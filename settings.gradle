@@ -1,1 +1,19 @@
+pluginManagement {
+    apply from: file('common.gradle')
+    repositories {
+        maven {
+            url publicConfig.tencentGradleUrl as String
+        }
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("libs.versions.toml"))
+        }
+    }
+}
 rootProject.name = 'centaur'
+include 'centaur-authentication'
+

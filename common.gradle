@@ -1,0 +1,8 @@
+// 通用属性
+ext {
+    // 公共配置信息
+    publicConfig = [
+            aliyunPublicRepositoryUrl: "https://maven.aliyun.com/repository/public/",
+            tencentGradleUrl         : "https://mirrors.cloud.tencent.com/gradle/"
+    ]
+}

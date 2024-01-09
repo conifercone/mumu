@@ -1,0 +1,40 @@
+[versions]
+junitVersion = "5.8.2"
+jmhVersion = "1.32"
+springbootPluginVersion = "3.2.1"
+jmhPluginVersion = '0.6.6'
+dependencyManagementPluginVersion = "1.1.4"
+graalvmNativePluginVersion = "0.9.28"
+apiguardianVersion = '1.1.2'
+jetbrainsAnnotationsVersion = '24.0.0'
+
+[libraries]
+# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+jmhCore = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+jmhGeneratorAnnprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+springboot = { module = "org.springframework.boot:spring-boot-starter" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+springbootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+# https://mvnrepository.com/artifact/org.apiguardian/apiguardian-api
+apiguardian = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
+# https://mvnrepository.com/artifact/org.jetbrains/annotations
+jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
+# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+
+[bundles]
+jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
+
+[plugins]
+springboot = { id = "org.springframework.boot", version.ref = "springbootPluginVersion" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
+dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
+graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
+java = { id = "java" }
+javaLibrary = { id = "java-library" }
+idea = { id = "idea" }
+checkstyle = { id = "checkstyle" }

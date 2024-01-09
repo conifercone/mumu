@@ -1,26 +1,126 @@
+import java.nio.charset.StandardCharsets
+import java.time.LocalDateTime
+
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.graalvm.buildtools.native' version '0.9.28'
+    alias(libs.plugins.jmh) apply false
+    alias(libs.plugins.dependencyManagement) apply(false)
+    alias(libs.plugins.graalvmNative) apply(false)
 }
 
-group = 'com.sky'
-version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = '17'
+apply from: file('common.gradle')
+allprojects { project ->
+    group "${GROUP}"
+    version "${VERSION}"
+
+    // 定义maven仓库地址
+    repositories {
+        maven { url publicConfig.aliyunPublicRepositoryUrl as String }
+        mavenCentral()
+    }
+
+    configurations.configureEach {
+        resolutionStrategy {
+            // 配置缓存实时更新
+            cacheChangingModulesFor 0, "seconds"
+            cacheDynamicVersionsFor 0, "seconds"
+        }
+    }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects { project ->
+    apply plugin: libs.plugins.getJava().get().getPluginId()
+    apply plugin: libs.plugins.getJavaLibrary().get().getPluginId()
+    apply plugin: libs.plugins.getIdea().get().getPluginId()
+    apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
+    apply plugin: libs.plugins.getJmh().get().getPluginId()
+    apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
+    apply plugin: libs.plugins.getGraalvmNative().get().getPluginId()
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
 
-tasks.named('test') {
-    useJUnitPlatform()
+    // java工具链配置
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+            vendor = JvmVendorSpec.GRAAL_VM
+        }
+    }
+
+    tasks.withType(Javadoc).configureEach {
+        def javaDocDir = layout.buildDirectory.dir('docs/javadoc').get()
+        delete(javaDocDir)
+        options.encoding = StandardCharsets.UTF_8.name()
+        options.charSet = StandardCharsets.UTF_8.name()
+        failOnError = false
+        destinationDir = file(javaDocDir)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = StandardCharsets.UTF_8.name()
+    }
+
+    // 打包自定义设置
+    jar {
+        into("META-INF/") {
+            from rootProject.file("LICENSE")
+        }
+        afterEvaluate {
+            // 获取buildBy 优先使用git user email属性
+            String gitUserEmail = providers.exec {
+                commandLine("git", "config", "user.email")
+            }.standardOutput.asText.get().trim()
+            var buildBy = gitUserEmail.isBlank() ? System.getProperty("user.name").trim() : gitUserEmail
+            String hash = providers.exec {
+                commandLine("git", "rev-parse", "HEAD")
+            }.standardOutput.asText.get().trim()
+            String scmBranch = providers.exec {
+                commandLine("git", "symbolic-ref", "--short", "-q", "HEAD")
+            }.standardOutput.asText.get().trim()
+            String scmCommitMessage = providers.exec {
+                commandLine("git", "log", "--pretty=format:%s", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            String scmCommitAuthor = providers.exec {
+                commandLine("git", "log", "--pretty=format:%an", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            String scmCommitDate = providers.exec {
+                commandLine("git", "log", "--pretty=format:%cd", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            manifest {
+                attributes 'Implementation-Title': archiveBaseName
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Build-OS': System.getProperty("os.name")
+                attributes 'Built-By': buildBy
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': LocalDateTime.now().format("yyyy-MM-dd HH:mm:ss")
+                attributes 'Automatic-Module-Name': "${project.group}.${project.name.replaceAll("-", ".")}"
+                attributes 'SCM-Branch': scmBranch
+                attributes 'SCM-Commit-Hash': hash
+                attributes 'SCM-Commit-Message': scmCommitMessage
+                attributes 'SCM-Commit-Author': scmCommitAuthor
+                attributes 'SCM-Commit-Date': scmCommitDate
+            }
+        }
+    }
+
+
+    // 代码自动审查配置
+    checkstyle {
+        toolVersion = '9.3'
+        configFile = file("${rootProject.projectDir}/code_checks.xml")
+    }
+
+    // 通用依赖
+    dependencies {
+        implementation libs.springboot
+        implementation libs.bundles.jmh
+        implementation libs.jetbrainsAnnotations
+        implementation libs.apiguardian
+        testImplementation libs.junitJupiterApi
+        testRuntimeOnly libs.junitJupiterEngine
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
