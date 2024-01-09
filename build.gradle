@@ -126,6 +126,12 @@ subprojects { project ->
         ext.organization = "shankaiyu#kaiyu.shan@outlook.com"
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom(libs.springBootDependencies.get().toString())
+        }
+    }
+
     // 通用依赖
     dependencies {
         implementation libs.springboot

@@ -16,4 +16,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = 'centaur'
 include 'centaur-authentication'
+include 'centaur-authentication:authentication-adapter'
+findProject(':centaur-authentication:authentication-adapter')?.name = 'authentication-adapter'
+include 'centaur-authentication:authentication-application'
+findProject(':centaur-authentication:authentication-application')?.name = 'authentication-application'
+include 'centaur-authentication:authentication-domain'
+findProject(':centaur-authentication:authentication-domain')?.name = 'authentication-domain'
+include 'centaur-authentication:authentication-infrastructure'
+findProject(':centaur-authentication:authentication-infrastructure')?.name = 'authentication-infrastructure'
 

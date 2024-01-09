@@ -5,3 +5,7 @@ plugins {
 dependencies {
     testImplementation libs.springbootTest
 }
+
+bootJar {
+    mainClass = 'com.sky.centaur.authentication.CentaurAuthenticationApplication'
+}

@@ -1,7 +1,7 @@
 [versions]
 junitVersion = "5.8.2"
 jmhVersion = "1.32"
-springbootPluginVersion = "3.2.1"
+springbootVersion = "3.2.1"
 jmhPluginVersion = '0.6.6'
 dependencyManagementPluginVersion = "1.1.4"
 graalvmNativePluginVersion = "0.9.28"
@@ -26,12 +26,14 @@ apiguardian = { module = "org.apiguardian:apiguardian-api", version.ref = "apigu
 jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
 junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
+springBootDependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
 
 [plugins]
-springboot = { id = "org.springframework.boot", version.ref = "springbootPluginVersion" }
+springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
 dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
 graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
