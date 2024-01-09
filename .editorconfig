@@ -1,0 +1,6 @@
+root = true
+# 对于所有的文件: 始终在文件末尾插入一个新行、设置文件字符集为utf-8
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
