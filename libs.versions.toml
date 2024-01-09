@@ -7,6 +7,7 @@ dependencyManagementPluginVersion = "1.1.4"
 graalvmNativePluginVersion = "0.9.28"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
+licensePluginVersion = '0.16.2'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
@@ -38,3 +39,4 @@ java = { id = "java" }
 javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
+license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }

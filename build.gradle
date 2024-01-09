@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jmh) apply false
     alias(libs.plugins.dependencyManagement) apply(false)
     alias(libs.plugins.graalvmNative) apply(false)
+    alias(libs.plugins.license) apply(false)
 }
 
 
@@ -36,6 +37,7 @@ subprojects { project ->
     apply plugin: libs.plugins.getJmh().get().getPluginId()
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
     apply plugin: libs.plugins.getGraalvmNative().get().getPluginId()
+    apply plugin: libs.plugins.getLicense().get().getPluginId()
 
 
     // java工具链配置
@@ -108,6 +110,20 @@ subprojects { project ->
     checkstyle {
         toolVersion = '9.3'
         configFile = file("${rootProject.projectDir}/code_checks.xml")
+    }
+
+    // 源代码许可配置
+    license {
+        encoding = StandardCharsets.UTF_8.name()
+        header = rootProject.file("source_code_head.txt")
+        includes(["**/*.java", "**/*.properties", "**/*.sql", "**/*.xml", "**/*.yml"])
+        mapping "java", "SLASHSTAR_STYLE"
+        mapping "properties", "SCRIPT_STYLE"
+        mapping "sql", "DOUBLEDASHES_STYLE"
+        mapping "xml", "XML_STYLE"
+        mapping "yml", "SCRIPT_STYLE"
+        ext.year = Calendar.getInstance().get(Calendar.YEAR)
+        ext.organization = "shankaiyu#kaiyu.shan@outlook.com"
     }
 
     // 通用依赖
