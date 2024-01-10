@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication;
+package com.sky.centaur.authentication.adapter.web;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 鉴权服务
+ * 测试接口
  *
  * @author 单开宇
- * @since 2024-01-09
+ * @since 2024-01-10
  */
-@SpringBootApplication
-public class CentaurAuthenticationApplication {
+@RestController
+@RequestMapping("/test")
+public class TestController {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurAuthenticationApplication.class, args);
+  @GetMapping
+  public String test() {
+    return "test";
   }
 }

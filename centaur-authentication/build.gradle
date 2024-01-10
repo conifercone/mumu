@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation project(":centaur-authentication:authentication-adapter")
     testImplementation libs.springbootTest
 }
 

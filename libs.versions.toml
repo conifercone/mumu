@@ -28,6 +28,8 @@ jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "je
 junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
 springBootDependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
