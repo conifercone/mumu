@@ -1,9 +1,6 @@
 pluginManagement {
-    apply from: file('common.gradle')
     repositories {
-        maven {
-            url publicConfig.tencentGradleUrl as String
-        }
+        mavenCentral()
         gradlePluginPortal()
     }
 }

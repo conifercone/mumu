@@ -49,7 +49,6 @@ dependencyManagement = { id = "io.spring.dependency-management", version.ref = "
 graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
-application = { id = "application" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }

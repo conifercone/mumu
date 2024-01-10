@@ -6,17 +6,15 @@ plugins {
     alias(libs.plugins.dependencyManagement) apply(false)
     alias(libs.plugins.graalvmNative) apply(false)
     alias(libs.plugins.license) apply(false)
+    alias(libs.plugins.springboot) apply(false)
 }
 
-
-apply from: file('common.gradle')
 allprojects { project ->
     group "${GROUP}"
     version "${VERSION}"
 
     // 定义maven仓库地址
     repositories {
-        maven { url publicConfig.aliyunPublicRepositoryUrl as String }
         mavenCentral()
     }
 
@@ -32,7 +30,6 @@ allprojects { project ->
 subprojects { project ->
     apply plugin: libs.plugins.getJava().get().getPluginId()
     apply plugin: libs.plugins.getJavaLibrary().get().getPluginId()
-    apply plugin: libs.plugins.getApplication().get().getPluginId()
     apply plugin: libs.plugins.getIdea().get().getPluginId()
     apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
     apply plugin: libs.plugins.getJmh().get().getPluginId()
@@ -117,6 +114,9 @@ subprojects { project ->
         encoding = StandardCharsets.UTF_8.name()
         header = rootProject.file("source_code_head.txt")
         includes(["**/*.java", "**/*.properties", "**/*.sql", "**/*.xml", "**/*.yml"])
+        excludes(["**/*__BeanDefinitions.java", "**/native-image.properties",
+                  "**/*__BeanFactoryRegistrations.java", "**/*__ApplicationContextInitializer.java",
+                  "**/*__Autowiring.java"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "properties", "SCRIPT_STYLE"
         mapping "sql", "DOUBLEDASHES_STYLE"
