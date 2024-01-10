@@ -109,14 +109,20 @@ subprojects { project ->
         configFile = file("${rootProject.projectDir}/code_checks.xml")
     }
 
+    // 禁用任务
+    tasks.configureEach {
+        String disableTasks = ["checkstyleAot", "checkstyleAotTest", "licenseFormatAot",
+                               "licenseFormatAotTest", "licenseAot", "licenseAotTest"]
+        if (disableTasks.contains(it.name)) {
+            it.enabled(false)
+        }
+    }
+
     // 源代码许可配置
     license {
         encoding = StandardCharsets.UTF_8.name()
         header = rootProject.file("source_code_head.txt")
         includes(["**/*.java", "**/*.properties", "**/*.sql", "**/*.xml", "**/*.yml"])
-        excludes(["**/*__BeanDefinitions.java", "**/native-image.properties",
-                  "**/*__BeanFactoryRegistrations.java", "**/*__ApplicationContextInitializer.java",
-                  "**/*__Autowiring.java"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "properties", "SCRIPT_STYLE"
         mapping "sql", "DOUBLEDASHES_STYLE"
