@@ -8,6 +8,7 @@ graalvmNativePluginVersion = "0.9.28"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
 licensePluginVersion = '0.16.2'
+jacksonVersion = '2.16.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
@@ -30,9 +31,16 @@ junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 springBootDependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jacksonVersion" }
+# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonVersion" }
+# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jacksonVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
+jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
@@ -41,6 +49,7 @@ dependencyManagement = { id = "io.spring.dependency-management", version.ref = "
 graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
+application = { id = "application" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }

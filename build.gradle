@@ -32,6 +32,7 @@ allprojects { project ->
 subprojects { project ->
     apply plugin: libs.plugins.getJava().get().getPluginId()
     apply plugin: libs.plugins.getJavaLibrary().get().getPluginId()
+    apply plugin: libs.plugins.getApplication().get().getPluginId()
     apply plugin: libs.plugins.getIdea().get().getPluginId()
     apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
     apply plugin: libs.plugins.getJmh().get().getPluginId()
@@ -105,7 +106,6 @@ subprojects { project ->
         }
     }
 
-
     // 代码自动审查配置
     checkstyle {
         toolVersion = '9.3'
@@ -136,6 +136,7 @@ subprojects { project ->
     dependencies {
         implementation libs.springboot
         implementation libs.bundles.jmh
+        implementation libs.bundles.jackson
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian
         testImplementation libs.junitJupiterApi
