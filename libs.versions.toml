@@ -48,7 +48,6 @@ jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
 dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
 graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
 java = { id = "java" }
-javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }

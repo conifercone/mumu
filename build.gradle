@@ -29,12 +29,10 @@ allprojects { project ->
 
 subprojects { project ->
     apply plugin: libs.plugins.getJava().get().getPluginId()
-    apply plugin: libs.plugins.getJavaLibrary().get().getPluginId()
     apply plugin: libs.plugins.getIdea().get().getPluginId()
     apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
     apply plugin: libs.plugins.getJmh().get().getPluginId()
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
-    apply plugin: libs.plugins.getGraalvmNative().get().getPluginId()
     apply plugin: libs.plugins.getLicense().get().getPluginId()
 
 
