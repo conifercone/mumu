@@ -12,20 +12,24 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
 import javax.sql.DataSource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -72,7 +76,7 @@ public class SecurityConfig {
 
   @Bean
   @Order(2)
-  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
+  public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http)
       throws Exception {
     http
         .authorizeHttpRequests((authorize) -> authorize
@@ -91,12 +95,22 @@ public class SecurityConfig {
   }
 
   @Bean
-  public UserDetailsService userDetailsService(DataSource dataSource) {
-    return new JdbcUserDetailsManager(dataSource);
+  public UserDetailsService userDetailsService(DataSource dataSource,
+      @NotNull BCryptPasswordEncoder bCryptPasswordEncoder) {
+    UserDetails user = User.builder()
+        .username("admin")
+        .password(bCryptPasswordEncoder.encode("admin"))
+        .roles("USER")
+        .build();
+    JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+    if (!jdbcUserDetailsManager.userExists("admin")) {
+      jdbcUserDetailsManager.createUser(user);
+    }
+    return jdbcUserDetailsManager;
   }
 
   @Bean
-  public RegisteredClientRepository registeredClientRepository() {
+  public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
     RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
         .clientId("oidc-client")
         .clientSecret("{noop}secret")
@@ -109,8 +123,14 @@ public class SecurityConfig {
         .scope(OidcScopes.PROFILE)
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
         .build();
-
-    return new InMemoryRegisteredClientRepository(oidcClient);
+    JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(
+        jdbcTemplate);
+    RegisteredClient registeredClient = jdbcRegisteredClientRepository.findByClientId(
+        "oidc-client");
+    if (registeredClient == null) {
+      jdbcRegisteredClientRepository.save(oidcClient);
+    }
+    return jdbcRegisteredClientRepository;
   }
 
   @Bean
