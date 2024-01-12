@@ -16,3 +16,14 @@
 
 server:
   port: 31100
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/authentication
+    # noinspection SpellCheckingInspection
+    username: ENC(kJ2N59i4ucIs1w/XeaWbvXtSCvZEQWAjC5hDR5CYp80zuIKn2KajFakByV9CgqT5)
+    # noinspection SpellCheckingInspection
+    password: ENC(9+KboIWPqCXcv2n6XrjpiKXnDpuwe6BBf4LJE7Dx612379XFUBrY4JoZ0CvQuPNV)
+jasypt:
+  encryptor:
+    password: 11acd5cbbd07496eae0a8328c9946a89

@@ -1,2 +1,6 @@
 dependencies {
+    implementation libs.springBootOauth2AuthorizationServer
+    implementation libs.springBootDataJpa
+    implementation libs.postgresql
+    implementation libs.jasypt
 }

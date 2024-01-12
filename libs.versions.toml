@@ -1,5 +1,5 @@
 [versions]
-junitVersion = "5.8.2"
+junitVersion = "5.10.1"
 jmhVersion = "1.32"
 springbootVersion = "3.2.1"
 jmhPluginVersion = '0.6.6'
@@ -9,10 +9,12 @@ apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
 licensePluginVersion = '0.16.2'
 jacksonVersion = '2.16.0'
+postgresqlVersion = '42.7.1'
+jasyptVersion = '3.0.5'
 
 [libraries]
-# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitVersion" }
+# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitVersion" }
 # https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
 jmhCore = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
 # https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
@@ -25,8 +27,6 @@ springbootTest = { module = "org.springframework.boot:spring-boot-starter-test" 
 apiguardian = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
 # https://mvnrepository.com/artifact/org.jetbrains/annotations
 jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
-# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
 springBootDependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
@@ -37,6 +37,16 @@ jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref 
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonVersion" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
 jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jacksonVersion" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
+springBootOauth2AuthorizationServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+# https://mvnrepository.com/artifact/org.postgresql/postgresql
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
+# https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
+jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", version.ref = "jasyptVersion" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
+springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]

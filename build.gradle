@@ -143,8 +143,7 @@ subprojects { project ->
         implementation libs.bundles.jackson
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian
-        testImplementation libs.junitJupiterApi
-        testRuntimeOnly libs.junitJupiterEngine
+        testImplementation libs.junitJupiter
     }
 
     test {
