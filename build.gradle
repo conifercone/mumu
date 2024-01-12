@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.graalvmNative) apply(false)
     alias(libs.plugins.license) apply(false)
     alias(libs.plugins.springboot) apply(false)
+    alias(libs.plugins.lombok) apply(false)
 }
 
 allprojects { project ->
@@ -34,6 +35,7 @@ subprojects { project ->
     apply plugin: libs.plugins.getJmh().get().getPluginId()
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
     apply plugin: libs.plugins.getLicense().get().getPluginId()
+    apply plugin: libs.plugins.getLombok().get().getPluginId()
 
 
     // java工具链配置

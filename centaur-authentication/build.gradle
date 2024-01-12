@@ -3,7 +3,6 @@ apply plugin: libs.plugins.getGraalvmNative().get().getPluginId()
 
 dependencies {
     implementation project(":centaur-authentication:authentication-adapter")
-    implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-authentication:authentication-infrastructure")
     implementation libs.springBootStarterWeb
     compileOnly libs.springBootDevtools
