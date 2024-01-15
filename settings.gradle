@@ -21,4 +21,6 @@ include 'centaur-authentication:authentication-domain'
 findProject(':centaur-authentication:authentication-domain')?.name = 'authentication-domain'
 include 'centaur-authentication:authentication-infrastructure'
 findProject(':centaur-authentication:authentication-infrastructure')?.name = 'authentication-infrastructure'
+include 'centaur-authentication:authentication-client'
+findProject(':centaur-authentication:authentication-client')?.name = 'authentication-client'
 
