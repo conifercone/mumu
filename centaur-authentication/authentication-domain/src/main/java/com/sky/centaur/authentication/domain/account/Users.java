@@ -19,6 +19,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Objects;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 用户基本信息
@@ -28,6 +34,10 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Users {
 
   @Id
@@ -52,59 +62,30 @@ public class Users {
   @Column(name = "account_non_expired")
   private Boolean accountNonExpired;
 
-  public Long getId() {
-    return id;
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+        ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+        : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+        ? ((HibernateProxy) this).getHibernateLazyInitializer()
+        .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    Users users = (Users) o;
+    return getId() != null && Objects.equals(getId(), users.getId());
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Boolean getEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Boolean getCredentialsNonExpired() {
-    return credentialsNonExpired;
-  }
-
-  public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
-    this.credentialsNonExpired = credentialsNonExpired;
-  }
-
-  public Boolean getAccountNonLocked() {
-    return accountNonLocked;
-  }
-
-  public void setAccountNonLocked(Boolean accountNonLocked) {
-    this.accountNonLocked = accountNonLocked;
-  }
-
-  public Boolean getAccountNonExpired() {
-    return accountNonExpired;
-  }
-
-  public void setAccountNonExpired(Boolean accountNonExpired) {
-    this.accountNonExpired = accountNonExpired;
+  @Override
+  public final int hashCode() {
+    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+        .getPersistentClass().hashCode() : getClass().hashCode();
   }
 }
