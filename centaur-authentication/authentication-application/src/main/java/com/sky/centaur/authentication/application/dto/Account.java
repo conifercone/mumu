@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.application.dto;
 import com.sky.centaur.authentication.domain.account.Users;
 import java.util.Collection;
 import java.util.Collections;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -30,11 +31,12 @@ import org.springframework.security.core.userdetails.User;
  */
 public class Account extends User {
 
-  private Long id;
+  @Getter
+  private final Long id;
 
-  private String username;
+  private final String username;
 
-  private String password;
+  private final String password;
 
   private boolean enable = true;
 
@@ -44,7 +46,7 @@ public class Account extends User {
 
   private boolean accountNonExpired = true;
 
-  private Collection<? extends GrantedAuthority> authorities;
+  private Collection<GrantedAuthority> authorities;
 
   public Account(@NotNull Users users) {
     super(users.getUsername(), users.getPassword(), users.getEnabled(),
@@ -60,7 +62,7 @@ public class Account extends User {
   }
 
   public Account(Long id, String username, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+      Collection<GrantedAuthority> authorities) {
     super(username, password, authorities);
     this.id = id;
     this.username = username;
@@ -71,7 +73,7 @@ public class Account extends User {
   public Account(Long id, String username, String password, boolean enabled,
       boolean accountNonExpired,
       boolean credentialsNonExpired, boolean accountNonLocked,
-      Collection<? extends GrantedAuthority> authorities) {
+      Collection<GrantedAuthority> authorities) {
     super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked,
         authorities);
     this.id = id;
@@ -86,7 +88,7 @@ public class Account extends User {
 
   @Override
   public Collection<GrantedAuthority> getAuthorities() {
-    return super.getAuthorities();
+    return this.authorities;
   }
 
   @Override
