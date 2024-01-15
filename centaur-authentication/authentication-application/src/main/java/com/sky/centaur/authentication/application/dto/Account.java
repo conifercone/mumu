@@ -49,16 +49,16 @@ public class Account extends User {
   private Collection<GrantedAuthority> authorities;
 
   public Account(@NotNull Users users) {
-    super(users.getUsername(), users.getPassword(), users.getEnabled(),
-        users.getAccountNonExpired(), users.getCredentialsNonExpired(), users.getAccountNonLocked(),
+    super(users.getUsername(), users.getPassword(), users.isEnabled(),
+        users.isAccountNonExpired(), users.isCredentialsNonExpired(), users.isAccountNonLocked(),
         Collections.emptyList());
     this.id = users.getId();
     this.username = users.getUsername();
     this.password = users.getPassword();
-    this.enable = users.getEnabled();
-    this.credentialsNonExpired = users.getCredentialsNonExpired();
-    this.accountNonExpired = users.getAccountNonExpired();
-    this.accountNonLocked = users.getAccountNonLocked();
+    this.enable = users.isEnabled();
+    this.credentialsNonExpired = users.isCredentialsNonExpired();
+    this.accountNonExpired = users.isAccountNonExpired();
+    this.accountNonLocked = users.isAccountNonLocked();
   }
 
   public Account(Long id, String username, String password,

@@ -19,12 +19,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 用户基本信息
@@ -42,50 +40,23 @@ public class Users {
 
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private long id;
 
-  @Column(name = "username")
+  @Column(name = "username", nullable = false)
   private String username;
 
-  @Column(name = "password")
+  @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "enabled")
-  private Boolean enabled;
+  @Column(name = "enabled", nullable = false)
+  private boolean enabled;
 
-  @Column(name = "credentials_non_expired")
-  private Boolean credentialsNonExpired;
+  @Column(name = "credentials_non_expired", nullable = false)
+  private boolean credentialsNonExpired;
 
-  @Column(name = "account_non_locked")
-  private Boolean accountNonLocked;
+  @Column(name = "account_non_locked", nullable = false)
+  private boolean accountNonLocked;
 
-  @Column(name = "account_non_expired")
-  private Boolean accountNonExpired;
-
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null) {
-      return false;
-    }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy
-        ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-        : o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy
-        ? ((HibernateProxy) this).getHibernateLazyInitializer()
-        .getPersistentClass() : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) {
-      return false;
-    }
-    Users users = (Users) o;
-    return getId() != null && Objects.equals(getId(), users.getId());
-  }
-
-  @Override
-  public final int hashCode() {
-    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-        .getPersistentClass().hashCode() : getClass().hashCode();
-  }
+  @Column(name = "account_non_expired", nullable = false)
+  private boolean accountNonExpired;
 }
