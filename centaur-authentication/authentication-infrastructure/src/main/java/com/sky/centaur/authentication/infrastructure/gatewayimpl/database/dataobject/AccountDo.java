@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account;
+package com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 用户基本信息
+ * 用户基本信息数据对象
  *
  * @author 单开宇
  * @since 2024-01-12
@@ -36,7 +36,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Users {
+public class AccountDo {
 
   @Id
   @Column(name = "id", nullable = false)

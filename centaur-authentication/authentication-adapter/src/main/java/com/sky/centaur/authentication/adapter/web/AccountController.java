@@ -15,22 +15,30 @@
  */
 package com.sky.centaur.authentication.adapter.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.domain.account.Account;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 测试接口
+ * 账户相关
  *
  * @author 单开宇
  * @since 2024-01-10
  */
 @RestController
-@RequestMapping("/test")
-public class TestController {
+@RequestMapping("/account")
+public class AccountController {
 
-  @GetMapping
-  public String test() {
-    return "test2";
+  @Resource
+  private AccountService accountService;
+
+  @PostMapping
+  public Account registered(@RequestBody AccountRegisterCmd accountRegisterCmd) {
+    return accountService.registered(accountRegisterCmd);
   }
 }

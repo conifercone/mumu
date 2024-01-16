@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.repository;
+package com.sky.centaur.authentication.infrastructure.gatewayimpl.database;
 
-import com.sky.centaur.authentication.domain.account.Users;
+import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject.AccountDo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 单开宇
  * @since 2024-01-12
  */
-public interface UsersRepository extends JpaRepository<Users, Long> {
+public interface AccountRepository extends JpaRepository<AccountDo, Long> {
 
-  Users findUsersByUsername(String username);
+  AccountDo findAccountDoByUsername(String username);
 }

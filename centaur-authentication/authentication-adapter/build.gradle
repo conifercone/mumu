@@ -1,4 +1,5 @@
 dependencies {
-    implementation project(":centaur-authentication:authentication-application")
+    implementation project(":centaur-authentication:authentication-client")
+    implementation project(":centaur-authentication:authentication-domain")
     implementation libs.springBootStarterWeb
 }
