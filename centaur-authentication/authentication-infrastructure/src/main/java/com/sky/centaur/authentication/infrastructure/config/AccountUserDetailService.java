@@ -13,29 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.application.service;
+package com.sky.centaur.authentication.infrastructure.config;
 
-import com.sky.centaur.authentication.application.command.AccountRegisterCmdExe;
-import com.sky.centaur.authentication.client.api.AccountService;
-import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.gateway.AccountGateway;
 import jakarta.annotation.Resource;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * 账户功能实现
+ * spring security authentication server专用用户信息service
  *
  * @author 单开宇
  * @since 2024-01-16
  */
-@Service
-public class AccountServiceImpl implements AccountService {
+public class AccountUserDetailService implements UserDetailsService {
 
   @Resource
-  private AccountRegisterCmdExe accountRegisterCmdExe;
+  private AccountGateway accountGateway;
 
   @Override
-  public Account registered(AccountRegisterCmd accountRegisterCmd) {
-    return accountRegisterCmdExe.execute(accountRegisterCmd);
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Account account = accountGateway.findAccountByUsername(username);
+    if (null == account) {
+      throw new UsernameNotFoundException(username);
+    }
+    return account;
   }
 }

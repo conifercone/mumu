@@ -21,7 +21,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.sky.centaur.authentication.application.service.AccountServiceImpl;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -108,7 +107,7 @@ public class SecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    return new AccountServiceImpl();
+    return new AccountUserDetailService();
   }
 
   @Bean
