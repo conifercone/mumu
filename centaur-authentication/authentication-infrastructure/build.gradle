@@ -1,8 +1,6 @@
 dependencies {
     implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-authentication:authentication-client")
-    implementation libs.springBootOauth2AuthorizationServer
     implementation libs.springBootDataJpa
-    implementation libs.postgresql
-    implementation libs.jasypt
+    implementation libs.springBootOauth2AuthorizationServer
 }
