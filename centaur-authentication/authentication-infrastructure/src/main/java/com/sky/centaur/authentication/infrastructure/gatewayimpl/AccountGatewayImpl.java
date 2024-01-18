@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.infrastructure.convertor.AccountConvertor;
 import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject.AccountDo;
 import jakarta.annotation.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,9 +36,15 @@ public class AccountGatewayImpl implements AccountGateway {
   @Resource
   private AccountRepository accountRepository;
 
+  @Resource
+  private PasswordEncoder passwordEncoder;
+
   @Override
   public Account register(Account account) {
-    AccountDo save = accountRepository.save(AccountConvertor.toDataObject(account));
+    AccountDo dataObject = AccountConvertor.toDataObject(account);
+    // 密码加密
+    dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
+    AccountDo save = accountRepository.save(dataObject);
     return AccountConvertor.toEntity(save);
   }
 
