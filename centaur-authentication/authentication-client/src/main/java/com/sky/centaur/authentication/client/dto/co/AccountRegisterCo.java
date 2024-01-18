@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.clientobject;
+package com.sky.centaur.authentication.client.dto.co;
 
 import java.util.Collection;
 import lombok.Data;

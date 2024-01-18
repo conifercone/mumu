@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.client.dto.clientobject.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import lombok.Data;
 
 /**

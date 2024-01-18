@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.authentication.infrastructure.convertor;
 
-import com.sky.centaur.authentication.client.dto.clientobject.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject.AccountDo;
 import java.util.Collections;
