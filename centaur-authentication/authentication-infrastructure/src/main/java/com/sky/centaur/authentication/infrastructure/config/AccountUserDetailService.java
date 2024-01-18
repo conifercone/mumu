@@ -16,7 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.config;
 
 import com.sky.centaur.authentication.domain.account.Account;
-import com.sky.centaur.authentication.domain.gateway.AccountGateway;
+import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject;
+package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

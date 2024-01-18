@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.authentication.application.service;
 
-import com.sky.centaur.authentication.application.command.AccountRegisterCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.domain.account.Account;

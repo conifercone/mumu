@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.gatewayimpl;
+package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.account.Account;
-import com.sky.centaur.authentication.domain.gateway.AccountGateway;
-import com.sky.centaur.authentication.infrastructure.convertor.AccountConvertor;
-import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.AccountRepository;
-import com.sky.centaur.authentication.infrastructure.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
