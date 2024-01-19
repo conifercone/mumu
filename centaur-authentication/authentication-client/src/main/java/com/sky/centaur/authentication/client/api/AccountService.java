@@ -26,5 +26,5 @@ import com.sky.centaur.authentication.domain.account.Account;
  */
 public interface AccountService {
 
-  Account registered(AccountRegisterCmd accountRegisterCmd);
+  Account register(AccountRegisterCmd accountRegisterCmd);
 }

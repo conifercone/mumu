@@ -22,6 +22,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sky.centaur.authentication.application.service.AccountUserDetailService;
+import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -36,6 +37,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -101,6 +103,24 @@ public class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * 使用WebSecurity.ignoring()忽略某些URL请求，这些请求将被Spring Security忽略
+   */
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer(
+      AuthenticationProperties authenticationProperties) {
+    return web -> {
+      // 读取配置文件auth.security.excludeUrls下的链接进行忽略（白名单）
+      web.ignoring().requestMatchers(
+          authenticationProperties.getSecurity().getExcludeUrls().toArray(new String[]{}));
+    };
+  }
+
+  /**
+   * 密码加密策略
+   *
+   * @return bCrypt密码加解密
+   */
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();

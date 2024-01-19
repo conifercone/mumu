@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
   private AccountRegisterCmdExe accountRegisterCmdExe;
 
   @Override
-  public Account registered(AccountRegisterCmd accountRegisterCmd) {
+  public Account register(AccountRegisterCmd accountRegisterCmd) {
     return accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 }

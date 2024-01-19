@@ -37,8 +37,8 @@ public class AccountController {
   @Resource
   private AccountService accountService;
 
-  @PostMapping
-  public Account registered(@RequestBody AccountRegisterCmd accountRegisterCmd) {
-    return accountService.registered(accountRegisterCmd);
+  @PostMapping("/register")
+  public Account register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
+    return accountService.register(accountRegisterCmd);
   }
 }

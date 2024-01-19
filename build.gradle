@@ -59,6 +59,8 @@ subprojects { project ->
         options.encoding = StandardCharsets.UTF_8.name()
     }
 
+    compileJava.dependsOn(processResources)
+
     // 打包自定义设置
     jar {
         into("META-INF/") {
@@ -189,6 +191,7 @@ subprojects { project ->
         implementation libs.apiguardian
         implementation libs.guava
         testImplementation libs.junitJupiter
+        annotationProcessor libs.springBootConfigurationProcessor
     }
 
     test {

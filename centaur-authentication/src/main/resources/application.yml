@@ -27,3 +27,7 @@ spring:
 jasypt:
   encryptor:
     password: 11acd5cbbd07496eae0a8328c9946a89
+auth:
+  security:
+    exclude-urls: #excludeUrls中存放白名单地址
+      - "/account/register"

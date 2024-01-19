@@ -51,6 +51,8 @@ jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", versi
 springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
 # https://mvnrepository.com/artifact/com.google.guava/guava
 guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
+springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
