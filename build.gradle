@@ -103,6 +103,48 @@ subprojects { project ->
         }
     }
 
+    tasks.configureEach {
+        if (it.name == "bootJar") {
+            // 获取buildBy 优先使用git user email属性
+            String gitUserEmail = providers.exec {
+                commandLine("git", "config", "user.email")
+            }.standardOutput.asText.get().trim()
+            var buildBy = gitUserEmail.isBlank() ? System.getProperty("user.name").trim() : gitUserEmail
+            String hash = providers.exec {
+                commandLine("git", "rev-parse", "HEAD")
+            }.standardOutput.asText.get().trim()
+            String scmBranch = providers.exec {
+                commandLine("git", "symbolic-ref", "--short", "-q", "HEAD")
+            }.standardOutput.asText.get().trim()
+            String scmCommitMessage = providers.exec {
+                commandLine("git", "log", "--pretty=format:%s", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            String scmCommitAuthor = providers.exec {
+                commandLine("git", "log", "--pretty=format:%an", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            String scmCommitDate = providers.exec {
+                commandLine("git", "log", "--pretty=format:%cd", hash, "-1")
+            }.standardOutput.asText.get().trim()
+            manifest {
+                attributes 'Implementation-Title': archiveBaseName
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Application-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Build-OS': System.getProperty("os.name")
+                attributes 'Built-By': buildBy
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': LocalDateTime.now().format("yyyy-MM-dd HH:mm:ss")
+                attributes 'Automatic-Module-Name': "${project.group}.${project.name.replaceAll("-", ".")}"
+                attributes 'SCM-Branch': scmBranch
+                attributes 'SCM-Commit-Hash': hash
+                attributes 'SCM-Commit-Message': scmCommitMessage
+                attributes 'SCM-Commit-Author': scmCommitAuthor
+                attributes 'SCM-Commit-Date': scmCommitDate
+            }
+        }
+
+    }
+
     // 代码自动审查配置
     checkstyle {
         toolVersion = '9.3'
@@ -145,6 +187,7 @@ subprojects { project ->
         implementation libs.bundles.jackson
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian
+        implementation libs.guava
         testImplementation libs.junitJupiter
     }
 

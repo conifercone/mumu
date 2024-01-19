@@ -12,6 +12,7 @@ jacksonVersion = '2.16.0'
 postgresqlVersion = '42.7.1'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
+guavaVersion = '33.0.0-jre'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -48,6 +49,8 @@ postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVe
 jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", version.ref = "jasyptVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
 springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
+# https://mvnrepository.com/artifact/com.google.guava/guava
+guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
