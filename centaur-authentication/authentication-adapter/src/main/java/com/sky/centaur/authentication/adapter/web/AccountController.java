@@ -22,6 +22,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,6 +39,7 @@ public class AccountController {
   private AccountService accountService;
 
   @PostMapping("/register")
+  @ResponseBody
   public Account register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
     return accountService.register(accountRegisterCmd);
   }

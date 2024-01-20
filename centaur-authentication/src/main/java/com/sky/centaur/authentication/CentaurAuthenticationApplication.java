@@ -18,6 +18,7 @@ package com.sky.centaur.authentication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 鉴权服务
@@ -27,6 +28,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 @SpringBootApplication
 @EnableConfigurationProperties
+@ComponentScan(basePackages = "com.sky.centaur.**")
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {

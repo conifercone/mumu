@@ -5,11 +5,15 @@ dependencies {
     implementation project(":centaur-authentication:authentication-adapter")
     implementation project(":centaur-authentication:authentication-application")
     implementation project(":centaur-authentication:authentication-infrastructure")
+    implementation project(":centaur-extension")
     implementation libs.springBootOauth2AuthorizationServer
     implementation libs.springBootDataJpa
     implementation libs.springBootStarterWeb
     implementation libs.postgresql
     implementation libs.jasypt
+    implementation libs.springCloudBootstrap
+    implementation libs.springCloudAlibabaNacosDiscovery
+    implementation libs.springCloudAlibabaNacosConfig
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

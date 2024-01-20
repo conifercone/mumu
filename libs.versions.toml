@@ -2,6 +2,8 @@
 junitVersion = "5.10.1"
 jmhVersion = "1.32"
 springbootVersion = "3.2.1"
+springCloudVersion = "2023.0.0"
+springCloudAlibabaVersion = "2022.0.0.0"
 jmhPluginVersion = '0.6.6'
 dependencyManagementPluginVersion = "1.1.4"
 graalvmNativePluginVersion = "0.9.28"
@@ -53,6 +55,16 @@ springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" 
 guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
+springCloudDependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
+# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-alibaba-dependencies
+springCloudAlibabaDependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "springCloudAlibabaVersion" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap
+springCloudBootstrap = { module = "org.springframework.cloud:spring-cloud-starter-bootstrap" }
+# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-discovery
+springCloudAlibabaNacosDiscovery = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery" }
+# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config
+springCloudAlibabaNacosConfig = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
