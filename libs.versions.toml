@@ -15,6 +15,7 @@ postgresqlVersion = '42.7.1'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
 guavaVersion = '33.0.0-jre'
+swagger3Version = '2.3.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -65,6 +66,10 @@ springCloudBootstrap = { module = "org.springframework.cloud:spring-cloud-starte
 springCloudAlibabaNacosDiscovery = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery" }
 # https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config
 springCloudAlibabaNacosConfig = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config" }
+# https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
+# https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-api
+swagger3Api = { module = "org.springdoc:springdoc-openapi-starter-webmvc-api", version.ref = "swagger3Version" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]

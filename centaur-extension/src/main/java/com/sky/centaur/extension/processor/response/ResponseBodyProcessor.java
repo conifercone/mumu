@@ -18,6 +18,7 @@ package com.sky.centaur.extension.processor.response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.extension.exception.CentaurException;
+import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -39,6 +40,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
+
+  private static final ArrayList<String> ADDRESSES_THAT_DO_NOT_REQUIRE_TRANSLATION = new ArrayList<>();
+
+  static {
+    ADDRESSES_THAT_DO_NOT_REQUIRE_TRANSLATION.add("/v3/api-docs");
+  }
 
   @ExceptionHandler(CentaurException.class)
   public ResultResponse<?> handleException(@NotNull CentaurException centaurException) {
@@ -69,6 +76,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
         throw new RuntimeException(e);
       }
     } else if (body != null) {
+      if (ADDRESSES_THAT_DO_NOT_REQUIRE_TRANSLATION.contains(request.getURI().getPath())) {
+        return body;
+      }
       return ResultResponse.success(body);
     } else {
       return ResultResponse.success();

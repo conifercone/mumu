@@ -18,7 +18,11 @@ package com.sky.centaur.authentication.adapter.web;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.domain.account.Account;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,13 +37,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/account")
+@Tag(name = "用户管理")
 public class AccountController {
 
   @Resource
   private AccountService accountService;
 
+  @Operation(summary = "用户注册")
   @PostMapping("/register")
   @ResponseBody
+  @API(status = Status.STABLE)
   public Account register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
     return accountService.register(accountRegisterCmd);
   }
