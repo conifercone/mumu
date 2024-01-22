@@ -45,6 +45,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   static {
     ADDRESSES_THAT_DO_NOT_REQUIRE_TRANSLATION.add("/v3/api-docs");
+    ADDRESSES_THAT_DO_NOT_REQUIRE_TRANSLATION.add("/v3/api-docs/swagger-config");
   }
 
   @ExceptionHandler(CentaurException.class)

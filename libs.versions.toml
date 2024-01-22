@@ -68,8 +68,6 @@ springCloudAlibabaNacosDiscovery = { module = "com.alibaba.cloud:spring-cloud-st
 springCloudAlibabaNacosConfig = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config" }
 # https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
-# https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-api
-swagger3Api = { module = "org.springdoc:springdoc-openapi-starter-webmvc-api", version.ref = "swagger3Version" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]

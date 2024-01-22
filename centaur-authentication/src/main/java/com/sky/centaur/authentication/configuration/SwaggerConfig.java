@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * swagger配置文件
+ *
  * @author 单开宇
  * @since 2024-01-20
  */
@@ -29,10 +31,10 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
   @Bean
-  public OpenAPI springShopOpenAPI() {
+  public OpenAPI authenticationOpenAPI() {
     return new OpenAPI()
-        .info(new Info().title("centaur")
-            .description("centaur API document")
+        .info(new Info().title("centaur authentication")
+            .description("centaur authentication API document")
             .version("v1")
             .license(new License().name("Apache 2.0").url("https://springdoc.org")));
   }
