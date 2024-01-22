@@ -36,6 +36,11 @@ public class AuthenticationProperties {
   @NestedConfigurationProperty
   private Security security = new Security();
 
+  /**
+   * 是否开启服务日志
+   */
+  private boolean enableLog = false;
+
   @Data
   public static class Security {
 

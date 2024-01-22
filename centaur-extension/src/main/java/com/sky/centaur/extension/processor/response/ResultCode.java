@@ -32,7 +32,9 @@ public enum ResultCode implements BaseResultInterface {
   PARAMS_IS_INVALID(1001, "参数无效"),
   PARAMS_IS_BLANK(1002, "参数为空"),
   /*账户错误2001-2999*/
-  ACCOUNT_ALREADY_EXISTS(2001, "账户已存在");
+  ACCOUNT_ALREADY_EXISTS(2001, "账户已存在"),
+  /*数据源错误3001-3999*/
+  MISSING_P6SPY_DEPENDENCY_INFORMATION(3001, "缺少P6spy依赖信息");
   private final Integer code;
   private final String message;
 

@@ -16,6 +16,7 @@ jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
 guavaVersion = '33.0.0-jre'
 swagger3Version = '2.3.0'
+p6spyVersion = '3.9.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -70,6 +71,8 @@ springCloudAlibabaNacosConfig = { module = "com.alibaba.cloud:spring-cloud-start
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+# https://mvnrepository.com/artifact/p6spy/p6spy
+p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
