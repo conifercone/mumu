@@ -24,4 +24,5 @@ findProject(':centaur-authentication:authentication-infrastructure')?.name = 'au
 include 'centaur-authentication:authentication-client'
 findProject(':centaur-authentication:authentication-client')?.name = 'authentication-client'
 include 'centaur-extension'
+include 'centaur-log'
 
