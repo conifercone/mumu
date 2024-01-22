@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.extension.client.dto.co.ClientObject;
 import com.sky.centaur.extension.exception.CentaurException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -41,12 +43,22 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
+
+
   @ExceptionHandler(CentaurException.class)
-  public ResultResponse<?> handleException(@NotNull CentaurException centaurException) {
+  public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException) {
+    LOGGER.error(centaurException.getResultCode().getResultMsg(), centaurException);
     if (centaurException.getData() != null) {
       return ResultResponse.failure(centaurException.getResultCode(), centaurException.getData());
     }
     return ResultResponse.failure(centaurException.getResultCode());
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResultResponse<?> handleException(@NotNull Exception exception) {
+    LOGGER.error(exception.getMessage(), exception);
+    return ResultResponse.failure(ResultCode.INTERNAL_SERVER_ERROR);
   }
 
   @Override
