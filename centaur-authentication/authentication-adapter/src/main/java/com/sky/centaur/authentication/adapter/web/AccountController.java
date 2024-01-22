@@ -17,7 +17,7 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -47,7 +47,7 @@ public class AccountController {
   @PostMapping("/register")
   @ResponseBody
   @API(status = Status.STABLE)
-  public Account register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
+  public AccountRegisterCo register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
     return accountService.register(accountRegisterCmd);
   }
 }

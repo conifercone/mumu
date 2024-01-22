@@ -15,6 +15,7 @@ dependencies {
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig
     implementation libs.swagger3Ui
+    implementation libs.springBootActuator
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

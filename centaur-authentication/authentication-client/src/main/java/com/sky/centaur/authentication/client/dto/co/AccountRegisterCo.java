@@ -15,8 +15,10 @@
  */
 package com.sky.centaur.authentication.client.dto.co;
 
+import com.sky.centaur.extension.client.dto.co.BaseClientObject;
 import java.util.Collection;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -26,7 +28,8 @@ import org.springframework.security.core.GrantedAuthority;
  * @since 2024-01-16
  */
 @Data
-public class AccountRegisterCo {
+@EqualsAndHashCode(callSuper = true)
+public class AccountRegisterCo extends BaseClientObject {
 
   private Long id;
 

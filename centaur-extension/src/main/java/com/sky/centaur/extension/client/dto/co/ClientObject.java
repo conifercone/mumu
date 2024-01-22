@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
-
-import com.sky.centaur.authentication.domain.account.Account;
+package com.sky.centaur.extension.client.dto.co;
 
 /**
- * 用户领域网关
+ * 顶级co接口
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-01-22
  */
-public interface AccountGateway {
+public interface ClientObject {
 
-  void register(Account account);
-
-  Account findAccountByUsername(String username);
 }

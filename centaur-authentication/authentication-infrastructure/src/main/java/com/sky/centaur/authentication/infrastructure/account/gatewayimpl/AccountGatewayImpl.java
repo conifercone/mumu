@@ -41,7 +41,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private PasswordEncoder passwordEncoder;
 
   @Override
-  public Account register(Account account) {
+  public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
     // 密码加密
     dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
@@ -50,8 +50,7 @@ public class AccountGatewayImpl implements AccountGateway {
     if (accountDoByUsername != null) {
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
-    AccountDo save = accountRepository.save(dataObject);
-    return AccountConvertor.toEntity(save);
+    accountRepository.save(dataObject);
   }
 
   @Override

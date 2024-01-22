@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":centaur-authentication:authentication-domain")
+    implementation project(":centaur-extension")
     compileOnly libs.springBootOauth2AuthorizationServer
 }
 

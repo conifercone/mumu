@@ -18,7 +18,7 @@ package com.sky.centaur.authentication.application.service;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
   private AccountRegisterCmdExe accountRegisterCmdExe;
 
   @Override
-  public Account register(AccountRegisterCmd accountRegisterCmd) {
+  public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
     return accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 }

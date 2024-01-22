@@ -16,7 +16,7 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 
 /**
  * 账户功能API
@@ -26,5 +26,5 @@ import com.sky.centaur.authentication.domain.account.Account;
  */
 public interface AccountService {
 
-  Account register(AccountRegisterCmd accountRegisterCmd);
+  AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
 }

@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
@@ -35,8 +36,9 @@ public class AccountRegisterCmdExe {
   @Resource
   private AccountGateway accountGateway;
 
-  public Account execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
+  public AccountRegisterCo execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
     Account entity = AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo());
-    return accountGateway.register(entity);
+    accountGateway.register(entity);
+    return accountRegisterCmd.getAccountRegisterCo();
   }
 }
