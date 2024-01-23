@@ -2,6 +2,7 @@ apply plugin: libs.plugins.getSpringboot().get().getPluginId()
 apply plugin: libs.plugins.getGraalvmNative().get().getPluginId()
 
 dependencies {
+    implementation project(":centaur-log:log-infrastructure")
     implementation project(":centaur-extension")
     implementation libs.springBootStarterWeb
     implementation libs.jasypt
@@ -10,6 +11,7 @@ dependencies {
     implementation libs.springCloudAlibabaNacosConfig
     implementation libs.swagger3Ui
     implementation libs.springBootActuator
+    implementation libs.springBootDataElasticsearch
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

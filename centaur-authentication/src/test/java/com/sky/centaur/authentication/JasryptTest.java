@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * 配置文件敏感信息加密测试
@@ -29,6 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @since 2024-01-12
  */
 @SpringBootTest
+@ActiveProfiles("dev")
 public class JasryptTest {
 
   Logger LOGGER = LoggerFactory.getLogger(JasryptTest.class);
