@@ -17,6 +17,7 @@ lombookPluginVersion = '8.4'
 guavaVersion = '33.0.0-jre'
 swagger3Version = '2.3.0'
 p6spyVersion = '3.9.1'
+springKafkaVersion = '3.1.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -75,6 +76,8 @@ springBootActuator = { module = "org.springframework.boot:spring-boot-starter-ac
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
 springBootDataElasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
+# https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+springKafka = { module = "org.springframework.kafka:spring-kafka", version.ref = "springKafkaVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
