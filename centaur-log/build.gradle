@@ -13,6 +13,7 @@ dependencies {
     implementation libs.springBootActuator
     implementation libs.springBootDataElasticsearch
     implementation libs.springKafka
+    implementation libs.springBootOauth2ResourceServer
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
