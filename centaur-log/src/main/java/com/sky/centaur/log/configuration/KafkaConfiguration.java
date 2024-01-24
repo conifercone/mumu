@@ -31,6 +31,11 @@ import org.springframework.kafka.config.TopicBuilder;
 @ConditionalOnProperty(prefix = "log.kafka", name = "enabled", havingValue = "true")
 public class KafkaConfiguration {
 
+  /**
+   * 操作日志主题
+   *
+   * @return topic
+   */
   @Bean
   public NewTopic operationLog() {
     return TopicBuilder.name("operation-log")
@@ -39,6 +44,11 @@ public class KafkaConfiguration {
         .build();
   }
 
+  /**
+   * 系统日志主题
+   *
+   * @return topic
+   */
   @Bean
   public NewTopic systemLog() {
     return TopicBuilder.name("system-log")
