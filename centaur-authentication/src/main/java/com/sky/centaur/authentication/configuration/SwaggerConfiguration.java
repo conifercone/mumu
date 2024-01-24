@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024-01-20
  */
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfiguration {
 
   @Bean
   public OpenAPI authenticationOpenAPI() {

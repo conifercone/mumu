@@ -32,7 +32,11 @@ import org.springframework.stereotype.Component;
 public class LogProperties {
 
   @NestedConfigurationProperty
-  private ElasticSearch elasticSearch = new ElasticSearch();
+  private Elasticsearch elasticsearch = new Elasticsearch();
+
+  @NestedConfigurationProperty
+  private Kafka kafka = new Kafka();
+
 
   /**
    * 是否开启服务日志
@@ -40,7 +44,7 @@ public class LogProperties {
   private boolean enableLog = false;
 
   @Data
-  public static class ElasticSearch {
+  public static class Elasticsearch {
 
     /**
      * 地址
@@ -58,5 +62,19 @@ public class LogProperties {
      * CA证书指纹
      */
     private String caFingerprint;
+
+    /**
+     * 是否启用
+     */
+    private boolean enabled;
+  }
+
+  @Data
+  public static class Kafka {
+
+    /**
+     * 是否启用
+     */
+    private boolean enabled;
   }
 }

@@ -18,9 +18,9 @@ package com.sky.centaur.log.configuration;
 import com.sky.centaur.log.infrastructure.config.LogProperties;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 /**
  * es配置类
@@ -29,7 +29,9 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
  * @since 2024-01-23
  */
 @Configuration
-public class ElasticsearchConfig extends ElasticsearchConfiguration {
+@ConditionalOnProperty(prefix = "log.elasticsearch", name = "enabled", havingValue = "true")
+public class ElasticsearchConfiguration extends
+    org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
 
   @Resource
   private LogProperties logProperties;
@@ -39,12 +41,12 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
     // 使用构建器来提供集群地址
     return ClientConfiguration.builder()
         // 设置连接地址
-        .connectedTo(logProperties.getElasticSearch().getHostAndPorts())
+        .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
         // 启用ssl并配置CA指纹
-        .usingSsl(logProperties.getElasticSearch().getCaFingerprint())
+        .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
         // 设置用户名密码
-        .withBasicAuth(logProperties.getElasticSearch().getUsername(),
-            logProperties.getElasticSearch().getPassword())
+        .withBasicAuth(logProperties.getElasticsearch().getUsername(),
+            logProperties.getElasticsearch().getPassword())
         // 创建连接信息
         .build();
   }
