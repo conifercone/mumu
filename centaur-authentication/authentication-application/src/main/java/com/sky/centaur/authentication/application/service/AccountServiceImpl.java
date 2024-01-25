@@ -17,9 +17,14 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
+import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,7 +34,8 @@ import org.springframework.stereotype.Service;
  * @since 2024-01-16
  */
 @Service
-public class AccountServiceImpl implements AccountService {
+@GRpcService
+public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
   @Resource
   private AccountRegisterCmdExe accountRegisterCmdExe;
@@ -37,5 +43,11 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
     return accountRegisterCmdExe.execute(accountRegisterCmd);
+  }
+
+  @Override
+  public void register(AccountRegisterGrpcCmd request,
+      StreamObserver<AccountRegisterGrpcCo> responseObserver) {
+    super.register(request, responseObserver);
   }
 }

@@ -14,10 +14,18 @@ jacksonVersion = '2.16.0'
 postgresqlVersion = '42.7.1'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
+protobufVersion = '0.9.4'
 guavaVersion = '33.0.0-jre'
 swagger3Version = '2.3.0'
 p6spyVersion = '3.9.1'
 springKafkaVersion = '3.1.1'
+protobufJavaVersion = '3.25.1'
+protocVersion = '3.25.1'
+protocGenGrpcJavaVersion = '1.59.1'
+grpcStubVersion = '1.59.1'
+grpcProtobufVersion = '1.59.1'
+annotationApiVersion = '1.3.2'
+grpcSpringBootStarterApiVersion = '5.1.5'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -80,6 +88,20 @@ p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 springBootDataElasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
 # https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
 springKafka = { module = "org.springframework.kafka:spring-kafka", version.ref = "springKafkaVersion" }
+# https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+protobufJava = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJavaVersion" }
+# https://mvnrepository.com/artifact/com.google.protobuf/protoc
+protoc = { module = "com.google.protobuf:protoc", version.ref = "protocVersion" }
+# https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java
+protocGenGrpcJava = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "protocGenGrpcJavaVersion" }
+# https://mvnrepository.com/artifact/io.grpc/grpc-stub
+grpcStub = { module = "io.grpc:grpc-stub", version.ref = "grpcStubVersion" }
+# https://mvnrepository.com/artifact/io.grpc/grpc-protobuf
+grpcProtobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcProtobufVersion" }
+# https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+annotationApi = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
+# https://mvnrepository.com/artifact/io.github.lognet/grpc-spring-boot-starter
+grpcSpringBootStarter = { module = "io.github.lognet:grpc-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
@@ -95,3 +117,4 @@ idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufVersion" }

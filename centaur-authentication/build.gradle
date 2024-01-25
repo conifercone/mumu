@@ -17,6 +17,7 @@ dependencies {
     implementation libs.swagger3Ui
     implementation libs.springBootActuator
     implementation libs.p6spy
+    implementation libs.grpcSpringBootStarter
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

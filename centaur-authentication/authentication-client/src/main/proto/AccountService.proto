@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sky.centaur.authentication.client.api.grpc";
+option java_outer_classname = "AccountServiceProto";
+
+service AccountService {
+  rpc register (AccountRegisterGrpcCmd) returns (AccountRegisterGrpcCo);
+}
+
+message AccountRegisterGrpcCmd {
+  AccountRegisterGrpcCo accountRegisterCo = 1;
+}
+
+message AccountRegisterGrpcCo {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  repeated  GrpcGrantedAuthority authorities = 4;
+}
+
+message GrpcGrantedAuthority {
+  string authority = 1;
+}

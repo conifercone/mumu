@@ -1,6 +1,29 @@
+apply plugin: libs.plugins.getProtobuf().get().getPluginId()
+
 dependencies {
     implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-extension")
+    implementation libs.protobufJava
+    implementation libs.grpcStub
+    implementation libs.grpcProtobuf
+    implementation libs.annotationApi
     compileOnly libs.springBootOauth2AuthorizationServer
 }
 
+protobuf {
+    protoc {
+        artifact = libs.protoc.get().toString()
+    }
+    plugins {
+        grpc {
+            artifact = libs.protocGenGrpcJava.get().toString()
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
