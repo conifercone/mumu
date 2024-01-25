@@ -21,6 +21,9 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.extension.exception.AccountAlreadyExistsException;
+import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -40,6 +43,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @Resource
   private PasswordEncoder passwordEncoder;
 
+  @Resource
+  private OperationLogGrpcService operationLogGrpcService;
+
   @Override
   public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
@@ -48,9 +54,21 @@ public class AccountGatewayImpl implements AccountGateway {
     AccountDo accountDoByUsername = accountRepository.findAccountDoByUsername(
         dataObject.getUsername());
     if (accountDoByUsername != null) {
+      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+          .setOperationLogSubmitCo(
+              OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                  .setBizNo(account.getUsername())
+                  .setFail("账户已存在").build())
+          .build());
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
     accountRepository.save(dataObject);
+    operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+        .setOperationLogSubmitCo(
+            OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                .setBizNo(account.getUsername())
+                .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+        .build());
   }
 
   @Override

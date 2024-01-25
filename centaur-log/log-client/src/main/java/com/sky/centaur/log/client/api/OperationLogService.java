@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.log.client.api;
 
+import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+
 /**
  * 操作日志api
  *
@@ -22,5 +24,7 @@ package com.sky.centaur.log.client.api;
  * @since 2024-01-24
  */
 public interface OperationLogService {
+
+  void submit(OperationLogSubmitCmd operationLogSubmitCmd);
 
 }

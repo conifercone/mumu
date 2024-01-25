@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation;
+package com.sky.centaur.log.client.dto.co;
 
 import lombok.Data;
 
 /**
- * 操作日志领域模型
+ * 操作日志提交客户端对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-25
  */
 @Data
-public class OperationLog {
+public class OperationLogSubmitCo {
 
   /**
    * 日志内容
@@ -51,4 +51,13 @@ public class OperationLog {
    */
   private String detail;
 
+  /**
+   * 操作日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 操作日志失败的文本模板
+   */
+  private String fail;
 }

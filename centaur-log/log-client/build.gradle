@@ -1,6 +1,8 @@
 apply plugin: libs.plugins.getProtobuf().get().getPluginId()
 
 dependencies {
+    implementation project(":centaur-extension")
+    implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.protobufJava
     implementation libs.grpcStub
     implementation libs.grpcProtobuf

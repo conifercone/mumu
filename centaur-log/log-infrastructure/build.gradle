@@ -1,2 +1,5 @@
 dependencies {
+    implementation project(":centaur-log:log-domain")
+    implementation project(":centaur-log:log-client")
+    implementation libs.springKafka
 }

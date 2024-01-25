@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation;
+package com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject;
 
 import lombok.Data;
 
 /**
- * 操作日志领域模型
+ * 操作日志数据对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-25
  */
 @Data
-public class OperationLog {
+public class OperationLogDo {
 
   /**
    * 日志内容
@@ -50,5 +50,4 @@ public class OperationLog {
    * 扩展参数，记录操作日志的修改详情
    */
   private String detail;
-
 }
