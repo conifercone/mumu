@@ -14,6 +14,7 @@ dependencies {
     implementation libs.springBootDataElasticsearch
     implementation libs.springKafka
     implementation libs.springBootOauth2ResourceServer
+    implementation libs.grpcSpringBootStarter
     compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

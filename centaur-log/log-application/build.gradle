@@ -1,2 +1,4 @@
 dependencies {
+    implementation libs.grpcStub
+    implementation libs.grpcSpringBootStarter
 }

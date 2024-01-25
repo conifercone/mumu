@@ -1,2 +1,26 @@
+apply plugin: libs.plugins.getProtobuf().get().getPluginId()
+
 dependencies {
+    implementation libs.protobufJava
+    implementation libs.grpcStub
+    implementation libs.grpcProtobuf
+    implementation libs.annotationApi
+}
+
+protobuf {
+    protoc {
+        artifact = libs.protoc.get().toString()
+    }
+    plugins {
+        grpc {
+            artifact = libs.protocGenGrpcJava.get().toString()
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
 }

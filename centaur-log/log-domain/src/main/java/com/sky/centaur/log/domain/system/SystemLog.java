@@ -15,12 +15,19 @@
  */
 package com.sky.centaur.log.domain.system;
 
+import lombok.Data;
+
 /**
  * 系统日志领域模型
  *
  * @author 单开宇
  * @since 2024-01-24
  */
+@Data
 public class SystemLog {
 
+  /**
+   * 日志内容
+   */
+  private String content;
 }
