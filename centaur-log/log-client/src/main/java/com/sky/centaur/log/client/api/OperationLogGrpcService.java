@@ -26,6 +26,7 @@ import io.grpc.ManagedChannelBuilder;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Random;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -37,14 +38,22 @@ import org.springframework.util.CollectionUtils;
  * @since 2024-01-25
  */
 @Component
-public class OperationLogGrpcService {
+public class OperationLogGrpcService implements DisposableBean {
 
   @Resource
   NacosDiscoveryClient nacosDiscoveryClient;
 
+  private ManagedChannel channel;
+
+  @Override
+  public void destroy() {
+    channel.shutdown();
+  }
 
   public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
-    final ManagedChannel channel = getManagedChannelUsePlaintext();
+    if (channel == null) {
+      channel = getManagedChannelUsePlaintext();
+    }
     OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
         channel);
     //noinspection ResultOfMethodCallIgnored

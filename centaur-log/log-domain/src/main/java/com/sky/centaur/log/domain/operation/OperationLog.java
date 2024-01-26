@@ -51,4 +51,14 @@ public class OperationLog {
    */
   private String detail;
 
+  /**
+   * 操作日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 操作日志失败的文本模板
+   */
+  private String fail;
+
 }
