@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation.gateway;
+package com.sky.centaur.log.client.dto;
 
-import com.sky.centaur.log.domain.operation.OperationLog;
+import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
+import lombok.Data;
 
 /**
- * 操作日志领域网关
+ * 操作日志保存指令
  *
  * @author 单开宇
  * @since 2024-01-25
  */
-public interface OperationLogGateway {
+@Data
+public class OperationLogSaveCmd {
 
-  void submit(OperationLog operationLog);
-
-  void save(OperationLog operationLog);
+  private OperationLogSaveCo operationLogSaveCo;
 }

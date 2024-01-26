@@ -15,9 +15,12 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
+import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
-import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogDo;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import java.util.UUID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -32,16 +35,31 @@ public class OperationLogConvertor {
 
 
   @Contract("_ -> new")
-  public static @NotNull OperationLogDo toDataObject(@NotNull OperationLog operationLog) {
-    OperationLogDo operationLogDo = new OperationLogDo();
-    BeanUtils.copyProperties(operationLog, operationLogDo);
-    return operationLogDo;
+  public static @NotNull OperationLogKafkaDo toKafkaDataObject(@NotNull OperationLog operationLog) {
+    OperationLogKafkaDo operationLogKafkaDo = new OperationLogKafkaDo();
+    BeanUtils.copyProperties(operationLog, operationLogKafkaDo);
+    return operationLogKafkaDo;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull OperationLogEsDo toEsDataObject(@NotNull OperationLog operationLog) {
+    OperationLogEsDo operationLogEsDo = new OperationLogEsDo();
+    BeanUtils.copyProperties(operationLog, operationLogEsDo);
+    operationLogEsDo.setId(UUID.randomUUID().toString());
+    return operationLogEsDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
+    return operationLog;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull OperationLog toEntity(@NotNull OperationLogSaveCo operationLogSaveCo) {
+    OperationLog operationLog = new OperationLog();
+    BeanUtils.copyProperties(operationLogSaveCo, operationLog);
     return operationLog;
   }
 

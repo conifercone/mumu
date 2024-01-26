@@ -15,8 +15,16 @@
  */
 package com.sky.centaur.log.application.consumer.operation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sky.centaur.log.client.api.OperationLogService;
+import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
+import com.sky.centaur.log.domain.operation.OperationLog;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +39,20 @@ public class OperationLogConsumer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OperationLogConsumer.class);
 
+  private final ObjectMapper objectMapper = new ObjectMapper();
+
+  @Resource
+  private OperationLogService operationLogService;
+
   @KafkaListener(topics = {"operation-log"})
-  public void handle(String operationLog) {
+  public void handle(String operationLog) throws JsonProcessingException {
     LOGGER.info("接收到消息: {}", operationLog);
+    OperationLog operationLogEntity = objectMapper.readValue(operationLog, OperationLog.class);
+    //存储日志
+    OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
+    OperationLogSaveCo operationLogSaveCo = new OperationLogSaveCo();
+    BeanUtils.copyProperties(operationLogEntity, operationLogSaveCo);
+    operationLogSaveCmd.setOperationLogSaveCo(operationLogSaveCo);
+    operationLogService.save(operationLogSaveCmd);
   }
 }

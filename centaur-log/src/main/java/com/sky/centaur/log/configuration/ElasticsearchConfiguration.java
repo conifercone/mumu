@@ -47,6 +47,8 @@ public class ElasticsearchConfiguration extends
         // 设置用户名密码
         .withBasicAuth(logProperties.getElasticsearch().getUsername(),
             logProperties.getElasticsearch().getPassword())
+        .withSocketTimeout(60000)
+        .withConnectTimeout(60000)
         // 创建连接信息
         .build();
   }

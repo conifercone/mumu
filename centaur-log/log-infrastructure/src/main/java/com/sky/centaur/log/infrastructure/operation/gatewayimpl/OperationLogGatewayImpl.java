@@ -19,7 +19,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
-import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogRepository;
+import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -33,16 +35,27 @@ import org.springframework.stereotype.Component;
 public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Resource
-  private OperationLogRepository operationLogRepository;
+  private OperationLogKafkaRepository operationLogKafkaRepository;
+
+
+  @Resource
+  private OperationLogEsRepository operationLogEsRepository;
+
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public void submit(OperationLog operationLog) {
     try {
-      operationLogRepository.send("operation-log", objectMapper.writeValueAsString(operationLog));
+      operationLogKafkaRepository.send("operation-log", objectMapper.writeValueAsString(
+          OperationLogConvertor.toKafkaDataObject(operationLog)));
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public void save(OperationLog operationLog) {
+    operationLogEsRepository.save(OperationLogConvertor.toEsDataObject(operationLog));
   }
 }

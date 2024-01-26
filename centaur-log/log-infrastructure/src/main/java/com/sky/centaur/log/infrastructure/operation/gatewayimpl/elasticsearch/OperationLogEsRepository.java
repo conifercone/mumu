@@ -13,41 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject;
+package com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch;
 
-import lombok.Data;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
- * 操作日志数据对象
+ * 操作日志es存储操作对象
  *
  * @author 单开宇
- * @since 2024-01-25
+ * @since 2024-01-26
  */
-@Data
-public class OperationLogDo {
+public interface OperationLogEsRepository extends
+    ElasticsearchRepository<OperationLogEsDo, String> {
 
-  /**
-   * 日志内容
-   */
-  private String content;
-
-  /**
-   * 操作日志的执行人
-   */
-  private String operator;
-
-  /**
-   * 操作日志绑定的业务对象标识
-   */
-  private String bizNo;
-
-  /**
-   * 操作日志的种类
-   */
-  private String category;
-
-  /**
-   * 扩展参数，记录操作日志的修改详情
-   */
-  private String detail;
 }

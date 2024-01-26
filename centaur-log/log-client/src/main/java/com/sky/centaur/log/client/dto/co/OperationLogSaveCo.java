@@ -13,19 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation.gateway;
+package com.sky.centaur.log.client.dto.co;
 
-import com.sky.centaur.log.domain.operation.OperationLog;
+import lombok.Data;
 
 /**
- * 操作日志领域网关
+ * 操作日志保存客户端对象
  *
  * @author 单开宇
  * @since 2024-01-25
  */
-public interface OperationLogGateway {
+@Data
+public class OperationLogSaveCo {
 
-  void submit(OperationLog operationLog);
+  /**
+   * 日志内容
+   */
+  private String content;
 
-  void save(OperationLog operationLog);
+  /**
+   * 操作日志的执行人
+   */
+  private String operator;
+
+  /**
+   * 操作日志绑定的业务对象标识
+   */
+  private String bizNo;
+
+  /**
+   * 操作日志的种类
+   */
+  private String category;
+
+  /**
+   * 扩展参数，记录操作日志的修改详情
+   */
+  private String detail;
+
+  /**
+   * 操作日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 操作日志失败的文本模板
+   */
+  private String fail;
 }

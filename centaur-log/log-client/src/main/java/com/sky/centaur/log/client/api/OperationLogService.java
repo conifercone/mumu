@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.client.api;
 
+import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
 
 /**
@@ -27,4 +28,5 @@ public interface OperationLogService {
 
   void submit(OperationLogSubmitCmd operationLogSubmitCmd);
 
+  void save(OperationLogSaveCmd operationLogSaveCmd);
 }

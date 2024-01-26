@@ -33,9 +33,10 @@ import org.springframework.stereotype.Component;
  * @since 2024-01-25
  */
 @Component
-public class OperationLogRepository extends KafkaTemplate<Object, Object> {
+public class OperationLogKafkaRepository extends KafkaTemplate<Object, Object> {
 
-  public OperationLogRepository(@Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
+  public OperationLogKafkaRepository(
+      @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
       @Autowired ProducerListener<Object, Object> kafkaProducerListener,
       @Autowired @NotNull ObjectProvider<RecordMessageConverter> messageConverter,
       @Autowired @NotNull KafkaProperties properties) {

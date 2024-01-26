@@ -15,12 +15,14 @@
  */
 package com.sky.centaur.log.application.service;
 
+import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;
 import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.api.grpc.Empty;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import io.grpc.stub.StreamObserver;
@@ -43,9 +45,17 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   @Resource
   private OperationLogSubmitCmdExe operationLogSubmitCmdExe;
 
+  @Resource
+  private OperationLogSaveCmdExe operationLogSaveCmdExe;
+
   @Override
   public void submit(OperationLogSubmitCmd operationLogSubmitCmd) {
     operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+  }
+
+  @Override
+  public void save(OperationLogSaveCmd operationLogSaveCmd) {
+    operationLogSaveCmdExe.execute(operationLogSaveCmd);
   }
 
   @Override
