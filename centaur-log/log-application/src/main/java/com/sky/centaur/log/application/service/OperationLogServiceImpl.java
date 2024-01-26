@@ -49,7 +49,7 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   }
 
   @Override
-  public void submit(OperationLogSubmitGrpcCmd request,
+  public void submit(@NotNull OperationLogSubmitGrpcCmd request,
       @NotNull StreamObserver<Empty> responseObserver) {
     OperationLogSubmitCmd operationLogSubmitCmd = new OperationLogSubmitCmd();
     OperationLogSubmitCo operationLogSubmitCo = new OperationLogSubmitCo();
