@@ -42,7 +42,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
-
+  private static final String VOID = "void";
   private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
 
@@ -72,6 +72,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       @NotNull MediaType selectedContentType,
       @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
       @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
+    if (VOID.equals(getReturnName(returnType))) {
+      return ResultResponse.success();
+    }
     if (body instanceof ResultResponse) {
       return body;
     } else if (body instanceof String) {
@@ -89,5 +92,12 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     } else {
       return null;
     }
+  }
+
+  private @NotNull String getReturnName(MethodParameter returnType) {
+    if (returnType == null || returnType.getMethod() == null) {
+      return "";
+    }
+    return returnType.getMethod().getReturnType().getName();
   }
 }

@@ -17,6 +17,7 @@ package com.sky.centaur.log;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 日志服务
@@ -25,6 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2024-01-22
  */
 @SpringBootApplication
+@ComponentScan(basePackages = "com.sky.centaur.**")
 public class CentaurLogApplication {
 
   public static void main(String[] args) {
