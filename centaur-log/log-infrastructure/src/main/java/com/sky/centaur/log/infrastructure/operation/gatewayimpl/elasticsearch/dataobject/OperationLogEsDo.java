@@ -42,13 +42,13 @@ public class OperationLogEsDo {
   /**
    * 日志内容
    */
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String content;
 
   /**
    * 操作日志的执行人
    */
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String operator;
 
   /**
@@ -66,19 +66,19 @@ public class OperationLogEsDo {
   /**
    * 扩展参数，记录操作日志的修改详情
    */
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String detail;
 
   /**
    * 操作日志成功的文本模板
    */
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String success;
 
   /**
    * 操作日志失败的文本模板
    */
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String fail;
 
   /**
