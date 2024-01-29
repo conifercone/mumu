@@ -26,6 +26,7 @@ grpcStubVersion = '1.59.1'
 grpcProtobufVersion = '1.59.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
+redisOmSpringVersion = "0.8.8"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -102,6 +103,8 @@ grpcProtobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcProtobufVe
 annotationApi = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
 # https://mvnrepository.com/artifact/io.github.lognet/grpc-spring-boot-starter
 grpcSpringBootStarter = { module = "io.github.lognet:grpc-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+# https://mvnrepository.com/artifact/com.redis.om/redis-om-spring
+redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
