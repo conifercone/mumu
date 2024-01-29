@@ -20,6 +20,8 @@ import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +48,7 @@ public class OperationLogConvertor {
     OperationLogEsDo operationLogEsDo = new OperationLogEsDo();
     BeanUtils.copyProperties(operationLog, operationLogEsDo);
     operationLogEsDo.setId(UUID.randomUUID().toString());
+    operationLogEsDo.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     return operationLogEsDo;
   }
 
