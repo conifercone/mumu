@@ -1,11 +1,12 @@
-<div style="text-align:center">
+<!--suppress HtmlDeprecatedAttribute -->
+<p align="center">
 	<!--suppress CheckImageSize -->
 <img src="./logo.png" alt="centaur" width="200" height="200"/>
-</div>
+</p>
 
-# <center> centaur
+# centaur
 
-<p style="text-align:center">
+<p>
   <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html">
     <img alt="jdk version" src="https://img.shields.io/badge/JDK-17+-green.svg" />
   </a>
