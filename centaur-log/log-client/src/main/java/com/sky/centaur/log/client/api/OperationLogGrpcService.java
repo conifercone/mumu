@@ -16,13 +16,12 @@
 package com.sky.centaur.log.client.api;
 
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryClient;
-import com.sky.centaur.extension.exception.CentaurException;
-import com.sky.centaur.extension.processor.response.ResultCode;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceFutureStub;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Random;
@@ -71,7 +70,7 @@ public class OperationLogGrpcService implements DisposableBean {
   private ServiceInstance getServiceInstance() {
     List<ServiceInstance> instances = nacosDiscoveryClient.getInstances("log");
     if (CollectionUtils.isEmpty(instances)) {
-      throw new CentaurException(ResultCode.INTERNAL_SERVER_ERROR);
+      throw Status.NOT_FOUND.asRuntimeException();
     }
     Random random = new Random();
     int randomIndex = random.nextInt(instances.size());
