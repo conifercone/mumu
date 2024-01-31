@@ -53,6 +53,8 @@ jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref 
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonVersion" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
 jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jacksonVersion" }
+# https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jacksonVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
 springBootOauth2AuthorizationServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
@@ -108,7 +110,7 @@ redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisO
 
 [bundles]
 jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
-jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations"]
+jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }

@@ -3,4 +3,5 @@ dependencies {
     implementation project(":centaur-log:log-client")
     implementation libs.springKafka
     implementation libs.springBootDataElasticsearch
+    implementation libs.redisOmSpring
 }

@@ -15,7 +15,14 @@
  */
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 操作日志数据对象
@@ -25,6 +32,11 @@ import lombok.Data;
  */
 @Data
 public class OperationLogKafkaDo {
+
+  /**
+   * 唯一标识
+   */
+  private String id;
 
   /**
    * 日志内容
@@ -60,4 +72,13 @@ public class OperationLogKafkaDo {
    * 操作日志失败的文本模板
    */
   private String fail;
+
+  /**
+   * 操作日志的操作时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  private LocalDateTime operatingTime;
 }

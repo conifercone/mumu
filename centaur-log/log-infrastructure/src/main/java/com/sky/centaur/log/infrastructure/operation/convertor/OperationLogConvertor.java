@@ -20,6 +20,7 @@ import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.dataobject.OperationLogRedisDo;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -47,15 +48,22 @@ public class OperationLogConvertor {
   public static @NotNull OperationLogEsDo toEsDataObject(@NotNull OperationLog operationLog) {
     OperationLogEsDo operationLogEsDo = new OperationLogEsDo();
     BeanUtils.copyProperties(operationLog, operationLogEsDo);
-    operationLogEsDo.setId(UUID.randomUUID().toString());
-    operationLogEsDo.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     return operationLogEsDo;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull OperationLogRedisDo toRedisDataObject(@NotNull OperationLog operationLog) {
+    OperationLogRedisDo operationLogRedisDo = new OperationLogRedisDo();
+    BeanUtils.copyProperties(operationLog, operationLogRedisDo);
+    return operationLogRedisDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
+    operationLog.setId(UUID.randomUUID().toString());
+    operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     return operationLog;
   }
 

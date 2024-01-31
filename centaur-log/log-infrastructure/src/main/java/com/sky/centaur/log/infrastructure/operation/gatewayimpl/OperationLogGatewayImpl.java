@@ -22,7 +22,9 @@ import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.OperationLogRedisRepository;
 import jakarta.annotation.Resource;
+import java.util.Collections;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,6 +43,9 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   @Resource
   private OperationLogEsRepository operationLogEsRepository;
 
+  @Resource
+  private OperationLogRedisRepository operationLogRedisRepository;
+
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -57,5 +62,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   @Override
   public void save(OperationLog operationLog) {
     operationLogEsRepository.save(OperationLogConvertor.toEsDataObject(operationLog));
+    operationLogRedisRepository.saveAll(
+        Collections.singletonList(OperationLogConvertor.toRedisDataObject(operationLog)));
   }
 }

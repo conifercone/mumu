@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.domain.operation;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -25,6 +26,11 @@ import lombok.Data;
  */
 @Data
 public class OperationLog {
+
+  /**
+   * 唯一标识
+   */
+  private String id;
 
   /**
    * 日志内容
@@ -61,4 +67,8 @@ public class OperationLog {
    */
   private String fail;
 
+  /**
+   * 操作日志的操作时间
+   */
+  private LocalDateTime operatingTime;
 }

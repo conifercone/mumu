@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
-import com.sky.centaur.log.domain.operation.OperationLog;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +47,12 @@ public class OperationLogConsumer {
   @KafkaListener(topics = {"operation-log"})
   public void handle(String operationLog) throws JsonProcessingException {
     LOGGER.info("接收到消息: {}", operationLog);
-    OperationLog operationLogEntity = objectMapper.readValue(operationLog, OperationLog.class);
+    OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
+        OperationLogKafkaDo.class);
     //存储日志
     OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
     OperationLogSaveCo operationLogSaveCo = new OperationLogSaveCo();
-    BeanUtils.copyProperties(operationLogEntity, operationLogSaveCo);
+    BeanUtils.copyProperties(operationLogKafkaDo, operationLogSaveCo);
     operationLogSaveCmd.setOperationLogSaveCo(operationLogSaveCo);
     operationLogService.save(operationLogSaveCmd);
   }
