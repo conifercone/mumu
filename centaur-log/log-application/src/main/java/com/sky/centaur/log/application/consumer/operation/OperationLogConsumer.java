@@ -22,8 +22,6 @@ import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import jakarta.annotation.Resource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -37,8 +35,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogConsumer {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(OperationLogConsumer.class);
-
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Resource
@@ -46,10 +42,8 @@ public class OperationLogConsumer {
 
   @KafkaListener(topics = {"operation-log"})
   public void handle(String operationLog) throws JsonProcessingException {
-    LOGGER.info("接收到消息: {}", operationLog);
     OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
         OperationLogKafkaDo.class);
-    //存储日志
     OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
     OperationLogSaveCo operationLogSaveCo = new OperationLogSaveCo();
     BeanUtils.copyProperties(operationLogKafkaDo, operationLogSaveCo);
