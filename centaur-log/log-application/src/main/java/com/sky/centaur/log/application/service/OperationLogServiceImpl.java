@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.application.service;
 
+import com.sky.centaur.extension.exception.CentaurException;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;
 import com.sky.centaur.log.client.api.OperationLogService;
@@ -29,6 +30,7 @@ import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
+import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,7 +74,11 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     operationLogSubmitCo.setSuccess(operationLogSubmitGrpcCo.getSuccess());
     operationLogSubmitCo.setFail(operationLogSubmitGrpcCo.getFail());
     operationLogSubmitCmd.setOperationLogSubmitCo(operationLogSubmitCo);
-    operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+    try {
+      operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
     Empty build = Empty.newBuilder().build();
     responseObserver.onNext(build);
     responseObserver.onCompleted();

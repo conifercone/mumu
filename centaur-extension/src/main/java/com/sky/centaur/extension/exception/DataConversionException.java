@@ -16,32 +16,16 @@
 package com.sky.centaur.extension.exception;
 
 import com.sky.centaur.extension.processor.response.ResultCode;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * 顶级异常
+ * 数据转换异常
  *
  * @author 单开宇
  * @since 2024-01-20
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class CentaurException extends RuntimeException {
+public class DataConversionException extends CentaurException {
 
-  private ResultCode resultCode;
-
-  private Object data;
-
-  public CentaurException(@NotNull ResultCode resultCode) {
-    super(resultCode.getResultMsg());
-    this.resultCode = resultCode;
-  }
-
-  public CentaurException(@NotNull ResultCode resultCode, Object data) {
-    super(resultCode.getResultMsg());
-    this.resultCode = resultCode;
-    this.data = data;
+  public DataConversionException() {
+    super(ResultCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
   }
 }

@@ -2,6 +2,7 @@ dependencies {
     implementation project(":centaur-log:log-client")
     implementation project(":centaur-log:log-domain")
     implementation project(":centaur-log:log-infrastructure")
+    implementation project(":centaur-extension")
     implementation libs.grpcStub
     implementation libs.grpcSpringBootStarter
     implementation libs.springKafka
