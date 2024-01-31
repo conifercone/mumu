@@ -43,9 +43,9 @@ public class GrpcExceptionAdvice {
   private static final Logger LOGGER = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
 
 
-  @SuppressWarnings("unused")
   @GRpcExceptionHandler
-  public Status handle(CentaurException centaurException, GRpcExceptionScope gRpcExceptionScope) {
+  public Status handle(CentaurException centaurException,
+      @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
     if (centaurException != null) {
       LOGGER.error(centaurException.getMessage());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
