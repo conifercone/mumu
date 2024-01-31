@@ -25,7 +25,17 @@ import com.sky.centaur.log.domain.operation.OperationLog;
  */
 public interface OperationLogGateway {
 
+  /**
+   * 提交操作日志
+   *
+   * @param operationLog 操作日志领域对象
+   */
   void submit(OperationLog operationLog);
 
+  /**
+   * 保存操作日志
+   *
+   * @param operationLog 操作日志领域对象
+   */
   void save(OperationLog operationLog);
 }
