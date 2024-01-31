@@ -13,47 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.system;
+package com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject;
 
 import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
- * 系统日志领域模型
+ * 系统日志es数据对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-26
  */
+@Document(indexName = "system-log")
 @Data
-public class SystemLog {
+public class SystemLogEsDo {
 
   /**
    * 唯一标识
    */
+  @Id
   private String id;
 
   /**
    * 日志内容
    */
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String content;
 
   /**
    * 系统日志的种类
    */
+  @Field(type = FieldType.Keyword)
   private String category;
 
   /**
    * 系统日志成功的文本模板
    */
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String success;
 
   /**
    * 系统日志失败的文本模板
    */
+  @Field(type = FieldType.Text, analyzer = "ik_max_word")
   private String fail;
 
   /**
    * 系统日志的记录时间
    */
+  @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
   private LocalDateTime recordTime;
 }

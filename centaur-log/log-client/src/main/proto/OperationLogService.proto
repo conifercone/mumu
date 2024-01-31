@@ -5,7 +5,7 @@ option java_package = "com.sky.centaur.log.client.api.grpc";
 option java_outer_classname = "OperationLogServiceProto";
 
 service OperationLogService {
-  rpc submit (OperationLogSubmitGrpcCmd) returns (Empty);
+  rpc submit (OperationLogSubmitGrpcCmd) returns (OperationLogServiceEmptyResult);
 }
 
 message OperationLogSubmitGrpcCmd {
@@ -22,6 +22,6 @@ message OperationLogSubmitGrpcCo {
   string fail = 7;
 }
 
-message Empty {
+message OperationLogServiceEmptyResult {
 
 }

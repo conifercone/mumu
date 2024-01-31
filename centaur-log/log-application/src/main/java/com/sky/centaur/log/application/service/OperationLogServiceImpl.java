@@ -19,7 +19,7 @@ import com.sky.centaur.extension.exception.CentaurException;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;
 import com.sky.centaur.log.client.api.OperationLogService;
-import com.sky.centaur.log.client.api.grpc.Empty;
+import com.sky.centaur.log.client.api.grpc.OperationLogServiceEmptyResult;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
@@ -62,8 +62,24 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
 
   @Override
   public void submit(@NotNull OperationLogSubmitGrpcCmd request,
-      @NotNull StreamObserver<Empty> responseObserver) {
+      @NotNull StreamObserver<OperationLogServiceEmptyResult> responseObserver) {
     OperationLogSubmitCmd operationLogSubmitCmd = new OperationLogSubmitCmd();
+    OperationLogSubmitCo operationLogSubmitCo = getOperationLogSubmitCo(
+        request);
+    operationLogSubmitCmd.setOperationLogSubmitCo(operationLogSubmitCo);
+    try {
+      operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    OperationLogServiceEmptyResult build = OperationLogServiceEmptyResult.newBuilder().build();
+    responseObserver.onNext(build);
+    responseObserver.onCompleted();
+  }
+
+  @NotNull
+  private static OperationLogSubmitCo getOperationLogSubmitCo(
+      @NotNull OperationLogSubmitGrpcCmd request) {
     OperationLogSubmitCo operationLogSubmitCo = new OperationLogSubmitCo();
     OperationLogSubmitGrpcCo operationLogSubmitGrpcCo = request.getOperationLogSubmitCo();
     operationLogSubmitCo.setContent(operationLogSubmitGrpcCo.getContent());
@@ -73,14 +89,6 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     operationLogSubmitCo.setDetail(operationLogSubmitGrpcCo.getDetail());
     operationLogSubmitCo.setSuccess(operationLogSubmitGrpcCo.getSuccess());
     operationLogSubmitCo.setFail(operationLogSubmitGrpcCo.getFail());
-    operationLogSubmitCmd.setOperationLogSubmitCo(operationLogSubmitCo);
-    try {
-      operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-    } catch (CentaurException e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    Empty build = Empty.newBuilder().build();
-    responseObserver.onNext(build);
-    responseObserver.onCompleted();
+    return operationLogSubmitCo;
   }
 }

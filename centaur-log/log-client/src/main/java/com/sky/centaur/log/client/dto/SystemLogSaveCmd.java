@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.client.api;
+package com.sky.centaur.log.client.dto;
 
-import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
-import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
+import lombok.Data;
 
 /**
- * 系统日志api
+ * 系统日志保存指令
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-25
  */
-public interface SystemLogService {
+@Data
+public class SystemLogSaveCmd {
 
-  void submit(SystemLogSubmitCmd systemLogSubmitCmd);
-
-  void save(SystemLogSaveCmd systemLogSaveCmd);
+  private SystemLogSaveCo systemLogSaveCo;
 }

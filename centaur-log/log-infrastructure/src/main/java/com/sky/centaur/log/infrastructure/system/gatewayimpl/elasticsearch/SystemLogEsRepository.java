@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.client.api;
+package com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch;
 
-import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
-import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
+import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
- * 系统日志api
+ * 系统日志es存储操作对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-31
  */
-public interface SystemLogService {
+public interface SystemLogEsRepository extends ElasticsearchRepository<SystemLogEsDo, String> {
 
-  void submit(SystemLogSubmitCmd systemLogSubmitCmd);
-
-  void save(SystemLogSaveCmd systemLogSaveCmd);
 }

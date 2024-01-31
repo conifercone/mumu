@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.client.api;
+package com.sky.centaur.log.domain.system.gateway;
 
-import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
-import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
+import com.sky.centaur.log.domain.system.SystemLog;
 
 /**
- * 系统日志api
+ * 系统日志领域网关
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-31
  */
-public interface SystemLogService {
+public interface SystemLogGateway {
 
-  void submit(SystemLogSubmitCmd systemLogSubmitCmd);
+  /**
+   * 提交系统日志
+   *
+   * @param systemLog 系统日志领域对象
+   */
+  void submit(SystemLog systemLog);
 
-  void save(SystemLogSaveCmd systemLogSaveCmd);
+  /**
+   * 保存系统日志
+   *
+   * @param systemLog 系统日志领域对象
+   */
+  void save(SystemLog systemLog);
 }

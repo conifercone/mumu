@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.system;
+package com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 系统日志领域模型
+ * 系统日志数据对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-01-25
  */
 @Data
-public class SystemLog {
+public class SystemLogKafkaDo {
 
   /**
    * 唯一标识
@@ -55,5 +61,9 @@ public class SystemLog {
   /**
    * 系统日志的记录时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
   private LocalDateTime recordTime;
 }
