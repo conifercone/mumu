@@ -59,7 +59,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     LOGGER.error(centaurException.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
-            SystemLogSubmitGrpcCo.newBuilder().setContent("CentaurException")
+            SystemLogSubmitGrpcCo.newBuilder().setContent(centaurException.getMessage())
                 .setCategory("centaurException")
                 .setFail(ExceptionUtils.getStackTrace(centaurException)).build())
         .build());
@@ -74,7 +74,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     LOGGER.error(exception.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
-            SystemLogSubmitGrpcCo.newBuilder().setContent("Exception")
+            SystemLogSubmitGrpcCo.newBuilder().setContent(exception.getMessage())
                 .setCategory("exception")
                 .setFail(ExceptionUtils.getStackTrace(exception)).build())
         .build());
