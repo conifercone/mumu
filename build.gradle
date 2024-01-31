@@ -193,6 +193,7 @@ subprojects { project ->
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian
         implementation libs.guava
+        implementation libs.commonsLang3
         testImplementation libs.junitJupiter
         annotationProcessor libs.springBootConfigurationProcessor
     }

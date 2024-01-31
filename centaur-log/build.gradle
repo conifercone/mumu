@@ -17,7 +17,6 @@ dependencies {
     implementation libs.springKafka
     implementation libs.grpcSpringBootStarter
     implementation libs.redisOmSpring
-    compileOnly libs.springBootDevtools
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
 }

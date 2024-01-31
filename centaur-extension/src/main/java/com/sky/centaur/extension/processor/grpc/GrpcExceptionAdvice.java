@@ -16,10 +16,17 @@
 package com.sky.centaur.extension.processor.grpc;
 
 import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import io.grpc.Status;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.lognet.springboot.grpc.recovery.GRpcExceptionHandler;
 import org.lognet.springboot.grpc.recovery.GRpcExceptionScope;
 import org.lognet.springboot.grpc.recovery.GRpcServiceAdvice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * grpc异常统一处理
@@ -30,9 +37,24 @@ import org.lognet.springboot.grpc.recovery.GRpcServiceAdvice;
 @GRpcServiceAdvice
 public class GrpcExceptionAdvice {
 
+  @Resource
+  private SystemLogGrpcService systemLogGrpcService;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
+
+
   @SuppressWarnings("unused")
   @GRpcExceptionHandler
   public Status handle(CentaurException centaurException, GRpcExceptionScope gRpcExceptionScope) {
+    if (centaurException != null) {
+      LOGGER.error(centaurException.getMessage());
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder().setContent("CentaurException")
+                  .setCategory("centaurException")
+                  .setFail(ExceptionUtils.getStackTrace(centaurException)).build())
+          .build());
+    }
     return Status.INTERNAL;
   }
 }

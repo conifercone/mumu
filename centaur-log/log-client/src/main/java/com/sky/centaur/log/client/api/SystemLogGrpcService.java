@@ -15,21 +15,21 @@
  */
 package com.sky.centaur.log.client.api;
 
-import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc;
-import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceFutureStub;
-import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.SystemLogServiceGrpc;
+import com.sky.centaur.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceFutureStub;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
 /**
- * 操作日志对外提供grpc调用实例
+ * 系统日志对外提供grpc调用实例
  *
  * @author 单开宇
  * @since 2024-01-25
  */
 @Component
-public class OperationLogGrpcService extends LogGrpcService implements DisposableBean {
+public class SystemLogGrpcService extends LogGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 
@@ -38,14 +38,14 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
     channel.shutdown();
   }
 
-  public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+  public void submit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     if (channel == null) {
       channel = getManagedChannelUsePlaintext();
     }
-    OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
+    SystemLogServiceFutureStub systemLogServiceFutureStub = SystemLogServiceGrpc.newFutureStub(
         channel);
     //noinspection ResultOfMethodCallIgnored
-    operationLogServiceFutureStub.submit(operationLogSubmitGrpcCmd);
+    systemLogServiceFutureStub.submit(systemLogSubmitGrpcCmd);
   }
 
 }

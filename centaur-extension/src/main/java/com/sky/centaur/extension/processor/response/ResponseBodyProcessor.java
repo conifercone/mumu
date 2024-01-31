@@ -19,6 +19,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.extension.client.dto.co.ClientObject;
 import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +50,19 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   private static final String VOID = "void";
   private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
+  @Resource
+  private SystemLogGrpcService systemLogGrpcService;
+
 
   @ExceptionHandler(CentaurException.class)
   public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException) {
-    LOGGER.error(centaurException.getResultCode().getResultMsg(), centaurException);
+    LOGGER.error(centaurException.getMessage());
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder().setContent("CentaurException")
+                .setCategory("centaurException")
+                .setFail(ExceptionUtils.getStackTrace(centaurException)).build())
+        .build());
     if (centaurException.getData() != null) {
       return ResultResponse.failure(centaurException.getResultCode(), centaurException.getData());
     }
@@ -57,7 +71,13 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(Exception.class)
   public ResultResponse<?> handleException(@NotNull Exception exception) {
-    LOGGER.error(exception.getMessage(), exception);
+    LOGGER.error(exception.getMessage());
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder().setContent("Exception")
+                .setCategory("exception")
+                .setFail(ExceptionUtils.getStackTrace(exception)).build())
+        .build());
     return ResultResponse.failure(ResultCode.INTERNAL_SERVER_ERROR);
   }
 
