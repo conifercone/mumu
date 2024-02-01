@@ -74,8 +74,6 @@ springBootConfigurationProcessor = { module = "org.springframework.boot:spring-b
 springCloudDependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
 # https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-alibaba-dependencies
 springCloudAlibabaDependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "springCloudAlibabaVersion" }
-# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap
-springCloudBootstrap = { module = "org.springframework.cloud:spring-cloud-starter-bootstrap" }
 # https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-discovery
 springCloudAlibabaNacosDiscovery = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery" }
 # https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config

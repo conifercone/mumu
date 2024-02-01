@@ -8,7 +8,6 @@ dependencies {
     implementation project(":centaur-log:log-adapter")
     implementation libs.springBootStarterWeb
     implementation libs.jasypt
-    implementation libs.springCloudBootstrap
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig
     implementation libs.swagger3Ui

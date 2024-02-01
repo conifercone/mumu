@@ -15,10 +15,12 @@
 #
 
 server:
-  port: 31200
+  port: 31100
 spring:
   application:
-    name: log
+    name: authentication
+  config:
+    import: nacos:authentication-dev.yml
   cloud:
     nacos:
       discovery:
