@@ -43,6 +43,23 @@
 
 ## 模块介绍
 
+```text
+centaur
+│  ├─centaur-authentication -- 鉴权服务
+│  │  │-authentication-adapter -- 鉴权服务适配层
+│  │  │-authentication-application -- 鉴权服务应用层
+│  │  │-authentication-client -- 鉴权服务客户端
+│  │  │-authentication-domain -- 鉴权服务领域层
+│  │  │-authentication-infrastructure -- 鉴权服务基础设施层
+│  │─centaur-extension -- 拓展模块
+│  │─centaur-log -- 日志服务
+│  │  │-log-adapter -- 日志服务适配层
+│  │  │-log-application -- 日志服务应用层
+│  │  │-log-client -- 日志服务客户端
+│  │  │-log-domain -- 日志服务领域层
+│  │  │-log-infrastructure -- 日志服务基础设施层
+```
+
 ## 构建
 
 ## 依赖说明
