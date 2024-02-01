@@ -1,12 +1,9 @@
 [versions]
 junitVersion = "5.10.1"
-jmhVersion = "1.32"
 springbootVersion = "3.2.1"
 springCloudVersion = "2023.0.0"
 springCloudAlibabaVersion = "2022.0.0.0"
-jmhPluginVersion = '0.6.6'
 dependencyManagementPluginVersion = "1.1.4"
-graalvmNativePluginVersion = "0.9.28"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
 licensePluginVersion = '0.16.2'
@@ -21,7 +18,7 @@ p6spyVersion = '3.9.1'
 springKafkaVersion = '3.1.1'
 protobufJavaVersion = '3.25.1'
 protocVersion = '3.25.1'
-protocGenGrpcJavaVersion = '1.59.1'
+protocGenGrpcJavaVersion = '1.61.0'
 grpcStubVersion = '1.59.1'
 grpcProtobufVersion = '1.59.1'
 annotationApiVersion = '1.3.2'
@@ -32,10 +29,6 @@ commonsLang3Version = "3.14.0"
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
 junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitVersion" }
-# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
-jmhCore = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
-# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
-jmhGeneratorAnnprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
 springboot = { module = "org.springframework.boot:spring-boot-starter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
@@ -108,14 +101,11 @@ redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisO
 commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
 
 [bundles]
-jmh = ["jmhCore", "jmhGeneratorAnnprocess"]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
-jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
 dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
-graalvmNative = { id = "org.graalvm.buildtools.native", version.ref = "graalvmNativePluginVersion" }
 java = { id = "java" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }

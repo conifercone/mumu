@@ -12,6 +12,7 @@ protobuf {
     protoc {
         artifact = libs.protoc.get().toString()
     }
+
     plugins {
         grpc {
             artifact = libs.protocGenGrpcJava.get().toString()
