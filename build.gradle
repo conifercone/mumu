@@ -154,6 +154,7 @@ subprojects { project ->
     license {
         encoding = StandardCharsets.UTF_8.name()
         header = rootProject.file("source_code_head.txt")
+        excludes(["build/generated/source/proto/**"])
         includes(["**/*.java", "**/*.properties", "**/*.sql", "**/*.xml", "**/*.yml"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "properties", "SCRIPT_STYLE"
