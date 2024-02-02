@@ -16,6 +16,7 @@
 package com.sky.centaur.log.domain.operation.gateway;
 
 import com.sky.centaur.log.domain.operation.OperationLog;
+import java.util.Optional;
 
 /**
  * 操作日志领域网关
@@ -38,4 +39,12 @@ public interface OperationLogGateway {
    * @param operationLog 操作日志领域对象
    */
   void save(OperationLog operationLog);
+
+  /**
+   * 根据日志ID获取操作日志
+   *
+   * @param id 操作日志ID
+   * @return 操作日志
+   */
+  Optional<OperationLog> findOperationLogById(String id);
 }

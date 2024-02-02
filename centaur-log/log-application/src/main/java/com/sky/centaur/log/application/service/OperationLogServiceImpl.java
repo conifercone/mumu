@@ -16,6 +16,7 @@
 package com.sky.centaur.log.application.service;
 
 import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.log.application.operation.executor.OperationLogQryCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;
 import com.sky.centaur.log.client.api.OperationLogService;
@@ -23,8 +24,10 @@ import com.sky.centaur.log.client.api.grpc.OperationLogServiceEmptyResult;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import com.sky.centaur.log.client.dto.OperationLogQryCmd;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
@@ -49,6 +52,9 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
 
   @Resource
   private OperationLogSaveCmdExe operationLogSaveCmdExe;
+
+  @Resource
+  private OperationLogQryCmdExe operationLogQryCmdExe;
 
   @Override
   public void submit(OperationLogSubmitCmd operationLogSubmitCmd) {
@@ -75,6 +81,13 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     OperationLogServiceEmptyResult build = OperationLogServiceEmptyResult.newBuilder().build();
     responseObserver.onNext(build);
     responseObserver.onCompleted();
+  }
+
+  @Override
+  public OperationLogQryCo findOperationLogById(String id) {
+    OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
+    operationLogQryCmd.setId(id);
+    return operationLogQryCmdExe.execute(operationLogQryCmd);
   }
 
   @NotNull

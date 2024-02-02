@@ -17,14 +17,17 @@ package com.sky.centaur.log.adapter.web;
 
 import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,6 +51,14 @@ public class OperationLogController {
   @API(status = Status.STABLE)
   public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
     operationLogService.submit(operationLogSubmitCmd);
+  }
+
+  @Operation(summary = "根据日志ID获取操作日志")
+  @GetMapping("/findById")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public OperationLogQryCo findOperationLogById(@RequestParam(value = "id") String id) {
+    return operationLogService.findOperationLogById(id);
   }
 
 }

@@ -74,4 +74,18 @@ public class OperationLogConvertor {
     return operationLog;
   }
 
+  @Contract("_ -> new")
+  public static @NotNull OperationLog toEntity(@NotNull OperationLogRedisDo operationLogRedisDo) {
+    OperationLog operationLog = new OperationLog();
+    BeanUtils.copyProperties(operationLogRedisDo, operationLog);
+    return operationLog;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {
+    OperationLog operationLog = new OperationLog();
+    BeanUtils.copyProperties(operationLogEsDo, operationLog);
+    return operationLog;
+  }
+
 }

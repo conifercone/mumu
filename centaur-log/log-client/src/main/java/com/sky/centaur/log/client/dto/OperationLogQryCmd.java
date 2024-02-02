@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.client.api;
 
-import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
-import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
-import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
+package com.sky.centaur.log.client.dto;
+
+import lombok.Data;
 
 /**
- * 操作日志api
+ * 操作日志查询指令
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-02-02
  */
-public interface OperationLogService {
+@Data
+public class OperationLogQryCmd {
 
-  void submit(OperationLogSubmitCmd operationLogSubmitCmd);
-
-  void save(OperationLogSaveCmd operationLogSaveCmd);
-
-  OperationLogQryCo findOperationLogById(String id);
+  private String id;
 }

@@ -26,6 +26,7 @@ import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationL
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.OperationLogRedisRepository;
 import jakarta.annotation.Resource;
 import java.util.Collections;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 /**
@@ -65,5 +66,13 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     operationLogEsRepository.save(OperationLogConvertor.toEsDataObject(operationLog));
     operationLogRedisRepository.saveAll(
         Collections.singletonList(OperationLogConvertor.toRedisDataObject(operationLog)));
+  }
+
+  @Override
+  public Optional<OperationLog> findOperationLogById(String id) {
+    return operationLogRedisRepository.findById(
+            id).map(OperationLogConvertor::toEntity)
+        .or(() -> operationLogEsRepository.findById(id).map(OperationLogConvertor::toEntity)
+        );
   }
 }
