@@ -16,11 +16,10 @@
 
 server:
   port: 31100
+
 spring:
   application:
     name: authentication
-  config:
-    import: nacos:authentication-dev.yml
   cloud:
     nacos:
       discovery:
@@ -37,3 +36,16 @@ spring:
         namespace: ${nacos_namespace:centaur}
         group: ${nacos_group:DEFAULT_GROUP}
         file-extension: yml
+---
+spring:
+  config:
+    import: nacos:authentication-dev.yml
+    activate:
+      on-profile: dev
+---
+spring:
+  config:
+    import: nacos:authentication-prod.yml
+    activate:
+      on-profile: prod
+---

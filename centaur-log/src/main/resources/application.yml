@@ -19,8 +19,6 @@ server:
 spring:
   application:
     name: log
-  config:
-    import: nacos:log-dev.yml
   cloud:
     nacos:
       discovery:
@@ -37,3 +35,16 @@ spring:
         namespace: ${nacos_namespace:centaur}
         group: ${nacos_group:DEFAULT_GROUP}
         file-extension: yml
+---
+spring:
+  config:
+    import: nacos:log-dev.yml
+    activate:
+      on-profile: dev
+---
+spring:
+  config:
+    import: nacos:log-prod.yml
+    activate:
+      on-profile: prod
+---

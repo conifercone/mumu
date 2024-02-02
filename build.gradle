@@ -3,7 +3,6 @@ import java.time.LocalDateTime
 
 plugins {
     alias(libs.plugins.dependencyManagement) apply(false)
-    alias(libs.plugins.license) apply(false)
     alias(libs.plugins.springboot) apply(false)
     alias(libs.plugins.lombok) apply(false)
     alias(libs.plugins.protobuf) apply(false)
@@ -32,7 +31,6 @@ subprojects { project ->
     apply plugin: libs.plugins.getIdea().get().getPluginId()
     apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
-    apply plugin: libs.plugins.getLicense().get().getPluginId()
     apply plugin: libs.plugins.getLombok().get().getPluginId()
 
     // java工具链配置
@@ -148,21 +146,6 @@ subprojects { project ->
     checkstyle {
         toolVersion = '9.3'
         configFile = file("${rootProject.projectDir}/code_checks.xml")
-    }
-
-    // 源代码许可配置
-    license {
-        encoding = StandardCharsets.UTF_8.name()
-        header = rootProject.file("source_code_head.txt")
-        excludes(["build/generated/source/proto/**"])
-        includes(["**/*.java", "**/*.properties", "**/*.sql", "**/*.xml", "**/*.yml"])
-        mapping "java", "SLASHSTAR_STYLE"
-        mapping "properties", "SCRIPT_STYLE"
-        mapping "sql", "DOUBLEDASHES_STYLE"
-        mapping "xml", "XML_STYLE"
-        mapping "yml", "SCRIPT_STYLE"
-        ext.year = Calendar.getInstance().get(Calendar.YEAR)
-        ext.organization = "kaiyu.shan@outlook.com"
     }
 
     dependencyManagement {

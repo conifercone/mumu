@@ -6,7 +6,6 @@ springCloudAlibabaVersion = "2022.0.0.0"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
-licensePluginVersion = '0.16.2'
 jacksonVersion = '2.16.0'
 postgresqlVersion = '42.7.1'
 jasyptVersion = '3.0.5'
@@ -109,6 +108,5 @@ dependencyManagement = { id = "io.spring.dependency-management", version.ref = "
 java = { id = "java" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
-license = { id = "com.benjaminsproule.license", version.ref = "licensePluginVersion" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufVersion" }
