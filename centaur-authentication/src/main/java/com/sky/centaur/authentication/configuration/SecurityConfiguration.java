@@ -159,12 +159,26 @@ public class SecurityConfiguration {
     return jdbcRegisteredClientRepository;
   }
 
+  /**
+   * 授权信息
+   *
+   * @param jdbcTemplate               jdbc实例
+   * @param registeredClientRepository 客户端注册实例
+   * @return 授权实例
+   */
   @Bean
   public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate,
       RegisteredClientRepository registeredClientRepository) {
     return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
   }
 
+  /**
+   * 授权确认
+   *
+   * @param jdbcTemplate               jdbc实例
+   * @param registeredClientRepository 客户端注册实例
+   * @return 授权确认实例
+   */
   @Bean
   public OAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate,
       RegisteredClientRepository registeredClientRepository) {
