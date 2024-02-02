@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.processor.response;
+package com.sky.centaur.basis.response;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;

@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.log.application.service;
 
-import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.log.application.operation.executor.OperationLogQryCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;

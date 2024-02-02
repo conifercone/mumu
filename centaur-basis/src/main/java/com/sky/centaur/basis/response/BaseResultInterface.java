@@ -13,14 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.client.dto.co;
+package com.sky.centaur.basis.response;
 
 /**
- * 基础co
+ * 基础响应顶级接口
  *
  * @author 单开宇
- * @since 2024-01-22
+ * @since 2024-01-20
  */
-public abstract class BaseClientObject implements ClientObject {
+public interface BaseResultInterface {
 
+  /**
+   * 响应码
+   *
+   * @return 响应码
+   */
+  String getResultCode();
+
+  /**
+   * 错误描述
+   *
+   * @return 错误描述
+   */
+  String getResultMsg();
 }

@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.extension.client.dto.co.BaseClientObject;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.util.Collection;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

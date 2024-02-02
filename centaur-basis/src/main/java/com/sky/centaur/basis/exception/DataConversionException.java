@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.processor.response;
+package com.sky.centaur.basis.exception;
+
+import com.sky.centaur.basis.response.ResultCode;
 
 /**
- * 基础响应顶级接口
+ * 数据转换异常
  *
  * @author 单开宇
  * @since 2024-01-20
  */
-public interface BaseResultInterface {
+public class DataConversionException extends CentaurException {
 
-  /**
-   * 响应码
-   *
-   * @return 响应码
-   */
-  String getResultCode();
-
-  /**
-   * 错误描述
-   *
-   * @return 错误描述
-   */
-  String getResultMsg();
+  public DataConversionException() {
+    super(ResultCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
+  }
 }

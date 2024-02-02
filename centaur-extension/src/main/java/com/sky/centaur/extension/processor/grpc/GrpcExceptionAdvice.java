@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.extension.processor.grpc;
 
-import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;

@@ -17,7 +17,7 @@ package com.sky.centaur.log.infrastructure.operation.gatewayimpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sky.centaur.extension.exception.DataConversionException;
+import com.sky.centaur.basis.exception.DataConversionException;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;

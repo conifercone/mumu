@@ -15,7 +15,9 @@
  */
 package com.sky.centaur.log.client.dto.co;
 
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 操作日志提交客户端对象
@@ -24,7 +26,8 @@ import lombok.Data;
  * @since 2024-01-25
  */
 @Data
-public class OperationLogSubmitCo {
+@EqualsAndHashCode(callSuper = true)
+public class OperationLogSubmitCo extends BaseClientObject {
 
   /**
    * 日志内容

@@ -35,4 +35,5 @@ include 'centaur-log:log-domain'
 findProject(':centaur-log:log-domain')?.name = 'log-domain'
 include 'centaur-log:log-infrastructure'
 findProject(':centaur-log:log-infrastructure')?.name = 'log-infrastructure'
+include 'centaur-basis'
 

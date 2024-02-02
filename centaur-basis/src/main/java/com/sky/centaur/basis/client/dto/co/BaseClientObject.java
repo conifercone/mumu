@@ -13,39 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.client.dto.co;
-
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+package com.sky.centaur.basis.client.dto.co;
 
 /**
- * 系统日志提交客户端对象
+ * 基础co
  *
  * @author 单开宇
- * @since 2024-01-25
+ * @since 2024-01-22
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class SystemLogSubmitCo extends BaseClientObject {
+public abstract class BaseClientObject implements ClientObject {
 
-  /**
-   * 日志内容
-   */
-  private String content;
-
-  /**
-   * 系统日志的种类
-   */
-  private String category;
-
-  /**
-   * 系统日志成功的文本模板
-   */
-  private String success;
-
-  /**
-   * 系统日志失败的文本模板
-   */
-  private String fail;
 }

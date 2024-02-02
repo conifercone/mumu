@@ -17,8 +17,8 @@ package com.sky.centaur.authentication.filter.datasource;
 
 import com.p6spy.engine.spy.P6DataSource;
 import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
-import com.sky.centaur.extension.exception.CentaurException;
-import com.sky.centaur.extension.processor.response.ResultCode;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

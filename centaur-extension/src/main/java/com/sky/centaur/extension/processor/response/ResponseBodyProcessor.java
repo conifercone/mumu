@@ -17,8 +17,10 @@ package com.sky.centaur.extension.processor.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sky.centaur.extension.client.dto.co.ClientObject;
-import com.sky.centaur.extension.exception.CentaurException;
+import com.sky.centaur.basis.client.dto.co.ClientObject;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
@@ -110,7 +112,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       }
       return body;
     } else {
-      return null;
+      return ResultResponse.success();
     }
   }
 

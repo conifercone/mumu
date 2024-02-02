@@ -51,6 +51,7 @@ centaur
 │  │  │-authentication-client -- 鉴权服务客户端
 │  │  │-authentication-domain -- 鉴权服务领域层
 │  │  │-authentication-infrastructure -- 鉴权服务基础设施层
+│  │─centaur-basis -- 基础模块
 │  │─centaur-extension -- 拓展模块
 │  │─centaur-log -- 日志服务
 │  │  │-log-adapter -- 日志服务适配层

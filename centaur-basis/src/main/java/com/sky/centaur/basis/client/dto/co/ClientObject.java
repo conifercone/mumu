@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.exception;
-
-import com.sky.centaur.extension.processor.response.ResultCode;
+package com.sky.centaur.basis.client.dto.co;
 
 /**
- * 账户已存在
+ * 顶级co接口
  *
  * @author 单开宇
- * @since 2024-01-20
+ * @since 2024-01-22
  */
-public class AccountAlreadyExistsException extends CentaurException {
+public interface ClientObject {
 
-  public AccountAlreadyExistsException(String accountName) {
-    super(ResultCode.ACCOUNT_ALREADY_EXISTS, accountName);
-  }
 }

@@ -17,7 +17,7 @@ package com.sky.centaur.log.infrastructure.system.gatewayimpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sky.centaur.extension.exception.DataConversionException;
+import com.sky.centaur.basis.exception.DataConversionException;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;

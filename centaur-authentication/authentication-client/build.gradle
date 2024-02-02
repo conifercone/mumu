@@ -3,6 +3,7 @@ apply plugin: libs.plugins.getProtobuf().get().getPluginId()
 dependencies {
     implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-extension")
+    implementation project(":centaur-basis")
     implementation libs.protobufJava
     implementation libs.grpcStub
     implementation libs.grpcProtobuf

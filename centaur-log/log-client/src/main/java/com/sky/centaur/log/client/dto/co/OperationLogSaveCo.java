@@ -15,8 +15,10 @@
  */
 package com.sky.centaur.log.client.dto.co;
 
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 操作日志保存客户端对象
@@ -25,7 +27,8 @@ import lombok.Data;
  * @since 2024-01-25
  */
 @Data
-public class OperationLogSaveCo {
+@EqualsAndHashCode(callSuper = true)
+public class OperationLogSaveCo extends BaseClientObject {
 
   /**
    * 唯一标识
