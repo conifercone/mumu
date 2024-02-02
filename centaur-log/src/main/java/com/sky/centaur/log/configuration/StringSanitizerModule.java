@@ -25,6 +25,8 @@ import java.io.IOException;
 import org.springframework.stereotype.Component;
 
 /**
+ * jackson空字符串转NULL模块
+ *
  * @author 单开宇
  * @since 2024-02-02
  */
