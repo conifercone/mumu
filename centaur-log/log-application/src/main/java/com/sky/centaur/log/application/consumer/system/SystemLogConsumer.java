@@ -35,7 +35,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemLogConsumer {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Resource
+  private ObjectMapper objectMapper;
 
   @Resource
   private SystemLogService systemLogService;

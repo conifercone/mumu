@@ -25,8 +25,11 @@ import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.Op
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.OperationLogRedisRepository;
 import jakarta.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,7 +52,8 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   private OperationLogRedisRepository operationLogRedisRepository;
 
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Resource
+  private ObjectMapper objectMapper;
 
   @Override
   public void submit(OperationLog operationLog) {
@@ -70,9 +74,18 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public Optional<OperationLog> findOperationLogById(String id) {
-    return operationLogRedisRepository.findById(
+    Optional<OperationLog> optionalOperationLog = operationLogRedisRepository.findById(
             id).map(OperationLogConvertor::toEntity)
         .or(() -> operationLogEsRepository.findById(id).map(OperationLogConvertor::toEntity)
         );
+    OperationLog operationLog = new OperationLog();
+    operationLog.setId(UUID.randomUUID().toString());
+    operationLog.setBizNo(id);
+    operationLog.setContent("根据日志ID获取操作日志");
+    operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
+    optionalOperationLog.ifPresentOrElse(op -> operationLog.setSuccess(op.toString()),
+        () -> operationLog.setFail(String.format("未找到ID为%s的操作日志", id)));
+    this.submit(operationLog);
+    return optionalOperationLog;
   }
 }

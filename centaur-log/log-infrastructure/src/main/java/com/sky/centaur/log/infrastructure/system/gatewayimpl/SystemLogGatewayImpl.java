@@ -42,7 +42,8 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
   private SystemLogEsRepository systemLogEsRepository;
 
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  @Resource
+  private ObjectMapper objectMapper;
 
   @Override
   public void submit(SystemLog systemLog) {
