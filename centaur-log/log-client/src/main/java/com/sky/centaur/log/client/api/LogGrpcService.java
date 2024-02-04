@@ -18,12 +18,10 @@ package com.sky.centaur.log.client.api;
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryClient;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
 import jakarta.annotation.Resource;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 日志grpc服务
@@ -36,22 +34,17 @@ class LogGrpcService {
   @Resource
   NacosDiscoveryClient nacosDiscoveryClient;
 
-  protected ManagedChannel getManagedChannelUsePlaintext() {
-    ServiceInstance serviceInstance = getServiceInstance();
-    return ManagedChannelBuilder.forAddress(serviceInstance.getHost(),
-            serviceInstance.getPort() + 2)
-        .usePlaintext()
-        .build();
+  protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
+    return getServiceInstance().map(
+        serviceInstance -> ManagedChannelBuilder.forAddress(serviceInstance.getHost(),
+                serviceInstance.getPort() + 2)
+            .usePlaintext()
+            .build());
   }
 
-  protected ServiceInstance getServiceInstance() {
+  protected Optional<ServiceInstance> getServiceInstance() {
     List<ServiceInstance> instances = nacosDiscoveryClient.getInstances("log");
-    if (CollectionUtils.isEmpty(instances)) {
-      throw Status.NOT_FOUND.asRuntimeException();
-    }
-    Random random = new Random();
-    int randomIndex = random.nextInt(instances.size());
-    return instances.get(randomIndex);
+    return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 
 }

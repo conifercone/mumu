@@ -40,8 +40,17 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
 
   public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
     if (channel == null) {
-      channel = getManagedChannelUsePlaintext();
+      getManagedChannelUsePlaintext().ifPresent(managedChannel -> {
+        channel = managedChannel;
+        extracted(operationLogSubmitGrpcCmd);
+      });
+    } else {
+      extracted(operationLogSubmitGrpcCmd);
     }
+
+  }
+
+  private void extracted(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
     OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
         channel);
     //noinspection ResultOfMethodCallIgnored
