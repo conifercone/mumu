@@ -37,3 +37,6 @@ include 'centaur-log:log-infrastructure'
 findProject(':centaur-log:log-infrastructure')?.name = 'log-infrastructure'
 include 'centaur-basis'
 include 'centaur-unique'
+include 'centaur-unique:unique-adapter'
+findProject(':centaur-unique:unique-adapter')?.name = 'unique-adapter'
+
