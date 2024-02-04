@@ -36,3 +36,45 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# build output
+dist/
+
+# generated types
+.astro/
+
+# unwanted types
+**/env.d.ts
+
+# System / Log files
+*.DS_Store
+*.log
+
+# Archives
+*.zip
+
+# Sass Cache
+.sass-cache
+
+# Project files
+nbproject
+nbproject/private
+.vs/
+
+# Node / Bower
+node_modules/
+bower_components/
+
+# Docs
+/docs/_site/
+/docs/vendor/
+/docs/.bundle/
+/docs_html/
+.jekyll-cache/
+.jekyll-metadata
+
+# ETC
+TODO
+test.html
+ad.js
+/.cache/

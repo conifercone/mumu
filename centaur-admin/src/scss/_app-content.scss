@@ -1,0 +1,71 @@
+/*!
+ * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.app-content {
+  padding: $lte-content-padding-y $lte-content-padding-x;
+}
+
+.app-content-top-area,
+.app-content-bottom-area {
+  display: flex;
+  align-items: center;
+  padding: $lte-content-padding-y $lte-content-padding-x;
+  overflow: auto;
+  background: $lte-app-footer-bg;
+
+  > .row {
+    display: contents;
+  }
+
+  &.app-content-top-area-sm,
+  &.app-content-bottom-area-sm {
+    min-height: $lte-app-content-bottom-area-height-sm;
+  }
+
+  &.app-content-top-area-md,
+  &.app-content-bottom-area-md {
+    min-height: $lte-app-content-bottom-area-height-md;
+  }
+
+  &.app-content-top-area-lg,
+  &.app-content-bottom-area-lg {
+    min-height: $lte-app-content-bottom-area-height-lg;
+  }
+
+  &.app-content-top-area-xl,
+  &.app-content-bottom-area-xl {
+    min-height: $lte-app-content-bottom-area-height-xl;
+  }
+}
+
+.app-content-top-area:not(.app-content-top-area-sm):not(.app-content-top-area-md):not(.app-content-top-area-lg):not(.app-content-top-area-xl),
+.app-content-bottom-area:not(.app-content-bottom-area-sm):not(.app-content-bottom-area-md):not(.app-content-bottom-area-lg):not(.app-content-bottom-area-xl) {
+  padding-top: $grid-gutter-width * .625;
+  padding-bottom: $grid-gutter-width * .625;
+}
+
+.app-content-bottom-area {
+  border-top: $lte-app-footer-border-top;
+}
+
+.app-content-top-area {
+  border-bottom: $lte-app-footer-border-top;
+
+  + .app-main {
+    padding-top: $grid-gutter-width * .5;
+  }
+}
+

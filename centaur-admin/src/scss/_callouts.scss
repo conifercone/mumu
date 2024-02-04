@@ -1,0 +1,56 @@
+/*!
+ * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+//
+// Callouts
+//
+
+.callout {
+  --#{$prefix}link-color-rgb: var(--#{$lte-prefix}callout-link);
+  --#{$prefix}code-color: var(--#{$lte-prefix}callout-code-color);
+
+  padding: 1.25rem;
+  color: var(--#{$lte-prefix}callout-color, inherit);
+  background-color: var(--#{$lte-prefix}callout-bg, var(--bs-gray-100));
+  border-left: .25rem solid var(--#{$lte-prefix}callout-border, var(--bs-gray-300));
+
+  .callout-link {
+    font-weight: $lte-callout-link-font-weight;
+    color: var(--#{$prefix}callout-link-color);
+  }
+
+  h4 {
+    margin-bottom: .25rem;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  + .callout {
+    margin-top: -.25rem;
+  }
+}
+
+// Variations
+@each $name, $color in $theme-colors {
+  .callout-#{$name} {
+    --#{$lte-prefix}callout-color: var(--#{$prefix}#{$name}-text-emphasis);
+    --#{$lte-prefix}callout-bg: var(--#{$prefix}#{$name}-bg-subtle);
+    --#{$lte-prefix}callout-border: var(--#{$prefix}#{$name}-border-subtle);
+    --#{$prefix}callout-link-color: var(--#{$prefix}#{$name}-text-emphasis);
+  }
+}
