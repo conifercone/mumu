@@ -51,7 +51,7 @@ public class AccountControllerTest {
     @Language("JSON") String userInfo = """
         {
             "accountRegisterCo": {
-                "id": 6234234323143455656756,
+                "id": 12345678,
                 "username": "yxt",
                 "password": "yxt5211314",
                 "authorities": []
