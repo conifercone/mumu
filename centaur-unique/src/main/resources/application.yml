@@ -26,3 +26,9 @@ spring:
     activate:
       on-profile: dev
 ---
+spring:
+  config:
+    import: nacos:unique-prod.yml
+    activate:
+      on-profile: prod
+---
