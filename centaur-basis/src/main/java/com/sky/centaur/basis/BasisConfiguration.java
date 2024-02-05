@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log;
 
-import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.sky.centaur.basis;
+
+import com.sky.centaur.basis.tools.SpringContextUtil;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
- * 日志服务
+ * 基础模块配置类
  *
  * @author 单开宇
- * @since 2024-01-22
+ * @since 2024-02-05
  */
-@SpringBootApplication
-@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.**")
-public class CentaurLogApplication {
+@Configuration
+@Import({SpringContextUtil.class})
+public class BasisConfiguration {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurLogApplication.class, args);
-  }
 }

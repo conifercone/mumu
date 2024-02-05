@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log;
 
-import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.sky.centaur.extension;
+
+import com.sky.centaur.extension.processor.grpc.GrpcExceptionAdvice;
+import com.sky.centaur.extension.processor.response.ResponseBodyProcessor;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
- * 日志服务
+ * 拓展模块配置
  *
  * @author 单开宇
- * @since 2024-01-22
+ * @since 2024-02-05
  */
-@SpringBootApplication
-@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.**")
-public class CentaurLogApplication {
+@Configuration
+@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class, SystemLogGrpcService.class})
+public class ExtensionConfiguration {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurLogApplication.class, args);
-  }
 }

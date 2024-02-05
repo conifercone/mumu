@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":centaur-unique:unique-adapter")
+    implementation project(":centaur-extension")
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
     implementation libs.leaf
