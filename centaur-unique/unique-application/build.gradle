@@ -1,4 +1,5 @@
 dependencies {
+    implementation project(":centaur-basis")
     implementation project(":centaur-unique:unique-client")
     implementation libs.grpcStub
     implementation libs.grpcSpringBootStarter

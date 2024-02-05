@@ -21,6 +21,7 @@ import com.sky.centaur.unique.application.pk.executor.SnowflakeGenerateExe;
 import com.sky.centaur.unique.client.api.PrimaryKeyService;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceImplBase;
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
+import com.sky.centaur.unique.client.dto.co.PrimaryKeySnowflakeCo;
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -41,8 +42,10 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
   private SnowflakeGenerateExe snowflakeGenerateExe;
 
   @Override
-  public long snowflake() {
-    return snowflakeGenerateExe.execute();
+  public PrimaryKeySnowflakeCo snowflake() {
+    PrimaryKeySnowflakeCo primaryKeySnowflakeCo = new PrimaryKeySnowflakeCo();
+    primaryKeySnowflakeCo.setId(snowflakeGenerateExe.execute());
+    return primaryKeySnowflakeCo;
   }
 
   @Override

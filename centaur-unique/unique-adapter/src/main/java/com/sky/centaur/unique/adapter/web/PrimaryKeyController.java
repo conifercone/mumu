@@ -16,6 +16,7 @@
 package com.sky.centaur.unique.adapter.web;
 
 import com.sky.centaur.unique.client.api.PrimaryKeyService;
+import com.sky.centaur.unique.client.dto.co.PrimaryKeySnowflakeCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -44,7 +45,7 @@ public class PrimaryKeyController {
   @GetMapping("/snowflake")
   @ResponseBody
   @API(status = Status.STABLE)
-  public long snowflake() {
+  public PrimaryKeySnowflakeCo snowflake() {
     return primaryKeyService.snowflake();
   }
 }

@@ -22,7 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 操作日志查询指令
+ * 操作日志查询客户端对象
  *
  * @author 单开宇
  * @since 2024-02-02
