@@ -1,4 +1,10 @@
 dependencies {
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
+    implementation libs.leaf
+    implementation libs.jasypt
+    implementation libs.springCloudAlibabaNacosDiscovery
+    implementation libs.springCloudAlibabaNacosConfig
+    implementation libs.springBootActuator
+    testImplementation libs.springbootTest
 }

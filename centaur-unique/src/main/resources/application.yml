@@ -1,2 +1,28 @@
 server:
   port: 31300
+spring:
+  application:
+    name: unique
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos_ip:localhost:8848}
+        username: ${nacos_username:nacos}
+        password: ${nacos_passwd:nacos}
+        namespace: ${nacos_namespace:centaur}
+        group: ${nacos_group:DEFAULT_GROUP}
+        ip: 10.11.204.24
+      config:
+        server-addr: ${nacos_ip:localhost:8848}
+        username: ${nacos_username:nacos}
+        password: ${nacos_passwd:nacos}
+        namespace: ${nacos_namespace:centaur}
+        group: ${nacos_group:DEFAULT_GROUP}
+        file-extension: yml
+---
+spring:
+  config:
+    import: nacos:unique-dev.yml
+    activate:
+      on-profile: dev
+---

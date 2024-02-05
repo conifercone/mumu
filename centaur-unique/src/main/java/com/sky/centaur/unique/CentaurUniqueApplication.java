@@ -16,8 +16,10 @@
 
 package com.sky.centaur.unique;
 
+import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
 /**
  * 分布式主键生成服务
@@ -26,6 +28,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2024-02-04
  */
 @SpringBootApplication
+@Import(LeafAutoConfiguration.class)
 public class CentaurUniqueApplication {
 
   public static void main(String[] args) {
