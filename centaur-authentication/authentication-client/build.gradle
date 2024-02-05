@@ -8,6 +8,7 @@ dependencies {
     implementation libs.grpcStub
     implementation libs.grpcProtobuf
     implementation libs.annotationApi
+    implementation libs.springCloudAlibabaNacosDiscovery
     compileOnly libs.springBootOauth2AuthorizationServer
 }
 

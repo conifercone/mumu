@@ -22,9 +22,12 @@ import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
+import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -48,6 +51,27 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   public void register(AccountRegisterGrpcCmd request,
       StreamObserver<AccountRegisterGrpcCo> responseObserver) {
-    super.register(request, responseObserver);
+    AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
+    AccountRegisterCo accountRegisterCo = getAccountRegisterCo(
+        request);
+    accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
+    try {
+      accountRegisterCmdExe.execute(accountRegisterCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(request.getAccountRegisterCo());
+    responseObserver.onCompleted();
+  }
+
+  @NotNull
+  private static AccountRegisterCo getAccountRegisterCo(
+      @NotNull AccountRegisterGrpcCmd request) {
+    AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
+    AccountRegisterGrpcCo accountRegisterGrpcCo = request.getAccountRegisterCo();
+    accountRegisterCo.setId(accountRegisterGrpcCo.getId());
+    accountRegisterCo.setUsername(accountRegisterGrpcCo.getUsername());
+    accountRegisterCo.setPassword(accountRegisterGrpcCo.getPassword());
+    return accountRegisterCo;
   }
 }
