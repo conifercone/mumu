@@ -18,6 +18,8 @@ package com.sky.centaur.authentication.infrastructure.account.convertor;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Collections;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +50,10 @@ public class AccountConvertor {
   @Contract("_ -> new")
   public static @NotNull Account toEntity(@NotNull AccountRegisterCo accountRegisterCo) {
     return new Account(
-        accountRegisterCo.getId(), accountRegisterCo.getUsername(), accountRegisterCo.getPassword(),
+        accountRegisterCo.getId() == null ?
+            SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
+            : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
+        accountRegisterCo.getPassword(),
         accountRegisterCo.getAuthorities());
   }
 }

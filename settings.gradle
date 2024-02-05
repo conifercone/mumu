@@ -39,4 +39,8 @@ include 'centaur-basis'
 include 'centaur-unique'
 include 'centaur-unique:unique-adapter'
 findProject(':centaur-unique:unique-adapter')?.name = 'unique-adapter'
+include 'centaur-unique:unique-client'
+findProject(':centaur-unique:unique-client')?.name = 'unique-client'
+include 'centaur-unique:unique-application'
+findProject(':centaur-unique:unique-application')?.name = 'unique-application'
 

@@ -25,6 +25,7 @@ grpcSpringBootStarterApiVersion = '5.1.5'
 redisOmSpringVersion = "0.8.8"
 commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
+yitterIdGeneratorVersion = "1.0.6"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -101,6 +102,8 @@ redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisO
 commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
+# https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
+yitterIdGenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

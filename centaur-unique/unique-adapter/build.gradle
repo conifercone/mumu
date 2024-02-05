@@ -1,7 +1,8 @@
 dependencies {
+    implementation project(":centaur-unique:unique-application")
+    implementation project(":centaur-unique:unique-client")
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
-    implementation libs.leaf
     implementation libs.jasypt
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig

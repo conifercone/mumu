@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.unique.adapter.web;
 
-import com.github.guang19.leaf.core.IdGenerator;
+import com.sky.centaur.unique.client.api.PrimaryKeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -38,13 +38,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PrimaryKeyController {
 
   @Resource
-  private IdGenerator snowflakeIdGenerator;
+  private PrimaryKeyService primaryKeyService;
 
   @Operation(summary = "获取主键(雪花算法)")
   @GetMapping("/snowflake")
   @ResponseBody
   @API(status = Status.STABLE)
   public long snowflake() {
-    return snowflakeIdGenerator.nextId().getId();
+    return primaryKeyService.snowflake();
   }
 }

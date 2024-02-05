@@ -15,15 +15,16 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
+import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.dataobject.OperationLogRedisDo;
+import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.UUID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -62,7 +63,8 @@ public class OperationLogConvertor {
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
-    operationLog.setId(UUID.randomUUID().toString());
+    operationLog.setId(
+        String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()));
     operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     return operationLog;
   }

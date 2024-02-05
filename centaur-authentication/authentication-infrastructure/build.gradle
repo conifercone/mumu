@@ -2,6 +2,7 @@ dependencies {
     implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-authentication:authentication-client")
     implementation project(":centaur-log:log-client")
+    implementation project(":centaur-unique:unique-client")
     implementation project(":centaur-extension")
     implementation project(":centaur-basis")
     implementation libs.springBootDataJpa

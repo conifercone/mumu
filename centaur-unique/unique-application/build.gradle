@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(":centaur-unique:unique-client")
+    implementation libs.grpcStub
+    implementation libs.grpcSpringBootStarter
+    implementation libs.leaf
+}

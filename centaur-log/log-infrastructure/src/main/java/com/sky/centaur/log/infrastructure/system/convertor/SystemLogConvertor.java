@@ -15,14 +15,15 @@
  */
 package com.sky.centaur.log.infrastructure.system.convertor;
 
+import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
+import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.UUID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -53,7 +54,8 @@ public class SystemLogConvertor {
   public static @NotNull SystemLog toEntity(@NotNull SystemLogSubmitCo systemLogSubmitCo) {
     SystemLog systemLog = new SystemLog();
     BeanUtils.copyProperties(systemLogSubmitCo, systemLog);
-    systemLog.setId(UUID.randomUUID().toString());
+    systemLog.setId(
+        String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()));
     systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
     return systemLog;
   }
