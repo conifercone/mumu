@@ -15,7 +15,6 @@ allprojects { project ->
     // 定义maven仓库地址
     repositories {
         mavenCentral()
-        mavenLocal()
     }
 
     configurations.configureEach {

@@ -1,10 +1,5 @@
 dependencies {
     implementation project(":centaur-unique:unique-adapter")
-    implementation libs.leaf
-    implementation libs.alibabaDruid
-    implementation libs.springTx
-    implementation libs.springJdbc
-    implementation libs.mysqlConnectorJava
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
 }

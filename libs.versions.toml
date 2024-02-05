@@ -6,7 +6,7 @@ springCloudAlibabaVersion = "2022.0.0.0"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
-jacksonVersion = '2.16.0'
+jacksonVersion = '2.15.3'
 postgresqlVersion = '42.7.1'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
@@ -24,9 +24,6 @@ annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
 redisOmSpringVersion = "0.8.8"
 commonsLang3Version = "3.14.0"
-leafVersion = "1.0.1-RELEASE"
-alibabaDruidVersion = "1.2.21"
-mysqlConnectorJavaVersion = "8.0.33"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -101,15 +98,6 @@ grpcSpringBootStarter = { module = "io.github.lognet:grpc-spring-boot-starter", 
 redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
-leaf = { module = "com.sankuai.inf.leaf:leaf-boot-starter", version.ref = "leafVersion" }
-# https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-3-starter
-alibabaDruid = { module = "com.alibaba:druid-spring-boot-3-starter", version.ref = "alibabaDruidVersion" }
-# https://mvnrepository.com/artifact/org.springframework/spring-tx
-springTx = { module = "org.springframework:spring-tx" }
-# https://mvnrepository.com/artifact/org.springframework/spring-jdbc
-springJdbc = { module = "org.springframework:spring-jdbc" }
-# https://mvnrepository.com/artifact/mysql/mysql-connector-java
-mysqlConnectorJava = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJavaVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

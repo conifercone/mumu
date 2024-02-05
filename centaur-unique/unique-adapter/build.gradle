@@ -1,5 +1,4 @@
 dependencies {
-    implementation libs.leaf
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
 }

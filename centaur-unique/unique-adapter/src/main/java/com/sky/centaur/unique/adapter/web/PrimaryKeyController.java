@@ -15,10 +15,8 @@
  */
 package com.sky.centaur.unique.adapter.web;
 
-import com.sankuai.inf.leaf.service.SegmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,14 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "主键管理")
 public class PrimaryKeyController {
 
-  @Resource
-  private SegmentService segmentService;
 
   @Operation(summary = "号段模式获取主键")
   @GetMapping("/segment")
   @ResponseBody
   @API(status = Status.STABLE)
   public long segment(@RequestParam("key") String key) {
-    return segmentService.getId(key).getId();
+    return 1L;
   }
 }

@@ -16,7 +16,6 @@
 
 package com.sky.centaur.unique;
 
-import com.sankuai.inf.leaf.plugin.annotation.EnableLeafServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -27,7 +26,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2024-02-04
  */
 @SpringBootApplication
-@EnableLeafServer
 public class CentaurUniqueApplication {
 
   public static void main(String[] args) {
