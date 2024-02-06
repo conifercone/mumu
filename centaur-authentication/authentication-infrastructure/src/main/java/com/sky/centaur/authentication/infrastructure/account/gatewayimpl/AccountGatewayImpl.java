@@ -24,6 +24,7 @@ import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-01-16
  */
 @Component
+@Observed(name = "AccountGatewayImpl")
 public class AccountGatewayImpl implements AccountGateway {
 
   @Resource

@@ -7,4 +7,5 @@ dependencies {
     implementation libs.grpcStub
     implementation libs.grpcSpringBootStarter
     implementation libs.springKafka
+    implementation libs.springBootActuator
 }

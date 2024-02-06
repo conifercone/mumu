@@ -8,13 +8,12 @@ dependencies {
     implementation project(":centaur-basis")
     implementation libs.springBootOauth2AuthorizationServer
     implementation libs.springBootDataJpa
-    implementation libs.springBootStarterWeb
     implementation libs.postgresql
     implementation libs.jasypt
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig
     implementation libs.swagger3Ui
-    implementation libs.springBootActuator
+    implementation libs.bundles.micrometer
     implementation libs.p6spy
     implementation libs.grpcSpringBootStarter
     testImplementation libs.springbootTest

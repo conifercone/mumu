@@ -24,6 +24,8 @@ import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
@@ -37,7 +39,8 @@ import org.springframework.stereotype.Service;
  * @since 2024-01-16
  */
 @Service
-@GRpcService
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@Observed(name = "AccountServiceImpl")
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
   @Resource

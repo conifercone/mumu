@@ -23,6 +23,8 @@ import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeySe
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
 import com.sky.centaur.unique.client.dto.co.PrimaryKeySnowflakeCo;
 import io.grpc.stub.StreamObserver;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
@@ -35,7 +37,8 @@ import org.springframework.stereotype.Service;
  * @since 2024-02-05
  */
 @Service
-@GRpcService
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@Observed(name = "PrimaryKeyServiceImpl")
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 
   @Resource

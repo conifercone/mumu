@@ -8,6 +8,7 @@ dependencies {
     implementation libs.grpcProtobuf
     implementation libs.annotationApi
     implementation libs.yitterIdGenerator
+    implementation libs.springBootActuator
 }
 protobuf {
     protoc {

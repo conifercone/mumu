@@ -5,16 +5,15 @@ dependencies {
     implementation project(":centaur-log:log-application")
     implementation project(":centaur-extension")
     implementation project(":centaur-log:log-adapter")
-    implementation libs.springBootStarterWeb
     implementation libs.jasypt
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig
     implementation libs.swagger3Ui
-    implementation libs.springBootActuator
     implementation libs.springBootDataElasticsearch
     implementation libs.springKafka
     implementation libs.grpcSpringBootStarter
     implementation libs.redisOmSpring
+    implementation libs.bundles.micrometer
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
 }

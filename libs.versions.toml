@@ -105,8 +105,14 @@ leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "
 # https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
 yitterIdGenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
 
+micrometerTracing = { module = "io.micrometer:micrometer-tracing" }
+micrometerTracingBridgeOtel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
+opentelemetryExporterZipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
+springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
+micrometer = ["micrometerTracing", "micrometerTracingBridgeOtel", "opentelemetryExporterZipkin", "springBootStarterAop", "springBootActuator", "springBootStarterWeb"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }

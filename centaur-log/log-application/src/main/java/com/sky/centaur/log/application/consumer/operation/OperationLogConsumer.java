@@ -21,6 +21,7 @@ import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-01-25
  */
 @Component
+@Observed(name = "OperationLogConsumer")
 public class OperationLogConsumer {
 
   @Resource

@@ -7,4 +7,5 @@ dependencies {
     implementation libs.springBootOauth2AuthorizationServer
     implementation libs.grpcStub
     implementation libs.grpcSpringBootStarter
+    implementation libs.springBootActuator
 }

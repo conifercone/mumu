@@ -23,8 +23,10 @@ import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.da
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.dataobject.OperationLogRedisDo;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -64,7 +66,10 @@ public class OperationLogConvertor {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
     operationLog.setId(
-        String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()));
+        Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
+            .map(span -> span.context().traceId()).orElseGet(() ->
+                String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()))
+    );
     operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     return operationLog;
   }

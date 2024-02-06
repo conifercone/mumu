@@ -27,6 +27,7 @@ import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
 import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import io.grpc.stub.StreamObserver;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
@@ -40,7 +41,7 @@ import org.springframework.stereotype.Service;
  * @since 2024-01-31
  */
 @Service
-@GRpcService
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
   @Resource

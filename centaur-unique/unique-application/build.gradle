@@ -4,4 +4,5 @@ dependencies {
     implementation libs.grpcStub
     implementation libs.grpcSpringBootStarter
     implementation libs.leaf
+    implementation libs.springBootActuator
 }

@@ -16,11 +16,14 @@
 package com.sky.centaur.unique.client.api;
 
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryClient;
+import com.sky.centaur.basis.tools.SpringContextUtil;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.cloud.client.ServiceInstance;
 
 /**
@@ -36,10 +39,22 @@ class UniqueGrpcService {
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
     return getServiceInstance().map(
-        serviceInstance -> ManagedChannelBuilder.forAddress(serviceInstance.getHost(),
-                serviceInstance.getPort() + 2)
-            .usePlaintext()
-            .build());
+        serviceInstance -> {
+          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
+                  serviceInstance.getHost(),
+                  serviceInstance.getPort() + 2)
+              .usePlaintext();
+          ObservationGrpcClientInterceptor interceptor = null;
+          try {
+            interceptor = SpringContextUtil.getBean(ObservationGrpcClientInterceptor.class);
+          } catch (NoSuchBeanDefinitionException e) {
+            // ignore
+          }
+          if (interceptor != null) {
+            builder.intercept(interceptor);
+          }
+          return builder.build();
+        });
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {

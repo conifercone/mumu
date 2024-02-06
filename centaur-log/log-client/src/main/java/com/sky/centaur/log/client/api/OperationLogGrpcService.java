@@ -19,6 +19,7 @@ import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceFutureStub;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
+import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-01-25
  */
 @Component
+@Observed(name = "OperationLogGrpcService")
 public class OperationLogGrpcService extends LogGrpcService implements DisposableBean {
 
   private ManagedChannel channel;

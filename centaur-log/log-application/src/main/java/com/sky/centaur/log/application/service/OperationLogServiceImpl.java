@@ -30,6 +30,8 @@ import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import io.grpc.stub.StreamObserver;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
@@ -43,7 +45,8 @@ import org.springframework.stereotype.Service;
  * @since 2024-01-25
  */
 @Service
-@GRpcService
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
     OperationLogService {
 
