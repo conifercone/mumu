@@ -104,15 +104,20 @@ commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "com
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
 # https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
 yitterIdGenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
-
+# https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
 micrometerTracing = { module = "io.micrometer:micrometer-tracing" }
+# https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+# https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing-bridge-otel
 micrometerTracingBridgeOtel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
+# https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-exporter-zipkin
 opentelemetryExporterZipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
 springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
-micrometer = ["micrometerTracing", "micrometerTracingBridgeOtel", "opentelemetryExporterZipkin", "springBootStarterAop", "springBootActuator", "springBootStarterWeb"]
+micrometer = ["micrometerTracing", "micrometerRegistryPrometheus", "micrometerTracingBridgeOtel", "opentelemetryExporterZipkin", "springBootStarterAop", "springBootActuator", "springBootStarterWeb"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
