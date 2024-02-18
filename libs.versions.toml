@@ -123,6 +123,7 @@ micrometer = ["micrometerTracing", "micrometerRegistryPrometheus", "micrometerTr
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
 dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
 java = { id = "java" }
+javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
