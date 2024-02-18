@@ -24,5 +24,10 @@ package com.sky.centaur.unique.domain.pk.gateway;
  */
 public interface PrimaryKeyGateway {
 
+  /**
+   * 基于雪花算法生成主键
+   *
+   * @return 主键
+   */
   long snowflake();
 }
