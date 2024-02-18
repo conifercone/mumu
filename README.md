@@ -8,7 +8,7 @@
 
 <p>
   <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html">
-    <img alt="jdk version" src="https://img.shields.io/badge/JDK-17+-green.svg" />
+    <img alt="jdk version" src="https://img.shields.io/badge/JDK-21+-green.svg" />
   </a>
   <a target="_blank" href="https://github.com/conifercone/centaur">
     <img alt="centaur version" src="https://img.shields.io/badge/centaur-1.0.0--SNAPSHOT-brightgreen" />
