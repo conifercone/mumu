@@ -1,6 +1,6 @@
 dependencies {
+    api project(":centaur-basis")
     implementation project(":centaur-log:log-client")
-    implementation project(":centaur-basis")
     implementation libs.springBootStarterWeb
     implementation libs.grpcSpringBootStarter
 }
