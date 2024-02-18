@@ -144,7 +144,7 @@ subprojects { project ->
 
     // 代码自动审查配置
     checkstyle {
-        toolVersion = '9.3'
+        toolVersion = '10.13.0'
         configFile = file("${rootProject.projectDir}/code_checks.xml")
     }
 
