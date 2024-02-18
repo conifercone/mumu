@@ -23,6 +23,7 @@ import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceFutureStub;
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
 import io.grpc.ManagedChannel;
+import io.micrometer.observation.annotation.Observed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -40,6 +41,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-01-25
  */
 @Component
+@Observed(name = "PrimaryKeyGrpcService")
 public class PrimaryKeyGrpcService extends UniqueGrpcService implements DisposableBean,
     InitializingBean {
 
