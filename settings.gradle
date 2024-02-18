@@ -43,4 +43,8 @@ include 'centaur-unique:unique-client'
 findProject(':centaur-unique:unique-client')?.name = 'unique-client'
 include 'centaur-unique:unique-application'
 findProject(':centaur-unique:unique-application')?.name = 'unique-application'
+include 'centaur-unique:unique-domain'
+findProject(':centaur-unique:unique-domain')?.name = 'unique-domain'
+include 'centaur-unique:unique-infrastructure'
+findProject(':centaur-unique:unique-infrastructure')?.name = 'unique-infrastructure'
 

@@ -17,7 +17,7 @@
 package com.sky.centaur.unique.application.service;
 
 import com.google.protobuf.Empty;
-import com.sky.centaur.unique.application.pk.executor.SnowflakeGenerateExe;
+import com.sky.centaur.unique.application.pk.executor.PrimaryKeySnowflakeGenerateExe;
 import com.sky.centaur.unique.client.api.PrimaryKeyService;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceImplBase;
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
@@ -42,18 +42,19 @@ import org.springframework.stereotype.Service;
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 
   @Resource
-  private SnowflakeGenerateExe snowflakeGenerateExe;
+  private PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe;
 
   @Override
   public PrimaryKeySnowflakeCo snowflake() {
     PrimaryKeySnowflakeCo primaryKeySnowflakeCo = new PrimaryKeySnowflakeCo();
-    primaryKeySnowflakeCo.setId(snowflakeGenerateExe.execute());
+    primaryKeySnowflakeCo.setId(primaryKeySnowflakeGenerateExe.execute());
     return primaryKeySnowflakeCo;
   }
 
   @Override
   public void snowflake(Empty request, @NotNull StreamObserver<SnowflakeResult> responseObserver) {
-    SnowflakeResult build = SnowflakeResult.newBuilder().setId(snowflakeGenerateExe.execute())
+    SnowflakeResult build = SnowflakeResult.newBuilder()
+        .setId(primaryKeySnowflakeGenerateExe.execute())
         .build();
     responseObserver.onNext(build);
     responseObserver.onCompleted();

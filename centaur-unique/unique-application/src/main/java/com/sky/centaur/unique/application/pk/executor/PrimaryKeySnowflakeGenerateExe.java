@@ -16,7 +16,7 @@
 
 package com.sky.centaur.unique.application.pk.executor;
 
-import com.github.guang19.leaf.core.IdGenerator;
+import com.sky.centaur.unique.domain.pk.gateway.PrimaryKeyGateway;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +27,12 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-05
  */
 @Component
-public class SnowflakeGenerateExe {
+public class PrimaryKeySnowflakeGenerateExe {
 
   @Resource
-  private IdGenerator snowflakeIdGenerator;
+  private PrimaryKeyGateway primaryKeyGateway;
 
   public long execute() {
-    return snowflakeIdGenerator.nextId().getId();
+    return primaryKeyGateway.snowflake();
   }
 }

@@ -59,6 +59,12 @@ centaur
 │  │  │-log-client -- 日志服务客户端
 │  │  │-log-domain -- 日志服务领域层
 │  │  │-log-infrastructure -- 日志服务基础设施层
+│  │─centaur-unique -- 唯一性数据生成服务
+│  │  │-unique-adapter -- 唯一性数据生成服务适配层
+│  │  │-unique-application -- 唯一性数据生成服务应用层
+│  │  │-unique-client -- 唯一性数据生成服务客户端
+│  │  │-unique-domain -- 唯一性数据生成服务领域层
+│  │  │-unique-infrastructure -- 唯一性数据生成服务基础设施层
 ```
 
 ## 构建

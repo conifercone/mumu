@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(":centaur-unique:unique-domain")
+    implementation libs.leaf
+}
