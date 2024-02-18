@@ -3,9 +3,4 @@ dependencies {
     implementation project(":centaur-unique:unique-client")
     implementation libs.springBootStarterWeb
     implementation libs.swagger3Ui
-    implementation libs.jasypt
-    implementation libs.springCloudAlibabaNacosDiscovery
-    implementation libs.springCloudAlibabaNacosConfig
-    implementation libs.springBootActuator
-    testImplementation libs.springbootTest
 }

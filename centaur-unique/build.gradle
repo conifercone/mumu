@@ -1,7 +1,12 @@
 dependencies {
     implementation project(":centaur-unique:unique-adapter")
+    implementation project(":centaur-unique:unique-application")
     implementation project(":centaur-extension")
     implementation libs.bundles.micrometer
     implementation libs.swagger3Ui
     implementation libs.leaf
+    implementation libs.jasypt
+    implementation libs.springCloudAlibabaNacosDiscovery
+    implementation libs.springCloudAlibabaNacosConfig
+    testImplementation libs.springbootTest
 }
