@@ -133,6 +133,13 @@ public class AuthorizationConfiguration {
     return new AccountUserDetailService();
   }
 
+  /**
+   * 客户端信息注册
+   *
+   * @param jdbcTemplate jdbc模板
+   * @param properties   客户端属性
+   * @return 客户端信息注册实例
+   */
   @Bean
   public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate,
       OAuth2AuthorizationServerProperties properties) {
