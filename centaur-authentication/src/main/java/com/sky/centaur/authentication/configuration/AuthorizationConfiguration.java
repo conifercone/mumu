@@ -60,14 +60,14 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 /**
- * 安全配置
+ * 授权配置
  *
  * @author 单开宇
  * @since 2024-01-12
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
+public class AuthorizationConfiguration {
 
   @Bean
   @Order(1)
