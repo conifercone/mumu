@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.configuration;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -42,6 +43,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.jackson2.CoreJackson2Module;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
@@ -52,6 +56,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -142,9 +147,9 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate,
-      OAuth2AuthorizationServerProperties properties) {
+      OAuth2AuthorizationServerProperties properties, PasswordEncoder passwordEncoder) {
     OAuth2AuthorizationServerPropertiesMapper oAuth2AuthorizationServerPropertiesMapper = new OAuth2AuthorizationServerPropertiesMapper(
-        properties);
+        properties, passwordEncoder);
     List<RegisteredClient> registeredClients = oAuth2AuthorizationServerPropertiesMapper.asRegisteredClients();
     JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(
         jdbcTemplate);
@@ -162,7 +167,18 @@ public class AuthorizationConfiguration {
   @Bean
   public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate,
       RegisteredClientRepository registeredClientRepository) {
-    return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+    JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(
+        jdbcTemplate, registeredClientRepository);
+    JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper(
+        registeredClientRepository);
+    ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModules(new CoreJackson2Module());
+    objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
+    objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+    rowMapper.setObjectMapper(objectMapper);
+    jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
+    return jdbcOAuth2AuthorizationService;
   }
 
   /**

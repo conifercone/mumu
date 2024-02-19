@@ -15,10 +15,11 @@
  */
 package com.sky.centaur.authentication.domain.account;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Collection;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 账户领域模型
@@ -26,14 +27,15 @@ import org.springframework.security.core.userdetails.User;
  * @author 单开宇
  * @since 2024-01-16
  */
-public class Account extends User {
+@JsonDeserialize
+public class Account implements UserDetails {
 
   @Getter
-  private final Long id;
+  private Long id;
 
-  private final String username;
+  private String username;
 
-  private final String password;
+  private String password;
 
   private boolean enabled = true;
 
@@ -43,11 +45,14 @@ public class Account extends User {
 
   private boolean accountNonExpired = true;
 
-  private final Collection<GrantedAuthority> authorities;
+  private Collection<GrantedAuthority> authorities;
+
+  @SuppressWarnings("unused")
+  public Account() {
+  }
 
   public Account(Long id, String username, String password,
       Collection<GrantedAuthority> authorities) {
-    super(username, password, authorities);
     this.id = id;
     this.username = username;
     this.password = password;
@@ -58,8 +63,6 @@ public class Account extends User {
       boolean accountNonExpired,
       boolean credentialsNonExpired, boolean accountNonLocked,
       Collection<GrantedAuthority> authorities) {
-    super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked,
-        authorities);
     this.id = id;
     this.username = username;
     this.password = password;

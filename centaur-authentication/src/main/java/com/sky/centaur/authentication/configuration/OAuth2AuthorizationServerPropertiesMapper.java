@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAu
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Client;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Registration;
 import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
@@ -44,9 +45,12 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 public class OAuth2AuthorizationServerPropertiesMapper {
 
   private final OAuth2AuthorizationServerProperties properties;
+  private final PasswordEncoder passwordEncoder;
 
-  OAuth2AuthorizationServerPropertiesMapper(OAuth2AuthorizationServerProperties properties) {
+  OAuth2AuthorizationServerPropertiesMapper(OAuth2AuthorizationServerProperties properties,
+      PasswordEncoder passwordEncoder) {
     this.properties = properties;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public AuthorizationServerSettings asAuthorizationServerSettings() {
@@ -81,7 +85,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
     RegisteredClient.Builder builder = RegisteredClient.withId(registrationId);
     map.from(registration::getClientId).to(builder::clientId);
-    map.from(registration::getClientSecret).to(builder::clientSecret);
+    map.from(passwordEncoder.encode(registration.getClientSecret())).to(builder::clientSecret);
     map.from(registration::getClientName).to(builder::clientName);
     registration.getClientAuthenticationMethods()
         .forEach((clientAuthenticationMethod) -> map.from(clientAuthenticationMethod)
