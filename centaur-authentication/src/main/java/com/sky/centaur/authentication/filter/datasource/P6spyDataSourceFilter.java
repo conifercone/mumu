@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.infrastructure.config.AuthenticationProper
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import javax.sql.DataSource;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
-      AuthenticationProperties authenticationProperties) {
+      @NotNull AuthenticationProperties authenticationProperties) {
     LOGGER.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
         authenticationProperties.isEnableLog();
