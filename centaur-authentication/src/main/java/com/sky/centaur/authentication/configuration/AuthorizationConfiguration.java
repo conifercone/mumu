@@ -295,12 +295,9 @@ public class AuthorizationConfiguration {
             .map(GrantedAuthority::getAuthority)
             // 去重
             .collect(Collectors.toSet());
-
         // 合并scope与用户信息
         authoritySet.addAll(scopes);
-
         JwtClaimsSet.Builder claims = context.getClaims();
-        // 将权限信息放入jwt的claims中（也可以生成一个以指定字符分割的字符串放入）
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
