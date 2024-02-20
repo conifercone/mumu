@@ -30,7 +30,12 @@ public enum TokenClaimsEnum {
   AUTHORITIES,
 
   /**
-   * 用户名
+   * 账户ID
    */
-  USERNAME
+  ACCOUNT_ID,
+
+  /**
+   * 账户名
+   */
+  ACCOUNT_NAME
 }

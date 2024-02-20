@@ -302,7 +302,8 @@ public class AuthorizationConfiguration {
         JwtClaimsSet.Builder claims = context.getClaims();
         // 将权限信息放入jwt的claims中（也可以生成一个以指定字符分割的字符串放入）
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
-        claims.claim(TokenClaimsEnum.USERNAME.name(), account.getUsername());
+        claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
+        claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
       }
     };
   }
