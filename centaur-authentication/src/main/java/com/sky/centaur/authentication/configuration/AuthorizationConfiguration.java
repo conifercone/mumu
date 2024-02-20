@@ -28,7 +28,9 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
@@ -46,6 +48,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.jackson2.CoreJackson2Module;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
@@ -78,7 +82,16 @@ public class AuthorizationConfiguration {
       throws Exception {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-        .oidc(Customizer.withDefaults());  // Enable OpenID Connect 1.0
+        .oidc(oidc -> oidc.userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
+            oidcUserInfoAuthenticationContext -> {
+              OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
+              Map<String, Object> claims = new HashMap<>();
+              claims.put("accessToken", accessToken);
+              claims.put("sub",
+                  oidcUserInfoAuthenticationContext.getAuthorization().getPrincipalName());
+              return new OidcUserInfo(claims);
+            }))
+        );  // Enable OpenID Connect 1.0
     http
         // Redirect to the login page when not authenticated from the
         // authorization endpoint
