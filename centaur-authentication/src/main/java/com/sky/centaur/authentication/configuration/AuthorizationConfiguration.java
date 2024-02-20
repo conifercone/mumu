@@ -23,15 +23,22 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sky.centaur.authentication.application.service.AccountUserDetailService;
+import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +50,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +58,7 @@ import org.springframework.security.jackson2.CoreJackson2Module;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
@@ -62,6 +71,8 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -263,4 +274,36 @@ public class AuthorizationConfiguration {
     return AuthorizationServerSettings.builder().build();
   }
 
+  /**
+   * 自定义jwt，将权限信息放至jwt中
+   *
+   * @return OAuth2TokenCustomizer的实例
+   */
+  @Bean
+  public OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer() {
+    return context -> {
+      // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
+      if (context.getPrincipal().getPrincipal() instanceof Account account) {
+        // 获取申请的scopes
+        Set<String> scopes = context.getAuthorizedScopes();
+        // 获取用户的权限
+        Collection<? extends GrantedAuthority> authorities = account.getAuthorities();
+        // 提取权限并转为字符串
+        Set<String> authoritySet = Optional.ofNullable(authorities).orElse(Collections.emptyList())
+            .stream()
+            // 获取权限字符串
+            .map(GrantedAuthority::getAuthority)
+            // 去重
+            .collect(Collectors.toSet());
+
+        // 合并scope与用户信息
+        authoritySet.addAll(scopes);
+
+        JwtClaimsSet.Builder claims = context.getClaims();
+        // 将权限信息放入jwt的claims中（也可以生成一个以指定字符分割的字符串放入）
+        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
+        claims.claim(TokenClaimsEnum.USERNAME.name(), account.getUsername());
+      }
+    };
+  }
 }
