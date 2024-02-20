@@ -194,6 +194,11 @@ public class AuthorizationConfiguration {
     return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
   }
 
+  /**
+   * jwks配置
+   *
+   * @return jwks实例
+   */
   @Bean
   public JWKSource<SecurityContext> jwkSource() {
     KeyPair keyPair = generateRsaKey();
@@ -207,6 +212,11 @@ public class AuthorizationConfiguration {
     return new ImmutableJWKSet<>(jwkSet);
   }
 
+  /**
+   * 生成rsa密钥对
+   *
+   * @return rsa密钥对
+   */
   private static KeyPair generateRsaKey() {
     KeyPair keyPair;
     try {
@@ -219,11 +229,22 @@ public class AuthorizationConfiguration {
     return keyPair;
   }
 
+  /**
+   * jwt解码配置
+   *
+   * @param jwkSource jwks实例
+   * @return jwt解码实例
+   */
   @Bean
   public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
     return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
   }
 
+  /**
+   * AuthorizationServer实例配置
+   *
+   * @return AuthorizationServer配置实例
+   */
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
     return AuthorizationServerSettings.builder().build();
