@@ -102,7 +102,9 @@ public class AuthorizationConfiguration {
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler)
       throws Exception {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
+            oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
+                centaurAuthenticationFailureHandler))
         //设置自定义密码模式
         .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
