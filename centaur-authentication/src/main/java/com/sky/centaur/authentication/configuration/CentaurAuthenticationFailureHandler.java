@@ -16,6 +16,12 @@
 
 package com.sky.centaur.authentication.configuration;
 
+
+import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_CLIENT;
+import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_GRANT;
+import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
+
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +46,16 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
       AuthenticationException exception) throws IOException {
     if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
       OAuth2Error error = oAuth2AuthenticationException.getError();
-      ResultResponse.exceptionResponse(response, error.getErrorCode(), error.getDescription());
+      String errorCode = error.getErrorCode();
+      switch (errorCode) {
+        case UNSUPPORTED_GRANT_TYPE -> ResultResponse.exceptionResponse(response,
+            ResultCode.UNSUPPORTED_GRANT_TYPE);
+        case INVALID_CLIENT -> ResultResponse.exceptionResponse(response,
+            ResultCode.INVALID_CLIENT);
+        case INVALID_GRANT -> ResultResponse.exceptionResponse(response,
+            ResultCode.INVALID_GRANT);
+        default -> ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
+      }
     }
 
   }
