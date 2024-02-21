@@ -39,7 +39,8 @@ public enum ResultCode implements BaseResultInterface {
   ACCOUNT_DOES_NOT_EXIST(2005, "账户不存在"),
   UNSUPPORTED_GRANT_TYPE(2006, "不支持的授权类型"),
   INVALID_CLIENT(2007, "无效的客户端"),
-  INVALID_GRANT(2008, "无效授权"),
+  INVALID_GRANT(2008,
+      "提供的授权授予（例如，授权代码、资源所有者凭据）或刷新令牌无效、过期、已撤销、与授权请求中使用的重定向 URI 不匹配，或者已颁发给另一个客户端"),
   /*数据源错误3001-3999*/
   MISSING_P6SPY_DEPENDENCY_INFORMATION(3001, "缺少P6spy依赖信息"),
   /*数据转换错误4001-4999*/
