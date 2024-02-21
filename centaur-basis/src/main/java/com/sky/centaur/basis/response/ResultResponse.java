@@ -92,6 +92,12 @@ public class ResultResponse<T> implements Serializable {
     ResultResponse<?> responseResult = ResultResponse.failure(resultCode);
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResult = objectMapper.writeValueAsString(responseResult);
+    applicationJsonResponse(response, jsonResult);
+  }
+
+  private static void applicationJsonResponse(@NotNull HttpServletResponse response,
+      String jsonResult)
+      throws IOException {
     response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json");
     response.setCharacterEncoding(Charsets.UTF_8.name());
@@ -104,9 +110,6 @@ public class ResultResponse<T> implements Serializable {
     ResultResponse<?> responseResult = ResultResponse.failure(code, message);
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResult = objectMapper.writeValueAsString(responseResult);
-    response.setStatus(HttpServletResponse.SC_OK);
-    response.setContentType("application/json");
-    response.setCharacterEncoding(Charsets.UTF_8.name());
-    response.getWriter().print(jsonResult);
+    applicationJsonResponse(response, jsonResult);
   }
 }
