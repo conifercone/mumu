@@ -15,6 +15,12 @@
  */
 package com.sky.centaur.basis.response;
 
+import com.sky.centaur.basis.tools.SpringContextUtil;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 /**
  * 响应码
  *
@@ -22,44 +28,43 @@ package com.sky.centaur.basis.response;
  * @since 2024-01-20
  */
 public enum ResultCode implements BaseResultInterface {
-  SUCCESS(200, "成功"),
-  BAD_REQUEST(400, "Bad Request"),
-  UNAUTHORIZED(401, "认证失败"),
-  NOT_FOUND(404, "接口不存在"),
-  INTERNAL_SERVER_ERROR(500, "系统繁忙"),
-  METHOD_NOT_ALLOWED(405, "方法不被允许"),
+  SUCCESS(200),
+  BAD_REQUEST(400),
+  UNAUTHORIZED(401),
+  NOT_FOUND(404),
+  INTERNAL_SERVER_ERROR(500),
+  METHOD_NOT_ALLOWED(405),
   /*参数错误:1001-1999*/
-  PARAMS_IS_INVALID(1001, "参数无效"),
-  PARAMS_IS_BLANK(1002, "参数为空"),
+  PARAMS_IS_INVALID(1001),
+  PARAMS_IS_BLANK(1002),
   /*认证错误2001-2999*/
-  ACCOUNT_ALREADY_EXISTS(2001, "账户已存在"),
-  ACCOUNT_NAME_CANNOT_BE_EMPTY(2002, "账户名不能为空"),
-  ACCOUNT_PASSWORD_CANNOT_BE_EMPTY(2003, "账户密码不能为空"),
-  ACCOUNT_PASSWORD_IS_INCORRECT(2004, "账户密码不正确"),
-  ACCOUNT_DOES_NOT_EXIST(2005, "账户不存在"),
-  UNSUPPORTED_GRANT_TYPE(2006, "不支持的授权类型"),
-  INVALID_CLIENT(2007, "无效的客户端"),
-  INVALID_GRANT(2008,
-      "提供的授权授予（例如，授权代码、资源所有者凭据）或刷新令牌无效、过期、已撤销、与授权请求中使用的重定向 URI 不匹配，或者已颁发给另一个客户端"),
+  ACCOUNT_ALREADY_EXISTS(2001),
+  ACCOUNT_NAME_CANNOT_BE_EMPTY(2002),
+  ACCOUNT_PASSWORD_CANNOT_BE_EMPTY(2003),
+  ACCOUNT_PASSWORD_IS_INCORRECT(2004),
+  ACCOUNT_DOES_NOT_EXIST(2005),
+  UNSUPPORTED_GRANT_TYPE(2006),
+  INVALID_CLIENT(2007),
+  INVALID_GRANT(2008),
   /*数据源错误3001-3999*/
-  MISSING_P6SPY_DEPENDENCY_INFORMATION(3001, "缺少P6spy依赖信息"),
+  MISSING_P6SPY_DEPENDENCY_INFORMATION(3001),
   /*数据转换错误4001-4999*/
-  OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001, "操作日志Kafka消息转换失败");
+  OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001);
   private final Integer code;
-  private final String message;
+  private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 
-  ResultCode(int code, String message) {
+  ResultCode(int code) {
     this.code = code;
-    this.message = message;
   }
 
+  @Contract(pure = true)
   @Override
-  public String getResultCode() {
+  public @NotNull String getResultCode() {
     return this.code.toString();
   }
 
   @Override
-  public String getResultMsg() {
-    return this.message;
+  public @NotNull String getResultMsg() {
+    return messageSource.getMessage(getResultCode(), null, LocaleContextHolder.getLocale());
   }
 }
