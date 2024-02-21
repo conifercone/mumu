@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.configuration;
 
+import com.sky.centaur.basis.response.ResultCode;
 import jakarta.annotation.Resource;
 import java.security.Principal;
 import java.util.HashMap;
@@ -111,7 +112,10 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     //校验用户名信息
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
     if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-      throw new OAuth2AuthenticationException("密码不正确！");
+      ResultCode accountPasswordIsIncorrect = ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountPasswordIsIncorrect.getResultCode(),
+              accountPasswordIsIncorrect.getResultMsg(), ""));
     }
 
     //由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken

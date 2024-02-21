@@ -26,6 +26,7 @@ redisOmSpringVersion = "0.8.8"
 commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
 yitterIdGeneratorVersion = "1.0.6"
+tomcatEmbedCoreVersion = "10.1.17"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -114,6 +115,8 @@ micrometerTracingBridgeOtel = { module = "io.micrometer:micrometer-tracing-bridg
 opentelemetryExporterZipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
 springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+# https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core
+tomcatEmbedCore = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcatEmbedCoreVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

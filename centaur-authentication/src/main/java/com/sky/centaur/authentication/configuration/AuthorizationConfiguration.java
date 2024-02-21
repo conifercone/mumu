@@ -97,13 +97,16 @@ public class AuthorizationConfiguration {
   @Order(1)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http,
       OAuth2AuthorizationService authorizationService,
-      OAuth2TokenGenerator<?> tokenGenerator)
+      OAuth2TokenGenerator<?> tokenGenerator,
+      CentaurAuthenticationEntryPoint centaurAuthenticationEntryPoint,
+      CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler)
       throws Exception {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
         //设置自定义密码模式
         .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
+                .errorResponseHandler(centaurAuthenticationFailureHandler)
                 .accessTokenRequestConverter(
                     new PasswordGrantAuthenticationConverter())
                 .authenticationProvider(
@@ -126,11 +129,12 @@ public class AuthorizationConfiguration {
             .defaultAuthenticationEntryPointFor(
                 new LoginUrlAuthenticationEntryPoint("/login"),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-            )
+            ).authenticationEntryPoint(centaurAuthenticationEntryPoint)
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
-            .jwt(Customizer.withDefaults()));
+            .jwt(Customizer.withDefaults())
+            .authenticationEntryPoint(centaurAuthenticationEntryPoint));
 
     return http.build();
   }

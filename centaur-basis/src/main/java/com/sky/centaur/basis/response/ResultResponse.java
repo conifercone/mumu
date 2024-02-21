@@ -15,6 +15,10 @@
  */
 package com.sky.centaur.basis.response;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,6 +55,11 @@ public class ResultResponse<T> implements Serializable {
     this.message = resultCode.getResultMsg();
   }
 
+  public ResultResponse(@NotNull String code, @NotNull String message) {
+    this.code = code;
+    this.message = message;
+  }
+
   @Contract(" -> new")
   public static @NotNull ResultResponse<?> success() {
     return new ResultResponse<>(ResultCode.SUCCESS);
@@ -67,9 +76,37 @@ public class ResultResponse<T> implements Serializable {
     return new ResultResponse<>(resultCode);
   }
 
+  public static @NotNull ResultResponse<?> failure(String code, String message) {
+    return new ResultResponse<>(code, message);
+  }
+
   public static <T> @NotNull ResultResponse<T> failure(BaseResultInterface resultCode, T t) {
     ResultResponse<T> resultResponse = new ResultResponse<>(resultCode);
     resultResponse.setData(t);
     return resultResponse;
+  }
+
+  public static void exceptionResponse(@NotNull HttpServletResponse response,
+      BaseResultInterface resultCode)
+      throws IOException {
+    ResultResponse<?> responseResult = ResultResponse.failure(resultCode);
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonResult = objectMapper.writeValueAsString(responseResult);
+    response.setStatus(HttpServletResponse.SC_OK);
+    response.setContentType("application/json");
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.getWriter().print(jsonResult);
+  }
+
+  public static void exceptionResponse(@NotNull HttpServletResponse response,
+      String code, String message)
+      throws IOException {
+    ResultResponse<?> responseResult = ResultResponse.failure(code, message);
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonResult = objectMapper.writeValueAsString(responseResult);
+    response.setStatus(HttpServletResponse.SC_OK);
+    response.setContentType("application/json");
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.getWriter().print(jsonResult);
   }
 }

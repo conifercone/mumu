@@ -33,6 +33,10 @@ public enum ResultCode implements BaseResultInterface {
   PARAMS_IS_BLANK(1002, "参数为空"),
   /*账户错误2001-2999*/
   ACCOUNT_ALREADY_EXISTS(2001, "账户已存在"),
+  ACCOUNT_NAME_CANNOT_BE_EMPTY(2002, "账户名不能为空"),
+  ACCOUNT_PASSWORD_CANNOT_BE_EMPTY(2003, "账户密码不能为空"),
+  ACCOUNT_PASSWORD_IS_INCORRECT(2004, "账户密码不正确"),
+  ACCOUNT_DOES_NOT_EXIST(2005, "账户不存在"),
   /*数据源错误3001-3999*/
   MISSING_P6SPY_DEPENDENCY_INFORMATION(3001, "缺少P6spy依赖信息"),
   /*数据转换错误4001-4999*/

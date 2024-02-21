@@ -26,6 +26,8 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -74,7 +76,8 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  public Account findAccountByUsername(String username) {
-    return AccountConvertor.toEntity(accountRepository.findAccountDoByUsername(username));
+  public @Nullable Account findAccountByUsername(String username) {
+    return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
+        .map(AccountConvertor::toEntity).orElse(null);
   }
 }

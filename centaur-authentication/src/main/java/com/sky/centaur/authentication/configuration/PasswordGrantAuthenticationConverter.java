@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.configuration;
 
 import com.sky.centaur.basis.enums.OAuth2Enum;
+import com.sky.centaur.basis.response.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.LinkedMultiValueMap;
@@ -54,12 +56,18 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
     if (!StringUtils.hasText(username) ||
         parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
-      throw new OAuth2AuthenticationException("无效请求，用户名不能为空！");
+      ResultCode accountNameCannotBeEmpty = ResultCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountNameCannotBeEmpty.getResultCode(),
+              accountNameCannotBeEmpty.getResultMsg(), ""));
     }
     String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
     if (!StringUtils.hasText(password) ||
         parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
-      throw new OAuth2AuthenticationException("无效请求，密码不能为空！");
+      ResultCode accountPasswordCannotBeEmpty = ResultCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountPasswordCannotBeEmpty.getResultCode(),
+              accountPasswordCannotBeEmpty.getResultMsg(), ""));
     }
     //收集要传入PasswordGrantAuthenticationToken构造方法的参数，
     //该参数接下来在PasswordGrantAuthenticationProvider中使用
