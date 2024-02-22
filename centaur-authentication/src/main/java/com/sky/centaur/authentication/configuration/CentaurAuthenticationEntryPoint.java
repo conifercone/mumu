@@ -18,6 +18,10 @@ package com.sky.centaur.authentication.configuration;
 
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
+import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,7 +31,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 /**
- * 自定义AuthenticationFailureHandler
+ * 自定义AuthenticationEntryPoint
  *
  * @author 单开宇
  * @since 2024-02-21
@@ -35,10 +39,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+  @Resource
+  OperationLogGrpcService operationLogGrpcService;
+
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
     if (authException instanceof UsernameNotFoundException) {
+      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+          .setOperationLogSubmitCo(
+              OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
+                  .setBizNo(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
+                  .setFail(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg()).build())
+          .build());
       ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
     }
   }

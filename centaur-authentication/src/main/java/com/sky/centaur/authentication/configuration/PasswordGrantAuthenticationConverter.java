@@ -61,10 +61,11 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     MultiValueMap<String, String> parameters = getParameters(request);
     if (clientPrincipal instanceof OAuth2ClientAuthenticationToken clientAuthenticationToken) {
       RegisteredClient registeredClient = clientAuthenticationToken.getRegisteredClient();
-      Optional.ofNullable(registeredClient).flatMap(
-          registeredClientFinal -> Optional.ofNullable(registeredClientFinal.getScopes()).flatMap(
+      Optional.ofNullable(registeredClient)
+          .flatMap(registeredClientFinal -> Optional.ofNullable(registeredClientFinal.getScopes()))
+          .ifPresent(
               clientScope -> Optional.ofNullable(parameters.getFirst(OAuth2ParameterNames.SCOPE))
-                  .flatMap(requestScopeStr -> scopeRangeJudgment(clientScope, requestScopeStr))));
+                  .ifPresent(requestScopeStr -> scopeRangeJudgment(clientScope, requestScopeStr)));
     }
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
@@ -104,10 +105,8 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
    *
    * @param clientScope     客户端权限范围
    * @param requestScopeStr 请求携带的范围
-   * @return empty
    */
-  @NotNull
-  private static Optional<Object> scopeRangeJudgment(Set<String> clientScope,
+  private static void scopeRangeJudgment(Set<String> clientScope,
       @NotNull String requestScopeStr) {
     Set<String> invalidRequestScopeSet = Stream.of(requestScopeStr.split(" "))
         .filter(scopeStr ->
@@ -120,7 +119,6 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
           new OAuth2Error(invalidScope.getResultCode(),
               invalidScope.getResultMsg(), ""));
     }
-    return Optional.empty();
   }
 
   /**

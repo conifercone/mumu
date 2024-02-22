@@ -24,6 +24,11 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPOR
 
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
+import com.sky.centaur.basis.tools.IpUtils;
+import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -42,6 +47,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CentaurAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+  @Resource
+  OperationLogGrpcService operationLogGrpcService;
+
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException exception) throws IOException {
@@ -49,16 +57,50 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
       OAuth2Error error = oAuth2AuthenticationException.getError();
       String errorCode = error.getErrorCode();
       switch (errorCode) {
-        case UNSUPPORTED_GRANT_TYPE -> ResultResponse.exceptionResponse(response,
-            ResultCode.UNSUPPORTED_GRANT_TYPE);
-        case INVALID_CLIENT -> ResultResponse.exceptionResponse(response,
-            ResultCode.INVALID_CLIENT);
-        case INVALID_GRANT -> ResultResponse.exceptionResponse(response,
-            ResultCode.INVALID_GRANT);
-        case INVALID_SCOPE -> ResultResponse.exceptionResponse(response,
-            ResultCode.INVALID_SCOPE);
-        default -> ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
+        case UNSUPPORTED_GRANT_TYPE ->
+            exceptionResponse(response, ResultCode.UNSUPPORTED_GRANT_TYPE, request);
+        case INVALID_CLIENT -> exceptionResponse(response, ResultCode.INVALID_CLIENT, request);
+        case INVALID_GRANT -> exceptionResponse(response, ResultCode.INVALID_GRANT, request);
+        case INVALID_SCOPE -> exceptionResponse(response, ResultCode.INVALID_SCOPE, request);
+        default -> {
+          ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
+          operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
+        }
       }
     }
+  }
+
+  /**
+   * 统一认证异常信息响应
+   *
+   * @param response   响应
+   * @param resultCode 结果编码
+   * @param request    请求信息
+   * @throws IOException io异常
+   */
+  private void exceptionResponse(HttpServletResponse response, ResultCode resultCode,
+      HttpServletRequest request)
+      throws IOException {
+    ResultResponse.exceptionResponse(response,
+        resultCode);
+    operationFailLog(resultCode.getResultCode(),
+        resultCode.getResultMsg(), IpUtils.getIpAddr(request));
+  }
+
+  /**
+   * 发送操作日志（失败结果）
+   *
+   * @param category 类别
+   * @param fail     失败信息
+   * @param ip       ip地址
+   */
+  private void operationFailLog(String category, String fail, String ip) {
+    operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+        .setOperationLogSubmitCo(
+            OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationFailureHandler")
+                .setBizNo(ip)
+                .setCategory(category)
+                .setFail(fail).build())
+        .build());
   }
 }

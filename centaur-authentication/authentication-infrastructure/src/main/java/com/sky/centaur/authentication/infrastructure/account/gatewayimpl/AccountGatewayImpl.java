@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
@@ -62,7 +63,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
                   .setBizNo(account.getUsername())
-                  .setFail("账户已存在").build())
+                  .setFail(ResultCode.ACCOUNT_ALREADY_EXISTS.getResultMsg()).build())
           .build());
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
