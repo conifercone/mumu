@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
@@ -46,6 +47,9 @@ public class AccountGatewayImpl implements AccountGateway {
   private AccountRepository accountRepository;
 
   @Resource
+  private AccountNodeRepository accountNodeRepository;
+
+  @Resource
   private PasswordEncoder passwordEncoder;
 
   @Resource
@@ -68,6 +72,8 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
     accountRepository.save(dataObject);
+    accountNodeRepository.save(
+        AccountConvertor.toNodeDataObject(account));
     operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
         .setOperationLogSubmitCo(
             OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")

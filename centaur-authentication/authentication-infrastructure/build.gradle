@@ -5,6 +5,7 @@ dependencies {
     implementation project(":centaur-unique:unique-client")
     implementation project(":centaur-extension")
     implementation libs.springBootDataJpa
+    implementation libs.springBootDataNeo4j
     implementation libs.protobufJava
     implementation libs.springBootOauth2AuthorizationServer
 }

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.convertor;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Collections;
@@ -45,6 +46,13 @@ public class AccountConvertor {
     AccountDo accountDo = new AccountDo();
     BeanUtils.copyProperties(account, accountDo);
     return accountDo;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull AccountNodeDo toNodeDataObject(@NotNull Account account) {
+    AccountNodeDo accountNodeDo = new AccountNodeDo();
+    BeanUtils.copyProperties(account, accountNodeDo);
+    return accountNodeDo;
   }
 
   @Contract("_ -> new")
