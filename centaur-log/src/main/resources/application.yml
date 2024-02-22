@@ -38,13 +38,13 @@ spring:
 ---
 spring:
   config:
-    import: nacos:log-dev.yml
+    import: nacos:${spring.application.name}-dev.yml
     activate:
       on-profile: dev
 ---
 spring:
   config:
-    import: nacos:log-prod.yml
+    import: nacos:${spring.application.name}-prod.yml
     activate:
       on-profile: prod
 ---
