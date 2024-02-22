@@ -60,6 +60,12 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
     //从request中提取请求参数，然后存入MultiValueMap<String, String>
     MultiValueMap<String, String> parameters = getParameters(request);
+    // scope (REQUIRED)
+    String scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
+    if (!StringUtils.hasText(scope) ||
+        parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {
+      throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.INVALID_SCOPE));
+    }
     if (clientPrincipal instanceof OAuth2ClientAuthenticationToken clientAuthenticationToken) {
       RegisteredClient registeredClient = clientAuthenticationToken.getRegisteredClient();
       Optional.ofNullable(registeredClient)
