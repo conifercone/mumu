@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.configuration;
 
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_CLIENT;
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_GRANT;
+import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_SCOPE;
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
 
 import com.sky.centaur.basis.response.ResultCode;
@@ -54,10 +55,10 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
             ResultCode.INVALID_CLIENT);
         case INVALID_GRANT -> ResultResponse.exceptionResponse(response,
             ResultCode.INVALID_GRANT);
+        case INVALID_SCOPE -> ResultResponse.exceptionResponse(response,
+            ResultCode.INVALID_SCOPE);
         default -> ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
       }
     }
-
   }
 }
-

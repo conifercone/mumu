@@ -21,6 +21,10 @@ import com.sky.centaur.basis.response.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
@@ -28,7 +32,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
+import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -52,6 +59,13 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
     //从request中提取请求参数，然后存入MultiValueMap<String, String>
     MultiValueMap<String, String> parameters = getParameters(request);
+    if (clientPrincipal instanceof OAuth2ClientAuthenticationToken clientAuthenticationToken) {
+      RegisteredClient registeredClient = clientAuthenticationToken.getRegisteredClient();
+      Optional.ofNullable(registeredClient).flatMap(
+          registeredClientFinal -> Optional.ofNullable(registeredClientFinal.getScopes()).flatMap(
+              clientScope -> Optional.ofNullable(parameters.getFirst(OAuth2ParameterNames.SCOPE))
+                  .flatMap(requestScopeStr -> scopeRangeJudgment(clientScope, requestScopeStr))));
+    }
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
     if (!StringUtils.hasText(username) ||
@@ -86,7 +100,34 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
   }
 
   /**
+   * scope范围判断（stream）
+   *
+   * @param clientScope     客户端权限范围
+   * @param requestScopeStr 请求携带的范围
+   * @return empty
+   */
+  @NotNull
+  private static Optional<Object> scopeRangeJudgment(Set<String> clientScope,
+      @NotNull String requestScopeStr) {
+    Set<String> invalidRequestScopeSet = Stream.of(requestScopeStr.split(" "))
+        .filter(scopeStr ->
+            !clientScope.contains(scopeStr)
+        )
+        .collect(Collectors.toSet());
+    if (!CollectionUtils.isEmpty(invalidRequestScopeSet)) {
+      ResultCode invalidScope = ResultCode.INVALID_SCOPE;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(invalidScope.getResultCode(),
+              invalidScope.getResultMsg(), ""));
+    }
+    return Optional.empty();
+  }
+
+  /**
    * 从request中提取请求参数，然后存入MultiValueMap<String, String>
+   *
+   * @param request 请求
+   * @return 请求参数
    */
   private static @NotNull MultiValueMap<String, String> getParameters(
       @NotNull HttpServletRequest request) {
