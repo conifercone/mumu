@@ -26,12 +26,19 @@ import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.basis.tools.IpUtils;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
@@ -47,8 +54,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class CentaurAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      CentaurAuthenticationFailureHandler.class);
+
   @Resource
   OperationLogGrpcService operationLogGrpcService;
+
+  @Resource
+  SystemLogGrpcService systemLogGrpcService;
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -56,6 +69,13 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
     if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
       OAuth2Error error = oAuth2AuthenticationException.getError();
       String errorCode = error.getErrorCode();
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder().setContent(errorCode)
+                  .setCategory("exception")
+                  .setFail(ExceptionUtils.getStackTrace(exception)).build())
+          .build());
+      LOGGER.error(errorCode);
       switch (errorCode) {
         case UNSUPPORTED_GRANT_TYPE ->
             exceptionResponse(response, ResultCode.UNSUPPORTED_GRANT_TYPE, request);
@@ -78,7 +98,7 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
    * @param request    请求信息
    * @throws IOException io异常
    */
-  private void exceptionResponse(HttpServletResponse response, ResultCode resultCode,
+  private void exceptionResponse(HttpServletResponse response, @NotNull ResultCode resultCode,
       HttpServletRequest request)
       throws IOException {
     ResultResponse.exceptionResponse(response,

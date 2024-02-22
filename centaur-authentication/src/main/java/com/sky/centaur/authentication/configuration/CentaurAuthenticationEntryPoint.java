@@ -19,12 +19,16 @@ package com.sky.centaur.authentication.configuration;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
+import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -42,10 +46,20 @@ public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint
   @Resource
   OperationLogGrpcService operationLogGrpcService;
 
+  @Resource
+  SystemLogGrpcService systemLogGrpcService;
+
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
-    if (authException instanceof UsernameNotFoundException) {
+    if (authException instanceof UsernameNotFoundException usernameNotFoundException) {
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder()
+                  .setContent(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
+                  .setCategory("exception")
+                  .setFail(ExceptionUtils.getStackTrace(usernameNotFoundException)).build())
+          .build());
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")

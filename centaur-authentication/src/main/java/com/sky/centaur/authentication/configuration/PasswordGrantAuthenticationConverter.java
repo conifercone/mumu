@@ -31,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -114,10 +115,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
         )
         .collect(Collectors.toSet());
     if (!CollectionUtils.isEmpty(invalidRequestScopeSet)) {
-      ResultCode invalidScope = ResultCode.INVALID_SCOPE;
-      throw new OAuth2AuthenticationException(
-          new OAuth2Error(invalidScope.getResultCode(),
-              invalidScope.getResultMsg(), ""));
+      throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.INVALID_SCOPE));
     }
   }
 
