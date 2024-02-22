@@ -29,6 +29,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -43,6 +45,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      CentaurAuthenticationEntryPoint.class);
+
+
   @Resource
   OperationLogGrpcService operationLogGrpcService;
 
@@ -53,6 +59,7 @@ public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
     if (authException instanceof UsernameNotFoundException usernameNotFoundException) {
+      LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder()
