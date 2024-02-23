@@ -22,6 +22,6 @@ package com.sky.centaur.authentication.domain.account;
  * @author 单开宇
  * @since 2024-02-23
  */
-public record Authority(Long id, String code) {
+public record Authority(Long id, String code, String name) {
 
 }

@@ -33,4 +33,6 @@ public class AuthorityAddCo extends BaseClientObject {
   private Long id;
 
   private String code;
+
+  private String name;
 }

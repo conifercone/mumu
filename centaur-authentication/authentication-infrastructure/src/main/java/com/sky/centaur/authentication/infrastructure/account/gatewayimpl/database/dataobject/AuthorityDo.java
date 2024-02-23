@@ -47,4 +47,9 @@ public class AuthorityDo {
   @NotNull
   @Column(name = "code", nullable = false, length = 50)
   private String code;
+
+  @Size(max = 200)
+  @Column(name = "name", length = 200)
+  private String name;
+
 }

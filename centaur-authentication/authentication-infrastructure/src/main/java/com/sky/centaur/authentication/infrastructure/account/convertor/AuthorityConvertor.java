@@ -35,7 +35,7 @@ public class AuthorityConvertor {
 
   @Contract("_ -> new")
   public static @NotNull Authority toEntity(@NotNull AuthorityDo authorityDo) {
-    return new Authority(authorityDo.getId(), authorityDo.getCode());
+    return new Authority(authorityDo.getId(), authorityDo.getCode(), authorityDo.getName());
   }
 
   @Contract("_ -> new")
@@ -43,6 +43,7 @@ public class AuthorityConvertor {
     AuthorityDo authorityDo = new AuthorityDo();
     authorityDo.setId(authority.id());
     authorityDo.setCode(authority.code());
+    authorityDo.setName(authority.name());
     return authorityDo;
   }
 
@@ -57,6 +58,6 @@ public class AuthorityConvertor {
   public static @NotNull Authority toEntity(@NotNull AuthorityAddCo authorityAddCo) {
     return new Authority(authorityAddCo.getId() == null ?
         SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
-        : authorityAddCo.getId(), authorityAddCo.getCode());
+        : authorityAddCo.getId(), authorityAddCo.getCode(), authorityAddCo.getName());
   }
 }
