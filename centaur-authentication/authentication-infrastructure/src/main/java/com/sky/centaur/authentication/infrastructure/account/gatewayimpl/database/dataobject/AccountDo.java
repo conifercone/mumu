@@ -69,6 +69,6 @@ public class AccountDo {
   private Boolean accountNonExpired;
 
   @OneToMany(mappedBy = "user")
-  private Set<AuthorityDo> authorities = new LinkedHashSet<>();
+  private Set<AuthoritiesDo> authorities = new LinkedHashSet<>();
 
 }

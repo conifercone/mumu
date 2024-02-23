@@ -16,7 +16,7 @@
 
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
 
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthoritiesDo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -25,6 +25,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 单开宇
  * @since 2024-01-12
  */
-public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long> {
+public interface AuthoritiesRepository extends JpaRepository<AuthoritiesDo, Long> {
 
 }

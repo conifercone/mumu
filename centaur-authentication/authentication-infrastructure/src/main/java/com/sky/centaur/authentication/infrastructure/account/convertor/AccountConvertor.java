@@ -19,12 +19,17 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthoritiesDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 账户信息转换器
@@ -39,7 +44,10 @@ public class AccountConvertor {
     return new Account(accountDo.getId(), accountDo.getUsername(), accountDo.getPassword(),
         accountDo.getEnabled(), accountDo.getAccountNonExpired(),
         accountDo.getCredentialsNonExpired(),
-        accountDo.getAccountNonLocked(), Collections.emptyList());
+        accountDo.getAccountNonLocked(), accountDo.getAuthorities().stream()
+        .map(authoritiesDo -> new SimpleGrantedAuthority(authoritiesDo.getAuthority())
+        ).collect(
+            Collectors.toList()));
   }
 
   @Contract("_ -> new")
@@ -64,5 +72,21 @@ public class AccountConvertor {
             : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
         accountRegisterCo.getPassword(),
         accountRegisterCo.getAuthorities());
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull List<AuthoritiesDo> toAuthoritiesDataObject(@NotNull Account account) {
+    if (CollectionUtils.isEmpty(account.getAuthorities())) {
+      return Collections.emptyList();
+    }
+    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtil.getBean(
+        PrimaryKeyGrpcService.class);
+    return account.getAuthorities().stream().map(grantedAuthority -> {
+      AuthoritiesDo authoritiesDo = new AuthoritiesDo();
+      authoritiesDo.setId(primaryKeyGrpcService.snowflake());
+      authoritiesDo.setUser(toDataObject(account));
+      authoritiesDo.setAuthority(grantedAuthority.getAuthority());
+      return authoritiesDo;
+    }).collect(Collectors.toList());
   }
 }

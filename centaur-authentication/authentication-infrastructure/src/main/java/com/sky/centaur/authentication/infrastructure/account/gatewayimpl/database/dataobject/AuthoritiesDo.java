@@ -40,7 +40,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "authorities")
 @RequiredArgsConstructor
-public class AuthorityDo {
+public class AuthoritiesDo {
 
   @Id
   @Column(name = "id", nullable = false)
