@@ -28,6 +28,7 @@ leafVersion = "1.0.2"
 yitterIdGeneratorVersion = "1.0.6"
 tomcatEmbedCoreVersion = "10.1.17"
 jakartaValidationApiVersion = "3.0.2"
+hibernateTypes60Version = "2.21.1"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -122,6 +123,8 @@ springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-
 tomcatEmbedCore = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcatEmbedCoreVersion" }
 # https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
 jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidationApiVersion" }
+# https://mvnrepository.com/artifact/com.vladmihalcea/hibernate-types-60
+hibernateTypes60 = { module = "com.vladmihalcea:hibernate-types-60", version.ref = "hibernateTypes60Version" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

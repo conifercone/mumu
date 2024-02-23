@@ -21,26 +21,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
- * 账户节点
+ * 权限图节点数据对象
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-02-23
  */
-@Node("account")
+@Node("authority")
 @Data
 @RequiredArgsConstructor
-public class AccountNodeDo {
+public class AuthorityNodeDo {
 
   @Id
   private Long id;
 
-  @Property("username")
-  private String username;
-
-  @Relationship(type = "role", direction = Relationship.Direction.OUTGOING)
-  private RoleNodeDo role;
-
+  @Property("code")
+  private String code;
 }

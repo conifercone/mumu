@@ -13,34 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.client.dto.co;
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
-
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.util.List;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import lombok.EqualsAndHashCode;
 
 /**
- * 账户节点
+ * 角色添加客户端对象
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-01-16
  */
-@Node("account")
 @Data
-@RequiredArgsConstructor
-public class AccountNodeDo {
+@EqualsAndHashCode(callSuper = true)
+public class RoleAddCo extends BaseClientObject {
 
-  @Id
   private Long id;
 
-  @Property("username")
-  private String username;
+  private String name;
 
-  @Relationship(type = "role", direction = Relationship.Direction.OUTGOING)
-  private RoleNodeDo role;
+  private String code;
 
+  private List<Long> authorities;
 }

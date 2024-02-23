@@ -16,21 +16,23 @@
 
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 /**
- * 权限基本信息数据对象
+ * 角色基本信息数据对象
  *
  * @author 单开宇
  * @since 2024-02-23
@@ -38,21 +40,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "authorities")
-@RequiredArgsConstructor
-public class AuthoritiesDo {
+@Table(name = "roles")
+public class RoleDo {
 
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Size(max = 50)
-  @NotNull
-  @Column(name = "authority", nullable = false, length = 50)
-  private String authority;
+  @Size(max = 200)
+  @Column(name = "name", length = 200)
+  private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private AccountDo user;
+  @Size(max = 100)
+  @NotNull
+  @Column(name = "code", nullable = false, length = 100)
+  private String code;
+
+  @OneToMany(mappedBy = "role")
+  private Set<AccountDo> users = new LinkedHashSet<>();
+
+  @Column(name = "authorities", columnDefinition = "bigint[]")
+  @Type(ListArrayType.class)
+  private List<Long> authorities;
 
 }

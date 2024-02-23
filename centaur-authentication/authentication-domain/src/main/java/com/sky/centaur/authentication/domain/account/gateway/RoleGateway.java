@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.domain.account.gateway;
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
-
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthoritiesDo;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.sky.centaur.authentication.domain.account.Role;
 
 /**
- * 权限基本信息
+ * 角色领域网关
  *
  * @author 单开宇
- * @since 2024-01-12
+ * @since 2024-01-16
  */
-public interface AuthoritiesRepository extends JpaRepository<AuthoritiesDo, Long> {
+public interface RoleGateway {
 
+  void add(Role role);
 }

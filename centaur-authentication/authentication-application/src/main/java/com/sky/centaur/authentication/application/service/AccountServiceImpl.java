@@ -75,6 +75,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setId(accountRegisterGrpcCo.getId());
     accountRegisterCo.setUsername(accountRegisterGrpcCo.getUsername());
     accountRegisterCo.setPassword(accountRegisterGrpcCo.getPassword());
+    accountRegisterCo.setRoleCode(accountRegisterGrpcCo.getRoleCode());
     return accountRegisterCo;
   }
 }

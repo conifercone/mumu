@@ -17,19 +17,14 @@ package com.sky.centaur.authentication.infrastructure.account.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthoritiesDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 账户信息转换器
@@ -44,49 +39,42 @@ public class AccountConvertor {
     return new Account(accountDo.getId(), accountDo.getUsername(), accountDo.getPassword(),
         accountDo.getEnabled(), accountDo.getAccountNonExpired(),
         accountDo.getCredentialsNonExpired(),
-        accountDo.getAccountNonLocked(), accountDo.getAuthorities().stream()
-        .map(authoritiesDo -> new SimpleGrantedAuthority(authoritiesDo.getAuthority())
-        ).collect(
-            Collectors.toList()));
+        accountDo.getAccountNonLocked(), RoleConvertor.toEntity(accountDo.getRole()));
   }
 
   @Contract("_ -> new")
   public static @NotNull AccountDo toDataObject(@NotNull Account account) {
     AccountDo accountDo = new AccountDo();
-    BeanUtils.copyProperties(account, accountDo);
+    accountDo.setId(account.getId());
+    accountDo.setUsername(account.getUsername());
+    accountDo.setPassword(account.getPassword());
+    accountDo.setEnabled(account.isEnabled());
+    accountDo.setCredentialsNonExpired(account.isCredentialsNonExpired());
+    accountDo.setAccountNonLocked(account.isAccountNonLocked());
+    accountDo.setAccountNonExpired(account.isAccountNonExpired());
+    accountDo.setRole(RoleConvertor.toDataObject(account.getRole()));
     return accountDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull AccountNodeDo toNodeDataObject(@NotNull Account account) {
     AccountNodeDo accountNodeDo = new AccountNodeDo();
-    BeanUtils.copyProperties(account, accountNodeDo);
+    accountNodeDo.setId(account.getId());
+    accountNodeDo.setUsername(account.getUsername());
+    Optional.ofNullable(account.getRole())
+        .ifPresent(role -> accountNodeDo.setRole(RoleConvertor.toNodeDataObject(role)));
+
     return accountNodeDo;
   }
 
-  @Contract("_ -> new")
   public static @NotNull Account toEntity(@NotNull AccountRegisterCo accountRegisterCo) {
+    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
     return new Account(
         accountRegisterCo.getId() == null ?
             SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
             : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
         accountRegisterCo.getPassword(),
-        accountRegisterCo.getAuthorities());
-  }
-
-  @Contract("_ -> new")
-  public static @NotNull List<AuthoritiesDo> toAuthoritiesDataObject(@NotNull Account account) {
-    if (CollectionUtils.isEmpty(account.getAuthorities())) {
-      return Collections.emptyList();
-    }
-    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtil.getBean(
-        PrimaryKeyGrpcService.class);
-    return account.getAuthorities().stream().map(grantedAuthority -> {
-      AuthoritiesDo authoritiesDo = new AuthoritiesDo();
-      authoritiesDo.setId(primaryKeyGrpcService.snowflake());
-      authoritiesDo.setUser(toDataObject(account));
-      authoritiesDo.setAuthority(grantedAuthority.getAuthority());
-      return authoritiesDo;
-    }).collect(Collectors.toList());
+        Optional.ofNullable(roleRepository.findByCode(accountRegisterCo.getRoleCode()))
+            .map(RoleConvertor::toEntity).orElse(null));
   }
 }

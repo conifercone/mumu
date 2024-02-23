@@ -13,27 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
+package com.sky.centaur.authentication.client.api;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.sky.centaur.authentication.client.dto.RoleAddCmd;
+import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 
 /**
- * 账户信息注册客户端对象
+ * 角色功能API
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-01-15
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountRegisterCo extends BaseClientObject {
+public interface RoleService {
 
-  private Long id;
-
-  private String username;
-
-  private String password;
-
-  private String roleCode;
+  RoleAddCo add(RoleAddCmd roleAddCmd);
 }

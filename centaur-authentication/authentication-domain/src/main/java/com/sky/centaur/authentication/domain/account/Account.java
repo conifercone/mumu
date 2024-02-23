@@ -17,8 +17,10 @@ package com.sky.centaur.authentication.domain.account;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -45,37 +47,38 @@ public class Account implements UserDetails {
 
   private Boolean accountNonExpired = true;
 
-  private Collection<GrantedAuthority> authorities;
+  @Getter
+  private Role role;
 
   @SuppressWarnings("unused")
   public Account() {
   }
 
-  public Account(Long id, String username, String password,
-      Collection<GrantedAuthority> authorities) {
+  public Account(Long id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.authorities = authorities;
+    this.role = role;
   }
 
   public Account(Long id, String username, String password, boolean enabled,
       boolean accountNonExpired,
-      boolean credentialsNonExpired, boolean accountNonLocked,
-      Collection<GrantedAuthority> authorities) {
+      boolean credentialsNonExpired, boolean accountNonLocked, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.authorities = authorities;
     this.enabled = enabled;
     this.accountNonExpired = accountNonExpired;
     this.credentialsNonExpired = credentialsNonExpired;
+    this.role = role;
     this.accountNonLocked = accountNonLocked;
   }
 
   @Override
   public Collection<GrantedAuthority> getAuthorities() {
-    return this.authorities;
+    return this.role.authorities().stream()
+        .map(authority -> new SimpleGrantedAuthority(authority.code()))
+        .collect(Collectors.toList());
   }
 
   @Override

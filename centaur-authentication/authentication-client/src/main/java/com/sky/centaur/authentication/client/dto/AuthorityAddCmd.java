@@ -13,34 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.client.dto;
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
-
+import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
- * 账户节点
+ * 添加权限指令
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-01-16
  */
-@Node("account")
 @Data
-@RequiredArgsConstructor
-public class AccountNodeDo {
+public class AuthorityAddCmd {
 
-  @Id
-  private Long id;
-
-  @Property("username")
-  private String username;
-
-  @Relationship(type = "role", direction = Relationship.Direction.OUTGOING)
-  private RoleNodeDo role;
-
+  private AuthorityAddCo authorityAddCo;
 }

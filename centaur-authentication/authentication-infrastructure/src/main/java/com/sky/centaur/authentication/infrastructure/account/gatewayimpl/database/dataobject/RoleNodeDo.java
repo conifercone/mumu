@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
+import java.util.List;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -24,23 +25,22 @@ import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
- * 账户节点
+ * 角色图节点数据对象
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-02-23
  */
-@Node("account")
+@Node("role")
 @Data
 @RequiredArgsConstructor
-public class AccountNodeDo {
+public class RoleNodeDo {
 
   @Id
   private Long id;
 
-  @Property("username")
-  private String username;
+  @Property("code")
+  private String code;
 
-  @Relationship(type = "role", direction = Relationship.Direction.OUTGOING)
-  private RoleNodeDo role;
-
+  @Relationship(type = "authorities", direction = Relationship.Direction.OUTGOING)
+  private List<AuthorityNodeDo> authorities;
 }

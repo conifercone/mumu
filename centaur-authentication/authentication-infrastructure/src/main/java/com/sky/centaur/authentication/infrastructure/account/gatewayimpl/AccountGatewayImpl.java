@@ -20,9 +20,7 @@ import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AuthoritiesRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthoritiesDo;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
@@ -30,7 +28,6 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
-import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,14 +56,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Resource
   private OperationLogGrpcService operationLogGrpcService;
 
-  @Resource
-  private AuthoritiesRepository authoritiesRepository;
-
   @Override
   @Transactional
   public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
-    List<AuthoritiesDo> authoritiesDoList = AccountConvertor.toAuthoritiesDataObject(account);
     // 密码加密
     dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
     AccountDo accountDoByUsername = accountRepository.findAccountDoByUsername(
@@ -81,7 +74,6 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
     accountRepository.save(dataObject);
-    authoritiesRepository.saveAll(authoritiesDoList);
     accountNodeRepository.save(
         AccountConvertor.toNodeDataObject(account));
     operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()

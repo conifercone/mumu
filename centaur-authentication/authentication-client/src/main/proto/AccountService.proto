@@ -16,9 +16,6 @@ message AccountRegisterGrpcCo {
   int64 id = 1;
   string username = 2;
   string password = 3;
-  repeated  GrpcGrantedAuthority authorities = 4;
+  string roleCode = 4;
 }
 
-message GrpcGrantedAuthority {
-  string authority = 1;
-}

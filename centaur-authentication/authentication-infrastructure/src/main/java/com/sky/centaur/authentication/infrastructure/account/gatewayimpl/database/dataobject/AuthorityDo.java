@@ -16,31 +16,35 @@
 
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import lombok.Setter;
 
 /**
- * 账户节点
+ * 权限基本信息数据对象
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-02-23
  */
-@Node("account")
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "authorities")
 @RequiredArgsConstructor
-public class AccountNodeDo {
+public class AuthorityDo {
 
   @Id
+  @Column(name = "id", nullable = false)
   private Long id;
 
-  @Property("username")
-  private String username;
-
-  @Relationship(type = "role", direction = Relationship.Direction.OUTGOING)
-  private RoleNodeDo role;
-
+  @Size(max = 50)
+  @NotNull
+  @Column(name = "code", nullable = false, length = 50)
+  private String code;
 }

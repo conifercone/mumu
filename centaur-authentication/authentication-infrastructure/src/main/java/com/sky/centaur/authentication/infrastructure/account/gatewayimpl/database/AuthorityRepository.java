@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
+
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityDo;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * 账户信息注册客户端对象
+ * 权限基本信息
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-01-12
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountRegisterCo extends BaseClientObject {
+public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long> {
 
-  private Long id;
-
-  private String username;
-
-  private String password;
-
-  private String roleCode;
+  List<AuthorityDo> findAuthorityDoByIdIn(Collection<Long> ids);
 }
