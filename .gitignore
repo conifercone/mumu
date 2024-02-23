@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 .idea
+.jpb
 !/.idea/icon.png
 *.iws
 *.iml

@@ -20,7 +20,7 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 /**
- * 账户节点
+ * 账户基本信息图节点
  *
  * @author 单开宇
  * @since 2024-02-22

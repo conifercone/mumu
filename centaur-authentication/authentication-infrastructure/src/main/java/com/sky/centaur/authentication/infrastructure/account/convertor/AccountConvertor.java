@@ -37,8 +37,9 @@ public class AccountConvertor {
   @Contract("_ -> new")
   public static @NotNull Account toEntity(@NotNull AccountDo accountDo) {
     return new Account(accountDo.getId(), accountDo.getUsername(), accountDo.getPassword(),
-        accountDo.isEnabled(), accountDo.isAccountNonExpired(), accountDo.isCredentialsNonExpired(),
-        accountDo.isAccountNonLocked(), Collections.emptyList());
+        accountDo.getEnabled(), accountDo.getAccountNonExpired(),
+        accountDo.getCredentialsNonExpired(),
+        accountDo.getAccountNonLocked(), Collections.emptyList());
   }
 
   @Contract("_ -> new")

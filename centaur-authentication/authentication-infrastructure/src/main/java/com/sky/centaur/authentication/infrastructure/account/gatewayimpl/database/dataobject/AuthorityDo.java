@@ -13,33 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
- * 用户基本信息数据对象
+ * 权限基本信息数据对象
  *
  * @author 单开宇
- * @since 2024-01-12
+ * @since 2024-02-23
  */
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Entity
+@Table(name = "authorities")
 @RequiredArgsConstructor
-public class AccountDo {
+public class AuthorityDo {
 
   @Id
   @Column(name = "id", nullable = false)
@@ -47,28 +48,11 @@ public class AccountDo {
 
   @Size(max = 50)
   @NotNull
-  @Column(name = "username", nullable = false, length = 50)
-  private String username;
+  @Column(name = "authority", nullable = false, length = 50)
+  private String authority;
 
-  @Size(max = 500)
-  @NotNull
-  @Column(name = "password", nullable = false, length = 500)
-  private String password;
-
-  @NotNull
-  @Column(name = "enabled", nullable = false)
-  private Boolean enabled = false;
-
-  @Column(name = "credentials_non_expired")
-  private Boolean credentialsNonExpired;
-
-  @Column(name = "account_non_locked")
-  private Boolean accountNonLocked;
-
-  @Column(name = "account_non_expired")
-  private Boolean accountNonExpired;
-
-  @OneToMany(mappedBy = "user")
-  private Set<AuthorityDo> authorities = new LinkedHashSet<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private AccountDo user;
 
 }

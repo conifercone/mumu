@@ -37,13 +37,13 @@ public class Account implements UserDetails {
 
   private String password;
 
-  private boolean enabled = true;
+  private Boolean enabled = false;
 
-  private boolean credentialsNonExpired = true;
+  private Boolean credentialsNonExpired = true;
 
-  private boolean accountNonLocked = true;
+  private Boolean accountNonLocked = true;
 
-  private boolean accountNonExpired = true;
+  private Boolean accountNonExpired = true;
 
   private Collection<GrantedAuthority> authorities;
 
