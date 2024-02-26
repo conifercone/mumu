@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +29,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @author 单开宇
  * @since 2024-01-16
  */
+@Observed(name = "AccountUserDetailService")
 public class AccountUserDetailService implements UserDetailsService {
 
   @Resource

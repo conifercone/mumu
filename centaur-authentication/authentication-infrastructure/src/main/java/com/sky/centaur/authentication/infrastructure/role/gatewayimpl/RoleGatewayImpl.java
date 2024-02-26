@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConverto
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-23
  */
 @Component
+@Observed(name = "RoleGatewayImpl")
 public class RoleGatewayImpl implements RoleGateway {
 
   @Resource

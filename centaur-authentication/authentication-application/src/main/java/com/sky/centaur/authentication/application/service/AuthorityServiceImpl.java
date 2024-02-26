@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.application.authority.executor.AuthorityAd
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 2024-02-23
  */
 @Service
+@Observed(name = "AuthorityServiceImpl")
 public class AuthorityServiceImpl implements AuthorityService {
 
   @Resource

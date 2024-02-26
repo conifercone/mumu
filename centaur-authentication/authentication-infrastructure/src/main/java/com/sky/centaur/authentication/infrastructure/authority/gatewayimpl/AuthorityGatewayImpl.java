@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-23
  */
 @Component
+@Observed(name = "AuthorityGatewayImpl")
 public class AuthorityGatewayImpl implements AuthorityGateway {
 
 

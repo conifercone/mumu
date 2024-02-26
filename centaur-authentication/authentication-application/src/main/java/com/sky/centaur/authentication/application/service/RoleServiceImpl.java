@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 2024-02-23
  */
 @Service
+@Observed(name = "RoleServiceImpl")
 public class RoleServiceImpl implements RoleService {
 
   @Resource
