@@ -16,12 +16,42 @@
 
 package com.sky.centaur.authentication.domain.authority;
 
+import com.sky.centaur.basis.domain.BasisDomainModel;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 /**
- * 权限
+ * 权限领域模型
  *
  * @author 单开宇
  * @since 2024-02-23
  */
-public record Authority(Long id, String code, String name) {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public final class Authority extends BasisDomainModel {
 
+  private final Long id;
+  private final String code;
+  private final String name;
+
+  /**
+   * all properties constructor
+   */
+  public Authority(Long id, String code, String name) {
+    this.id = id;
+    this.code = code;
+    this.name = name;
+  }
+
+  public Long id() {
+    return id;
+  }
+
+  public String code() {
+    return code;
+  }
+
+  public String name() {
+    return name;
+  }
 }

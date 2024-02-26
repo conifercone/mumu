@@ -17,14 +17,49 @@
 package com.sky.centaur.authentication.domain.role;
 
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * 角色
+ * 角色领域模型
  *
  * @author 单开宇
  * @since 2024-02-23
  */
-public record Role(Long id, String code, String name, List<Authority> authorities) {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public final class Role extends BasisDomainModel {
 
+  private final Long id;
+  private final String code;
+  private final String name;
+  private final List<Authority> authorities;
+
+  /**
+   * all properties constructor
+   */
+  public Role(Long id, String code, String name, List<Authority> authorities) {
+    this.id = id;
+    this.code = code;
+    this.name = name;
+    this.authorities = authorities;
+  }
+
+  public Long id() {
+    return id;
+  }
+
+  public String code() {
+    return code;
+  }
+
+  public String name() {
+    return name;
+  }
+
+  public List<Authority> authorities() {
+    return authorities;
+  }
 }

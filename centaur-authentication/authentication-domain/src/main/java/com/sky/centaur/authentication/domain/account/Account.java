@@ -17,9 +17,12 @@ package com.sky.centaur.authentication.domain.account;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +34,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since 2024-01-16
  */
 @JsonDeserialize
-public class Account implements UserDetails {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class Account extends BasisDomainModel implements UserDetails {
 
   @Getter
   private Long id;
