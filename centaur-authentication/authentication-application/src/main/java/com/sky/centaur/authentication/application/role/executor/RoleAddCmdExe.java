@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.application.account.executor;
+package com.sky.centaur.authentication.application.role.executor;
 
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.domain.account.Role;
-import com.sky.centaur.authentication.domain.account.gateway.RoleGateway;
-import com.sky.centaur.authentication.infrastructure.account.convertor.RoleConvertor;
+import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
+import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

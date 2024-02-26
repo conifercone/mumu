@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
 
-import com.sky.centaur.authentication.domain.account.Role;
+package com.sky.centaur.authentication.domain.role;
+
+import com.sky.centaur.authentication.domain.authority.Authority;
+import java.util.List;
 
 /**
- * 角色领域网关
+ * 角色
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-02-23
  */
-public interface RoleGateway {
+public record Role(Long id, String code, String name, List<Authority> authorities) {
 
-  void add(Role role);
 }

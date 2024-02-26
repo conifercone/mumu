@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.domain.role.gateway;
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
-
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.RoleNodeDo;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import com.sky.centaur.authentication.domain.role.Role;
 
 /**
- * 角色基本信息图节点
+ * 角色领域网关
  *
  * @author 单开宇
- * @since 2024-02-22
+ * @since 2024-01-16
  */
-public interface RoleNodeRepository extends Neo4jRepository<RoleNodeDo, Long> {
+public interface RoleGateway {
 
+  void add(Role role);
 }

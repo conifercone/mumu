@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
+package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl;
 
-import com.sky.centaur.authentication.domain.account.Authority;
-import com.sky.centaur.authentication.domain.account.gateway.AuthorityGateway;
-import com.sky.centaur.authentication.infrastructure.account.convertor.AuthorityConvertor;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AuthorityNodeRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AuthorityRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
+import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityNodeRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

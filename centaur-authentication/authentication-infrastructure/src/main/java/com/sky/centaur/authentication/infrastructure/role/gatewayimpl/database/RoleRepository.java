@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.domain.account;
+package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database;
 
-import java.util.List;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * 角色
+ * 角色管理
  *
  * @author 单开宇
  * @since 2024-02-23
  */
-public record Role(Long id, String code, String name, List<Authority> authorities) {
+public interface RoleRepository extends JpaRepository<RoleDo, Long> {
 
+  RoleDo findByCode(String code);
 }

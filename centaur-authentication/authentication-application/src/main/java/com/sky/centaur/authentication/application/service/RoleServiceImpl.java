@@ -16,7 +16,7 @@
 
 package com.sky.centaur.authentication.application.service;
 
-import com.sky.centaur.authentication.application.account.executor.RoleAddCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;

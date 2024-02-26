@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.convertor;
+package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.domain.account.Authority;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import org.jetbrains.annotations.Contract;

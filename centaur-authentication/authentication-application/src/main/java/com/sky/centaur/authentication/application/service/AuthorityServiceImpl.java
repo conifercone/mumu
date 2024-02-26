@@ -16,7 +16,7 @@
 
 package com.sky.centaur.authentication.application.service;
 
-import com.sky.centaur.authentication.application.account.executor.AuthorityAddCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;

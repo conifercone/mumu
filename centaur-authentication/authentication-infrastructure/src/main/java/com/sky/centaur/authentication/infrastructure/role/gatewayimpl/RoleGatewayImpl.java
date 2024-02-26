@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
+package com.sky.centaur.authentication.infrastructure.role.gatewayimpl;
 
-import com.sky.centaur.authentication.domain.account.Role;
-import com.sky.centaur.authentication.domain.account.gateway.RoleGateway;
-import com.sky.centaur.authentication.infrastructure.account.convertor.RoleConvertor;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.RoleNodeRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.RoleRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
+import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

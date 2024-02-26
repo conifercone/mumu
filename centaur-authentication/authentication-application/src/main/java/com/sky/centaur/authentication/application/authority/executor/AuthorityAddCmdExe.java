@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.application.account.executor;
+package com.sky.centaur.authentication.application.authority.executor;
 
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.domain.account.Authority;
-import com.sky.centaur.authentication.domain.account.gateway.AuthorityGateway;
-import com.sky.centaur.authentication.infrastructure.account.convertor.AuthorityConvertor;
+import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
+import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

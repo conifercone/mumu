@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
 
-import com.sky.centaur.authentication.domain.account.Authority;
+package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database;
+
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * 权限领域网关
+ * 权限基本信息
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-01-12
  */
-public interface AuthorityGateway {
+public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long> {
 
-  void add(Authority authority);
+  List<AuthorityDo> findAuthorityDoByIdIn(Collection<Long> ids);
 }

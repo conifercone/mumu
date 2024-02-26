@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.convertor;
+package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.domain.account.Authority;
-import com.sky.centaur.authentication.domain.account.Role;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AuthorityRepository;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AuthorityNodeDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.RoleDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.RoleNodeDo;
+import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.List;

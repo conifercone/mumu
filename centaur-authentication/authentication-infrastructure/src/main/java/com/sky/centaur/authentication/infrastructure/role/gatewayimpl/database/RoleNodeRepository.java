@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.domain.account;
+package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database;
+
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 /**
- * 权限
+ * 角色基本信息图节点
  *
  * @author 单开宇
- * @since 2024-02-23
+ * @since 2024-02-22
  */
-public record Authority(Long id, String code, String name) {
+public interface RoleNodeRepository extends Neo4jRepository<RoleNodeDo, Long> {
 
 }

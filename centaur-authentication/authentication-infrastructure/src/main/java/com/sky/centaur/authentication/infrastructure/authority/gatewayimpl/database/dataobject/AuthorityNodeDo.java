@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
+package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject;
 
-import java.util.List;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
- * 角色图节点数据对象
+ * 权限图节点数据对象
  *
  * @author 单开宇
  * @since 2024-02-23
  */
-@Node("role")
+@Node("authority")
 @Data
 @RequiredArgsConstructor
-public class RoleNodeDo {
+public class AuthorityNodeDo {
 
   @Id
   private Long id;
 
   @Property("code")
   private String code;
-
-  @Relationship(type = "authorities", direction = Relationship.Direction.OUTGOING)
-  private List<AuthorityNodeDo> authorities;
 }

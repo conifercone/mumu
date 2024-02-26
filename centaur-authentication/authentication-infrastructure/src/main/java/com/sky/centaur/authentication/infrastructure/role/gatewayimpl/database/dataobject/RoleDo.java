@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
+package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

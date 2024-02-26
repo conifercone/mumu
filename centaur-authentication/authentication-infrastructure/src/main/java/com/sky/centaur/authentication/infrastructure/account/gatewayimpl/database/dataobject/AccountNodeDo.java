@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;

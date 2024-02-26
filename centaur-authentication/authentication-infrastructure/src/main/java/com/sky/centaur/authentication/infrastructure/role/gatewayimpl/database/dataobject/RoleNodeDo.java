@@ -14,42 +14,34 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
+package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import java.util.List;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
- * 权限基本信息数据对象
+ * 角色图节点数据对象
  *
  * @author 单开宇
  * @since 2024-02-23
  */
-@Getter
-@Setter
-@Entity
-@Table(name = "authorities")
+@Node("role")
+@Data
 @RequiredArgsConstructor
-public class AuthorityDo {
+public class RoleNodeDo {
 
   @Id
-  @Column(name = "id", nullable = false)
   private Long id;
 
-  @Size(max = 50)
-  @NotNull
-  @Column(name = "code", nullable = false, length = 50)
+  @Property("code")
   private String code;
 
-  @Size(max = 200)
-  @Column(name = "name", length = 200)
-  private String name;
-
+  @Relationship(type = "authorities", direction = Relationship.Direction.OUTGOING)
+  private List<AuthorityNodeDo> authorities;
 }

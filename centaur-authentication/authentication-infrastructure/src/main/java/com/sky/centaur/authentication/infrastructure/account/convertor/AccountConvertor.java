@@ -17,9 +17,10 @@ package com.sky.centaur.authentication.infrastructure.account.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.domain.account.Account;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
+import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;

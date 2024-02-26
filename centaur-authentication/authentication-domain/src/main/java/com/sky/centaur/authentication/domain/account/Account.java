@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.account;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sky.centaur.authentication.domain.role.Role;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import lombok.Getter;
