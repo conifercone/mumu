@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.basis.dataobject.BasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,6 +26,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -40,7 +42,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AccountDo {
+public class AccountDo extends BasisDataObject {
 
   @Id
   @Column(name = "id", nullable = false)
@@ -73,4 +75,35 @@ public class AccountDo {
   @JoinColumn(name = "role_id")
   private RoleDo role;
 
+  @Column(name = "creation_time")
+  private OffsetDateTime creationTime;
+
+  @Column(name = "founder")
+  private Long founder;
+
+  @Column(name = "modifier")
+  private Long modifier;
+
+  @Column(name = "modification_time")
+  private OffsetDateTime modificationTime;
+
+  @Override
+  public Long getFounder() {
+    return founder;
+  }
+
+  @Override
+  public Long getModifier() {
+    return modifier;
+  }
+
+  @Override
+  public OffsetDateTime getCreationTime() {
+    return creationTime;
+  }
+
+  @Override
+  public OffsetDateTime getModificationTime() {
+    return modificationTime;
+  }
 }
