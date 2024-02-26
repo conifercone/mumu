@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * spring security authentication server专用用户信息service
+ * spring security authentication server 用户信息service
  *
  * @author 单开宇
  * @since 2024-01-16
