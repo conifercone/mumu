@@ -16,14 +16,13 @@
 
 package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject;
 
-import com.sky.centaur.basis.dataobject.BasisDataObject;
+import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -39,7 +38,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "authorities")
 @RequiredArgsConstructor
-public class AuthorityDo extends BasisDataObject {
+public class AuthorityDo extends JpaBasisDataObject {
 
   @Id
   @Column(name = "id", nullable = false)
@@ -54,35 +53,4 @@ public class AuthorityDo extends BasisDataObject {
   @Column(name = "name", length = 200)
   private String name;
 
-  @Column(name = "creation_time")
-  private OffsetDateTime creationTime;
-
-  @Column(name = "founder")
-  private Long founder;
-
-  @Column(name = "modifier")
-  private Long modifier;
-
-  @Column(name = "modification_time")
-  private OffsetDateTime modificationTime;
-
-  @Override
-  public Long getFounder() {
-    return founder;
-  }
-
-  @Override
-  public Long getModifier() {
-    return modifier;
-  }
-
-  @Override
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
-
-  @Override
-  public OffsetDateTime getModificationTime() {
-    return modificationTime;
-  }
 }

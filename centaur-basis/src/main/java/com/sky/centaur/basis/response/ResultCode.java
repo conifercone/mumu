@@ -47,6 +47,7 @@ public enum ResultCode implements BaseResultInterface {
   INVALID_CLIENT(2007),
   INVALID_GRANT(2008),
   INVALID_SCOPE(2009),
+  INVALID_TOKEN(2010),
   /*数据源错误3001-3999*/
   MISSING_P6SPY_DEPENDENCY_INFORMATION(3001),
   /*数据转换错误4001-4999*/

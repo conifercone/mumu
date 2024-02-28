@@ -16,9 +16,15 @@
 
 package com.sky.centaur.authentication.domain.authority;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 权限领域模型
@@ -28,11 +34,15 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class Authority extends BasisDomainModel {
+@JsonDeserialize
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+public class Authority extends BasisDomainModel implements GrantedAuthority {
 
-  private final Long id;
-  private final String code;
-  private final String name;
+  private Long id;
+  private String code;
+  private String name;
 
   /**
    * all properties constructor
@@ -43,15 +53,23 @@ public final class Authority extends BasisDomainModel {
     this.name = name;
   }
 
+  @JsonGetter("id")
   public Long id() {
     return id;
   }
 
+  @JsonGetter("code")
   public String code() {
     return code;
   }
 
+  @JsonGetter("name")
   public String name() {
     return name;
+  }
+
+  @Override
+  public String getAuthority() {
+    return code;
   }
 }

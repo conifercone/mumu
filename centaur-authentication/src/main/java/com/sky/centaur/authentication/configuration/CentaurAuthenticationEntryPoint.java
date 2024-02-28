@@ -24,7 +24,7 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,8 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 /**
  * 自定义AuthenticationEntryPoint
@@ -42,22 +42,26 @@ import org.springframework.stereotype.Component;
  * @author 单开宇
  * @since 2024-02-21
  */
-@Component
-public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
       CentaurAuthenticationEntryPoint.class);
 
 
-  @Resource
-  OperationLogGrpcService operationLogGrpcService;
+  private final OperationLogGrpcService operationLogGrpcService;
 
-  @Resource
-  SystemLogGrpcService systemLogGrpcService;
+  private final SystemLogGrpcService systemLogGrpcService;
+
+  public CentaurAuthenticationEntryPoint(String loginFormUrl,
+      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+    super(loginFormUrl);
+    this.operationLogGrpcService = operationLogGrpcService;
+    this.systemLogGrpcService = systemLogGrpcService;
+  }
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException {
+      AuthenticationException authException) throws IOException, ServletException {
     if (authException instanceof UsernameNotFoundException usernameNotFoundException) {
       LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -73,7 +77,27 @@ public class CentaurAuthenticationEntryPoint implements AuthenticationEntryPoint
                   .setBizNo(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
                   .setFail(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg()).build())
           .build());
+      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
       ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
+    } else if (authException instanceof InvalidBearerTokenException invalidBearerTokenException) {
+      LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder()
+                  .setContent(ResultCode.INVALID_TOKEN.getResultCode())
+                  .setCategory("exception")
+                  .setFail(ExceptionUtils.getStackTrace(invalidBearerTokenException)).build())
+          .build());
+      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+          .setOperationLogSubmitCo(
+              OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
+                  .setBizNo(ResultCode.INVALID_TOKEN.getResultCode())
+                  .setFail(ResultCode.INVALID_TOKEN.getResultMsg()).build())
+          .build());
+      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+      ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+    } else {
+      super.commence(request, response, authException);
     }
   }
 }

@@ -14,31 +14,14 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.dataobject;
-
-import java.time.OffsetDateTime;
+package com.sky.centaur.authentication.configuration;
 
 /**
- * 基础数据对象
+ * jackson long mixin
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-02-27
  */
-public abstract class BasisDataObject {
+public abstract class LongMixin {
 
-  public abstract Long getFounder();
-
-  public abstract Long getModifier();
-
-  public abstract OffsetDateTime getCreationTime();
-
-  public abstract OffsetDateTime getModificationTime();
-
-  public abstract void setFounder(Long founder);
-
-  public abstract void setModifier(Long modifier);
-
-  public abstract void setCreationTime(OffsetDateTime creationTime);
-
-  public abstract void setModificationTime(OffsetDateTime modificationTime);
 }

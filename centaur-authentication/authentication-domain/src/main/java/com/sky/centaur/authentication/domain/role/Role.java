@@ -16,10 +16,15 @@
 
 package com.sky.centaur.authentication.domain.role;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.List;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -28,14 +33,18 @@ import lombok.ToString;
  * @author 单开宇
  * @since 2024-02-23
  */
+@Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class Role extends BasisDomainModel {
+@JsonDeserialize
+@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+public class Role extends BasisDomainModel {
 
-  private final Long id;
-  private final String code;
-  private final String name;
-  private final List<Authority> authorities;
+  private Long id;
+  private String code;
+  private String name;
+  private List<Authority> authorities;
 
   /**
    * all properties constructor
@@ -47,19 +56,24 @@ public final class Role extends BasisDomainModel {
     this.authorities = authorities;
   }
 
+  @JsonGetter("id")
   public Long id() {
     return id;
   }
 
+  @JsonGetter("code")
   public String code() {
     return code;
   }
 
+  @JsonGetter("name")
   public String name() {
     return name;
   }
 
+  @JsonGetter("authorities")
   public List<Authority> authorities() {
     return authorities;
   }
+
 }

@@ -15,16 +15,17 @@
  */
 package com.sky.centaur.authentication.domain.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -36,6 +37,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @JsonDeserialize
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Getter
@@ -55,10 +58,6 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Getter
   private Role role;
-
-  @SuppressWarnings("unused")
-  public Account() {
-  }
 
   public Account(Long id, String username, String password, Role role) {
     this.id = id;
@@ -81,10 +80,12 @@ public class Account extends BasisDomainModel implements UserDetails {
   }
 
   @Override
-  public Collection<GrantedAuthority> getAuthorities() {
-    return this.role.authorities().stream()
-        .map(authority -> new SimpleGrantedAuthority(authority.code()))
-        .collect(Collectors.toList());
+  public Collection<Authority> getAuthorities() {
+    return this.role.authorities();
+  }
+
+  public void setAuthorities(Collection<Authority> authorities) {
+    this.role.setAuthorities(new ArrayList<>(authorities));
   }
 
   @Override

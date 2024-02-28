@@ -18,6 +18,7 @@ package com.sky.centaur.authentication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
  * 鉴权服务
@@ -27,6 +28,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 @SpringBootApplication
 @EnableConfigurationProperties
+@EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {
