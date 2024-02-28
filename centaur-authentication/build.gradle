@@ -20,4 +20,5 @@ dependencies {
     implementation libs.grpcSpringBootStarter
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
+    testImplementation libs.springSecurityTest
 }

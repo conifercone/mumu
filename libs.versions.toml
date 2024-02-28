@@ -131,6 +131,8 @@ springSecurityCore = { module = "org.springframework.security:spring-security-co
 springSecurityOauth2Jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
 springDataCommons = { module = "org.springframework.data:spring-data-commons" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+springSecurityTest = { module = "org.springframework.security:spring-security-test" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
