@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-@WithMockUser(username = "admin", password = "admin")
+@WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
 public class AuthorityControllerTest {
 
   @Resource
