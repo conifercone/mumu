@@ -46,7 +46,8 @@ public class RoleConvertor {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     return new Role(roleDo.getId(), roleDo.getCode(), roleDo.getName(),
         authorityRepository.findAuthorityDoByIdIn(
-            roleDo.getAuthorities()).stream().map(AuthorityConvertor::toEntity).toList());
+                roleDo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+            .collect(Collectors.toList()));
   }
 
   @Contract("_ -> new")
@@ -70,7 +71,7 @@ public class RoleConvertor {
     Optional.ofNullable(role.authorities()).ifPresent(
         authorities -> {
           List<AuthorityNodeDo> authorityNodeDos = authorities.stream()
-              .map(AuthorityConvertor::toNodeDataObject).toList();
+              .map(AuthorityConvertor::toNodeDataObject).collect(Collectors.toList());
           roleNodeDo.setAuthorities(authorityNodeDos);
         });
     return roleNodeDo;
@@ -82,6 +83,7 @@ public class RoleConvertor {
         SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
         : roleAddCo.getId(), roleAddCo.getCode(), roleAddCo.getName(),
         authorityRepository.findAuthorityDoByIdIn(
-            roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity).toList());
+                roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+            .collect(Collectors.toList()));
   }
 }

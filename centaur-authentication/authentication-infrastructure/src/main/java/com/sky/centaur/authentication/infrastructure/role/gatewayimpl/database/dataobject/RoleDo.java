@@ -17,7 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import com.sky.centaur.basis.dataobject.BasisDataObject;
+import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +43,7 @@ import org.hibernate.annotations.Type;
 @Setter
 @Entity
 @Table(name = "roles")
-public class RoleDo extends BasisDataObject {
+public class RoleDo extends JpaBasisDataObject {
 
   @Id
   @Column(name = "id", nullable = false)
@@ -66,35 +65,4 @@ public class RoleDo extends BasisDataObject {
   @Type(ListArrayType.class)
   private List<Long> authorities;
 
-  @Column(name = "creation_time")
-  private OffsetDateTime creationTime;
-
-  @Column(name = "founder")
-  private Long founder;
-
-  @Column(name = "modifier")
-  private Long modifier;
-
-  @Column(name = "modification_time")
-  private OffsetDateTime modificationTime;
-
-  @Override
-  public Long getFounder() {
-    return founder;
-  }
-
-  @Override
-  public Long getModifier() {
-    return modifier;
-  }
-
-  @Override
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
-
-  @Override
-  public OffsetDateTime getModificationTime() {
-    return modificationTime;
-  }
 }

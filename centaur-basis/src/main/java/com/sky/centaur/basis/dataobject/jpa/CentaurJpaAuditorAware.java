@@ -14,31 +14,23 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.dataobject;
+package com.sky.centaur.basis.dataobject.jpa;
 
-import java.time.OffsetDateTime;
+import com.sky.centaur.basis.tools.SecurityContextUtil;
+import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.AuditorAware;
 
 /**
- * 基础数据对象
+ * 创建人&修改人自动填充
  *
  * @author 单开宇
  * @since 2024-02-26
  */
-public abstract class BasisDataObject {
+public class CentaurJpaAuditorAware implements AuditorAware<Long> {
 
-  public abstract Long getFounder();
-
-  public abstract Long getModifier();
-
-  public abstract OffsetDateTime getCreationTime();
-
-  public abstract OffsetDateTime getModificationTime();
-
-  public abstract void setFounder(Long founder);
-
-  public abstract void setModifier(Long modifier);
-
-  public abstract void setCreationTime(OffsetDateTime creationTime);
-
-  public abstract void setModificationTime(OffsetDateTime modificationTime);
+  @Override
+  public @NotNull Optional<Long> getCurrentAuditor() {
+    return Optional.ofNullable(SecurityContextUtil.getLoginAccountId());
+  }
 }
