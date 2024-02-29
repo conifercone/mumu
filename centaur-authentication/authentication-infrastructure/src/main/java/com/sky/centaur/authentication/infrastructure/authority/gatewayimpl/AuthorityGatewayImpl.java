@@ -26,6 +26,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 权限领域网关实现
@@ -45,6 +46,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   AuthorityNodeRepository authorityNodeRepository;
 
   @Override
+  @Transactional
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
     authorityRepository.save(dataObject);

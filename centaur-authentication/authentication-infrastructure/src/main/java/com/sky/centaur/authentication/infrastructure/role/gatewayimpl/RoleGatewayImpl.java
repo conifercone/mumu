@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.d
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 角色领域网关实现
@@ -43,6 +44,7 @@ public class RoleGatewayImpl implements RoleGateway {
   RoleNodeRepository roleNodeRepository;
 
   @Override
+  @Transactional
   public void add(Role role) {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
     roleRepository.save(roleDo);
