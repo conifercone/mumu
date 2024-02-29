@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 账户相关web接口单元测试
+ * 角色相关web接口单元测试
  *
  * @author 单开宇
  * @since 2024-01-12
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 @WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
-public class AuthorityControllerTest {
+public class RoleControllerTest {
 
   @Resource
   private MockMvc mockMvc;
@@ -48,17 +48,20 @@ public class AuthorityControllerTest {
   @Test
   @Transactional
   public void add() throws Exception {
-    @Language("JSON") String authority = """
+    @Language("JSON") String role = """
         {
-            "authorityAddCo": {
-                "id": 412354321321,
-                "code": "test",
-                "name": "test"
-            }
-        }""";
+             "roleAddCo": {
+                 "id": 451235432,
+                 "code": "test",
+                 "name": "测试角色",
+                 "authorities": [
+                     1,2
+                 ]
+             }
+         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/authority/add")
-            .content(authority.getBytes())
+            .post("/role/add")
+            .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
