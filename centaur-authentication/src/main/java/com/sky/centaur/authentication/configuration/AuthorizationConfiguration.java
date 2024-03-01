@@ -94,6 +94,18 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 @Configuration
 public class AuthorizationConfiguration {
 
+  /**
+   * 授权服务安全过滤链配置
+   *
+   * @param http                                请求
+   * @param authorizationService                认证服务
+   * @param tokenGenerator                      token生成器
+   * @param operationLogGrpcService             操作日志
+   * @param systemLogGrpcService                系统日志
+   * @param centaurAuthenticationFailureHandler 自定义认证失败处理器
+   * @return 授权服务安全过滤链实例
+   * @throws Exception 异常信息
+   */
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
   public SecurityFilterChain authorizationServerSecurityFilterChain(@NotNull HttpSecurity http,
