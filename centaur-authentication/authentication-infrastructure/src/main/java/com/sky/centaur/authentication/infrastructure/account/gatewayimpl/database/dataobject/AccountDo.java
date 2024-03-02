@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,7 +41,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AccountDo {
+public class AccountDo extends JpaBasisDataObject {
 
   @Id
   @Column(name = "id", nullable = false)
@@ -72,5 +73,4 @@ public class AccountDo {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "role_id")
   private RoleDo role;
-
 }

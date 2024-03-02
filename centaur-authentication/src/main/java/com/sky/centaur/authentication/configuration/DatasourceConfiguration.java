@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChain;
 import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChainImpl;
 import com.sky.centaur.authentication.filter.datasource.P6spyDataSourceFilter;
 import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.basis.dataobject.jpa.CentaurJpaAuditorAware;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
@@ -75,5 +76,10 @@ public class DatasourceConfiguration {
   @Bean
   public DatasourceFilterChain dataSourceFilterChain(List<DataSourceFilter> dataSourceFilters) {
     return new DatasourceFilterChainImpl(dataSourceFilters);
+  }
+
+  @Bean
+  public CentaurJpaAuditorAware centaurJpaAuditorAware() {
+    return new CentaurJpaAuditorAware();
   }
 }

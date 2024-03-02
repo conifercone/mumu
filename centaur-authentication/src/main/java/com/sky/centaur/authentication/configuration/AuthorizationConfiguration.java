@@ -16,7 +16,10 @@
 package com.sky.centaur.authentication.configuration;
 
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -24,8 +27,9 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sky.centaur.authentication.application.service.AccountUserDetailService;
 import com.sky.centaur.authentication.domain.account.Account;
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -43,13 +47,11 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -90,15 +92,26 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
  * @since 2024-01-12
  */
 @Configuration
-@EnableWebSecurity
 public class AuthorizationConfiguration {
 
+  /**
+   * 授权服务安全过滤链配置
+   *
+   * @param http                                请求
+   * @param authorizationService                认证服务
+   * @param tokenGenerator                      token生成器
+   * @param operationLogGrpcService             操作日志
+   * @param systemLogGrpcService                系统日志
+   * @param centaurAuthenticationFailureHandler 自定义认证失败处理器
+   * @return 授权服务安全过滤链实例
+   * @throws Exception 异常信息
+   */
   @Bean
-  @Order(1)
-  public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http,
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  public SecurityFilterChain authorizationServerSecurityFilterChain(@NotNull HttpSecurity http,
       OAuth2AuthorizationService authorizationService,
       OAuth2TokenGenerator<?> tokenGenerator,
-      CentaurAuthenticationEntryPoint centaurAuthenticationEntryPoint,
+      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler)
       throws Exception {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
@@ -114,30 +127,34 @@ public class AuthorizationConfiguration {
                 .authenticationProvider(
                     new PasswordGrantAuthenticationProvider(
                         authorizationService, tokenGenerator)))
-        .oidc(oidc -> oidc.userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
-            oidcUserInfoAuthenticationContext -> {
-              OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
-              Map<String, Object> claims = new HashMap<>();
-              claims.put("accessToken", accessToken);
-              claims.put("sub",
-                  oidcUserInfoAuthenticationContext.getAuthorization().getPrincipalName());
-              return new OidcUserInfo(claims);
-            }))
-        );  // Enable OpenID Connect 1.0
-    http
-        // Redirect to the login page when not authenticated from the
-        // authorization endpoint
-        .exceptionHandling((exceptions) -> exceptions
+        .oidc(oidc -> oidc.userInfoEndpoint(
+            userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
+                oidcUserInfoAuthenticationContext -> {
+                  OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
+                  Map<String, Object> claims = new HashMap<>();
+                  claims.put("accessToken", accessToken);
+                  claims.put("sub",
+                      oidcUserInfoAuthenticationContext.getAuthorization()
+                          .getPrincipalName());
+                  return new OidcUserInfo(claims);
+                })));
+
+    // Redirect to the login page when not authenticated from the
+    // authorization endpoint
+    http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
                 new LoginUrlAuthenticationEntryPoint("/login"),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-            ).authenticationEntryPoint(centaurAuthenticationEntryPoint)
+            ).authenticationEntryPoint(
+                new CentaurAuthenticationEntryPoint("/login", operationLogGrpcService,
+                    systemLogGrpcService))
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
-            .jwt(Customizer.withDefaults())
-            .authenticationEntryPoint(centaurAuthenticationEntryPoint));
-
+            .jwt(withDefaults())
+            .authenticationEntryPoint(
+                new CentaurAuthenticationEntryPoint("/login", operationLogGrpcService,
+                    systemLogGrpcService)));
     return http.build();
   }
 
@@ -145,40 +162,14 @@ public class AuthorizationConfiguration {
    * 配置token生成器
    */
   @Bean
-  OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource) {
+  OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
+      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer) {
     JwtGenerator jwtGenerator = new JwtGenerator(new NimbusJwtEncoder(jwkSource));
+    jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(
         jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
-  }
-
-  @Bean
-  @Order(2)
-  public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http)
-      throws Exception {
-    http
-        .authorizeHttpRequests((authorize) -> authorize
-            .anyRequest().authenticated()
-        )
-        // Form login handles the redirect to the login page from the
-        // authorization server filter chain
-        .formLogin(Customizer.withDefaults());
-
-    return http.build();
-  }
-
-  /**
-   * 使用WebSecurity.ignoring()忽略某些URL请求，这些请求将被Spring Security忽略
-   */
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer(
-      AuthenticationProperties authenticationProperties) {
-    return web -> {
-      // 读取配置文件auth.security.excludeUrls下的链接进行忽略（白名单）
-      web.ignoring().requestMatchers(
-          authenticationProperties.getSecurity().getExcludeUrls().toArray(new String[]{}));
-    };
   }
 
   /**
@@ -191,6 +182,11 @@ public class AuthorizationConfiguration {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * 账户详细信息
+   *
+   * @return 账户详细信息实例
+   */
   @Bean
   public UserDetailsService userDetailsService() {
     return new AccountUserDetailService();
@@ -234,6 +230,7 @@ public class AuthorizationConfiguration {
     objectMapper.registerModules(new CoreJackson2Module());
     objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
     objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+    objectMapper.addMixIn(Long.class, LongMixin.class);
     rowMapper.setObjectMapper(objectMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
     return jdbcOAuth2AuthorizationService;
@@ -314,7 +311,7 @@ public class AuthorizationConfiguration {
    * @return OAuth2TokenCustomizer的实例
    */
   @Bean
-  public OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer() {
+  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -337,5 +334,10 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
       }
     };
+  }
+
+  @Bean
+  public com.fasterxml.jackson.databind.Module dateTimeModule() {
+    return new JavaTimeModule();
   }
 }

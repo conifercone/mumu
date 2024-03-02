@@ -24,7 +24,7 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPOR
 
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
-import com.sky.centaur.basis.tools.IpUtils;
+import com.sky.centaur.basis.tools.IpUtil;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
@@ -76,6 +76,7 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
                   .setFail(ExceptionUtils.getStackTrace(exception)).build())
           .build());
       LOGGER.error(errorCode);
+      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
       switch (errorCode) {
         case UNSUPPORTED_GRANT_TYPE ->
             exceptionResponse(response, ResultCode.UNSUPPORTED_GRANT_TYPE, request);
@@ -84,7 +85,7 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
         case INVALID_SCOPE -> exceptionResponse(response, ResultCode.INVALID_SCOPE, request);
         default -> {
           ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
-          operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
+          operationFailLog(errorCode, error.getDescription(), IpUtil.getIpAddr(request));
         }
       }
     }
@@ -104,7 +105,7 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
     ResultResponse.exceptionResponse(response,
         resultCode);
     operationFailLog(resultCode.getResultCode(),
-        resultCode.getResultMsg(), IpUtils.getIpAddr(request));
+        resultCode.getResultMsg(), IpUtil.getIpAddr(request));
   }
 
   /**

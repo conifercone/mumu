@@ -125,6 +125,14 @@ tomcatEmbedCore = { module = "org.apache.tomcat.embed:tomcat-embed-core", versio
 jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidationApiVersion" }
 # https://mvnrepository.com/artifact/com.vladmihalcea/hibernate-types-60
 hibernateTypes60 = { module = "com.vladmihalcea:hibernate-types-60", version.ref = "hibernateTypes60Version" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+springSecurityCore = { module = "org.springframework.security:spring-security-core" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose
+springSecurityOauth2Jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
+springDataCommons = { module = "org.springframework.data:spring-data-commons" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+springSecurityTest = { module = "org.springframework.security:spring-security-test" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

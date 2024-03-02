@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(HIGHEST_PRECEDENCE)
 @SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
-public class SpringContextUtil implements ApplicationContextAware {
+public final class SpringContextUtil implements ApplicationContextAware {
 
   /**
    * Spring上下文

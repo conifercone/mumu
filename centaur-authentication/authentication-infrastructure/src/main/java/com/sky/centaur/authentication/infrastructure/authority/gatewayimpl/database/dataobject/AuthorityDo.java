@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject;
 
+import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -37,7 +38,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "authorities")
 @RequiredArgsConstructor
-public class AuthorityDo {
+public class AuthorityDo extends JpaBasisDataObject {
 
   @Id
   @Column(name = "id", nullable = false)

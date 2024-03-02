@@ -13,25 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+package com.sky.centaur.basis.dataobject;
+
+import java.time.OffsetDateTime;
 
 /**
- * 鉴权服务
+ * 基础数据对象
  *
  * @author 单开宇
- * @since 2024-01-09
+ * @since 2024-02-26
  */
-@SpringBootApplication
-@EnableConfigurationProperties
-@EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
-public class CentaurAuthenticationApplication {
+public abstract class BasisDataObject {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurAuthenticationApplication.class, args);
-  }
+  public abstract Long getFounder();
+
+  public abstract Long getModifier();
+
+  public abstract OffsetDateTime getCreationTime();
+
+  public abstract OffsetDateTime getModificationTime();
+
+  public abstract void setFounder(Long founder);
+
+  public abstract void setModifier(Long modifier);
+
+  public abstract void setCreationTime(OffsetDateTime creationTime);
+
+  public abstract void setModificationTime(OffsetDateTime modificationTime);
 }

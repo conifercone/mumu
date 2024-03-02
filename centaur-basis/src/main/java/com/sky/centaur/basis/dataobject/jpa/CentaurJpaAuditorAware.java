@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+package com.sky.centaur.basis.dataobject.jpa;
+
+import com.sky.centaur.basis.tools.SecurityContextUtil;
+import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.AuditorAware;
 
 /**
- * 鉴权服务
+ * 创建人&修改人自动填充
  *
  * @author 单开宇
- * @since 2024-01-09
+ * @since 2024-02-26
  */
-@SpringBootApplication
-@EnableConfigurationProperties
-@EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
-public class CentaurAuthenticationApplication {
+public class CentaurJpaAuditorAware implements AuditorAware<Long> {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurAuthenticationApplication.class, args);
+  @Override
+  public @NotNull Optional<Long> getCurrentAuditor() {
+    return Optional.ofNullable(SecurityContextUtil.getLoginAccountId());
   }
 }

@@ -98,7 +98,6 @@ public class ResultResponse<T> implements Serializable {
   private static void applicationJsonResponse(@NotNull HttpServletResponse response,
       String jsonResult)
       throws IOException {
-    response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json");
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.getWriter().print(jsonResult);

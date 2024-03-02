@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @author 单开宇
  * @since 2024-02-22
  */
-public class IpUtils {
+public final class IpUtil {
 
   /**
    * 从request对象中获取客户端真实的ip地址

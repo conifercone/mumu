@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,7 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 账户相关web接口单元测试
+ * 角色相关web接口单元测试
  *
  * @author 单开宇
  * @since 2024-01-12
@@ -38,26 +39,29 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-public class AccountControllerTest {
+@WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
+public class RoleControllerTest {
 
   @Resource
   private MockMvc mockMvc;
 
   @Test
   @Transactional
-  public void register() throws Exception {
-    @Language("JSON") String userInfo = """
+  public void add() throws Exception {
+    @Language("JSON") String role = """
         {
-            "accountRegisterCo": {
-                "id": 12345678,
-                "username": "yxt",
-                "password": "yxt5211314",
-                "authorities": []
-            }
-        }""";
+             "roleAddCo": {
+                 "id": 451235432,
+                 "code": "test",
+                 "name": "测试角色",
+                 "authorities": [
+                     1,2
+                 ]
+             }
+         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/account/register")
-            .content(userInfo.getBytes())
+            .post("/role/add")
+            .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,26 +39,26 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-public class AccountControllerTest {
+@WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
+public class AuthorityControllerTest {
 
   @Resource
   private MockMvc mockMvc;
 
   @Test
   @Transactional
-  public void register() throws Exception {
-    @Language("JSON") String userInfo = """
+  public void add() throws Exception {
+    @Language("JSON") String authority = """
         {
-            "accountRegisterCo": {
-                "id": 12345678,
-                "username": "yxt",
-                "password": "yxt5211314",
-                "authorities": []
+            "authorityAddCo": {
+                "id": 412354321321,
+                "code": "test",
+                "name": "test"
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/account/register")
-            .content(userInfo.getBytes())
+            .post("/authority/add")
+            .content(authority.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

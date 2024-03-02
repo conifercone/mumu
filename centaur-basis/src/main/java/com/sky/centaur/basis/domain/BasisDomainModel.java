@@ -13,25 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+package com.sky.centaur.basis.domain;
 
 /**
- * 鉴权服务
+ * 基础领域模型
  *
  * @author 单开宇
- * @since 2024-01-09
+ * @since 2024-02-26
  */
-@SpringBootApplication
-@EnableConfigurationProperties
-@EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
-public class CentaurAuthenticationApplication {
+public abstract class BasisDomainModel {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurAuthenticationApplication.class, args);
-  }
 }
