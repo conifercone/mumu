@@ -182,6 +182,11 @@ public class AuthorizationConfiguration {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * 账户详细信息
+   *
+   * @return 账户详细信息实例
+   */
   @Bean
   public UserDetailsService userDetailsService() {
     return new AccountUserDetailService();
