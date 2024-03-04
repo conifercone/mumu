@@ -53,12 +53,12 @@ public class RoleConvertor {
   @Contract("_ -> new")
   public static @NotNull RoleDo toDataObject(@NotNull Role role) {
     RoleDo roleDo = new RoleDo();
-    roleDo.setId(role.id());
-    roleDo.setName(role.name());
-    roleDo.setCode(role.code());
-    if (!CollectionUtils.isEmpty(role.authorities())) {
+    roleDo.setId(role.getId());
+    roleDo.setName(role.getName());
+    roleDo.setCode(role.getCode());
+    if (!CollectionUtils.isEmpty(role.getAuthorities())) {
       roleDo.setAuthorities(
-          role.authorities().stream().map(Authority::getId).collect(Collectors.toList()));
+          role.getAuthorities().stream().map(Authority::getId).collect(Collectors.toList()));
     }
     return roleDo;
   }
@@ -66,9 +66,9 @@ public class RoleConvertor {
   @Contract("_ -> new")
   public static @NotNull RoleNodeDo toNodeDataObject(@NotNull Role role) {
     RoleNodeDo roleNodeDo = new RoleNodeDo();
-    roleNodeDo.setId(role.id());
-    roleNodeDo.setCode(role.code());
-    Optional.ofNullable(role.authorities()).ifPresent(
+    roleNodeDo.setId(role.getId());
+    roleNodeDo.setCode(role.getCode());
+    Optional.ofNullable(role.getAuthorities()).ifPresent(
         authorities -> {
           List<AuthorityNodeDo> authorityNodeDos = authorities.stream()
               .map(AuthorityConvertor::toNodeDataObject).collect(Collectors.toList());
