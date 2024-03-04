@@ -58,7 +58,7 @@ public class RoleConvertor {
     roleDo.setCode(role.code());
     if (!CollectionUtils.isEmpty(role.authorities())) {
       roleDo.setAuthorities(
-          role.authorities().stream().map(Authority::id).collect(Collectors.toList()));
+          role.authorities().stream().map(Authority::getId).collect(Collectors.toList()));
     }
     return roleDo;
   }

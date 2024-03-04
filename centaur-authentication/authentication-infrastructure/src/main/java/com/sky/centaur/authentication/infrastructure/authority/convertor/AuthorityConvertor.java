@@ -41,17 +41,17 @@ public class AuthorityConvertor {
   @Contract("_ -> new")
   public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
     AuthorityDo authorityDo = new AuthorityDo();
-    authorityDo.setId(authority.id());
-    authorityDo.setCode(authority.code());
-    authorityDo.setName(authority.name());
+    authorityDo.setId(authority.getId());
+    authorityDo.setCode(authority.getCode());
+    authorityDo.setName(authority.getName());
     return authorityDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull AuthorityNodeDo toNodeDataObject(@NotNull Authority authority) {
     AuthorityNodeDo authorityNodeDo = new AuthorityNodeDo();
-    authorityNodeDo.setId(authority.id());
-    authorityNodeDo.setCode(authority.code());
+    authorityNodeDo.setId(authority.getId());
+    authorityNodeDo.setCode(authority.getCode());
     return authorityNodeDo;
   }
 
