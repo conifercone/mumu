@@ -16,12 +16,37 @@
 
 package com.sky.centaur.basis.domain;
 
+import java.time.OffsetDateTime;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 基础领域模型
  *
  * @author 单开宇
  * @since 2024-02-26
  */
+@Getter
+@Setter
 public abstract class BasisDomainModel implements DomainModel {
 
+  /**
+   * 创建时间
+   */
+  private OffsetDateTime creationTime;
+
+  /**
+   * 创建人
+   */
+  private Long founder;
+
+  /**
+   * 修改人
+   */
+  private Long modifier;
+
+  /**
+   * 修改时间
+   */
+  private OffsetDateTime modificationTime;
 }
