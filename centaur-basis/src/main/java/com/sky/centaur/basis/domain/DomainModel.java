@@ -17,7 +17,7 @@
 package com.sky.centaur.basis.domain;
 
 /**
- * 领域模型接口
+ * 顶级领域模型接口
  *
  * @author 单开宇
  * @since 2024-03-05
