@@ -16,7 +16,9 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 
 /**
  * 权限功能API
@@ -27,4 +29,6 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 public interface AuthorityService {
 
   AuthorityAddCo add(AuthorityAddCmd authorityAddCmd);
+
+  AuthorityDeleteCo delete(AuthorityDeleteCmd authorityDeleteCmd);
 }
