@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.authority.gateway;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import lombok.Data;
 
 /**
- * 权限领域网关
+ * 删除权限指令
  *
  * @author 单开宇
  * @since 2024-01-16
  */
-public interface AuthorityGateway {
+@Data
+public class AuthorityDeleteCmd {
 
-  void add(Authority authority);
-
-  void delete(Authority authority);
+  private AuthorityDeleteCo authorityDeleteCo;
 }

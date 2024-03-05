@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +53,12 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     authorityRepository.save(dataObject);
     AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
     authorityNodeRepository.save(nodeDataObject);
+  }
+
+  @Override
+  @Transactional
+  public void delete(@NotNull Authority authority) {
+    authorityRepository.deleteById(authority.getId());
+    authorityNodeRepository.deleteById(authority.getId());
   }
 }

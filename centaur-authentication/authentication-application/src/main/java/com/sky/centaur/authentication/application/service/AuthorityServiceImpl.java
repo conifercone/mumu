@@ -17,12 +17,15 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -46,6 +49,9 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Resource
   AuthorityAddCmdExe authorityAddCmdExe;
+
+  @Resource
+  AuthorityDeleteCmdExe authorityDeleteCmdExe;
 
   @Override
   public AuthorityAddCo add(AuthorityAddCmd authorityAddCmd) {
@@ -77,5 +83,10 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     authorityAddCo.setCode(authorityAddGrpcCo.getCode());
     authorityAddCo.setName(authorityAddGrpcCo.getName());
     return authorityAddCo;
+  }
+
+  @Override
+  public AuthorityDeleteCo delete(AuthorityDeleteCmd authorityDeleteCmd) {
+    return authorityDeleteCmdExe.execute(authorityDeleteCmd);
   }
 }
