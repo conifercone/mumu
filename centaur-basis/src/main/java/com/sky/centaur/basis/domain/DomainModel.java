@@ -17,11 +17,11 @@
 package com.sky.centaur.basis.domain;
 
 /**
- * 基础领域模型
+ * 领域模型接口
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-05
  */
-public abstract class BasisDomainModel implements DomainModel {
+public interface DomainModel {
 
 }
