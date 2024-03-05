@@ -33,12 +33,4 @@ public interface DataObject {
   OffsetDateTime getCreationTime();
 
   OffsetDateTime getModificationTime();
-
-  void setFounder(Long founder);
-
-  void setModifier(Long modifier);
-
-  void setCreationTime(OffsetDateTime creationTime);
-
-  void setModificationTime(OffsetDateTime modificationTime);
 }
