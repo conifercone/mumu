@@ -42,6 +42,10 @@ subprojects { project ->
         }
     }
 
+    tasks.matching { it.name == "GradleDependencyReportTask" }.configureEach {
+        notCompatibleWithConfigurationCache("broken")
+    }
+
     tasks.withType(Javadoc).configureEach {
         def javaDocDir = layout.buildDirectory.dir('docs/javadoc').get()
         delete(javaDocDir)
