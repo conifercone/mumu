@@ -37,6 +37,8 @@ public enum ResultCode implements BaseResultInterface {
   /*参数错误:1001-1999*/
   PARAMS_IS_INVALID(1001),
   PARAMS_IS_BLANK(1002),
+  DATA_ALREADY_EXISTS(1003),
+  DATA_DOES_NOT_EXIST(1004),
   /*认证错误2001-2999*/
   ACCOUNT_ALREADY_EXISTS(2001),
   ACCOUNT_NAME_CANNOT_BE_EMPTY(2002),
@@ -51,7 +53,10 @@ public enum ResultCode implements BaseResultInterface {
   /*数据源错误3001-3999*/
   MISSING_P6SPY_DEPENDENCY_INFORMATION(3001),
   /*数据转换错误4001-4999*/
-  OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001);
+  OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001),
+  /*拓展模块错误5001-5999*/
+  FAILED_TO_OBTAIN_DISTRIBUTED_LOCK(5001),
+  FAILED_TO_RELEASE_DISTRIBUTED_LOCK(5002);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

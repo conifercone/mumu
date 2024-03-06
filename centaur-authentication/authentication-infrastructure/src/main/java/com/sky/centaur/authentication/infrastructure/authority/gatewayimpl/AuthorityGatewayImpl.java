@@ -23,9 +23,14 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.basis.tools.BeanUtil;
+import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,10 +51,16 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Resource
   AuthorityNodeRepository authorityNodeRepository;
 
+  @Resource
+  DistributedLock distributedLock;
+
   @Override
   @Transactional
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
+    if (authorityRepository.findById(authority.getId()).isPresent()) {
+      throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authority.getId());
+    }
     authorityRepository.save(dataObject);
     AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
     authorityNodeRepository.save(nodeDataObject);
@@ -60,5 +71,26 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void delete(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
     authorityNodeRepository.deleteById(authority.getId());
+  }
+
+  @Override
+  @Transactional
+  public void updateById(@NotNull Authority authority) {
+    if (authorityRepository.findById(authority.getId()).isPresent()
+        && authorityNodeRepository.findById(authority.getId()).isPresent()) {
+      distributedLock.lock();
+      AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
+      AuthorityDo target = authorityRepository.findById(authority.getId()).get();
+      BeanUtil.jpaUpdate(dataObject, target);
+      authorityRepository.save(target);
+      AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
+      AuthorityNodeDo targetNode = authorityNodeRepository.findById(authority.getId()).get();
+      BeanUtils.copyProperties(nodeDataObject, targetNode,
+          BeanUtil.getNullPropertyNames(nodeDataObject));
+      authorityNodeRepository.save(targetNode);
+      distributedLock.unlock();
+    } else {
+      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
+    }
   }
 }

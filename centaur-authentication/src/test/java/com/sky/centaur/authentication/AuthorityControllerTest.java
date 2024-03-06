@@ -86,4 +86,25 @@ public class AuthorityControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void updateById() throws Exception {
+    add();
+    @Language("JSON") String authority = """
+        {
+            "authorityUpdateCo": {
+                "id": 412354321321,
+                "name": "updated"
+            }
+        }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/authority/updateById")
+            .content(authority.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }

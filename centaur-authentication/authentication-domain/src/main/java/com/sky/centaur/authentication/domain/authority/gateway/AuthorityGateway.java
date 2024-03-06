@@ -28,4 +28,6 @@ public interface AuthorityGateway {
   void add(Authority authority);
 
   void delete(Authority authority);
+
+  void updateById(Authority authority);
 }

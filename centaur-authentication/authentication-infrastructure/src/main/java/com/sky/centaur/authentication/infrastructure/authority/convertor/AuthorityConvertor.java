@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
@@ -60,6 +61,11 @@ public class AuthorityConvertor {
     return new Authority(authorityAddCo.getId() == null ?
         SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
         : authorityAddCo.getId(), authorityAddCo.getCode(), authorityAddCo.getName());
+  }
+
+  public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
+    return new Authority(authorityUpdateCo.getId(), authorityUpdateCo.getCode(),
+        authorityUpdateCo.getName());
   }
 
   public static @NotNull Authority toEntity(@NotNull AuthorityDeleteCo authorityDeleteCo) {

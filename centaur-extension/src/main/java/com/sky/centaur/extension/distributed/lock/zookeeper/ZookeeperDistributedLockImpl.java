@@ -16,6 +16,8 @@
 
 package com.sky.centaur.extension.distributed.lock.zookeeper;
 
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 
@@ -34,12 +36,20 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   }
 
   @Override
-  public void lock() throws Exception {
-    interProcessLock.acquire();
+  public void lock() {
+    try {
+      interProcessLock.acquire();
+    } catch (Exception e) {
+      throw new CentaurException(ResultCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK);
+    }
   }
 
   @Override
-  public void unlock() throws Exception {
-    interProcessLock.release();
+  public void unlock() {
+    try {
+      interProcessLock.release();
+    } catch (Exception e) {
+      throw new CentaurException(ResultCode.FAILED_TO_RELEASE_DISTRIBUTED_LOCK);
+    }
   }
 }

@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.extension.distributed.lock;
+package com.sky.centaur.authentication.client.dto.co;
+
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 分布式锁顶级接口
+ * 更新权限客户端对象
  *
  * @author 单开宇
- * @since 2024-03-06
+ * @since 2024-02-23
  */
-public interface DistributedLock {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AuthorityUpdateCo extends BaseClientObject {
 
-  /**
-   * 尝试获取锁
-   */
-  void lock();
+  private Long id;
 
-  /**
-   * 释放锁
-   */
-  void unlock();
+  private String code;
+
+  private String name;
 }

@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
-import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
-import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
+import lombok.Data;
 
 /**
- * 权限功能API
+ * 更新权限指令
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-01-16
  */
-public interface AuthorityService {
+@Data
+public class AuthorityUpdateCmd {
 
-  AuthorityAddCo add(AuthorityAddCmd authorityAddCmd);
-
-  AuthorityDeleteCo delete(AuthorityDeleteCmd authorityDeleteCmd);
-
-  AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd);
+  private AuthorityUpdateCo authorityUpdateCo;
 }
