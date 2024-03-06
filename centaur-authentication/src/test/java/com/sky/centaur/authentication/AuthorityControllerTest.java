@@ -69,11 +69,10 @@ public class AuthorityControllerTest {
   @Test
   @Transactional
   public void delete() throws Exception {
-    add();
     @Language("JSON") String authority = """
         {
             "authorityDeleteCo": {
-                "id": 412354321321
+                "id": 1
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
@@ -89,11 +88,10 @@ public class AuthorityControllerTest {
   @Test
   @Transactional
   public void updateById() throws Exception {
-    add();
     @Language("JSON") String authority = """
         {
             "authorityUpdateCo": {
-                "id": 412354321321,
+                "id": 1,
                 "name": "updated"
             }
         }""";
