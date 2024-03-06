@@ -17,18 +17,23 @@
 package com.sky.centaur.authentication.configuration;
 
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.basis.response.ResultResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,6 +50,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   private static final String TOKEN_START = "Bearer ";
   UserDetailsService userDetailsService;
   JwtDecoder jwtDecoder;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      JwtAuthenticationTokenFilter.class);
 
   public JwtAuthenticationTokenFilter(UserDetailsService userDetailsService,
       JwtDecoder jwtDecoder) {
@@ -60,7 +67,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     // 存在token
     if (StringUtils.hasText(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
-      Jwt jwt = jwtDecoder.decode(authToken);
+      Jwt jwt;
+      try {
+        jwt = jwtDecoder.decode(authToken);
+      } catch (JwtException e) {
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        return;
+      }
       String accountName = jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_NAME.name());
       // 存在token 但是用户名未登录
       if (accountName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
