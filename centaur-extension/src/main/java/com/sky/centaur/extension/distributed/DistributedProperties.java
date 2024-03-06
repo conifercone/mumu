@@ -13,37 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.config;
 
-import java.util.ArrayList;
-import java.util.List;
+package com.sky.centaur.extension.distributed;
+
+import com.sky.centaur.extension.distributed.lock.LockProperties;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.stereotype.Component;
 
 /**
- * 鉴权服务全局配置信息
+ * 分布式相关配置属性
  *
  * @author 单开宇
- * @since 2024-01-19
+ * @since 2024-03-06
  */
 @Data
-@Component
-@ConfigurationProperties("centaur.auth")
-public class AuthenticationProperties {
-
-  @NestedConfigurationProperty
-  private Security security = new Security();
+public class DistributedProperties {
 
   /**
-   * 是否开启服务日志
+   * 分布式锁相关配置
    */
-  private boolean enableLog = false;
-
-  @Data
-  public static class Security {
-
-    private List<String> excludeUrls = new ArrayList<>();
-  }
+  @NestedConfigurationProperty
+  private LockProperties lock;
 }

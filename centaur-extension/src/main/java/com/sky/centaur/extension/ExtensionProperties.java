@@ -16,23 +16,24 @@
 
 package com.sky.centaur.extension;
 
-import com.sky.centaur.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
-import com.sky.centaur.extension.processor.grpc.GrpcExceptionAdvice;
-import com.sky.centaur.extension.processor.response.ResponseBodyProcessor;
-import com.sky.centaur.log.client.api.SystemLogGrpcService;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import com.sky.centaur.extension.distributed.DistributedProperties;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 拓展模块配置
+ * 拓展属性
  *
  * @author 单开宇
- * @since 2024-02-05
+ * @since 2024-03-06
  */
-@Configuration
-@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class, SystemLogGrpcService.class,
-    ExtensionProperties.class,
-    ZookeeperConfiguration.class})
-public class ExtensionConfiguration {
+@Data
+@ConfigurationProperties("centaur.extension")
+public class ExtensionProperties {
 
+  /**
+   * 分布式相关配置
+   */
+  @NestedConfigurationProperty
+  private DistributedProperties distributed;
 }

@@ -29,6 +29,7 @@ yitterIdGeneratorVersion = "1.0.6"
 tomcatEmbedCoreVersion = "10.1.17"
 jakartaValidationApiVersion = "3.0.2"
 hibernateTypes60Version = "2.21.1"
+curatorRecipesVersion = "5.1.0"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -133,6 +134,8 @@ springSecurityOauth2Jose = { module = "org.springframework.security:spring-secur
 springDataCommons = { module = "org.springframework.data:spring-data-commons" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
 springSecurityTest = { module = "org.springframework.security:spring-security-test" }
+# https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
+curatorRecipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
