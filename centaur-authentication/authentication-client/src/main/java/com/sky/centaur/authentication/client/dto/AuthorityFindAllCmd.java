@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.authority.gateway;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.domain.authority.Authority;
-import org.springframework.data.domain.Page;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import lombok.Data;
 
 /**
- * 权限领域网关
+ * 权限查询指令
  *
  * @author 单开宇
  * @since 2024-01-16
  */
-public interface AuthorityGateway {
+@Data
+public class AuthorityFindAllCmd {
 
-  void add(Authority authority);
-
-  void delete(Authority authority);
-
-  void updateById(Authority authority);
-
-  Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
+  private AuthorityFindAllCo authorityFindAllCo;
+  private int pageNo;
+  private int pageSize;
 }

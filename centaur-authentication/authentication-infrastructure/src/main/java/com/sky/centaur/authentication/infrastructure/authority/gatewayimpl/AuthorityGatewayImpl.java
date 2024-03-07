@@ -29,11 +29,19 @@ import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * 权限领域网关实现
@@ -94,5 +102,32 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     } else {
       throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
+  }
+
+  @Override
+  public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
+    Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
+      List<Predicate> predicateList = new ArrayList<>();
+      if (StringUtils.hasText(authority.getCode())) {
+        predicateList.add(cb.like(root.get("code"), "%" + authority.getCode() + "%"));
+      }
+      if (StringUtils.hasText(authority.getName())) {
+        predicateList.add(cb.like(root.get("name"), "%" + authority.getName() + "%"));
+      }
+      if (authority.getId() != null) {
+        predicateList.add(cb.equal(root.get("id"), authority.getId()));
+      }
+      return query.orderBy(cb.desc(root.get("creationTime")))
+          .where(predicateList.toArray(new Predicate[0]))
+          .getRestriction();
+    };
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
+        pageRequest);
+
+    List<Authority> authorities = repositoryAll.getContent().stream()
+        .map(AuthorityConvertor::toEntity)
+        .toList();
+    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
 }

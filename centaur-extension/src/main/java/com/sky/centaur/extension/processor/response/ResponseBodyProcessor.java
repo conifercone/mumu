@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -108,6 +109,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       }
     } else if (body != null) {
       if (body instanceof ClientObject) {
+        return ResultResponse.success(body);
+      } else if (body instanceof Page<?>) {
         return ResultResponse.success(body);
       }
       return body;

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -25,9 +26,11 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
@@ -37,6 +40,7 @@ import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -58,6 +62,9 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Resource
   AuthorityUpdateCmdExe authorityUpdateCmdExe;
+
+  @Resource
+  AuthorityFindAllCmdExe authorityFindAllCmdExe;
 
   @Override
   public AuthorityAddCo add(AuthorityAddCmd authorityAddCmd) {
@@ -99,5 +106,11 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   @Override
   public AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd) {
     return authorityUpdateCmdExe.execute(authorityUpdateCmd);
+  }
+
+  @Override
+  public Page<AuthorityFindAllCo> findAll(
+      AuthorityFindAllCmd authorityFindAllCmd) {
+    return authorityFindAllCmdExe.execute(authorityFindAllCmd);
   }
 }

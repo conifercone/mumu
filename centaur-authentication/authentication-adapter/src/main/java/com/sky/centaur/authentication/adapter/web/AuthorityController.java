@@ -18,16 +18,20 @@ package com.sky.centaur.authentication.adapter.web;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,5 +75,13 @@ public class AuthorityController {
   @API(status = Status.STABLE)
   public AuthorityUpdateCo updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
     return authorityService.updateById(authorityUpdateCmd);
+  }
+
+  @Operation(summary = "查询权限")
+  @GetMapping("/findAll")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public Page<AuthorityFindAllCo> findAll(@RequestBody AuthorityFindAllCmd authorityFindAllCmd) {
+    return authorityService.findAll(authorityFindAllCmd);
   }
 }
