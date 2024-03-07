@@ -29,6 +29,7 @@ import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -76,15 +77,16 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional
   public void updateById(@NotNull Authority authority) {
-    if (authorityRepository.findById(authority.getId()).isPresent()
-        && authorityNodeRepository.findById(authority.getId()).isPresent()) {
+    Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(authority.getId());
+    Optional<AuthorityNodeDo> nodeDoOptional = authorityNodeRepository.findById(authority.getId());
+    if (authorityDoOptional.isPresent() && nodeDoOptional.isPresent()) {
       distributedLock.lock();
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
-      AuthorityDo target = authorityRepository.findById(authority.getId()).get();
+      AuthorityDo target = authorityDoOptional.get();
       BeanUtil.jpaUpdate(dataObject, target);
       authorityRepository.save(target);
       AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
-      AuthorityNodeDo targetNode = authorityNodeRepository.findById(authority.getId()).get();
+      AuthorityNodeDo targetNode = nodeDoOptional.get();
       BeanUtils.copyProperties(nodeDataObject, targetNode,
           BeanUtil.getNullPropertyNames(nodeDataObject));
       authorityNodeRepository.save(targetNode);
