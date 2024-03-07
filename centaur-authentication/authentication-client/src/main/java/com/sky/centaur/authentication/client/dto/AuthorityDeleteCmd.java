@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.client.dto;
 
-package com.sky.centaur.basis.dataobject;
+import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import lombok.Data;
 
 /**
- * 基础数据对象
+ * 删除权限指令
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-01-16
  */
-public abstract class BasisDataObject implements DataObject {
+@Data
+public class AuthorityDeleteCmd {
 
-
+  private AuthorityDeleteCo authorityDeleteCo;
 }

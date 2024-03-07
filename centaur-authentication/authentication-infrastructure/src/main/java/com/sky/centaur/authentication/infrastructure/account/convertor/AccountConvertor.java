@@ -37,10 +37,16 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   public static @NotNull Account toEntity(@NotNull AccountDo accountDo) {
-    return new Account(accountDo.getId(), accountDo.getUsername(), accountDo.getPassword(),
+    Account account = new Account(accountDo.getId(), accountDo.getUsername(),
+        accountDo.getPassword(),
         accountDo.getEnabled(), accountDo.getAccountNonExpired(),
         accountDo.getCredentialsNonExpired(),
         accountDo.getAccountNonLocked(), RoleConvertor.toEntity(accountDo.getRole()));
+    account.setFounder(accountDo.getFounder());
+    account.setModifier(accountDo.getModifier());
+    account.setCreationTime(accountDo.getCreationTime());
+    account.setModificationTime(accountDo.getModificationTime());
+    return account;
   }
 
   @Contract("_ -> new")

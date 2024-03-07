@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sky.centaur.authentication.client.api.grpc";
+option java_outer_classname = "AuthorityServiceProto";
+
+service AuthorityService {
+  rpc add (AuthorityAddGrpcCmd) returns (AuthorityAddGrpcCo);
+}
+
+message AuthorityAddGrpcCmd {
+  AuthorityAddGrpcCo authorityAddCo = 1;
+}
+
+message AuthorityAddGrpcCo {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+}
+

@@ -17,6 +17,9 @@
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
@@ -24,6 +27,7 @@ import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 权限信息转换器
@@ -41,17 +45,17 @@ public class AuthorityConvertor {
   @Contract("_ -> new")
   public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
     AuthorityDo authorityDo = new AuthorityDo();
-    authorityDo.setId(authority.id());
-    authorityDo.setCode(authority.code());
-    authorityDo.setName(authority.name());
+    authorityDo.setId(authority.getId());
+    authorityDo.setCode(authority.getCode());
+    authorityDo.setName(authority.getName());
     return authorityDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull AuthorityNodeDo toNodeDataObject(@NotNull Authority authority) {
     AuthorityNodeDo authorityNodeDo = new AuthorityNodeDo();
-    authorityNodeDo.setId(authority.id());
-    authorityNodeDo.setCode(authority.code());
+    authorityNodeDo.setId(authority.getId());
+    authorityNodeDo.setCode(authority.getCode());
     return authorityNodeDo;
   }
 
@@ -59,5 +63,25 @@ public class AuthorityConvertor {
     return new Authority(authorityAddCo.getId() == null ?
         SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
         : authorityAddCo.getId(), authorityAddCo.getCode(), authorityAddCo.getName());
+  }
+
+  public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
+    return new Authority(authorityUpdateCo.getId(), authorityUpdateCo.getCode(),
+        authorityUpdateCo.getName());
+  }
+
+  public static @NotNull Authority toEntity(@NotNull AuthorityFindAllCo authorityFindAllCo) {
+    return new Authority(authorityFindAllCo.getId(), authorityFindAllCo.getCode(),
+        authorityFindAllCo.getName());
+  }
+
+  public static @NotNull Authority toEntity(@NotNull AuthorityDeleteCo authorityDeleteCo) {
+    return new Authority(authorityDeleteCo.getId(), null, null);
+  }
+
+  public static @NotNull AuthorityFindAllCo toFindAllCo(@NotNull Authority authority) {
+    AuthorityFindAllCo authorityFindAllCo = new AuthorityFindAllCo();
+    BeanUtils.copyProperties(authority, authorityFindAllCo);
+    return authorityFindAllCo;
   }
 }

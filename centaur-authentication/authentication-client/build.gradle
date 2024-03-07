@@ -9,6 +9,7 @@ dependencies {
     implementation libs.annotationApi
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springBootActuator
+    implementation libs.springDataCommons
     compileOnly libs.springBootOauth2AuthorizationServer
 }
 

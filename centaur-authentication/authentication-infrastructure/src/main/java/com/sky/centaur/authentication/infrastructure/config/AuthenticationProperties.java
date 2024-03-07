@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("auth")
+@ConfigurationProperties("centaur.auth")
 public class AuthenticationProperties {
 
   @NestedConfigurationProperty

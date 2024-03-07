@@ -14,39 +14,47 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.domain;
+package com.sky.centaur.extension.distributed.lock.zookeeper;
 
-import java.time.OffsetDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
- * 基础领域模型
+ * zookeeper配置属性
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-06
  */
-@Getter
-@Setter
-public abstract class BasisDomainModel implements DomainModel {
+@Data
+public class ZookeeperProperties {
 
   /**
-   * 创建时间
+   * 重试次数
    */
-  private OffsetDateTime creationTime;
+  private int retryCount = 1;
 
   /**
-   * 创建人
+   * 重试间隔时间
    */
-  private Long founder;
+  private int elapsedTimeMs = 2000;
 
   /**
-   * 修改人
+   * zookeeper 地址
+   * <p>eg:localhost:2181,localhost:2182,localhost:2183</p>
    */
-  private Long modifier;
+  private String connectString = "localhost:2181";
 
   /**
-   * 修改时间
+   * 会话超时时间
    */
-  private OffsetDateTime modificationTime;
+  private int sessionTimeoutMs = 60000;
+
+  /**
+   * 连接超时时间
+   */
+  private int connectionTimeoutMs = 10000;
+
+  /**
+   * 是否启用
+   */
+  private boolean enabled = false;
 }

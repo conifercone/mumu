@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * 权限基本信息
@@ -27,7 +28,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 单开宇
  * @since 2024-01-12
  */
-public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long> {
+public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long>,
+    JpaSpecificationExecutor<AuthorityDo> {
 
   List<AuthorityDo> findAuthorityDoByIdIn(Collection<Long> ids);
 }

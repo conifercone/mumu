@@ -1,4 +1,5 @@
 dependencies {
     implementation project(":centaur-basis")
     compileOnly libs.springBootOauth2AuthorizationServer
+    compileOnly libs.springDataCommons
 }

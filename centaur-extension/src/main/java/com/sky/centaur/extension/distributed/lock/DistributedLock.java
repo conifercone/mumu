@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.dataobject;
+package com.sky.centaur.extension.distributed.lock;
 
 /**
- * 基础数据对象
+ * 分布式锁顶级接口
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-06
  */
-public abstract class BasisDataObject implements DataObject {
+public interface DistributedLock {
 
+  /**
+   * 尝试获取锁
+   */
+  void lock();
 
+  /**
+   * 释放锁
+   */
+  void unlock();
 }

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.dataobject;
+package com.sky.centaur.basis.domain;
 
 /**
- * 基础数据对象
+ * 顶级领域模型接口
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-05
  */
-public abstract class BasisDataObject implements DataObject {
-
+public interface DomainModel {
 
 }

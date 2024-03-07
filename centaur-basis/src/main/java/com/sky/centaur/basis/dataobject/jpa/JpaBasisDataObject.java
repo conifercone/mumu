@@ -21,6 +21,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.OffsetDateTime;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -35,6 +36,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@Setter
 public class JpaBasisDataObject extends BasisDataObject {
 
   @CreationTimestamp
@@ -73,23 +75,4 @@ public class JpaBasisDataObject extends BasisDataObject {
     return modificationTime;
   }
 
-  @Override
-  public void setFounder(Long founder) {
-    this.founder = founder;
-  }
-
-  @Override
-  public void setModifier(Long modifier) {
-    this.modifier = modifier;
-  }
-
-  @Override
-  public void setCreationTime(OffsetDateTime creationTime) {
-    this.creationTime = creationTime;
-  }
-
-  @Override
-  public void setModificationTime(OffsetDateTime modificationTime) {
-    this.modificationTime = modificationTime;
-  }
 }

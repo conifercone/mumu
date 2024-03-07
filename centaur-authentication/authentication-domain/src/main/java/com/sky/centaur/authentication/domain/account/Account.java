@@ -81,7 +81,7 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Override
   public Collection<Authority> getAuthorities() {
-    return this.role.authorities();
+    return this.role.getAuthorities();
   }
 
   public void setAuthorities(Collection<Authority> authorities) {

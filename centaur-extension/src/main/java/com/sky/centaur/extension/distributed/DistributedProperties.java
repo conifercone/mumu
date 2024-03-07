@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.basis.dataobject;
+package com.sky.centaur.extension.distributed;
+
+import com.sky.centaur.extension.distributed.lock.LockProperties;
+import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 基础数据对象
+ * 分布式相关配置属性
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-06
  */
-public abstract class BasisDataObject implements DataObject {
+@Data
+public class DistributedProperties {
 
-
+  /**
+   * 分布式锁相关配置
+   */
+  @NestedConfigurationProperty
+  private LockProperties lock;
 }

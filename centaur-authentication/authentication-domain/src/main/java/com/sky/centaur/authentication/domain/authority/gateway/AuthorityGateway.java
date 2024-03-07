@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.authority.gateway;
 
 import com.sky.centaur.authentication.domain.authority.Authority;
+import org.springframework.data.domain.Page;
 
 /**
  * 权限领域网关
@@ -26,4 +27,10 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 public interface AuthorityGateway {
 
   void add(Authority authority);
+
+  void delete(Authority authority);
+
+  void updateById(Authority authority);
+
+  Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
 }

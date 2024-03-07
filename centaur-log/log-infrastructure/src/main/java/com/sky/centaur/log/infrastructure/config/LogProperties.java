@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("log")
+@ConfigurationProperties("centaur.log")
 public class LogProperties {
 
   @NestedConfigurationProperty

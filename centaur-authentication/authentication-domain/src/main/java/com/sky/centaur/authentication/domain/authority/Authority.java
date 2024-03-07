@@ -16,11 +16,11 @@
 
 package com.sky.centaur.authentication.domain.authority;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -32,6 +32,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @author 单开宇
  * @since 2024-02-23
  */
+@Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @JsonDeserialize
@@ -51,21 +52,6 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
     this.id = id;
     this.code = code;
     this.name = name;
-  }
-
-  @JsonGetter("id")
-  public Long id() {
-    return id;
-  }
-
-  @JsonGetter("code")
-  public String code() {
-    return code;
-  }
-
-  @JsonGetter("name")
-  public String name() {
-    return name;
   }
 
   @Override

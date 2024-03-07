@@ -16,13 +16,21 @@
 
 package com.sky.centaur.basis.dataobject;
 
+import java.time.OffsetDateTime;
+
 /**
- * 基础数据对象
+ * 数据对象接口
  *
  * @author 单开宇
- * @since 2024-02-26
+ * @since 2024-03-05
  */
-public abstract class BasisDataObject implements DataObject {
+public interface DataObject {
 
+  Long getFounder();
 
+  Long getModifier();
+
+  OffsetDateTime getCreationTime();
+
+  OffsetDateTime getModificationTime();
 }

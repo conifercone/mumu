@@ -66,4 +66,43 @@ public class AuthorityControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void delete() throws Exception {
+    @Language("JSON") String authority = """
+        {
+            "authorityDeleteCo": {
+                "id": 1
+            }
+        }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .delete("/authority/delete")
+            .content(authority.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional
+  public void updateById() throws Exception {
+    @Language("JSON") String authority = """
+        {
+            "authorityUpdateCo": {
+                "id": 1,
+                "name": "updated"
+            }
+        }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/authority/updateById")
+            .content(authority.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }
