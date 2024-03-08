@@ -17,9 +17,12 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
+import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
+import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -37,9 +40,16 @@ public class RoleServiceImpl implements RoleService {
   @Resource
   RoleAddCmdExe roleAddCmdExe;
 
+  @Resource
+  RoleDeleteCmdExe roleDeleteCmdExe;
+
   @Override
   public RoleAddCo add(RoleAddCmd roleAddCmd) {
     return roleAddCmdExe.execute(roleAddCmd);
   }
 
+  @Override
+  public RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd) {
+    return roleDeleteCmdExe.execute(roleDeleteCmd);
+  }
 }

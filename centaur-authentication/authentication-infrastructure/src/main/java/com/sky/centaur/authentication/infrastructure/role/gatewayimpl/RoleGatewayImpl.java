@@ -24,6 +24,7 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.R
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +50,12 @@ public class RoleGatewayImpl implements RoleGateway {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
     roleRepository.save(roleDo);
     roleNodeRepository.save(RoleConvertor.toNodeDataObject(role));
+  }
+
+  @Override
+  @Transactional
+  public void delete(@NotNull Role role) {
+    roleRepository.deleteById(role.getId());
+    roleNodeRepository.deleteById(role.getId());
   }
 }

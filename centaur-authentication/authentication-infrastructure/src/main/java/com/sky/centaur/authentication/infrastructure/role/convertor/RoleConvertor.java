@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
+import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -85,5 +86,9 @@ public class RoleConvertor {
         authorityRepository.findAuthorityDoByIdIn(
                 roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
             .collect(Collectors.toList()));
+  }
+
+  public static @NotNull Role toEntity(@NotNull RoleDeleteCo roleDeleteCo) {
+    return new Role(roleDeleteCo.getId(), null, null, null);
   }
 }
