@@ -69,4 +69,23 @@ public class RoleControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void delete() throws Exception {
+    @Language("JSON") String role = """
+        {
+             "roleDeleteCo": {
+                 "id": 1
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .delete("/role/delete")
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }

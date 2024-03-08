@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
+import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -44,18 +46,18 @@ public class RoleConvertor {
   @Contract("_ -> new")
   public static @NotNull Role toEntity(@NotNull RoleDo roleDo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    return new Role(roleDo.getId(), roleDo.getCode(), roleDo.getName(),
-        authorityRepository.findAuthorityDoByIdIn(
-                roleDo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
-            .collect(Collectors.toList()));
+    Role role = new Role();
+    BeanUtils.copyProperties(roleDo, role, "authorities");
+    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
+            roleDo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+        .collect(Collectors.toList()));
+    return role;
   }
 
   @Contract("_ -> new")
   public static @NotNull RoleDo toDataObject(@NotNull Role role) {
     RoleDo roleDo = new RoleDo();
-    roleDo.setId(role.getId());
-    roleDo.setName(role.getName());
-    roleDo.setCode(role.getCode());
+    BeanUtils.copyProperties(role, roleDo, "authorities");
     if (!CollectionUtils.isEmpty(role.getAuthorities())) {
       roleDo.setAuthorities(
           role.getAuthorities().stream().map(Authority::getId).collect(Collectors.toList()));
@@ -66,8 +68,7 @@ public class RoleConvertor {
   @Contract("_ -> new")
   public static @NotNull RoleNodeDo toNodeDataObject(@NotNull Role role) {
     RoleNodeDo roleNodeDo = new RoleNodeDo();
-    roleNodeDo.setId(role.getId());
-    roleNodeDo.setCode(role.getCode());
+    BeanUtils.copyProperties(role, roleNodeDo, "authorities");
     Optional.ofNullable(role.getAuthorities()).ifPresent(
         authorities -> {
           List<AuthorityNodeDo> authorityNodeDos = authorities.stream()
@@ -79,11 +80,20 @@ public class RoleConvertor {
 
   public static @NotNull Role toEntity(@NotNull RoleAddCo roleAddCo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    return new Role(roleAddCo.getId() == null ?
-        SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
-        : roleAddCo.getId(), roleAddCo.getCode(), roleAddCo.getName(),
-        authorityRepository.findAuthorityDoByIdIn(
-                roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
-            .collect(Collectors.toList()));
+    Role role = new Role();
+    BeanUtils.copyProperties(roleAddCo, role, "authorities");
+    if (role.getId() == null) {
+      role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+    }
+    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
+            roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+        .collect(Collectors.toList()));
+    return role;
+  }
+
+  public static @NotNull Role toEntity(@NotNull RoleDeleteCo roleDeleteCo) {
+    Role role = new Role();
+    BeanUtils.copyProperties(roleDeleteCo, role);
+    return role;
   }
 }

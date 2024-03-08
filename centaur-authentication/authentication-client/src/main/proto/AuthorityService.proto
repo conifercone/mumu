@@ -6,6 +6,9 @@ option java_outer_classname = "AuthorityServiceProto";
 
 service AuthorityService {
   rpc add (AuthorityAddGrpcCmd) returns (AuthorityAddGrpcCo);
+  rpc delete (AuthorityDeleteGrpcCmd) returns (AuthorityDeleteGrpcCo);
+  rpc updateById (AuthorityUpdateGrpcCmd) returns (AuthorityUpdateGrpcCo);
+  rpc findAll (AuthorityFindAllGrpcCmd) returns (PageOfAuthorityFindAllGrpcCo);
 }
 
 message AuthorityAddGrpcCmd {
@@ -18,3 +21,37 @@ message AuthorityAddGrpcCo {
   string name = 3;
 }
 
+message AuthorityDeleteGrpcCmd {
+  AuthorityDeleteGrpcCo authorityDeleteCo = 1;
+}
+
+message AuthorityDeleteGrpcCo {
+  int64 id = 1;
+}
+
+message AuthorityUpdateGrpcCmd {
+  AuthorityUpdateGrpcCo authorityUpdateCo = 1;
+}
+
+message AuthorityUpdateGrpcCo {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+}
+
+message AuthorityFindAllGrpcCmd {
+  AuthorityFindAllGrpcCo authorityFindAllCo = 1;
+  int32 page_no = 2;
+  int32 page_size = 3;
+}
+
+message AuthorityFindAllGrpcCo {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+}
+
+message PageOfAuthorityFindAllGrpcCo {
+  repeated AuthorityFindAllGrpcCo content = 1;
+  int32 total_pages = 2;
+}

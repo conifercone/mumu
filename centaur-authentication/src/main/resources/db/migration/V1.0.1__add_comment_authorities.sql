@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.role.gateway;
 
-import com.sky.centaur.authentication.domain.role.Role;
-
-/**
- * 角色领域网关
- *
- * @author 单开宇
- * @since 2024-01-16
- */
-public interface RoleGateway {
-
-  void add(Role role);
-
-  void delete(Role role);
-}
+comment on column authorities.id is '唯一主键';
+comment on column authorities.code is '权限编码';
+comment on column authorities.name is '权限名称';
+comment on column authorities.creation_time is '创建时间';
+comment on column authorities.founder is '创建人';
+comment on column authorities.modifier is '修改人';
+comment on column authorities.modification_time is '修改时间';

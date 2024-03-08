@@ -59,7 +59,8 @@ public class AccountConvertor {
     accountDo.setCredentialsNonExpired(account.isCredentialsNonExpired());
     accountDo.setAccountNonLocked(account.isAccountNonLocked());
     accountDo.setAccountNonExpired(account.isAccountNonExpired());
-    accountDo.setRole(RoleConvertor.toDataObject(account.getRole()));
+    Optional.ofNullable(account.getRole())
+        .ifPresent(role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole())));
     return accountDo;
   }
 
@@ -70,7 +71,6 @@ public class AccountConvertor {
     accountNodeDo.setUsername(account.getUsername());
     Optional.ofNullable(account.getRole())
         .ifPresent(role -> accountNodeDo.setRole(RoleConvertor.toNodeDataObject(role)));
-
     return accountNodeDo;
   }
 

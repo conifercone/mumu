@@ -45,38 +45,42 @@ public class AuthorityConvertor {
   @Contract("_ -> new")
   public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
     AuthorityDo authorityDo = new AuthorityDo();
-    authorityDo.setId(authority.getId());
-    authorityDo.setCode(authority.getCode());
-    authorityDo.setName(authority.getName());
+    BeanUtils.copyProperties(authority, authorityDo);
     return authorityDo;
   }
 
   @Contract("_ -> new")
   public static @NotNull AuthorityNodeDo toNodeDataObject(@NotNull Authority authority) {
     AuthorityNodeDo authorityNodeDo = new AuthorityNodeDo();
-    authorityNodeDo.setId(authority.getId());
-    authorityNodeDo.setCode(authority.getCode());
+    BeanUtils.copyProperties(authority, authorityNodeDo);
     return authorityNodeDo;
   }
 
   public static @NotNull Authority toEntity(@NotNull AuthorityAddCo authorityAddCo) {
-    return new Authority(authorityAddCo.getId() == null ?
-        SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
-        : authorityAddCo.getId(), authorityAddCo.getCode(), authorityAddCo.getName());
+    Authority authority = new Authority();
+    BeanUtils.copyProperties(authorityAddCo, authority);
+    if (authority.getId() == null) {
+      authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+    }
+    return authority;
   }
 
   public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
-    return new Authority(authorityUpdateCo.getId(), authorityUpdateCo.getCode(),
-        authorityUpdateCo.getName());
+    Authority authority = new Authority();
+    BeanUtils.copyProperties(authorityUpdateCo, authority);
+    return authority;
   }
 
   public static @NotNull Authority toEntity(@NotNull AuthorityFindAllCo authorityFindAllCo) {
-    return new Authority(authorityFindAllCo.getId(), authorityFindAllCo.getCode(),
-        authorityFindAllCo.getName());
+    Authority authority = new Authority();
+    BeanUtils.copyProperties(authorityFindAllCo, authority);
+    return authority;
   }
 
   public static @NotNull Authority toEntity(@NotNull AuthorityDeleteCo authorityDeleteCo) {
-    return new Authority(authorityDeleteCo.getId(), null, null);
+    Authority authority = new Authority();
+    BeanUtils.copyProperties(authorityDeleteCo, authority);
+    return authority;
   }
 
   public static @NotNull AuthorityFindAllCo toFindAllCo(@NotNull Authority authority) {

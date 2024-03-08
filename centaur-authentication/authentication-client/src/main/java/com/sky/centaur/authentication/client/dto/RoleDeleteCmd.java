@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.role.gateway;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import lombok.Data;
 
 /**
- * 角色领域网关
+ * 删除角色指令
  *
  * @author 单开宇
  * @since 2024-01-16
  */
-public interface RoleGateway {
+@Data
+public class RoleDeleteCmd {
 
-  void add(Role role);
-
-  void delete(Role role);
+  private RoleDeleteCo roleDeleteCo;
 }

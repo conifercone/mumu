@@ -30,6 +30,7 @@ tomcatEmbedCoreVersion = "10.1.17"
 jakartaValidationApiVersion = "3.0.2"
 hibernateTypes60Version = "2.21.1"
 curatorRecipesVersion = "5.1.0"
+flywayCoreVersion = "10.9.0"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -136,6 +137,9 @@ springDataCommons = { module = "org.springframework.data:spring-data-commons" }
 springSecurityTest = { module = "org.springframework.security:spring-security-test" }
 # https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
 curatorRecipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
+# https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayCoreVersion" }
+flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayCoreVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
