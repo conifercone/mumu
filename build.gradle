@@ -42,7 +42,9 @@ subprojects { project ->
         }
     }
 
-    tasks.matching { it.name == "GradleDependencyReportTask" }.configureEach {
+    List<String> notCompatibleWithConfigurationCacheTasks = new ArrayList<>()
+    notCompatibleWithConfigurationCacheTasks.add("GradleDependencyReportTask")
+    tasks.matching { notCompatibleWithConfigurationCacheTasks.contains(it.name) }.configureEach {
         notCompatibleWithConfigurationCache("broken")
     }
 
