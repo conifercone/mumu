@@ -28,4 +28,6 @@ public interface RoleGateway {
   void add(Role role);
 
   void delete(Role role);
+
+  void updateById(Role role);
 }

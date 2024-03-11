@@ -22,9 +22,16 @@ import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConverto
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.basis.tools.BeanUtil;
+import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +51,9 @@ public class RoleGatewayImpl implements RoleGateway {
   @Resource
   RoleNodeRepository roleNodeRepository;
 
+  @Resource
+  DistributedLock distributedLock;
+
   @Override
   @Transactional
   public void add(Role role) {
@@ -57,5 +67,27 @@ public class RoleGatewayImpl implements RoleGateway {
   public void delete(@NotNull Role role) {
     roleRepository.deleteById(role.getId());
     roleNodeRepository.deleteById(role.getId());
+  }
+
+  @Override
+  @Transactional
+  public void updateById(@NotNull Role role) {
+    Optional<RoleDo> roleDoOptional = roleRepository.findById(role.getId());
+    Optional<RoleNodeDo> roleNodeDoOptional = roleNodeRepository.findById(role.getId());
+    if (roleDoOptional.isPresent() && roleNodeDoOptional.isPresent()) {
+      distributedLock.lock();
+      RoleDo roleDo = RoleConvertor.toDataObject(role);
+      RoleDo target = roleDoOptional.get();
+      BeanUtil.jpaUpdate(roleDo, target);
+      roleRepository.save(target);
+      RoleNodeDo nodeDataObject = RoleConvertor.toNodeDataObject(role);
+      RoleNodeDo roleNodeDo = roleNodeDoOptional.get();
+      BeanUtils.copyProperties(nodeDataObject, roleNodeDo,
+          BeanUtil.getNullPropertyNames(nodeDataObject));
+      roleNodeRepository.save(roleNodeDo);
+      distributedLock.unlock();
+    } else {
+      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
+    }
   }
 }

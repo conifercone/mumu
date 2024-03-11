@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-@WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class AuthorityControllerTest {
 
   @Resource
