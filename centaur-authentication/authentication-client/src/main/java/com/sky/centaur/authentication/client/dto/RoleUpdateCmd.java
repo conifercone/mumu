@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.client.dto.RoleAddCmd;
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
-import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
+import lombok.Data;
 
 /**
- * 角色功能API
+ * 更新角色指令
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-11
  */
-public interface RoleService {
+@Data
+public class RoleUpdateCmd {
 
-  RoleAddCo add(RoleAddCmd roleAddCmd);
-
-  RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd);
-
-  RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
+  private RoleUpdateCo roleUpdateCo;
 }

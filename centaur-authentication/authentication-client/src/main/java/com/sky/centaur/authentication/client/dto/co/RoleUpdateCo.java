@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.authentication.client.dto.RoleAddCmd;
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
-import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
-import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 角色功能API
+ * 角色更新客户端对象
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-11
  */
-public interface RoleService {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class RoleUpdateCo extends BaseClientObject {
 
-  RoleAddCo add(RoleAddCmd roleAddCmd);
+  private Long id;
 
-  RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd);
+  private String name;
 
-  RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
+  private String code;
+
+  private List<Long> authorities;
 }

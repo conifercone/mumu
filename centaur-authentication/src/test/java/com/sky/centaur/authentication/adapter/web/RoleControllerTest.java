@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-@WithUserDetails(value = "sky", userDetailsServiceBeanName = "userDetailsService")
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class RoleControllerTest {
 
   @Resource
@@ -80,6 +80,26 @@ public class RoleControllerTest {
          }""";
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/role/delete")
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional
+  public void updateById() throws Exception {
+    @Language("JSON") String role = """
+        {
+             "roleUpdateCo": {
+                 "id": 1,
+                 "code": "test"
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/role/updateById")
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

@@ -13,26 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
 
-import com.sky.centaur.authentication.client.dto.RoleAddCmd;
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+package com.sky.centaur.authentication.application.role.executor;
+
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
+import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
+import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
+import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 /**
- * 角色功能API
+ * 角色更新指令执行器
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-11
  */
-public interface RoleService {
+@Component
+public class RoleUpdateCmdExe {
 
-  RoleAddCo add(RoleAddCmd roleAddCmd);
+  @Resource
+  private RoleGateway roleGateway;
 
-  RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd);
-
-  RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
+  public RoleUpdateCo execute(@NotNull RoleUpdateCmd roleUpdateCmd) {
+    Role role = RoleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo());
+    roleGateway.updateById(role);
+    return roleUpdateCmd.getRoleUpdateCo();
+  }
 }

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -25,6 +26,8 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.List;
@@ -45,6 +48,7 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   public static @NotNull Role toEntity(@NotNull RoleDo roleDo) {
+    //noinspection DuplicatedCode
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     Role role = new Role();
     BeanUtils.copyProperties(roleDo, role, "authorities");
@@ -87,6 +91,20 @@ public class RoleConvertor {
     }
     role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
             roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+        .collect(Collectors.toList()));
+    return role;
+  }
+
+  public static @NotNull Role toEntity(@NotNull RoleUpdateCo roleUpdateCo) {
+    if (roleUpdateCo.getId() == null) {
+      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+    }
+    //noinspection DuplicatedCode
+    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
+    Role role = new Role();
+    BeanUtils.copyProperties(roleUpdateCo, role, "authorities");
+    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
+            roleUpdateCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
         .collect(Collectors.toList()));
     return role;
   }
