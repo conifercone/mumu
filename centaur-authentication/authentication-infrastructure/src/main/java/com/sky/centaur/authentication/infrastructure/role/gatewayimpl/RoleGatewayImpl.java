@@ -29,11 +29,20 @@ import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 角色领域网关实现
@@ -89,5 +98,40 @@ public class RoleGatewayImpl implements RoleGateway {
     } else {
       throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
+  }
+
+  @Override
+  @Transactional
+  public Page<Role> findAll(Role role, int pageNo, int pageSize) {
+    Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
+      //noinspection DuplicatedCode
+      List<Predicate> predicateList = new ArrayList<>();
+      if (StringUtils.hasText(role.getCode())) {
+        predicateList.add(cb.like(root.get("code"), "%" + role.getCode() + "%"));
+      }
+      if (StringUtils.hasText(role.getName())) {
+        predicateList.add(cb.like(root.get("name"), "%" + role.getName() + "%"));
+      }
+      if (role.getId() != null) {
+        predicateList.add(cb.equal(root.get("id"), role.getId()));
+      }
+      if (!CollectionUtils.isEmpty(role.getAuthorities())) {
+        role.getAuthorities().forEach(authority -> predicateList.add(cb.equal(
+            cb.literal(authority.getId()),
+            cb.function("any_pg", Long.class, root.get("authorities"))
+        )));
+      }
+      return query.orderBy(cb.desc(root.get("creationTime")))
+          .where(predicateList.toArray(new Predicate[0]))
+          .getRestriction();
+    };
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
+        pageRequest);
+
+    List<Role> roles = repositoryAll.getContent().stream()
+        .map(RoleConvertor::toEntity)
+        .toList();
+    return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }
 }

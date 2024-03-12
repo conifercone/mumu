@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.role.gateway;
 
 import com.sky.centaur.authentication.domain.role.Role;
+import org.springframework.data.domain.Page;
 
 /**
  * 角色领域网关
@@ -30,4 +31,6 @@ public interface RoleGateway {
   void delete(Role role);
 
   void updateById(Role role);
+
+  Page<Role> findAll(Role role, int pageNo, int pageSize);
 }

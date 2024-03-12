@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
@@ -113,5 +114,28 @@ public class RoleConvertor {
     Role role = new Role();
     BeanUtils.copyProperties(roleDeleteCo, role);
     return role;
+  }
+
+  public static @NotNull Role toEntity(@NotNull RoleFindAllCo roleFindAllCo) {
+    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
+    Role role = new Role();
+    BeanUtils.copyProperties(roleFindAllCo, role, "authorities");
+    if (!CollectionUtils.isEmpty(roleFindAllCo.getAuthorities())) {
+      role.setAuthorities(
+          authorityRepository.findAuthorityDoByIdIn(roleFindAllCo.getAuthorities()).stream()
+              .map(AuthorityConvertor::toEntity).collect(
+                  Collectors.toList()));
+    }
+    return role;
+  }
+
+  public static @NotNull RoleFindAllCo toFindAllCo(@NotNull Role role) {
+    RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
+    BeanUtils.copyProperties(role, roleFindAllCo, "authorities");
+    if (!CollectionUtils.isEmpty(role.getAuthorities())) {
+      roleFindAllCo.setAuthorities(role.getAuthorities().stream().map(Authority::getId).collect(
+          Collectors.toList()));
+    }
+    return roleFindAllCo;
   }
 }

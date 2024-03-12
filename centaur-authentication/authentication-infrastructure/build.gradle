@@ -9,5 +9,6 @@ dependencies {
     implementation libs.protobufJava
     implementation libs.springBootOauth2AuthorizationServer
     implementation libs.jakartaValidationApi
-    implementation libs.hibernateTypes60
+    implementation libs.hibernateTypes63
+    implementation libs.postgresql
 }

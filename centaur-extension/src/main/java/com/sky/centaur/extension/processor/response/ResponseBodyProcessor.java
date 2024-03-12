@@ -25,6 +25,7 @@ import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -58,7 +59,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
 
   @ExceptionHandler(CentaurException.class)
-  public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException) {
+  public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException,
+      @NotNull HttpServletResponse response) {
+    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(centaurException.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
@@ -73,7 +76,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResultResponse<?> handleException(@NotNull Exception exception) {
+  public ResultResponse<?> handleException(@NotNull Exception exception,
+      @NotNull HttpServletResponse response) {
+    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(exception.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(

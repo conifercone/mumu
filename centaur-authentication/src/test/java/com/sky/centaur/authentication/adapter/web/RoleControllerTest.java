@@ -108,4 +108,25 @@ public class RoleControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void findAll() throws Exception {
+    @Language("JSON") String role = """
+        {
+             "roleFindAllCo": {
+                 "authorities": [1]
+             },
+             "pageNo": 0,
+             "pageSize": 10
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/role/findAll")
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }

@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.client.dto;
 
-package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database;
-
-import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
+import lombok.Data;
 
 /**
- * 角色管理
+ * 查询角色指令
  *
  * @author 单开宇
- * @since 2024-02-23
+ * @since 2024-03-12
  */
-public interface RoleRepository extends JpaRepository<RoleDo, Long>,
-    JpaSpecificationExecutor<RoleDo> {
+@Data
+public class RoleFindAllCmd {
 
-  RoleDo findByCode(String code);
+  private RoleFindAllCo roleFindAllCo;
+  private int pageNo;
+  private int pageSize;
 }

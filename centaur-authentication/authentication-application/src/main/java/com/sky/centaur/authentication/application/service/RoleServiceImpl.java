@@ -18,16 +18,20 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,6 +53,9 @@ public class RoleServiceImpl implements RoleService {
   @Resource
   RoleUpdateCmdExe roleUpdateCmdExe;
 
+  @Resource
+  RoleFindAllCmdExe roleFindAllCmdExe;
+
   @Override
   public RoleAddCo add(RoleAddCmd roleAddCmd) {
     return roleAddCmdExe.execute(roleAddCmd);
@@ -64,4 +71,8 @@ public class RoleServiceImpl implements RoleService {
     return roleUpdateCmdExe.execute(roleUpdateCmd);
   }
 
+  @Override
+  public Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd) {
+    return roleFindAllCmdExe.execute(roleFindAllCmd);
+  }
 }

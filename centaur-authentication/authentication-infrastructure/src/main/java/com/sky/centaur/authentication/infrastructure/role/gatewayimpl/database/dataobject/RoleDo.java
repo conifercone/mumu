@@ -18,7 +18,7 @@ package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.
 
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
