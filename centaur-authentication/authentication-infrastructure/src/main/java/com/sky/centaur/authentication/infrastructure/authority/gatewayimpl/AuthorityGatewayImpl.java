@@ -107,6 +107,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
+      //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
       if (StringUtils.hasText(authority.getCode())) {
         predicateList.add(cb.like(root.get("code"), "%" + authority.getCode() + "%"));

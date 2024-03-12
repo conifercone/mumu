@@ -17,10 +17,13 @@ package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
+import org.springframework.data.domain.Page;
 
 /**
  * 角色功能API
@@ -35,4 +38,6 @@ public interface RoleService {
   RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd);
 
   RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
+
+  Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
 }

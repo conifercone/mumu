@@ -18,16 +18,20 @@ package com.sky.centaur.authentication.adapter.web;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,5 +75,13 @@ public class RoleController {
   @API(status = Status.STABLE)
   public RoleUpdateCo updateById(@RequestBody RoleUpdateCmd roleUpdateCmd) {
     return roleService.updateById(roleUpdateCmd);
+  }
+
+  @Operation(summary = "查询角色")
+  @GetMapping("/findAll")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public Page<RoleFindAllCo> findAll(@RequestBody RoleFindAllCmd roleFindAllCmd) {
+    return roleService.findAll(roleFindAllCmd);
   }
 }
