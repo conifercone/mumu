@@ -73,7 +73,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .build());
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
-    accountRepository.save(dataObject);
+    accountRepository.persist(dataObject);
     accountNodeRepository.save(
         AccountConvertor.toNodeDataObject(account));
     operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()

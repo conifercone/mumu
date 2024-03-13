@@ -17,9 +17,9 @@
 package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database;
 
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author 单开宇
  * @since 2024-01-12
  */
-public interface AuthorityRepository extends JpaRepository<AuthorityDo, Long>,
+public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long>,
     JpaSpecificationExecutor<AuthorityDo> {
 
   List<AuthorityDo> findAuthorityDoByIdIn(Collection<Long> ids);
