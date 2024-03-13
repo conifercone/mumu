@@ -20,11 +20,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import com.sky.centaur.basis.enums.SexEnum;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -58,6 +60,18 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Getter
   private Role role;
+
+  @Getter
+  @Setter
+  private String avatarUrl;
+
+  @Getter
+  @Setter
+  private String phone;
+
+  @Getter
+  @Setter
+  private SexEnum sex;
 
   public Account(Long id, String username, String password, Role role) {
     this.id = id;

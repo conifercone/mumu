@@ -17,5 +17,15 @@ message AccountRegisterGrpcCo {
   string username = 2;
   string password = 3;
   string roleCode = 4;
+  string avatarUrl = 5;
+  string phone = 6;
+  SexEnum sex = 7;
 }
 
+enum SexEnum
+{
+  MALE = 0;
+  FEMALE = 1;
+  GREY = 2;
+  SEXLESS = 3;
+}

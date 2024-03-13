@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -76,6 +77,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setUsername(accountRegisterGrpcCo.getUsername());
     accountRegisterCo.setPassword(accountRegisterGrpcCo.getPassword());
     accountRegisterCo.setRoleCode(accountRegisterGrpcCo.getRoleCode());
+    accountRegisterCo.setAvatarUrl(accountRegisterGrpcCo.getAvatarUrl());
+    accountRegisterCo.setPhone(accountRegisterGrpcCo.getPhone());
+    accountRegisterCo.setSex(SexEnum.valueOf(accountRegisterGrpcCo.getSex().name()));
     return accountRegisterCo;
   }
 }

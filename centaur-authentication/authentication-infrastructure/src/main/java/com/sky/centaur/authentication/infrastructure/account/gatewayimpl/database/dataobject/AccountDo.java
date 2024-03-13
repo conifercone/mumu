@@ -17,8 +17,11 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databa
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
+import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -29,6 +32,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 /**
  * 用户基本信息数据对象
@@ -73,4 +78,18 @@ public class AccountDo extends JpaBasisDataObject {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "role_id")
   private RoleDo role;
+
+  @Size(max = 200)
+  @Column(name = "avatar_url", length = 200)
+  private String avatarUrl;
+
+  @Size(max = 200)
+  @Column(name = "phone", length = 200)
+  private String phone;
+
+
+  @Column(name = "sex", columnDefinition = "sex(0, 0)")
+  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Enumerated(EnumType.STRING)
+  private SexEnum sex;
 }

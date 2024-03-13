@@ -13,34 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+package com.sky.centaur.basis.enums;
 
 /**
- * 账户信息注册客户端对象
+ * 性别枚举
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-03-13
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountRegisterCo extends BaseClientObject {
+public enum SexEnum {
 
-  private Long id;
+  /**
+   * 男性
+   */
+  MALE,
 
-  private String username;
+  /**
+   * 女性
+   */
+  FEMALE,
 
-  private String password;
+  /**
+   * 双性
+   */
+  GREY,
 
-  private String roleCode;
-
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
+  /**
+   * 无性
+   */
+  SEXLESS
 }

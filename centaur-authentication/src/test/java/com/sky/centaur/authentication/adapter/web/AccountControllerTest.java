@@ -48,13 +48,17 @@ public class AccountControllerTest {
   public void register() throws Exception {
     @Language("JSON") String userInfo = """
         {
-            "accountRegisterCo": {
-                "id": 12345678,
-                "username": "yxt",
-                "password": "yxt5211314",
-                "authorities": []
-            }
-        }""";
+             "accountRegisterCo": {
+                 "id": 31241232131,
+                 "username": "test",
+                 "password": "test",
+                 "enabled": true,
+                 "roleCode": "admin",
+                 "avatarUrl": "https://github.com/users/conifercone",
+                 "phone": "13031723736",
+                 "sex": "MALE"
+             }
+         }""";
     mockMvc.perform(MockMvcRequestBuilders
             .post("/account/register")
             .content(userInfo.getBytes())
