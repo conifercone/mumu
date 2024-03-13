@@ -70,7 +70,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     if (authorityRepository.findById(authority.getId()).isPresent()) {
       throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authority.getId());
     }
-    authorityRepository.save(dataObject);
+    authorityRepository.persist(dataObject);
     AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
     authorityNodeRepository.save(nodeDataObject);
   }
@@ -92,7 +92,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
       AuthorityDo target = authorityDoOptional.get();
       BeanUtil.jpaUpdate(dataObject, target);
-      authorityRepository.save(target);
+      authorityRepository.merge(target);
       AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
       AuthorityNodeDo targetNode = nodeDoOptional.get();
       BeanUtils.copyProperties(nodeDataObject, targetNode,

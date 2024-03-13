@@ -13,18 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
 
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+package com.sky.centaur.authentication.configuration;
+
+import io.hypersistence.utils.spring.repository.BaseJpaRepositoryImpl;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * 账户基本信息
+ * jpa配置
  *
  * @author 单开宇
- * @since 2024-01-12
+ * @since 2024-03-13
  */
-public interface AccountRepository extends BaseJpaRepository<AccountDo, Long> {
+@Configuration
+@EnableJpaRepositories(
+    value = "com.sky.centaur.authentication.infrastructure",
+    repositoryBaseClass = BaseJpaRepositoryImpl.class
+)
+public class JpaConfiguration {
 
-  AccountDo findAccountDoByUsername(String username);
 }

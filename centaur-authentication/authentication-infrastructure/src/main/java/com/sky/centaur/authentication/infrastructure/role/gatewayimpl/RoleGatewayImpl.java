@@ -67,7 +67,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional
   public void add(Role role) {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
-    roleRepository.save(roleDo);
+    roleRepository.persist(roleDo);
     roleNodeRepository.save(RoleConvertor.toNodeDataObject(role));
   }
 
@@ -88,11 +88,12 @@ public class RoleGatewayImpl implements RoleGateway {
       RoleDo roleDo = RoleConvertor.toDataObject(role);
       RoleDo target = roleDoOptional.get();
       BeanUtil.jpaUpdate(roleDo, target);
-      roleRepository.save(target);
+      roleRepository.merge(target);
       RoleNodeDo nodeDataObject = RoleConvertor.toNodeDataObject(role);
       RoleNodeDo roleNodeDo = roleNodeDoOptional.get();
       BeanUtils.copyProperties(nodeDataObject, roleNodeDo,
           BeanUtil.getNullPropertyNames(nodeDataObject));
+      roleNodeRepository.deleteById(roleNodeDo.getId());
       roleNodeRepository.save(roleNodeDo);
       distributedLock.unlock();
     } else {

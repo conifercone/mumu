@@ -23,4 +23,5 @@ dependencies {
     testImplementation libs.springSecurityTest
     implementation libs.flywayCore
     implementation libs.flywayDatabasePostgresql
+    implementation libs.hibernateTypes63
 }
