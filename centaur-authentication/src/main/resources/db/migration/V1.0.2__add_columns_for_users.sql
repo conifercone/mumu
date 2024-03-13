@@ -13,34 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+-- 性别枚举
+CREATE TYPE sex AS ENUM (
+    'MALE',
+    'FEMALE',
+    'GREY',
+    'SEXLESS'
+    );
+-- users新增列
+-- 性别
+ALTER TABLE users
+    ADD COLUMN sex sex;
+comment on column users.sex is '性别';
+-- 头像地址
+ALTER TABLE users
+    ADD COLUMN avatar_url varchar(200);
+comment on column users.avatar_url is '头像地址';
+-- 手机号
+ALTER TABLE users
+    ADD COLUMN phone varchar(200);
+comment on column users.phone is '手机号';
 
-/**
- * 账户信息注册客户端对象
- *
- * @author 单开宇
- * @since 2024-01-16
- */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountRegisterCo extends BaseClientObject {
-
-  private Long id;
-
-  private String username;
-
-  private String password;
-
-  private String roleCode;
-
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
-}

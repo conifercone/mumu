@@ -28,7 +28,7 @@ leafVersion = "1.0.2"
 yitterIdGeneratorVersion = "1.0.6"
 tomcatEmbedCoreVersion = "10.1.17"
 jakartaValidationApiVersion = "3.0.2"
-hibernateTypes63Version = "3.7.3"
+hypersistenceUtilsVersion = "3.7.3"
 curatorRecipesVersion = "5.1.0"
 flywayCoreVersion = "10.9.0"
 
@@ -126,7 +126,7 @@ tomcatEmbedCore = { module = "org.apache.tomcat.embed:tomcat-embed-core", versio
 # https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
 jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidationApiVersion" }
 # https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
-hibernateTypes63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hibernateTypes63Version" }
+hibernateTypes63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
 springSecurityCore = { module = "org.springframework.security:spring-security-core" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose

@@ -46,6 +46,9 @@ public class AccountConvertor {
     account.setModifier(accountDo.getModifier());
     account.setCreationTime(accountDo.getCreationTime());
     account.setModificationTime(accountDo.getModificationTime());
+    account.setAvatarUrl(accountDo.getAvatarUrl());
+    account.setPhone(accountDo.getPhone());
+    account.setSex(accountDo.getSex());
     return account;
   }
 
@@ -59,6 +62,9 @@ public class AccountConvertor {
     accountDo.setCredentialsNonExpired(account.isCredentialsNonExpired());
     accountDo.setAccountNonLocked(account.isAccountNonLocked());
     accountDo.setAccountNonExpired(account.isAccountNonExpired());
+    accountDo.setAvatarUrl(account.getAvatarUrl());
+    accountDo.setPhone(account.getPhone());
+    accountDo.setSex(account.getSex());
     Optional.ofNullable(account.getRole())
         .ifPresent(role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole())));
     return accountDo;
@@ -76,12 +82,16 @@ public class AccountConvertor {
 
   public static @NotNull Account toEntity(@NotNull AccountRegisterCo accountRegisterCo) {
     RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
-    return new Account(
+    Account account = new Account(
         accountRegisterCo.getId() == null ?
             SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
             : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
         accountRegisterCo.getPassword(),
         Optional.ofNullable(roleRepository.findByCode(accountRegisterCo.getRoleCode()))
             .map(RoleConvertor::toEntity).orElse(null));
+    account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
+    account.setPhone(accountRegisterCo.getPhone());
+    account.setSex(accountRegisterCo.getSex());
+    return account;
   }
 }
