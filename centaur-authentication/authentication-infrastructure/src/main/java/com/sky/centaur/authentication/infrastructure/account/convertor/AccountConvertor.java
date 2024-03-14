@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
@@ -92,6 +93,14 @@ public class AccountConvertor {
     account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
     account.setPhone(accountRegisterCo.getPhone());
     account.setSex(accountRegisterCo.getSex());
+    return account;
+  }
+
+  public static @NotNull Account toEntity(@NotNull AccountUpdateCo accountUpdateCo) {
+    Account account = new Account(accountUpdateCo.getId(), null, null, null);
+    account.setAvatarUrl(accountUpdateCo.getAvatarUrl());
+    account.setPhone(accountUpdateCo.getPhone());
+    account.setSex(accountUpdateCo.getSex());
     return account;
   }
 }

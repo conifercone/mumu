@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import com.sky.centaur.basis.enums.SexEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 账户功能API
+ * 账户信息更新客户端对象
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-14
  */
-public interface AccountService {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AccountUpdateCo extends BaseClientObject {
 
-  AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
+  private Long id;
 
-  AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd);
+  private String avatarUrl;
+
+  private String phone;
+
+  private SexEnum sex;
 }

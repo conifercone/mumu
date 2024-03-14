@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import lombok.Data;
 
 /**
- * 账户功能API
+ * 账户更新指令
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-14
  */
-public interface AccountService {
+@Data
+public class AccountUpdateCmd {
 
-  AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
-
-  AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd);
+  private AccountUpdateCo accountUpdateCo;
 }
