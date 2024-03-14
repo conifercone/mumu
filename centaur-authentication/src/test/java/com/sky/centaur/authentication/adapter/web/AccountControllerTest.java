@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class AccountControllerTest {
 
   @Resource
@@ -61,6 +63,26 @@ public class AccountControllerTest {
          }""";
     mockMvc.perform(MockMvcRequestBuilders
             .post("/account/register")
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional
+  public void updateById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+             "accountUpdateCo": {
+                 "id": 1,
+                 "sex": "MALE"
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/updateById")
             .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

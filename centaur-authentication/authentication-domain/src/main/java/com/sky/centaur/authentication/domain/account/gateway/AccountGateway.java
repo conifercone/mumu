@@ -28,4 +28,6 @@ public interface AccountGateway {
   void register(Account account);
 
   Account findAccountByUsername(String username);
+
+  void updateById(Account account);
 }

@@ -16,12 +16,15 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
@@ -46,6 +49,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Resource
   private AccountRegisterCmdExe accountRegisterCmdExe;
+
+  @Resource
+  private AccountUpdateCmdExe accountUpdateCmdExe;
 
   @Override
   public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
@@ -81,5 +87,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setPhone(accountRegisterGrpcCo.getPhone());
     accountRegisterCo.setSex(SexEnum.valueOf(accountRegisterGrpcCo.getSex().name()));
     return accountRegisterCo;
+  }
+
+  @Override
+  public AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd) {
+    return accountUpdateCmdExe.execute(accountUpdateCmd);
   }
 }

@@ -17,13 +17,16 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,5 +52,13 @@ public class AccountController {
   @API(status = Status.STABLE)
   public AccountRegisterCo register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
     return accountService.register(accountRegisterCmd);
+  }
+
+  @Operation(summary = "用户基本信息更新")
+  @PutMapping("/updateById")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public AccountUpdateCo updateById(@RequestBody AccountUpdateCmd accountUpdateCmd) {
+    return accountService.updateById(accountUpdateCmd);
   }
 }
