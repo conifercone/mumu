@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-23
  */
 @Component
+@Observed(name = "RoleFindAllCmdExe")
 public class RoleFindAllCmdExe {
 
   @Resource
