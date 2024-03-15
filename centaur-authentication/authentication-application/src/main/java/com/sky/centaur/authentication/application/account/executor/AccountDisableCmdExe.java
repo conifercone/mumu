@@ -13,26 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.api;
+package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
-import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import io.micrometer.observation.annotation.Observed;
+import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 /**
- * 账户功能API
+ * 账户禁用指令执行器
  *
  * @author 单开宇
- * @since 2024-01-15
+ * @since 2024-03-15
  */
-public interface AccountService {
+@Component
+@Observed(name = "AccountDisableCmdExe")
+public class AccountDisableCmdExe {
 
-  AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
+  @Resource
+  private AccountGateway accountGateway;
 
-  AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd);
 
-  AccountDisableCo disable(AccountDisableCmd accountDisableCmd);
+  public AccountDisableCo execute(@NotNull AccountDisableCmd accountDisableCmd) {
+    accountGateway.disable(accountDisableCmd.getAccountDisableCo().getId());
+    return accountDisableCmd.getAccountDisableCo();
+  }
 }

@@ -61,7 +61,5 @@ public class BeanUtil {
    */
   public static void jpaUpdate(JpaBasisDataObject source, JpaBasisDataObject target) {
     BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
-    target.setModifier(null);
-    target.setModificationTime(null);
   }
 }
