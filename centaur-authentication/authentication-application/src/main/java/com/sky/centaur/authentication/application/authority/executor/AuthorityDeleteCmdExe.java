@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-23
  */
 @Component
+@Observed(name = "AuthorityDeleteCmdExe")
 public class AuthorityDeleteCmdExe {
 
   @Resource

@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
  * @since 2024-02-23
  */
 @Component
+@Observed(name = "AuthorityFindAllCmdExe")
 public class AuthorityFindAllCmdExe {
 
   @Resource
