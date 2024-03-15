@@ -91,4 +91,23 @@ public class AccountControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void disable() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+             "accountDisableCo": {
+                 "id": 1
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/disable")
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }

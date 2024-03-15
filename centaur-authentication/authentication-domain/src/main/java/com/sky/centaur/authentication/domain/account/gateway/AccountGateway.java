@@ -30,4 +30,6 @@ public interface AccountGateway {
   Account findAccountByUsername(String username);
 
   void updateById(Account account);
+
+  void disable(Long id);
 }

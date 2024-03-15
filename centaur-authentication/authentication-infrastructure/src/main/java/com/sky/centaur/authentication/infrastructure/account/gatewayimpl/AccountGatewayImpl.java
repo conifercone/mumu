@@ -114,10 +114,23 @@ public class AccountGatewayImpl implements AccountGateway {
         accountRepository.merge(accountDoTarget);
         distributedLock.unlock();
       } else {
-        throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
+        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
     } else {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
+    }
+  }
+
+  @Override
+  @Transactional
+  public void disable(Long id) {
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
+    if (accountDoOptional.isPresent()) {
+      AccountDo accountDo = accountDoOptional.get();
+      accountDo.setEnabled(false);
+      accountRepository.merge(accountDo);
+    } else {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     }
   }
 }

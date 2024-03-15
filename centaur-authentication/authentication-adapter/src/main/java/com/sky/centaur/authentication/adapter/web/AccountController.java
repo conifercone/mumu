@@ -16,8 +16,10 @@
 package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,13 +42,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/account")
-@Tag(name = "用户管理")
+@Tag(name = "账户管理")
 public class AccountController {
 
   @Resource
   private AccountService accountService;
 
-  @Operation(summary = "用户注册")
+  @Operation(summary = "账户注册")
   @PostMapping("/register")
   @ResponseBody
   @API(status = Status.STABLE)
@@ -54,11 +56,19 @@ public class AccountController {
     return accountService.register(accountRegisterCmd);
   }
 
-  @Operation(summary = "用户基本信息更新")
+  @Operation(summary = "账户基本信息更新")
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE)
   public AccountUpdateCo updateById(@RequestBody AccountUpdateCmd accountUpdateCmd) {
     return accountService.updateById(accountUpdateCmd);
+  }
+
+  @Operation(summary = "禁用账户")
+  @PutMapping("/disable")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public AccountDisableCo disable(@RequestBody AccountDisableCmd accountDisableCmd) {
+    return accountService.disable(accountDisableCmd);
   }
 }

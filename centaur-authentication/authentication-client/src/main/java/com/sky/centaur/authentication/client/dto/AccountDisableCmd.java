@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
+import lombok.Data;
 
 /**
- * 账户基本信息
+ * 账户禁用指令
  *
  * @author 单开宇
- * @since 2024-01-12
+ * @since 2024-03-15
  */
-public interface AccountRepository extends BaseJpaRepository<AccountDo, Long> {
+@Data
+public class AccountDisableCmd {
 
-  AccountDo findAccountDoByUsername(String username);
-
+  private AccountDisableCo accountDisableCo;
 }
