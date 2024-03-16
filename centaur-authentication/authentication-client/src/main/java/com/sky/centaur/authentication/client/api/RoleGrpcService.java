@@ -56,7 +56,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     } else {
       return extracted(roleAddGrpcCmd);
     }
-
   }
 
   private @Nullable RoleAddGrpcCo extracted(RoleAddGrpcCmd roleAddGrpcCmd) {
