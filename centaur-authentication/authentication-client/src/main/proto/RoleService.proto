@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sky.centaur.authentication.client.api.grpc";
+option java_outer_classname = "RoleServiceProto";
+
+service RoleService {
+  rpc add (RoleAddGrpcCmd) returns (RoleAddGrpcCo);
+}
+
+message RoleAddGrpcCmd {
+  RoleAddGrpcCo roleAddCo = 1;
+}
+
+message RoleAddGrpcCo {
+  int64 id = 1;
+  string name = 2;
+  string code = 3;
+  repeated int64 authorities = 4;
+}
