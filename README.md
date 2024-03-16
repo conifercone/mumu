@@ -23,7 +23,7 @@
     <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/conifercone/centaur">
   </a>
   <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/conifercone/centaur">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/conifercone/centaur/develop">
   </a>
 </p>
 
