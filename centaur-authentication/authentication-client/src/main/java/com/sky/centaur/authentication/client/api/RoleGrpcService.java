@@ -60,8 +60,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private @Nullable RoleAddGrpcCo extracted(RoleAddGrpcCmd roleAddGrpcCmd) {
-    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
-        channel);
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
     try {
       return roleServiceFutureStub.add(roleAddGrpcCmd).get(3, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
