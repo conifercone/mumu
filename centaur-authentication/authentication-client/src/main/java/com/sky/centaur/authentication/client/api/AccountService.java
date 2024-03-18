@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.api;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
@@ -35,4 +36,6 @@ public interface AccountService {
   AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd);
 
   AccountDisableCo disable(AccountDisableCmd accountDisableCmd);
+
+  AccountCurrentLoginQueryCo queryCurrentLoginAccount();
 }

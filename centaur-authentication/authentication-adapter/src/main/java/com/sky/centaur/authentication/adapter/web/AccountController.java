@@ -19,6 +19,7 @@ import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
@@ -27,6 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,5 +72,13 @@ public class AccountController {
   @API(status = Status.STABLE)
   public AccountDisableCo disable(@RequestBody AccountDisableCmd accountDisableCmd) {
     return accountService.disable(accountDisableCmd);
+  }
+
+  @Operation(summary = "获取当前登录账户信息")
+  @GetMapping("/currentLoginAccount")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
+    return accountService.queryCurrentLoginAccount();
   }
 }
