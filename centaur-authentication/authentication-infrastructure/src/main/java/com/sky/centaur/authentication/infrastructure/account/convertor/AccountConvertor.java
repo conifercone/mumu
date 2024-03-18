@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
+import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.authentication.domain.account.Account;
@@ -27,6 +28,7 @@ import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 账户信息转换器
@@ -102,5 +104,12 @@ public class AccountConvertor {
     account.setPhone(accountUpdateCo.getPhone());
     account.setSex(accountUpdateCo.getSex());
     return account;
+  }
+
+  public static @NotNull AccountCurrentLoginQueryCo toCurrentLoginQueryCo(
+      @NotNull Account account) {
+    AccountCurrentLoginQueryCo accountCurrentLoginQueryCo = new AccountCurrentLoginQueryCo();
+    BeanUtils.copyProperties(account, accountCurrentLoginQueryCo);
+    return accountCurrentLoginQueryCo;
   }
 }

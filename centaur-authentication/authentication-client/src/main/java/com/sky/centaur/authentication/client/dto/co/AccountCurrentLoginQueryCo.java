@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import com.sky.centaur.basis.enums.SexEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 用户领域网关
+ * 查询当前登录账户信息客户端对象
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-03-14
  */
-public interface AccountGateway {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AccountCurrentLoginQueryCo extends BaseClientObject {
 
-  void register(Account account);
+  private Long id;
 
-  Account findAccountByUsername(String username);
+  private String name;
 
-  void updateById(Account account);
+  private String avatarUrl;
 
-  void disable(Long id);
+  private String phone;
 
-  Account queryCurrentLoginAccount();
+  private SexEnum sex;
 }

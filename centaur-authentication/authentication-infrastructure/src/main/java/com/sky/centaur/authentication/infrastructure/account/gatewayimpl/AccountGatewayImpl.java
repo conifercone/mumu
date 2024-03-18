@@ -133,4 +133,20 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     }
   }
+
+  @Override
+  @Transactional
+  public Account queryCurrentLoginAccount() {
+    Long loginAccountId = SecurityContextUtil.getLoginAccountId();
+    if (loginAccountId == null) {
+      throw new CentaurException(ResultCode.UNAUTHORIZED);
+    } else {
+      Optional<AccountDo> accountDoOptional = accountRepository.findById(loginAccountId);
+      if (accountDoOptional.isPresent()) {
+        return AccountConvertor.toEntity(accountDoOptional.get());
+      } else {
+        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+      }
+    }
+  }
 }
