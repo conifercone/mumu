@@ -11,4 +11,5 @@ dependencies {
     implementation libs.jakartaValidationApi
     implementation libs.hibernateTypes63
     implementation libs.postgresql
+    implementation libs.redisOmSpring
 }
