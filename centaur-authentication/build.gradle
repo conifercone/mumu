@@ -24,4 +24,5 @@ dependencies {
     implementation libs.flywayCore
     implementation libs.flywayDatabasePostgresql
     implementation libs.hibernateTypes63
+    implementation libs.redisOmSpring
 }
