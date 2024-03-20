@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +46,7 @@ public class DefaultSecurityConfig {
   @Bean
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
-      UserDetailsService userDetailsService, JwtDecoder jwtDecoder)
+      UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository)
       throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests((authorize) -> authorize
@@ -54,7 +55,8 @@ public class DefaultSecurityConfig {
         // Form login handles the redirect to the login page from the
         // authorization server filter chain
         .formLogin(withDefaults());
-    http.addFilterBefore(new JwtAuthenticationTokenFilter(userDetailsService, jwtDecoder),
+    http.addFilterBefore(
+        new JwtAuthenticationTokenFilter(userDetailsService, jwtDecoder, tokenRepository),
         UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
