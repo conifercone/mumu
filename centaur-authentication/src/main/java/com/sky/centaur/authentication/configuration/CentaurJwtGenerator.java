@@ -177,13 +177,13 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       TokenRedisDo tokenRedisDo = new TokenRedisDo();
-      tokenRedisDo.setId(String.valueOf(tokenValue.hashCode()));
+      tokenRedisDo.setId(tokenValue.hashCode());
       tokenRedisDo.setTokenValue(tokenValue);
       tokenRedisDo.setTtl(between.toSeconds());
       tokenRepository.save(tokenRedisDo);
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
       OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
-      oidcIdTokenRedisDo.setId(String.valueOf(tokenValue.hashCode()));
+      oidcIdTokenRedisDo.setId(tokenValue.hashCode());
       oidcIdTokenRedisDo.setTokenValue(tokenValue);
       oidcIdTokenRedisDo.setTtl(between.toSeconds());
       oidcIdTokenRepository.save(oidcIdTokenRedisDo);
