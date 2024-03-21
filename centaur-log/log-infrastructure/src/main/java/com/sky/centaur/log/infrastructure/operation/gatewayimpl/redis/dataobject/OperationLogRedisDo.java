@@ -52,13 +52,13 @@ public class OperationLogRedisDo {
   /**
    * 操作日志绑定的业务对象标识
    */
-  @Indexed
+  @Searchable
   private String bizNo;
 
   /**
    * 操作日志的种类
    */
-  @Indexed
+  @Searchable
   private String category;
 
   /**
@@ -82,7 +82,7 @@ public class OperationLogRedisDo {
   /**
    * 操作日志的操作时间
    */
-  @Indexed
+  @Searchable
   private LocalDateTime operatingTime;
 
   /**

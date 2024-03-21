@@ -10,6 +10,6 @@ import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.Toke
  * @since 2024-03-19
  */
 public interface TokenRepository extends
-    RedisDocumentRepository<TokenRedisDo, String> {
+    RedisDocumentRepository<TokenRedisDo, Integer> {
 
 }

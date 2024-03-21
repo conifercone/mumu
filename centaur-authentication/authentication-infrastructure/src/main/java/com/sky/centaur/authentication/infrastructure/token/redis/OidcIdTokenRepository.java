@@ -10,6 +10,6 @@ import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.Oidc
  * @since 2024-03-19
  */
 public interface OidcIdTokenRepository extends
-    RedisDocumentRepository<OidcIdTokenRedisDo, String> {
+    RedisDocumentRepository<OidcIdTokenRedisDo, Integer> {
 
 }

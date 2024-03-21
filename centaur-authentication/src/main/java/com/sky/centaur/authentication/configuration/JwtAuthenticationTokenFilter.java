@@ -71,7 +71,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     if (StringUtils.hasText(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
       // 判断redis中是否存在token
-      if (tokenRepository.findById(String.valueOf(authToken.hashCode())).isEmpty()) {
+      if (tokenRepository.findById(authToken.hashCode()).isEmpty()) {
         LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
