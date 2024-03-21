@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024-01-24
  */
 @Configuration
-@ConditionalOnProperty(prefix = "log.elasticsearch", name = "enabled", havingValue = "false")
+@ConditionalOnProperty(prefix = "centaur.log.elasticsearch", name = "enabled", havingValue = "false")
 @EnableAutoConfiguration(exclude = {
     ElasticsearchRestClientAutoConfiguration.class,
     ElasticsearchReactiveHealthContributorAutoConfiguration.class,

@@ -23,12 +23,10 @@ import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
-import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.OperationLogRedisRepository;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -49,9 +47,6 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   private OperationLogEsRepository operationLogEsRepository;
 
   @Resource
-  private OperationLogRedisRepository operationLogRedisRepository;
-
-  @Resource
   private ObjectMapper objectMapper;
 
   @Resource
@@ -70,16 +65,12 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   @Override
   public void save(OperationLog operationLog) {
     operationLogEsRepository.save(OperationLogConvertor.toEsDataObject(operationLog));
-    operationLogRedisRepository.saveAll(
-        Collections.singletonList(OperationLogConvertor.toRedisDataObject(operationLog)));
   }
 
   @Override
   public Optional<OperationLog> findOperationLogById(String id) {
-    Optional<OperationLog> optionalOperationLog = operationLogRedisRepository.findById(
-            id).map(OperationLogConvertor::toEntity)
-        .or(() -> operationLogEsRepository.findById(id).map(OperationLogConvertor::toEntity)
-        );
+    Optional<OperationLog> optionalOperationLog = operationLogEsRepository.findById(
+        id).map(OperationLogConvertor::toEntity);
     OperationLog operationLog = new OperationLog();
     operationLog.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
     operationLog.setBizNo(id);

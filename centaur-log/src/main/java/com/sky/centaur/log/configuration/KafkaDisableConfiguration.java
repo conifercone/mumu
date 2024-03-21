@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024-01-24
  */
 @Configuration
-@ConditionalOnProperty(prefix = "log.kafka", name = "enabled", havingValue = "false")
+@ConditionalOnProperty(prefix = "centaur.log.kafka", name = "enabled", havingValue = "false")
 @EnableAutoConfiguration(exclude = {
     KafkaAutoConfiguration.class
 })

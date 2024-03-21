@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.log;
 
-import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -26,7 +25,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2024-01-22
  */
 @SpringBootApplication
-@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.**")
 public class CentaurLogApplication {
 
   public static void main(String[] args) {

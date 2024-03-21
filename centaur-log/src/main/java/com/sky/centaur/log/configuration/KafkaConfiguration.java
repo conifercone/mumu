@@ -28,7 +28,7 @@ import org.springframework.kafka.config.TopicBuilder;
  * @since 2024-01-24
  */
 @Configuration
-@ConditionalOnProperty(prefix = "log.kafka", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "centaur.log.kafka", name = "enabled", havingValue = "true")
 public class KafkaConfiguration {
 
   /**
