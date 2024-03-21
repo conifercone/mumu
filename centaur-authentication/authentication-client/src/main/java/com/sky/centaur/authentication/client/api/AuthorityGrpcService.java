@@ -23,6 +23,8 @@ import io.grpc.ManagedChannel;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
     channel.shutdown();
   }
 
+  @API(status = Status.STABLE)
   public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
