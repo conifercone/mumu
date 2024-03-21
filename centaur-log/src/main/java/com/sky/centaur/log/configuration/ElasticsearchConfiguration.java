@@ -29,7 +29,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
  * @since 2024-01-23
  */
 @Configuration
-@ConditionalOnProperty(prefix = "log.elasticsearch", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "centaur.log.elasticsearch", name = "enabled", havingValue = "true")
 public class ElasticsearchConfiguration extends
     org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
 

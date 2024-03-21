@@ -12,8 +12,6 @@ dependencies {
     implementation libs.springBootDataElasticsearch
     implementation libs.springKafka
     implementation libs.grpcSpringBootStarter
-    implementation libs.redisOmSpring
-    annotationProcessor libs.redisOmSpring
     implementation libs.bundles.micrometer
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
