@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
+import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,5 +81,13 @@ public class AccountController {
   @API(status = Status.STABLE)
   public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
     return accountService.queryCurrentLoginAccount();
+  }
+
+  @Operation(summary = "获取在线账户数量等信息")
+  @GetMapping("/onlineAccounts")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public AccountOnlineStatisticsCo onlineAccounts() {
+    return accountService.onlineAccounts();
   }
 }

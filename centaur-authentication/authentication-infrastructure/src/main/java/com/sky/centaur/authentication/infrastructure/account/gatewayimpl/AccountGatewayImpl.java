@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -54,6 +55,9 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Resource
   private AccountRepository accountRepository;
+
+  @Resource
+  private TokenRepository tokenRepository;
 
   @Resource
   private AccountNodeRepository accountNodeRepository;
@@ -155,5 +159,12 @@ public class AccountGatewayImpl implements AccountGateway {
         throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
     }
+  }
+
+  @Override
+  @Transactional
+  @API(status = Status.STABLE)
+  public Long onlineAccounts() {
+    return tokenRepository.count();
   }
 }
