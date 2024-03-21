@@ -32,7 +32,7 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
 
   private Long id;
 
-  private String name;
+  private String username;
 
   private String avatarUrl;
 
