@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
@@ -28,6 +29,7 @@ import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
+import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.basis.enums.SexEnum;
@@ -63,6 +65,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Resource
   private AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe;
+
+  @Resource
+  private AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe;
 
   @Override
   public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
@@ -113,5 +118,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
     return accountCurrentLoginQueryCmdExe.execute();
+  }
+
+  @Override
+  public AccountOnlineStatisticsCo onlineAccounts() {
+    return accountOnlineStatisticsCmdExe.execute();
   }
 }

@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 用户领域网关
+ * 账户在线统计客户端对象
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-03-14
  */
-public interface AccountGateway {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AccountOnlineStatisticsCo extends BaseClientObject {
 
-  void register(Account account);
-
-  Account findAccountByUsername(String username);
-
-  void updateById(Account account);
-
-  void disable(Long id);
-
-  Account queryCurrentLoginAccount();
-
-  Long onlineAccounts();
+  private Long onlineCapacity;
 }
