@@ -17,7 +17,7 @@ package com.sky.centaur.authentication.infrastructure.token.redis.dataobject;
 
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.Searchable;
+import com.redis.om.spring.annotations.TextIndexed;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
@@ -39,7 +39,7 @@ public class OidcIdTokenRedisDo {
   /**
    * token值
    */
-  @Searchable
+  @TextIndexed
   private String tokenValue;
 
   /**
