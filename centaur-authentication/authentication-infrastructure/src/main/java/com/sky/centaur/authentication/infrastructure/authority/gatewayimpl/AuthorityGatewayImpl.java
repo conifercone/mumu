@@ -33,6 +33,8 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -65,6 +67,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
     if (authorityRepository.findById(authority.getId()).isPresent()) {
@@ -77,6 +80,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void delete(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
     authorityNodeRepository.deleteById(authority.getId());
@@ -84,6 +88,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void updateById(@NotNull Authority authority) {
     Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(authority.getId());
     Optional<AuthorityNodeDo> nodeDoOptional = authorityNodeRepository.findById(authority.getId());
@@ -105,6 +110,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
+  @Transactional
+  @API(status = Status.STABLE)
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
       //noinspection DuplicatedCode

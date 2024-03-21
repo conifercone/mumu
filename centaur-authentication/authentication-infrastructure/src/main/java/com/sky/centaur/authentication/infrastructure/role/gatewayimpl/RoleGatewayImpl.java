@@ -33,6 +33,8 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -65,6 +67,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void add(Role role) {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
     roleRepository.persist(roleDo);
@@ -73,6 +76,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void delete(@NotNull Role role) {
     roleRepository.deleteById(role.getId());
     roleNodeRepository.deleteById(role.getId());
@@ -80,6 +84,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void updateById(@NotNull Role role) {
     Optional<RoleDo> roleDoOptional = roleRepository.findById(role.getId());
     Optional<RoleNodeDo> roleNodeDoOptional = roleNodeRepository.findById(role.getId());
@@ -103,6 +108,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
       //noinspection DuplicatedCode

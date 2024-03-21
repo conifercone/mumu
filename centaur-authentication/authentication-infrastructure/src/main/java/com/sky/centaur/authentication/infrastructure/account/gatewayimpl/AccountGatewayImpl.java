@@ -34,6 +34,8 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import java.util.Objects;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,6 +69,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
     // 密码加密
@@ -95,6 +98,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(readOnly = true)
+  @API(status = Status.STABLE)
   public @Nullable Account findAccountByUsername(String username) {
     return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
         .map(AccountConvertor::toEntity).orElse(null);
@@ -102,6 +106,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void updateById(@NotNull Account account) {
     if (SecurityContextUtil.getLoginAccountId() != null && Objects.equals(
         SecurityContextUtil.getLoginAccountId(), account.getId())) {
@@ -123,6 +128,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void disable(Long id) {
     Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
     if (accountDoOptional.isPresent()) {
@@ -136,6 +142,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public Account queryCurrentLoginAccount() {
     Long loginAccountId = SecurityContextUtil.getLoginAccountId();
     if (loginAccountId == null) {
