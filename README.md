@@ -35,7 +35,7 @@
 - [依赖说明](#依赖说明)
 - [版本发布历史](#版本发布历史)
 - [使用说明](#使用说明)
-- [维护者](#维护者)
+- [贡献者](#贡献者)
 - [如何贡献](#如何贡献)
 - [使用许可](#使用许可)
 
@@ -75,7 +75,11 @@ centaur
 
 ## 使用说明
 
-## 维护者
+## 贡献者
+
+<a href="https://github.com/conifercone/centaur/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="centaur contributors"/>
+</a>
 
 ## 如何贡献
 
