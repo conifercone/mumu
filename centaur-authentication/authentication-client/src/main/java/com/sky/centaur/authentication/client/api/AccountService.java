@@ -16,11 +16,13 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
+import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 
@@ -41,4 +43,6 @@ public interface AccountService {
   AccountCurrentLoginQueryCo queryCurrentLoginAccount();
 
   AccountOnlineStatisticsCo onlineAccounts();
+
+  AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
 }
