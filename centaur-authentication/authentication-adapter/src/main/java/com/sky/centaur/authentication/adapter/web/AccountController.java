@@ -17,11 +17,13 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
+import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,5 +91,14 @@ public class AccountController {
   @API(status = Status.STABLE)
   public AccountOnlineStatisticsCo onlineAccounts() {
     return accountService.onlineAccounts();
+  }
+
+  @Operation(summary = "重置密码")
+  @PutMapping("/resetPassword")
+  @ResponseBody
+  @API(status = Status.STABLE)
+  public AccountResetPasswordCo resetPassword(
+      @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
+    return accountService.resetPassword(accountResetPasswordCmd);
   }
 }

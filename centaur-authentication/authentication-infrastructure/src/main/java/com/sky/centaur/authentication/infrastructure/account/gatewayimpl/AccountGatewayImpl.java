@@ -71,6 +71,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Resource
   private DistributedLock distributedLock;
 
+  public static final String PASSWORD_AFTER_RESET = "123456";
+
   @Override
   @Transactional
   @API(status = Status.STABLE)
@@ -166,5 +168,19 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE)
   public Long onlineAccounts() {
     return tokenRepository.count();
+  }
+
+  @Override
+  @Transactional
+  @API(status = Status.STABLE)
+  public void resetPassword(Long id) {
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
+    if (accountDoOptional.isPresent()) {
+      AccountDo accountDo = accountDoOptional.get();
+      accountDo.setPassword(passwordEncoder.encode(PASSWORD_AFTER_RESET));
+      accountRepository.merge(accountDo);
+    } else {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+    }
   }
 }

@@ -13,29 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account.gateway;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
+import lombok.Data;
 
 /**
- * 用户领域网关
+ * 账户密码重置指令
  *
  * @author 单开宇
- * @since 2024-01-16
+ * @since 2024-04-09
  */
-public interface AccountGateway {
+@Data
+public class AccountResetPasswordCmd {
 
-  void register(Account account);
-
-  Account findAccountByUsername(String username);
-
-  void updateById(Account account);
-
-  void disable(Long id);
-
-  Account queryCurrentLoginAccount();
-
-  Long onlineAccounts();
-
-  void resetPassword(Long id);
+  private AccountResetPasswordCo accountResetPasswordCo;
 }
