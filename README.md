@@ -71,7 +71,7 @@ centaur
 
 ## 依赖说明
 
-[Dependency graph](https://github.com/conifercone/centaur/network/dependencies)
+[**Dependency graph**](https://github.com/conifercone/centaur/network/dependencies)
 
 ## 版本发布历史
 
