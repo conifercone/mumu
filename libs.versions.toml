@@ -1,8 +1,8 @@
 [versions]
 junitVersion = "5.10.1"
-springbootVersion = "3.2.1"
-springCloudVersion = "2023.0.0"
-springCloudAlibabaVersion = "2022.0.0.0"
+springbootVersion = "3.2.4"
+springCloudVersion = "2023.0.1"
+springCloudAlibabaVersion = "2023.0.0.0-RC1"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
@@ -22,7 +22,7 @@ grpcStubVersion = '1.58.0'
 grpcProtobufVersion = '1.58.0'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
-redisOmSpringVersion = "0.8.8"
+redisOmSpringVersion = "0.9.0"
 commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
 yitterIdGeneratorVersion = "1.0.6"

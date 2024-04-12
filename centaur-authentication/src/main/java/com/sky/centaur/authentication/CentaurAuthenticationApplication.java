@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication;
 
+import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,6 +30,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
+@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.authentication.**")
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {

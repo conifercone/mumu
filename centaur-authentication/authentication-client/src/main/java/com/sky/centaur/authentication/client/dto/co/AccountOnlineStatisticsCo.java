@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.redis.om.spring.repository.RedisDocumentRepository;
-import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.dataobject.OperationLogRedisDo;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 操作日志redis存储操作对象
+ * 账户在线统计客户端对象
  *
  * @author 单开宇
- * @since 2024-01-31
+ * @since 2024-03-14
  */
-public interface OperationLogRedisRepository extends
-    RedisDocumentRepository<OperationLogRedisDo, String> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AccountOnlineStatisticsCo extends BaseClientObject {
 
+  private Long onlineCapacity;
 }

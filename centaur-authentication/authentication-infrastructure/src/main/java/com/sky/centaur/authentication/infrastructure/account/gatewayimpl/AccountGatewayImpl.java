@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -34,6 +35,8 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import java.util.Objects;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +57,9 @@ public class AccountGatewayImpl implements AccountGateway {
   private AccountRepository accountRepository;
 
   @Resource
+  private TokenRepository tokenRepository;
+
+  @Resource
   private AccountNodeRepository accountNodeRepository;
 
   @Resource
@@ -65,8 +71,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Resource
   private DistributedLock distributedLock;
 
+  public static final String PASSWORD_AFTER_RESET = "123456";
+
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
     // 密码加密
@@ -95,6 +104,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(readOnly = true)
+  @API(status = Status.STABLE)
   public @Nullable Account findAccountByUsername(String username) {
     return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
         .map(AccountConvertor::toEntity).orElse(null);
@@ -102,6 +112,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void updateById(@NotNull Account account) {
     if (SecurityContextUtil.getLoginAccountId() != null && Objects.equals(
         SecurityContextUtil.getLoginAccountId(), account.getId())) {
@@ -123,6 +134,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public void disable(Long id) {
     Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
     if (accountDoOptional.isPresent()) {
@@ -136,6 +148,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional
+  @API(status = Status.STABLE)
   public Account queryCurrentLoginAccount() {
     Long loginAccountId = SecurityContextUtil.getLoginAccountId();
     if (loginAccountId == null) {
@@ -147,6 +160,27 @@ public class AccountGatewayImpl implements AccountGateway {
       } else {
         throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
+    }
+  }
+
+  @Override
+  @Transactional
+  @API(status = Status.STABLE)
+  public Long onlineAccounts() {
+    return tokenRepository.count();
+  }
+
+  @Override
+  @Transactional
+  @API(status = Status.STABLE)
+  public void resetPassword(Long id) {
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
+    if (accountDoOptional.isPresent()) {
+      AccountDo accountDo = accountDoOptional.get();
+      accountDo.setPassword(passwordEncoder.encode(PASSWORD_AFTER_RESET));
+      accountRepository.merge(accountDo);
+    } else {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     }
   }
 }

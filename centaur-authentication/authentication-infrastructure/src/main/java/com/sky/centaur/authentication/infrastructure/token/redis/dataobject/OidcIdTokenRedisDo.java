@@ -13,30 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
+package com.sky.centaur.authentication.infrastructure.token.redis.dataobject;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
+import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
+import com.redis.om.spring.annotations.TextIndexed;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 查询当前登录账户信息客户端对象
+ * oidc id token redis数据对象
  *
  * @author 单开宇
- * @since 2024-03-14
+ * @since 2024-03-19
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountCurrentLoginQueryCo extends BaseClientObject {
+@Document(value = "oidcIdToken")
+public class OidcIdTokenRedisDo {
 
-  private Long id;
+  @Id
+  @Indexed
+  private Integer id;
 
-  private String username;
+  /**
+   * token值
+   */
+  @TextIndexed
+  private String tokenValue;
 
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
+  /**
+   * 存活时间
+   */
+  @TimeToLive
+  private Long ttl = 5L;
 }

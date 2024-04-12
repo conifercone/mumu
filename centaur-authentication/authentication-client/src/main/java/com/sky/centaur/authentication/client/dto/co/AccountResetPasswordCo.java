@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.configuration;
+package com.sky.centaur.authentication.client.dto.co;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * kafka禁用配置类
+ * 账户重置密码客户端对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-04-09
  */
-@Configuration
-@ConditionalOnProperty(prefix = "centaur.log.kafka", name = "enabled", havingValue = "false")
-@EnableAutoConfiguration(exclude = {
-    KafkaAutoConfiguration.class
-})
-public class KafkaDisableConfiguration {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AccountResetPasswordCo extends BaseClientObject {
 
+  private Long id;
 }

@@ -13,24 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.configuration;
+package com.sky.centaur.authentication.infrastructure.token.redis.dataobject;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
+import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
+import com.redis.om.spring.annotations.TextIndexed;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * kafka禁用配置类
+ * token redis数据对象
  *
  * @author 单开宇
- * @since 2024-01-24
+ * @since 2024-03-19
  */
-@Configuration
-@ConditionalOnProperty(prefix = "centaur.log.kafka", name = "enabled", havingValue = "false")
-@EnableAutoConfiguration(exclude = {
-    KafkaAutoConfiguration.class
-})
-public class KafkaDisableConfiguration {
+@Data
+@Document(value = "token")
+public class TokenRedisDo {
 
+  @Id
+  @Indexed
+  private Integer id;
+
+  /**
+   * token值
+   */
+  @TextIndexed
+  private String tokenValue;
+
+  /**
+   * 存活时间
+   */
+  @TimeToLive
+  private Long ttl = 5L;
 }

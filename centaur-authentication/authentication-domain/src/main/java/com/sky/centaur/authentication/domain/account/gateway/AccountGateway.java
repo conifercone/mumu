@@ -34,4 +34,8 @@ public interface AccountGateway {
   void disable(Long id);
 
   Account queryCurrentLoginAccount();
+
+  Long onlineAccounts();
+
+  void resetPassword(Long id);
 }

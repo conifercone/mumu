@@ -21,7 +21,6 @@ import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
-import com.sky.centaur.log.infrastructure.operation.gatewayimpl.redis.dataobject.OperationLogRedisDo;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
@@ -55,13 +54,6 @@ public class OperationLogConvertor {
   }
 
   @Contract("_ -> new")
-  public static @NotNull OperationLogRedisDo toRedisDataObject(@NotNull OperationLog operationLog) {
-    OperationLogRedisDo operationLogRedisDo = new OperationLogRedisDo();
-    BeanUtils.copyProperties(operationLog, operationLogRedisDo);
-    return operationLogRedisDo;
-  }
-
-  @Contract("_ -> new")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
@@ -81,12 +73,6 @@ public class OperationLogConvertor {
     return operationLog;
   }
 
-  @Contract("_ -> new")
-  public static @NotNull OperationLog toEntity(@NotNull OperationLogRedisDo operationLogRedisDo) {
-    OperationLog operationLog = new OperationLog();
-    BeanUtils.copyProperties(operationLogRedisDo, operationLog);
-    return operationLog;
-  }
 
   @Contract("_ -> new")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {

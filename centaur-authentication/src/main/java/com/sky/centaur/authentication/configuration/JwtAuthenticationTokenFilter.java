@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.configuration;
 
+import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
@@ -50,13 +51,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   private static final String TOKEN_START = "Bearer ";
   UserDetailsService userDetailsService;
   JwtDecoder jwtDecoder;
+  TokenRepository tokenRepository;
   private static final Logger LOGGER = LoggerFactory.getLogger(
       JwtAuthenticationTokenFilter.class);
 
   public JwtAuthenticationTokenFilter(UserDetailsService userDetailsService,
-      JwtDecoder jwtDecoder) {
+      JwtDecoder jwtDecoder, TokenRepository tokenRepository) {
     this.userDetailsService = userDetailsService;
     this.jwtDecoder = jwtDecoder;
+    this.tokenRepository = tokenRepository;
   }
 
   @Override
@@ -67,6 +70,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     // 存在token
     if (StringUtils.hasText(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
+      // 判断redis中是否存在token
+      if (tokenRepository.findById(authToken.hashCode()).isEmpty()) {
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        return;
+      }
+      // 判断token是否合法
       Jwt jwt;
       try {
         jwt = jwtDecoder.decode(authToken);

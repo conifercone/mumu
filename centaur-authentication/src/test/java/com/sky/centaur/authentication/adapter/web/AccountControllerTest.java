@@ -110,4 +110,22 @@ public class AccountControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional
+  public void resetPassword() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+             "accountResetPasswordCo": {
+                 "id": 1
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/resetPassword")
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
 }

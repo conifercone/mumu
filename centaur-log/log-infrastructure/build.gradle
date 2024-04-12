@@ -5,7 +5,5 @@ dependencies {
     implementation project(":centaur-extension")
     implementation libs.springKafka
     implementation libs.springBootDataElasticsearch
-    implementation libs.redisOmSpring
-    annotationProcessor libs.redisOmSpring
     implementation libs.micrometerTracing
 }

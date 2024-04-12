@@ -27,6 +27,8 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sky.centaur.authentication.application.service.AccountUserDetailService;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.infrastructure.token.redis.OidcIdTokenRepository;
+import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
@@ -76,7 +78,6 @@ import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2A
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.JwtGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
@@ -163,9 +164,12 @@ public class AuthorizationConfiguration {
    */
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
-      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer) {
-    JwtGenerator jwtGenerator = new JwtGenerator(new NimbusJwtEncoder(jwkSource));
+      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer, TokenRepository tokenRepository,
+      OidcIdTokenRepository oidcIdTokenRepository) {
+    CentaurJwtGenerator jwtGenerator = new CentaurJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
+    jwtGenerator.setTokenRepository(tokenRepository);
+    jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(
