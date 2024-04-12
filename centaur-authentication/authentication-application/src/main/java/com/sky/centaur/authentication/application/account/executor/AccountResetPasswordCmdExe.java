@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 /**
- * 账户密码重置指令执行器
+ * 账户重置密码指令执行器
  *
  * @author 单开宇
  * @since 2024-04-09

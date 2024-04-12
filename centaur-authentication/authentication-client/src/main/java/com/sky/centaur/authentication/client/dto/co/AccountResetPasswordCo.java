@@ -20,7 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 账户密码重置客户端对象
+ * 账户重置密码客户端对象
  *
  * @author 单开宇
  * @since 2024-04-09

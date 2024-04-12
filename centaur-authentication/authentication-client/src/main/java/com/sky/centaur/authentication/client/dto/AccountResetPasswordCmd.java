@@ -19,7 +19,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import lombok.Data;
 
 /**
- * 账户密码重置指令
+ * 账户重置密码指令
  *
  * @author 单开宇
  * @since 2024-04-09
