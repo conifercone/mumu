@@ -6,6 +6,9 @@ option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
   rpc add (RoleAddGrpcCmd) returns (RoleAddGrpcCo);
+  rpc delete (RoleDeleteGrpcCmd) returns (RoleDeleteGrpcCo);
+  rpc updateById (RoleUpdateGrpcCmd) returns (RoleUpdateGrpcCo);
+  rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
 }
 
 message RoleAddGrpcCmd {
@@ -17,4 +20,41 @@ message RoleAddGrpcCo {
   string name = 2;
   string code = 3;
   repeated int64 authorities = 4;
+}
+
+message RoleDeleteGrpcCmd {
+  RoleDeleteGrpcCo roleDeleteCo = 1;
+}
+
+message RoleDeleteGrpcCo {
+  int64 id = 1;
+}
+
+message RoleUpdateGrpcCmd {
+  RoleUpdateGrpcCo roleUpdateCo = 1;
+}
+
+message RoleUpdateGrpcCo {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  repeated int64 authorities = 4;
+}
+
+message RoleFindAllGrpcCmd {
+  RoleFindAllGrpcCo roleFindAllCo = 1;
+  int32 page_no = 2;
+  int32 page_size = 3;
+}
+
+message RoleFindAllGrpcCo {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  repeated int64 authorities = 4;
+}
+
+message PageOfRoleFindAllGrpcCo {
+  repeated RoleFindAllGrpcCo content = 1;
+  int32 total_pages = 2;
 }

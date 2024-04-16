@@ -21,9 +21,17 @@ import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe
 import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
+import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
@@ -37,6 +45,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
@@ -110,5 +119,95 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleAddCo.setName(roleAddGrpcCo.getName());
     roleAddCo.setAuthorities(roleAddGrpcCo.getAuthoritiesList());
     return roleAddCo;
+  }
+
+  @NotNull
+  private static RoleDeleteCo getRoleDeleteCo(
+      @NotNull RoleDeleteGrpcCmd request) {
+    RoleDeleteCo roleDeleteCo = new RoleDeleteCo();
+    RoleDeleteGrpcCo roleDeleteGrpcCo = request.getRoleDeleteCo();
+    roleDeleteCo.setId(roleDeleteGrpcCo.getId());
+    return roleDeleteCo;
+  }
+
+  @Override
+  public void delete(RoleDeleteGrpcCmd request, StreamObserver<RoleDeleteGrpcCo> responseObserver) {
+    RoleDeleteCmd roleDeleteCmd = new RoleDeleteCmd();
+    RoleDeleteCo roleDeleteCo = getRoleDeleteCo(
+        request);
+    roleDeleteCmd.setRoleDeleteCo(roleDeleteCo);
+    try {
+      roleDeleteCmdExe.execute(roleDeleteCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(request.getRoleDeleteCo());
+    responseObserver.onCompleted();
+  }
+
+  @NotNull
+  private static RoleUpdateCo getRoleUpdateCo(
+      @NotNull RoleUpdateGrpcCmd request) {
+    RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
+    RoleUpdateGrpcCo roleUpdateGrpcCo = request.getRoleUpdateCo();
+    roleUpdateCo.setId(roleUpdateGrpcCo.getId());
+    roleUpdateCo.setCode(roleUpdateGrpcCo.getCode());
+    roleUpdateCo.setName(roleUpdateGrpcCo.getName());
+    roleUpdateCo.setAuthorities(roleUpdateGrpcCo.getAuthoritiesList());
+    return roleUpdateCo;
+  }
+
+  @Override
+  public void updateById(RoleUpdateGrpcCmd request,
+      StreamObserver<RoleUpdateGrpcCo> responseObserver) {
+    RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
+    RoleUpdateCo roleUpdateCo = getRoleUpdateCo(
+        request);
+    roleUpdateCmd.setRoleUpdateCo(roleUpdateCo);
+    try {
+      roleUpdateCmdExe.execute(roleUpdateCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(request.getRoleUpdateCo());
+    responseObserver.onCompleted();
+  }
+
+  @NotNull
+  private static RoleFindAllCo getRoleFindAllCo(
+      @NotNull RoleFindAllGrpcCmd request) {
+    RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
+    RoleFindAllGrpcCo roleFindAllGrpcCo = request.getRoleFindAllCo();
+    roleFindAllCo.setId(roleFindAllGrpcCo.getId());
+    roleFindAllCo.setCode(roleFindAllGrpcCo.getCode());
+    roleFindAllCo.setName(roleFindAllGrpcCo.getName());
+    roleFindAllCo.setAuthorities(roleFindAllGrpcCo.getAuthoritiesList());
+    return roleFindAllCo;
+  }
+
+  @Override
+  public void findAll(RoleFindAllGrpcCmd request,
+      StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
+    RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
+    roleFindAllCmd.setRoleFindAllCo(getRoleFindAllCo(request));
+    roleFindAllCmd.setPageNo(request.getPageNo());
+    roleFindAllCmd.setPageSize(request.getPageSize());
+    Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
+    try {
+      Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
+          roleFindAllCmd);
+      List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
+          .map(roleFindAllCo -> RoleFindAllGrpcCo.newBuilder()
+              .setId(roleFindAllCo.getId())
+              .setCode(roleFindAllCo.getCode()).setName(
+                  roleFindAllCo.getName()).addAllAuthorities(roleFindAllCo.getAuthorities())
+              .build()).toList();
+      builder.addAllContent(findAllGrpcCos);
+      builder.setTotalPages(roleFindAllCos.getTotalPages());
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(builder.build());
+    responseObserver.onCompleted();
   }
 }
