@@ -1,7 +1,5 @@
-<!--suppress HtmlDeprecatedAttribute -->
-<p align="center">
-	<!--suppress CheckImageSize -->
-<img src="./logo.png" alt="centaur" width="200" height="200"/>
+<p style="text-align:center">
+<img src="./logo.png" alt="centaur"/>
 </p>
 
 # centaur
@@ -27,21 +25,18 @@
   </a>
 </p>
 
-## 内容列表
+## Content list
 
-- [项目介绍](#项目介绍)
-- [模块介绍](#模块介绍)
-- [构建](#构建)
-- [依赖说明](#依赖说明)
-- [版本发布历史](#版本发布历史)
-- [使用说明](#使用说明)
-- [贡献者](#贡献者)
-- [如何贡献](#如何贡献)
-- [使用许可](#使用许可)
+- [Projects](#Projects)
+- [Module Introduction](#module-introduction)
+- [Build](#Build)
+- [Dependency Statement](#dependency-statement)
+- [All Contributors](#all-contributors)
+- [License](#license)
 
-## 项目介绍
+## Projects
 
-## 模块介绍
+## Module Introduction
 
 ```text
 centaur
@@ -67,24 +62,22 @@ centaur
 │  │  │- 📂 unique-infrastructure -- 唯一性数据生成服务基础设施层
 ```
 
-## 构建
+## Build
 
-## 依赖说明
+## Dependency Statement
 
 [**Dependency graph**](https://github.com/conifercone/centaur/network/dependencies)
 
-## 版本发布历史
-
-## 使用说明
-
-## 贡献者
+## All Contributors
 
 <a href="https://github.com/conifercone/centaur/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="centaur contributors"/>
 </a>
 
-## 如何贡献
-
-## 使用许可
+## License
 
 [Apache License 2.0](LICENSE) © kaiyu.shan@outlook.com
+
+## Star History
+
+![Star History Chart](https://api.star-history.com/svg?repos=conifercone/centaur&type=Date)
