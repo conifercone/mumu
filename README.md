@@ -1,29 +1,13 @@
-<p style="text-align:center">
-<img src="./logo.png" alt="centaur"/>
-</p>
+![centaur](./logo.png)
 
 # centaur
 
-<p>
-  <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html">
-    <img alt="jdk version" src="https://img.shields.io/badge/JDK-21+-green.svg" />
-  </a>
-  <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="centaur version" src="https://img.shields.io/badge/centaur-1.0.0--SNAPSHOT-brightgreen" />
-  </a>
-  <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="GitHub License" src="https://img.shields.io/github/license/conifercone/centaur">
-  </a>
-  <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/conifercone/centaur">
-  </a>
-  <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/conifercone/centaur">
-  </a>
-  <a target="_blank" href="https://github.com/conifercone/centaur">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/conifercone/centaur/develop">
-  </a>
-</p>
+[![jdk version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![centaur version](https://img.shields.io/badge/centaur-1.0.0--SNAPSHOT-brightgreen)](https://github.com/conifercone/centaur)
+[![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
+[![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur)
+[![GitHub language count](https://img.shields.io/github/languages/count/conifercone/centaur)](https://github.com/conifercone/centaur)
+[![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/centaur/develop)](https://github.com/conifercone/centaur)
 
 ## Content list
 
