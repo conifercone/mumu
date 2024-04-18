@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
@@ -79,7 +80,7 @@ subprojects { project ->
     }
 
     tasks.configureEach {
-        if (it.name == "bootJar") {
+        if ("bootJar".is(it.name)) {
             manifest {
                 attributes 'Implementation-Title': archiveBaseName
                 attributes 'Implementation-Version': archiveVersion

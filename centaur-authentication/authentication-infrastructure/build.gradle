@@ -1,3 +1,5 @@
+//file:noinspection DependencyNotationArgument
+//file:noinspection GroovyAssignabilityCheck
 dependencies {
     implementation project(":centaur-authentication:authentication-domain")
     implementation project(":centaur-authentication:authentication-client")

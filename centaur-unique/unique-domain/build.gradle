@@ -1,2 +1,4 @@
+//file:noinspection DependencyNotationArgument
+//file:noinspection GroovyAssignabilityCheck
 dependencies {
 }
