@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 日志服务
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-22
  */
 @SpringBootApplication

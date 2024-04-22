@@ -33,7 +33,7 @@ import org.slf4j.MDC;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-22
  */
 public class P6spyCustomLogger extends FormattedLogger {

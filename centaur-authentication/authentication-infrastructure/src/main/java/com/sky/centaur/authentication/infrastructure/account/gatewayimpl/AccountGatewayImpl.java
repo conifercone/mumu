@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 用户领域网关实现
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 @Component

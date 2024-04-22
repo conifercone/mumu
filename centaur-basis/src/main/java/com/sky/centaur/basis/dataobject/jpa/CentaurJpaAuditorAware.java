@@ -24,7 +24,7 @@ import org.springframework.data.domain.AuditorAware;
 /**
  * 创建人&修改人自动填充
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-26
  */
 public class CentaurJpaAuditorAware implements AuditorAware<Long> {

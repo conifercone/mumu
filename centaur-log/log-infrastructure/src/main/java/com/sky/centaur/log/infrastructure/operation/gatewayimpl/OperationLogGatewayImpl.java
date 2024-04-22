@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 /**
  * 操作日志领域网关实现
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 @Component

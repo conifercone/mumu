@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 /**
  * 雪花算法主键生成
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-05
  */
 @Component

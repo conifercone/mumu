@@ -28,7 +28,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 /**
  * 认证上下文工具类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-26
  */
 public final class SecurityContextUtil {

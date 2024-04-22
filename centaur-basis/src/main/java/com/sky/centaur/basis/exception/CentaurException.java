@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 顶级异常
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 @Data

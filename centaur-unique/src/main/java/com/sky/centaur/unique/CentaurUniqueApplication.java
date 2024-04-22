@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 /**
  * 分布式主键生成服务
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-04
  */
 @SpringBootApplication

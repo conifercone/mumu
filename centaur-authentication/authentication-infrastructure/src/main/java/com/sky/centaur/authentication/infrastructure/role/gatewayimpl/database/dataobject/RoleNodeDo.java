@@ -28,7 +28,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 /**
  * 角色图节点数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-23
  */
 @Node("role")

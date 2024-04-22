@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 响应信息
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 @Data

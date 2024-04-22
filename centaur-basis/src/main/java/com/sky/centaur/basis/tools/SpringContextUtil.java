@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 /**
  * spring上下文工具类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-05
  */
 @Component

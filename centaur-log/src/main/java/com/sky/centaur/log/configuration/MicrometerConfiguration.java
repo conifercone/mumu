@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 监控配置类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-06
  */
 @Configuration

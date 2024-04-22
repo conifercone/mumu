@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 /**
  * 更新权限指令执行器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-23
  */
 @Component

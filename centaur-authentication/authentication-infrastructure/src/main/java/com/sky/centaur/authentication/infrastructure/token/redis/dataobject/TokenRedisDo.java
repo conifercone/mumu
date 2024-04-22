@@ -25,7 +25,7 @@ import org.springframework.data.redis.core.TimeToLive;
 /**
  * token redis数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-19
  */
 @Data

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 /**
  * 账户重置密码指令执行器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-04-09
  */
 @Component

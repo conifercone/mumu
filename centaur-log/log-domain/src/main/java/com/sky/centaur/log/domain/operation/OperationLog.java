@@ -21,7 +21,7 @@ import lombok.Data;
 /**
  * 操作日志领域模型
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-24
  */
 @Data

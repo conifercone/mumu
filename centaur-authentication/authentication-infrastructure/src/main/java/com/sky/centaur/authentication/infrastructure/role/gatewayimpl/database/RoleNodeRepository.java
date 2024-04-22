@@ -22,7 +22,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 /**
  * 角色基本信息图节点
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-22
  */
 public interface RoleNodeRepository extends Neo4jRepository<RoleNodeDo, Long> {

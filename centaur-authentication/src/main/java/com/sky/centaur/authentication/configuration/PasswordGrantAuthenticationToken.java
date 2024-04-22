@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
 /**
  * 密码模式
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-21
  */
 public class PasswordGrantAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {

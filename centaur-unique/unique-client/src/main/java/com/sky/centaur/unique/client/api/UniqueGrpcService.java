@@ -29,7 +29,7 @@ import org.springframework.cloud.client.ServiceInstance;
 /**
  * 唯一性数据生成grpc服务
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-31
  */
 class UniqueGrpcService {

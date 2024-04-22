@@ -23,7 +23,7 @@ import lombok.Setter;
 /**
  * 基础领域模型
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-26
  */
 @Getter

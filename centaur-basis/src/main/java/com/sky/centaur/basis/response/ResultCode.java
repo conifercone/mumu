@@ -24,7 +24,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * 响应码
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 public enum ResultCode implements BaseResultInterface {

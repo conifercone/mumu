@@ -25,7 +25,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 /**
  * es配置类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-23
  */
 @Configuration

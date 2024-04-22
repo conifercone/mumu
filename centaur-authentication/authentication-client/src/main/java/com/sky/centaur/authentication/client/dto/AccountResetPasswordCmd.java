@@ -21,7 +21,7 @@ import lombok.Data;
 /**
  * 账户重置密码指令
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-04-09
  */
 @Data

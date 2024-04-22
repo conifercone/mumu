@@ -29,7 +29,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 /**
  * 账户功能API
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-15
  */
 public interface AccountService {

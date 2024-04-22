@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 角色管理
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-23
  */
 public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,

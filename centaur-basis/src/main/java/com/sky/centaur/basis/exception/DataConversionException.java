@@ -20,7 +20,7 @@ import com.sky.centaur.basis.response.ResultCode;
 /**
  * 数据转换异常
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 public class DataConversionException extends CentaurException {

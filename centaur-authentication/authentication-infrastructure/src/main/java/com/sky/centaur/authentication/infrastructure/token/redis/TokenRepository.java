@@ -6,7 +6,7 @@ import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.Toke
 /**
  * token redis repository
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-19
  */
 public interface TokenRepository extends

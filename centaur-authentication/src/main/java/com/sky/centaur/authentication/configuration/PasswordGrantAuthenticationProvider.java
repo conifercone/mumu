@@ -62,7 +62,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * 密码模式
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-21
  */
 public class PasswordGrantAuthenticationProvider implements AuthenticationProvider {

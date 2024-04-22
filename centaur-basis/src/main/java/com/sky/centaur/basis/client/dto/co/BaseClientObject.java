@@ -18,7 +18,7 @@ package com.sky.centaur.basis.client.dto.co;
 /**
  * 基础co
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-22
  */
 public abstract class BaseClientObject implements ClientObject {

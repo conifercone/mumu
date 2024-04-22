@@ -28,7 +28,7 @@ import org.springframework.data.domain.Page;
 /**
  * 权限功能API
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-15
  */
 public interface AuthorityService {

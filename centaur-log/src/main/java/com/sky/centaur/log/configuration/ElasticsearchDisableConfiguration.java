@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * es禁用配置类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-24
  */
 @Configuration

@@ -38,7 +38,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 /**
  * OAuth2 授权服务器属性映射器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-19
  */
 @SuppressWarnings({"DuplicatedCode", "unused"})

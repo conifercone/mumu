@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 /**
  * 查询当前登录账户信息指令执行器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-14
  */
 @Component

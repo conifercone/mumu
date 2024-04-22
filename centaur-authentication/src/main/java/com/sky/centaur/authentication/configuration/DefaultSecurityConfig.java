@@ -36,7 +36,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * 默认安全配置
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-27
  */
 @EnableWebSecurity

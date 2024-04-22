@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * zookeeper配置文件
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-06
  */
 @Configuration

@@ -19,7 +19,7 @@ package com.sky.centaur.authentication.configuration;
 /**
  * jackson long mixin
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-27
  */
 public abstract class LongMixin {

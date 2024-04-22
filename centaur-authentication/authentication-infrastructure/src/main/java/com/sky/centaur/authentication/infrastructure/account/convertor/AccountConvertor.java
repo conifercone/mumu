@@ -33,7 +33,7 @@ import org.springframework.beans.BeanUtils;
 /**
  * 账户信息转换器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 public class AccountConvertor {

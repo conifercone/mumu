@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 /**
  * 查询权限指令执行器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-23
  */
 @Component

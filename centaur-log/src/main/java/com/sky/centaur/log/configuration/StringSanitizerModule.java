@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 /**
  * jackson空字符串转NULL模块
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-02
  */
 @Component

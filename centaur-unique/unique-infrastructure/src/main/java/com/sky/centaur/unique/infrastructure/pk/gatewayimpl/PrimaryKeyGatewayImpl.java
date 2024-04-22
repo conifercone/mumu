@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 /**
  * 唯一性主键领域网关实现
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-18
  */
 @Component

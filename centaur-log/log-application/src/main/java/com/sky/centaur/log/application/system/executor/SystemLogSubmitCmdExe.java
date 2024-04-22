@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 /**
  * 系统日志提交指令执行器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 @Component

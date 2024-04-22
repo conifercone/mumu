@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * grpc异常统一处理
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-31
  */
 @GRpcServiceAdvice

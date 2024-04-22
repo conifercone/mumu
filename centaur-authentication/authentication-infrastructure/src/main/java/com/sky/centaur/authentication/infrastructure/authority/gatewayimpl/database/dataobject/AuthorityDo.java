@@ -30,7 +30,7 @@ import lombok.Setter;
 /**
  * 权限基本信息数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-23
  */
 @Getter

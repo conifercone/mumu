@@ -38,7 +38,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 /**
  * 用户基本信息数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-12
  */
 @Entity

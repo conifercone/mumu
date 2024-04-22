@@ -21,7 +21,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * 操作日志es存储操作对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-26
  */
 public interface OperationLogEsRepository extends

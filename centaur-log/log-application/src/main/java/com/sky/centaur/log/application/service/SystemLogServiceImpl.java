@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 /**
  * 系统日志
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-31
  */
 @Service

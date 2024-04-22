@@ -21,7 +21,7 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 /**
  * SQL打印策略
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-22
  */
 public class P6spyCustomStrategy implements MessageFormattingStrategy {

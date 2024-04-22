@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page;
 /**
  * 角色领域网关
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 public interface RoleGateway {

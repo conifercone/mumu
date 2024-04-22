@@ -21,7 +21,7 @@ import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 /**
  * 账户基本信息
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-12
  */
 public interface AccountRepository extends BaseJpaRepository<AccountDo, Long> {

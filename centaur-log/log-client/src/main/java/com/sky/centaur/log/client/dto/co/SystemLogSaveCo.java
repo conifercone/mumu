@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 系统日志保存客户端对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 @Data

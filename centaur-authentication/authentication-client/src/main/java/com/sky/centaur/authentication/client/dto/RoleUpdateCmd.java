@@ -21,7 +21,7 @@ import lombok.Data;
 /**
  * 更新角色指令
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-11
  */
 @Data

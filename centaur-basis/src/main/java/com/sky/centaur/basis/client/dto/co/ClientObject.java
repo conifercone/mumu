@@ -18,7 +18,7 @@ package com.sky.centaur.basis.client.dto.co;
 /**
  * 顶级co接口
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-22
  */
 public interface ClientObject {

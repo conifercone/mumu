@@ -24,7 +24,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessLock;
 /**
  * zookeeper分布式锁实现
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-06
  */
 public class ZookeeperDistributedLockImpl implements DistributedLock {

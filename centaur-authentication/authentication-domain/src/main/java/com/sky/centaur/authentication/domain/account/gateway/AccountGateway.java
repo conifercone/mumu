@@ -20,7 +20,7 @@ import com.sky.centaur.authentication.domain.account.Account;
 /**
  * 用户领域网关
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 public interface AccountGateway {

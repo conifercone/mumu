@@ -21,7 +21,7 @@ import lombok.Data;
 /**
  * 账户注册指令
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 @Data

@@ -26,7 +26,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 /**
  * 操作日志es数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-26
  */
 @Document(indexName = "operation-log")

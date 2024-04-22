@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 /**
  * 角色对外提供grpc调用实例
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-16
  */
 @Component

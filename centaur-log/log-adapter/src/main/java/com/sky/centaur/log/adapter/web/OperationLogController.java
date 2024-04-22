@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 操作日志相关
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 @RestController

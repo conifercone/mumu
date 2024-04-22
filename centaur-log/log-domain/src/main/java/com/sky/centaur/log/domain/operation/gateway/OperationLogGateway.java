@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * 操作日志领域网关
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 public interface OperationLogGateway {

@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * spring security authentication server 用户信息service
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 @Observed(name = "AccountUserDetailService")

@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Import;
 /**
  * 拓展模块配置
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-05
  */
 @Configuration

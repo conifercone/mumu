@@ -48,7 +48,7 @@ import org.springframework.stereotype.Component;
 /**
  * 自定义异常处理
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-21
  */
 @Component

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 /**
  * 日志服务全局配置信息
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-19
  */
 @Data

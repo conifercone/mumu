@@ -33,7 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 账户领域模型
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-16
  */
 @JsonDeserialize

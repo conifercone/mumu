@@ -19,7 +19,7 @@ package com.sky.centaur.basis.dataobject;
 /**
  * 基础数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-26
  */
 public abstract class BasisDataObject implements DataObject {

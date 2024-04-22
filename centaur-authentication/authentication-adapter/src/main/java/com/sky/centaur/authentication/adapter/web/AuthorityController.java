@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 权限管理
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-10
  */
 @RestController

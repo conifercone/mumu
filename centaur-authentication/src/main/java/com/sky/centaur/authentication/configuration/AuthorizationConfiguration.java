@@ -89,7 +89,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 /**
  * 授权配置
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-12
  */
 @Configuration

@@ -33,7 +33,7 @@ import org.springframework.beans.BeanUtils;
 /**
  * 系统日志转换器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-31
  */
 public class SystemLogConvertor {

@@ -27,7 +27,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 /**
  * 账户节点
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-22
  */
 @Node("account")

@@ -18,7 +18,7 @@ package com.sky.centaur.basis.response;
 /**
  * 基础响应顶级接口
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 public interface BaseResultInterface {

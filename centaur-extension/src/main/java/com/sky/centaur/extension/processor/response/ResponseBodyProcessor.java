@@ -44,7 +44,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /**
  * 响应处理器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-20
  */
 @RestControllerAdvice(annotations = RestController.class)

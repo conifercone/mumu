@@ -42,7 +42,7 @@ import org.springframework.util.StringUtils;
 /**
  * centaur jwt generator
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-03-19
  */
 public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {

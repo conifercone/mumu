@@ -26,7 +26,7 @@ import java.util.function.Function;
  * 并发缓存（LRU）
  * <p>满载时淘汰最近最久未使用的数据</p>
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2023-08-22
  */
 public final class ConcurrentCache<K, V> {

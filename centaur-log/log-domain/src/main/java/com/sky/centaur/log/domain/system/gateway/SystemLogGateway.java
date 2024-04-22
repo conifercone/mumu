@@ -20,7 +20,7 @@ import com.sky.centaur.log.domain.system.SystemLog;
 /**
  * 系统日志领域网关
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-31
  */
 public interface SystemLogGateway {

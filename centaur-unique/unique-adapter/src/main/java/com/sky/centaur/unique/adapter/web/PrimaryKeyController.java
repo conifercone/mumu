@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 主键相关接口
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-10
  */
 @RestController

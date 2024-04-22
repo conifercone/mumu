@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
 /**
  * 密码模式转换器
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-21
  */
 public class PasswordGrantAuthenticationConverter implements AuthenticationConverter {

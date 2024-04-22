@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 /**
  * 日志客户端配置类
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-05
  */
 @Configuration

@@ -22,7 +22,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 /**
  * 权限基本信息图节点
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-02-22
  */
 public interface AuthorityNodeRepository extends Neo4jRepository<AuthorityNodeDo, Long> {

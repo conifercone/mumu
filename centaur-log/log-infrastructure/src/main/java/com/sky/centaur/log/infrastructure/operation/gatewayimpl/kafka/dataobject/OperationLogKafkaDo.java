@@ -27,7 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 操作日志数据对象
  *
- * @author 单开宇
+ * @author kaiyu.shan
  * @since 2024-01-25
  */
 @Data
