@@ -31,6 +31,7 @@ jakartaValidationApiVersion = "3.0.2"
 hypersistenceUtilsVersion = "3.7.3"
 curatorRecipesVersion = "5.1.0"
 flywayCoreVersion = "10.9.0"
+licensePluginVersion = '0.16.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -154,3 +155,4 @@ idea = { id = "idea" }
 checkstyle = { id = "checkstyle" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufVersion" }
+license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }
