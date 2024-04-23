@@ -47,12 +47,6 @@ subprojects { project ->
         }
     }
 
-    List<String> notCompatibleWithConfigurationCacheTasks = new ArrayList<>()
-    notCompatibleWithConfigurationCacheTasks.add("GradleDependencyReportTask")
-    tasks.matching { notCompatibleWithConfigurationCacheTasks.contains(it.name) }.configureEach {
-        notCompatibleWithConfigurationCache("broken")
-    }
-
     tasks.withType(Javadoc).configureEach {
         def javaDocDir = layout.buildDirectory.dir('docs/javadoc').get()
         delete(javaDocDir)
