@@ -1,5 +1,6 @@
 //file:noinspection DependencyNotationArgument
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection GrUnresolvedAccess
 dependencies {
     implementation project(":centaur-log:log-domain")
     implementation project(":centaur-log:log-client")

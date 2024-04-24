@@ -1,4 +1,5 @@
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection GrUnresolvedAccess
 
 import com.hierynomus.gradle.license.tasks.LicenseFormat
 

@@ -1,5 +1,6 @@
 //file:noinspection DependencyNotationArgument
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection GrUnresolvedAccess
 dependencies {
     implementation project(":centaur-unique:unique-application")
     implementation project(":centaur-unique:unique-client")

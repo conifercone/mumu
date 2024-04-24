@@ -1,5 +1,6 @@
 //file:noinspection DependencyNotationArgument
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection GrUnresolvedAccess
 dependencies {
     implementation project(":centaur-authentication:authentication-client")
     implementation project(":centaur-authentication:authentication-infrastructure")
