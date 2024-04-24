@@ -27,7 +27,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,7 +47,7 @@ public class DefaultSecurityConfig {
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
       UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository)
       throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
+    http.csrf(withDefaults())
         .authorizeHttpRequests((authorize) -> authorize
             .anyRequest().authenticated()
         )
