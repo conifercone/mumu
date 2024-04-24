@@ -32,7 +32,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * jpa基础数据对象
  *
  * @author kaiyu.shan
- * @since 2024-02-26
+ * @since 1.0.0
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

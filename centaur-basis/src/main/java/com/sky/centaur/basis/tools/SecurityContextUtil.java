@@ -29,7 +29,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
  * 认证上下文工具类
  *
  * @author kaiyu.shan
- * @since 2024-02-26
+ * @since 1.0.0
  */
 public final class SecurityContextUtil {
 

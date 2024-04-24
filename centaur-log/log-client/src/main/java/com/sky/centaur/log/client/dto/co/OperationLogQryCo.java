@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
  * 操作日志查询客户端对象
  *
  * @author kaiyu.shan
- * @since 2024-02-02
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

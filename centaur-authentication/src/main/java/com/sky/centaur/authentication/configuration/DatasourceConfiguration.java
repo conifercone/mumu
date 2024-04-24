@@ -35,7 +35,7 @@ import org.springframework.core.annotation.Order;
  * 数据源配置类
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 @Configuration
 public class DatasourceConfiguration {

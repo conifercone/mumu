@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * 账户禁用指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-03-15
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountDisableCmdExe")

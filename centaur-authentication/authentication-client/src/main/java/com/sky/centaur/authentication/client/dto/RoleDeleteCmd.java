@@ -22,7 +22,7 @@ import lombok.Data;
  * 删除角色指令
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 @Data
 public class RoleDeleteCmd {

@@ -25,7 +25,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * 拓展属性
  *
  * @author kaiyu.shan
- * @since 2024-03-06
+ * @since 1.0.0
  */
 @Data
 @ConfigurationProperties("centaur.extension")

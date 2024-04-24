@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  * 账户禁用客户端对象
  *
  * @author kaiyu.shan
- * @since 2024-03-15
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

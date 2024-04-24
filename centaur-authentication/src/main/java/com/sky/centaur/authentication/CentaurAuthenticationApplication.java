@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  * 鉴权服务
  *
  * @author kaiyu.shan
- * @since 2024-01-09
+ * @since 1.0.0
  */
 @SpringBootApplication
 @EnableConfigurationProperties

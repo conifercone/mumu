@@ -20,7 +20,7 @@ package com.sky.centaur.basis.enums;
  * 性别枚举
  *
  * @author kaiyu.shan
- * @since 2024-03-13
+ * @since 1.0.0
  */
 public enum SexEnum {
 

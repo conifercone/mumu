@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
  * swagger配置文件
  *
  * @author kaiyu.shan
- * @since 2024-01-20
+ * @since 1.0.0
  */
 @Configuration
 public class SwaggerConfiguration {

@@ -31,7 +31,7 @@ import lombok.Setter;
  * 权限基本信息数据对象
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Getter
 @Setter

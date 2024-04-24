@@ -25,7 +25,7 @@ import org.springframework.kafka.config.TopicBuilder;
  * kafka配置类
  *
  * @author kaiyu.shan
- * @since 2024-01-24
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.log.kafka", name = "enabled", havingValue = "true")

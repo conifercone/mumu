@@ -22,7 +22,7 @@ import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
  * 系统日志api
  *
  * @author kaiyu.shan
- * @since 2024-01-24
+ * @since 1.0.0
  */
 public interface SystemLogService {
 

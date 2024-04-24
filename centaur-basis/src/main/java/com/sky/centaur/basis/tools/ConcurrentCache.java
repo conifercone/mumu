@@ -27,7 +27,7 @@ import java.util.function.Function;
  * <p>满载时淘汰最近最久未使用的数据</p>
  *
  * @author kaiyu.shan
- * @since 2023-08-22
+ * @since 1.0.0
  */
 public final class ConcurrentCache<K, V> {
 

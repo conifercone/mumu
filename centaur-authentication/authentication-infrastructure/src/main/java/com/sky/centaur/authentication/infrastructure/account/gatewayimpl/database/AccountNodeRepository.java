@@ -23,7 +23,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
  * 账户基本信息图节点
  *
  * @author kaiyu.shan
- * @since 2024-02-22
+ * @since 1.0.0
  */
 public interface AccountNodeRepository extends Neo4jRepository<AccountNodeDo, Long> {
 

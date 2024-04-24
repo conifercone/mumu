@@ -45,7 +45,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * 响应处理器
  *
  * @author kaiyu.shan
- * @since 2024-01-20
+ * @since 1.0.0
  */
 @RestControllerAdvice(annotations = RestController.class)
 public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {

@@ -34,7 +34,7 @@ import org.slf4j.MDC;
  * </p>
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {
 

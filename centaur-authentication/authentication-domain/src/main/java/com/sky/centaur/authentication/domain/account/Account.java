@@ -34,7 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * 账户领域模型
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 @JsonDeserialize
 @ToString

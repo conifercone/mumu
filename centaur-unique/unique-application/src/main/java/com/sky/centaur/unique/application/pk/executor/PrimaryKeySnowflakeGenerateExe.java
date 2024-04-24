@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * 雪花算法主键生成
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 @Component
 public class PrimaryKeySnowflakeGenerateExe {

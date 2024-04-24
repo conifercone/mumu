@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
  * 账户对外提供grpc调用实例
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @Component
 public class AccountGrpcService extends AuthenticationGrpcService implements DisposableBean {

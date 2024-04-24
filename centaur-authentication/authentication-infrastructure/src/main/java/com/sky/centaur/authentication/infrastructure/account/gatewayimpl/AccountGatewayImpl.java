@@ -47,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 用户领域网关实现
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountGatewayImpl")

@@ -22,7 +22,7 @@ import lombok.Data;
  * 账户重置密码指令
  *
  * @author kaiyu.shan
- * @since 2024-04-09
+ * @since 1.0.0
  */
 @Data
 public class AccountResetPasswordCmd {

@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  * 主键生成雪花算法客户端对象
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

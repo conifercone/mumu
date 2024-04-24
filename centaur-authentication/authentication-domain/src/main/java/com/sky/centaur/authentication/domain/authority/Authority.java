@@ -30,7 +30,7 @@ import org.springframework.security.core.GrantedAuthority;
  * 权限领域模型
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Getter
 @ToString

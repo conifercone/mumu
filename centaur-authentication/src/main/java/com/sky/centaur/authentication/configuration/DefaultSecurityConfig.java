@@ -37,7 +37,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * 默认安全配置
  *
  * @author kaiyu.shan
- * @since 2024-02-27
+ * @since 1.0.0
  */
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)

@@ -39,7 +39,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
  * 用户基本信息数据对象
  *
  * @author kaiyu.shan
- * @since 2024-01-12
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "users")

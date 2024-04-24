@@ -23,7 +23,7 @@ import java.sql.SQLException;
  * LoggingEventListener
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 public class AuthenticationLoggingEventListener extends LoggingEventListener {
 

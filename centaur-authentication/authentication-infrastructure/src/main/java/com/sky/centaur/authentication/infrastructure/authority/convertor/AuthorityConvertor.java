@@ -33,7 +33,7 @@ import org.springframework.beans.BeanUtils;
  * 权限信息转换器
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 public class AuthorityConvertor {
 

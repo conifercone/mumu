@@ -21,7 +21,7 @@ import com.sky.centaur.basis.response.ResultCode;
  * 数据转换异常
  *
  * @author kaiyu.shan
- * @since 2024-01-20
+ * @since 1.0.0
  */
 public class DataConversionException extends CentaurException {
 

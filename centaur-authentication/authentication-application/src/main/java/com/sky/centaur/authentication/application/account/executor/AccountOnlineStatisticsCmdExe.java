@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  * 账户在线统计指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-03-21
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountOnlineStatisticsCmdExe")

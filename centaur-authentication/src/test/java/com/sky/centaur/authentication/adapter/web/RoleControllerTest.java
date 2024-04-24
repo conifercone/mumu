@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 角色相关web接口单元测试
  *
  * @author kaiyu.shan
- * @since 2024-01-12
+ * @since 1.0.0
  */
 @SpringBootTest
 @ActiveProfiles("dev")

@@ -49,7 +49,7 @@ import org.springframework.stereotype.Component;
  * 自定义异常处理
  *
  * @author kaiyu.shan
- * @since 2024-02-21
+ * @since 1.0.0
  */
 @Component
 public class CentaurAuthenticationFailureHandler implements AuthenticationFailureHandler {

@@ -22,7 +22,7 @@ import lombok.Data;
  * 查询角色指令
  *
  * @author kaiyu.shan
- * @since 2024-03-12
+ * @since 1.0.0
  */
 @Data
 public class RoleFindAllCmd {

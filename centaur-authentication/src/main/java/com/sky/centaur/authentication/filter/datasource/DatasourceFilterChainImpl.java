@@ -24,7 +24,7 @@ import javax.sql.DataSource;
  * 数据源过滤器链条接口实现
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 public class DatasourceFilterChainImpl implements DatasourceFilterChain {
 

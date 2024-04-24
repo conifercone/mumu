@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
  * spring上下文工具类
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 @Component
 @Order(HIGHEST_PRECEDENCE)

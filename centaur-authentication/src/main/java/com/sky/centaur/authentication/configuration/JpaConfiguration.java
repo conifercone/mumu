@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * jpa配置
  *
  * @author kaiyu.shan
- * @since 2024-03-13
+ * @since 1.0.0
  */
 @Configuration
 @EnableJpaRepositories(

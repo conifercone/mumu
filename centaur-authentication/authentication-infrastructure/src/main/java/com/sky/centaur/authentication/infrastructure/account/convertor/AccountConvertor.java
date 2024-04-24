@@ -34,7 +34,7 @@ import org.springframework.beans.BeanUtils;
  * 账户信息转换器
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 public class AccountConvertor {
 

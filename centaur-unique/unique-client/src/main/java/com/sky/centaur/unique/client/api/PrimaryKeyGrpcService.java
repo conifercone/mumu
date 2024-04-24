@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
  * 主键生成对外提供grpc调用实例
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "PrimaryKeyGrpcService")

@@ -22,7 +22,7 @@ import lombok.Data;
  * 系统日志保存指令
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @Data
 public class SystemLogSaveCmd {

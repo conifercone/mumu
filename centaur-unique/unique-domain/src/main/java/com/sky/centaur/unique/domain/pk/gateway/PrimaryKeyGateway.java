@@ -20,7 +20,7 @@ package com.sky.centaur.unique.domain.pk.gateway;
  * 唯一性主键领域网关
  *
  * @author kaiyu.shan
- * @since 2024-02-18
+ * @since 1.0.0
  */
 public interface PrimaryKeyGateway {
 

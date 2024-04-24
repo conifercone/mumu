@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  * 账户重置密码客户端对象
  *
  * @author kaiyu.shan
- * @since 2024-04-09
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

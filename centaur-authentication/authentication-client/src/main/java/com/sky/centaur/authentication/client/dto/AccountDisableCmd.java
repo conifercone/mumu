@@ -22,7 +22,7 @@ import lombok.Data;
  * 账户禁用指令
  *
  * @author kaiyu.shan
- * @since 2024-03-15
+ * @since 1.0.0
  */
 @Data
 public class AccountDisableCmd {

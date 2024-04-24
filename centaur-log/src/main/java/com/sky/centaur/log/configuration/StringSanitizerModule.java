@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
  * jackson空字符串转NULL模块
  *
  * @author kaiyu.shan
- * @since 2024-02-02
+ * @since 1.0.0
  */
 @Component
 public class StringSanitizerModule extends SimpleModule {

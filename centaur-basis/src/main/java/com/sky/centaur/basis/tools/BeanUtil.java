@@ -28,7 +28,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * 对象工具类
  *
  * @author kaiyu.shan
- * @since 2024-03-06
+ * @since 1.0.0
  */
 public class BeanUtil {
 

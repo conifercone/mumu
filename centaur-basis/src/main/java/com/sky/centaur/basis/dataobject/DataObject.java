@@ -22,7 +22,7 @@ import java.time.OffsetDateTime;
  * 数据对象接口
  *
  * @author kaiyu.shan
- * @since 2024-03-05
+ * @since 1.0.0
  */
 public interface DataObject {
 

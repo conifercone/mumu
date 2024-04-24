@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  * 角色更新指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-03-11
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "RoleUpdateCmdExe")

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * 响应信息
  *
  * @author kaiyu.shan
- * @since 2024-01-20
+ * @since 1.0.0
  */
 @Data
 @NoArgsConstructor

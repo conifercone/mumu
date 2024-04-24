@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
  * jackson配置
  *
  * @author kaiyu.shan
- * @since 2024-02-02
+ * @since 1.0.0
  */
 @Configuration
 public class JacksonConfiguration {

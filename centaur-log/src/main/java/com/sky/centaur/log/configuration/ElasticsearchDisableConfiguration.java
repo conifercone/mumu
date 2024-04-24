@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * es禁用配置类
  *
  * @author kaiyu.shan
- * @since 2024-01-24
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.log.elasticsearch", name = "enabled", havingValue = "false")

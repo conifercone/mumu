@@ -24,7 +24,7 @@ import lombok.Setter;
  * 基础领域模型
  *
  * @author kaiyu.shan
- * @since 2024-02-26
+ * @since 1.0.0
  */
 @Getter
 @Setter

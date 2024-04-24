@@ -40,7 +40,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
  * 自定义AuthenticationEntryPoint
  *
  * @author kaiyu.shan
- * @since 2024-02-21
+ * @since 1.0.0
  */
 public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
 

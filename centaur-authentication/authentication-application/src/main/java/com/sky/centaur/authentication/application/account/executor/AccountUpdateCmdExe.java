@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * 账户更新指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-03-14
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountUpdateCmdExe")

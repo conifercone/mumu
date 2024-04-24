@@ -27,7 +27,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * 系统日志es数据对象
  *
  * @author kaiyu.shan
- * @since 2024-01-26
+ * @since 1.0.0
  */
 @Document(indexName = "system-log")
 @Data

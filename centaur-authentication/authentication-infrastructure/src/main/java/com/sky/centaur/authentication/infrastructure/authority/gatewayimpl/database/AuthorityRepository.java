@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * 权限基本信息
  *
  * @author kaiyu.shan
- * @since 2024-01-12
+ * @since 1.0.0
  */
 public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long>,
     JpaSpecificationExecutor<AuthorityDo> {

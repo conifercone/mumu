@@ -22,7 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 日志服务
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 @SpringBootApplication
 public class CentaurLogApplication {

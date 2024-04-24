@@ -49,7 +49,7 @@ import org.springframework.util.StringUtils;
  * 权限领域网关实现
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AuthorityGatewayImpl")

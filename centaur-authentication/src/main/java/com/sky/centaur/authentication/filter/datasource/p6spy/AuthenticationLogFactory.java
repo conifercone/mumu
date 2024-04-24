@@ -25,7 +25,7 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
  * P6Factory
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 public class AuthenticationLogFactory implements P6Factory {
 

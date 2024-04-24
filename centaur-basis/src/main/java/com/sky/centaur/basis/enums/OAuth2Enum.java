@@ -22,7 +22,7 @@ import lombok.Getter;
  * oauth2常量枚举
  *
  * @author kaiyu.shan
- * @since 2024-02-21
+ * @since 1.0.0
  */
 @Getter
 public enum OAuth2Enum {

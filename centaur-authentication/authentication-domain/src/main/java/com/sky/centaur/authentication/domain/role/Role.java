@@ -31,7 +31,7 @@ import lombok.ToString;
  * 角色领域模型
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Getter
 @Setter

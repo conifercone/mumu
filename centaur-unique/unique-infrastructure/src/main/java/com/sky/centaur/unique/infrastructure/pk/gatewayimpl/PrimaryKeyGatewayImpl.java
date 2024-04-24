@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  * 唯一性主键领域网关实现
  *
  * @author kaiyu.shan
- * @since 2024-02-18
+ * @since 1.0.0
  */
 @Component
 public class PrimaryKeyGatewayImpl implements PrimaryKeyGateway {

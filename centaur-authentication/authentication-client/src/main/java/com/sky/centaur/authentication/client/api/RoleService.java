@@ -29,7 +29,7 @@ import org.springframework.data.domain.Page;
  * 角色功能API
  *
  * @author kaiyu.shan
- * @since 2024-01-15
+ * @since 1.0.0
  */
 public interface RoleService {
 

@@ -43,7 +43,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * jwt token认证拦截器
  *
  * @author kaiyu.shan
- * @since 2024-02-27
+ * @since 1.0.0
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 

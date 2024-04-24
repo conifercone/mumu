@@ -90,7 +90,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
  * 授权配置
  *
  * @author kaiyu.shan
- * @since 2024-01-12
+ * @since 1.0.0
  */
 @Configuration
 public class AuthorizationConfiguration {

@@ -34,7 +34,7 @@ import org.springframework.beans.BeanUtils;
  * 系统日志转换器
  *
  * @author kaiyu.shan
- * @since 2024-01-31
+ * @since 1.0.0
  */
 public class SystemLogConvertor {
 

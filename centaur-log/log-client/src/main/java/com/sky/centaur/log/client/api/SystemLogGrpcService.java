@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
  * 系统日志对外提供grpc调用实例
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @Component
 public class SystemLogGrpcService extends LogGrpcService implements DisposableBean {

@@ -20,7 +20,7 @@ package com.sky.centaur.basis.enums;
  * Token声言
  *
  * @author kaiyu.shan
- * @since 2024-02-20
+ * @since 1.0.0
  */
 public enum TokenClaimsEnum {
 

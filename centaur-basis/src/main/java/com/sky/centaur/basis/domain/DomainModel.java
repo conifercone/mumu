@@ -20,7 +20,7 @@ package com.sky.centaur.basis.domain;
  * 顶级领域模型接口
  *
  * @author kaiyu.shan
- * @since 2024-03-05
+ * @since 1.0.0
  */
 public interface DomainModel {
 

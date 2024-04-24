@@ -28,7 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 系统日志数据对象
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @Data
 public class SystemLogKafkaDo {

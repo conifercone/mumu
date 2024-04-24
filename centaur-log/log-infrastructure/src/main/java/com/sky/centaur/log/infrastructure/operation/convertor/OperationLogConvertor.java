@@ -34,7 +34,7 @@ import org.springframework.beans.BeanUtils;
  * 操作日志转换器
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 public class OperationLogConvertor {
 

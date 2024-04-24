@@ -22,7 +22,7 @@ import lombok.Data;
  * zookeeper配置属性
  *
  * @author kaiyu.shan
- * @since 2024-03-06
+ * @since 1.0.0
  */
 @Data
 public class ZookeeperProperties {

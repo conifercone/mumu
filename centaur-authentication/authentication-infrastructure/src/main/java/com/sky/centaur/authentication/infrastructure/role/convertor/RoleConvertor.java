@@ -43,7 +43,7 @@ import org.springframework.util.CollectionUtils;
  * 角色信息转换器
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 public class RoleConvertor {
 

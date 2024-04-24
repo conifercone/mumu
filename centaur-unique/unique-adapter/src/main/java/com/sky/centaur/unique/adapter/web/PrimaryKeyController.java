@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 主键相关接口
  *
  * @author kaiyu.shan
- * @since 2024-01-10
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping("/pk")

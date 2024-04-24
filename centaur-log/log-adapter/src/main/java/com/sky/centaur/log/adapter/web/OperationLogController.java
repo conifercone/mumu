@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 操作日志相关
  *
  * @author kaiyu.shan
- * @since 2024-01-25
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping("/operation")

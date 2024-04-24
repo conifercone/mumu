@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * 账户注册指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountRegisterCmdExe")

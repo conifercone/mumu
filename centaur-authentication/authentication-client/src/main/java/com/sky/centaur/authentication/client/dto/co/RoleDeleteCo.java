@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  * 角色删除客户端对象
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

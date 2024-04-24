@@ -23,7 +23,7 @@ import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
  * 操作日志api
  *
  * @author kaiyu.shan
- * @since 2024-01-24
+ * @since 1.0.0
  */
 public interface OperationLogService {
 

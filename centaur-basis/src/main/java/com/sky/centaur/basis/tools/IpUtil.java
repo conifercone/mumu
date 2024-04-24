@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * ip工具类
  *
  * @author kaiyu.shan
- * @since 2024-02-22
+ * @since 1.0.0
  */
 public final class IpUtil {
 

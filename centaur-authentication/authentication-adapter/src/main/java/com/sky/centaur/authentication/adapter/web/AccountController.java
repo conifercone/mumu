@@ -17,14 +17,14 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
-import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 账户相关
  *
  * @author kaiyu.shan
- * @since 2024-01-10
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping("/account")

@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
  * 拓展模块配置
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class, SystemLogGrpcService.class,

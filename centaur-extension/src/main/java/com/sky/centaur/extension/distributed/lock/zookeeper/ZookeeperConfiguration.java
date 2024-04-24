@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
  * zookeeper配置文件
  *
  * @author kaiyu.shan
- * @since 2024-03-06
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.extension.distributed.lock.zookeeper", value = "enabled", havingValue = "true")

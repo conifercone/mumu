@@ -26,7 +26,7 @@ import org.springframework.data.neo4j.core.schema.Property;
  * 权限图节点数据对象
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Node("authority")
 @Data

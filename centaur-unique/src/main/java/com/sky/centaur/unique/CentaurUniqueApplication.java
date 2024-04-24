@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Import;
  * 分布式主键生成服务
  *
  * @author kaiyu.shan
- * @since 2024-02-04
+ * @since 1.0.0
  */
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)

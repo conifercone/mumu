@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
  * 系统日志
  *
  * @author kaiyu.shan
- * @since 2024-01-31
+ * @since 1.0.0
  */
 @Service
 @GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})

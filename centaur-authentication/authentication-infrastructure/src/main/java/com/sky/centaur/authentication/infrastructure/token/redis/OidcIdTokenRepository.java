@@ -22,7 +22,7 @@ import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.Oidc
  * oidc id token redis repository
  *
  * @author kaiyu.shan
- * @since 2024-03-19
+ * @since 1.0.0
  */
 public interface OidcIdTokenRepository extends
     RedisDocumentRepository<OidcIdTokenRedisDo, Integer> {

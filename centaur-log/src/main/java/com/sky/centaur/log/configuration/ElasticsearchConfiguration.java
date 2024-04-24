@@ -26,7 +26,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
  * es配置类
  *
  * @author kaiyu.shan
- * @since 2024-01-23
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.log.elasticsearch", name = "enabled", havingValue = "true")

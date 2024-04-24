@@ -22,7 +22,7 @@ import com.sky.centaur.unique.client.dto.co.PrimaryKeySnowflakeCo;
  * 主键
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 public interface PrimaryKeyService {
 

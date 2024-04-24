@@ -26,7 +26,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * oidc id token redis数据对象
  *
  * @author kaiyu.shan
- * @since 2024-03-19
+ * @since 1.0.0
  */
 @Data
 @Document(value = "oidcIdToken")

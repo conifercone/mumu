@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
  * 唯一数据服务客户端配置
  *
  * @author kaiyu.shan
- * @since 2024-02-05
+ * @since 1.0.0
  */
 @Configuration
 @Import({PrimaryKeyGrpcService.class})

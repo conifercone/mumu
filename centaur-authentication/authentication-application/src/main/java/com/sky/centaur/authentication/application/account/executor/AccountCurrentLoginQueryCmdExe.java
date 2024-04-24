@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * 查询当前登录账户信息指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-03-14
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "AccountCurrentLoginQueryCmdExe")

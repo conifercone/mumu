@@ -22,7 +22,7 @@ import org.springframework.data.domain.Page;
  * 角色领域网关
  *
  * @author kaiyu.shan
- * @since 2024-01-16
+ * @since 1.0.0
  */
 public interface RoleGateway {
 

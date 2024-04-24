@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * grpc异常统一处理
  *
  * @author kaiyu.shan
- * @since 2024-01-31
+ * @since 1.0.0
  */
 @GRpcServiceAdvice
 public class GrpcExceptionAdvice {

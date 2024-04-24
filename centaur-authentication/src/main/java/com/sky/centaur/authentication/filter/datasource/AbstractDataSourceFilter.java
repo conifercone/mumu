@@ -19,7 +19,7 @@ package com.sky.centaur.authentication.filter.datasource;
  * 抽象数据源过滤器
  *
  * @author kaiyu.shan
- * @since 2024-01-22
+ * @since 1.0.0
  */
 public abstract class AbstractDataSourceFilter implements DataSourceFilter {
 

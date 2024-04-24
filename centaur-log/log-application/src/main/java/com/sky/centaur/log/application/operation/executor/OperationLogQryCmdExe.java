@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * 操作日志查询指令
  *
  * @author kaiyu.shan
- * @since 2024-02-02
+ * @since 1.0.0
  */
 @Component
 public class OperationLogQryCmdExe {

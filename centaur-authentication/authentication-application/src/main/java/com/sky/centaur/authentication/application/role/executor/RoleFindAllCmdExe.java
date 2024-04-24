@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
  * 角色权限指令执行器
  *
  * @author kaiyu.shan
- * @since 2024-02-23
+ * @since 1.0.0
  */
 @Component
 @Observed(name = "RoleFindAllCmdExe")
