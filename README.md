@@ -2,7 +2,7 @@
 
 # centaur
 
-[![jdk version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![centaur version](https://img.shields.io/badge/centaur-1.0.0--SNAPSHOT-brightgreen)](https://github.com/conifercone/centaur)
 [![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
 [![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur)
