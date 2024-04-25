@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.core.ClaimAccessor;
 
 /**
  * 认证上下文工具类
@@ -49,8 +49,8 @@ public final class SecurityContextUtil {
                 return Long.parseLong(String.valueOf(beanMap.get(ID)));
               }
               return null;
-            } else if (principal instanceof Jwt jwt) {
-              Map<String, Object> claims = jwt.getClaims();
+            } else if (principal instanceof ClaimAccessor claimAccessor) {
+              Map<String, Object> claims = claimAccessor.getClaims();
               return Long.parseLong(String.valueOf(claims.get(TokenClaimsEnum.ACCOUNT_ID.name())));
             }
             return null;

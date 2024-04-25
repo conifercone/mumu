@@ -4,6 +4,6 @@
 dependencies {
     implementation libs.tomcatEmbedCore
     implementation libs.springSecurityCore
-    implementation libs.springSecurityOauth2Jose
+    implementation libs.springSecurityOauth2Core
     compileOnly libs.springBootDataJpa
 }
