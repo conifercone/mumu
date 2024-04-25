@@ -57,7 +57,9 @@ centaur
 
 ## All Contributors
 
-![centaur contributors](https://contrib.rocks/image?repo=conifercone/centaur)
+<a href="https://github.com/conifercone/centaur/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="centaur contributors"/>
+</a>
 
 ## License
 
