@@ -15,7 +15,7 @@
 #
 
 server:
-  port: 31100
+  port: ${port:31100}
 
 spring:
   application:
