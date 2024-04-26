@@ -11,7 +11,6 @@
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/centaur)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/centaur/dependency-submission.yml)
 
-
 ## Content list
 
 - [Projects](#Projects)
@@ -49,6 +48,20 @@ centaur
 ```
 
 ## Build
+
+### infrastructure
+
+| name          | releases |
+|---------------|----------|
+| apiSix        | 3.8.0    |
+| elasticsearch | 8.12.0   |
+| kafka         | 3.4      |
+| mysql         | 8.0.21   |
+| postgresql    | 15.1     |
+| neo4j         | 2.2.2    |
+| redis         | latest   |
+| zookeeper     | 3.8      |
+| zipkin        | 3.19.0   |
 
 ## Dependency Statement
 

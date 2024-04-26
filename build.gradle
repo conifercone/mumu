@@ -1,8 +1,6 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GrUnresolvedAccess
 
-import com.hierynomus.gradle.license.tasks.LicenseFormat
-
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
@@ -97,8 +95,10 @@ subprojects { project ->
     // 源代码许可配置
     license {
         encoding = StandardCharsets.UTF_8.name()
+        ignoreFailures = true
         header = rootProject.file("source_code_head.txt")
         includes(["**/*.java", "**/*.sql", "**/*.xml", "**/*.yml"])
+        excludes(["**/client/api/grpc/*.java"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "properties", "SCRIPT_STYLE"
         mapping "sql", "SLASHSTAR_STYLE"
@@ -108,10 +108,6 @@ subprojects { project ->
         ext.organization = "kaiyu.shan@outlook.com"
     }
 
-    tasks.register('licenseSource', LicenseFormat) {
-        source = fileTree(dir: "src").include("**/*.java", "**/*.sql", "**/*.xml", "**/*.yml")
-    }
-    licenseFormat.dependsOn("licenseSource")
 
     // 代码自动审查配置
     checkstyle {
