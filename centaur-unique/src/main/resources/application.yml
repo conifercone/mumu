@@ -15,7 +15,7 @@
 #
 
 server:
-  port: 31300
+  port: ${port:31300}
 spring:
   application:
     name: unique
