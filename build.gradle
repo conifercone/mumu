@@ -108,6 +108,18 @@ subprojects { project ->
         ext.organization = "kaiyu.shan@outlook.com"
     }
 
+    tasks.configureEach {
+        if ("bootBuildImage".is(it.name)) {
+            imageName.set("conifercone/${project.name}")
+            publish = true
+            docker {
+                publishRegistry {
+                    username = System.getenv("DOCKER_HUB_USERNAME")
+                    password = System.getenv("DOCKER_HUB_PASSWORD")
+                }
+            }
+        }
+    }
 
     // 代码自动审查配置
     checkstyle {
