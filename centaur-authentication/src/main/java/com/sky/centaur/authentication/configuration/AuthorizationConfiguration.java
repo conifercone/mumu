@@ -84,6 +84,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 /**
@@ -156,6 +158,8 @@ public class AuthorizationConfiguration {
             .authenticationEntryPoint(
                 new CentaurAuthenticationEntryPoint("/login", operationLogGrpcService,
                     systemLogGrpcService)));
+    http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
     return http.build();
   }
 
@@ -164,7 +168,8 @@ public class AuthorizationConfiguration {
    */
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
-      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer, TokenRepository tokenRepository,
+      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
+      TokenRepository tokenRepository,
       OidcIdTokenRepository oidcIdTokenRepository) {
     CentaurJwtGenerator jwtGenerator = new CentaurJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);

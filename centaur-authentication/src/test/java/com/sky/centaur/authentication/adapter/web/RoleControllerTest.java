@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.adapter.web;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import jakarta.annotation.Resource;
@@ -60,7 +61,7 @@ public class RoleControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/role/add")
+            .post("/role/add").with(csrf())
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -79,7 +80,7 @@ public class RoleControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/role/delete")
+            .delete("/role/delete").with(csrf())
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -99,7 +100,7 @@ public class RoleControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/role/updateById")
+            .put("/role/updateById").with(csrf())
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

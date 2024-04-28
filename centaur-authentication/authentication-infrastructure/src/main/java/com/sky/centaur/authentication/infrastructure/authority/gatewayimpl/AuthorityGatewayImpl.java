@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.tools.BeanUtil;
@@ -41,6 +42,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -66,8 +68,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   DistributedLock distributedLock;
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
     if (authorityRepository.findById(authority.getId()).isPresent()) {
@@ -75,23 +77,36 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     }
     authorityRepository.persist(dataObject);
     AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
+    addAuthorityNode(nodeDataObject);
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  protected void addAuthorityNode(AuthorityNodeDo nodeDataObject) {
     authorityNodeRepository.save(nodeDataObject);
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void delete(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
-    authorityNodeRepository.deleteById(authority.getId());
+    deleteAuthorityNode(authority.getId());
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  protected void deleteAuthorityNode(Long id) {
+    authorityNodeRepository.deleteById(id);
+  }
+
+
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Authority authority) {
     Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(authority.getId());
-    Optional<AuthorityNodeDo> nodeDoOptional = authorityNodeRepository.findById(authority.getId());
+    Optional<AuthorityNodeDo> nodeDoOptional = getAuthorityNodeDoOptional(authority);
     if (authorityDoOptional.isPresent() && nodeDoOptional.isPresent()) {
       distributedLock.lock();
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
@@ -102,16 +117,23 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       AuthorityNodeDo targetNode = nodeDoOptional.get();
       BeanUtils.copyProperties(nodeDataObject, targetNode,
           BeanUtil.getNullPropertyNames(nodeDataObject));
-      authorityNodeRepository.save(targetNode);
+      addAuthorityNode(targetNode);
       distributedLock.unlock();
     } else {
       throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(readOnly = true, transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  protected @NotNull Optional<AuthorityNodeDo> getAuthorityNodeDoOptional(
+      @NotNull Authority authority) {
+    return authorityNodeRepository.findById(authority.getId());
+  }
+
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
       //noinspection DuplicatedCode

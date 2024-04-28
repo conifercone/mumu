@@ -21,7 +21,9 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
+import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -39,6 +41,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,8 +77,8 @@ public class AccountGatewayImpl implements AccountGateway {
   public static final String PASSWORD_AFTER_RESET = "123456";
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
     // 密码加密
@@ -92,7 +95,7 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new AccountAlreadyExistsException(dataObject.getUsername());
     }
     accountRepository.persist(dataObject);
-    accountNodeRepository.save(
+    accountNodeRegister(
         AccountConvertor.toNodeDataObject(account));
     operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
         .setOperationLogSubmitCo(
@@ -102,17 +105,22 @@ public class AccountGatewayImpl implements AccountGateway {
         .build());
   }
 
+  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  protected void accountNodeRegister(AccountNodeDo accountNodeDo) {
+    accountNodeRepository.save(accountNodeDo);
+  }
+
   @Override
-  @Transactional(readOnly = true)
-  @API(status = Status.STABLE)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public @Nullable Account findAccountByUsername(String username) {
     return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
         .map(AccountConvertor::toEntity).orElse(null);
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Account account) {
     if (SecurityContextUtil.getLoginAccountId() != null && Objects.equals(
         SecurityContextUtil.getLoginAccountId(), account.getId())) {
@@ -133,8 +141,8 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
     Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
     if (accountDoOptional.isPresent()) {
@@ -147,8 +155,8 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public Account queryCurrentLoginAccount() {
     Long loginAccountId = SecurityContextUtil.getLoginAccountId();
     if (loginAccountId == null) {
@@ -164,15 +172,15 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public Long onlineAccounts() {
     return tokenRepository.count();
   }
 
   @Override
-  @Transactional
-  @API(status = Status.STABLE)
+  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long id) {
     Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
     if (accountDoOptional.isPresent()) {

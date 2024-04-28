@@ -48,7 +48,7 @@ public class OperationLogController {
   @Operation(summary = "提交日志")
   @PostMapping("/submit")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
     operationLogService.submit(operationLogSubmitCmd);
   }
@@ -56,7 +56,7 @@ public class OperationLogController {
   @Operation(summary = "根据日志ID获取操作日志")
   @GetMapping("/findById")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public OperationLogQryCo findOperationLogById(@RequestParam(value = "id") String id) {
     return operationLogService.findOperationLogById(id);
   }

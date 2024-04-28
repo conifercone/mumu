@@ -56,7 +56,7 @@ public class RoleController {
   @Operation(summary = "添加角色")
   @PostMapping("/add")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public RoleAddCo add(@RequestBody RoleAddCmd roleAddCmd) {
     return roleService.add(roleAddCmd);
   }
@@ -64,7 +64,7 @@ public class RoleController {
   @Operation(summary = "删除角色")
   @DeleteMapping("/delete")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public RoleDeleteCo delete(@RequestBody RoleDeleteCmd roleDeleteCmd) {
     return roleService.delete(roleDeleteCmd);
   }
@@ -72,7 +72,7 @@ public class RoleController {
   @Operation(summary = "更新角色")
   @PutMapping("/updateById")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public RoleUpdateCo updateById(@RequestBody RoleUpdateCmd roleUpdateCmd) {
     return roleService.updateById(roleUpdateCmd);
   }
@@ -80,7 +80,7 @@ public class RoleController {
   @Operation(summary = "查询角色")
   @GetMapping("/findAll")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public Page<RoleFindAllCo> findAll(@RequestBody RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
   }

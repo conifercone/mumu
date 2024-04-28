@@ -49,7 +49,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     channel.shutdown();
   }
 
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public RoleAddGrpcCo add(RoleAddGrpcCmd roleAddGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {

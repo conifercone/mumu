@@ -45,7 +45,7 @@ public class SystemLogController {
   @Operation(summary = "提交日志")
   @PostMapping("/submit")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void submit(@RequestBody SystemLogSubmitCmd systemLogSubmitCmd) {
     systemLogService.submit(systemLogSubmitCmd);
   }

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.adapter.web;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import jakarta.annotation.Resource;
@@ -62,7 +63,7 @@ public class AccountControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/account/register")
+            .post("/account/register").with(csrf())
             .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -82,7 +83,7 @@ public class AccountControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/updateById")
+            .put("/account/updateById").with(csrf())
             .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -101,7 +102,7 @@ public class AccountControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/disable")
+            .put("/account/disable").with(csrf())
             .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -120,7 +121,7 @@ public class AccountControllerTest {
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/resetPassword")
+            .put("/account/resetPassword").with(csrf())
             .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

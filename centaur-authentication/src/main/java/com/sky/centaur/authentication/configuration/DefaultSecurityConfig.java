@@ -31,6 +31,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 /**
  * 默认安全配置
@@ -47,7 +49,8 @@ public class DefaultSecurityConfig {
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
       UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository)
       throws Exception {
-    http.csrf(withDefaults())
+    http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
         .authorizeHttpRequests((authorize) -> authorize
             .anyRequest().authenticated()
         )

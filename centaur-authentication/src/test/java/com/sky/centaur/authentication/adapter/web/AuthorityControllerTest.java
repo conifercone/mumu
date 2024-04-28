@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.adapter.web;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import jakarta.annotation.Resource;
@@ -57,7 +58,7 @@ public class AuthorityControllerTest {
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/authority/add")
+            .post("/authority/add").with(csrf())
             .content(authority.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +77,7 @@ public class AuthorityControllerTest {
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/authority/delete")
+            .delete("/authority/delete").with(csrf())
             .content(authority.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -96,7 +97,28 @@ public class AuthorityControllerTest {
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/updateById")
+            .put("/authority/updateById").with(csrf())
+            .content(authority.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional
+  public void findAll() throws Exception {
+    @Language("JSON") String authority = """
+        {
+             "authorityFindAllCo": {
+                 "id": 1
+             },
+             "pageNo": 0,
+             "pageSize": 10
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/authority/findAll")
             .content(authority.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

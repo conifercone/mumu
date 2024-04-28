@@ -49,7 +49,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     channel.shutdown();
   }
 
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountRegisterGrpcCo register(AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {

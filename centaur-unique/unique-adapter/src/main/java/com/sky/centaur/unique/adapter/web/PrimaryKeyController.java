@@ -44,7 +44,7 @@ public class PrimaryKeyController {
   @Operation(summary = "获取主键(雪花算法)")
   @GetMapping("/snowflake")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public PrimaryKeySnowflakeCo snowflake() {
     return primaryKeyService.snowflake();
   }

@@ -56,7 +56,7 @@ public class AccountController {
   @Operation(summary = "账户注册")
   @PostMapping("/register")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountRegisterCo register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
     return accountService.register(accountRegisterCmd);
   }
@@ -64,7 +64,7 @@ public class AccountController {
   @Operation(summary = "账户基本信息更新")
   @PutMapping("/updateById")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountUpdateCo updateById(@RequestBody AccountUpdateCmd accountUpdateCmd) {
     return accountService.updateById(accountUpdateCmd);
   }
@@ -72,7 +72,7 @@ public class AccountController {
   @Operation(summary = "禁用账户")
   @PutMapping("/disable")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountDisableCo disable(@RequestBody AccountDisableCmd accountDisableCmd) {
     return accountService.disable(accountDisableCmd);
   }
@@ -80,7 +80,7 @@ public class AccountController {
   @Operation(summary = "获取当前登录账户信息")
   @GetMapping("/currentLoginAccount")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
     return accountService.queryCurrentLoginAccount();
   }
@@ -88,7 +88,7 @@ public class AccountController {
   @Operation(summary = "获取在线账户数量等信息")
   @GetMapping("/onlineAccounts")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountOnlineStatisticsCo onlineAccounts() {
     return accountService.onlineAccounts();
   }
@@ -96,7 +96,7 @@ public class AccountController {
   @Operation(summary = "重置密码")
   @PutMapping("/resetPassword")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AccountResetPasswordCo resetPassword(
       @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
     return accountService.resetPassword(accountResetPasswordCmd);

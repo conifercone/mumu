@@ -49,7 +49,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
     channel.shutdown();
   }
 
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {

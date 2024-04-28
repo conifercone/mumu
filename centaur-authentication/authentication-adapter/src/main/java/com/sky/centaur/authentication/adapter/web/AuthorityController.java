@@ -56,7 +56,7 @@ public class AuthorityController {
   @Operation(summary = "添加权限")
   @PostMapping("/add")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityAddCo add(@RequestBody AuthorityAddCmd authorityAddCmd) {
     return authorityService.add(authorityAddCmd);
   }
@@ -64,7 +64,7 @@ public class AuthorityController {
   @Operation(summary = "删除权限")
   @DeleteMapping("/delete")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityDeleteCo delete(@RequestBody AuthorityDeleteCmd authorityDeleteCmd) {
     return authorityService.delete(authorityDeleteCmd);
   }
@@ -72,7 +72,7 @@ public class AuthorityController {
   @Operation(summary = "修改权限")
   @PutMapping("/updateById")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityUpdateCo updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
     return authorityService.updateById(authorityUpdateCmd);
   }
@@ -80,7 +80,7 @@ public class AuthorityController {
   @Operation(summary = "查询权限")
   @GetMapping("/findAll")
   @ResponseBody
-  @API(status = Status.STABLE)
+  @API(status = Status.STABLE, since = "1.0.0")
   public Page<AuthorityFindAllCo> findAll(@RequestBody AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
   }
