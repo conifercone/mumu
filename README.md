@@ -53,7 +53,7 @@ centaur
 
 | name          | releases |
 |---------------|----------|
-| apiSix        | 3.8.0    |
+| apisix        | 3.8.0    |
 | elasticsearch | 8.12.0   |
 | kafka         | 3.4      |
 | mysql         | 8.0.21   |
@@ -61,6 +61,7 @@ centaur
 | neo4j         | 2.2.2    |
 | redis         | latest   |
 | zookeeper     | 3.8      |
+| nacos         | 2.2.2    |
 | zipkin        | 3.19.0   |
 
 ## Dependency Statement
