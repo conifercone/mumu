@@ -1,12 +1,12 @@
 [versions]
-junitVersion = "5.10.1"
+junitVersion = "5.10.2"
 springbootVersion = "3.2.4"
 springCloudVersion = "2023.0.1"
 springCloudAlibabaVersion = "2023.0.0.0-RC1"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
-jacksonVersion = '2.15.3'
+jacksonVersion = '2.15.4'
 postgresqlVersion = '42.7.2'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
@@ -25,6 +25,7 @@ grpcSpringBootStarterApiVersion = '5.1.5'
 redisOmSpringVersion = "0.9.0"
 commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
+zookeeperVersion = "3.7.2"
 yitterIdGeneratorVersion = "1.0.6"
 tomcatEmbedCoreVersion = "10.1.17"
 jakartaValidationApiVersion = "3.0.2"
@@ -110,6 +111,8 @@ redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisO
 commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
+# https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
+zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeperVersion" }
 # https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
 yitterIdGenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
 # https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing

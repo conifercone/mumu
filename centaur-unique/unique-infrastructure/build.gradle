@@ -3,5 +3,8 @@
 //file:noinspection GrUnresolvedAccess
 dependencies {
     implementation project(":centaur-unique:unique-domain")
-    implementation libs.leaf
+    implementation(libs.leaf) {
+        exclude group: 'org.apache.zookeeper', module: 'zookeeper'
+    }
+    implementation libs.zookeeper
 }

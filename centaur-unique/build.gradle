@@ -7,7 +7,10 @@ dependencies {
     implementation project(":centaur-extension")
     implementation libs.bundles.micrometer
     implementation libs.swagger3Ui
-    implementation libs.leaf
+    implementation(libs.leaf) {
+        exclude group: 'org.apache.zookeeper', module: 'zookeeper'
+    }
+    implementation libs.zookeeper
     implementation libs.jasypt
     implementation libs.springCloudAlibabaNacosDiscovery
     implementation libs.springCloudAlibabaNacosConfig
