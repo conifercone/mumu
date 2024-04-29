@@ -10,7 +10,7 @@ dependencies {
     implementation libs.grpcStub
     implementation libs.grpcProtobuf
     implementation libs.annotationApi
-    implementation libs.springCloudAlibabaNacosDiscovery
+    implementation libs.consulDiscovery
     implementation libs.springBootActuator
     implementation libs.springDataCommons
     compileOnly libs.springBootOauth2AuthorizationServer

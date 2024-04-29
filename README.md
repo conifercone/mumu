@@ -61,7 +61,7 @@ centaur
 | neo4j         | 2.2.2    |
 | redis         | latest   |
 | zookeeper     | 3.8      |
-| nacos         | 2.2.2    |
+| consul        | 1.15.4   |
 | zipkin        | 3.19.0   |
 
 ## Dependency Statement

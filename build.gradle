@@ -131,7 +131,6 @@ subprojects { project ->
         imports {
             mavenBom(libs.springBootDependencies.get().toString())
             mavenBom(libs.springCloudDependencies.get().toString())
-            mavenBom(libs.springCloudAlibabaDependencies.get().toString())
         }
     }
 

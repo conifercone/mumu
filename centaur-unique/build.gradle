@@ -12,7 +12,7 @@ dependencies {
     }
     implementation libs.zookeeper
     implementation libs.jasypt
-    implementation libs.springCloudAlibabaNacosDiscovery
-    implementation libs.springCloudAlibabaNacosConfig
+    implementation libs.consulDiscovery
+    implementation libs.consulConfig
     testImplementation libs.springbootTest
 }

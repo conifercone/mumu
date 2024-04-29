@@ -9,8 +9,8 @@ dependencies {
     implementation project(":centaur-extension")
     implementation project(":centaur-log:log-adapter")
     implementation libs.jasypt
-    implementation libs.springCloudAlibabaNacosDiscovery
-    implementation libs.springCloudAlibabaNacosConfig
+    implementation libs.consulDiscovery
+    implementation libs.consulConfig
     implementation libs.swagger3Ui
     implementation libs.springBootDataElasticsearch
     implementation libs.springKafka

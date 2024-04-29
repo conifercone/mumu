@@ -19,31 +19,28 @@ server:
 spring:
   application:
     name: unique
+  config:
+    import: 'optional:consul:'
   cloud:
-    nacos:
-      discovery:
-        server-addr: ${nacos_ip:localhost:8848}
-        username: ${nacos_username:nacos}
-        password: ${nacos_passwd:nacos}
-        namespace: ${nacos_namespace:centaur}
-        group: ${nacos_group:DEFAULT_GROUP}
+    consul:
+      host: localhost
+      port: 8500
       config:
-        server-addr: ${nacos_ip:localhost:8848}
-        username: ${nacos_username:nacos}
-        password: ${nacos_passwd:nacos}
-        namespace: ${nacos_namespace:centaur}
-        group: ${nacos_group:DEFAULT_GROUP}
-        file-extension: yml
----
-spring:
-  config:
-    import: nacos:${spring.application.name}-dev.yml
-    activate:
-      on-profile: dev
----
-spring:
-  config:
-    import: nacos:${spring.application.name}-prod.yml
-    activate:
-      on-profile: prod
----
+        enabled: true
+        default-context: ${spring.application.name}
+        profile-separator: '-'
+        format: YAML
+        data-key: ${spring.application.name}
+        watch:
+          enabled: true
+          delay: 1000
+        prefixes: centaur
+        acl-token: e1da9899-6008-1999-07f6-f78c7d99715b
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
+        acl-token: e1da9899-6008-1999-07f6-f78c7d99715b

@@ -15,8 +15,8 @@ dependencies {
     implementation libs.springBootDataNeo4j
     implementation libs.postgresql
     implementation libs.jasypt
-    implementation libs.springCloudAlibabaNacosDiscovery
-    implementation libs.springCloudAlibabaNacosConfig
+    implementation libs.consulDiscovery
+    implementation libs.consulConfig
     implementation libs.swagger3Ui
     implementation libs.bundles.micrometer
     implementation libs.p6spy

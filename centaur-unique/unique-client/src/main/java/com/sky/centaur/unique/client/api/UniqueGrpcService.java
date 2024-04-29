@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.unique.client.api;
 
-import com.alibaba.cloud.nacos.discovery.NacosDiscoveryClient;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
  * 唯一性数据生成grpc服务
@@ -35,7 +35,7 @@ import org.springframework.cloud.client.ServiceInstance;
 class UniqueGrpcService {
 
   @Resource
-  NacosDiscoveryClient nacosDiscoveryClient;
+  DiscoveryClient consulDiscoveryClient;
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
     return getServiceInstance().map(
@@ -58,7 +58,7 @@ class UniqueGrpcService {
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = nacosDiscoveryClient.getInstances("unique");
+    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("unique");
     return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 

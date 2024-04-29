@@ -2,7 +2,6 @@
 junitVersion = "5.10.2"
 springbootVersion = "3.2.4"
 springCloudVersion = "2023.0.1"
-springCloudAlibabaVersion = "2023.0.0.0-RC1"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
@@ -73,12 +72,10 @@ guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 # https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
 springCloudDependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
-# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-alibaba-dependencies
-springCloudAlibabaDependencies = { module = "com.alibaba.cloud:spring-cloud-alibaba-dependencies", version.ref = "springCloudAlibabaVersion" }
-# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-discovery
-springCloudAlibabaNacosDiscovery = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery" }
-# https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config
-springCloudAlibabaNacosConfig = { module = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-discovery
+consulDiscovery = { module = "org.springframework.cloud:spring-cloud-starter-consul-discovery" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-config
+consulConfig = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
 # https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
