@@ -91,6 +91,12 @@ subprojects { project ->
         }
     }
 
+    tasks.configureEach {
+        if ("bootBuildImage".is(it.name)) {
+            imageName.set("conifercone/${project.name}:${project.version}")
+        }
+    }
+
     // 源代码许可配置
     license {
         encoding = StandardCharsets.UTF_8.name()
