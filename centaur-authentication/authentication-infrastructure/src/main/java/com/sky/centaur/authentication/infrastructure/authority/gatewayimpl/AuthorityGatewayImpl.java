@@ -42,7 +42,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -81,7 +80,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected void addAuthorityNode(AuthorityNodeDo nodeDataObject) {
     authorityNodeRepository.save(nodeDataObject);
   }
@@ -95,7 +94,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected void deleteAuthorityNode(Long id) {
     authorityNodeRepository.deleteById(id);
   }
@@ -125,7 +124,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(readOnly = true, transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected @NotNull Optional<AuthorityNodeDo> getAuthorityNodeDoOptional(
       @NotNull Authority authority) {
     return authorityNodeRepository.findById(authority.getId());

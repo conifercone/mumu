@@ -21,15 +21,23 @@ import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChain;
 import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChainImpl;
 import com.sky.centaur.authentication.filter.datasource.P6spyDataSourceFilter;
 import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.dataobject.jpa.CentaurJpaAuditorAware;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
 import javax.sql.DataSource;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.support.JdbcTransactionManager;
+import org.springframework.transaction.TransactionManager;
 
 /**
  * 数据源配置类
@@ -81,5 +89,24 @@ public class DatasourceConfiguration {
   @Bean
   public CentaurJpaAuditorAware centaurJpaAuditorAware() {
     return new CentaurJpaAuditorAware();
+  }
+
+  @Bean(BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  public DataSourceTransactionManager transactionManager(Environment environment,
+      DataSource dataSource,
+      ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+    DataSourceTransactionManager transactionManager = createTransactionManager(environment,
+        dataSource);
+    transactionManagerCustomizers
+        .ifAvailable(
+            (customizers) -> customizers.customize((TransactionManager) transactionManager));
+    return transactionManager;
+  }
+
+  private @NotNull DataSourceTransactionManager createTransactionManager(
+      @NotNull Environment environment, DataSource dataSource) {
+    return environment.getProperty("spring.dao.exceptiontranslation.enabled", Boolean.class,
+        Boolean.TRUE)
+        ? new JdbcTransactionManager(dataSource) : new DataSourceTransactionManager(dataSource);
   }
 }

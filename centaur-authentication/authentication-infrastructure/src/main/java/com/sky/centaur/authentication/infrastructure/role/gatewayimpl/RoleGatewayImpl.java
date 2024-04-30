@@ -42,7 +42,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -77,7 +76,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected void addRoleNode(RoleNodeDo roleNodeDo) {
     roleNodeRepository.save(roleNodeDo);
   }
@@ -91,7 +90,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected void deleteRoleNode(Long id) {
     roleNodeRepository.deleteById(id);
   }
@@ -121,7 +120,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(readOnly = true, transactionManager = ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
   protected @NotNull Optional<RoleNodeDo> getRoleNodeDoOptional(@NotNull Role role) {
     return roleNodeRepository.findById(role.getId());
   }

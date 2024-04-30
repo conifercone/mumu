@@ -1,6 +1,6 @@
 [versions]
 junitVersion = "5.10.2"
-springbootVersion = "3.2.4"
+springbootVersion = "3.2.5"
 springCloudVersion = "2023.0.1"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
@@ -13,7 +13,6 @@ protobufVersion = '0.9.4'
 guavaVersion = '33.0.0-jre'
 swagger3Version = '2.3.0'
 p6spyVersion = '3.9.1'
-springKafkaVersion = '3.1.1'
 protobufJavaVersion = '3.25.1'
 protocVersion = '3.25.1'
 protocGenGrpcJavaVersion = '1.58.0'
@@ -87,7 +86,7 @@ springBootDataElasticsearch = { module = "org.springframework.boot:spring-boot-s
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-neo4j
 springBootDataNeo4j = { module = "org.springframework.boot:spring-boot-starter-data-neo4j" }
 # https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
-springKafka = { module = "org.springframework.kafka:spring-kafka", version.ref = "springKafkaVersion" }
+springKafka = { module = "org.springframework.kafka:spring-kafka" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
 protobufJava = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJavaVersion" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protoc

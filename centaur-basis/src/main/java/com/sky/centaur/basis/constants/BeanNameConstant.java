@@ -17,5 +17,10 @@ public final class BeanNameConstant {
    */
   public static final String DEFAULT_TRANSACTION_MANAGER_BEAN_NAME = "transactionManager";
 
+  /**
+   * neo4j事务管理器bean名称
+   */
+  public static final String NEO4J_TRANSACTION_MANAGER_BEAN_NAME = "neo4jTransactionManager";
+
 }
 
