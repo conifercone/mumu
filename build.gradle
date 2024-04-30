@@ -34,7 +34,6 @@ subprojects { project ->
     apply plugin: libs.plugins.getJava().get().getPluginId()
     apply plugin: libs.plugins.getJavaLibrary().get().getPluginId()
     apply plugin: libs.plugins.getIdea().get().getPluginId()
-    apply plugin: libs.plugins.getCheckstyle().get().getPluginId()
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
     apply plugin: libs.plugins.getLombok().get().getPluginId()
     apply plugin: libs.plugins.getLicense().get().getPluginId()
@@ -106,25 +105,6 @@ subprojects { project ->
         mapping "yml", "SCRIPT_STYLE"
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
         ext.organization = "kaiyu.shan@outlook.com"
-    }
-
-    tasks.configureEach {
-        if ("bootBuildImage".is(it.name)) {
-            imageName.set("conifercone/${project.name}")
-            publish = true
-            docker {
-                publishRegistry {
-                    username = System.getenv("DOCKER_HUB_USERNAME")
-                    password = System.getenv("DOCKER_HUB_PASSWORD")
-                }
-            }
-        }
-    }
-
-    // 代码自动审查配置
-    checkstyle {
-        toolVersion = '10.10.0'
-        configFile = file("${rootProject.projectDir}/code_checks.xml")
     }
 
     dependencyManagement {

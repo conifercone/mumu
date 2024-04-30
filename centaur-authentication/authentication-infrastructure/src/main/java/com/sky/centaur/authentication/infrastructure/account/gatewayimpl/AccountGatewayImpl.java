@@ -40,7 +40,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,9 +111,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
-  public @Nullable Account findAccountByUsername(String username) {
+  public Optional<Account> findAccountByUsername(String username) {
     return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
-        .map(AccountConvertor::toEntity).orElse(null);
+        .map(AccountConvertor::toEntity);
   }
 
   @Override
@@ -156,24 +155,19 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
-  public Account queryCurrentLoginAccount() {
+  public Optional<Account> queryCurrentLoginAccount() {
     Long loginAccountId = SecurityContextUtil.getLoginAccountId();
     if (loginAccountId == null) {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
     } else {
-      Optional<AccountDo> accountDoOptional = accountRepository.findById(loginAccountId);
-      if (accountDoOptional.isPresent()) {
-        return AccountConvertor.toEntity(accountDoOptional.get());
-      } else {
-        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-      }
+      return accountRepository.findById(loginAccountId).map(AccountConvertor::toEntity);
     }
   }
 
   @Override
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
-  public Long onlineAccounts() {
+  public long onlineAccounts() {
     return tokenRepository.count();
   }
 

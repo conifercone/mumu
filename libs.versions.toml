@@ -151,7 +151,6 @@ dependencyManagement = { id = "io.spring.dependency-management", version.ref = "
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
-checkstyle = { id = "checkstyle" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufVersion" }
 license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }

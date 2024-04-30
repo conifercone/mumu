@@ -36,7 +36,7 @@ public class AccountOnlineStatisticsCmdExe {
 
 
   public AccountOnlineStatisticsCo execute() {
-    Long onlineAccounts = accountGateway.onlineAccounts();
+    long onlineAccounts = accountGateway.onlineAccounts();
     AccountOnlineStatisticsCo accountOnlineStatisticsCo = new AccountOnlineStatisticsCo();
     accountOnlineStatisticsCo.setOnlineCapacity(onlineAccounts);
     return accountOnlineStatisticsCo;

@@ -19,8 +19,11 @@ import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,7 +41,10 @@ public class AccountCurrentLoginQueryCmdExe {
 
 
   public AccountCurrentLoginQueryCo execute() {
-    Account account = accountGateway.queryCurrentLoginAccount();
-    return AccountConvertor.toCurrentLoginQueryCo(account);
+    Optional<Account> optionalAccount = accountGateway.queryCurrentLoginAccount();
+    if (optionalAccount.isPresent()) {
+      return AccountConvertor.toCurrentLoginQueryCo(optionalAccount.get());
+    }
+    throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
   }
 }

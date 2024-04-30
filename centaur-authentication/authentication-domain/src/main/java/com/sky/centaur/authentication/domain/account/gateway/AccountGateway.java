@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.account.gateway;
 
 import com.sky.centaur.authentication.domain.account.Account;
+import java.util.Optional;
 
 /**
  * 用户领域网关
@@ -27,15 +28,15 @@ public interface AccountGateway {
 
   void register(Account account);
 
-  Account findAccountByUsername(String username);
+  Optional<Account> findAccountByUsername(String username);
 
   void updateById(Account account);
 
   void disable(Long id);
 
-  Account queryCurrentLoginAccount();
+  Optional<Account> queryCurrentLoginAccount();
 
-  Long onlineAccounts();
+  long onlineAccounts();
 
   void resetPassword(Long id);
 }

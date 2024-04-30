@@ -19,6 +19,7 @@ import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
+import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,10 +38,10 @@ public class AccountUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Account account = accountGateway.findAccountByUsername(username);
-    if (null == account) {
-      throw new UsernameNotFoundException(username);
+    Optional<Account> optionalAccount = accountGateway.findAccountByUsername(username);
+    if (optionalAccount.isPresent()) {
+      return optionalAccount.get();
     }
-    return account;
+    throw new UsernameNotFoundException(username);
   }
 }
