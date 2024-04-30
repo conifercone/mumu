@@ -26,6 +26,8 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.R
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +41,7 @@ import org.springframework.beans.BeanUtils;
 public class AccountConvertor {
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Account toEntity(@NotNull AccountDo accountDo) {
     Account account = new Account(accountDo.getId(), accountDo.getUsername(),
         accountDo.getPassword(),
@@ -56,6 +59,7 @@ public class AccountConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AccountDo toDataObject(@NotNull Account account) {
     AccountDo accountDo = new AccountDo();
     accountDo.setId(account.getId());
@@ -74,6 +78,7 @@ public class AccountConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AccountNodeDo toNodeDataObject(@NotNull Account account) {
     AccountNodeDo accountNodeDo = new AccountNodeDo();
     accountNodeDo.setId(account.getId());
@@ -83,6 +88,7 @@ public class AccountConvertor {
     return accountNodeDo;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Account toEntity(@NotNull AccountRegisterCo accountRegisterCo) {
     RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
     Account account = new Account(
@@ -98,6 +104,7 @@ public class AccountConvertor {
     return account;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Account toEntity(@NotNull AccountUpdateCo accountUpdateCo) {
     Account account = new Account(accountUpdateCo.getId(), null, null, null);
     account.setAvatarUrl(accountUpdateCo.getAvatarUrl());
@@ -106,6 +113,7 @@ public class AccountConvertor {
     return account;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AccountCurrentLoginQueryCo toCurrentLoginQueryCo(
       @NotNull Account account) {
     AccountCurrentLoginQueryCo accountCurrentLoginQueryCo = new AccountCurrentLoginQueryCo();

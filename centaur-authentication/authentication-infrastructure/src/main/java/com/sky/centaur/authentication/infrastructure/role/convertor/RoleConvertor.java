@@ -34,6 +34,8 @@ import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -48,6 +50,7 @@ import org.springframework.util.CollectionUtils;
 public class RoleConvertor {
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleDo roleDo) {
     //noinspection DuplicatedCode
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
@@ -60,6 +63,7 @@ public class RoleConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull RoleDo toDataObject(@NotNull Role role) {
     RoleDo roleDo = new RoleDo();
     BeanUtils.copyProperties(role, roleDo, "authorities");
@@ -71,6 +75,7 @@ public class RoleConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull RoleNodeDo toNodeDataObject(@NotNull Role role) {
     RoleNodeDo roleNodeDo = new RoleNodeDo();
     BeanUtils.copyProperties(role, roleNodeDo, "authorities");
@@ -83,6 +88,7 @@ public class RoleConvertor {
     return roleNodeDo;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleAddCo roleAddCo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     Role role = new Role();
@@ -96,6 +102,7 @@ public class RoleConvertor {
     return role;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleUpdateCo roleUpdateCo) {
     if (roleUpdateCo.getId() == null) {
       throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
@@ -110,12 +117,14 @@ public class RoleConvertor {
     return role;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleDeleteCo roleDeleteCo) {
     Role role = new Role();
     BeanUtils.copyProperties(roleDeleteCo, role);
     return role;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleFindAllCo roleFindAllCo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     Role role = new Role();
@@ -129,6 +138,7 @@ public class RoleConvertor {
     return role;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull RoleFindAllCo toFindAllCo(@NotNull Role role) {
     RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
     BeanUtils.copyProperties(role, roleFindAllCo, "authorities");

@@ -26,6 +26,8 @@ import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +42,7 @@ public class OperationLogConvertor {
 
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLogKafkaDo toKafkaDataObject(@NotNull OperationLog operationLog) {
     OperationLogKafkaDo operationLogKafkaDo = new OperationLogKafkaDo();
     BeanUtils.copyProperties(operationLog, operationLogKafkaDo);
@@ -47,6 +50,7 @@ public class OperationLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLogEsDo toEsDataObject(@NotNull OperationLog operationLog) {
     OperationLogEsDo operationLogEsDo = new OperationLogEsDo();
     BeanUtils.copyProperties(operationLog, operationLogEsDo);
@@ -54,6 +58,7 @@ public class OperationLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
@@ -67,6 +72,7 @@ public class OperationLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSaveCo operationLogSaveCo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogSaveCo, operationLog);
@@ -75,6 +81,7 @@ public class OperationLogConvertor {
 
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {
     OperationLog operationLog = new OperationLog();
     BeanUtils.copyProperties(operationLogEsDo, operationLog);

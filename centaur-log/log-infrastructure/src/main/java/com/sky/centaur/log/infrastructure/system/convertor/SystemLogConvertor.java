@@ -26,6 +26,8 @@ import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +41,7 @@ import org.springframework.beans.BeanUtils;
 public class SystemLogConvertor {
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLogKafkaDo toKafkaDataObject(@NotNull SystemLog systemLog) {
     SystemLogKafkaDo systemLogKafkaDo = new SystemLogKafkaDo();
     BeanUtils.copyProperties(systemLog, systemLogKafkaDo);
@@ -46,6 +49,7 @@ public class SystemLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLogEsDo toEsDataObject(@NotNull SystemLog systemLog) {
     SystemLogEsDo systemLogEsDo = new SystemLogEsDo();
     BeanUtils.copyProperties(systemLog, systemLogEsDo);
@@ -53,6 +57,7 @@ public class SystemLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLog toEntity(@NotNull SystemLogSubmitCo systemLogSubmitCo) {
     SystemLog systemLog = new SystemLog();
     BeanUtils.copyProperties(systemLogSubmitCo, systemLog);
@@ -65,6 +70,7 @@ public class SystemLogConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLog toEntity(@NotNull SystemLogSaveCo systemLogSaveCo) {
     SystemLog systemLog = new SystemLog();
     BeanUtils.copyProperties(systemLogSaveCo, systemLog);

@@ -25,6 +25,8 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
@@ -38,11 +40,13 @@ import org.springframework.beans.BeanUtils;
 public class AuthorityConvertor {
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityDo authorityDo) {
     return new Authority(authorityDo.getId(), authorityDo.getCode(), authorityDo.getName());
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
     AuthorityDo authorityDo = new AuthorityDo();
     BeanUtils.copyProperties(authority, authorityDo);
@@ -50,12 +54,14 @@ public class AuthorityConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityNodeDo toNodeDataObject(@NotNull Authority authority) {
     AuthorityNodeDo authorityNodeDo = new AuthorityNodeDo();
     BeanUtils.copyProperties(authority, authorityNodeDo);
     return authorityNodeDo;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityAddCo authorityAddCo) {
     Authority authority = new Authority();
     BeanUtils.copyProperties(authorityAddCo, authority);
@@ -65,24 +71,28 @@ public class AuthorityConvertor {
     return authority;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
     Authority authority = new Authority();
     BeanUtils.copyProperties(authorityUpdateCo, authority);
     return authority;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityFindAllCo authorityFindAllCo) {
     Authority authority = new Authority();
     BeanUtils.copyProperties(authorityFindAllCo, authority);
     return authority;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityDeleteCo authorityDeleteCo) {
     Authority authority = new Authority();
     BeanUtils.copyProperties(authorityDeleteCo, authority);
     return authority;
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityFindAllCo toFindAllCo(@NotNull Authority authority) {
     AuthorityFindAllCo authorityFindAllCo = new AuthorityFindAllCo();
     BeanUtils.copyProperties(authority, authorityFindAllCo);
