@@ -20,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 /**
  * 鉴权服务
@@ -31,6 +32,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableConfigurationProperties
 @EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
 @EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.authentication.**")
+@EnableMethodSecurity
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {
