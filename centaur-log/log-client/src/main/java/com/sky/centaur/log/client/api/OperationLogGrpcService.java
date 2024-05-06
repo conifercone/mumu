@@ -37,7 +37,9 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
 
   @Override
   public void destroy() {
-    channel.shutdown();
+    if (channel != null) {
+      channel.shutdown();
+    }
   }
 
   public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {

@@ -35,7 +35,9 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   @Override
   public void destroy() {
-    channel.shutdown();
+    if (channel != null) {
+      channel.shutdown();
+    }
   }
 
   public void submit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {

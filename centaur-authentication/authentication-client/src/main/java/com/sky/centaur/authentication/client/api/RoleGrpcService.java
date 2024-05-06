@@ -46,7 +46,9 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @Override
   public void destroy() {
-    channel.shutdown();
+    if (channel != null) {
+      channel.shutdown();
+    }
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
