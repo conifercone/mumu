@@ -39,4 +39,6 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
   private String phone;
 
   private SexEnum sex;
+
+  private String email;
 }

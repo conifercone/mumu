@@ -26,18 +26,15 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -104,30 +101,17 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Authority authority) {
-    Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(authority.getId());
-    Optional<AuthorityNodeDo> nodeDoOptional = getAuthorityNodeDoOptional(authority);
-    if (authorityDoOptional.isPresent() && nodeDoOptional.isPresent()) {
-      distributedLock.lock();
+    distributedLock.lock();
+    try {
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
-      AuthorityDo target = authorityDoOptional.get();
-      BeanUtil.jpaUpdate(dataObject, target);
-      authorityRepository.merge(target);
+      authorityRepository.merge(dataObject);
       AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
-      AuthorityNodeDo targetNode = nodeDoOptional.get();
-      BeanUtils.copyProperties(nodeDataObject, targetNode,
-          BeanUtil.getNullPropertyNames(nodeDataObject));
-      addAuthorityNode(targetNode);
+      addAuthorityNode(nodeDataObject);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    } finally {
       distributedLock.unlock();
-    } else {
-      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected @NotNull Optional<AuthorityNodeDo> getAuthorityNodeDoOptional(
-      @NotNull Authority authority) {
-    return authorityNodeRepository.findById(authority.getId());
   }
 
   @Override

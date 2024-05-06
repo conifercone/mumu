@@ -16,11 +16,9 @@
 
 package com.sky.centaur.basis.tools;
 
-import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import java.util.HashSet;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -53,13 +51,4 @@ public class BeanUtil {
     return emptyNames.toArray(result);
   }
 
-  /**
-   * jpa更新数据属性赋值
-   *
-   * @param source 更新值
-   * @param target 数据库目标值
-   */
-  public static void jpaUpdate(JpaBasisDataObject source, JpaBasisDataObject target) {
-    BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
-  }
 }

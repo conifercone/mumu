@@ -51,7 +51,7 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   private String password;
 
-  private Boolean enabled = false;
+  private Boolean enabled = true;
 
   private Boolean credentialsNonExpired = true;
 
@@ -74,6 +74,10 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Setter
   private SexEnum sex;
 
+  @Getter
+  @Setter
+  private String email;
+
   public Account(Long id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
@@ -81,9 +85,9 @@ public class Account extends BasisDomainModel implements UserDetails {
     this.role = role;
   }
 
-  public Account(Long id, String username, String password, boolean enabled,
-      boolean accountNonExpired,
-      boolean credentialsNonExpired, boolean accountNonLocked, Role role) {
+  public Account(Long id, String username, String password, Boolean enabled,
+      Boolean accountNonExpired,
+      Boolean credentialsNonExpired, Boolean accountNonLocked, Role role) {
     this.id = id;
     this.username = username;
     this.password = password;

@@ -13,36 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+-- users新增列
+-- 电子邮箱
+ALTER TABLE users
+    ADD COLUMN email varchar(200);
+comment on column users.email is '电子邮箱';
 
-/**
- * 账户信息注册客户端对象
- *
- * @author kaiyu.shan
- * @since 1.0.0
- */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountRegisterCo extends BaseClientObject {
-
-  private Long id;
-
-  private String username;
-
-  private String password;
-
-  private String roleCode;
-
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
-
-  private String email;
-}

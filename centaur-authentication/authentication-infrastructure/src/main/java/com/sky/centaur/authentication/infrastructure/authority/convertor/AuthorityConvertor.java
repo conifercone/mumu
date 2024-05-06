@@ -21,10 +21,16 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityNodeRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
@@ -73,9 +79,24 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
-    Authority authority = new Authority();
-    BeanUtils.copyProperties(authorityUpdateCo, authority);
-    return authority;
+    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
+    AuthorityNodeRepository authorityNodeRepository = SpringContextUtil.getBean(
+        AuthorityNodeRepository.class);
+    if (authorityUpdateCo.getId() == null) {
+      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+    }
+    Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(
+        authorityUpdateCo.getId());
+    Optional<AuthorityNodeDo> authorityNodeDoOptional = authorityNodeRepository.findById(
+        authorityUpdateCo.getId());
+    if (authorityDoOptional.isPresent() && authorityNodeDoOptional.isPresent()) {
+      Authority authority = toEntity(authorityDoOptional.get());
+      BeanUtils.copyProperties(authorityUpdateCo, authority,
+          BeanUtil.getNullPropertyNames(authorityUpdateCo));
+      return authority;
+    } else {
+      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
+    }
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

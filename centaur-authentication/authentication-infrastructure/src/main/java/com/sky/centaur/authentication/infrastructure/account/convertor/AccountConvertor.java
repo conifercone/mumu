@@ -19,10 +19,13 @@ import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
@@ -55,6 +58,7 @@ public class AccountConvertor {
     account.setAvatarUrl(accountDo.getAvatarUrl());
     account.setPhone(accountDo.getPhone());
     account.setSex(accountDo.getSex());
+    account.setEmail(accountDo.getEmail());
     return account;
   }
 
@@ -72,6 +76,7 @@ public class AccountConvertor {
     accountDo.setAvatarUrl(account.getAvatarUrl());
     accountDo.setPhone(account.getPhone());
     accountDo.setSex(account.getSex());
+    accountDo.setEmail(account.getEmail());
     Optional.ofNullable(account.getRole())
         .ifPresent(role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole())));
     return accountDo;
@@ -101,16 +106,28 @@ public class AccountConvertor {
     account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
     account.setPhone(accountRegisterCo.getPhone());
     account.setSex(accountRegisterCo.getSex());
+    account.setEmail(accountRegisterCo.getEmail());
     return account;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Account toEntity(@NotNull AccountUpdateCo accountUpdateCo) {
-    Account account = new Account(accountUpdateCo.getId(), null, null, null);
-    account.setAvatarUrl(accountUpdateCo.getAvatarUrl());
-    account.setPhone(accountUpdateCo.getPhone());
-    account.setSex(accountUpdateCo.getSex());
-    return account;
+    if (accountUpdateCo.getId() == null) {
+      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+    }
+    AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateCo.getId());
+    if (accountDoOptional.isPresent()) {
+      Account account = toEntity(accountDoOptional.get());
+      Optional.ofNullable(accountUpdateCo.getAvatarUrl()).ifPresent(account::setAvatarUrl);
+      Optional.ofNullable(accountUpdateCo.getPhone()).ifPresent(account::setPhone);
+      Optional.ofNullable(accountUpdateCo.getSex()).ifPresent(account::setSex);
+      Optional.ofNullable(accountUpdateCo.getEmail()).ifPresent(account::setEmail);
+      return account;
+    } else {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+    }
+
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

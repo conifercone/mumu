@@ -37,4 +37,6 @@ public class AccountUpdateCo extends BaseClientObject {
   private String phone;
 
   private SexEnum sex;
+
+  private String email;
 }

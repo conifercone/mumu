@@ -27,7 +27,6 @@ import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.basis.tools.SecurityContextUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
@@ -122,16 +121,14 @@ public class AccountGatewayImpl implements AccountGateway {
   public void updateById(@NotNull Account account) {
     if (SecurityContextUtil.getLoginAccountId() != null && Objects.equals(
         SecurityContextUtil.getLoginAccountId(), account.getId())) {
-      Optional<AccountDo> accountDoOptional = accountRepository.findById(account.getId());
-      if (accountDoOptional.isPresent()) {
-        distributedLock.lock();
+      distributedLock.lock();
+      try {
         AccountDo accountDoSource = AccountConvertor.toDataObject(account);
-        AccountDo accountDoTarget = accountDoOptional.get();
-        BeanUtil.jpaUpdate(accountDoSource, accountDoTarget);
-        accountRepository.merge(accountDoTarget);
+        accountRepository.merge(accountDoSource);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      } finally {
         distributedLock.unlock();
-      } else {
-        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
     } else {
       throw new CentaurException(ResultCode.UNAUTHORIZED);

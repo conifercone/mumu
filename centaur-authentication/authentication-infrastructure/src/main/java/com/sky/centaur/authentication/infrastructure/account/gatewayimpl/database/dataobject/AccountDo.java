@@ -64,7 +64,7 @@ public class AccountDo extends JpaBasisDataObject {
 
   @NotNull
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = false;
+  private Boolean enabled = true;
 
   @Column(name = "credentials_non_expired")
   private Boolean credentialsNonExpired;
@@ -92,4 +92,8 @@ public class AccountDo extends JpaBasisDataObject {
   @JdbcType(PostgreSQLEnumJdbcType.class)
   @Enumerated(EnumType.STRING)
   private SexEnum sex;
+
+  @Size(max = 200)
+  @Column(name = "email", length = 200)
+  private String email;
 }

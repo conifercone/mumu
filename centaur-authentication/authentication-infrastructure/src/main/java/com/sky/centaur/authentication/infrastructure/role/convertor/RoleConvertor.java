@@ -25,6 +25,8 @@ import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -109,12 +111,22 @@ public class RoleConvertor {
     }
     //noinspection DuplicatedCode
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = new Role();
-    BeanUtils.copyProperties(roleUpdateCo, role, "authorities");
-    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-            roleUpdateCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
-        .collect(Collectors.toList()));
-    return role;
+    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
+    RoleNodeRepository roleNodeRepository = SpringContextUtil.getBean(RoleNodeRepository.class);
+    Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateCo.getId());
+    Optional<RoleNodeDo> roleNodeDoOptional = roleNodeRepository.findById(roleUpdateCo.getId());
+    if (roleDoOptional.isPresent() && roleNodeDoOptional.isPresent()) {
+      Role role = toEntity(roleDoOptional.get());
+      Optional.ofNullable(roleUpdateCo.getName()).ifPresent(role::setName);
+      Optional.ofNullable(roleUpdateCo.getCode()).ifPresent(role::setCode);
+      Optional.ofNullable(roleUpdateCo.getAuthorities())
+          .ifPresent(authorities -> role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
+                  authorities).stream().map(AuthorityConvertor::toEntity)
+              .collect(Collectors.toList())));
+      return role;
+    } else {
+      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
+    }
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

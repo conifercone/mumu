@@ -24,20 +24,15 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.R
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
 import com.sky.centaur.basis.constants.BeanNameConstant;
-import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.basis.tools.BeanUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -99,30 +94,18 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Role role) {
-    Optional<RoleDo> roleDoOptional = roleRepository.findById(role.getId());
-    Optional<RoleNodeDo> roleNodeDoOptional = getRoleNodeDoOptional(role);
-    if (roleDoOptional.isPresent() && roleNodeDoOptional.isPresent()) {
-      distributedLock.lock();
+    distributedLock.lock();
+    try {
       RoleDo roleDo = RoleConvertor.toDataObject(role);
-      RoleDo target = roleDoOptional.get();
-      BeanUtil.jpaUpdate(roleDo, target);
-      roleRepository.merge(target);
+      roleRepository.merge(roleDo);
       RoleNodeDo nodeDataObject = RoleConvertor.toNodeDataObject(role);
-      RoleNodeDo roleNodeDo = roleNodeDoOptional.get();
-      BeanUtils.copyProperties(nodeDataObject, roleNodeDo,
-          BeanUtil.getNullPropertyNames(nodeDataObject));
-      deleteRoleNode(roleNodeDo.getId());
-      addRoleNode(roleNodeDo);
+      deleteRoleNode(nodeDataObject.getId());
+      addRoleNode(nodeDataObject);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    } finally {
       distributedLock.unlock();
-    } else {
-      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected @NotNull Optional<RoleNodeDo> getRoleNodeDoOptional(@NotNull Role role) {
-    return roleNodeRepository.findById(role.getId());
   }
 
   @Override
