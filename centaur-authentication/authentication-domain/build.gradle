@@ -3,6 +3,6 @@
 //file:noinspection GrUnresolvedAccess
 dependencies {
     implementation project(":centaur-basis")
-    compileOnly libs.springBootOauth2AuthorizationServer
-    compileOnly libs.springDataCommons
+    implementation libs.springSecurityCore
+    implementation libs.springDataCommons
 }

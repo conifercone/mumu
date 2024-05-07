@@ -129,6 +129,8 @@ jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api", v
 hibernateTypes63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
 springSecurityCore = { module = "org.springframework.security:spring-security-core" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto
+springSecurityCrypto = { module = "org.springframework.security:spring-security-crypto" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-core
 springSecurityOauth2Core = { module = "org.springframework.security:spring-security-oauth2-core" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
