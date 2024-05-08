@@ -15,11 +15,8 @@
  */
 package com.sky.centaur.authentication.infrastructure.config;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,17 +30,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("centaur.auth")
 public class AuthenticationProperties {
 
-  @NestedConfigurationProperty
-  private Security security = new Security();
-
   /**
    * 是否开启服务日志
    */
   private boolean enableLog = false;
 
-  @Data
-  public static class Security {
-
-    private List<String> excludeUrls = new ArrayList<>();
-  }
 }

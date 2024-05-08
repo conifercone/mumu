@@ -18,16 +18,18 @@ package com.sky.centaur.authentication.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.authentication.client.config.ResourceServerProperties;
+import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,6 +38,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 默认安全配置
@@ -50,8 +54,27 @@ public class DefaultSecurityConfig {
   @Bean
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
-      UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository)
+      UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository,
+      ResourceServerProperties resourceServerProperties)
       throws Exception {
+    //noinspection DuplicatedCode
+    if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
+      for (Policy policy : resourceServerProperties.getPolicies()) {
+        http.authorizeHttpRequests((authorize) -> {
+              AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
+                  .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
+                      policy.getMatcher());
+              if (StringUtils.hasText(policy.getRole())) {
+                authorizedUrl.hasRole(policy.getRole());
+              } else if (StringUtils.hasText(policy.getAuthority())) {
+                authorizedUrl.hasAuthority(policy.getAuthority());
+              } else if (policy.isPermitAll()) {
+                authorizedUrl.permitAll();
+              }
+            }
+        );
+      }
+    }
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
         .authorizeHttpRequests((authorize) -> authorize
@@ -72,17 +95,4 @@ public class DefaultSecurityConfig {
     return http.build();
   }
 
-
-  /**
-   * 使用WebSecurity.ignoring()忽略某些URL请求，这些请求将被Spring Security忽略
-   */
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer(
-      AuthenticationProperties authenticationProperties) {
-    return web -> {
-      // 读取配置文件auth.security.excludeUrls下的链接进行忽略（白名单）
-      web.ignoring().requestMatchers(
-          authenticationProperties.getSecurity().getExcludeUrls().toArray(new String[]{}));
-    };
-  }
 }

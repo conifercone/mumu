@@ -62,3 +62,6 @@ centaur:
       - matcher: /system/submit
         http-method: POST
         authority: message.write
+      - matcher: /actuator/**
+        http-method: GET
+        permit-all: true

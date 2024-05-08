@@ -45,3 +45,21 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         acl-token: ${consul_token:e1da9899-6008-1999-07f6-f78c7d99715b}
+centaur:
+  resource:
+    policies:
+      - matcher: /account/register
+        http-method: POST
+        permit-all: true
+      - matcher: /account/disable
+        http-method: PUT
+        role: admin
+      - matcher: /account/onlineAccounts
+        http-method: GET
+        role: admin
+      - matcher: /account/resetPassword
+        http-method: PUT
+        role: admin
+      - matcher: /actuator/**
+        http-method: GET
+        permit-all: true

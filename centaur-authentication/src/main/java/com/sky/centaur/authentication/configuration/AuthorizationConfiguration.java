@@ -26,6 +26,8 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sky.centaur.authentication.application.service.AccountUserDetailService;
+import com.sky.centaur.authentication.client.config.ResourceServerProperties;
+import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.token.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
@@ -52,9 +54,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -88,6 +92,8 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 授权配置
@@ -116,8 +122,27 @@ public class AuthorizationConfiguration {
       OAuth2AuthorizationService authorizationService,
       OAuth2TokenGenerator<?> tokenGenerator,
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
-      CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler)
+      CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler,
+      ResourceServerProperties resourceServerProperties)
       throws Exception {
+    //noinspection DuplicatedCode
+    if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
+      for (Policy policy : resourceServerProperties.getPolicies()) {
+        http.authorizeHttpRequests((authorize) -> {
+              AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
+                  .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
+                      policy.getMatcher());
+              if (StringUtils.hasText(policy.getRole())) {
+                authorizedUrl.hasRole(policy.getRole());
+              } else if (StringUtils.hasText(policy.getAuthority())) {
+                authorizedUrl.hasAuthority(policy.getAuthority());
+              } else if (policy.isPermitAll()) {
+                authorizedUrl.permitAll();
+              }
+            }
+        );
+      }
+    }
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
             oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
@@ -163,6 +188,7 @@ public class AuthorizationConfiguration {
                     systemLogGrpcService)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+
     return http.build();
   }
 

@@ -31,7 +31,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,7 +73,6 @@ public class AccountController {
   @PutMapping("/disable")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  @PreAuthorize("hasRole('admin')")
   public AccountDisableCo disable(@RequestBody AccountDisableCmd accountDisableCmd) {
     return accountService.disable(accountDisableCmd);
   }
@@ -91,7 +89,6 @@ public class AccountController {
   @GetMapping("/onlineAccounts")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  @PreAuthorize("hasRole('admin')")
   public AccountOnlineStatisticsCo onlineAccounts() {
     return accountService.onlineAccounts();
   }
@@ -100,7 +97,6 @@ public class AccountController {
   @PutMapping("/resetPassword")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  @PreAuthorize("hasRole('admin')")
   public AccountResetPasswordCo resetPassword(
       @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
     return accountService.resetPassword(accountResetPasswordCmd);

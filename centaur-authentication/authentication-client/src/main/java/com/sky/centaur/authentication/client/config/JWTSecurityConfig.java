@@ -50,6 +50,7 @@ public class JWTSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
         http.authorizeHttpRequests((authorize) -> {
@@ -68,7 +69,7 @@ public class JWTSecurityConfig {
       }
     }
     http.authorizeHttpRequests(
-        (authorize) -> authorize.requestMatchers("GET", "/actuator/**").permitAll().anyRequest()
+        (authorize) -> authorize.anyRequest()
             .authenticated());
     http.oauth2ResourceServer(
             resourceServerConfigurer -> resourceServerConfigurer.jwt(Customizer.withDefaults())
