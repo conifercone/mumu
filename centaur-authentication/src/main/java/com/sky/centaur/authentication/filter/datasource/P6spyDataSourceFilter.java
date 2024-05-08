@@ -55,7 +55,6 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
    */
   private void checkJar() {
     try {
-      //noinspection Java9ReflectionClassVisibility
       Class.forName("com.p6spy.engine.spy.P6DataSource");
     } catch (Exception e) {
       throw new CentaurException(ResultCode.MISSING_P6SPY_DEPENDENCY_INFORMATION);
