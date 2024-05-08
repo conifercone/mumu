@@ -13,6 +13,9 @@ dependencies {
     implementation libs.consulDiscovery
     implementation libs.springBootActuator
     implementation libs.springDataCommons
+    implementation libs.springWeb
+    implementation libs.tomcatEmbedCore
+    api libs.springBootOauth2ResourceServer
 }
 
 protobuf {

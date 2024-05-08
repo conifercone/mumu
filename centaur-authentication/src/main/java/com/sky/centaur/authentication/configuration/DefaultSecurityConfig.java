@@ -24,15 +24,18 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 /**
  * 默认安全配置
@@ -60,6 +63,12 @@ public class DefaultSecurityConfig {
     http.addFilterBefore(
         new JwtAuthenticationTokenFilter(userDetailsService, jwtDecoder, tokenRepository),
         UsernamePasswordAuthenticationFilter.class);
+    http.exceptionHandling((exceptions) -> exceptions
+        .defaultAuthenticationEntryPointFor(
+            new LoginUrlAuthenticationEntryPoint("http://localhost:31100/login"),
+            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+        )
+    );
     return http.build();
   }
 

@@ -13,29 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.basis.constants;
+package com.sky.centaur.authentication.client.config;
 
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
+import java.util.List;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * bean实例名称常量
+ * 资源服务器配置
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@API(status = Status.STABLE, since = "1.0.0")
-public final class BeanNameConstant {
+@Data
+@ConfigurationProperties("centaur.resource")
+public class ResourceServerProperties {
 
-  /**
-   * 默认事务管理器bean名称
-   */
-  public static final String DEFAULT_TRANSACTION_MANAGER_BEAN_NAME = "transactionManager";
+  @NestedConfigurationProperty
+  private List<Policy> policies;
 
-  /**
-   * neo4j事务管理器bean名称
-   */
-  public static final String NEO4J_TRANSACTION_MANAGER_BEAN_NAME = "neo4jTransactionManager";
 
+  @Data
+  public static class Policy {
+
+    private String httpMethod;
+
+    private String matcher;
+
+    private String authority;
+
+    private String role;
+
+    private boolean permitAll;
+
+  }
 }
-

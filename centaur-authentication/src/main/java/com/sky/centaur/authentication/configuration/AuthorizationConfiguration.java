@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -146,17 +147,19 @@ public class AuthorizationConfiguration {
     // authorization endpoint
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
-                new LoginUrlAuthenticationEntryPoint("/login"),
+                new LoginUrlAuthenticationEntryPoint("http://localhost:31100/login"),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("/login", operationLogGrpcService,
+                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                    operationLogGrpcService,
                     systemLogGrpcService))
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
             .jwt(withDefaults())
             .authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("/login", operationLogGrpcService,
+                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                    operationLogGrpcService,
                     systemLogGrpcService)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
@@ -310,8 +313,9 @@ public class AuthorizationConfiguration {
    * @return AuthorizationServer配置实例
    */
   @Bean
-  public AuthorizationServerSettings authorizationServerSettings() {
-    return AuthorizationServerSettings.builder().build();
+  public AuthorizationServerSettings authorizationServerSettings(
+      @Value("${server.port}") Integer port) {
+    return AuthorizationServerSettings.builder().issuer("http://localhost:" + port).build();
   }
 
   /**
