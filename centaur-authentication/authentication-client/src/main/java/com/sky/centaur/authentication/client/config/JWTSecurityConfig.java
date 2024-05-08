@@ -68,7 +68,8 @@ public class JWTSecurityConfig {
       }
     }
     http.authorizeHttpRequests(
-        (authorize) -> authorize.requestMatchers("GET", "/actuator/**").permitAll());
+        (authorize) -> authorize.requestMatchers("GET", "/actuator/**").permitAll().anyRequest()
+            .authenticated());
     http.oauth2ResourceServer(
             resourceServerConfigurer -> resourceServerConfigurer.jwt(Customizer.withDefaults())
                 .authenticationEntryPoint(new ResourceServerAuthenticationEntryPoint()))

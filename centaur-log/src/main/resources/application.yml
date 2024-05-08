@@ -59,3 +59,6 @@ centaur:
       - matcher: /operation/submit
         http-method: POST
         authority: message.write
+      - matcher: /system/submit
+        http-method: POST
+        authority: message.write
