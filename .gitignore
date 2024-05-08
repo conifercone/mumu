@@ -79,3 +79,6 @@ TODO
 test.html
 ad.js
 /.cache/
+
+# jrebel
+rebel.xml
