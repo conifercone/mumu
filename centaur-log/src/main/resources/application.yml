@@ -17,12 +17,6 @@
 server:
   port: ${port:31200}
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:31100
-          jwk-set-uri: http://localhost:31100/oauth2/jwks
   application:
     name: log
   config:
@@ -50,18 +44,3 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         acl-token: ${consul_token:e1da9899-6008-1999-07f6-f78c7d99715b}
-centaur:
-  resource:
-    policies:
-      - matcher: /operation/findById
-        http-method: GET
-        authority: message.read
-      - matcher: /operation/submit
-        http-method: POST
-        authority: message.write
-      - matcher: /system/submit
-        http-method: POST
-        authority: message.write
-      - matcher: /actuator/**
-        http-method: GET
-        permit-all: true
