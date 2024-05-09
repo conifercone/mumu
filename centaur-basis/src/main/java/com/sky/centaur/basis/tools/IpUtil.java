@@ -18,6 +18,8 @@ package com.sky.centaur.basis.tools;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,30 +37,24 @@ public final class IpUtil {
    * @return 客户端的IP地址
    */
   public static String getIpAddr(@NotNull HttpServletRequest request) {
-    String ip = request.getRemoteAddr();
+    AtomicReference<String> ip = new AtomicReference<>(request.getRemoteAddr());
     ArrayList<String> localIp = new ArrayList<>();
     localIp.add("127.0.0.1");
     localIp.add("192.168.1.110");
     localIp.add("unknown");
-    if (localIp.contains(ip)) {
-      ip = null;
+    if (localIp.contains(ip.get())) {
+      ip.set(null);
     }
-    if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-      ip = request.getHeader("x-forwarded-for");
-    }
-    if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-      ip = request.getHeader("Proxy-Client-IP");
-    }
-    if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-      ip = request.getHeader("WL-Proxy-Client-IP");
-    }
-    if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-      ip = request.getHeader("HTTP_CLIENT_IP");
-    }
-    if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-      ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-    }
-
-    return ip;
+    BiConsumer<String, String> ipConsumer = (ipStr, headerCausality) -> {
+      if (ipStr == null || ipStr.isEmpty() || "unknown".equalsIgnoreCase(ipStr)) {
+        ip.set(request.getHeader(headerCausality));
+      }
+    };
+    ipConsumer.accept(ip.get(), "x-forwarded-for");
+    ipConsumer.accept(ip.get(), "Proxy-Client-IP");
+    ipConsumer.accept(ip.get(), "WL-Proxy-Client-IP");
+    ipConsumer.accept(ip.get(), "HTTP_CLIENT_IP");
+    ipConsumer.accept(ip.get(), "HTTP_X_FORWARDED_FOR");
+    return ip.get();
   }
 }
