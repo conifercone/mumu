@@ -13,21 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database;
+package com.sky.centaur.basis.tools;
 
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import java.util.regex.Pattern;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 /**
- * 账户基本信息
+ * 通用工具类
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public interface AccountRepository extends BaseJpaRepository<AccountDo, Long> {
+public final class CommonUtil {
 
-  AccountDo findAccountDoByUsername(String username);
+  /**
+   * 邮箱正则表达式
+   */
+  private static final Pattern EMAIL_ENGLISH_PATTERN = Pattern.compile(
+      "^[a-zA-Z0-9_+&*-]+(?:\\\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,7}$");
 
-  AccountDo findAccountDoByEmail(String email);
+
+  /**
+   * 是否为合法邮箱格式
+   *
+   * @param email 邮箱地址
+   * @return 结果
+   */
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static boolean isEmail(final String email) {
+    return EMAIL_ENGLISH_PATTERN.matcher(email).matches();
+  }
 
 }

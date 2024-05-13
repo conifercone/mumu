@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import com.sky.centaur.basis.tools.CommonUtil;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.annotation.Resource;
 import java.util.Optional;
@@ -38,7 +39,9 @@ public class AccountUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<Account> optionalAccount = accountGateway.findAccountByUsername(username);
+    Optional<Account> optionalAccount =
+        CommonUtil.isEmail(username) ? accountGateway.findAccountByEmail(username)
+            : accountGateway.findAccountByUsername(username);
     if (optionalAccount.isPresent()) {
       return optionalAccount.get();
     }

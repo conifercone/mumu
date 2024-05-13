@@ -82,7 +82,8 @@ public class AccountGatewayImpl implements AccountGateway {
     dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
     AccountDo accountDoByUsername = accountRepository.findAccountDoByUsername(
         dataObject.getUsername());
-    if (accountDoByUsername != null) {
+    AccountDo accountDoByEmail = accountRepository.findAccountDoByEmail(dataObject.getEmail());
+    if (accountDoByUsername != null && accountDoByEmail != null) {
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -112,6 +113,14 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByUsername(String username) {
     return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
+        .map(AccountConvertor::toEntity);
+  }
+
+  @Override
+  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Optional<Account> findAccountByEmail(String email) {
+    return Optional.ofNullable(accountRepository.findAccountDoByEmail(email))
         .map(AccountConvertor::toEntity);
   }
 
