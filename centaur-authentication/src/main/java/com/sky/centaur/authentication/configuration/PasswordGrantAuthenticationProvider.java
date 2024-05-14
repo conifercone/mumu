@@ -20,7 +20,9 @@ import com.sky.centaur.basis.response.ResultCode;
 import jakarta.annotation.Resource;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -100,8 +102,9 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     //请求参数权限范围
     String requestScopesStr = (String) additionalParameters.get(OAuth2ParameterNames.SCOPE);
     //请求参数权限范围专场集合
-    Set<String> requestScopeSet = Stream.of(requestScopesStr.split(" "))
-        .collect(Collectors.toSet());
+    Set<String> requestScopeSet = Optional.ofNullable(requestScopesStr)
+        .map(res -> Stream.of(res.split(" "))
+            .collect(Collectors.toSet())).orElse(new HashSet<>());
 
     // Ensure the client is authenticated
     OAuth2ClientAuthenticationToken clientPrincipal =
