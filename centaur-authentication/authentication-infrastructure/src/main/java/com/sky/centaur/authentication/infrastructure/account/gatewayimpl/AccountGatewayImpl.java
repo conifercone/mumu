@@ -80,10 +80,8 @@ public class AccountGatewayImpl implements AccountGateway {
     AccountDo dataObject = AccountConvertor.toDataObject(account);
     // 密码加密
     dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
-    AccountDo accountDoByUsername = accountRepository.findAccountDoByUsername(
-        dataObject.getUsername());
-    AccountDo accountDoByEmail = accountRepository.findAccountDoByEmail(dataObject.getEmail());
-    if (accountDoByUsername != null && accountDoByEmail != null) {
+    if (findAccountByUsername(dataObject.getUsername()).isPresent() || findAccountByEmail(
+        dataObject.getEmail()).isPresent()) {
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
