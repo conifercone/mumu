@@ -110,7 +110,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByUsername(String username) {
-    return Optional.ofNullable(accountRepository.findAccountDoByUsername(username))
+    return accountRepository.findAccountDoByUsername(username)
         .map(AccountConvertor::toEntity);
   }
 
@@ -118,7 +118,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByEmail(String email) {
-    return Optional.ofNullable(accountRepository.findAccountDoByEmail(email))
+    return accountRepository.findAccountDoByEmail(email)
         .map(AccountConvertor::toEntity);
   }
 

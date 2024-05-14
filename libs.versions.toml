@@ -31,6 +31,7 @@ hypersistenceUtilsVersion = "3.7.3"
 curatorRecipesVersion = "5.1.0"
 flywayCoreVersion = "10.9.0"
 licensePluginVersion = '0.16.1'
+javaxMailVersion = '1.6.2'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -144,6 +145,8 @@ curatorRecipes = { module = "org.apache.curator:curator-recipes", version.ref = 
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayCoreVersion" }
 flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayCoreVersion" }
+# https://mvnrepository.com/artifact/com.sun.mail/javax.mail
+javaxMail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

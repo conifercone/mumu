@@ -38,13 +38,14 @@ public class AccountUserDetailService implements UserDetailsService {
   private AccountGateway accountGateway;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
     Optional<Account> optionalAccount =
-        CommonUtil.isEmail(username) ? accountGateway.findAccountByEmail(username)
-            : accountGateway.findAccountByUsername(username);
+        CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
+            usernameOrEmail)
+            : accountGateway.findAccountByUsername(usernameOrEmail);
     if (optionalAccount.isPresent()) {
       return optionalAccount.get();
     }
-    throw new UsernameNotFoundException(username);
+    throw new UsernameNotFoundException(usernameOrEmail);
   }
 }

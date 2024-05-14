@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database;
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
@@ -29,5 +30,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
     JpaSpecificationExecutor<RoleDo> {
 
-  RoleDo findByCode(String code);
+  Optional<RoleDo> findByCode(String code);
 }

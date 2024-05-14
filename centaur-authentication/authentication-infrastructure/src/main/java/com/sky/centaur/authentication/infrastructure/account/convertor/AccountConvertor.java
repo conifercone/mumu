@@ -101,7 +101,7 @@ public class AccountConvertor {
             SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
             : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
         accountRegisterCo.getPassword(),
-        Optional.ofNullable(roleRepository.findByCode(accountRegisterCo.getRoleCode()))
+        roleRepository.findByCode(accountRegisterCo.getRoleCode())
             .map(RoleConvertor::toEntity).orElse(null));
     account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
     account.setPhone(accountRegisterCo.getPhone());
