@@ -28,7 +28,7 @@ import org.springframework.beans.BeanWrapperImpl;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class BeanUtil {
+public final class BeanUtil {
 
   /**
    * 获取当前对象中属性值为null的所有属性名
