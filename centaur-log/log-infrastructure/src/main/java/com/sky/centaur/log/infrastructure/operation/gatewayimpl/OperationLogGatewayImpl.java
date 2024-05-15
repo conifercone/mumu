@@ -24,10 +24,10 @@ import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConver
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
-import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,18 +39,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogGatewayImpl implements OperationLogGateway {
 
-  @Resource
-  private OperationLogKafkaRepository operationLogKafkaRepository;
+  private final OperationLogKafkaRepository operationLogKafkaRepository;
+  private final OperationLogEsRepository operationLogEsRepository;
+  private final ObjectMapper objectMapper;
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
 
-
-  @Resource
-  private OperationLogEsRepository operationLogEsRepository;
-
-  @Resource
-  private ObjectMapper objectMapper;
-
-  @Resource
-  private PrimaryKeyGrpcService primaryKeyGrpcService;
+  @Autowired
+  public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
+      OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
+      PrimaryKeyGrpcService primaryKeyGrpcService) {
+    this.operationLogKafkaRepository = operationLogKafkaRepository;
+    this.operationLogEsRepository = operationLogEsRepository;
+    this.objectMapper = objectMapper;
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
+  }
 
   @Override
   public void submit(OperationLog operationLog) {

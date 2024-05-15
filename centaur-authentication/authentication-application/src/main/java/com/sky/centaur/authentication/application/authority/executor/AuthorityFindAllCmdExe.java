@@ -22,9 +22,9 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
@@ -39,8 +39,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AuthorityFindAllCmdExe")
 public class AuthorityFindAllCmdExe {
 
-  @Resource
-  private AuthorityGateway authorityGateway;
+  private final AuthorityGateway authorityGateway;
+
+  @Autowired
+  public AuthorityFindAllCmdExe(AuthorityGateway authorityGateway) {
+    this.authorityGateway = authorityGateway;
+  }
 
   public Page<AuthorityFindAllCo> execute(@NotNull AuthorityFindAllCmd authorityFindAllCmd) {
     Authority authority = AuthorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo());

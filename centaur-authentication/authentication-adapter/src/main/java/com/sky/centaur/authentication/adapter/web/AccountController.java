@@ -28,9 +28,9 @@ import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,8 +50,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "账户管理")
 public class AccountController {
 
-  @Resource
-  private AccountService accountService;
+  private final AccountService accountService;
+
+  @Autowired
+  public AccountController(AccountService accountService) {
+    this.accountService = accountService;
+  }
 
   @Operation(summary = "账户注册")
   @PostMapping("/register")

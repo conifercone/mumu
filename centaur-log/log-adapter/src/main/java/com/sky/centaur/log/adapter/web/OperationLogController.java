@@ -20,9 +20,9 @@ import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +42,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "操作日志管理")
 public class OperationLogController {
 
-  @Resource
-  private OperationLogService operationLogService;
+  private final OperationLogService operationLogService;
+
+  @Autowired
+  public OperationLogController(OperationLogService operationLogService) {
+    this.operationLogService = operationLogService;
+  }
 
   @Operation(summary = "提交日志")
   @PostMapping("/submit")

@@ -22,8 +22,8 @@ import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,8 +36,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleAddCmdExe")
 public class RoleAddCmdExe {
 
-  @Resource
-  private RoleGateway roleGateway;
+  private final RoleGateway roleGateway;
+
+  @Autowired
+  public RoleAddCmdExe(RoleGateway roleGateway) {
+    this.roleGateway = roleGateway;
+  }
 
   public RoleAddCo execute(@NotNull RoleAddCmd roleAddCmd) {
     Role role = RoleConvertor.toEntity(roleAddCmd.getRoleAddCo());

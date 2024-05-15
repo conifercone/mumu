@@ -26,9 +26,9 @@ import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +50,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "角色管理")
 public class RoleController {
 
-  @Resource
-  private RoleService roleService;
+  private final RoleService roleService;
+
+  @Autowired
+  public RoleController(RoleService roleService) {
+    this.roleService = roleService;
+  }
 
   @Operation(summary = "添加角色")
   @PostMapping("/add")

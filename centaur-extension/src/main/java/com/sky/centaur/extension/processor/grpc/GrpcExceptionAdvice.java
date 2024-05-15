@@ -20,13 +20,13 @@ import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import io.grpc.Status;
-import jakarta.annotation.Resource;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.lognet.springboot.grpc.recovery.GRpcExceptionHandler;
 import org.lognet.springboot.grpc.recovery.GRpcExceptionScope;
 import org.lognet.springboot.grpc.recovery.GRpcServiceAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * grpc异常统一处理
@@ -37,8 +37,12 @@ import org.slf4j.LoggerFactory;
 @GRpcServiceAdvice
 public class GrpcExceptionAdvice {
 
-  @Resource
-  private SystemLogGrpcService systemLogGrpcService;
+  private final SystemLogGrpcService systemLogGrpcService;
+
+  @Autowired
+  public GrpcExceptionAdvice(SystemLogGrpcService systemLogGrpcService) {
+    this.systemLogGrpcService = systemLogGrpcService;
+  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
 

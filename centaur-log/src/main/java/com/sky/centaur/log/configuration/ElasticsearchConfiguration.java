@@ -16,9 +16,10 @@
 package com.sky.centaur.log.configuration;
 
 import com.sky.centaur.log.infrastructure.config.LogProperties;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 
@@ -30,11 +31,16 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.log.elasticsearch", name = "enabled", havingValue = "true")
+@EnableConfigurationProperties(LogProperties.class)
 public class ElasticsearchConfiguration extends
     org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
 
-  @Resource
-  private LogProperties logProperties;
+  private final LogProperties logProperties;
+
+  @Autowired
+  public ElasticsearchConfiguration(LogProperties logProperties) {
+    this.logProperties = logProperties;
+  }
 
   @Override
   public @NotNull ClientConfiguration clientConfiguration() {

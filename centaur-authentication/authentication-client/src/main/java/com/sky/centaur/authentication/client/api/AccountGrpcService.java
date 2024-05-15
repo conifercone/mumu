@@ -29,6 +29,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,6 +45,12 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   private ManagedChannel channel;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcService.class);
+
+  @Autowired
+  public AccountGrpcService(
+      DiscoveryClient consulDiscoveryClient) {
+    super(consulDiscoveryClient);
+  }
 
   @Override
   public void destroy() {

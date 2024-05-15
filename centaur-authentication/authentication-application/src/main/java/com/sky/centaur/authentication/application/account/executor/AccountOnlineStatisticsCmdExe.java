@@ -18,7 +18,7 @@ package com.sky.centaur.authentication.application.account.executor;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,9 +31,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountOnlineStatisticsCmdExe")
 public class AccountOnlineStatisticsCmdExe {
 
-  @Resource
-  private AccountGateway accountGateway;
+  private final AccountGateway accountGateway;
 
+  @Autowired
+  public AccountOnlineStatisticsCmdExe(AccountGateway accountGateway) {
+    this.accountGateway = accountGateway;
+  }
 
   public AccountOnlineStatisticsCo execute() {
     long onlineAccounts = accountGateway.onlineAccounts();

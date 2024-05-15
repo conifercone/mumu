@@ -19,7 +19,6 @@ import com.sky.centaur.basis.tools.SpringContextUtil;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -34,8 +33,11 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class AuthenticationGrpcService {
 
-  @Resource
-  DiscoveryClient consulDiscoveryClient;
+  private final DiscoveryClient consulDiscoveryClient;
+
+  public AuthenticationGrpcService(DiscoveryClient consulDiscoveryClient) {
+    this.consulDiscoveryClient = consulDiscoveryClient;
+  }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
     //noinspection DuplicatedCode

@@ -28,10 +28,10 @@ import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,11 +44,16 @@ import org.springframework.stereotype.Service;
 @GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
-  @Resource
-  private SystemLogSubmitCmdExe systemLogSubmitCmdExe;
+  private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
 
-  @Resource
-  private SystemLogSaveCmdExe systemLogSaveCmdExe;
+  private final SystemLogSaveCmdExe systemLogSaveCmdExe;
+
+  @Autowired
+  public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
+      SystemLogSaveCmdExe systemLogSaveCmdExe) {
+    this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
+    this.systemLogSaveCmdExe = systemLogSaveCmdExe;
+  }
 
   @Override
   public void submit(SystemLogSubmitCmd systemLogSubmitCmd) {

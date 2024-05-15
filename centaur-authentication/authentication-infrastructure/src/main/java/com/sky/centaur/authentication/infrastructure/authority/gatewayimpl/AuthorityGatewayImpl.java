@@ -28,13 +28,14 @@ import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -54,14 +55,20 @@ import org.springframework.util.StringUtils;
 public class AuthorityGatewayImpl implements AuthorityGateway {
 
 
-  @Resource
-  AuthorityRepository authorityRepository;
+  private final AuthorityRepository authorityRepository;
 
-  @Resource
-  AuthorityNodeRepository authorityNodeRepository;
+  private final AuthorityNodeRepository authorityNodeRepository;
 
-  @Resource
-  DistributedLock distributedLock;
+  private final DistributedLock distributedLock;
+
+  @Autowired
+  public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
+      AuthorityNodeRepository authorityNodeRepository,
+      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+    this.authorityRepository = authorityRepository;
+    this.authorityNodeRepository = authorityNodeRepository;
+    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+  }
 
   @Override
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)

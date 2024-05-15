@@ -19,8 +19,8 @@ import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,8 +32,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogSaveCmdExe {
 
-  @Resource
-  private OperationLogGateway operationLogGateway;
+  private final OperationLogGateway operationLogGateway;
+
+  @Autowired
+  public OperationLogSaveCmdExe(OperationLogGateway operationLogGateway) {
+    this.operationLogGateway = operationLogGateway;
+  }
 
   public void execute(@NotNull OperationLogSaveCmd operationLogSaveCmd) {
     OperationLogSaveCo operationLogSaveCo = operationLogSaveCmd.getOperationLogSaveCo();

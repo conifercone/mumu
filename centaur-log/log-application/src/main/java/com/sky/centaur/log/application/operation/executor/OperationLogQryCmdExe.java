@@ -19,10 +19,10 @@ package com.sky.centaur.log.application.operation.executor;
 import com.sky.centaur.log.client.dto.OperationLogQryCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
-import jakarta.annotation.Resource;
 import java.util.concurrent.atomic.AtomicReference;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,8 +34,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogQryCmdExe {
 
-  @Resource
-  private OperationLogGateway operationLogGateway;
+  private final OperationLogGateway operationLogGateway;
+
+  @Autowired
+  public OperationLogQryCmdExe(OperationLogGateway operationLogGateway) {
+    this.operationLogGateway = operationLogGateway;
+  }
 
   public OperationLogQryCo execute(@NotNull OperationLogQryCmd operationLogQryCmd) {
     AtomicReference<OperationLogQryCo> operationLogQryCo = new AtomicReference<>();

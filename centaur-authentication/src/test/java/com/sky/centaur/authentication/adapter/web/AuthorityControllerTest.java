@@ -18,9 +18,9 @@ package com.sky.centaur.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import jakarta.annotation.Resource;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -43,8 +43,12 @@ import org.springframework.transaction.annotation.Transactional;
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class AuthorityControllerTest {
 
-  @Resource
-  private MockMvc mockMvc;
+  private final MockMvc mockMvc;
+
+  @Autowired
+  public AuthorityControllerTest(MockMvc mockMvc) {
+    this.mockMvc = mockMvc;
+  }
 
   @Test
   @Transactional

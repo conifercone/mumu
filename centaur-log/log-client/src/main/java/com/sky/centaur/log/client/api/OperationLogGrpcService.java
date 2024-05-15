@@ -21,6 +21,8 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,6 +36,12 @@ import org.springframework.stereotype.Component;
 public class OperationLogGrpcService extends LogGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
+
+  @Autowired
+  public OperationLogGrpcService(
+      DiscoveryClient consulDiscoveryClient) {
+    super(consulDiscoveryClient);
+  }
 
   @Override
   public void destroy() {

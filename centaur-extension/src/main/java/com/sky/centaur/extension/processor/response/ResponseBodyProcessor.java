@@ -24,12 +24,12 @@ import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -54,9 +54,12 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   private static final String VOID = "void";
   private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
-  @Resource
-  private SystemLogGrpcService systemLogGrpcService;
+  private final SystemLogGrpcService systemLogGrpcService;
 
+  @Autowired
+  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService) {
+    this.systemLogGrpcService = systemLogGrpcService;
+  }
 
   @ExceptionHandler(CentaurException.class)
   public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException,

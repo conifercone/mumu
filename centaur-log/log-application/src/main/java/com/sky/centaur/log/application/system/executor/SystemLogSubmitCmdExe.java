@@ -19,8 +19,8 @@ import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,8 +32,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemLogSubmitCmdExe {
 
-  @Resource
-  private SystemLogGateway systemLogGateway;
+  private final SystemLogGateway systemLogGateway;
+
+  @Autowired
+  public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway) {
+    this.systemLogGateway = systemLogGateway;
+  }
 
   public void execute(@NotNull SystemLogSubmitCmd systemLogSubmitCmd) {
     SystemLogSubmitCo systemLogSubmitCo = systemLogSubmitCmd.getSystemLogSubmitCo();

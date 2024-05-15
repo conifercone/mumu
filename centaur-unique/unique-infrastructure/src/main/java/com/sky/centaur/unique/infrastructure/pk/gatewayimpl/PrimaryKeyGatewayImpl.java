@@ -18,7 +18,7 @@ package com.sky.centaur.unique.infrastructure.pk.gatewayimpl;
 
 import com.github.guang19.leaf.core.IdGenerator;
 import com.sky.centaur.unique.domain.pk.gateway.PrimaryKeyGateway;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,8 +30,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryKeyGatewayImpl implements PrimaryKeyGateway {
 
-  @Resource
-  private IdGenerator snowflakeIdGenerator;
+  private final IdGenerator snowflakeIdGenerator;
+
+  @Autowired
+  public PrimaryKeyGatewayImpl(IdGenerator snowflakeIdGenerator) {
+    this.snowflakeIdGenerator = snowflakeIdGenerator;
+  }
 
   @Override
   public long snowflake() {

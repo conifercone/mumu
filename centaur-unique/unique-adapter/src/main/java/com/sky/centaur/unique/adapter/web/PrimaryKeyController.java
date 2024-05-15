@@ -19,9 +19,9 @@ import com.sky.centaur.unique.client.api.PrimaryKeyService;
 import com.sky.centaur.unique.client.dto.co.PrimaryKeySnowflakeCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,8 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "主键")
 public class PrimaryKeyController {
 
-  @Resource
-  private PrimaryKeyService primaryKeyService;
+  private final PrimaryKeyService primaryKeyService;
+
+  @Autowired
+  public PrimaryKeyController(PrimaryKeyService primaryKeyService) {
+    this.primaryKeyService = primaryKeyService;
+  }
 
   @Operation(summary = "获取主键(雪花算法)")
   @GetMapping("/snowflake")

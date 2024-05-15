@@ -17,7 +17,7 @@ package com.sky.centaur.authentication.client.config;
 
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +45,12 @@ import org.springframework.util.StringUtils;
 @Import(ResourceServerProperties.class)
 public class JWTSecurityConfig {
 
-  @Resource
-  ResourceServerProperties resourceServerProperties;
+  private final ResourceServerProperties resourceServerProperties;
+
+  @Autowired
+  public JWTSecurityConfig(ResourceServerProperties resourceServerProperties) {
+    this.resourceServerProperties = resourceServerProperties;
+  }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

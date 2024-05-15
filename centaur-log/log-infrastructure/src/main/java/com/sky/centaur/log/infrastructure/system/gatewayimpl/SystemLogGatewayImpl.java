@@ -23,7 +23,7 @@ import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.SystemLogKafkaRepository;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,15 +35,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemLogGatewayImpl implements SystemLogGateway {
 
-  @Resource
-  private SystemLogKafkaRepository systemLogKafkaRepository;
+  private final SystemLogKafkaRepository systemLogKafkaRepository;
 
-  @Resource
-  private SystemLogEsRepository systemLogEsRepository;
+  private final SystemLogEsRepository systemLogEsRepository;
 
+  private final ObjectMapper objectMapper;
 
-  @Resource
-  private ObjectMapper objectMapper;
+  @Autowired
+  public SystemLogGatewayImpl(SystemLogKafkaRepository systemLogKafkaRepository,
+      SystemLogEsRepository systemLogEsRepository, ObjectMapper objectMapper) {
+    this.systemLogKafkaRepository = systemLogKafkaRepository;
+    this.systemLogEsRepository = systemLogEsRepository;
+    this.objectMapper = objectMapper;
+  }
 
   @Override
   public void submit(SystemLog systemLog) {

@@ -33,12 +33,13 @@ import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,25 +54,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Observed(name = "AccountGatewayImpl")
 public class AccountGatewayImpl implements AccountGateway {
 
-  @Resource
-  private AccountRepository accountRepository;
+  private final AccountRepository accountRepository;
 
-  @Resource
-  private TokenRepository tokenRepository;
+  private final TokenRepository tokenRepository;
 
-  @Resource
-  private AccountNodeRepository accountNodeRepository;
+  private final AccountNodeRepository accountNodeRepository;
 
-  @Resource
-  private PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-  @Resource
-  private OperationLogGrpcService operationLogGrpcService;
+  private final OperationLogGrpcService operationLogGrpcService;
 
-  @Resource
-  private DistributedLock distributedLock;
+  private final DistributedLock distributedLock;
 
   public static final String PASSWORD_AFTER_RESET = "123456";
+
+  @Autowired
+  public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
+      AccountNodeRepository accountNodeRepository, PasswordEncoder passwordEncoder,
+      OperationLogGrpcService operationLogGrpcService,
+      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+    this.accountRepository = accountRepository;
+    this.tokenRepository = tokenRepository;
+    this.accountNodeRepository = accountNodeRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.operationLogGrpcService = operationLogGrpcService;
+    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+  }
 
   @Override
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)

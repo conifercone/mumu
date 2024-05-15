@@ -40,10 +40,10 @@ import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -57,23 +57,31 @@ import org.springframework.stereotype.Service;
 @Observed(name = "AccountServiceImpl")
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
-  @Resource
-  private AccountRegisterCmdExe accountRegisterCmdExe;
+  private final AccountRegisterCmdExe accountRegisterCmdExe;
 
-  @Resource
-  private AccountUpdateCmdExe accountUpdateCmdExe;
+  private final AccountUpdateCmdExe accountUpdateCmdExe;
 
-  @Resource
-  private AccountDisableCmdExe accountDisableCmdExe;
+  private final AccountDisableCmdExe accountDisableCmdExe;
 
-  @Resource
-  private AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe;
+  private final AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe;
 
-  @Resource
-  private AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe;
+  private final AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe;
 
-  @Resource
-  private AccountResetPasswordCmdExe accountResetPasswordCmdExe;
+  private final AccountResetPasswordCmdExe accountResetPasswordCmdExe;
+
+  @Autowired
+  public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
+      AccountUpdateCmdExe accountUpdateCmdExe, AccountDisableCmdExe accountDisableCmdExe,
+      AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
+      AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
+      AccountResetPasswordCmdExe accountResetPasswordCmdExe) {
+    this.accountRegisterCmdExe = accountRegisterCmdExe;
+    this.accountUpdateCmdExe = accountUpdateCmdExe;
+    this.accountDisableCmdExe = accountDisableCmdExe;
+    this.accountCurrentLoginQueryCmdExe = accountCurrentLoginQueryCmdExe;
+    this.accountOnlineStatisticsCmdExe = accountOnlineStatisticsCmdExe;
+    this.accountResetPasswordCmdExe = accountResetPasswordCmdExe;
+  }
 
   @Override
   public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {

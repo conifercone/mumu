@@ -32,10 +32,10 @@ import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -50,14 +50,19 @@ import org.springframework.stereotype.Service;
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
     OperationLogService {
 
-  @Resource
-  private OperationLogSubmitCmdExe operationLogSubmitCmdExe;
+  private final OperationLogSubmitCmdExe operationLogSubmitCmdExe;
 
-  @Resource
-  private OperationLogSaveCmdExe operationLogSaveCmdExe;
+  private final OperationLogSaveCmdExe operationLogSaveCmdExe;
 
-  @Resource
-  private OperationLogQryCmdExe operationLogQryCmdExe;
+  private final OperationLogQryCmdExe operationLogQryCmdExe;
+
+  @Autowired
+  public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
+      OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe) {
+    this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
+    this.operationLogSaveCmdExe = operationLogSaveCmdExe;
+    this.operationLogQryCmdExe = operationLogQryCmdExe;
+  }
 
   @Override
   public void submit(OperationLogSubmitCmd operationLogSubmitCmd) {

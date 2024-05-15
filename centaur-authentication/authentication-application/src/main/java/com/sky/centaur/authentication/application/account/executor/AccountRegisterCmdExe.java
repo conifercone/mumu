@@ -21,8 +21,8 @@ import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,9 +35,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountRegisterCmdExe")
 public class AccountRegisterCmdExe {
 
-  @Resource
-  private AccountGateway accountGateway;
+  private final AccountGateway accountGateway;
 
+  @Autowired
+  public AccountRegisterCmdExe(AccountGateway accountGateway) {
+    this.accountGateway = accountGateway;
+  }
 
   public AccountRegisterCo execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
     Account entity = AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo());

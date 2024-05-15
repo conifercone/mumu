@@ -22,8 +22,8 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,9 +36,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AuthorityAddCmdExe")
 public class AuthorityAddCmdExe {
 
-  @Resource
-  private AuthorityGateway authorityGateway;
+  private final AuthorityGateway authorityGateway;
 
+  @Autowired
+  public AuthorityAddCmdExe(AuthorityGateway authorityGateway) {
+    this.authorityGateway = authorityGateway;
+  }
 
   public AuthorityAddCo execute(@NotNull AuthorityAddCmd authorityAddCmd) {
     Authority authority = AuthorityConvertor.toEntity(authorityAddCmd.getAuthorityAddCo());

@@ -17,7 +17,6 @@
 package com.sky.centaur.authentication.configuration;
 
 import com.sky.centaur.basis.response.ResultCode;
-import jakarta.annotation.Resource;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,20 +70,23 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
 
 
   private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
-  @Resource
-  private UserDetailsService userDetailsService;
-  @Resource
-  private PasswordEncoder passwordEncoder;
+  private final UserDetailsService userDetailsService;
+  private final PasswordEncoder passwordEncoder;
 
   private final OAuth2AuthorizationService authorizationService;
   private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
 
   public PasswordGrantAuthenticationProvider(OAuth2AuthorizationService authorizationService,
-      OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator) {
+      OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
+      UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
     Assert.notNull(authorizationService, "authorizationService cannot be null");
     Assert.notNull(tokenGenerator, "tokenGenerator cannot be null");
+    Assert.notNull(userDetailsService, "userDetailsService cannot be null");
+    Assert.notNull(passwordEncoder, "passwordEncoder cannot be null");
     this.authorizationService = authorizationService;
     this.tokenGenerator = tokenGenerator;
+    this.userDetailsService = userDetailsService;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override

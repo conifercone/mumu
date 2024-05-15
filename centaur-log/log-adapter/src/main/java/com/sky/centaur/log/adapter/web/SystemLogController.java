@@ -19,9 +19,9 @@ import com.sky.centaur.log.client.api.SystemLogService;
 import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +39,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "系统日志管理")
 public class SystemLogController {
 
-  @Resource
-  private SystemLogService systemLogService;
+  private final SystemLogService systemLogService;
+
+  @Autowired
+  public SystemLogController(SystemLogService systemLogService) {
+    this.systemLogService = systemLogService;
+  }
 
   @Operation(summary = "提交日志")
   @PostMapping("/submit")

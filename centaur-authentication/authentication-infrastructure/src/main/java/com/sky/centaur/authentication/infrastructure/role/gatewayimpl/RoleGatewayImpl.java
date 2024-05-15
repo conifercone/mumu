@@ -26,13 +26,13 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.d
 import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -52,14 +52,18 @@ import org.springframework.util.StringUtils;
 @Observed(name = "RoleGatewayImpl")
 public class RoleGatewayImpl implements RoleGateway {
 
-  @Resource
-  RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
-  @Resource
-  RoleNodeRepository roleNodeRepository;
+  private final RoleNodeRepository roleNodeRepository;
 
-  @Resource
-  DistributedLock distributedLock;
+  private final DistributedLock distributedLock;
+
+  public RoleGatewayImpl(RoleRepository roleRepository, RoleNodeRepository roleNodeRepository,
+      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+    this.roleRepository = roleRepository;
+    this.roleNodeRepository = roleNodeRepository;
+    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+  }
 
   @Override
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)

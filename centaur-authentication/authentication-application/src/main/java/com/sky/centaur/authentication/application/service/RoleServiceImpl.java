@@ -44,11 +44,11 @@ import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -63,17 +63,22 @@ import org.springframework.stereotype.Service;
 @Observed(name = "RoleServiceImpl")
 public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
 
-  @Resource
-  RoleAddCmdExe roleAddCmdExe;
+  private final RoleAddCmdExe roleAddCmdExe;
 
-  @Resource
-  RoleDeleteCmdExe roleDeleteCmdExe;
+  private final RoleDeleteCmdExe roleDeleteCmdExe;
 
-  @Resource
-  RoleUpdateCmdExe roleUpdateCmdExe;
+  private final RoleUpdateCmdExe roleUpdateCmdExe;
 
-  @Resource
-  RoleFindAllCmdExe roleFindAllCmdExe;
+  private final RoleFindAllCmdExe roleFindAllCmdExe;
+
+  @Autowired
+  public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteCmdExe roleDeleteCmdExe,
+      RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe) {
+    this.roleAddCmdExe = roleAddCmdExe;
+    this.roleDeleteCmdExe = roleDeleteCmdExe;
+    this.roleUpdateCmdExe = roleUpdateCmdExe;
+    this.roleFindAllCmdExe = roleFindAllCmdExe;
+  }
 
   @Override
   public RoleAddCo add(RoleAddCmd roleAddCmd) {

@@ -29,6 +29,7 @@ import com.sky.centaur.authentication.application.service.AccountUserDetailServi
 import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.token.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
@@ -123,7 +124,8 @@ public class AuthorizationConfiguration {
       OAuth2TokenGenerator<?> tokenGenerator,
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler,
-      ResourceServerProperties resourceServerProperties)
+      ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
+      PasswordEncoder passwordEncoder)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -155,7 +157,7 @@ public class AuthorizationConfiguration {
                     new PasswordGrantAuthenticationConverter())
                 .authenticationProvider(
                     new PasswordGrantAuthenticationProvider(
-                        authorizationService, tokenGenerator)))
+                        authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
         .oidc(oidc -> oidc.userInfoEndpoint(
             userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
                 oidcUserInfoAuthenticationContext -> {
@@ -226,8 +228,8 @@ public class AuthorizationConfiguration {
    * @return 账户详细信息实例
    */
   @Bean
-  public UserDetailsService userDetailsService() {
-    return new AccountUserDetailService();
+  public UserDetailsService userDetailsService(AccountGateway accountGateway) {
+    return new AccountUserDetailService(accountGateway);
   }
 
   /**

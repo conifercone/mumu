@@ -26,9 +26,9 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +50,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "权限管理")
 public class AuthorityController {
 
-  @Resource
-  private AuthorityService authorityService;
+  private final AuthorityService authorityService;
+
+  @Autowired
+  public AuthorityController(AuthorityService authorityService) {
+    this.authorityService = authorityService;
+  }
 
   @Operation(summary = "添加权限")
   @PostMapping("/add")

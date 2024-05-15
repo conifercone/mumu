@@ -22,8 +22,8 @@ import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -37,11 +37,15 @@ import org.springframework.stereotype.Component;
 @Observed(name = "SystemLogConsumer")
 public class SystemLogConsumer {
 
-  @Resource
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-  @Resource
-  private SystemLogService systemLogService;
+  private final SystemLogService systemLogService;
+
+  @Autowired
+  public SystemLogConsumer(ObjectMapper objectMapper, SystemLogService systemLogService) {
+    this.objectMapper = objectMapper;
+    this.systemLogService = systemLogService;
+  }
 
   @KafkaListener(topics = {"system-log"})
   public void handle(String systemLog) throws JsonProcessingException {

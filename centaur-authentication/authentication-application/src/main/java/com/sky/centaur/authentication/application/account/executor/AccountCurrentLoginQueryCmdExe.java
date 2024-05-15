@@ -22,8 +22,8 @@ import com.sky.centaur.authentication.infrastructure.account.convertor.AccountCo
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,9 +36,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountCurrentLoginQueryCmdExe")
 public class AccountCurrentLoginQueryCmdExe {
 
-  @Resource
-  private AccountGateway accountGateway;
+  private final AccountGateway accountGateway;
 
+  @Autowired
+  public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway) {
+    this.accountGateway = accountGateway;
+  }
 
   public AccountCurrentLoginQueryCo execute() {
     Optional<Account> optionalAccount = accountGateway.queryCurrentLoginAccount();

@@ -22,8 +22,8 @@ import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -37,11 +37,15 @@ import org.springframework.stereotype.Component;
 @Observed(name = "OperationLogConsumer")
 public class OperationLogConsumer {
 
-  @Resource
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-  @Resource
-  private OperationLogService operationLogService;
+  private final OperationLogService operationLogService;
+
+  @Autowired
+  public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService) {
+    this.objectMapper = objectMapper;
+    this.operationLogService = operationLogService;
+  }
 
   @KafkaListener(topics = {"operation-log"})
   public void handle(String operationLog) throws JsonProcessingException {

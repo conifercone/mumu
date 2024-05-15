@@ -18,13 +18,14 @@ package com.sky.centaur.extension.distributed.lock.zookeeper;
 
 import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
-import jakarta.annotation.Resource;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.RetryNTimes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,10 +37,15 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.extension.distributed.lock.zookeeper", value = "enabled", havingValue = "true")
+@EnableConfigurationProperties(ExtensionProperties.class)
 public class ZookeeperConfiguration {
 
-  @Resource
-  private ExtensionProperties extensionProperties;
+  private final ExtensionProperties extensionProperties;
+
+  @Autowired
+  public ZookeeperConfiguration(ExtensionProperties extensionProperties) {
+    this.extensionProperties = extensionProperties;
+  }
 
   @Bean
   public InterProcessLock centaurInterProcessLock() {

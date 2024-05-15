@@ -31,7 +31,6 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,6 +38,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
@@ -57,11 +57,16 @@ public class CentaurAuthenticationFailureHandler implements AuthenticationFailur
   private static final Logger LOGGER = LoggerFactory.getLogger(
       CentaurAuthenticationFailureHandler.class);
 
-  @Resource
-  OperationLogGrpcService operationLogGrpcService;
+  private final OperationLogGrpcService operationLogGrpcService;
 
-  @Resource
-  SystemLogGrpcService systemLogGrpcService;
+  private final SystemLogGrpcService systemLogGrpcService;
+
+  @Autowired
+  public CentaurAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
+      SystemLogGrpcService systemLogGrpcService) {
+    this.operationLogGrpcService = operationLogGrpcService;
+    this.systemLogGrpcService = systemLogGrpcService;
+  }
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,

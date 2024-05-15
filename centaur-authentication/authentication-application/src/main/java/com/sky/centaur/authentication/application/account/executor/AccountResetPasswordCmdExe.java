@@ -19,8 +19,8 @@ import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,9 +33,12 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountResetPasswordCmdExe")
 public class AccountResetPasswordCmdExe {
 
-  @Resource
-  private AccountGateway accountGateway;
+  private final AccountGateway accountGateway;
 
+  @Autowired
+  public AccountResetPasswordCmdExe(AccountGateway accountGateway) {
+    this.accountGateway = accountGateway;
+  }
 
   public AccountResetPasswordCo execute(@NotNull AccountResetPasswordCmd accountResetPasswordCmd) {
     accountGateway.resetPassword(accountResetPasswordCmd.getAccountResetPasswordCo().getId());

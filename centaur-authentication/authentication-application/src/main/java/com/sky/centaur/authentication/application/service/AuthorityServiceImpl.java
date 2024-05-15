@@ -44,11 +44,11 @@ import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.annotation.Resource;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -63,17 +63,23 @@ import org.springframework.stereotype.Service;
 @Observed(name = "AuthorityServiceImpl")
 public class AuthorityServiceImpl extends AuthorityServiceImplBase implements AuthorityService {
 
-  @Resource
-  AuthorityAddCmdExe authorityAddCmdExe;
+  private final AuthorityAddCmdExe authorityAddCmdExe;
 
-  @Resource
-  AuthorityDeleteCmdExe authorityDeleteCmdExe;
+  private final AuthorityDeleteCmdExe authorityDeleteCmdExe;
 
-  @Resource
-  AuthorityUpdateCmdExe authorityUpdateCmdExe;
+  private final AuthorityUpdateCmdExe authorityUpdateCmdExe;
 
-  @Resource
-  AuthorityFindAllCmdExe authorityFindAllCmdExe;
+  private final AuthorityFindAllCmdExe authorityFindAllCmdExe;
+
+  @Autowired
+  public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
+      AuthorityDeleteCmdExe authorityDeleteCmdExe, AuthorityUpdateCmdExe authorityUpdateCmdExe,
+      AuthorityFindAllCmdExe authorityFindAllCmdExe) {
+    this.authorityAddCmdExe = authorityAddCmdExe;
+    this.authorityDeleteCmdExe = authorityDeleteCmdExe;
+    this.authorityUpdateCmdExe = authorityUpdateCmdExe;
+    this.authorityFindAllCmdExe = authorityFindAllCmdExe;
+  }
 
   @Override
   public AuthorityAddCo add(AuthorityAddCmd authorityAddCmd) {

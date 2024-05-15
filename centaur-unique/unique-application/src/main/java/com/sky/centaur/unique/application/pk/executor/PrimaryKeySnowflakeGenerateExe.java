@@ -17,7 +17,7 @@
 package com.sky.centaur.unique.application.pk.executor;
 
 import com.sky.centaur.unique.domain.pk.gateway.PrimaryKeyGateway;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,8 +29,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryKeySnowflakeGenerateExe {
 
-  @Resource
-  private PrimaryKeyGateway primaryKeyGateway;
+  private final PrimaryKeyGateway primaryKeyGateway;
+
+  @Autowired
+  public PrimaryKeySnowflakeGenerateExe(PrimaryKeyGateway primaryKeyGateway) {
+    this.primaryKeyGateway = primaryKeyGateway;
+  }
 
   public long execute() {
     return primaryKeyGateway.snowflake();
