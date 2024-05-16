@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration status="INFO" name="centaur">
   <Properties>
-    <Property name="log-path">logs/${spring:spring.application.name:-centaur}</Property>
-    <Property name="logfile-name">${spring:spring.application.name:-centaur}</Property>
+    <Property name="LOG_PATH">logs/${spring:spring.application.name:-centaur}</Property>
+    <Property name="LOGFILE_NAME">${spring:spring.application.name:-centaur}</Property>
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%wEx</Property>
     <!-- @formatter:off -->
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-centaur},%X{traceId},%X{spanId}]</Property>
@@ -16,7 +16,7 @@
       <!-- @formatter:on -->
     </Console>
     <!-- @formatter:off -->
-    <RollingFile name="RollingFile" filePattern="${log-path}/${logfile-name}-%d{yyyy-MM-dd}.log">
+    <RollingFile name="RollingFile" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
       <PatternLayout pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <Policies>
         <TimeBasedTriggeringPolicy />
