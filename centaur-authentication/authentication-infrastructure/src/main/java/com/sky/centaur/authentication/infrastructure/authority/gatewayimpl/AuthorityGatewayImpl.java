@@ -75,12 +75,13 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
-    if (authorityRepository.findById(authority.getId()).isPresent()) {
-      throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authority.getId());
-    }
-    authorityRepository.persist(dataObject);
-    AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
-    addAuthorityNode(nodeDataObject);
+    authorityRepository.findById(authority.getId()).ifPresentOrElse(authorityDo -> {
+      throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
+    }, () -> {
+      authorityRepository.persist(dataObject);
+      AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
+      addAuthorityNode(nodeDataObject);
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
