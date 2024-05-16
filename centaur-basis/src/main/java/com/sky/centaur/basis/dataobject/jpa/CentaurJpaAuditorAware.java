@@ -31,6 +31,6 @@ public class CentaurJpaAuditorAware implements AuditorAware<Long> {
 
   @Override
   public @NotNull Optional<Long> getCurrentAuditor() {
-    return Optional.ofNullable(SecurityContextUtil.getLoginAccountId());
+    return SecurityContextUtil.getLoginAccountId();
   }
 }

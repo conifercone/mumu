@@ -19,7 +19,6 @@ package com.sky.centaur.basis.tools;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import java.util.Map;
 import java.util.Optional;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +37,7 @@ public final class SecurityContextUtil {
    */
   private static final String ID = "id";
 
-  public static @Nullable Long getLoginAccountId() {
+  public static Optional<Long> getLoginAccountId() {
     return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
         .map(authentication -> {
           if (authentication.isAuthenticated()) {
@@ -48,14 +47,12 @@ public final class SecurityContextUtil {
               if (beanMap.containsKey(ID)) {
                 return Long.parseLong(String.valueOf(beanMap.get(ID)));
               }
-              return null;
             } else if (principal instanceof ClaimAccessor claimAccessor) {
               Map<String, Object> claims = claimAccessor.getClaims();
               return Long.parseLong(String.valueOf(claims.get(TokenClaimsEnum.ACCOUNT_ID.name())));
             }
-            return null;
           }
           return null;
-        }).orElse(null);
+        });
   }
 }

@@ -134,20 +134,21 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Account account) {
-    if (SecurityContextUtil.getLoginAccountId() != null && Objects.equals(
-        SecurityContextUtil.getLoginAccountId(), account.getId())) {
-      distributedLock.lock();
-      try {
-        AccountDo accountDoSource = AccountConvertor.toDataObject(account);
-        accountRepository.merge(accountDoSource);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      } finally {
-        distributedLock.unlock();
-      }
-    } else {
-      throw new CentaurException(ResultCode.UNAUTHORIZED);
-    }
+    SecurityContextUtil.getLoginAccountId()
+        .filter(res -> Objects.equals(res, account.getId()))
+        .ifPresentOrElse((accountId) -> {
+          distributedLock.lock();
+          try {
+            AccountDo accountDoSource = AccountConvertor.toDataObject(account);
+            accountRepository.merge(accountDoSource);
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          } finally {
+            distributedLock.unlock();
+          }
+        }, () -> {
+          throw new CentaurException(ResultCode.UNAUTHORIZED);
+        });
   }
 
   @Override
@@ -168,12 +169,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> queryCurrentLoginAccount() {
-    Long loginAccountId = SecurityContextUtil.getLoginAccountId();
-    if (loginAccountId == null) {
-      throw new CentaurException(ResultCode.UNAUTHORIZED);
-    } else {
-      return accountRepository.findById(loginAccountId).map(AccountConvertor::toEntity);
-    }
+    return SecurityContextUtil.getLoginAccountId().map(
+            loginAccountId -> accountRepository.findById(loginAccountId)
+                .map(AccountConvertor::toEntity))
+        .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
   }
 
   @Override
