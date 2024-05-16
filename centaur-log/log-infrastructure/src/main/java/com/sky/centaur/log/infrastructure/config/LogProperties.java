@@ -18,7 +18,6 @@ package com.sky.centaur.log.infrastructure.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.stereotype.Component;
 
 /**
  * 日志服务全局配置信息
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Data
-@Component
 @ConfigurationProperties("centaur.log")
 public class LogProperties {
 

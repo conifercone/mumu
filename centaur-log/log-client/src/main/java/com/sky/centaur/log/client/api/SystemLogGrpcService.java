@@ -22,7 +22,6 @@ import io.grpc.ManagedChannel;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.stereotype.Component;
 
 /**
  * 系统日志对外提供grpc调用实例
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Component;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Component
 public class SystemLogGrpcService extends LogGrpcService implements DisposableBean {
 
   private ManagedChannel channel;

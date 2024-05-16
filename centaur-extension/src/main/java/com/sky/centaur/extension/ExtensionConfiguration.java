@@ -32,7 +32,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class, SystemLogGrpcService.class,
-    ExtensionProperties.class,
     ZookeeperConfiguration.class, CentaurCorsConfiguration.class})
 public class ExtensionConfiguration {
 

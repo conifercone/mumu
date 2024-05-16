@@ -27,6 +27,7 @@ allprojects { project ->
             cacheChangingModulesFor 0, "seconds"
             cacheDynamicVersionsFor 0, "seconds"
         }
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }
 
@@ -123,6 +124,7 @@ subprojects { project ->
     // 通用依赖
     dependencies {
         implementation libs.springboot
+        implementation libs.springBootLog4j2
         implementation libs.bundles.jackson
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian

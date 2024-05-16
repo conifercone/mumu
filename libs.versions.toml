@@ -80,6 +80,8 @@ consulConfig = { module = "org.springframework.cloud:spring-cloud-starter-consul
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
+springBootLog4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 # https://mvnrepository.com/artifact/p6spy/p6spy
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
