@@ -35,6 +35,7 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -85,28 +86,31 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
-    AccountDo dataObject = AccountConvertor.toDataObject(account);
-    // 密码加密
-    dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
-    if (findAccountByUsername(dataObject.getUsername()).isPresent() || findAccountByEmail(
-        dataObject.getEmail()).isPresent()) {
+    Consumer<Account> accountAlreadyExistsConsumer = (existingAccount) -> {
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                  .setBizNo(account.getUsername())
+                  .setBizNo(existingAccount.getUsername())
                   .setFail(ResultCode.ACCOUNT_ALREADY_EXISTS.getResultMsg()).build())
           .build());
-      throw new AccountAlreadyExistsException(dataObject.getUsername());
-    }
-    accountRepository.persist(dataObject);
-    accountNodeRegister(
-        AccountConvertor.toNodeDataObject(account));
-    operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setOperationLogSubmitCo(
-            OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                .setBizNo(account.getUsername())
-                .setSuccess(String.format("%s注册成功", account.getUsername())).build())
-        .build());
+      throw new AccountAlreadyExistsException(existingAccount.getUsername());
+    };
+    AccountDo dataObject = AccountConvertor.toDataObject(account);
+    // 密码加密
+    dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
+    findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
+        () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
+            accountAlreadyExistsConsumer, () -> {
+              accountRepository.persist(dataObject);
+              accountNodeRegister(
+                  AccountConvertor.toNodeDataObject(account));
+              operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+                  .setOperationLogSubmitCo(
+                      OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                          .setBizNo(account.getUsername())
+                          .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+                  .build());
+            }));
   }
 
   @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
@@ -155,14 +159,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
-    Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
-    if (accountDoOptional.isPresent()) {
-      AccountDo accountDo = accountDoOptional.get();
+    accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       accountDo.setEnabled(false);
       accountRepository.merge(accountDo);
-    } else {
+    }, () -> {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-    }
+    });
   }
 
   @Override
@@ -186,13 +188,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long id) {
-    Optional<AccountDo> accountDoOptional = accountRepository.findById(id);
-    if (accountDoOptional.isPresent()) {
-      AccountDo accountDo = accountDoOptional.get();
+    accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       accountDo.setPassword(passwordEncoder.encode(PASSWORD_AFTER_RESET));
       accountRepository.merge(accountDo);
-    } else {
+    }, () -> {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-    }
+    });
   }
 }
