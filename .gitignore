@@ -50,6 +50,7 @@ dist/
 # System / Log files
 *.DS_Store
 *.log
+logs
 
 # Archives
 *.zip
