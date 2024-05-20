@@ -18,27 +18,32 @@
 -->
 <Configuration status="INFO" name="centaur">
   <Properties>
+    <!-- @formatter:off -->
     <Property name="LOG_PATH">logs/${spring:spring.application.name:-centaur}</Property>
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-centaur}</Property>
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%wEx</Property>
-    <!-- @formatter:off -->
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-centaur},%X{traceId},%X{spanId}]</Property>
     <!-- @formatter:on -->
   </Properties>
 
   <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <!-- @formatter:off -->
-      <PatternLayout pattern="%clr{%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}}{faint} %clr{${LOG_LEVEL_PATTERN:-%5p}} %clr{${sys:PID:- }}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40logger{39}}{cyan} %clr{:}{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-      <!-- @formatter:on -->
-    </Console>
     <!-- @formatter:off -->
-    <RollingFile name="RollingFile" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%clr{%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}}{faint} %clr{${LOG_LEVEL_PATTERN:-%5p}} %clr{${sys:PID:- }}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40logger{39}}{cyan} %clr{:}{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    </Console>
+    <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
       <PatternLayout pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <Policies>
-        <TimeBasedTriggeringPolicy />
+        <TimeBasedTriggeringPolicy interval="1" />
+        <SizeBasedTriggeringPolicy size="100 MB" />
+        <OnStartupTriggeringPolicy />
       </Policies>
-      <DirectWriteRolloverStrategy/>
+      <DefaultRolloverStrategy max="5">
+        <Delete basePath="${LOG_PATH}/" maxDepth="1">
+          <IfFileName glob="*.log"/>
+          <IfLastModified age="7d"/>
+        </Delete>
+      </DefaultRolloverStrategy>
     </RollingFile>
     <!-- @formatter:on -->
   </Appenders>
