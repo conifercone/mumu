@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,8 +40,7 @@ import org.springframework.util.StringUtils;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties
-@Import(ResourceServerProperties.class)
+@EnableConfigurationProperties(ResourceServerProperties.class)
 public class JWTSecurityConfig {
 
   private final ResourceServerProperties resourceServerProperties;
