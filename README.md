@@ -59,7 +59,6 @@ centaur
 | kafka         | 3.4      |
 | mysql         | 8.0.21   |
 | postgresql    | 15.1     |
-| neo4j         | 2.2.2    |
 | redis         | latest   |
 | zookeeper     | 3.8      |
 | consul        | 1.15.4   |

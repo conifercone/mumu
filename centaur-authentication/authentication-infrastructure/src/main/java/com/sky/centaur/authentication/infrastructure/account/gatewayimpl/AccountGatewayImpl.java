@@ -18,12 +18,9 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountNodeRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
-import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -59,8 +56,6 @@ public class AccountGatewayImpl implements AccountGateway {
 
   private final TokenRepository tokenRepository;
 
-  private final AccountNodeRepository accountNodeRepository;
-
   private final PasswordEncoder passwordEncoder;
 
   private final OperationLogGrpcService operationLogGrpcService;
@@ -71,19 +66,18 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
-      AccountNodeRepository accountNodeRepository, PasswordEncoder passwordEncoder,
+      PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
-    this.accountNodeRepository = accountNodeRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
     Consumer<Account> accountAlreadyExistsConsumer = (existingAccount) -> {
@@ -102,8 +96,6 @@ public class AccountGatewayImpl implements AccountGateway {
         () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
             accountAlreadyExistsConsumer, () -> {
               accountRepository.persist(dataObject);
-              accountNodeRegister(
-                  AccountConvertor.toNodeDataObject(account));
               operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
                   .setOperationLogSubmitCo(
                       OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -113,13 +105,8 @@ public class AccountGatewayImpl implements AccountGateway {
             }));
   }
 
-  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected void accountNodeRegister(AccountNodeDo accountNodeDo) {
-    accountNodeRepository.save(accountNodeDo);
-  }
-
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
@@ -127,7 +114,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
@@ -135,7 +122,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Account account) {
     SecurityContextUtil.getLoginAccountId()
@@ -156,7 +143,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
@@ -168,7 +155,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
@@ -178,14 +165,14 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
     return tokenRepository.count();
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {

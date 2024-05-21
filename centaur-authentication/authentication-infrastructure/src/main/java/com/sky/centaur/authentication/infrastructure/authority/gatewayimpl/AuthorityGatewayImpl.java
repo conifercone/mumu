@@ -19,11 +19,8 @@ package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
-import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityNodeRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
-import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
-import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
@@ -57,64 +54,40 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   private final AuthorityRepository authorityRepository;
 
-  private final AuthorityNodeRepository authorityNodeRepository;
-
   private final DistributedLock distributedLock;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
-      AuthorityNodeRepository authorityNodeRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider) {
     this.authorityRepository = authorityRepository;
-    this.authorityNodeRepository = authorityNodeRepository;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
     authorityRepository.findById(authority.getId()).ifPresentOrElse(authorityDo -> {
       throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
-    }, () -> {
-      authorityRepository.persist(dataObject);
-      AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
-      addAuthorityNode(nodeDataObject);
-    });
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected void addAuthorityNode(AuthorityNodeDo nodeDataObject) {
-    authorityNodeRepository.save(nodeDataObject);
+    }, () -> authorityRepository.persist(dataObject));
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void delete(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
-    deleteAuthorityNode(authority.getId());
   }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected void deleteAuthorityNode(Long id) {
-    authorityNodeRepository.deleteById(id);
-  }
-
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Authority authority) {
     distributedLock.lock();
     try {
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
       authorityRepository.merge(dataObject);
-      AuthorityNodeDo nodeDataObject = AuthorityConvertor.toNodeDataObject(authority);
-      addAuthorityNode(nodeDataObject);
     } catch (Exception e) {
       throw new RuntimeException(e);
     } finally {
@@ -123,7 +96,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {

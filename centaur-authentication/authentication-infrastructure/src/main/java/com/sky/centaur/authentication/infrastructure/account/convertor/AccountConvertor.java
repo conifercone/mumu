@@ -21,7 +21,6 @@ import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountNodeDo;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -80,17 +79,6 @@ public class AccountConvertor {
     Optional.ofNullable(account.getRole())
         .ifPresent(role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole())));
     return accountDo;
-  }
-
-  @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AccountNodeDo toNodeDataObject(@NotNull Account account) {
-    AccountNodeDo accountNodeDo = new AccountNodeDo();
-    accountNodeDo.setId(account.getId());
-    accountNodeDo.setUsername(account.getUsername());
-    Optional.ofNullable(account.getRole())
-        .ifPresent(role -> accountNodeDo.setRole(RoleConvertor.toNodeDataObject(role)));
-    return accountNodeDo;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

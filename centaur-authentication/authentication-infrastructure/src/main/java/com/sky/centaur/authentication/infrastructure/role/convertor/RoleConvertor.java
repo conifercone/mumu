@@ -24,16 +24,12 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
-import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityNodeDo;
-import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
@@ -76,19 +72,6 @@ public class RoleConvertor {
     return roleDo;
   }
 
-  @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull RoleNodeDo toNodeDataObject(@NotNull Role role) {
-    RoleNodeDo roleNodeDo = new RoleNodeDo();
-    BeanUtils.copyProperties(role, roleNodeDo, "authorities");
-    Optional.ofNullable(role.getAuthorities()).ifPresent(
-        authorities -> {
-          List<AuthorityNodeDo> authorityNodeDos = authorities.stream()
-              .map(AuthorityConvertor::toNodeDataObject).collect(Collectors.toList());
-          roleNodeDo.setAuthorities(authorityNodeDos);
-        });
-    return roleNodeDo;
-  }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleAddCo roleAddCo) {
@@ -112,10 +95,8 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
-    RoleNodeRepository roleNodeRepository = SpringContextUtil.getBean(RoleNodeRepository.class);
     Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateCo.getId());
-    Optional<RoleNodeDo> roleNodeDoOptional = roleNodeRepository.findById(roleUpdateCo.getId());
-    if (roleDoOptional.isPresent() && roleNodeDoOptional.isPresent()) {
+    if (roleDoOptional.isPresent()) {
       Role role = toEntity(roleDoOptional.get());
       Optional.ofNullable(roleUpdateCo.getName()).ifPresent(role::setName);
       Optional.ofNullable(roleUpdateCo.getCode()).ifPresent(role::setCode);

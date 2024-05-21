@@ -19,11 +19,8 @@ package com.sky.centaur.authentication.infrastructure.role.gatewayimpl;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
-import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleNodeRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleNodeDo;
-import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
@@ -54,57 +51,37 @@ public class RoleGatewayImpl implements RoleGateway {
 
   private final RoleRepository roleRepository;
 
-  private final RoleNodeRepository roleNodeRepository;
-
   private final DistributedLock distributedLock;
 
-  public RoleGatewayImpl(RoleRepository roleRepository, RoleNodeRepository roleNodeRepository,
+  public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider) {
     this.roleRepository = roleRepository;
-    this.roleNodeRepository = roleNodeRepository;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
     roleRepository.persist(roleDo);
-    addRoleNode(RoleConvertor.toNodeDataObject(role));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected void addRoleNode(RoleNodeDo roleNodeDo) {
-    roleNodeRepository.save(roleNodeDo);
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void delete(@NotNull Role role) {
     roleRepository.deleteById(role.getId());
-    deleteRoleNode(role.getId());
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  @Transactional(transactionManager = BeanNameConstant.NEO4J_TRANSACTION_MANAGER_BEAN_NAME)
-  protected void deleteRoleNode(Long id) {
-    roleNodeRepository.deleteById(id);
   }
 
   @Override
-  @Transactional(transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Role role) {
     distributedLock.lock();
     try {
       RoleDo roleDo = RoleConvertor.toDataObject(role);
       roleRepository.merge(roleDo);
-      RoleNodeDo nodeDataObject = RoleConvertor.toNodeDataObject(role);
-      deleteRoleNode(nodeDataObject.getId());
-      addRoleNode(nodeDataObject);
     } catch (Exception e) {
       throw new RuntimeException(e);
     } finally {
@@ -113,7 +90,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @Override
-  @Transactional(readOnly = true, transactionManager = BeanNameConstant.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {

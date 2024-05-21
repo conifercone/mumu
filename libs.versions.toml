@@ -86,8 +86,6 @@ springBootLog4j2 = { module = "org.springframework.boot:spring-boot-starter-log4
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
 springBootDataElasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-neo4j
-springBootDataNeo4j = { module = "org.springframework.boot:spring-boot-starter-data-neo4j" }
 # https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
 springKafka = { module = "org.springframework.kafka:spring-kafka" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
