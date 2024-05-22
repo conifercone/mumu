@@ -50,6 +50,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 /**
@@ -101,6 +102,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void add(RoleAddGrpcCmd request, StreamObserver<RoleAddGrpcCo> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
     RoleAddCo roleAddCo = getRoleAddCo(request);
