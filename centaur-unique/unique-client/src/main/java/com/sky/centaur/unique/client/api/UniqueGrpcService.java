@@ -44,7 +44,7 @@ class UniqueGrpcService {
         serviceInstance -> {
           ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
                   serviceInstance.getHost(),
-                  serviceInstance.getPort() + 2)
+                  serviceInstance.getPort())
               .usePlaintext();
           ObservationGrpcClientInterceptor interceptor = null;
           try {
@@ -60,7 +60,7 @@ class UniqueGrpcService {
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("unique");
+    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("grpc-unique");
     return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 

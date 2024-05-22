@@ -22,10 +22,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -74,7 +75,8 @@ public class JWTSecurityConfig {
         (authorize) -> authorize.anyRequest()
             .authenticated());
     http.oauth2ResourceServer(
-            resourceServerConfigurer -> resourceServerConfigurer.jwt(Customizer.withDefaults())
+            resourceServerConfigurer -> resourceServerConfigurer.jwt(
+                    jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 .authenticationEntryPoint(new ResourceServerAuthenticationEntryPoint()))
         .csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -90,5 +92,13 @@ public class JWTSecurityConfig {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
+  }
+
+  @Bean
+  public JwtAuthenticationProvider jwtAuthenticationProvider(JwtDecoder jwtDecoder,
+      JwtAuthenticationConverter jwtAuthenticationConverter) {
+    JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
+    jwtAuthenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
+    return jwtAuthenticationProvider;
   }
 }

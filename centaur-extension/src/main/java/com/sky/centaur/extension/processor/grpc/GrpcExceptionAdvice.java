@@ -16,6 +16,7 @@
 package com.sky.centaur.extension.processor.grpc;
 
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
@@ -27,6 +28,7 @@ import org.lognet.springboot.grpc.recovery.GRpcServiceAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * grpc异常统一处理
@@ -60,5 +62,20 @@ public class GrpcExceptionAdvice {
           .build());
     }
     return Status.INTERNAL;
+  }
+
+  @GRpcExceptionHandler
+  public Status handle(AuthenticationException authenticationException,
+      @SuppressWarnings("unused") GRpcExceptionScope scope) {
+    if (authenticationException != null) {
+      LOGGER.error(ResultCode.UNAUTHORIZED.getResultCode());
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultCode())
+                  .setCategory("exception")
+                  .setFail(ResultCode.UNAUTHORIZED.getResultMsg()).build())
+          .build());
+    }
+    return Status.UNAUTHENTICATED;
   }
 }

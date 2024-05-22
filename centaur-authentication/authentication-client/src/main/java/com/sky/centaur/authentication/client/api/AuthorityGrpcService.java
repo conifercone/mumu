@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Nullable;
+import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -60,23 +61,26 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd) {
+  public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(authorityAddGrpcCmd);
+        return extracted(authorityAddGrpcCmd, callCredentials);
       }).orElse(null);
     } else {
-      return extracted(authorityAddGrpcCmd);
+      return extracted(authorityAddGrpcCmd, callCredentials);
     }
 
   }
 
-  private @Nullable AuthorityAddGrpcCo extracted(AuthorityAddGrpcCmd authorityAddGrpcCmd) {
+  private @Nullable AuthorityAddGrpcCo extracted(AuthorityAddGrpcCmd authorityAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
     try {
-      return authorityServiceFutureStub.add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
+      return authorityServiceFutureStub.withCallCredentials(callCredentials)
+          .add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       LOGGER.error(e.getMessage());
       return null;

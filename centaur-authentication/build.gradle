@@ -24,6 +24,7 @@ dependencies {
     testImplementation libs.springbootTest
     testImplementation libs.jasypt
     testImplementation libs.springSecurityTest
+    testImplementation libs.grpcClientSpringBootStarter
     implementation libs.flywayCore
     implementation libs.flywayDatabasePostgresql
     implementation libs.hibernateTypes63

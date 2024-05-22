@@ -45,7 +45,7 @@ class LogGrpcService {
         serviceInstance -> {
           ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
                   serviceInstance.getHost(),
-                  serviceInstance.getPort() + 2)
+                  serviceInstance.getPort())
               .usePlaintext();
           ObservationGrpcClientInterceptor interceptor = null;
           try {
@@ -61,7 +61,7 @@ class LogGrpcService {
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("log");
+    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("grpc-log");
     return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 

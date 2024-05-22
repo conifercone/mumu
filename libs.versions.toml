@@ -102,6 +102,8 @@ grpcProtobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcProtobufVe
 annotationApi = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
 # https://mvnrepository.com/artifact/io.github.lognet/grpc-spring-boot-starter
 grpcSpringBootStarter = { module = "io.github.lognet:grpc-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+# https://mvnrepository.com/artifact/io.github.lognet/grpc-client-spring-boot-starter
+grpcClientSpringBootStarter = { module = "io.github.lognet:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 # https://mvnrepository.com/artifact/com.redis.om/redis-om-spring
 redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
