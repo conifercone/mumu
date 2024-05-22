@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sky.centaur.authentication.client.api.grpc";
+option java_outer_classname = "TokenServiceProto";
+
+service TokenService {
+  rpc validity (TokenValidityGrpcCmd) returns (TokenValidityGrpcCo);
+}
+
+message TokenValidityGrpcCmd {
+  TokenValidityGrpcCo tokenValidityCo = 1;
+}
+
+message TokenValidityGrpcCo {
+  string token = 1;
+  bool validity = 2;
+}

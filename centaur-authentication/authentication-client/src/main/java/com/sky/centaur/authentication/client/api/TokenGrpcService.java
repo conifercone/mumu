@@ -15,10 +15,10 @@
  */
 package com.sky.centaur.authentication.client.api;
 
-import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceFutureStub;
+import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc;
+import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceFutureStub;
+import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import io.grpc.ManagedChannel;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -26,25 +26,24 @@ import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Nullable;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
- * 权限对外提供grpc调用实例
+ * token对外提供grpc调用实例
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class AuthorityGrpcService extends AuthenticationGrpcService implements DisposableBean {
+public class TokenGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TokenGrpcService.class);
 
-  public AuthorityGrpcService(
+  public TokenGrpcService(
       DiscoveryClient consulDiscoveryClient) {
     super(consulDiscoveryClient);
   }
@@ -57,26 +56,21 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials) {
+  public TokenValidityGrpcCo validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(authorityAddGrpcCmd, callCredentials);
+        return extracted(tokenValidityGrpcCmd);
       }).orElse(null);
     } else {
-      return extracted(authorityAddGrpcCmd, callCredentials);
+      return extracted(tokenValidityGrpcCmd);
     }
-
   }
 
-  private @Nullable AuthorityAddGrpcCo extracted(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials) {
-    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
-        channel);
+  private @Nullable TokenValidityGrpcCo extracted(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+    TokenServiceFutureStub tokenServiceFutureStub = TokenServiceGrpc.newFutureStub(channel);
     try {
-      return authorityServiceFutureStub.withCallCredentials(callCredentials)
-          .add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
+      return tokenServiceFutureStub.validity(tokenValidityGrpcCmd).get(3, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       LOGGER.error(e.getMessage());
       return null;

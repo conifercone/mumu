@@ -18,9 +18,10 @@ package com.sky.centaur.authentication.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.sky.centaur.authentication.client.api.TokenGrpcService;
+import com.sky.centaur.authentication.client.config.JwtAuthenticationTokenFilter;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
-import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -54,7 +54,7 @@ public class DefaultSecurityConfig {
   @Bean
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
-      UserDetailsService userDetailsService, JwtDecoder jwtDecoder, TokenRepository tokenRepository,
+      JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
       ResourceServerProperties resourceServerProperties)
       throws Exception {
     //noinspection DuplicatedCode
@@ -84,7 +84,7 @@ public class DefaultSecurityConfig {
         // authorization server filter chain
         .formLogin(withDefaults());
     http.addFilterBefore(
-        new JwtAuthenticationTokenFilter(userDetailsService, jwtDecoder, tokenRepository),
+        new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
         UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exceptions) -> exceptions
         .defaultAuthenticationEntryPointFor(

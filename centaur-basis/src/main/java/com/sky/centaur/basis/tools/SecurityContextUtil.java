@@ -23,6 +23,7 @@ import org.springframework.cglib.beans.BeanMap;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.ClaimAccessor;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 /**
  * 认证上下文工具类
@@ -50,6 +51,19 @@ public final class SecurityContextUtil {
             } else if (principal instanceof ClaimAccessor claimAccessor) {
               Map<String, Object> claims = claimAccessor.getClaims();
               return Long.parseLong(String.valueOf(claims.get(TokenClaimsEnum.ACCOUNT_ID.name())));
+            }
+          }
+          return null;
+        });
+  }
+
+  public static Optional<String> getTokenValue() {
+    return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+        .map(authentication -> {
+          if (authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof Jwt jwt) {
+              return jwt.getTokenValue();
             }
           }
           return null;

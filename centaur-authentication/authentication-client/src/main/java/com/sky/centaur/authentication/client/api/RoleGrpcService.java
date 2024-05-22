@@ -29,9 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.stereotype.Component;
 
 /**
  * 角色对外提供grpc调用实例
@@ -39,14 +37,12 @@ import org.springframework.stereotype.Component;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Component
 public class RoleGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RoleGrpcService.class);
 
-  @Autowired
   public RoleGrpcService(
       DiscoveryClient consulDiscoveryClient) {
     super(consulDiscoveryClient);

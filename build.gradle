@@ -27,6 +27,9 @@ allprojects { project ->
             cacheChangingModulesFor 0, "seconds"
             cacheDynamicVersionsFor 0, "seconds"
         }
+        resolutionStrategy.dependencySubstitution {
+            substitute module("org.springframework.boot:spring-boot-starter-tomcat:" + libs.versions.springbootVersion.get()) using module("org.springframework.boot:spring-boot-starter-undertow:" + libs.versions.springbootVersion.get())
+        }
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }

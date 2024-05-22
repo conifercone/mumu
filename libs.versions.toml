@@ -25,7 +25,6 @@ commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.7.2"
 yitterIdGeneratorVersion = "1.0.6"
-tomcatEmbedCoreVersion = "10.1.20"
 jakartaValidationApiVersion = "3.0.2"
 hypersistenceUtilsVersion = "3.7.3"
 curatorRecipesVersion = "5.1.0"
@@ -124,8 +123,6 @@ micrometerTracingBridgeOtel = { module = "io.micrometer:micrometer-tracing-bridg
 opentelemetryExporterZipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
 springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
-# https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core
-tomcatEmbedCore = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcatEmbedCoreVersion" }
 # https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
 jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidationApiVersion" }
 # https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
@@ -136,6 +133,8 @@ springSecurityCore = { module = "org.springframework.security:spring-security-co
 springSecurityCrypto = { module = "org.springframework.security:spring-security-crypto" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-core
 springSecurityOauth2Core = { module = "org.springframework.security:spring-security-oauth2-core" }
+# https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose
+springSecurityOauth2Jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
 springDataCommons = { module = "org.springframework.data:spring-data-commons" }
 # https://mvnrepository.com/artifact/org.springframework/spring-web
@@ -149,6 +148,8 @@ flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayCoreVer
 flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayCoreVersion" }
 # https://mvnrepository.com/artifact/com.sun.mail/javax.mail
 javaxMail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
+# https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+jakartaServletApi = { module = "jakarta.servlet:jakarta.servlet-api" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.sky.centaur.authentication.configuration;
+package com.sky.centaur.authentication.client.config;
 
-import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
+import com.sky.centaur.authentication.client.api.TokenGrpcService;
+import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
@@ -25,16 +27,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -49,17 +53,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   private static final String TOKEN_HEADER = "Authorization";
   private static final String TOKEN_START = "Bearer ";
-  UserDetailsService userDetailsService;
   JwtDecoder jwtDecoder;
-  TokenRepository tokenRepository;
+  TokenGrpcService tokenGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(
       JwtAuthenticationTokenFilter.class);
 
-  public JwtAuthenticationTokenFilter(UserDetailsService userDetailsService,
-      JwtDecoder jwtDecoder, TokenRepository tokenRepository) {
-    this.userDetailsService = userDetailsService;
+  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
     this.jwtDecoder = jwtDecoder;
-    this.tokenRepository = tokenRepository;
+    this.tokenGrpcService = tokenGrpcService;
   }
 
   @Override
@@ -71,7 +72,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     if (StringUtils.hasText(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
       // 判断redis中是否存在token
-      if (tokenRepository.findById(authToken.hashCode()).isEmpty()) {
+      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
+          TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
         LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
@@ -87,14 +89,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
         return;
       }
-      String accountName = jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_NAME.name());
-      // 存在token 但是用户名未登录
-      if (accountName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-        // 登录
-        UserDetails userDetails = userDetailsService.loadUserByUsername(accountName);
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
+      List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());
+      if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        JwtAuthenticationToken authenticationToken =
+            new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
+                    authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+                .orElse(null));
         // 重新设置回用户对象
         authenticationToken.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request));

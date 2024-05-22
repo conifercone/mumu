@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.config;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
 import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -36,7 +37,8 @@ public class ResourceServerAuthenticationEntryPoint implements AuthenticationEnt
 
   @Override
   public void commence(jakarta.servlet.http.HttpServletRequest request,
-      jakarta.servlet.http.HttpServletResponse response, AuthenticationException authException)
+      jakarta.servlet.http.@NotNull HttpServletResponse response,
+      AuthenticationException authException)
       throws IOException {
     LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
     response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));

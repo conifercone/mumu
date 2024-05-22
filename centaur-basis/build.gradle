@@ -2,9 +2,10 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GrUnresolvedAccess
 dependencies {
-    implementation libs.tomcatEmbedCore
     implementation libs.springSecurityCore
+    implementation libs.jakartaServletApi
     implementation libs.springSecurityOauth2Core
+    implementation libs.springSecurityOauth2Jose
     implementation libs.javaxMail
     compileOnly libs.springBootDataJpa
 }

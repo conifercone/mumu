@@ -14,7 +14,7 @@ dependencies {
     implementation libs.springBootActuator
     implementation libs.springDataCommons
     implementation libs.springWeb
-    implementation libs.tomcatEmbedCore
+    implementation libs.jakartaServletApi
     implementation libs.grpcSpringBootStarter
     implementation libs.grpcClientSpringBootStarter
     api libs.springBootOauth2ResourceServer

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.config;
 
+import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.util.CollectionUtils;
@@ -52,7 +54,8 @@ public class JWTSecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
+      TokenGrpcService tokenGrpcService) throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
@@ -81,6 +84,8 @@ public class JWTSecurityConfig {
         .csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
             .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+    http.addFilterBefore(new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
+        UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 
