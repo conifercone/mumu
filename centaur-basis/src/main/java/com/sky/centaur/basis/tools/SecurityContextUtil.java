@@ -19,6 +19,8 @@ package com.sky.centaur.basis.tools;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import java.util.Map;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +40,12 @@ public final class SecurityContextUtil {
    */
   private static final String ID = "id";
 
+  /**
+   * 获取当前登录账户ID
+   *
+   * @return 登录账户ID
+   */
+  @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<Long> getLoginAccountId() {
     return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
         .map(authentication -> {
@@ -57,6 +65,12 @@ public final class SecurityContextUtil {
         });
   }
 
+  /**
+   * 获取当前token
+   *
+   * @return token
+   */
+  @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<String> getTokenValue() {
     return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
         .map(authentication -> {
