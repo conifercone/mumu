@@ -20,7 +20,6 @@ import com.sky.centaur.extension.cors.CentaurCorsConfiguration;
 import com.sky.centaur.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
 import com.sky.centaur.extension.processor.grpc.GrpcExceptionAdvice;
 import com.sky.centaur.extension.processor.response.ResponseBodyProcessor;
-import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -31,7 +30,7 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @Configuration
-@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class, SystemLogGrpcService.class,
+@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
     ZookeeperConfiguration.class, CentaurCorsConfiguration.class})
 public class ExtensionConfiguration {
 

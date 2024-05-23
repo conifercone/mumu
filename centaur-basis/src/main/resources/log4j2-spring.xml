@@ -19,7 +19,7 @@
 <Configuration status="INFO" name="centaur">
   <Properties>
     <!-- @formatter:off -->
-    <Property name="LOG_PATH">logs/${spring:spring.application.name:-centaur}</Property>
+    <Property name="LOG_PATH">${spring:centaur.log.path}/logs/${spring:spring.application.name:-centaur}</Property>
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-centaur}</Property>
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%wEx</Property>
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-centaur},%X{traceId},%X{spanId}]</Property>
