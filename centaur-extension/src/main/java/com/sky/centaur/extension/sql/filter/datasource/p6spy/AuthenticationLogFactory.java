@@ -13,14 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.filter.datasource;
+package com.sky.centaur.extension.sql.filter.datasource.p6spy;
+
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6Factory;
+import com.p6spy.engine.spy.P6LoadableOptions;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 /**
- * 抽象数据源过滤器
+ * P6Factory
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public abstract class AbstractDataSourceFilter implements DataSourceFilter {
+public class AuthenticationLogFactory implements P6Factory {
 
+  @Override
+  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
+    return new P6LogOptions(optionsRepository);
+  }
+
+  @Override
+  public JdbcEventListener getJdbcEventListener() {
+    return AuthenticationLoggingEventListener.getInstance();
+  }
 }
+

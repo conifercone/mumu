@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.configuration;
+package com.sky.centaur.extension.sql;
 
 import com.google.common.base.Strings;
-import com.sky.centaur.authentication.filter.datasource.DataSourceFilter;
-import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChain;
-import com.sky.centaur.authentication.filter.datasource.DatasourceFilterChainImpl;
-import com.sky.centaur.authentication.filter.datasource.P6spyDataSourceFilter;
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.p6spy.engine.spy.P6DataSource;
 import com.sky.centaur.basis.constants.BeanNameConstant;
 import com.sky.centaur.basis.dataobject.jpa.CentaurJpaAuditorAware;
+import com.sky.centaur.extension.ExtensionProperties;
+import com.sky.centaur.extension.sql.filter.datasource.DataSourceFilter;
+import com.sky.centaur.extension.sql.filter.datasource.DatasourceFilterChain;
+import com.sky.centaur.extension.sql.filter.datasource.DatasourceFilterChainImpl;
+import com.sky.centaur.extension.sql.filter.datasource.P6spyDataSourceFilter;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
 import javax.sql.DataSource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -38,6 +42,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.TransactionManager;
+import org.springframework.util.Assert;
 
 /**
  * 数据源配置类
@@ -46,6 +51,8 @@ import org.springframework.transaction.TransactionManager;
  * @since 1.0.0
  */
 @Configuration
+@EnableConfigurationProperties(ExtensionProperties.class)
+@ConditionalOnProperty(prefix = "centaur.extension.sql", value = "enabled", havingValue = "true")
 public class DatasourceConfiguration {
 
   /**
@@ -55,14 +62,18 @@ public class DatasourceConfiguration {
    */
   @Bean
   @Order(1000)
+  @ConditionalOnClass(P6DataSource.class)
   public DataSourceFilter p6spyWrapperDataSourceFilter() {
     return new P6spyDataSourceFilter();
   }
 
   @Bean
-  public DataSource datasource(DataSourceProperties dataSourceProperties,
+  public DataSource datasource(
+      ObjectProvider<DataSourceProperties> dataSourcePropertiesObjectProvider,
       DatasourceFilterChain dataSourceFilterChain,
-      AuthenticationProperties authenticationProperties) {
+      ExtensionProperties extensionProperties) {
+    DataSourceProperties dataSourceProperties = dataSourcePropertiesObjectProvider.getIfAvailable();
+    Assert.notNull(dataSourceProperties, "No data source properties found");
     HikariConfig config = new HikariConfig();
     config.setUsername(dataSourceProperties.getUsername());
     config.setPassword(dataSourceProperties.getPassword());
@@ -72,7 +83,7 @@ public class DatasourceConfiguration {
       config.setDriverClassName(driverClassName);
     }
     HikariDataSource hikariDataSource = new HikariDataSource(config);
-    return dataSourceFilterChain.doAfterFilter(hikariDataSource, authenticationProperties);
+    return dataSourceFilterChain.doAfterFilter(hikariDataSource, extensionProperties);
   }
 
   /**

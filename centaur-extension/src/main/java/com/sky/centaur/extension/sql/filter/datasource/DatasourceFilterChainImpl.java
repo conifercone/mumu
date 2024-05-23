@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.filter.datasource;
+package com.sky.centaur.extension.sql.filter.datasource;
 
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
+import com.sky.centaur.extension.ExtensionProperties;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.sql.DataSource;
@@ -40,10 +40,10 @@ public class DatasourceFilterChainImpl implements DatasourceFilterChain {
 
   @Override
   public DataSource doAfterFilter(DataSource dataSource,
-      AuthenticationProperties authenticationProperties) {
+      ExtensionProperties extensionProperties) {
     if (!filters.isEmpty()) {
       for (DataSourceFilter filter : filters) {
-        dataSource = filter.afterCreate(dataSource, authenticationProperties);
+        dataSource = filter.afterCreate(dataSource, extensionProperties);
       }
     }
 

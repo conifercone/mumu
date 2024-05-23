@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.filter.datasource;
+package com.sky.centaur.extension.sql;
 
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
-import javax.sql.DataSource;
+import lombok.Data;
 
 /**
- * 数据源过滤器链条接口
+ * sql日志相关配置
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public interface DatasourceFilterChain {
+@Data
+public class SqlLogProperties {
 
   /**
-   * 数据源创建后处理，主要处理数据源
-   *
-   * @param dataSource               处理前数据源
-   * @param authenticationProperties 服务配置信息
-   * @return 处理后数据源
+   * 启用sql日志
    */
-  DataSource doAfterFilter(DataSource dataSource,
-      AuthenticationProperties authenticationProperties);
+  private boolean enabled;
 }

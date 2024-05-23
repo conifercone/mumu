@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.config;
+package com.sky.centaur.extension.sql.filter.datasource;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import com.sky.centaur.extension.ExtensionProperties;
+import javax.sql.DataSource;
 
 /**
- * 鉴权服务全局配置信息
+ * 顶级数据源过滤器接口
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Data
-@Component
-@ConfigurationProperties("centaur.auth")
-public class AuthenticationProperties {
+public interface DataSourceFilter {
 
   /**
-   * 是否开启服务日志
+   * 数据源创建后处理，主要处理数据源
+   *
+   * @param dataSource          处理前数据源
+   * @param extensionProperties 服务配置信息
+   * @return 处理后数据源
    */
-  private boolean enableLog = false;
-
+  DataSource afterCreate(DataSource dataSource, ExtensionProperties extensionProperties);
 }

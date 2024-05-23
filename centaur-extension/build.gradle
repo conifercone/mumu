@@ -9,4 +9,7 @@ dependencies {
     implementation libs.curatorRecipes
     implementation libs.springDataCommons
     implementation libs.springSecurityCore
+    implementation libs.p6spy
+    compileOnly libs.springBootDataJpa
+    implementation libs.micrometerTracing
 }

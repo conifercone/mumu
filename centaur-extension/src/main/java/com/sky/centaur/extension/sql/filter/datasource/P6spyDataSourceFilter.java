@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.filter.datasource;
+package com.sky.centaur.extension.sql.filter.datasource;
 
 import com.p6spy.engine.spy.P6DataSource;
-import com.sky.centaur.authentication.infrastructure.config.AuthenticationProperties;
-import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.extension.ExtensionProperties;
 import javax.sql.DataSource;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -37,27 +35,15 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
-      @NotNull AuthenticationProperties authenticationProperties) {
+      @NotNull ExtensionProperties extensionProperties) {
     LOGGER.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
-        authenticationProperties.isEnableLog();
+        extensionProperties.getSql().getLog().isEnabled();
     if (enableLog) {
-      checkJar();
       dataSource = new P6DataSource(dataSource);
       LOGGER.debug("p6spy datasource wrapped datasource");
     }
 
     return dataSource;
-  }
-
-  /**
-   * 校验是否引入相关jar
-   */
-  private void checkJar() {
-    try {
-      Class.forName("com.p6spy.engine.spy.P6DataSource");
-    } catch (Exception e) {
-      throw new CentaurException(ResultCode.MISSING_P6SPY_DEPENDENCY_INFORMATION);
-    }
   }
 }

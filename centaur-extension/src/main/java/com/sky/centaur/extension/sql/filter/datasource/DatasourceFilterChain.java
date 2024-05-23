@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.extension.sql.filter.datasource;
 
-package com.sky.centaur.extension;
-
-import com.sky.centaur.extension.distributed.DistributedProperties;
-import com.sky.centaur.extension.sql.SqlProperties;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import com.sky.centaur.extension.ExtensionProperties;
+import javax.sql.DataSource;
 
 /**
- * 拓展属性
+ * 数据源过滤器链条接口
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Data
-@ConfigurationProperties("centaur.extension")
-public class ExtensionProperties {
+public interface DatasourceFilterChain {
 
   /**
-   * 分布式相关配置
+   * 数据源创建后处理，主要处理数据源
+   *
+   * @param dataSource          处理前数据源
+   * @param extensionProperties 服务配置信息
+   * @return 处理后数据源
    */
-  @NestedConfigurationProperty
-  private DistributedProperties distributed;
-
-  /**
-   * sql相关配置
-   */
-  @NestedConfigurationProperty
-  private SqlProperties sql;
+  DataSource doAfterFilter(DataSource dataSource,
+      ExtensionProperties extensionProperties);
 }

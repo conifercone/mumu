@@ -19,7 +19,6 @@ dependencies {
     implementation libs.consulConfig
     implementation libs.swagger3Ui
     implementation libs.bundles.micrometer
-    implementation libs.p6spy
     implementation libs.grpcSpringBootStarter
     testImplementation libs.springbootTest
     testImplementation libs.jasypt

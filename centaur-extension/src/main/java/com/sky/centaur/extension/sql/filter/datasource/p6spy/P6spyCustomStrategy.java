@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.filter.datasource.p6spy;
+package com.sky.centaur.extension.sql.filter.datasource.p6spy;
 
 import com.google.common.base.Strings;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
