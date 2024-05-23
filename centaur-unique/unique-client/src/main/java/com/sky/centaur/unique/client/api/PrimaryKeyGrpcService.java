@@ -32,9 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.stereotype.Component;
 
 /**
  * 主键生成对外提供grpc调用实例
@@ -42,7 +40,6 @@ import org.springframework.stereotype.Component;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Component
 @Observed(name = "PrimaryKeyGrpcService")
 public class PrimaryKeyGrpcService extends UniqueGrpcService implements DisposableBean,
     InitializingBean {
@@ -51,7 +48,6 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PrimaryKeyGrpcService.class);
 
-  @Autowired
   public PrimaryKeyGrpcService(
       DiscoveryClient consulDiscoveryClient) {
     super(consulDiscoveryClient);

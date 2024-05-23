@@ -18,8 +18,9 @@ package com.sky.centaur.log.client;
 
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * 日志客户端配置类
@@ -28,7 +29,15 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @Configuration
-@Import({OperationLogGrpcService.class, SystemLogGrpcService.class})
 public class LogClientConfiguration {
 
+  @Bean
+  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient consulDiscoveryClient) {
+    return new OperationLogGrpcService(consulDiscoveryClient);
+  }
+
+  @Bean
+  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient consulDiscoveryClient) {
+    return new SystemLogGrpcService(consulDiscoveryClient);
+  }
 }

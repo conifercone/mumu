@@ -20,7 +20,6 @@ import com.sky.centaur.log.client.api.grpc.SystemLogServiceGrpc.SystemLogService
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -33,7 +32,6 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   private ManagedChannel channel;
 
-  @Autowired
   public SystemLogGrpcService(
       DiscoveryClient consulDiscoveryClient) {
     super(consulDiscoveryClient);

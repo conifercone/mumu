@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 @Configuration
-public class ApiConfiguration {
+public class AuthenticationClientConfiguration {
 
   @Bean
   public TokenGrpcService tokenGrpcService(DiscoveryClient consulDiscoveryClient) {

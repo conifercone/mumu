@@ -17,8 +17,9 @@
 package com.sky.centaur.unique.client;
 
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * 唯一数据服务客户端配置
@@ -27,7 +28,10 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @Configuration
-@Import({PrimaryKeyGrpcService.class})
 public class UniqueClientConfiguration {
 
+  @Bean
+  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient consulDiscoveryClient) {
+    return new PrimaryKeyGrpcService(consulDiscoveryClient);
+  }
 }

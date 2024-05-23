@@ -1,2 +1,2 @@
 com.sky.centaur.authentication.client.config.JWTSecurityConfig
-com.sky.centaur.authentication.client.config.ApiConfiguration
+com.sky.centaur.authentication.client.config.AuthenticationClientConfiguration
