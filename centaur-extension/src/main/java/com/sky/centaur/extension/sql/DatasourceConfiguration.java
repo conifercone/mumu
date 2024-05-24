@@ -34,6 +34,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,19 +72,24 @@ public class DatasourceConfiguration {
   public DataSource datasource(
       ObjectProvider<DataSourceProperties> dataSourcePropertiesObjectProvider,
       DatasourceFilterChain dataSourceFilterChain,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties, HikariConfig hikariConfig) {
     DataSourceProperties dataSourceProperties = dataSourcePropertiesObjectProvider.getIfAvailable();
     Assert.notNull(dataSourceProperties, "No data source properties found");
-    HikariConfig config = new HikariConfig();
-    config.setUsername(dataSourceProperties.getUsername());
-    config.setPassword(dataSourceProperties.getPassword());
-    config.setJdbcUrl(dataSourceProperties.getUrl());
+    hikariConfig.setUsername(dataSourceProperties.getUsername());
+    hikariConfig.setPassword(dataSourceProperties.getPassword());
+    hikariConfig.setJdbcUrl(dataSourceProperties.getUrl());
     String driverClassName = dataSourceProperties.getDriverClassName();
     if (!Strings.isNullOrEmpty(driverClassName)) {
-      config.setDriverClassName(driverClassName);
+      hikariConfig.setDriverClassName(driverClassName);
     }
-    HikariDataSource hikariDataSource = new HikariDataSource(config);
+    HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
     return dataSourceFilterChain.doAfterFilter(hikariDataSource, extensionProperties);
+  }
+
+  @Bean
+  @ConfigurationProperties(prefix = "spring.datasource.hikari")
+  public HikariConfig hikariConfig() {
+    return new HikariConfig();
   }
 
   /**
