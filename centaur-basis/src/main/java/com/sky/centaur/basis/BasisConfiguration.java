@@ -16,9 +16,12 @@
 
 package com.sky.centaur.basis;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 import com.sky.centaur.basis.tools.SpringContextUtil;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 
 /**
  * 基础模块配置类
@@ -27,7 +30,11 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @Configuration
-@Import({SpringContextUtil.class})
 public class BasisConfiguration {
 
+  @Bean
+  @Order(HIGHEST_PRECEDENCE)
+  public SpringContextUtil springContextUtil() {
+    return new SpringContextUtil();
+  }
 }

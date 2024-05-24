@@ -16,10 +16,9 @@
 
 package com.sky.centaur.basis.tools;
 
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
-
 import java.util.Map;
 import java.util.function.Consumer;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -27,8 +26,6 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * spring上下文工具类
@@ -36,14 +33,14 @@ import org.springframework.stereotype.Component;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Component
-@Order(HIGHEST_PRECEDENCE)
-@SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
+
+@SuppressWarnings({"unused"})
 public final class SpringContextUtil implements ApplicationContextAware {
 
   /**
    * Spring上下文
    */
+  @Getter
   private static ApplicationContext applicationContext;
 
   /**
@@ -63,15 +60,6 @@ public final class SpringContextUtil implements ApplicationContextAware {
     if (SpringContextUtil.applicationContext == null) {
       SpringContextUtil.applicationContext = applicationContext;
     }
-  }
-
-  /**
-   * 获取applicationContext
-   *
-   * @return applicationContext
-   */
-  public static ApplicationContext getApplicationContext() {
-    return applicationContext;
   }
 
   /**
