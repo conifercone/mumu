@@ -31,6 +31,7 @@ curatorRecipesVersion = "5.1.0"
 flywayCoreVersion = "10.9.0"
 licensePluginVersion = '0.16.1'
 javaxMailVersion = '1.6.2'
+kotlinVersion = '2.0.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -150,6 +151,10 @@ flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql",
 javaxMail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakartaServletApi = { module = "jakarta.servlet:jakarta.servlet-api" }
+# https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+# https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
@@ -164,3 +169,6 @@ idea = { id = "idea" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufVersion" }
 license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinVersion" }
+kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinVersion" }

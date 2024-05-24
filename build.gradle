@@ -1,6 +1,9 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GrUnresolvedAccess
 
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
@@ -10,6 +13,9 @@ plugins {
     alias(libs.plugins.lombok) apply(false)
     alias(libs.plugins.protobuf) apply(false)
     alias(libs.plugins.license) apply(false)
+    alias(libs.plugins.kotlinJvm) apply(false)
+    alias(libs.plugins.kotlinPluginSpring) apply(false)
+    alias(libs.plugins.kotlinPluginJpa) apply(false)
 }
 
 allprojects { project ->
@@ -41,6 +47,9 @@ subprojects { project ->
     apply plugin: libs.plugins.getDependencyManagement().get().getPluginId()
     apply plugin: libs.plugins.getLombok().get().getPluginId()
     apply plugin: libs.plugins.getLicense().get().getPluginId()
+    apply plugin: libs.plugins.getKotlinJvm().get().getPluginId()
+    apply plugin: libs.plugins.getKotlinPluginSpring().get().getPluginId()
+    apply plugin: libs.plugins.getKotlinPluginJpa().get().getPluginId()
 
     // java工具链配置
     java {
@@ -63,6 +72,10 @@ subprojects { project ->
     }
 
     compileJava.dependsOn(processResources)
+
+    tasks.withType(KotlinCompile).configureEach {
+        kotlinOptions.freeCompilerArgs += "-Xjsr305=strict"
+    }
 
     // 打包自定义设置
     jar {
@@ -106,10 +119,10 @@ subprojects { project ->
         encoding = StandardCharsets.UTF_8.name()
         ignoreFailures = true
         header = rootProject.file("source_code_head.txt")
-        includes(["**/*.java", "**/*.sql", "**/*.xml", "**/*.yml"])
+        includes(["**/*.java", "**/*.kt", "**/*.sql", "**/*.xml", "**/*.yml"])
         excludes(["**/client/api/grpc/*.java"])
         mapping "java", "SLASHSTAR_STYLE"
-        mapping "properties", "SCRIPT_STYLE"
+        mapping "kt", "SLASHSTAR_STYLE"
         mapping "sql", "SLASHSTAR_STYLE"
         mapping "xml", "XML_STYLE"
         mapping "yml", "SCRIPT_STYLE"
@@ -133,6 +146,8 @@ subprojects { project ->
         implementation libs.apiguardian
         implementation libs.guava
         implementation libs.commonsLang3
+        implementation libs.jacksonModuleKotlin
+        implementation libs.kotlinReflect
         testImplementation libs.junitJupiter
         annotationProcessor libs.springBootConfigurationProcessor
     }
