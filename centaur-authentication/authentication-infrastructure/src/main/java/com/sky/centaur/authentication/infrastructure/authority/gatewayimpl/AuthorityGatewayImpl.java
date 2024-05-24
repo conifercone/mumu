@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
@@ -103,15 +104,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
       if (StringUtils.hasText(authority.getCode())) {
-        predicateList.add(cb.like(root.get("code"), "%" + authority.getCode() + "%"));
+        predicateList.add(cb.like(root.get(AuthorityDo_.code), "%" + authority.getCode() + "%"));
       }
       if (StringUtils.hasText(authority.getName())) {
-        predicateList.add(cb.like(root.get("name"), "%" + authority.getName() + "%"));
+        predicateList.add(cb.like(root.get(AuthorityDo_.name), "%" + authority.getName() + "%"));
       }
       if (authority.getId() != null) {
-        predicateList.add(cb.equal(root.get("id"), authority.getId()));
+        predicateList.add(cb.equal(root.get(AuthorityDo_.id), authority.getId()));
       }
-      return query.orderBy(cb.desc(root.get("creationTime")))
+      return query.orderBy(cb.desc(root.get(AuthorityDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
     };

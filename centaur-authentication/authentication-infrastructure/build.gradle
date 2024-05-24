@@ -15,4 +15,5 @@ dependencies {
     implementation libs.hibernateTypes63
     implementation libs.postgresql
     implementation libs.redisOmSpring
+    annotationProcessor libs.hibernateJpamodelgen
 }

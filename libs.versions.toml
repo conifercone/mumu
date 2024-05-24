@@ -155,6 +155,8 @@ jakartaServletApi = { module = "jakarta.servlet:jakarta.servlet-api" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+# https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
+hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

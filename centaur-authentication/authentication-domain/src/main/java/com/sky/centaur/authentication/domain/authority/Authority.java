@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.domain.authority;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import java.io.Serial;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,9 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 public class Authority extends BasisDomainModel implements GrantedAuthority {
 
+  @Serial
+  private static final long serialVersionUID = -5474154746791467326L;
+  
   private Long id;
   private String code;
   private String name;

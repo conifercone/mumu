@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
@@ -97,21 +98,21 @@ public class RoleGatewayImpl implements RoleGateway {
       //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
       if (StringUtils.hasText(role.getCode())) {
-        predicateList.add(cb.like(root.get("code"), "%" + role.getCode() + "%"));
+        predicateList.add(cb.like(root.get(RoleDo_.code), "%" + role.getCode() + "%"));
       }
       if (StringUtils.hasText(role.getName())) {
-        predicateList.add(cb.like(root.get("name"), "%" + role.getName() + "%"));
+        predicateList.add(cb.like(root.get(RoleDo_.name), "%" + role.getName() + "%"));
       }
       if (role.getId() != null) {
-        predicateList.add(cb.equal(root.get("id"), role.getId()));
+        predicateList.add(cb.equal(root.get(RoleDo_.id), role.getId()));
       }
       if (!CollectionUtils.isEmpty(role.getAuthorities())) {
         role.getAuthorities().forEach(authority -> predicateList.add(cb.equal(
             cb.literal(authority.getId()),
-            cb.function("any_pg", Long.class, root.get("authorities"))
+            cb.function("any_pg", Long.class, root.get(RoleDo_.authorities))
         )));
       }
-      return query.orderBy(cb.desc(root.get("creationTime")))
+      return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
     };

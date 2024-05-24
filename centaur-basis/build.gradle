@@ -8,4 +8,5 @@ dependencies {
     implementation libs.springSecurityOauth2Jose
     implementation libs.javaxMail
     compileOnly libs.springBootDataJpa
+    annotationProcessor libs.hibernateJpamodelgen
 }
