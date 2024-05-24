@@ -16,6 +16,8 @@
 
 package com.sky.centaur.authentication.configuration;
 
+import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
+
 import org.hibernate.boot.model.FunctionContributions;
 import org.hibernate.boot.model.FunctionContributor;
 import org.hibernate.dialect.function.StandardSQLFunction;
@@ -33,6 +35,6 @@ public class PostGreSQLAnyFunctionContributor implements FunctionContributor {
   @Override
   public void contributeFunctions(@NotNull FunctionContributions functionContributions) {
     functionContributions.getFunctionRegistry().register(
-        "any_pg", new StandardSQLFunction("any", StandardBasicTypes.LONG));
+        ANY_PG, new StandardSQLFunction("any", StandardBasicTypes.LONG));
   }
 }

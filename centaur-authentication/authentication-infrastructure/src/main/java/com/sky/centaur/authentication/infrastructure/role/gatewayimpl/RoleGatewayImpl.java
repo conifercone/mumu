@@ -16,6 +16,9 @@
 
 package com.sky.centaur.authentication.infrastructure.role.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
+import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
+
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -98,10 +101,12 @@ public class RoleGatewayImpl implements RoleGateway {
       //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
       if (StringUtils.hasText(role.getCode())) {
-        predicateList.add(cb.like(root.get(RoleDo_.code), "%" + role.getCode() + "%"));
+        predicateList.add(cb.like(root.get(RoleDo_.code),
+            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, role.getCode())));
       }
       if (StringUtils.hasText(role.getName())) {
-        predicateList.add(cb.like(root.get(RoleDo_.name), "%" + role.getName() + "%"));
+        predicateList.add(cb.like(root.get(RoleDo_.name),
+            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, role.getName())));
       }
       if (role.getId() != null) {
         predicateList.add(cb.equal(root.get(RoleDo_.id), role.getId()));
@@ -109,7 +114,7 @@ public class RoleGatewayImpl implements RoleGateway {
       if (!CollectionUtils.isEmpty(role.getAuthorities())) {
         role.getAuthorities().forEach(authority -> predicateList.add(cb.equal(
             cb.literal(authority.getId()),
-            cb.function("any_pg", Long.class, root.get(RoleDo_.authorities))
+            cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
         )));
       }
       return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))

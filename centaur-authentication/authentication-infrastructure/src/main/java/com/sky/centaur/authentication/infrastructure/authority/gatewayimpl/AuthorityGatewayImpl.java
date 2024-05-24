@@ -16,6 +16,8 @@
 
 package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
+
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -104,10 +106,12 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
       if (StringUtils.hasText(authority.getCode())) {
-        predicateList.add(cb.like(root.get(AuthorityDo_.code), "%" + authority.getCode() + "%"));
+        predicateList.add(cb.like(root.get(AuthorityDo_.code),
+            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, authority.getCode())));
       }
       if (StringUtils.hasText(authority.getName())) {
-        predicateList.add(cb.like(root.get(AuthorityDo_.name), "%" + authority.getName() + "%"));
+        predicateList.add(cb.like(root.get(AuthorityDo_.name),
+            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, authority.getName())));
       }
       if (authority.getId() != null) {
         predicateList.add(cb.equal(root.get(AuthorityDo_.id), authority.getId()));
