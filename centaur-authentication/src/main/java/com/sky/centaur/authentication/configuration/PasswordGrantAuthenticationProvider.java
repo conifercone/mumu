@@ -116,12 +116,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
 
     //校验用户名信息
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-    if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-      ResultCode accountPasswordIsIncorrect = ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT;
-      throw new OAuth2AuthenticationException(
-          new OAuth2Error(accountPasswordIsIncorrect.getResultCode(),
-              accountPasswordIsIncorrect.getResultMsg(), ""));
-    }
+    verifyAccountInformation(userDetails, password);
 
     //由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.authenticated(
@@ -217,6 +212,45 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     }
     return new OAuth2AccessTokenAuthenticationToken(
         registeredClient, clientPrincipal, accessToken, refreshToken, additionalParametersFinal);
+  }
+
+  /**
+   * 校验账户信息
+   *
+   * @param userDetails 账户信息
+   * @param password    密码
+   */
+  private void verifyAccountInformation(@NotNull UserDetails userDetails, String password) {
+    if (!userDetails.isEnabled()) {
+      ResultCode accountDisabled = ResultCode.ACCOUNT_DISABLED;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountDisabled.getResultCode(),
+              accountDisabled.getResultMsg(), ""));
+    }
+    if (!userDetails.isAccountNonLocked()) {
+      ResultCode accountLocked = ResultCode.ACCOUNT_LOCKED;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountLocked.getResultCode(),
+              accountLocked.getResultMsg(), ""));
+    }
+    if (!userDetails.isAccountNonExpired()) {
+      ResultCode accountHasExpired = ResultCode.ACCOUNT_HAS_EXPIRED;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountHasExpired.getResultCode(),
+              accountHasExpired.getResultMsg(), ""));
+    }
+    if (!userDetails.isCredentialsNonExpired()) {
+      ResultCode passwordExpired = ResultCode.PASSWORD_EXPIRED;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(passwordExpired.getResultCode(),
+              passwordExpired.getResultMsg(), ""));
+    }
+    if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+      ResultCode accountPasswordIsIncorrect = ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT;
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(accountPasswordIsIncorrect.getResultCode(),
+              accountPasswordIsIncorrect.getResultMsg(), ""));
+    }
   }
 
   @NotNull
