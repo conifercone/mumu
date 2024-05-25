@@ -20,7 +20,9 @@ dependencies {
     implementation libs.swagger3Ui
     implementation libs.bundles.micrometer
     implementation libs.grpcSpringBootStarter
-    testImplementation libs.springbootTest
+    testImplementation(libs.springbootTest) {
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
     testImplementation libs.jasypt
     testImplementation libs.springSecurityTest
     testImplementation libs.grpcClientSpringBootStarter

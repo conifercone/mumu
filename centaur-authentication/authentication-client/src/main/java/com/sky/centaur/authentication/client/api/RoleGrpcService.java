@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Nullable;
+import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -56,21 +57,23 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleAddGrpcCo add(RoleAddGrpcCmd roleAddGrpcCmd) {
+  public RoleAddGrpcCo add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(roleAddGrpcCmd);
+        return extracted(roleAddGrpcCmd, callCredentials);
       }).orElse(null);
     } else {
-      return extracted(roleAddGrpcCmd);
+      return extracted(roleAddGrpcCmd, callCredentials);
     }
   }
 
-  private @Nullable RoleAddGrpcCo extracted(RoleAddGrpcCmd roleAddGrpcCmd) {
+  private @Nullable RoleAddGrpcCo extracted(RoleAddGrpcCmd roleAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
     try {
-      return roleServiceFutureStub.add(roleAddGrpcCmd).get(3, TimeUnit.SECONDS);
+      return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd)
+          .get(3, TimeUnit.SECONDS);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       LOGGER.error(e.getMessage());
       return null;

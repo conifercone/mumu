@@ -14,5 +14,7 @@ dependencies {
     implementation libs.jasypt
     implementation libs.consulDiscovery
     implementation libs.consulConfig
-    testImplementation libs.springbootTest
+    testImplementation(libs.springbootTest) {
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
 }

@@ -17,6 +17,8 @@ dependencies {
     implementation libs.springKafka
     implementation libs.grpcSpringBootStarter
     implementation libs.bundles.micrometer
-    testImplementation libs.springbootTest
+    testImplementation(libs.springbootTest) {
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
     testImplementation libs.jasypt
 }
