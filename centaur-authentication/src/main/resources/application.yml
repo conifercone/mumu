@@ -16,7 +16,7 @@
 
 server:
   port: ${port:31100}
-
+  shutdown: graceful
 spring:
   application:
     name: authentication
