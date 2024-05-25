@@ -15,11 +15,14 @@
  */
 package com.sky.centaur.authentication;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 /**
@@ -33,6 +36,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
 @EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.authentication.**")
 @EnableMethodSecurity
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {
