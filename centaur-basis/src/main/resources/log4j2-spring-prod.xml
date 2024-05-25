@@ -52,9 +52,9 @@
 
   <Loggers>
     <!--Root level logger to control overall logging-->
-    <Root level="INFO">
+    <AsyncRoot level="INFO" includeLocation="true">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
-    </Root>
+    </AsyncRoot>
   </Loggers>
 </Configuration>

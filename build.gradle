@@ -141,6 +141,7 @@ subprojects { project ->
     dependencies {
         implementation libs.springboot
         implementation libs.springBootLog4j2
+        implementation libs.disruptor
         implementation libs.bundles.jackson
         implementation libs.jetbrainsAnnotations
         implementation libs.apiguardian

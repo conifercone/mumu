@@ -31,6 +31,7 @@ flywayCoreVersion = "10.9.0"
 licensePluginVersion = '0.16.1'
 javaxMailVersion = '1.6.2'
 kotlinVersion = '2.0.0'
+disruptorVersion = '4.0.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -156,6 +157,8 @@ jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-ko
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 # https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
 hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
+# https://mvnrepository.com/artifact/com.lmax/disruptor
+disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
