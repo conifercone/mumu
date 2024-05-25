@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.authentication.client.grpc;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.RoleGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
@@ -22,6 +24,9 @@ import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.nio.ByteBuffer;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -74,5 +79,37 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     LOGGER.info("RoleAddGrpcCo: {}", roleAddGrpcCo);
     Assertions.assertNotNull(roleAddGrpcCo);
     Assertions.assertEquals("test", roleAddGrpcCo.getCode());
+  }
+
+  @Test
+  @Transactional
+  public void syncAdd() throws InterruptedException {
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+    RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
+        .setRoleAddCo(
+            RoleAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<RoleAddGrpcCo> roleAddGrpcCoListenableFuture = roleGrpcService.syncAdd(
+        roleAddGrpcCmd,
+        callCredentials);
+    roleAddGrpcCoListenableFuture.addListener(() -> {
+      try {
+        RoleAddGrpcCo syncRoleAddGrpcCo = roleAddGrpcCoListenableFuture.get();
+        LOGGER.info("Sync RoleAddGrpcCo: {}", syncRoleAddGrpcCo);
+        Assertions.assertNotNull(syncRoleAddGrpcCo);
+        Assertions.assertEquals("test", syncRoleAddGrpcCo.getCode());
+        countDownLatch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
   }
 }

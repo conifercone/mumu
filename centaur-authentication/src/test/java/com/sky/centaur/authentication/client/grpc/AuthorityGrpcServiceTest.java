@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.authentication.client.grpc;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -22,6 +24,9 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.nio.ByteBuffer;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -74,5 +79,37 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     LOGGER.info("AuthorityAddGrpcCo: {}", authorityAddGrpcCo);
     Assertions.assertNotNull(authorityAddGrpcCo);
     Assertions.assertEquals("test", authorityAddGrpcCo.getCode());
+  }
+
+  @Test
+  @Transactional
+  public void syncAdd() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
+        .setAuthorityAddCo(
+            AuthorityAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AuthorityAddGrpcCo> authorityAddGrpcCoFuture = authorityGrpcService.syncAdd(
+        authorityAddGrpcCmd,
+        callCredentials);
+    authorityAddGrpcCoFuture.addListener(() -> {
+      try {
+        AuthorityAddGrpcCo syncAuthorityAddGrpcCo = authorityAddGrpcCoFuture.get();
+        LOGGER.info("Sync AuthorityAddGrpcCo: {}", syncAuthorityAddGrpcCo);
+        Assertions.assertNotNull(syncAuthorityAddGrpcCo);
+        Assertions.assertEquals("test", syncAuthorityAddGrpcCo.getCode());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
   }
 }

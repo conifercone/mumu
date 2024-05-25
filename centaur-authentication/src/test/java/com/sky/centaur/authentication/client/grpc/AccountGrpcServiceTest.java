@@ -15,10 +15,15 @@
  */
 package com.sky.centaur.authentication.client.grpc;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.sky.centaur.authentication.client.api.AccountGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.SexEnum;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -62,5 +67,32 @@ public class AccountGrpcServiceTest {
     LOGGER.info("AccountRegisterGrpcCo: {}", accountRegisterGrpcCo);
     Assertions.assertNotNull(accountRegisterGrpcCo);
     Assertions.assertEquals("test", accountRegisterGrpcCo.getUsername());
+  }
+
+  @Test
+  @Transactional
+  public void syncRegister() throws InterruptedException {
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+    AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
+        .setAccountRegisterCo(
+            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test")
+                .setPassword("test").setRoleCode("admin").setSex(SexEnum.SEXLESS)
+                .build())
+        .build();
+    ListenableFuture<AccountRegisterGrpcCo> accountRegisterGrpcCoListenableFuture = accountGrpcService.syncRegister(
+        accountRegisterGrpcCmd);
+    accountRegisterGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AccountRegisterGrpcCo syncAccountRegisterGrpcCo = accountRegisterGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AccountRegisterGrpcCo: {}", syncAccountRegisterGrpcCo);
+        Assertions.assertNotNull(syncAccountRegisterGrpcCo);
+        Assertions.assertEquals("test", syncAccountRegisterGrpcCo.getUsername());
+        countDownLatch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
   }
 }

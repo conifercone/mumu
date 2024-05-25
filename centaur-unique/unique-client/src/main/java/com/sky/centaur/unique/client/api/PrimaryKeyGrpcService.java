@@ -24,9 +24,11 @@ import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeySe
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,14 +72,25 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted();
+        return snowflakeFromGrpc();
       }).orElseGet(YitIdHelper::nextId);
     } else {
-      return extracted();
+      return snowflakeFromGrpc();
     }
   }
 
-  private @Nullable Long extracted() {
+  public Optional<ListenableFuture<SnowflakeResult>> syncSnowflake() {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncSnowflakeFromGrpc();
+      });
+    } else {
+      return Optional.of(syncSnowflakeFromGrpc());
+    }
+  }
+
+  private @Nullable Long snowflakeFromGrpc() {
     PrimaryKeyServiceFutureStub primaryKeyServiceFutureStub = PrimaryKeyServiceGrpc.newFutureStub(
         channel);
     ListenableFuture<SnowflakeResult> snowflake = primaryKeyServiceFutureStub.snowflake(
@@ -88,5 +101,12 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
       LOGGER.error(e.getMessage());
       return null;
     }
+  }
+
+  private @NotNull ListenableFuture<SnowflakeResult> syncSnowflakeFromGrpc() {
+    PrimaryKeyServiceFutureStub primaryKeyServiceFutureStub = PrimaryKeyServiceGrpc.newFutureStub(
+        channel);
+    return primaryKeyServiceFutureStub.snowflake(
+        Empty.newBuilder().build());
   }
 }

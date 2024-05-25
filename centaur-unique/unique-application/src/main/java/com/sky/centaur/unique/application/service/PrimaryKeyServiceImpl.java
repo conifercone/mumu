@@ -57,10 +57,10 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
 
   @Override
   public void snowflake(Empty request, @NotNull StreamObserver<SnowflakeResult> responseObserver) {
-    SnowflakeResult build = SnowflakeResult.newBuilder()
+    SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
         .setId(primaryKeySnowflakeGenerateExe.execute())
         .build();
-    responseObserver.onNext(build);
+    responseObserver.onNext(snowflakeResult);
     responseObserver.onCompleted();
   }
 }

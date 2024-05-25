@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
@@ -61,14 +63,27 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(roleAddGrpcCmd, callCredentials);
+        return addFromGrpc(roleAddGrpcCmd, callCredentials);
       }).orElse(null);
     } else {
-      return extracted(roleAddGrpcCmd, callCredentials);
+      return addFromGrpc(roleAddGrpcCmd, callCredentials);
     }
   }
 
-  private @Nullable RoleAddGrpcCo extracted(RoleAddGrpcCmd roleAddGrpcCmd,
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<RoleAddGrpcCo> syncAdd(RoleAddGrpcCmd roleAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
+      }).orElse(null);
+    } else {
+      return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
+    }
+  }
+
+  private @Nullable RoleAddGrpcCo addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
       AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
     try {
@@ -78,6 +93,12 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       LOGGER.error(e.getMessage());
       return null;
     }
+  }
+
+  private @NotNull ListenableFuture<RoleAddGrpcCo> syncAddFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd);
   }
 
 }

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
@@ -62,15 +64,29 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(authorityAddGrpcCmd, callCredentials);
+        return addFromGrpc(authorityAddGrpcCmd, callCredentials);
       }).orElse(null);
     } else {
-      return extracted(authorityAddGrpcCmd, callCredentials);
+      return addFromGrpc(authorityAddGrpcCmd, callCredentials);
     }
 
   }
 
-  private @Nullable AuthorityAddGrpcCo extracted(AuthorityAddGrpcCmd authorityAddGrpcCmd,
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<AuthorityAddGrpcCo> syncAdd(AuthorityAddGrpcCmd authorityAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
+      }).orElse(null);
+    } else {
+      return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
+    }
+
+  }
+
+  private @Nullable AuthorityAddGrpcCo addFromGrpc(AuthorityAddGrpcCmd authorityAddGrpcCmd,
       AuthCallCredentials callCredentials) {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
@@ -81,6 +97,15 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
       LOGGER.error(e.getMessage());
       return null;
     }
+  }
+
+  private @NotNull ListenableFuture<AuthorityAddGrpcCo> syncAddFromGrpc(
+      AuthorityAddGrpcCmd authorityAddGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+        channel);
+    return authorityServiceFutureStub.withCallCredentials(callCredentials)
+        .add(authorityAddGrpcCmd);
   }
 
 }
