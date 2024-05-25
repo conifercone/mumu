@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +38,8 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 public class ResultResponse<T> implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = -630682120634308837L;
   /**
    * 响应代码
    */

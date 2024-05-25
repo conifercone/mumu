@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.SexEnum;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +45,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Account extends BasisDomainModel implements UserDetails {
 
+  @Serial
+  private static final long serialVersionUID = 7134070079639713190L;
   @Getter
   private Long id;
 
