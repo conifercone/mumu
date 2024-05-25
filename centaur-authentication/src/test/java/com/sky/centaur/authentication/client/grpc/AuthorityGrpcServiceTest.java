@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +48,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   private final AuthorityGrpcService authorityGrpcService;
   private final MockMvc mockMvc;
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcServiceTest.class);
 
   @Autowired
   public AuthorityGrpcServiceTest(AuthorityGrpcService authorityGrpcService, MockMvc mockMvc) {
@@ -68,6 +71,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     );
     AuthorityAddGrpcCo authorityAddGrpcCo = authorityGrpcService.add(authorityAddGrpcCmd,
         callCredentials);
+    LOGGER.info("AuthorityAddGrpcCo: {}", authorityAddGrpcCo);
     Assertions.assertNotNull(authorityAddGrpcCo);
     Assertions.assertEquals("test", authorityAddGrpcCo.getCode());
   }
