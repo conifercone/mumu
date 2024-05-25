@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.configuration;
 
 import com.sky.centaur.basis.enums.OAuth2Enum;
+import java.io.Serial;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,9 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {
+
+  @Serial
+  private static final long serialVersionUID = -7378665661159716254L;
 
   public PasswordGrantAuthenticationToken(Authentication clientPrincipal,
       @Nullable Map<String, Object> additionalParameters) {
