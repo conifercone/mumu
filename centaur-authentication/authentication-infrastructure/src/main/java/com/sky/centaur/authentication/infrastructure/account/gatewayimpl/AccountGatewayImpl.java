@@ -182,7 +182,8 @@ public class AccountGatewayImpl implements AccountGateway {
   public void resetPassword(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
-      Assert.isTrue(StringUtils.hasText(initialPassword), "the initial password cannot be empty");
+      Assert.isTrue(StringUtils.hasText(initialPassword),
+          "the initial password cannot be empty,please check if the setting centaur.extension.authentication.initial-password");
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
     }, () -> {
