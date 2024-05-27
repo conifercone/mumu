@@ -63,6 +63,7 @@ public class AuthorityConvertor {
     BeanUtils.copyProperties(authorityAddCo, authority);
     if (authority.getId() == null) {
       authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+      authorityAddCo.setId(authority.getId());
     }
     return authority;
   }

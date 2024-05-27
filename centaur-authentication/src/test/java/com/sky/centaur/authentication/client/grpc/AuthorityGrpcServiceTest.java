@@ -21,6 +21,13 @@ import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.nio.ByteBuffer;
@@ -67,7 +74,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+            AuthorityAddGrpcCo.newBuilder().setCode("test").setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -88,7 +95,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+            AuthorityAddGrpcCo.newBuilder().setCode("test").setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -105,6 +112,165 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         LOGGER.info("Sync AuthorityAddGrpcCo: {}", syncAuthorityAddGrpcCo);
         Assertions.assertNotNull(syncAuthorityAddGrpcCo);
         Assertions.assertEquals("test", syncAuthorityAddGrpcCo.getCode());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void delete() throws ExecutionException, InterruptedException, TimeoutException {
+    AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
+        .setAuthorityDeleteCo(
+            AuthorityDeleteGrpcCo.newBuilder().setId(1)
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityGrpcService.delete(
+        authorityDeleteGrpcCmd,
+        callCredentials);
+    LOGGER.info("AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
+    Assertions.assertNotNull(authorityDeleteGrpcCo);
+    Assertions.assertEquals(1, authorityDeleteGrpcCo.getId());
+  }
+
+  @Test
+  @Transactional
+  public void syncDelete() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
+        .setAuthorityDeleteCo(
+            AuthorityDeleteGrpcCo.newBuilder().setId(1)
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AuthorityDeleteGrpcCo> authorityDeleteGrpcCoListenableFuture = authorityGrpcService.syncDelete(
+        authorityDeleteGrpcCmd,
+        callCredentials);
+    authorityDeleteGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityDeleteGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
+        Assertions.assertNotNull(authorityDeleteGrpcCo);
+        Assertions.assertEquals(1, authorityDeleteGrpcCo.getId());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
+        .setAuthorityUpdateCo(
+            AuthorityUpdateGrpcCo.newBuilder().setId(1).setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    AuthorityUpdateGrpcCo authorityUpdateGrpcCo = authorityGrpcService.updateById(
+        authorityUpdateGrpcCmd,
+        callCredentials);
+    LOGGER.info("AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
+    Assertions.assertNotNull(authorityUpdateGrpcCo);
+    Assertions.assertEquals("test", authorityUpdateGrpcCo.getName());
+  }
+
+  @Test
+  @Transactional
+  public void syncUpdateById() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
+        .setAuthorityUpdateCo(
+            AuthorityUpdateGrpcCo.newBuilder().setId(1).setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AuthorityUpdateGrpcCo> authorityUpdateGrpcCoListenableFuture = authorityGrpcService.syncUpdateById(
+        authorityUpdateGrpcCmd,
+        callCredentials);
+    authorityUpdateGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AuthorityUpdateGrpcCo authorityUpdateGrpcCo = authorityUpdateGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
+        Assertions.assertNotNull(authorityUpdateGrpcCo);
+        Assertions.assertEquals("test", authorityUpdateGrpcCo.getName());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
+    AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
+        .setAuthorityFindAllCo(
+            AuthorityFindAllGrpcCo.newBuilder().setName("数据")
+                .build()).setPageNo(0).setPageSize(10)
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    PageOfAuthorityFindAllGrpcCo pageOfAuthorityFindAllGrpcCo = authorityGrpcService.findAll(
+        authorityFindAllGrpcCmd,
+        callCredentials);
+    LOGGER.info("PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
+    Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
+    Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
+  }
+
+  @Test
+  @Transactional
+  public void syncFindAll() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
+        .setAuthorityFindAllCo(
+            AuthorityFindAllGrpcCo.newBuilder().setName("数据")
+                .build()).setPageNo(0).setPageSize(10)
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<PageOfAuthorityFindAllGrpcCo> pageOfAuthorityFindAllGrpcCoListenableFuture = authorityGrpcService.syncFindAll(
+        authorityFindAllGrpcCmd,
+        callCredentials);
+    pageOfAuthorityFindAllGrpcCoListenableFuture.addListener(() -> {
+      try {
+        PageOfAuthorityFindAllGrpcCo pageOfAuthorityFindAllGrpcCo = pageOfAuthorityFindAllGrpcCoListenableFuture.get();
+        LOGGER.info("Sync PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
+        Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
+        Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

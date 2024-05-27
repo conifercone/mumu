@@ -91,6 +91,7 @@ public class AccountConvertor {
         accountRegisterCo.getPassword(),
         roleRepository.findByCode(accountRegisterCo.getRoleCode())
             .map(RoleConvertor::toEntity).orElse(null));
+    accountRegisterCo.setId(account.getId());
     account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
     account.setPhone(accountRegisterCo.getPhone());
     account.setSex(accountRegisterCo.getSex());

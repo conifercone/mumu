@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/wrappers.proto";
 
 option java_multiple_files = true;
 option java_package = "com.sky.centaur.authentication.client.api.grpc";
@@ -16,7 +17,7 @@ message AuthorityAddGrpcCmd {
 }
 
 message AuthorityAddGrpcCo {
-  int64 id = 1;
+  google.protobuf.Int64Value id = 1;
   string code = 2;
   string name = 3;
 }
@@ -26,7 +27,7 @@ message AuthorityDeleteGrpcCmd {
 }
 
 message AuthorityDeleteGrpcCo {
-  int64 id = 1;
+  google.protobuf.Int64Value id = 1;
 }
 
 message AuthorityUpdateGrpcCmd {
@@ -34,7 +35,7 @@ message AuthorityUpdateGrpcCmd {
 }
 
 message AuthorityUpdateGrpcCo {
-  int64 id = 1;
+  google.protobuf.Int64Value id = 1;
   string code = 2;
   string name = 3;
 }
@@ -46,7 +47,7 @@ message AuthorityFindAllGrpcCmd {
 }
 
 message AuthorityFindAllGrpcCo {
-  int64 id = 1;
+  google.protobuf.Int64Value id = 1;
   string code = 2;
   string name = 3;
 }

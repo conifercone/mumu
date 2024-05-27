@@ -80,6 +80,7 @@ public class RoleConvertor {
     BeanUtils.copyProperties(roleAddCo, role, "authorities");
     if (role.getId() == null) {
       role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+      roleAddCo.setId(role.getId());
     }
     role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
             roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)

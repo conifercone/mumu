@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.application.service;
 
+import com.google.protobuf.Int64Value;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
@@ -95,12 +96,15 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityAddCo authorityAddCo = getAuthorityAddCo(
         request);
     authorityAddCmd.setAuthorityAddCo(authorityAddCo);
+    AuthorityAddGrpcCo.Builder authorityAddGrpcCoBuilder = AuthorityAddGrpcCo.newBuilder();
     try {
-      authorityAddCmdExe.execute(authorityAddCmd);
+      AuthorityAddCo addCo = authorityAddCmdExe.execute(authorityAddCmd);
+      authorityAddGrpcCoBuilder.setId(Int64Value.of(addCo.getId())).setCode(addCo.getCode())
+          .setName(addCo.getName());
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAuthorityAddCo());
+    responseObserver.onNext(authorityAddGrpcCoBuilder.build());
     responseObserver.onCompleted();
   }
 
@@ -109,7 +113,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       @NotNull AuthorityAddGrpcCmd request) {
     AuthorityAddCo authorityAddCo = new AuthorityAddCo();
     AuthorityAddGrpcCo authorityAddGrpcCo = request.getAuthorityAddCo();
-    authorityAddCo.setId(authorityAddGrpcCo.getId());
+    authorityAddCo.setId(authorityAddGrpcCo.hasId() ? authorityAddGrpcCo.getId().getValue() : null);
     authorityAddCo.setCode(authorityAddGrpcCo.getCode());
     authorityAddCo.setName(authorityAddGrpcCo.getName());
     return authorityAddCo;
@@ -120,7 +124,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       @NotNull AuthorityDeleteGrpcCmd request) {
     AuthorityDeleteCo authorityDeleteCo = new AuthorityDeleteCo();
     AuthorityDeleteGrpcCo authorityDeleteGrpcCo = request.getAuthorityDeleteCo();
-    authorityDeleteCo.setId(authorityDeleteGrpcCo.getId());
+    authorityDeleteCo.setId(
+        authorityDeleteGrpcCo.hasId() ? authorityDeleteGrpcCo.getId().getValue() : null);
     return authorityDeleteCo;
   }
 
@@ -129,7 +134,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       @NotNull AuthorityUpdateGrpcCmd request) {
     AuthorityUpdateCo authorityUpdateCo = new AuthorityUpdateCo();
     AuthorityUpdateGrpcCo authorityUpdateGrpcCo = request.getAuthorityUpdateCo();
-    authorityUpdateCo.setId(authorityUpdateGrpcCo.getId());
+    authorityUpdateCo.setId(
+        authorityUpdateGrpcCo.hasId() ? authorityUpdateGrpcCo.getId().getValue() : null);
     authorityUpdateCo.setCode(authorityUpdateGrpcCo.getCode());
     authorityUpdateCo.setName(authorityUpdateGrpcCo.getName());
     return authorityUpdateCo;
@@ -140,7 +146,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       @NotNull AuthorityFindAllGrpcCmd request) {
     AuthorityFindAllCo authorityFindAllCo = new AuthorityFindAllCo();
     AuthorityFindAllGrpcCo authorityFindAllGrpcCo = request.getAuthorityFindAllCo();
-    authorityFindAllCo.setId(authorityFindAllGrpcCo.getId());
+    authorityFindAllCo.setId(
+        authorityFindAllGrpcCo.hasId() ? authorityFindAllGrpcCo.getId().getValue() : null);
     authorityFindAllCo.setCode(authorityFindAllGrpcCo.getCode());
     authorityFindAllCo.setName(authorityFindAllGrpcCo.getName());
     return authorityFindAllCo;
@@ -163,6 +170,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void delete(AuthorityDeleteGrpcCmd request,
       StreamObserver<AuthorityDeleteGrpcCo> responseObserver) {
     AuthorityDeleteCmd authorityDeleteCmd = new AuthorityDeleteCmd();
@@ -179,6 +187,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void updateById(AuthorityUpdateGrpcCmd request,
       StreamObserver<AuthorityUpdateGrpcCo> responseObserver) {
     AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
@@ -195,6 +204,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
@@ -207,7 +217,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
           authorityFindAllCmd);
       List<AuthorityFindAllGrpcCo> findAllGrpcCos = authorityFindAllCos.getContent().stream()
           .map(authorityFindAllCo -> AuthorityFindAllGrpcCo.newBuilder()
-              .setId(authorityFindAllCo.getId())
+              .setId(Int64Value.of(authorityFindAllCo.getId()))
               .setCode(authorityFindAllCo.getCode()).setName(
                   authorityFindAllCo.getName()).build()).toList();
       builder.addAllContent(findAllGrpcCos);
