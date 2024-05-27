@@ -159,6 +159,8 @@ kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 # https://mvnrepository.com/artifact/com.lmax/disruptor
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
+# https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
