@@ -6,3 +6,5 @@
 |______\___/ \__, |
               __/ |
              |___/
+${application.title} : ${application.formatted-version}
+Spring Boot Version : ${spring-boot.formatted-version}
