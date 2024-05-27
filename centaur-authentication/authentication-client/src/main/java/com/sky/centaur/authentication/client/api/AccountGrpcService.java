@@ -20,14 +20,16 @@ import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -58,12 +60,17 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountRegisterGrpcCo register(AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  public AccountRegisterGrpcCo register(AccountRegisterGrpcCmd accountRegisterGrpcCmd)
+      throws ExecutionException, InterruptedException, TimeoutException {
     if (channel == null) {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
         return registerFromGrpc(accountRegisterGrpcCmd);
-      }).orElse(null);
+      } else {
+        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
+      }
     } else {
       return registerFromGrpc(accountRegisterGrpcCmd);
     }
@@ -84,16 +91,12 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
 
   }
 
-  private @Nullable AccountRegisterGrpcCo registerFromGrpc(
-      AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  private AccountRegisterGrpcCo registerFromGrpc(
+      AccountRegisterGrpcCmd accountRegisterGrpcCmd)
+      throws ExecutionException, InterruptedException, TimeoutException {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
         channel);
-    try {
-      return accountServiceFutureStub.register(accountRegisterGrpcCmd).get(3, TimeUnit.SECONDS);
-    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      LOGGER.error(e.getMessage());
-      return null;
-    }
+    return accountServiceFutureStub.register(accountRegisterGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
   private @NotNull ListenableFuture<AccountRegisterGrpcCo> syncRegisterFromGrpc(

@@ -24,6 +24,7 @@ import com.sky.centaur.authentication.client.api.grpc.SexEnum;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class AccountGrpcServiceTest {
 
   @Test
   @Transactional
-  public void register() {
+  public void register() throws ExecutionException, InterruptedException, TimeoutException {
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
             AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test")

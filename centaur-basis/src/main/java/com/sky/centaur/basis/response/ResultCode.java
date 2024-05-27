@@ -55,7 +55,8 @@ public enum ResultCode implements BaseResultInterface {
   ACCOUNT_LOCKED(2012),
   PASSWORD_EXPIRED(2013),
   ACCOUNT_HAS_EXPIRED(2014),
-  /*数据源错误3001-3999*/
+  /*grpc错误3001-3999*/
+  GRPC_SERVICE_NOT_FOUND(3001),
   /*数据转换错误4001-4999*/
   OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001),
   /*拓展模块错误5001-5999*/

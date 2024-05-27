@@ -15,19 +15,22 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceFutureStub;
+import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.ManagedChannel;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +63,17 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
 
   @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials) {
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
     if (channel == null) {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
         return addFromGrpc(authorityAddGrpcCmd, callCredentials);
-      }).orElse(null);
+      } else {
+        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
+      }
     } else {
       return addFromGrpc(authorityAddGrpcCmd, callCredentials);
     }
@@ -86,17 +94,13 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
 
   }
 
-  private @Nullable AuthorityAddGrpcCo addFromGrpc(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials) {
+  private AuthorityAddGrpcCo addFromGrpc(AuthorityAddGrpcCmd authorityAddGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
-    try {
-      return authorityServiceFutureStub.withCallCredentials(callCredentials)
-          .add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
-    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      LOGGER.error(e.getMessage());
-      return null;
-    }
+    return authorityServiceFutureStub.withCallCredentials(callCredentials)
+        .add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
   private @NotNull ListenableFuture<AuthorityAddGrpcCo> syncAddFromGrpc(

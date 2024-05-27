@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -63,7 +64,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional
-  public void add() {
+  public void add() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
             AuthorityAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
