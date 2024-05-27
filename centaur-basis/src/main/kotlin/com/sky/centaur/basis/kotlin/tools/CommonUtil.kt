@@ -38,7 +38,7 @@ object CommonUtil {
     @API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
     fun isValidEmailFormat(email: String?): Boolean {
-        if (email == null) {
+        if (email.isNullOrEmpty()) {
             return false
         }
         val matcher = EMAIL_PATTERN.matcher(email)
