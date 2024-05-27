@@ -96,15 +96,15 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityAddCo authorityAddCo = getAuthorityAddCo(
         request);
     authorityAddCmd.setAuthorityAddCo(authorityAddCo);
-    AuthorityAddGrpcCo.Builder authorityAddGrpcCoBuilder = AuthorityAddGrpcCo.newBuilder();
+    AuthorityAddGrpcCo authorityAddGrpcCo = request.getAuthorityAddCo();
     try {
       AuthorityAddCo addCo = authorityAddCmdExe.execute(authorityAddCmd);
-      authorityAddGrpcCoBuilder.setId(Int64Value.of(addCo.getId())).setCode(addCo.getCode())
-          .setName(addCo.getName());
+      authorityAddGrpcCo = authorityAddGrpcCo.toBuilder().setId(Int64Value.of(addCo.getId()))
+          .build();
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(authorityAddGrpcCoBuilder.build());
+    responseObserver.onNext(authorityAddGrpcCo);
     responseObserver.onCompleted();
   }
 

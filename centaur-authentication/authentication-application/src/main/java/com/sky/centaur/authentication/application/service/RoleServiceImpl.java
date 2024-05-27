@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.application.service;
 
+import com.google.protobuf.Int64Value;
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
@@ -107,12 +108,14 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleAddCmd roleAddCmd = new RoleAddCmd();
     RoleAddCo roleAddCo = getRoleAddCo(request);
     roleAddCmd.setRoleAddCo(roleAddCo);
+    RoleAddGrpcCo roleAddGrpcCo = request.getRoleAddCo();
     try {
-      roleAddCmdExe.execute(roleAddCmd);
+      RoleAddCo addCo = roleAddCmdExe.execute(roleAddCmd);
+      roleAddGrpcCo = roleAddGrpcCo.toBuilder().setId(Int64Value.of(addCo.getId())).build();
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getRoleAddCo());
+    responseObserver.onNext(roleAddGrpcCo);
     responseObserver.onCompleted();
   }
 
@@ -121,7 +124,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleAddGrpcCmd request) {
     RoleAddCo roleAddCo = new RoleAddCo();
     RoleAddGrpcCo roleAddGrpcCo = request.getRoleAddCo();
-    roleAddCo.setId(roleAddGrpcCo.getId());
+    roleAddCo.setId(roleAddGrpcCo.hasId() ? roleAddGrpcCo.getId().getValue() : null);
     roleAddCo.setCode(roleAddGrpcCo.getCode());
     roleAddCo.setName(roleAddGrpcCo.getName());
     roleAddCo.setAuthorities(roleAddGrpcCo.getAuthoritiesList());
@@ -133,11 +136,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleDeleteGrpcCmd request) {
     RoleDeleteCo roleDeleteCo = new RoleDeleteCo();
     RoleDeleteGrpcCo roleDeleteGrpcCo = request.getRoleDeleteCo();
-    roleDeleteCo.setId(roleDeleteGrpcCo.getId());
+    roleDeleteCo.setId(roleDeleteGrpcCo.hasId() ? roleDeleteGrpcCo.getId().getValue() : null);
     return roleDeleteCo;
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void delete(RoleDeleteGrpcCmd request, StreamObserver<RoleDeleteGrpcCo> responseObserver) {
     RoleDeleteCmd roleDeleteCmd = new RoleDeleteCmd();
     RoleDeleteCo roleDeleteCo = getRoleDeleteCo(
@@ -157,7 +161,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleUpdateGrpcCmd request) {
     RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
     RoleUpdateGrpcCo roleUpdateGrpcCo = request.getRoleUpdateCo();
-    roleUpdateCo.setId(roleUpdateGrpcCo.getId());
+    roleUpdateCo.setId(roleUpdateGrpcCo.hasId() ? roleUpdateGrpcCo.getId().getValue() : null);
     roleUpdateCo.setCode(roleUpdateGrpcCo.getCode());
     roleUpdateCo.setName(roleUpdateGrpcCo.getName());
     roleUpdateCo.setAuthorities(roleUpdateGrpcCo.getAuthoritiesList());
@@ -165,6 +169,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void updateById(RoleUpdateGrpcCmd request,
       StreamObserver<RoleUpdateGrpcCo> responseObserver) {
     RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
@@ -185,7 +190,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleFindAllGrpcCmd request) {
     RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
     RoleFindAllGrpcCo roleFindAllGrpcCo = request.getRoleFindAllCo();
-    roleFindAllCo.setId(roleFindAllGrpcCo.getId());
+    roleFindAllCo.setId(roleFindAllGrpcCo.hasId() ? roleFindAllGrpcCo.getId().getValue() : null);
     roleFindAllCo.setCode(roleFindAllGrpcCo.getCode());
     roleFindAllCo.setName(roleFindAllGrpcCo.getName());
     roleFindAllCo.setAuthorities(roleFindAllGrpcCo.getAuthoritiesList());
@@ -193,6 +198,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
+  @PreAuthorize("hasRole('admin')")
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
@@ -205,7 +211,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
           roleFindAllCmd);
       List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
           .map(roleFindAllCo -> RoleFindAllGrpcCo.newBuilder()
-              .setId(roleFindAllCo.getId())
+              .setId(Int64Value.of(roleFindAllCo.getId()))
               .setCode(roleFindAllCo.getCode()).setName(
                   roleFindAllCo.getName()).addAllAuthorities(roleFindAllCo.getAuthorities())
               .build()).toList();

@@ -71,7 +71,9 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public AuthorityAddGrpcCo add(AuthorityAddGrpcCmd authorityAddGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
-    if (channel == null) {
+    if (channel != null) {
+      return addFromGrpc(authorityAddGrpcCmd, callCredentials);
+    } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
@@ -80,8 +82,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
-    } else {
-      return addFromGrpc(authorityAddGrpcCmd, callCredentials);
     }
 
   }
@@ -89,13 +89,13 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<AuthorityAddGrpcCo> syncAdd(AuthorityAddGrpcCmd authorityAddGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel == null) {
+    if (channel != null) {
+      return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
+    } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
       }).orElse(null);
-    } else {
-      return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
     }
 
   }
@@ -104,7 +104,10 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public AuthorityDeleteGrpcCo delete(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
-    if (channel == null) {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return deleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+    } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
@@ -113,8 +116,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
-    } else {
-      return deleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
     }
 
   }
@@ -123,13 +124,13 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public ListenableFuture<AuthorityDeleteGrpcCo> syncDelete(
       AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel == null) {
+    if (channel != null) {
+      return syncDeleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+    } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncDeleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
       }).orElse(null);
-    } else {
-      return syncDeleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
     }
 
   }
@@ -138,7 +139,10 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public AuthorityUpdateGrpcCo updateById(AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
-    if (channel == null) {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return updateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
+    } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
@@ -147,8 +151,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
-    } else {
-      return updateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
     }
 
   }
@@ -157,13 +159,13 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public ListenableFuture<AuthorityUpdateGrpcCo> syncUpdateById(
       AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel == null) {
+    if (channel != null) {
+      return syncUpdateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
+    } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncUpdateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
       }).orElse(null);
-    } else {
-      return syncUpdateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
     }
 
   }
@@ -172,7 +174,10 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public PageOfAuthorityFindAllGrpcCo findAll(AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
-    if (channel == null) {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return findAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
+    } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
@@ -181,8 +186,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
-    } else {
-      return findAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
     }
 
   }
@@ -191,13 +194,13 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   public ListenableFuture<PageOfAuthorityFindAllGrpcCo> syncFindAll(
       AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel == null) {
+    if (channel != null) {
+      return syncFindAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
+    } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncFindAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
       }).orElse(null);
-    } else {
-      return syncFindAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
     }
 
   }

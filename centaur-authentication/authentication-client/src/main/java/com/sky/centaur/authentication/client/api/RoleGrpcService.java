@@ -15,11 +15,19 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+
 import com.google.common.util.concurrent.ListenableFuture;
+import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
@@ -63,7 +71,9 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   @API(status = Status.STABLE, since = "1.0.0")
   public RoleAddGrpcCo add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
-    if (channel == null) {
+    if (channel != null) {
+      return addFromGrpc(roleAddGrpcCmd, callCredentials);
+    } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
@@ -72,22 +82,125 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
       }
-    } else {
-      return addFromGrpc(roleAddGrpcCmd, callCredentials);
     }
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<RoleAddGrpcCo> syncAdd(RoleAddGrpcCmd roleAddGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel == null) {
+    if (channel != null) {
+      return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
+    } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
       }).orElse(null);
-    } else {
-      return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
     }
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public RoleDeleteGrpcCo delete(RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return deleteFromGrpc(roleDeleteGrpcCmd, callCredentials);
+    } else {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return deleteFromGrpc(roleDeleteGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
+      }
+    }
+
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<RoleDeleteGrpcCo> syncDelete(
+      RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel != null) {
+      return syncDeleteFromGrpc(roleDeleteGrpcCmd, callCredentials);
+    } else {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncDeleteFromGrpc(roleDeleteGrpcCmd, callCredentials);
+      }).orElse(null);
+    }
+
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public RoleUpdateGrpcCo updateById(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return updateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
+    } else {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return updateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
+      }
+    }
+
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<RoleUpdateGrpcCo> syncUpdateById(
+      RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel != null) {
+      return syncUpdateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
+    } else {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncUpdateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
+      }).orElse(null);
+    }
+
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public PageOfRoleFindAllGrpcCo findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    //noinspection DuplicatedCode
+    if (channel != null) {
+      return findAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+    } else {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return findAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
+      }
+    }
+
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAll(
+      RoleFindAllGrpcCmd roleFindAllGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel != null) {
+      return syncFindAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+    } else {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncFindAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+      }).orElse(null);
+    }
+
   }
 
   private RoleAddGrpcCo addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
@@ -102,6 +215,61 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd);
+  }
+
+  private RoleDeleteGrpcCo deleteFromGrpc(RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .delete(roleDeleteGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<RoleDeleteGrpcCo> syncDeleteFromGrpc(
+      RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .delete(roleDeleteGrpcCmd);
+  }
+
+  private RoleUpdateGrpcCo updateByIdFromGrpc(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .updateById(roleUpdateGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<RoleUpdateGrpcCo> syncUpdateByIdFromGrpc(
+      RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .updateById(roleUpdateGrpcCmd);
+  }
+
+  private PageOfRoleFindAllGrpcCo findAllFromGrpc(
+      RoleFindAllGrpcCmd roleFindAllGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .findAll(roleFindAllGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAllFromGrpc(
+      RoleFindAllGrpcCmd roleFindAllGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+        channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+        .findAll(roleFindAllGrpcCmd);
   }
 
 }

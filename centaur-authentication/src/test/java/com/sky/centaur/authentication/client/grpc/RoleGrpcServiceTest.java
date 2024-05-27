@@ -17,10 +17,18 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.RoleGrpcService;
+import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.nio.ByteBuffer;
@@ -67,7 +75,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+            RoleAddGrpcCo.newBuilder().setCode("test").setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -88,7 +96,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setId(926369451).setCode("test").setName("test")
+            RoleAddGrpcCo.newBuilder().setCode("test").setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -111,6 +119,165 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
       }
     }, MoreExecutors.directExecutor());
     boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void delete() throws ExecutionException, InterruptedException, TimeoutException {
+    RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
+        .setRoleDeleteCo(
+            RoleDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    RoleDeleteGrpcCo roleDeleteGrpcCo = roleGrpcService.delete(
+        roleDeleteGrpcCmd,
+        callCredentials);
+    LOGGER.info("RoleDeleteGrpcCo: {}", roleDeleteGrpcCo);
+    Assertions.assertNotNull(roleDeleteGrpcCo);
+    Assertions.assertEquals(1, roleDeleteGrpcCo.getId().getValue());
+  }
+
+  @Test
+  @Transactional
+  public void syncDelete() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
+        .setRoleDeleteCo(
+            RoleDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<RoleDeleteGrpcCo> roleDeleteGrpcCoListenableFuture = roleGrpcService.syncDelete(
+        roleDeleteGrpcCmd,
+        callCredentials);
+    roleDeleteGrpcCoListenableFuture.addListener(() -> {
+      try {
+        RoleDeleteGrpcCo roleDeleteGrpcCo = roleDeleteGrpcCoListenableFuture.get();
+        LOGGER.info("Sync RoleDeleteGrpcCo: {}", roleDeleteGrpcCo);
+        Assertions.assertNotNull(roleDeleteGrpcCo);
+        Assertions.assertEquals(1, roleDeleteGrpcCo.getId().getValue());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
+        .setRoleUpdateCo(
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    RoleUpdateGrpcCo roleUpdateGrpcCo = roleGrpcService.updateById(
+        roleUpdateGrpcCmd,
+        callCredentials);
+    LOGGER.info("RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
+    Assertions.assertNotNull(roleUpdateGrpcCo);
+    Assertions.assertEquals("test", roleUpdateGrpcCo.getName());
+  }
+
+  @Test
+  @Transactional
+  public void syncUpdateById() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
+        .setRoleUpdateCo(
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<RoleUpdateGrpcCo> roleUpdateGrpcCoListenableFuture = roleGrpcService.syncUpdateById(
+        roleUpdateGrpcCmd,
+        callCredentials);
+    roleUpdateGrpcCoListenableFuture.addListener(() -> {
+      try {
+        RoleUpdateGrpcCo roleUpdateGrpcCo = roleUpdateGrpcCoListenableFuture.get();
+        LOGGER.info("Sync RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
+        Assertions.assertNotNull(roleUpdateGrpcCo);
+        Assertions.assertEquals("test", roleUpdateGrpcCo.getName());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional
+  public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
+    RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
+        .setRoleFindAllCo(
+            RoleFindAllGrpcCo.newBuilder().setName("管理员")
+                .build()).setPageNo(0).setPageSize(10)
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
+        roleFindAllGrpcCmd,
+        callCredentials);
+    LOGGER.info("PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
+    Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
+    Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+  }
+
+  @Test
+  @Transactional
+  public void syncFindAll() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
+        .setRoleFindAllCo(
+            RoleFindAllGrpcCo.newBuilder().setName("管理员")
+                .build()).setPageNo(0).setPageSize(10)
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<PageOfRoleFindAllGrpcCo> pageOfRoleFindAllGrpcCoListenableFuture = roleGrpcService.syncFindAll(
+        roleFindAllGrpcCmd,
+        callCredentials);
+    pageOfRoleFindAllGrpcCoListenableFuture.addListener(() -> {
+      try {
+        PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = pageOfRoleFindAllGrpcCoListenableFuture.get();
+        LOGGER.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
+        Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
+        Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
     Assertions.assertTrue(completed);
   }
 }
