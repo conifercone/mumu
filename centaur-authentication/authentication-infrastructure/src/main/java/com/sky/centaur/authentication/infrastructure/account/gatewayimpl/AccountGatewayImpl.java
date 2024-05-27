@@ -25,6 +25,7 @@ import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
@@ -41,6 +42,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * 用户领域网关实现
@@ -62,18 +65,20 @@ public class AccountGatewayImpl implements AccountGateway {
 
   private final DistributedLock distributedLock;
 
-  public static final String PASSWORD_AFTER_RESET = "123456";
+  private final ExtensionProperties extensionProperties;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
       PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+      ObjectProvider<DistributedLock> distributedLockObjectProvider,
+      ExtensionProperties extensionProperties) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+    this.extensionProperties = extensionProperties;
   }
 
   @Override
@@ -176,7 +181,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
-      accountDo.setPassword(passwordEncoder.encode(PASSWORD_AFTER_RESET));
+      String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
+      Assert.isTrue(StringUtils.hasText(initialPassword), "the initial password cannot be empty");
+      accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
     }, () -> {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);

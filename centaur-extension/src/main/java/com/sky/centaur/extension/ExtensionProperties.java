@@ -16,6 +16,7 @@
 
 package com.sky.centaur.extension;
 
+import com.sky.centaur.extension.authentication.AuthenticationProperties;
 import com.sky.centaur.extension.distributed.DistributedProperties;
 import com.sky.centaur.extension.sql.SqlProperties;
 import lombok.Data;
@@ -43,4 +44,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private SqlProperties sql;
+
+  /**
+   * 认证相关配置
+   */
+  @NestedConfigurationProperty
+  private AuthenticationProperties authentication;
 }
