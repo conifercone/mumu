@@ -23,8 +23,8 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.basis.tools.SecurityContextUtil;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;

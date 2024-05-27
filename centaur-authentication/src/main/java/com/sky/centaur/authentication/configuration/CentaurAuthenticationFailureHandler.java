@@ -22,9 +22,9 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_SCOPE;
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
 
+import com.sky.centaur.basis.kotlin.tools.IpUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
-import com.sky.centaur.basis.tools.IpUtil;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;

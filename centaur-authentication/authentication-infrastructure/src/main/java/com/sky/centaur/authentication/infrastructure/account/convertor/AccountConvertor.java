@@ -24,8 +24,8 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.basis.tools.SpringContextUtil;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import org.apiguardian.api.API;

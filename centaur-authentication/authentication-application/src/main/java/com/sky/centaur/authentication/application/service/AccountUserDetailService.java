@@ -17,7 +17,7 @@ package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
-import com.sky.centaur.basis.tools.CommonUtil;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.grpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.RoleGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
@@ -75,7 +76,8 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setCode("test").setName("test")
+            RoleAddGrpcCo.newBuilder().setCode(StringValue.of("test")).setName(
+                    StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -87,7 +89,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     LOGGER.info("RoleAddGrpcCo: {}", roleAddGrpcCo);
     Assertions.assertNotNull(roleAddGrpcCo);
-    Assertions.assertEquals("test", roleAddGrpcCo.getCode());
+    Assertions.assertEquals("test", roleAddGrpcCo.getCode().getValue());
   }
 
   @Test
@@ -96,7 +98,8 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setCode("test").setName("test")
+            RoleAddGrpcCo.newBuilder().setCode(StringValue.of("test")).setName(
+                    StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -112,7 +115,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         RoleAddGrpcCo syncRoleAddGrpcCo = roleAddGrpcCoListenableFuture.get();
         LOGGER.info("Sync RoleAddGrpcCo: {}", syncRoleAddGrpcCo);
         Assertions.assertNotNull(syncRoleAddGrpcCo);
-        Assertions.assertEquals("test", syncRoleAddGrpcCo.getCode());
+        Assertions.assertEquals("test", syncRoleAddGrpcCo.getCode().getValue());
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -180,7 +183,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
     RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
         .setRoleUpdateCo(
-            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -193,7 +196,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     LOGGER.info("RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
     Assertions.assertNotNull(roleUpdateGrpcCo);
-    Assertions.assertEquals("test", roleUpdateGrpcCo.getName());
+    Assertions.assertEquals("test", roleUpdateGrpcCo.getName().getValue());
   }
 
   @Test
@@ -202,7 +205,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
         .setRoleUpdateCo(
-            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -218,7 +221,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         RoleUpdateGrpcCo roleUpdateGrpcCo = roleUpdateGrpcCoListenableFuture.get();
         LOGGER.info("Sync RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
         Assertions.assertNotNull(roleUpdateGrpcCo);
-        Assertions.assertEquals("test", roleUpdateGrpcCo.getName());
+        Assertions.assertEquals("test", roleUpdateGrpcCo.getName().getValue());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -233,8 +236,8 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
         .setRoleFindAllCo(
-            RoleFindAllGrpcCo.newBuilder().setName("管理员")
-                .build()).setPageNo(0).setPageSize(10)
+            RoleFindAllGrpcCo.newBuilder().setName(StringValue.of("管理员"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -255,8 +258,8 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
         .setRoleFindAllCo(
-            RoleFindAllGrpcCo.newBuilder().setName("管理员")
-                .build()).setPageNo(0).setPageSize(10)
+            RoleFindAllGrpcCo.newBuilder().setName(StringValue.of("管理员"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

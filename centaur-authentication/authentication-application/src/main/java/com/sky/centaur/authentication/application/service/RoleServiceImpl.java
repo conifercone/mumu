@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
@@ -124,9 +125,10 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleAddGrpcCmd request) {
     RoleAddCo roleAddCo = new RoleAddCo();
     RoleAddGrpcCo roleAddGrpcCo = request.getRoleAddCo();
+    //noinspection DuplicatedCode
     roleAddCo.setId(roleAddGrpcCo.hasId() ? roleAddGrpcCo.getId().getValue() : null);
-    roleAddCo.setCode(roleAddGrpcCo.getCode());
-    roleAddCo.setName(roleAddGrpcCo.getName());
+    roleAddCo.setCode(roleAddGrpcCo.hasCode() ? roleAddGrpcCo.getCode().getValue() : null);
+    roleAddCo.setName(roleAddGrpcCo.hasName() ? roleAddGrpcCo.getName().getValue() : null);
     roleAddCo.setAuthorities(roleAddGrpcCo.getAuthoritiesList());
     return roleAddCo;
   }
@@ -161,9 +163,10 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleUpdateGrpcCmd request) {
     RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
     RoleUpdateGrpcCo roleUpdateGrpcCo = request.getRoleUpdateCo();
+    //noinspection DuplicatedCode
     roleUpdateCo.setId(roleUpdateGrpcCo.hasId() ? roleUpdateGrpcCo.getId().getValue() : null);
-    roleUpdateCo.setCode(roleUpdateGrpcCo.getCode());
-    roleUpdateCo.setName(roleUpdateGrpcCo.getName());
+    roleUpdateCo.setCode(roleUpdateGrpcCo.hasCode() ? roleUpdateGrpcCo.getCode().getValue() : null);
+    roleUpdateCo.setName(roleUpdateGrpcCo.hasName() ? roleUpdateGrpcCo.getName().getValue() : null);
     roleUpdateCo.setAuthorities(roleUpdateGrpcCo.getAuthoritiesList());
     return roleUpdateCo;
   }
@@ -190,9 +193,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       @NotNull RoleFindAllGrpcCmd request) {
     RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
     RoleFindAllGrpcCo roleFindAllGrpcCo = request.getRoleFindAllCo();
+    //noinspection DuplicatedCode
     roleFindAllCo.setId(roleFindAllGrpcCo.hasId() ? roleFindAllGrpcCo.getId().getValue() : null);
-    roleFindAllCo.setCode(roleFindAllGrpcCo.getCode());
-    roleFindAllCo.setName(roleFindAllGrpcCo.getName());
+    roleFindAllCo.setCode(
+        roleFindAllGrpcCo.hasCode() ? roleFindAllGrpcCo.getCode().getValue() : null);
+    roleFindAllCo.setName(
+        roleFindAllGrpcCo.hasName() ? roleFindAllGrpcCo.getName().getValue() : null);
     roleFindAllCo.setAuthorities(roleFindAllGrpcCo.getAuthoritiesList());
     return roleFindAllCo;
   }
@@ -203,8 +209,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
     roleFindAllCmd.setRoleFindAllCo(getRoleFindAllCo(request));
-    roleFindAllCmd.setPageNo(request.getPageNo());
-    roleFindAllCmd.setPageSize(request.getPageSize());
+    roleFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    roleFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
     try {
       Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
@@ -212,8 +218,9 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
           .map(roleFindAllCo -> RoleFindAllGrpcCo.newBuilder()
               .setId(Int64Value.of(roleFindAllCo.getId()))
-              .setCode(roleFindAllCo.getCode()).setName(
-                  roleFindAllCo.getName()).addAllAuthorities(roleFindAllCo.getAuthorities())
+              .setCode(StringValue.of(roleFindAllCo.getCode())).setName(
+                  StringValue.of(roleFindAllCo.getName()))
+              .addAllAuthorities(roleFindAllCo.getAuthorities())
               .build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());

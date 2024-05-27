@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.log.client.api;
 
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;

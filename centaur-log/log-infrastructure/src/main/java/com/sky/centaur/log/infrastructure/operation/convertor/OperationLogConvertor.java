@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;

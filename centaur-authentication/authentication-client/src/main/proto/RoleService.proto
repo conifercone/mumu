@@ -18,8 +18,8 @@ message RoleAddGrpcCmd {
 
 message RoleAddGrpcCo {
   google.protobuf.Int64Value id = 1;
-  string name = 2;
-  string code = 3;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue code = 3;
   repeated int64 authorities = 4;
 }
 
@@ -37,21 +37,21 @@ message RoleUpdateGrpcCmd {
 
 message RoleUpdateGrpcCo {
   google.protobuf.Int64Value id = 1;
-  string code = 2;
-  string name = 3;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
   repeated int64 authorities = 4;
 }
 
 message RoleFindAllGrpcCmd {
   RoleFindAllGrpcCo roleFindAllCo = 1;
-  int32 page_no = 2;
-  int32 page_size = 3;
+  google.protobuf.Int32Value page_no = 2;
+  google.protobuf.Int32Value page_size = 3;
 }
 
 message RoleFindAllGrpcCo {
   google.protobuf.Int64Value id = 1;
-  string code = 2;
-  string name = 3;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
   repeated int64 authorities = 4;
 }
 

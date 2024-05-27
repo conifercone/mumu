@@ -19,7 +19,7 @@ import com.google.common.base.Strings;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import io.micrometer.tracing.Tracer;
 import java.util.Optional;
 import java.util.UUID;

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.grpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -75,7 +76,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setCode("test").setName("test")
+            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test"))
+                .setName(StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -87,7 +89,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     LOGGER.info("AuthorityAddGrpcCo: {}", authorityAddGrpcCo);
     Assertions.assertNotNull(authorityAddGrpcCo);
-    Assertions.assertEquals("test", authorityAddGrpcCo.getCode());
+    Assertions.assertEquals("test", authorityAddGrpcCo.getCode().getValue());
   }
 
   @Test
@@ -96,7 +98,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setCode("test").setName("test")
+            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test"))
+                .setName(StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -112,7 +115,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         AuthorityAddGrpcCo syncAuthorityAddGrpcCo = authorityAddGrpcCoFuture.get();
         LOGGER.info("Sync AuthorityAddGrpcCo: {}", syncAuthorityAddGrpcCo);
         Assertions.assertNotNull(syncAuthorityAddGrpcCo);
-        Assertions.assertEquals("test", syncAuthorityAddGrpcCo.getCode());
+        Assertions.assertEquals("test", syncAuthorityAddGrpcCo.getCode().getValue());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -180,7 +183,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(
+                    StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -193,7 +197,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     LOGGER.info("AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
     Assertions.assertNotNull(authorityUpdateGrpcCo);
-    Assertions.assertEquals("test", authorityUpdateGrpcCo.getName());
+    Assertions.assertEquals("test", authorityUpdateGrpcCo.getName().getValue());
   }
 
   @Test
@@ -202,7 +206,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(
+                    StringValue.of("test"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -218,7 +223,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         AuthorityUpdateGrpcCo authorityUpdateGrpcCo = authorityUpdateGrpcCoListenableFuture.get();
         LOGGER.info("Sync AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
         Assertions.assertNotNull(authorityUpdateGrpcCo);
-        Assertions.assertEquals("test", authorityUpdateGrpcCo.getName());
+        Assertions.assertEquals("test", authorityUpdateGrpcCo.getName().getValue());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -233,8 +238,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
         .setAuthorityFindAllCo(
-            AuthorityFindAllGrpcCo.newBuilder().setName("数据")
-                .build()).setPageNo(0).setPageSize(10)
+            AuthorityFindAllGrpcCo.newBuilder().setName(StringValue.of("数据"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -255,8 +260,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
         .setAuthorityFindAllCo(
-            AuthorityFindAllGrpcCo.newBuilder().setName("数据")
-                .build()).setPageNo(0).setPageSize(10)
+            AuthorityFindAllGrpcCo.newBuilder().setName(StringValue.of("数据"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

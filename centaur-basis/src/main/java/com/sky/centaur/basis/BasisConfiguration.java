@@ -18,7 +18,7 @@ package com.sky.centaur.basis;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

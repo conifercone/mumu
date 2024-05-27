@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
@@ -114,8 +115,10 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityAddCo authorityAddCo = new AuthorityAddCo();
     AuthorityAddGrpcCo authorityAddGrpcCo = request.getAuthorityAddCo();
     authorityAddCo.setId(authorityAddGrpcCo.hasId() ? authorityAddGrpcCo.getId().getValue() : null);
-    authorityAddCo.setCode(authorityAddGrpcCo.getCode());
-    authorityAddCo.setName(authorityAddGrpcCo.getName());
+    authorityAddCo.setCode(
+        authorityAddGrpcCo.hasCode() ? authorityAddGrpcCo.getCode().getValue() : null);
+    authorityAddCo.setName(
+        authorityAddGrpcCo.hasName() ? authorityAddGrpcCo.getName().getValue() : null);
     return authorityAddCo;
   }
 
@@ -136,8 +139,10 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityUpdateGrpcCo authorityUpdateGrpcCo = request.getAuthorityUpdateCo();
     authorityUpdateCo.setId(
         authorityUpdateGrpcCo.hasId() ? authorityUpdateGrpcCo.getId().getValue() : null);
-    authorityUpdateCo.setCode(authorityUpdateGrpcCo.getCode());
-    authorityUpdateCo.setName(authorityUpdateGrpcCo.getName());
+    authorityUpdateCo.setCode(
+        authorityUpdateGrpcCo.hasCode() ? authorityUpdateGrpcCo.getCode().getValue() : null);
+    authorityUpdateCo.setName(
+        authorityUpdateGrpcCo.hasName() ? authorityUpdateGrpcCo.getName().getValue() : null);
     return authorityUpdateCo;
   }
 
@@ -148,8 +153,10 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityFindAllGrpcCo authorityFindAllGrpcCo = request.getAuthorityFindAllCo();
     authorityFindAllCo.setId(
         authorityFindAllGrpcCo.hasId() ? authorityFindAllGrpcCo.getId().getValue() : null);
-    authorityFindAllCo.setCode(authorityFindAllGrpcCo.getCode());
-    authorityFindAllCo.setName(authorityFindAllGrpcCo.getName());
+    authorityFindAllCo.setCode(
+        authorityFindAllGrpcCo.hasCode() ? authorityFindAllGrpcCo.getCode().getValue() : null);
+    authorityFindAllCo.setName(
+        authorityFindAllGrpcCo.hasName() ? authorityFindAllGrpcCo.getName().getValue() : null);
     return authorityFindAllCo;
   }
 
@@ -209,8 +216,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
     authorityFindAllCmd.setAuthorityFindAllCo(getAuthorityFindAllCo(request));
-    authorityFindAllCmd.setPageNo(request.getPageNo());
-    authorityFindAllCmd.setPageSize(request.getPageSize());
+    authorityFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();
     try {
       Page<AuthorityFindAllCo> authorityFindAllCos = authorityFindAllCmdExe.execute(
@@ -218,8 +225,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       List<AuthorityFindAllGrpcCo> findAllGrpcCos = authorityFindAllCos.getContent().stream()
           .map(authorityFindAllCo -> AuthorityFindAllGrpcCo.newBuilder()
               .setId(Int64Value.of(authorityFindAllCo.getId()))
-              .setCode(authorityFindAllCo.getCode()).setName(
-                  authorityFindAllCo.getName()).build()).toList();
+              .setCode(StringValue.of(authorityFindAllCo.getCode())).setName(
+                  StringValue.of(authorityFindAllCo.getName())).build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(authorityFindAllCos.getTotalPages());
     } catch (CentaurException e) {

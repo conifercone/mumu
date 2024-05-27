@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.basis.response;
 
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;

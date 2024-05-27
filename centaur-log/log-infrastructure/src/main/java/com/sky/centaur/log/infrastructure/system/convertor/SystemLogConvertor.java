@@ -15,7 +15,7 @@
  */
 package com.sky.centaur.log.infrastructure.system.convertor;
 
-import com.sky.centaur.basis.tools.SpringContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.SystemLog;

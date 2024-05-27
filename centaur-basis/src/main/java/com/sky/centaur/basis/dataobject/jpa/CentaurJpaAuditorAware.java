@@ -16,7 +16,7 @@
 
 package com.sky.centaur.basis.dataobject.jpa;
 
-import com.sky.centaur.basis.tools.SecurityContextUtil;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.AuditorAware;
