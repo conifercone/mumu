@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -126,7 +127,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void delete() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
         .setAuthorityDeleteCo(
-            AuthorityDeleteGrpcCo.newBuilder().setId(1)
+            AuthorityDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -139,7 +140,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     LOGGER.info("AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
     Assertions.assertNotNull(authorityDeleteGrpcCo);
-    Assertions.assertEquals(1, authorityDeleteGrpcCo.getId());
+    Assertions.assertEquals(1, authorityDeleteGrpcCo.getId().getValue());
   }
 
   @Test
@@ -148,7 +149,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
         .setAuthorityDeleteCo(
-            AuthorityDeleteGrpcCo.newBuilder().setId(1)
+            AuthorityDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -164,7 +165,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityDeleteGrpcCoListenableFuture.get();
         LOGGER.info("Sync AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
         Assertions.assertNotNull(authorityDeleteGrpcCo);
-        Assertions.assertEquals(1, authorityDeleteGrpcCo.getId());
+        Assertions.assertEquals(1, authorityDeleteGrpcCo.getId().getValue());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -179,7 +180,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(1).setName("test")
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -201,7 +202,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(1).setName("test")
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName("test")
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
