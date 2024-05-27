@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.basis.kotlin.tools
 
-import com.sky.centaur.basis.tools.ConcurrentCache
 import org.springframework.beans.BeansException
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.DefaultListableBeanFactory
@@ -48,14 +47,16 @@ class SpringContextUtil : ApplicationContextAware {
         /**
          * bean name -> bean LRU cache
          */
-        private val BEAN_NAME_CACHE = ConcurrentCache<String, Any>(50)
+        private val BEAN_NAME_CACHE =
+            ConcurrentCache<String, Any>(50)
 
         /**
          * bean class -> bean LRU cache
          */
-        private val BEAN_CLASS_CACHE = ConcurrentCache<Class<*>, Any>(
-            50
-        )
+        private val BEAN_CLASS_CACHE =
+            ConcurrentCache<Class<*>, Any>(
+                50
+            )
 
         @JvmStatic
         fun getApplicationContext(): ApplicationContext? {
@@ -69,7 +70,7 @@ class SpringContextUtil : ApplicationContextAware {
          * @return 当前bean
          */
         @JvmStatic
-        fun getBean(name: String): Any {
+        fun getBean(name: String): Any? {
             return BEAN_NAME_CACHE.computeIfAbsent(name) {
                 getApplicationContext()!!.getBean(name)
             }
