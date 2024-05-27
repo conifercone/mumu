@@ -15,10 +15,13 @@
  */
 package com.sky.centaur.authentication.client.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.security.GrpcSecurity;
 import org.lognet.springboot.grpc.security.GrpcSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
 /**
@@ -33,12 +36,15 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
   @Autowired
-  public GrpcSecurityConfiguration(JwtAuthenticationProvider jwtAuthenticationProvider) {
+  public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
+      JwtAuthenticationConverter jwtAuthenticationConverter) {
+    JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
+    jwtAuthenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
     this.jwtAuthenticationProvider = jwtAuthenticationProvider;
   }
 
   @Override
-  public void configure(GrpcSecurity builder) throws Exception {
+  public void configure(@NotNull GrpcSecurity builder) throws Exception {
     builder.authorizeRequests()
         .and()
         .authenticationProvider(jwtAuthenticationProvider);
