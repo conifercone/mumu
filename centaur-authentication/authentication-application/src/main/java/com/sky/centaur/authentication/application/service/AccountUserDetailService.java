@@ -15,11 +15,10 @@
  */
 package com.sky.centaur.authentication.application.service;
 
-import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,13 +44,11 @@ public final class AccountUserDetailService implements UserDetailsService {
   public @NotNull UserDetails loadUserByUsername(String usernameOrEmail)
       throws UsernameNotFoundException {
     Assert.hasText(usernameOrEmail, "username or email is required");
-    Optional<Account> optionalAccount =
-        CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
-            usernameOrEmail)
-            : accountGateway.findAccountByUsername(usernameOrEmail);
-    if (optionalAccount.isPresent()) {
-      return optionalAccount.get();
-    }
-    throw new UsernameNotFoundException(usernameOrEmail);
+    Supplier<UsernameNotFoundException> usernameNotFoundExceptionSupplier = () -> new UsernameNotFoundException(
+        usernameOrEmail);
+    return CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
+        usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
+        : accountGateway.findAccountByUsername(usernameOrEmail)
+            .orElseThrow(usernameNotFoundExceptionSupplier);
   }
 }
