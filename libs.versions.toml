@@ -1,12 +1,9 @@
 [versions]
-junitVersion = "5.10.2"
 springbootVersion = "3.3.0"
 springCloudVersion = "2023.0.1"
 dependencyManagementPluginVersion = "1.1.4"
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
-jacksonVersion = '2.15.4'
-postgresqlVersion = '42.7.2'
 jasyptVersion = '3.0.5'
 lombookPluginVersion = '8.4'
 protobufVersion = '0.9.4'
@@ -21,7 +18,6 @@ grpcProtobufVersion = '1.58.0'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
 redisOmSpringVersion = "0.9.1"
-commonsLang3Version = "3.14.0"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.7.2"
 yitterIdGeneratorVersion = "1.0.6"
@@ -35,7 +31,7 @@ disruptorVersion = '4.0.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
-junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitVersion" }
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
 springboot = { module = "org.springframework.boot:spring-boot-starter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
@@ -49,13 +45,13 @@ springBootDependencies = { module = "org.springframework.boot:spring-boot-depend
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jacksonVersion" }
+jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonVersion" }
+jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
-jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jacksonVersion" }
+jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jacksonVersion" }
+jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
 springBootOauth2AuthorizationServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
@@ -63,7 +59,7 @@ springBootOauth2ResourceServer = { module = "org.springframework.boot:spring-boo
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 # https://mvnrepository.com/artifact/org.postgresql/postgresql
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresqlVersion" }
+postgresql = { module = "org.postgresql:postgresql" }
 # https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
 jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", version.ref = "jasyptVersion" }
 # https://mvnrepository.com/artifact/com.google.guava/guava
@@ -107,7 +103,7 @@ grpcClientSpringBootStarter = { module = "io.github.lognet:grpc-client-spring-bo
 # https://mvnrepository.com/artifact/com.redis.om/redis-om-spring
 redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
+commonsLang3 = { module = "org.apache.commons:commons-lang3" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
 # https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
