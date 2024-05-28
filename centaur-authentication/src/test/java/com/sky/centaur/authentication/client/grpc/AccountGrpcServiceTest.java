@@ -55,7 +55,7 @@ public class AccountGrpcServiceTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void register() throws ExecutionException, InterruptedException, TimeoutException {
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
@@ -71,7 +71,7 @@ public class AccountGrpcServiceTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncRegister() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()

@@ -51,7 +51,7 @@ public class AccountControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     @Language("JSON") String userInfo = """
         {
@@ -77,7 +77,7 @@ public class AccountControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
     @Language("JSON") String userInfo = """
         {
@@ -97,7 +97,7 @@ public class AccountControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void disable() throws Exception {
     @Language("JSON") String userInfo = """
         {
@@ -116,7 +116,7 @@ public class AccountControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void resetPassword() throws Exception {
     @Language("JSON") String userInfo = """
         {

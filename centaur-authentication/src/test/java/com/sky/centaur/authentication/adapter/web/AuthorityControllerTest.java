@@ -51,7 +51,7 @@ public class AuthorityControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     @Language("JSON") String authority = """
         {
@@ -72,7 +72,7 @@ public class AuthorityControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void delete() throws Exception {
     @Language("JSON") String authority = """
         {
@@ -91,7 +91,7 @@ public class AuthorityControllerTest {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
     @Language("JSON") String authority = """
         {
@@ -111,7 +111,6 @@ public class AuthorityControllerTest {
   }
 
   @Test
-  @Transactional
   public void findAll() throws Exception {
     @Language("JSON") String authority = """
         {

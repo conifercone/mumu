@@ -82,7 +82,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
     Consumer<Account> accountAlreadyExistsConsumer = (existingAccount) -> {
@@ -111,7 +111,6 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
@@ -119,7 +118,6 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
@@ -127,7 +125,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Account account) {
     SecurityContextUtil.getLoginAccountId()
@@ -148,7 +146,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
@@ -160,7 +158,6 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
@@ -170,14 +167,13 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
     return tokenRepository.count();
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {

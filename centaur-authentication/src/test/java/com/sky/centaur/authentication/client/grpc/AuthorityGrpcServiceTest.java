@@ -72,7 +72,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
@@ -93,7 +93,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncAdd() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
@@ -126,7 +126,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void delete() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
         .setAuthorityDeleteCo(
@@ -147,7 +147,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncDelete() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
@@ -179,7 +179,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
@@ -201,7 +201,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncUpdateById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
@@ -234,7 +234,6 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
   public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
         .setAuthorityFindAllCo(
@@ -255,7 +254,6 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()

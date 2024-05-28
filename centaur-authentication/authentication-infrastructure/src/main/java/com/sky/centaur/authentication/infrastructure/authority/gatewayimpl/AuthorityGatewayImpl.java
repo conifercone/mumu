@@ -67,7 +67,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
     AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
@@ -77,14 +77,14 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void delete(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Authority authority) {
     distributedLock.lock();
@@ -99,7 +99,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {

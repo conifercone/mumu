@@ -64,7 +64,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
     RoleDo roleDo = RoleConvertor.toDataObject(role);
@@ -72,14 +72,14 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void delete(@NotNull Role role) {
     roleRepository.deleteById(role.getId());
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Role role) {
     distributedLock.lock();
@@ -94,7 +94,6 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @Override
-  @Transactional
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {

@@ -72,7 +72,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
@@ -93,7 +93,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncAdd() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
@@ -126,7 +126,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void delete() throws ExecutionException, InterruptedException, TimeoutException {
     RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
         .setRoleDeleteCo(
@@ -147,7 +147,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncDelete() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
@@ -179,7 +179,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
     RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
         .setRoleUpdateCo(
@@ -200,7 +200,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void syncUpdateById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
@@ -232,7 +232,6 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
   public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
         .setRoleFindAllCo(
@@ -253,7 +252,6 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
