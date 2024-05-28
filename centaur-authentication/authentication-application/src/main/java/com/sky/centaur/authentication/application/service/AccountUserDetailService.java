@@ -20,9 +20,11 @@ import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.Assert;
 
 /**
  * spring security authentication server 用户信息service
@@ -40,7 +42,9 @@ public final class AccountUserDetailService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+  public @NotNull UserDetails loadUserByUsername(String usernameOrEmail)
+      throws UsernameNotFoundException {
+    Assert.hasText(usernameOrEmail, "username or email is required");
     Optional<Account> optionalAccount =
         CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
             usernameOrEmail)
