@@ -19,8 +19,10 @@ import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceFutureStub;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -35,8 +37,9 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
   private ManagedChannel channel;
 
   public OperationLogGrpcService(
-      DiscoveryClient consulDiscoveryClient) {
-    super(consulDiscoveryClient);
+      DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

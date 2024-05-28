@@ -15,13 +15,13 @@
  */
 package com.sky.centaur.log.client.api;
 
-import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
@@ -35,8 +35,12 @@ class LogGrpcService {
 
   private final DiscoveryClient consulDiscoveryClient;
 
-  public LogGrpcService(DiscoveryClient consulDiscoveryClient) {
+  private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
+
+  public LogGrpcService(DiscoveryClient consulDiscoveryClient,
+      @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     this.consulDiscoveryClient = consulDiscoveryClient;
+    this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
@@ -47,15 +51,7 @@ class LogGrpcService {
                   serviceInstance.getHost(),
                   serviceInstance.getPort())
               .usePlaintext();
-          ObservationGrpcClientInterceptor interceptor = null;
-          try {
-            interceptor = SpringContextUtil.getBean(ObservationGrpcClientInterceptor.class);
-          } catch (NoSuchBeanDefinitionException e) {
-            // ignore
-          }
-          if (interceptor != null) {
-            builder.intercept(interceptor);
-          }
+          Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
           return builder.build();
         });
   }

@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  * @since 1.0.0
  */
 @Observed(name = "AccountUserDetailService")
-public final class AccountUserDetailService implements UserDetailsService {
+public class AccountUserDetailService implements UserDetailsService {
 
   private final AccountGateway accountGateway;
 

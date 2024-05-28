@@ -19,6 +19,8 @@ import com.sky.centaur.authentication.client.api.AccountGrpcService;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.RoleGrpcService;
 import com.sky.centaur.authentication.client.api.TokenGrpcService;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,22 +35,26 @@ import org.springframework.context.annotation.Configuration;
 public class AuthenticationClientConfiguration {
 
   @Bean
-  public TokenGrpcService tokenGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new TokenGrpcService(consulDiscoveryClient);
+  public TokenGrpcService tokenGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new TokenGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public AccountGrpcService accountGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new AccountGrpcService(consulDiscoveryClient);
+  public AccountGrpcService accountGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new AccountGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public AuthorityGrpcService authorityGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new AuthorityGrpcService(consulDiscoveryClient);
+  public AuthorityGrpcService authorityGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new AuthorityGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public RoleGrpcService roleGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new RoleGrpcService(consulDiscoveryClient);
+  public RoleGrpcService roleGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new RoleGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

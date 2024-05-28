@@ -23,6 +23,7 @@ import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceFutureStub;
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
 import io.grpc.ManagedChannel;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -51,8 +53,9 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
   private static final Logger LOGGER = LoggerFactory.getLogger(PrimaryKeyGrpcService.class);
 
   public PrimaryKeyGrpcService(
-      DiscoveryClient consulDiscoveryClient) {
-    super(consulDiscoveryClient);
+      DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

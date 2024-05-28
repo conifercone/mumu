@@ -17,6 +17,8 @@
 package com.sky.centaur.unique.client;
 
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +33,8 @@ import org.springframework.context.annotation.Configuration;
 public class UniqueClientConfiguration {
 
   @Bean
-  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new PrimaryKeyGrpcService(consulDiscoveryClient);
+  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new PrimaryKeyGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

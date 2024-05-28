@@ -18,6 +18,8 @@ package com.sky.centaur.log.client;
 
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +34,14 @@ import org.springframework.context.annotation.Configuration;
 public class LogClientConfiguration {
 
   @Bean
-  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new OperationLogGrpcService(consulDiscoveryClient);
+  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new OperationLogGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient consulDiscoveryClient) {
-    return new SystemLogGrpcService(consulDiscoveryClient);
+  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new SystemLogGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

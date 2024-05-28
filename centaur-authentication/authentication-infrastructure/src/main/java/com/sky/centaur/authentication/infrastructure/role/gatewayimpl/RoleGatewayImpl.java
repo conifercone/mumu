@@ -93,6 +93,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(rollbackFor = Exception.class)
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
       List<Predicate> predicateList = new ArrayList<>();

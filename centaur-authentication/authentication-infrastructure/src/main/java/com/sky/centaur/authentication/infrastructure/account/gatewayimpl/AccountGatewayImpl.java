@@ -112,6 +112,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
         .map(AccountConvertor::toEntity);
@@ -119,6 +120,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
         .map(AccountConvertor::toEntity);
@@ -157,6 +159,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(rollbackFor = Exception.class)
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
             loginAccountId -> accountRepository.findById(loginAccountId)

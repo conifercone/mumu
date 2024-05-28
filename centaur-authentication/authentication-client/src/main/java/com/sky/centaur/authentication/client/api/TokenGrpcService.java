@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc.TokenServ
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import io.grpc.ManagedChannel;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -37,15 +39,16 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public final class TokenGrpcService extends AuthenticationGrpcService implements DisposableBean {
+public class TokenGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenGrpcService.class);
 
   public TokenGrpcService(
-      DiscoveryClient consulDiscoveryClient) {
-    super(consulDiscoveryClient);
+      DiscoveryClient consulDiscoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override
