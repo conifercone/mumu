@@ -26,11 +26,34 @@ import org.springframework.data.domain.Page;
  */
 public interface RoleGateway {
 
+  /**
+   * 添加角色
+   *
+   * @param role 角色信息
+   */
   void add(Role role);
 
-  void delete(Role role);
+  /**
+   * 根据id删除角色
+   *
+   * @param role 角色信息
+   */
+  void deleteById(Role role);
 
+  /**
+   * 根据id更新角色
+   *
+   * @param role 目标角色信息
+   */
   void updateById(Role role);
 
+  /**
+   * 分页查询角色
+   *
+   * @param role     查询条件
+   * @param pageNo   页码
+   * @param pageSize 当前页数量
+   * @return 查询结果
+   */
   Page<Role> findAll(Role role, int pageNo, int pageSize);
 }

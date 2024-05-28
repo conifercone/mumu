@@ -45,7 +45,7 @@ public class RoleDeleteCmdExe {
 
   public RoleDeleteCo execute(@NotNull RoleDeleteCmd roleDeleteCmd) {
     Role role = RoleConvertor.toEntity(roleDeleteCmd.getRoleDeleteCo());
-    roleGateway.delete(role);
+    roleGateway.deleteById(role);
     return roleDeleteCmd.getRoleDeleteCo();
   }
 }

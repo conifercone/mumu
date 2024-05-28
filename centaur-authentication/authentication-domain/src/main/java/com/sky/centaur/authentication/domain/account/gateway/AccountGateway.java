@@ -26,19 +26,61 @@ import java.util.Optional;
  */
 public interface AccountGateway {
 
+  /**
+   * 账户注册
+   *
+   * @param account 账户信息
+   */
   void register(Account account);
 
+  /**
+   * 根据用户名查找账户
+   *
+   * @param username 用户名
+   * @return 账户信息
+   */
   Optional<Account> findAccountByUsername(String username);
 
+  /**
+   * 根据邮箱查找账户
+   *
+   * @param email 邮箱
+   * @return 账户信息
+   */
   Optional<Account> findAccountByEmail(String email);
 
+  /**
+   * 根据id更新账户信息
+   *
+   * @param account 目标账户信息
+   */
   void updateById(Account account);
 
+  /**
+   * 禁用账户
+   *
+   * @param id 账户id
+   */
   void disable(Long id);
 
+  /**
+   * 查询当前登录账户
+   *
+   * @return 当前登录账户信息
+   */
   Optional<Account> queryCurrentLoginAccount();
 
+  /**
+   * 在线账户数量
+   *
+   * @return 在线账户数量
+   */
   long onlineAccounts();
 
+  /**
+   * 重置密码
+   *
+   * @param id 账户id
+   */
   void resetPassword(Long id);
 }

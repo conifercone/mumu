@@ -26,11 +26,34 @@ import org.springframework.data.domain.Page;
  */
 public interface AuthorityGateway {
 
+  /**
+   * 添加权限
+   *
+   * @param authority 权限信息
+   */
   void add(Authority authority);
 
-  void delete(Authority authority);
+  /**
+   * 根据id删除权限
+   *
+   * @param authority 权限信息
+   */
+  void deleteById(Authority authority);
 
+  /**
+   * 根据id更新权限
+   *
+   * @param authority 目标权限信息
+   */
   void updateById(Authority authority);
 
+  /**
+   * 分页查询权限
+   *
+   * @param authority 查询条件
+   * @param pageNo    页码
+   * @param pageSize  每页数量
+   * @return 查询结果
+   */
   Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
 }

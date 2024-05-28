@@ -80,7 +80,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void delete(@NotNull Authority authority) {
+  public void deleteById(@NotNull Authority authority) {
     authorityRepository.deleteById(authority.getId());
   }
 

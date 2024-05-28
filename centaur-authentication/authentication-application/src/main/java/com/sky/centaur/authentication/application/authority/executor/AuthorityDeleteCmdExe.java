@@ -45,7 +45,7 @@ public class AuthorityDeleteCmdExe {
 
   public AuthorityDeleteCo execute(@NotNull AuthorityDeleteCmd authorityDeleteCmd) {
     Authority authority = AuthorityConvertor.toEntity(authorityDeleteCmd.getAuthorityDeleteCo());
-    authorityGateway.delete(authority);
+    authorityGateway.deleteById(authority);
     return authorityDeleteCmd.getAuthorityDeleteCo();
   }
 }
