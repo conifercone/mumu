@@ -83,3 +83,6 @@ ad.js
 
 # jrebel
 rebel.xml
+
+# kotlin
+.kotlin/
