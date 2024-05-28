@@ -31,7 +31,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-class AuthenticationGrpcService {
+sealed class AuthenticationGrpcService permits AccountGrpcService, AuthorityGrpcService,
+    RoleGrpcService, TokenGrpcService {
 
   private final DiscoveryClient consulDiscoveryClient;
 

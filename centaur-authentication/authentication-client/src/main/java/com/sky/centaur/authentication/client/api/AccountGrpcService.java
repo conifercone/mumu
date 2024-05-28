@@ -41,7 +41,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class AccountGrpcService extends AuthenticationGrpcService implements DisposableBean {
+public final class AccountGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 

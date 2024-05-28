@@ -31,7 +31,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @since 1.0.0
  */
 @Observed(name = "AccountUserDetailService")
-public class AccountUserDetailService implements UserDetailsService {
+public final class AccountUserDetailService implements UserDetailsService {
 
   private final AccountGateway accountGateway;
 
