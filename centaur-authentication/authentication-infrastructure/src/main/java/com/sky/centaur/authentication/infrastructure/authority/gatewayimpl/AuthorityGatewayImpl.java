@@ -91,8 +91,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     try {
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
       authorityRepository.merge(dataObject);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
     } finally {
       distributedLock.unlock();
     }

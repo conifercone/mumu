@@ -86,8 +86,6 @@ public class RoleGatewayImpl implements RoleGateway {
     try {
       RoleDo roleDo = RoleConvertor.toDataObject(role);
       roleRepository.merge(roleDo);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
     } finally {
       distributedLock.unlock();
     }

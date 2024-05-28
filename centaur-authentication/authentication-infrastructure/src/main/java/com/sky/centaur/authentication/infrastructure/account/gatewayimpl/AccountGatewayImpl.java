@@ -135,8 +135,6 @@ public class AccountGatewayImpl implements AccountGateway {
           try {
             AccountDo accountDoSource = AccountConvertor.toDataObject(account);
             accountRepository.merge(accountDoSource);
-          } catch (Exception e) {
-            throw new RuntimeException(e);
           } finally {
             distributedLock.unlock();
           }
