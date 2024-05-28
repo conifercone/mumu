@@ -30,6 +30,7 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -95,25 +95,20 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
-      //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
-      if (StringUtils.hasText(role.getCode())) {
-        predicateList.add(cb.like(root.get(RoleDo_.code),
-            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, role.getCode())));
-      }
-      if (StringUtils.hasText(role.getName())) {
-        predicateList.add(cb.like(root.get(RoleDo_.name),
-            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, role.getName())));
-      }
-      if (role.getId() != null) {
-        predicateList.add(cb.equal(root.get(RoleDo_.id), role.getId()));
-      }
-      if (!CollectionUtils.isEmpty(role.getAuthorities())) {
-        role.getAuthorities().forEach(authority -> predicateList.add(cb.equal(
-            cb.literal(authority.getId()),
-            cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
-        )));
-      }
+      Optional.ofNullable(role.getCode()).filter(StringUtils::hasText)
+          .ifPresent(code -> predicateList.add(cb.like(root.get(RoleDo_.code),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
+      Optional.ofNullable(role.getName()).filter(StringUtils::hasText)
+          .ifPresent(name -> predicateList.add(cb.like(root.get(RoleDo_.name),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
+      Optional.ofNullable(role.getId())
+          .ifPresent(id -> predicateList.add(cb.equal(root.get(RoleDo_.id), id)));
+      Optional.ofNullable(role.getAuthorities()).filter(authorities -> !authorities.isEmpty())
+          .ifPresent(authorities -> authorities.forEach(authority -> predicateList.add(cb.equal(
+              cb.literal(authority.getId()),
+              cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
+          ))));
       return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
@@ -121,7 +116,6 @@ public class RoleGatewayImpl implements RoleGateway {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);
-
     List<Role> roles = repositoryAll.getContent().stream()
         .map(RoleConvertor::toEntity)
         .toList();

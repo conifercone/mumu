@@ -31,6 +31,7 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -100,19 +101,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
-      //noinspection DuplicatedCode
       List<Predicate> predicateList = new ArrayList<>();
-      if (StringUtils.hasText(authority.getCode())) {
-        predicateList.add(cb.like(root.get(AuthorityDo_.code),
-            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, authority.getCode())));
-      }
-      if (StringUtils.hasText(authority.getName())) {
-        predicateList.add(cb.like(root.get(AuthorityDo_.name),
-            String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, authority.getName())));
-      }
-      if (authority.getId() != null) {
-        predicateList.add(cb.equal(root.get(AuthorityDo_.id), authority.getId()));
-      }
+      Optional.ofNullable(authority.getCode()).filter(StringUtils::hasText)
+          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityDo_.code),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
+      Optional.ofNullable(authority.getName()).filter(StringUtils::hasText)
+          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityDo_.name),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
+      Optional.ofNullable(authority.getId())
+          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityDo_.id), id)));
       return query.orderBy(cb.desc(root.get(AuthorityDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
@@ -120,7 +117,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
-
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(AuthorityConvertor::toEntity)
         .toList();
