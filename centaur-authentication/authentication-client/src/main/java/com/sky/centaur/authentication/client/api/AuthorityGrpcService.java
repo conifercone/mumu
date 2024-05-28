@@ -101,17 +101,17 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityDeleteGrpcCo delete(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  public AuthorityDeleteGrpcCo deleteById(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     //noinspection DuplicatedCode
     if (channel != null) {
-      return deleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+      return deleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
     } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
-        return deleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+        return deleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
       } else {
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
@@ -121,15 +121,15 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<AuthorityDeleteGrpcCo> syncDelete(
+  public ListenableFuture<AuthorityDeleteGrpcCo> syncDeleteById(
       AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials) {
     if (channel != null) {
-      return syncDeleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+      return syncDeleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
     } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return syncDeleteFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+        return syncDeleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
       }).orElse(null);
     }
 
@@ -223,22 +223,22 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements D
         .add(authorityAddGrpcCmd);
   }
 
-  private AuthorityDeleteGrpcCo deleteFromGrpc(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  private AuthorityDeleteGrpcCo deleteByIdFromGrpc(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
     return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .delete(authorityDeleteGrpcCmd).get(3, TimeUnit.SECONDS);
+        .deleteById(authorityDeleteGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<AuthorityDeleteGrpcCo> syncDeleteFromGrpc(
+  private @NotNull ListenableFuture<AuthorityDeleteGrpcCo> syncDeleteByIdFromGrpc(
       AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
       AuthCallCredentials callCredentials) {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
     return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .delete(authorityDeleteGrpcCmd);
+        .deleteById(authorityDeleteGrpcCmd);
   }
 
   private AuthorityUpdateGrpcCo updateByIdFromGrpc(AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,

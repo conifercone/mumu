@@ -70,7 +70,7 @@ public class RoleController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public RoleDeleteCo delete(@RequestBody RoleDeleteCmd roleDeleteCmd) {
-    return roleService.delete(roleDeleteCmd);
+    return roleService.deleteById(roleDeleteCmd);
   }
 
   @Operation(summary = "更新角色")

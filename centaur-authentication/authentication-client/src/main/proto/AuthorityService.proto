@@ -7,7 +7,7 @@ option java_outer_classname = "AuthorityServiceProto";
 
 service AuthorityService {
   rpc add (AuthorityAddGrpcCmd) returns (AuthorityAddGrpcCo);
-  rpc delete (AuthorityDeleteGrpcCmd) returns (AuthorityDeleteGrpcCo);
+  rpc deleteById (AuthorityDeleteGrpcCmd) returns (AuthorityDeleteGrpcCo);
   rpc updateById (AuthorityUpdateGrpcCmd) returns (AuthorityUpdateGrpcCo);
   rpc findAll (AuthorityFindAllGrpcCmd) returns (PageOfAuthorityFindAllGrpcCo);
 }

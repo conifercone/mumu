@@ -35,7 +35,7 @@ public interface RoleService {
 
   RoleAddCo add(RoleAddCmd roleAddCmd);
 
-  RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd);
+  RoleDeleteCo deleteById(RoleDeleteCmd roleDeleteCmd);
 
   RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
 

@@ -161,7 +161,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  public AuthorityDeleteCo delete(AuthorityDeleteCmd authorityDeleteCmd) {
+  public AuthorityDeleteCo deleteById(AuthorityDeleteCmd authorityDeleteCmd) {
     return authorityDeleteCmdExe.execute(authorityDeleteCmd);
   }
 
@@ -178,7 +178,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @PreAuthorize("hasRole('admin')")
-  public void delete(AuthorityDeleteGrpcCmd request,
+  public void deleteById(AuthorityDeleteGrpcCmd request,
       StreamObserver<AuthorityDeleteGrpcCo> responseObserver) {
     AuthorityDeleteCmd authorityDeleteCmd = new AuthorityDeleteCmd();
     AuthorityDeleteCo authorityDeleteCo = getAuthorityDeleteCo(

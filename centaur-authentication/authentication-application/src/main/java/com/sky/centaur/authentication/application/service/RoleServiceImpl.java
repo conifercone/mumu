@@ -89,7 +89,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  public RoleDeleteCo delete(RoleDeleteCmd roleDeleteCmd) {
+  public RoleDeleteCo deleteById(RoleDeleteCmd roleDeleteCmd) {
     return roleDeleteCmdExe.execute(roleDeleteCmd);
   }
 
@@ -144,7 +144,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @PreAuthorize("hasRole('admin')")
-  public void delete(RoleDeleteGrpcCmd request, StreamObserver<RoleDeleteGrpcCo> responseObserver) {
+  public void deleteById(RoleDeleteGrpcCmd request,
+      StreamObserver<RoleDeleteGrpcCo> responseObserver) {
     RoleDeleteCmd roleDeleteCmd = new RoleDeleteCmd();
     RoleDeleteCo roleDeleteCo = getRoleDeleteCo(
         request);

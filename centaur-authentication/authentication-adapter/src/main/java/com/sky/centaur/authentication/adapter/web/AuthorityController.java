@@ -70,7 +70,7 @@ public class AuthorityController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityDeleteCo delete(@RequestBody AuthorityDeleteCmd authorityDeleteCmd) {
-    return authorityService.delete(authorityDeleteCmd);
+    return authorityService.deleteById(authorityDeleteCmd);
   }
 
   @Operation(summary = "修改权限")

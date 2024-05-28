@@ -7,7 +7,7 @@ option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
   rpc add (RoleAddGrpcCmd) returns (RoleAddGrpcCo);
-  rpc delete (RoleDeleteGrpcCmd) returns (RoleDeleteGrpcCo);
+  rpc deleteById (RoleDeleteGrpcCmd) returns (RoleDeleteGrpcCo);
   rpc updateById (RoleUpdateGrpcCmd) returns (RoleUpdateGrpcCo);
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
 }

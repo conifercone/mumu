@@ -127,7 +127,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void delete() throws ExecutionException, InterruptedException, TimeoutException {
+  public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
     RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
         .setRoleDeleteCo(
             RoleDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
@@ -138,7 +138,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    RoleDeleteGrpcCo roleDeleteGrpcCo = roleGrpcService.delete(
+    RoleDeleteGrpcCo roleDeleteGrpcCo = roleGrpcService.deleteById(
         roleDeleteGrpcCmd,
         callCredentials);
     LOGGER.info("RoleDeleteGrpcCo: {}", roleDeleteGrpcCo);
@@ -148,7 +148,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void syncDelete() throws InterruptedException {
+  public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
         .setRoleDeleteCo(
@@ -160,7 +160,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<RoleDeleteGrpcCo> roleDeleteGrpcCoListenableFuture = roleGrpcService.syncDelete(
+    ListenableFuture<RoleDeleteGrpcCo> roleDeleteGrpcCoListenableFuture = roleGrpcService.syncDeleteById(
         roleDeleteGrpcCmd,
         callCredentials);
     roleDeleteGrpcCoListenableFuture.addListener(() -> {

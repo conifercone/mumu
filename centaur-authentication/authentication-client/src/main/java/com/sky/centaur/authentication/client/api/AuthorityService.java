@@ -35,7 +35,7 @@ public interface AuthorityService {
 
   AuthorityAddCo add(AuthorityAddCmd authorityAddCmd);
 
-  AuthorityDeleteCo delete(AuthorityDeleteCmd authorityDeleteCmd);
+  AuthorityDeleteCo deleteById(AuthorityDeleteCmd authorityDeleteCmd);
 
   AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd);
 

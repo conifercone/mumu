@@ -127,7 +127,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void delete() throws ExecutionException, InterruptedException, TimeoutException {
+  public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
         .setAuthorityDeleteCo(
             AuthorityDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
@@ -138,7 +138,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityGrpcService.delete(
+    AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityGrpcService.deleteById(
         authorityDeleteGrpcCmd,
         callCredentials);
     LOGGER.info("AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
@@ -148,7 +148,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void syncDelete() throws InterruptedException {
+  public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
         .setAuthorityDeleteCo(
@@ -160,7 +160,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AuthorityDeleteGrpcCo> authorityDeleteGrpcCoListenableFuture = authorityGrpcService.syncDelete(
+    ListenableFuture<AuthorityDeleteGrpcCo> authorityDeleteGrpcCoListenableFuture = authorityGrpcService.syncDeleteById(
         authorityDeleteGrpcCmd,
         callCredentials);
     authorityDeleteGrpcCoListenableFuture.addListener(() -> {
