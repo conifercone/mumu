@@ -77,7 +77,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     } else {
       return registerFromGrpc(accountRegisterGrpcCmd);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -91,7 +90,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     } else {
       return syncRegisterFromGrpc(accountRegisterGrpcCmd);
     }
-
   }
 
   private AccountRegisterGrpcCo registerFromGrpc(

@@ -87,7 +87,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -101,7 +100,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         return syncAddFromGrpc(authorityAddGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -121,7 +119,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -136,7 +133,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         return syncDeleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -156,7 +152,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -171,7 +166,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         return syncUpdateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -191,7 +185,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -206,7 +199,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         return syncFindAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   private AuthorityAddGrpcCo addFromGrpc(AuthorityAddGrpcCmd authorityAddGrpcCmd,

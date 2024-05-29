@@ -118,7 +118,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -133,7 +132,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         return syncDeleteByIdFromGrpc(roleDeleteGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -153,7 +151,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -168,7 +165,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         return syncUpdateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -188,7 +184,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
-
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -203,7 +198,6 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         return syncFindAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
       }).orElse(null);
     }
-
   }
 
   private RoleAddGrpcCo addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
