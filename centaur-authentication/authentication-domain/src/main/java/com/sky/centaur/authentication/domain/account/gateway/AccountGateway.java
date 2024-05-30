@@ -83,4 +83,9 @@ public interface AccountGateway {
    * @param id 账户id
    */
   void resetPassword(Long id);
+
+  /**
+   * 删除当前账户
+   */
+  void deleteCurrentAccount();
 }

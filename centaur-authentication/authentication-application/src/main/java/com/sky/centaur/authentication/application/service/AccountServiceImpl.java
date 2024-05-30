@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
@@ -69,18 +70,22 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   private final AccountResetPasswordCmdExe accountResetPasswordCmdExe;
 
+  private final AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe;
+
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
       AccountUpdateCmdExe accountUpdateCmdExe, AccountDisableCmdExe accountDisableCmdExe,
       AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
       AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
-      AccountResetPasswordCmdExe accountResetPasswordCmdExe) {
+      AccountResetPasswordCmdExe accountResetPasswordCmdExe,
+      AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateCmdExe = accountUpdateCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
     this.accountCurrentLoginQueryCmdExe = accountCurrentLoginQueryCmdExe;
     this.accountOnlineStatisticsCmdExe = accountOnlineStatisticsCmdExe;
     this.accountResetPasswordCmdExe = accountResetPasswordCmdExe;
+    this.accountDeleteCurrentCmdExe = accountDeleteCurrentCmdExe;
   }
 
   @Override
@@ -142,5 +147,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   public AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
     return accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
+  }
+
+  @Override
+  public void deleteCurrentAccount() {
+    accountDeleteCurrentCmdExe.execute();
   }
 }

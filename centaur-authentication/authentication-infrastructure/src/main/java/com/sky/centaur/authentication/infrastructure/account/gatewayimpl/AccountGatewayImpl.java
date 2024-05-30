@@ -187,4 +187,20 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
   }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  public void deleteCurrentAccount() {
+    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
+      distributedLock.lock();
+      try {
+        accountRepository.deleteById(accountId);
+      } finally {
+        distributedLock.unlock();
+      }
+    }, () -> {
+      throw new CentaurException(ResultCode.UNAUTHORIZED);
+    });
+  }
 }

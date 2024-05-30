@@ -26,6 +26,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -104,5 +105,14 @@ public class AccountController {
   public AccountResetPasswordCo resetPassword(
       @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
     return accountService.resetPassword(accountResetPasswordCmd);
+  }
+
+  @Operation(summary = "删除当前账户")
+  @PutMapping("/deleteCurrent")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ResultResponse<?> deleteCurrent() {
+    accountService.deleteCurrentAccount();
+    return ResultResponse.success();
   }
 }

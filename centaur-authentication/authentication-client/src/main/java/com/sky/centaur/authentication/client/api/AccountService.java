@@ -45,4 +45,6 @@ public interface AccountService {
   AccountOnlineStatisticsCo onlineAccounts();
 
   AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
+
+  void deleteCurrentAccount();
 }
