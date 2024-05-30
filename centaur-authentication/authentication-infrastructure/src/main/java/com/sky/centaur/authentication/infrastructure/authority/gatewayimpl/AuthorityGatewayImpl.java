@@ -80,8 +80,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@NotNull Authority authority) {
-    authorityRepository.deleteById(authority.getId());
+  public void deleteById(Long id) {
+    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
   }
 
   @Override
@@ -121,5 +121,11 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         .map(AuthorityConvertor::toEntity)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  public Optional<Authority> findById(Long id) {
+    return Optional.ofNullable(id).flatMap(authorityRepository::findById).map(
+        AuthorityConvertor::toEntity);
   }
 }

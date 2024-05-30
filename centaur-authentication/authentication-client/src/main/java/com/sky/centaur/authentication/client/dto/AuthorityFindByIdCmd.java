@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.client.dto;
 
-package com.sky.centaur.authentication.client.dto.co;
-
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 删除权限客户端对象
+ * 根据id查询权限指令
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class AuthorityDeleteCo extends BaseClientObject {
+public class AuthorityFindByIdCmd {
 
   private Long id;
 }

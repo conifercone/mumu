@@ -73,15 +73,13 @@ public class AuthorityControllerTest {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void delete() throws Exception {
+  public void deleteById() throws Exception {
     @Language("JSON") String authority = """
         {
-            "authorityDeleteCo": {
-                "id": 1
-            }
+           "id": 1
         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/authority/delete").with(csrf())
+            .delete("/authority/deleteById").with(csrf())
             .content(authority.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

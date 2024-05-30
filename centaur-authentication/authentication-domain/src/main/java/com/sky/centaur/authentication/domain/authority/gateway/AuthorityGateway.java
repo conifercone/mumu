@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.authority.gateway;
 
 import com.sky.centaur.authentication.domain.authority.Authority;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 
 /**
@@ -36,9 +37,9 @@ public interface AuthorityGateway {
   /**
    * 根据id删除权限
    *
-   * @param authority 权限信息
+   * @param id 权限id
    */
-  void deleteById(Authority authority);
+  void deleteById(Long id);
 
   /**
    * 根据id更新权限
@@ -56,4 +57,12 @@ public interface AuthorityGateway {
    * @return 查询结果
    */
   Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
+
+  /**
+   * 根据id查询权限详情
+   *
+   * @param id 权限id
+   * @return 权限信息
+   */
+  Optional<Authority> findById(Long id);
 }

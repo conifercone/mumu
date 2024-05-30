@@ -17,14 +17,14 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AuthorityGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
@@ -128,47 +128,39 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
-    AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
-        .setAuthorityDeleteCo(
-            AuthorityDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
-                .build())
+    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityGrpcService.deleteById(
-        authorityDeleteGrpcCmd,
+    Empty empty = authorityGrpcService.deleteById(
+        authorityDeleteByIdGrpcCmd,
         callCredentials);
-    LOGGER.info("AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
-    Assertions.assertNotNull(authorityDeleteGrpcCo);
-    Assertions.assertEquals(1, authorityDeleteGrpcCo.getId().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd = AuthorityDeleteGrpcCmd.newBuilder()
-        .setAuthorityDeleteCo(
-            AuthorityDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
-                .build())
+    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AuthorityDeleteGrpcCo> authorityDeleteGrpcCoListenableFuture = authorityGrpcService.syncDeleteById(
-        authorityDeleteGrpcCmd,
+    ListenableFuture<Empty> emptyListenableFuture = authorityGrpcService.syncDeleteById(
+        authorityDeleteByIdGrpcCmd,
         callCredentials);
-    authorityDeleteGrpcCoListenableFuture.addListener(() -> {
+    emptyListenableFuture.addListener(() -> {
       try {
-        AuthorityDeleteGrpcCo authorityDeleteGrpcCo = authorityDeleteGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AuthorityDeleteGrpcCo: {}", authorityDeleteGrpcCo);
-        Assertions.assertNotNull(authorityDeleteGrpcCo);
-        Assertions.assertEquals(1, authorityDeleteGrpcCo.getId().getValue());
+        Empty empty = emptyListenableFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

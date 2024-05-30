@@ -17,8 +17,8 @@
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
@@ -94,10 +94,10 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Authority toEntity(@NotNull AuthorityDeleteCo authorityDeleteCo) {
-    Authority authority = new Authority();
-    BeanUtils.copyProperties(authorityDeleteCo, authority);
-    return authority;
+  public static @NotNull AuthorityFindByIdCo toFindByIdCo(@NotNull Authority authority) {
+    AuthorityFindByIdCo authorityFindByIdCo = new AuthorityFindByIdCo();
+    BeanUtils.copyProperties(authority, authorityFindByIdCo);
+    return authorityFindByIdCo;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

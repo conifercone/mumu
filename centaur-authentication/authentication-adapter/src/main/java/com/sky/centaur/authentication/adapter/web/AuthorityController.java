@@ -17,13 +17,15 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
-import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
+import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -65,12 +67,13 @@ public class AuthorityController {
     return authorityService.add(authorityAddCmd);
   }
 
-  @Operation(summary = "删除权限")
-  @DeleteMapping("/delete")
+  @Operation(summary = "根据主键删除权限")
+  @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityDeleteCo delete(@RequestBody AuthorityDeleteCmd authorityDeleteCmd) {
-    return authorityService.deleteById(authorityDeleteCmd);
+  public ResultResponse<?> deleteById(@RequestBody AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
+    authorityService.deleteById(authorityDeleteByIdCmd);
+    return ResultResponse.success();
   }
 
   @Operation(summary = "修改权限")
@@ -87,5 +90,13 @@ public class AuthorityController {
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<AuthorityFindAllCo> findAll(@RequestBody AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
+  }
+
+  @Operation(summary = "根据id查询权限")
+  @GetMapping("/findById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public AuthorityFindByIdCo findById(@RequestBody AuthorityFindByIdCmd authorityFindByIdCmd) {
+    return authorityService.findById(authorityFindByIdCmd);
   }
 }

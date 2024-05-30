@@ -13,39 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.sky.centaur.authentication.application.authority.executor;
 
-import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
-import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 删除权限指令执行器
+ * 根据id查询权限指令执行器
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Component
-@Observed(name = "AuthorityDeleteCmdExe")
-public class AuthorityDeleteCmdExe {
+@Observed(name = "AuthorityFindByIdCmdExe")
+public class AuthorityFindByIdCmdExe {
 
   private final AuthorityGateway authorityGateway;
 
   @Autowired
-  public AuthorityDeleteCmdExe(AuthorityGateway authorityGateway) {
+  public AuthorityFindByIdCmdExe(AuthorityGateway authorityGateway) {
     this.authorityGateway = authorityGateway;
   }
 
-  public AuthorityDeleteCo execute(@NotNull AuthorityDeleteCmd authorityDeleteCmd) {
-    Authority authority = AuthorityConvertor.toEntity(authorityDeleteCmd.getAuthorityDeleteCo());
-    authorityGateway.deleteById(authority);
-    return authorityDeleteCmd.getAuthorityDeleteCo();
+  public AuthorityFindByIdCo execute(AuthorityFindByIdCmd authorityFindByIdCmd) {
+    return Optional.ofNullable(authorityFindByIdCmd)
+        .flatMap(findByIdCmd -> authorityGateway.findById(findByIdCmd.getId())).map(
+            AuthorityConvertor::toFindByIdCo).orElse(null);
+
   }
 }

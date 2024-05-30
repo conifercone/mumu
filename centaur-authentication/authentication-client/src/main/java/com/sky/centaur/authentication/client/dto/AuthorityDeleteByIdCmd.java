@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import lombok.Data;
 
 /**
@@ -25,7 +24,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class AuthorityDeleteCmd {
+public class AuthorityDeleteByIdCmd {
 
-  private AuthorityDeleteCo authorityDeleteCo;
+  private Long id;
 }

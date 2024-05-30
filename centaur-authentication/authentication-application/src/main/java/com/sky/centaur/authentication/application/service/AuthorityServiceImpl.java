@@ -16,17 +16,18 @@
 
 package com.sky.centaur.authentication.application.service;
 
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
-import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
@@ -35,12 +36,13 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
-import com.sky.centaur.authentication.client.dto.AuthorityDeleteCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
@@ -68,20 +70,25 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   private final AuthorityAddCmdExe authorityAddCmdExe;
 
-  private final AuthorityDeleteCmdExe authorityDeleteCmdExe;
+  private final AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe;
 
   private final AuthorityUpdateCmdExe authorityUpdateCmdExe;
 
   private final AuthorityFindAllCmdExe authorityFindAllCmdExe;
 
+  private final AuthorityFindByIdCmdExe authorityFindByIdCmdExe;
+
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
-      AuthorityDeleteCmdExe authorityDeleteCmdExe, AuthorityUpdateCmdExe authorityUpdateCmdExe,
-      AuthorityFindAllCmdExe authorityFindAllCmdExe) {
+      AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe,
+      AuthorityUpdateCmdExe authorityUpdateCmdExe,
+      AuthorityFindAllCmdExe authorityFindAllCmdExe,
+      AuthorityFindByIdCmdExe authorityFindByIdCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
-    this.authorityDeleteCmdExe = authorityDeleteCmdExe;
+    this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
     this.authorityFindAllCmdExe = authorityFindAllCmdExe;
+    this.authorityFindByIdCmdExe = authorityFindByIdCmdExe;
   }
 
   @Override
@@ -123,16 +130,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @NotNull
-  private static AuthorityDeleteCo getAuthorityDeleteCo(
-      @NotNull AuthorityDeleteGrpcCmd request) {
-    AuthorityDeleteCo authorityDeleteCo = new AuthorityDeleteCo();
-    AuthorityDeleteGrpcCo authorityDeleteGrpcCo = request.getAuthorityDeleteCo();
-    authorityDeleteCo.setId(
-        authorityDeleteGrpcCo.hasId() ? authorityDeleteGrpcCo.getId().getValue() : null);
-    return authorityDeleteCo;
-  }
-
-  @NotNull
   private static AuthorityUpdateCo getAuthorityUpdateCo(
       @NotNull AuthorityUpdateGrpcCmd request) {
     AuthorityUpdateCo authorityUpdateCo = new AuthorityUpdateCo();
@@ -161,8 +158,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  public AuthorityDeleteCo deleteById(AuthorityDeleteCmd authorityDeleteCmd) {
-    return authorityDeleteCmdExe.execute(authorityDeleteCmd);
+  public void deleteById(AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
+    authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
   }
 
   @Override
@@ -177,19 +174,22 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  public AuthorityFindByIdCo findById(AuthorityFindByIdCmd authorityFindByIdCmd) {
+    return authorityFindByIdCmdExe.execute(authorityFindByIdCmd);
+  }
+
+  @Override
   @PreAuthorize("hasRole('admin')")
-  public void deleteById(AuthorityDeleteGrpcCmd request,
-      StreamObserver<AuthorityDeleteGrpcCo> responseObserver) {
-    AuthorityDeleteCmd authorityDeleteCmd = new AuthorityDeleteCmd();
-    AuthorityDeleteCo authorityDeleteCo = getAuthorityDeleteCo(
-        request);
-    authorityDeleteCmd.setAuthorityDeleteCo(authorityDeleteCo);
+  public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
+      StreamObserver<Empty> responseObserver) {
+    AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
+    authorityDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
-      authorityDeleteCmdExe.execute(authorityDeleteCmd);
+      authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAuthorityDeleteCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 

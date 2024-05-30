@@ -18,10 +18,10 @@ package com.sky.centaur.authentication.client.api;
 import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Empty;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceFutureStub;
@@ -103,17 +103,17 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityDeleteGrpcCo deleteById(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  public Empty deleteById(AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     //noinspection DuplicatedCode
     if (channel != null) {
-      return deleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+      return deleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
     } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
-        return deleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+        return deleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
       } else {
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
@@ -122,15 +122,15 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<AuthorityDeleteGrpcCo> syncDeleteById(
-      AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  public ListenableFuture<Empty> syncDeleteById(
+      AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials) {
     if (channel != null) {
-      return syncDeleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+      return syncDeleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
     } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return syncDeleteByIdFromGrpc(authorityDeleteGrpcCmd, callCredentials);
+        return syncDeleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
       }).orElse(null);
     }
   }
@@ -219,22 +219,22 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         .add(authorityAddGrpcCmd);
   }
 
-  private AuthorityDeleteGrpcCo deleteByIdFromGrpc(AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  private Empty deleteByIdFromGrpc(AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
     return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(authorityDeleteGrpcCmd).get(3, TimeUnit.SECONDS);
+        .deleteById(authorityDeleteByIdGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<AuthorityDeleteGrpcCo> syncDeleteByIdFromGrpc(
-      AuthorityDeleteGrpcCmd authorityDeleteGrpcCmd,
+  private @NotNull ListenableFuture<Empty> syncDeleteByIdFromGrpc(
+      AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials) {
     AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
         channel);
     return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(authorityDeleteGrpcCmd);
+        .deleteById(authorityDeleteByIdGrpcCmd);
   }
 
   private AuthorityUpdateGrpcCo updateByIdFromGrpc(AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,
