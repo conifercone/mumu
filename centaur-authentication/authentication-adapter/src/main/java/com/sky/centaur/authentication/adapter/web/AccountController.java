@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -108,7 +109,7 @@ public class AccountController {
   }
 
   @Operation(summary = "删除当前账户")
-  @PutMapping("/deleteCurrent")
+  @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public ResultResponse<?> deleteCurrent() {
