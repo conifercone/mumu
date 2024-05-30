@@ -1,5 +1,6 @@
 syntax = "proto3";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
 option java_multiple_files = true;
 option java_package = "com.sky.centaur.authentication.client.api.grpc";
@@ -7,7 +8,7 @@ option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
   rpc add (RoleAddGrpcCmd) returns (RoleAddGrpcCo);
-  rpc deleteById (RoleDeleteGrpcCmd) returns (RoleDeleteGrpcCo);
+  rpc deleteById (RoleDeleteByIdGrpcCmd) returns (google.protobuf.Empty);
   rpc updateById (RoleUpdateGrpcCmd) returns (RoleUpdateGrpcCo);
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
 }
@@ -23,11 +24,7 @@ message RoleAddGrpcCo {
   repeated int64 authorities = 4;
 }
 
-message RoleDeleteGrpcCmd {
-  RoleDeleteGrpcCo roleDeleteCo = 1;
-}
-
-message RoleDeleteGrpcCo {
+message RoleDeleteByIdGrpcCmd {
   google.protobuf.Int64Value id = 1;
 }
 

@@ -16,10 +16,11 @@
 
 package com.sky.centaur.authentication.application.service;
 
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
-import com.sky.centaur.authentication.application.role.executor.RoleDeleteCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
@@ -27,19 +28,17 @@ import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -68,17 +67,17 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   private final RoleAddCmdExe roleAddCmdExe;
 
-  private final RoleDeleteCmdExe roleDeleteCmdExe;
+  private final RoleDeleteByIdCmdExe roleDeleteByIdCmdExe;
 
   private final RoleUpdateCmdExe roleUpdateCmdExe;
 
   private final RoleFindAllCmdExe roleFindAllCmdExe;
 
   @Autowired
-  public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteCmdExe roleDeleteCmdExe,
+  public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
       RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
-    this.roleDeleteCmdExe = roleDeleteCmdExe;
+    this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
     this.roleFindAllCmdExe = roleFindAllCmdExe;
   }
@@ -89,8 +88,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  public RoleDeleteCo deleteById(RoleDeleteCmd roleDeleteCmd) {
-    return roleDeleteCmdExe.execute(roleDeleteCmd);
+  public void deleteById(RoleDeleteByIdCmd roleDeleteByIdCmd) {
+    roleDeleteByIdCmdExe.execute(roleDeleteByIdCmd);
   }
 
   @Override
@@ -133,29 +132,20 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     return roleAddCo;
   }
 
-  @NotNull
-  private static RoleDeleteCo getRoleDeleteCo(
-      @NotNull RoleDeleteGrpcCmd request) {
-    RoleDeleteCo roleDeleteCo = new RoleDeleteCo();
-    RoleDeleteGrpcCo roleDeleteGrpcCo = request.getRoleDeleteCo();
-    roleDeleteCo.setId(roleDeleteGrpcCo.hasId() ? roleDeleteGrpcCo.getId().getValue() : null);
-    return roleDeleteCo;
-  }
 
   @Override
   @PreAuthorize("hasRole('admin')")
-  public void deleteById(RoleDeleteGrpcCmd request,
-      StreamObserver<RoleDeleteGrpcCo> responseObserver) {
-    RoleDeleteCmd roleDeleteCmd = new RoleDeleteCmd();
-    RoleDeleteCo roleDeleteCo = getRoleDeleteCo(
-        request);
-    roleDeleteCmd.setRoleDeleteCo(roleDeleteCo);
+  public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
+      StreamObserver<Empty> responseObserver) {
+    RoleDeleteByIdCmd roleDeleteByIdCmd = new RoleDeleteByIdCmd();
+    //noinspection DuplicatedCode
+    roleDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
-      roleDeleteCmdExe.execute(roleDeleteCmd);
+      roleDeleteByIdCmdExe.execute(roleDeleteByIdCmd);
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getRoleDeleteCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 

@@ -74,8 +74,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@NotNull Role role) {
-    roleRepository.deleteById(role.getId());
+  public void deleteById(Long id) {
+    Optional.ofNullable(id).ifPresent(roleRepository::deleteById);
   }
 
   @Override

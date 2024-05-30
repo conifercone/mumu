@@ -18,11 +18,11 @@ package com.sky.centaur.authentication.client.api;
 import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Empty;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
@@ -102,17 +102,17 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleDeleteGrpcCo deleteById(RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+  public Empty deleteById(RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     //noinspection DuplicatedCode
     if (channel != null) {
-      return deleteByIdFromGrpc(roleDeleteGrpcCmd, callCredentials);
+      return deleteByIdFromGrpc(roleDeleteByIdGrpcCmd, callCredentials);
     } else {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
       if (managedChannelUsePlaintext.isPresent()) {
         channel = managedChannelUsePlaintext.get();
-        return deleteByIdFromGrpc(roleDeleteGrpcCmd, callCredentials);
+        return deleteByIdFromGrpc(roleDeleteByIdGrpcCmd, callCredentials);
       } else {
         LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
@@ -121,15 +121,15 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<RoleDeleteGrpcCo> syncDeleteById(
-      RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+  public ListenableFuture<Empty> syncDeleteById(
+      RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials) {
     if (channel != null) {
-      return syncDeleteByIdFromGrpc(roleDeleteGrpcCmd, callCredentials);
+      return syncDeleteByIdFromGrpc(roleDeleteByIdGrpcCmd, callCredentials);
     } else {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return syncDeleteByIdFromGrpc(roleDeleteGrpcCmd, callCredentials);
+        return syncDeleteByIdFromGrpc(roleDeleteByIdGrpcCmd, callCredentials);
       }).orElse(null);
     }
   }
@@ -214,22 +214,22 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd);
   }
 
-  private RoleDeleteGrpcCo deleteByIdFromGrpc(RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+  private Empty deleteByIdFromGrpc(RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
         channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(roleDeleteGrpcCmd).get(3, TimeUnit.SECONDS);
+        .deleteById(roleDeleteByIdGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<RoleDeleteGrpcCo> syncDeleteByIdFromGrpc(
-      RoleDeleteGrpcCmd roleDeleteGrpcCmd,
+  private @NotNull ListenableFuture<Empty> syncDeleteByIdFromGrpc(
+      RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
       AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
         channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(roleDeleteGrpcCmd);
+        .deleteById(roleDeleteByIdGrpcCmd);
   }
 
   private RoleUpdateGrpcCo updateByIdFromGrpc(RoleUpdateGrpcCmd roleUpdateGrpcCmd,

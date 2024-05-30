@@ -16,13 +16,10 @@
 
 package com.sky.centaur.authentication.application.role.executor;
 
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
-import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
-import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,19 +30,18 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-@Observed(name = "RoleDeleteCmdExe")
-public class RoleDeleteCmdExe {
+@Observed(name = "RoleDeleteByIdCmdExe")
+public class RoleDeleteByIdCmdExe {
 
   private final RoleGateway roleGateway;
 
   @Autowired
-  public RoleDeleteCmdExe(RoleGateway roleGateway) {
+  public RoleDeleteByIdCmdExe(RoleGateway roleGateway) {
     this.roleGateway = roleGateway;
   }
 
-  public RoleDeleteCo execute(@NotNull RoleDeleteCmd roleDeleteCmd) {
-    Role role = RoleConvertor.toEntity(roleDeleteCmd.getRoleDeleteCo());
-    roleGateway.deleteById(role);
-    return roleDeleteCmd.getRoleDeleteCo();
+  public void execute(RoleDeleteByIdCmd roleDeleteByIdCmd) {
+    Optional.ofNullable(roleDeleteByIdCmd)
+        .ifPresent(deleteCmd -> roleGateway.deleteById(deleteCmd.getId()));
   }
 }

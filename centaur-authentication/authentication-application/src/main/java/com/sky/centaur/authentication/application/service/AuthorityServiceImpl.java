@@ -183,6 +183,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
+    //noinspection DuplicatedCode
     authorityDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
       authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);

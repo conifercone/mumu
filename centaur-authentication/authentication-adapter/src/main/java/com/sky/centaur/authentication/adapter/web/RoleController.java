@@ -17,13 +17,13 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
-import com.sky.centaur.authentication.client.dto.RoleDeleteCmd;
+import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
+import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -65,12 +65,13 @@ public class RoleController {
     return roleService.add(roleAddCmd);
   }
 
-  @Operation(summary = "删除角色")
-  @DeleteMapping("/delete")
+  @Operation(summary = "根据id删除角色")
+  @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleDeleteCo delete(@RequestBody RoleDeleteCmd roleDeleteCmd) {
-    return roleService.deleteById(roleDeleteCmd);
+  public ResultResponse<?> deleteById(@RequestBody RoleDeleteByIdCmd roleDeleteByIdCmd) {
+    roleService.deleteById(roleDeleteByIdCmd);
+    return ResultResponse.success();
   }
 
   @Operation(summary = "更新角色")

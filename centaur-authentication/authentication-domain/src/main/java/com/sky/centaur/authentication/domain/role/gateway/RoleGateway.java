@@ -36,9 +36,9 @@ public interface RoleGateway {
   /**
    * 根据id删除角色
    *
-   * @param role 角色信息
+   * @param id 角色id
    */
-  void deleteById(Role role);
+  void deleteById(Long id);
 
   /**
    * 根据id更新角色

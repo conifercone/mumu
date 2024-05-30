@@ -76,15 +76,13 @@ public class RoleControllerTest {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void delete() throws Exception {
+  public void deleteById() throws Exception {
     @Language("JSON") String role = """
         {
-             "roleDeleteCo": {
-                 "id": 1
-             }
+            "id": 1
          }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/role/delete").with(csrf())
+            .delete("/role/deleteById").with(csrf())
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

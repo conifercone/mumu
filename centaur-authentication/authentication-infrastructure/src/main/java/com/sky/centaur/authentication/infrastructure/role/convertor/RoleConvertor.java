@@ -17,7 +17,6 @@
 package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
-import com.sky.centaur.authentication.client.dto.co.RoleDeleteCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
@@ -109,13 +108,6 @@ public class RoleConvertor {
     } else {
       throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
     }
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Role toEntity(@NotNull RoleDeleteCo roleDeleteCo) {
-    Role role = new Role();
-    BeanUtils.copyProperties(roleDeleteCo, role);
-    return role;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

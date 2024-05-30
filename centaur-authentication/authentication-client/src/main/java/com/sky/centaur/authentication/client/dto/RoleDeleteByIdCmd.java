@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 角色删除客户端对象
+ * 删除角色指令
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class RoleDeleteCo extends BaseClientObject {
+public class RoleDeleteByIdCmd {
 
   private Long id;
 }

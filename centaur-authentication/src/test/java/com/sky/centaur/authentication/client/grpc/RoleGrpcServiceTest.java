@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
@@ -24,8 +25,7 @@ import com.sky.centaur.authentication.client.api.RoleGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.RoleDeleteGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
@@ -128,47 +128,39 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
-    RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
-        .setRoleDeleteCo(
-            RoleDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
-                .build())
+    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    RoleDeleteGrpcCo roleDeleteGrpcCo = roleGrpcService.deleteById(
-        roleDeleteGrpcCmd,
+    Empty empty = roleGrpcService.deleteById(
+        roleDeleteByIdGrpcCmd,
         callCredentials);
-    LOGGER.info("RoleDeleteGrpcCo: {}", roleDeleteGrpcCo);
-    Assertions.assertNotNull(roleDeleteGrpcCo);
-    Assertions.assertEquals(1, roleDeleteGrpcCo.getId().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    RoleDeleteGrpcCmd roleDeleteGrpcCmd = RoleDeleteGrpcCmd.newBuilder()
-        .setRoleDeleteCo(
-            RoleDeleteGrpcCo.newBuilder().setId(Int64Value.of(1))
-                .build())
+    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<RoleDeleteGrpcCo> roleDeleteGrpcCoListenableFuture = roleGrpcService.syncDeleteById(
-        roleDeleteGrpcCmd,
+    ListenableFuture<Empty> emptyListenableFuture = roleGrpcService.syncDeleteById(
+        roleDeleteByIdGrpcCmd,
         callCredentials);
-    roleDeleteGrpcCoListenableFuture.addListener(() -> {
+    emptyListenableFuture.addListener(() -> {
       try {
-        RoleDeleteGrpcCo roleDeleteGrpcCo = roleDeleteGrpcCoListenableFuture.get();
-        LOGGER.info("Sync RoleDeleteGrpcCo: {}", roleDeleteGrpcCo);
-        Assertions.assertNotNull(roleDeleteGrpcCo);
-        Assertions.assertEquals(1, roleDeleteGrpcCo.getId().getValue());
+        Empty empty = emptyListenableFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
