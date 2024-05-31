@@ -171,12 +171,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
-    accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
-      accountDo.setEnabled(false);
-      accountRepository.merge(accountDo);
-    }, () -> {
-      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-    });
+    distributedLock.lock();
+    try {
+      accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
+        accountDo.setEnabled(false);
+        accountRepository.merge(accountDo);
+      }, () -> {
+        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+      });
+    } finally {
+      distributedLock.unlock();
+    }
   }
 
   @Override
