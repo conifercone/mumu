@@ -57,7 +57,6 @@ centaur
 | apisix        | 3.8.0    |
 | elasticsearch | 8.12.0   |
 | kafka         | 3.4      |
-| mysql         | 8.0.21   |
 | postgresql    | 15.1     |
 | redis         | latest   |
 | zookeeper     | 3.8      |
