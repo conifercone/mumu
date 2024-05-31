@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CentaurAuthenticationApplication"
-    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+  <configuration default="false" name="CentaurAuthenticationApplication-dev"
+    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev"/>
     <module name="centaur.centaur-authentication.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>

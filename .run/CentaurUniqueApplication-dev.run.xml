@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CentaurUniqueApplication"
-    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+  <configuration default="false" name="CentaurUniqueApplication-dev"
+    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev"/>
     <module name="centaur.centaur-unique.main"/>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.sky.centaur.unique.CentaurUniqueApplication"/>
