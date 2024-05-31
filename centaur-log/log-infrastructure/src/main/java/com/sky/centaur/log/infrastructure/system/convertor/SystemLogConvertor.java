@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.log.infrastructure.system.convertor;
 
+import com.expediagroup.beans.BeanUtils;
+import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
@@ -30,7 +32,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 
 /**
  * 系统日志转换器
@@ -38,29 +39,31 @@ import org.springframework.beans.BeanUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class SystemLogConvertor {
+public final class SystemLogConvertor {
+
+  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
+      .setDefaultValueForMissingField(true)
+      .setDefaultValueForMissingPrimitiveField(false);
+
+  private SystemLogConvertor() {
+  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLogKafkaDo toKafkaDataObject(@NotNull SystemLog systemLog) {
-    SystemLogKafkaDo systemLogKafkaDo = new SystemLogKafkaDo();
-    BeanUtils.copyProperties(systemLog, systemLogKafkaDo);
-    return systemLogKafkaDo;
+    return BEAN_TRANSFORMER.transform(systemLog, SystemLogKafkaDo.class);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLogEsDo toEsDataObject(@NotNull SystemLog systemLog) {
-    SystemLogEsDo systemLogEsDo = new SystemLogEsDo();
-    BeanUtils.copyProperties(systemLog, systemLogEsDo);
-    return systemLogEsDo;
+    return BEAN_TRANSFORMER.transform(systemLog, SystemLogEsDo.class);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLog toEntity(@NotNull SystemLogSubmitCo systemLogSubmitCo) {
-    SystemLog systemLog = new SystemLog();
-    BeanUtils.copyProperties(systemLogSubmitCo, systemLog);
+    SystemLog systemLog = BEAN_TRANSFORMER.transform(systemLogSubmitCo, SystemLog.class);
     systemLog.setId(
         Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
             .map(span -> span.context().traceId()).orElseGet(() ->
@@ -72,8 +75,6 @@ public class SystemLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull SystemLog toEntity(@NotNull SystemLogSaveCo systemLogSaveCo) {
-    SystemLog systemLog = new SystemLog();
-    BeanUtils.copyProperties(systemLogSaveCo, systemLog);
-    return systemLog;
+    return BEAN_TRANSFORMER.transform(systemLogSaveCo, SystemLog.class);
   }
 }

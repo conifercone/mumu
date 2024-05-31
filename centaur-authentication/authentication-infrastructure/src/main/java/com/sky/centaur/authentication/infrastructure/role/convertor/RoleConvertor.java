@@ -16,6 +16,8 @@
 
 package com.sky.centaur.authentication.infrastructure.role.convertor;
 
+import com.expediagroup.beans.BeanUtils;
+import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
@@ -35,7 +37,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -44,15 +45,23 @@ import org.springframework.util.CollectionUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class RoleConvertor {
+public final class RoleConvertor {
+
+  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
+      .setDefaultValueForMissingField(true)
+      .setDefaultValueForMissingPrimitiveField(false);
+
+  private RoleConvertor() {
+  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleDo roleDo) {
     //noinspection DuplicatedCode
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = new Role();
-    BeanUtils.copyProperties(roleDo, role, "authorities");
+    Role role = BEAN_TRANSFORMER
+        .skipTransformationForField("authorities")
+        .transform(roleDo, Role.class);
     Optional.ofNullable(roleDo.getAuthorities()).filter(authorityList -> !CollectionUtils.isEmpty(
         authorityList)).ifPresent(authorities -> role.setAuthorities(
         authorityRepository.findAuthorityDoByIdIn(authorities).stream()
@@ -64,8 +73,9 @@ public class RoleConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull RoleDo toDataObject(@NotNull Role role) {
-    RoleDo roleDo = new RoleDo();
-    BeanUtils.copyProperties(role, roleDo, "authorities");
+    RoleDo roleDo = BEAN_TRANSFORMER
+        .skipTransformationForField("authorities")
+        .transform(role, RoleDo.class);
     if (!CollectionUtils.isEmpty(role.getAuthorities())) {
       roleDo.setAuthorities(
           role.getAuthorities().stream().map(Authority::getId).collect(Collectors.toList()));
@@ -77,8 +87,9 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleAddCo roleAddCo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = new Role();
-    BeanUtils.copyProperties(roleAddCo, role, "authorities");
+    Role role = BEAN_TRANSFORMER
+        .skipTransformationForField("authorities")
+        .transform(roleAddCo, Role.class);
     if (role.getId() == null) {
       role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
       roleAddCo.setId(role.getId());
@@ -115,8 +126,9 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Role toEntity(@NotNull RoleFindAllCo roleFindAllCo) {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = new Role();
-    BeanUtils.copyProperties(roleFindAllCo, role, "authorities");
+    Role role = BEAN_TRANSFORMER
+        .skipTransformationForField("authorities")
+        .transform(roleFindAllCo, Role.class);
     if (!CollectionUtils.isEmpty(roleFindAllCo.getAuthorities())) {
       role.setAuthorities(
           authorityRepository.findAuthorityDoByIdIn(roleFindAllCo.getAuthorities()).stream()
@@ -128,8 +140,9 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull RoleFindAllCo toFindAllCo(@NotNull Role role) {
-    RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
-    BeanUtils.copyProperties(role, roleFindAllCo, "authorities");
+    RoleFindAllCo roleFindAllCo = BEAN_TRANSFORMER
+        .skipTransformationForField("authorities")
+        .transform(role, RoleFindAllCo.class);
     if (!CollectionUtils.isEmpty(role.getAuthorities())) {
       roleFindAllCo.setAuthorities(role.getAuthorities().stream().map(Authority::getId).collect(
           Collectors.toList()));

@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
+import com.expediagroup.beans.BeanUtils;
+import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
@@ -33,7 +35,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 
 /**
  * 账户信息转换器
@@ -41,7 +42,14 @@ import org.springframework.beans.BeanUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class AccountConvertor {
+public final class AccountConvertor {
+
+  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
+      .setDefaultValueForMissingField(true)
+      .setDefaultValueForMissingPrimitiveField(false);
+
+  private AccountConvertor() {
+  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
@@ -139,8 +147,6 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AccountCurrentLoginQueryCo toCurrentLoginQueryCo(
       @NotNull Account account) {
-    AccountCurrentLoginQueryCo accountCurrentLoginQueryCo = new AccountCurrentLoginQueryCo();
-    BeanUtils.copyProperties(account, accountCurrentLoginQueryCo);
-    return accountCurrentLoginQueryCo;
+    return BEAN_TRANSFORMER.transform(account, AccountCurrentLoginQueryCo.class);
   }
 }

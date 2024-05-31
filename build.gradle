@@ -134,6 +134,7 @@ subprojects { project ->
         imports {
             mavenBom(libs.springBootDependencies.get().toString())
             mavenBom(libs.springCloudDependencies.get().toString())
+            mavenBom(libs.bullBom.get().toString())
         }
     }
 
@@ -147,6 +148,8 @@ subprojects { project ->
         implementation libs.apiguardian
         implementation libs.guava
         implementation libs.commonsLang3
+        implementation libs.bullMapTransformer
+        implementation libs.bullBeanTransformer
         implementation libs.jacksonModuleKotlin
         implementation libs.kotlinReflect
         testImplementation libs.junitJupiter

@@ -16,6 +16,7 @@
 
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
+import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
@@ -33,7 +34,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 
 /**
  * 权限信息转换器
@@ -41,7 +41,14 @@ import org.springframework.beans.BeanUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class AuthorityConvertor {
+public final class AuthorityConvertor {
+
+  private static final BeanTransformer BEAN_TRANSFORMER = new com.expediagroup.beans.BeanUtils().getTransformer()
+      .setDefaultValueForMissingField(true)
+      .setDefaultValueForMissingPrimitiveField(false);
+
+  private AuthorityConvertor() {
+  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
@@ -52,15 +59,12 @@ public class AuthorityConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
-    AuthorityDo authorityDo = new AuthorityDo();
-    BeanUtils.copyProperties(authority, authorityDo);
-    return authorityDo;
+    return BEAN_TRANSFORMER.transform(authority, AuthorityDo.class);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityAddCo authorityAddCo) {
-    Authority authority = new Authority();
-    BeanUtils.copyProperties(authorityAddCo, authority);
+    Authority authority = BEAN_TRANSFORMER.transform(authorityAddCo, Authority.class);
     if (authority.getId() == null) {
       authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
       authorityAddCo.setId(authority.getId());
@@ -78,8 +82,8 @@ public class AuthorityConvertor {
         authorityUpdateCo.getId());
     if (authorityDoOptional.isPresent()) {
       Authority authority = toEntity(authorityDoOptional.get());
-      BeanUtils.copyProperties(authorityUpdateCo, authority,
-          BeanUtil.getNullPropertyNames(authorityUpdateCo));
+      BEAN_TRANSFORMER.skipTransformationForField(BeanUtil.getNullPropertyNames(authorityUpdateCo))
+          .transform(authorityUpdateCo, authority);
       return authority;
     } else {
       throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
@@ -88,22 +92,16 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Authority toEntity(@NotNull AuthorityFindAllCo authorityFindAllCo) {
-    Authority authority = new Authority();
-    BeanUtils.copyProperties(authorityFindAllCo, authority);
-    return authority;
+    return BEAN_TRANSFORMER.transform(authorityFindAllCo, Authority.class);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityFindByIdCo toFindByIdCo(@NotNull Authority authority) {
-    AuthorityFindByIdCo authorityFindByIdCo = new AuthorityFindByIdCo();
-    BeanUtils.copyProperties(authority, authorityFindByIdCo);
-    return authorityFindByIdCo;
+    return BEAN_TRANSFORMER.transform(authority, AuthorityFindByIdCo.class);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull AuthorityFindAllCo toFindAllCo(@NotNull Authority authority) {
-    AuthorityFindAllCo authorityFindAllCo = new AuthorityFindAllCo();
-    BeanUtils.copyProperties(authority, authorityFindAllCo);
-    return authorityFindAllCo;
+    return BEAN_TRANSFORMER.transform(authority, AuthorityFindAllCo.class);
   }
 }

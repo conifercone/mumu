@@ -28,6 +28,7 @@ licensePluginVersion = '0.16.1'
 javaxMailVersion = '1.6.2'
 kotlinVersion = '2.0.0'
 disruptorVersion = '4.0.0'
+bullVersion = '2.2.4'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -157,6 +158,12 @@ hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 # https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
+# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bom
+bullBom = { module = "com.expediagroup.beans:bull-bom", version.ref = "bullVersion" }
+# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bean-transformer
+bullBeanTransformer = { module = "com.expediagroup.beans:bull-bean-transformer" }
+# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-map-transformer
+bullMapTransformer = { module = "com.expediagroup.beans:bull-map-transformer" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

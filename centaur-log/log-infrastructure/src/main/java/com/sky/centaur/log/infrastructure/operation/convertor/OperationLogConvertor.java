@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
+import com.expediagroup.beans.BeanUtils;
+import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
@@ -30,7 +32,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 
 /**
  * 操作日志转换器
@@ -38,30 +39,32 @@ import org.springframework.beans.BeanUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class OperationLogConvertor {
+public final class OperationLogConvertor {
 
+  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
+      .setDefaultValueForMissingField(true)
+      .setDefaultValueForMissingPrimitiveField(false);
+
+  private OperationLogConvertor() {
+  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLogKafkaDo toKafkaDataObject(@NotNull OperationLog operationLog) {
-    OperationLogKafkaDo operationLogKafkaDo = new OperationLogKafkaDo();
-    BeanUtils.copyProperties(operationLog, operationLogKafkaDo);
-    return operationLogKafkaDo;
+    return BEAN_TRANSFORMER.transform(operationLog, OperationLogKafkaDo.class);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLogEsDo toEsDataObject(@NotNull OperationLog operationLog) {
-    OperationLogEsDo operationLogEsDo = new OperationLogEsDo();
-    BeanUtils.copyProperties(operationLog, operationLogEsDo);
-    return operationLogEsDo;
+    return BEAN_TRANSFORMER.transform(operationLog, OperationLogEsDo.class);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
-    OperationLog operationLog = new OperationLog();
-    BeanUtils.copyProperties(operationLogSubmitCo, operationLog);
+    OperationLog operationLog = BEAN_TRANSFORMER.transform(operationLogSubmitCo,
+        OperationLog.class);
     operationLog.setId(
         Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
             .map(span -> span.context().traceId()).orElseGet(() ->
@@ -74,18 +77,14 @@ public class OperationLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogSaveCo operationLogSaveCo) {
-    OperationLog operationLog = new OperationLog();
-    BeanUtils.copyProperties(operationLogSaveCo, operationLog);
-    return operationLog;
+    return BEAN_TRANSFORMER.transform(operationLogSaveCo, OperationLog.class);
   }
 
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {
-    OperationLog operationLog = new OperationLog();
-    BeanUtils.copyProperties(operationLogEsDo, operationLog);
-    return operationLog;
+    return BEAN_TRANSFORMER.transform(operationLogEsDo, OperationLog.class);
   }
 
 }
