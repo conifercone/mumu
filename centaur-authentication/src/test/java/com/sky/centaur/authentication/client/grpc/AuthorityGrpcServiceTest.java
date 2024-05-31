@@ -129,7 +129,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(1L))
+        .setId(Int64Value.of(3L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -147,7 +147,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(1L))
+        .setId(Int64Value.of(3L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

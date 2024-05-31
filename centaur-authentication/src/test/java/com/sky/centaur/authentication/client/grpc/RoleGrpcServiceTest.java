@@ -129,7 +129,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
     RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(3L))
+        .setId(Int64Value.of(2L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -147,7 +147,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(3L))
+        .setId(Int64Value.of(2L))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
