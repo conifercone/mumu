@@ -56,4 +56,14 @@ public interface RoleGateway {
    * @return 查询结果
    */
   Page<Role> findAll(Role role, int pageNo, int pageSize);
+
+  /**
+   * 分页查询角色(包含指定权限)
+   *
+   * @param authorityId 权限id
+   * @param pageNo      页码
+   * @param pageSize    当前页数量
+   * @return 查询结果
+   */
+  Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize);
 }

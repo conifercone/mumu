@@ -20,6 +20,8 @@ import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZ
 
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
+import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
@@ -43,6 +45,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -60,10 +63,13 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   private final DistributedLock distributedLock;
 
+  private final RoleGateway roleGateway;
+
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+      ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway) {
     this.authorityRepository = authorityRepository;
+    this.roleGateway = roleGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
@@ -81,7 +87,17 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
+    distributedLock.lock();
+    try {
+      Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
+      if (!CollectionUtils.isEmpty(authorities.getContent())) {
+        throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+            authorities.getContent().stream().map(Role::getCode).toList());
+      }
+      Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
+    } finally {
+      distributedLock.unlock();
+    }
   }
 
   @Override

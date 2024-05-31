@@ -114,6 +114,29 @@ public class RoleGatewayImpl implements RoleGateway {
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
     };
+    return getRoles(pageNo, pageSize, roleDoSpecification);
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "1.0.0")
+  @Transactional(rollbackFor = Exception.class)
+  public Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize) {
+    Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
+      List<Predicate> predicateList = new ArrayList<>();
+      Optional.ofNullable(authorityId)
+          .ifPresent(id -> predicateList.add(cb.equal(
+              cb.literal(id),
+              cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
+          )));
+      return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
+          .where(predicateList.toArray(new Predicate[0]))
+          .getRestriction();
+    };
+    return getRoles(pageNo, pageSize, roleDoSpecification);
+  }
+
+  @NotNull
+  private Page<Role> getRoles(int pageNo, int pageSize, Specification<RoleDo> roleDoSpecification) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);

@@ -61,7 +61,9 @@ public enum ResultCode implements BaseResultInterface {
   OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED(4001),
   /*拓展模块错误5001-5999*/
   FAILED_TO_OBTAIN_DISTRIBUTED_LOCK(5001),
-  FAILED_TO_RELEASE_DISTRIBUTED_LOCK(5002);
+  FAILED_TO_RELEASE_DISTRIBUTED_LOCK(5002),
+  /*业务错误6001-7999*/
+  AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED(6001);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 
