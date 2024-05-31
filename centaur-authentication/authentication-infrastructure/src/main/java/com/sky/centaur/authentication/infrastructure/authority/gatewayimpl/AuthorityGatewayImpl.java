@@ -87,7 +87,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
       if (!CollectionUtils.isEmpty(authorities.getContent())) {
@@ -96,7 +96,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       }
       Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 
@@ -104,12 +104,12 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Authority authority) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
       authorityRepository.merge(dataObject);
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 

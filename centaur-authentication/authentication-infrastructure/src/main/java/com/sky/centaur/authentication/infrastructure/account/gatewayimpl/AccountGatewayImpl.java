@@ -142,12 +142,12 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtil.getLoginAccountId()
         .filter(res -> Objects.equals(res, account.getId()))
         .ifPresentOrElse((accountId) -> {
-          distributedLock.lock();
+          Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
             AccountDo accountDoSource = AccountConvertor.toDataObject(account);
             accountRepository.merge(accountDoSource);
           } finally {
-            distributedLock.unlock();
+            Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
         }, () -> {
           throw new CentaurException(ResultCode.UNAUTHORIZED);
@@ -158,12 +158,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       AccountDo accountDoSource = AccountConvertor.toDataObject(account);
       accountRepository.merge(accountDoSource);
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 
@@ -171,7 +171,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
         accountDo.setEnabled(false);
@@ -180,7 +180,7 @@ public class AccountGatewayImpl implements AccountGateway {
         throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
       });
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 
@@ -220,11 +220,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrentAccount() {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
-      distributedLock.lock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
         accountRepository.deleteById(accountId);
       } finally {
-        distributedLock.unlock();
+        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
     }, () -> {
       throw new CentaurException(ResultCode.UNAUTHORIZED);

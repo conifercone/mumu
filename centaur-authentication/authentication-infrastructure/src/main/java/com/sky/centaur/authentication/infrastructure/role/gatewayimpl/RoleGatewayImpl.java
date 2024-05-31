@@ -84,7 +84,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       Optional.ofNullable(id).ifPresent(roleId -> {
         Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
@@ -95,7 +95,7 @@ public class RoleGatewayImpl implements RoleGateway {
         roleRepository.deleteById(roleId);
       });
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 
@@ -103,12 +103,12 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@NotNull Role role) {
-    distributedLock.lock();
+    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
     try {
       RoleDo roleDo = RoleConvertor.toDataObject(role);
       roleRepository.merge(roleDo);
     } finally {
-      distributedLock.unlock();
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
     }
   }
 
