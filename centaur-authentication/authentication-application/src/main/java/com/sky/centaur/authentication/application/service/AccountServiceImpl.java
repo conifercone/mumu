@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.application.account.executor.AccountOnline
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
@@ -30,12 +31,14 @@ import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
@@ -72,13 +75,16 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   private final AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe;
 
+  private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
+
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
       AccountUpdateCmdExe accountUpdateCmdExe, AccountDisableCmdExe accountDisableCmdExe,
       AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
       AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
       AccountResetPasswordCmdExe accountResetPasswordCmdExe,
-      AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe) {
+      AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
+      AccountUpdateRoleCmdExe accountUpdateRoleCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateCmdExe = accountUpdateCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -86,6 +92,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountOnlineStatisticsCmdExe = accountOnlineStatisticsCmdExe;
     this.accountResetPasswordCmdExe = accountResetPasswordCmdExe;
     this.accountDeleteCurrentCmdExe = accountDeleteCurrentCmdExe;
+    this.accountUpdateRoleCmdExe = accountUpdateRoleCmdExe;
   }
 
   @Override
@@ -127,6 +134,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   public AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd) {
     return accountUpdateCmdExe.execute(accountUpdateCmd);
+  }
+
+  @Override
+  public AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    return accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
   }
 
   @Override

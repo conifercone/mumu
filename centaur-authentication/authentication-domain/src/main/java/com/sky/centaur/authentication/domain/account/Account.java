@@ -63,6 +63,7 @@ public class Account extends BasisDomainModel implements UserDetails {
   private Boolean accountNonExpired = true;
 
   @Getter
+  @Setter
   private Role role;
 
   @Getter

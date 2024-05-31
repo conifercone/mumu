@@ -58,6 +58,13 @@ public interface AccountGateway {
   void updateById(Account account);
 
   /**
+   * 根据id更新账户角色
+   *
+   * @param account 目标账户信息
+   */
+  void updateRoleById(Account account);
+
+  /**
    * 禁用账户
    *
    * @param id 账户id

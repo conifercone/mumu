@@ -98,6 +98,26 @@ public class AccountControllerTest {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
+  public void updateRoleById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+             "accountUpdateRoleCo": {
+                 "id": 1,
+                 "roleCode": "test"
+             }
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/updateRoleById").with(csrf())
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
   public void disable() throws Exception {
     @Language("JSON") String userInfo = """
         {

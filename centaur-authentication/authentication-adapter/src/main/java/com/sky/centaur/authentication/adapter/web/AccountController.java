@@ -20,12 +20,14 @@ import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -73,6 +75,15 @@ public class AccountController {
   @API(status = Status.STABLE, since = "1.0.0")
   public AccountUpdateCo updateById(@RequestBody AccountUpdateCmd accountUpdateCmd) {
     return accountService.updateById(accountUpdateCmd);
+  }
+
+  @Operation(summary = "账户角色更新")
+  @PutMapping("/updateRoleById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public AccountUpdateRoleCo updateRoleById(
+      @RequestBody AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    return accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
   @Operation(summary = "禁用账户")

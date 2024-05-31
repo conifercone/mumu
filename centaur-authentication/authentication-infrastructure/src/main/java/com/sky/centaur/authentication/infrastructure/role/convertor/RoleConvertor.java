@@ -53,9 +53,11 @@ public class RoleConvertor {
     AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
     Role role = new Role();
     BeanUtils.copyProperties(roleDo, role, "authorities");
-    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-            roleDo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
-        .collect(Collectors.toList()));
+    Optional.ofNullable(roleDo.getAuthorities()).filter(authorityList -> !CollectionUtils.isEmpty(
+        authorityList)).ifPresent(authorities -> role.setAuthorities(
+        authorityRepository.findAuthorityDoByIdIn(authorities).stream()
+            .map(AuthorityConvertor::toEntity)
+            .collect(Collectors.toList())));
     return role;
   }
 

@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.convertor;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
@@ -101,9 +102,8 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull Account toEntity(@NotNull AccountUpdateCo accountUpdateCo) {
-    if (accountUpdateCo.getId() == null) {
-      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
-    }
+    Optional.ofNullable(accountUpdateCo.getId())
+        .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
     AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
     Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateCo.getId());
     if (accountDoOptional.isPresent()) {
@@ -117,6 +117,23 @@ public class AccountConvertor {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     }
 
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static @NotNull Account toEntity(@NotNull AccountUpdateRoleCo accountUpdateRoleCo) {
+    Optional.ofNullable(accountUpdateRoleCo.getId())
+        .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+    AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateRoleCo.getId());
+    AccountDo accountDo = accountDoOptional.orElseThrow(
+        () -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
+    Account account = toEntity(accountDo);
+    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
+    roleRepository.findByCode(accountUpdateRoleCo.getRoleCode())
+        .ifPresentOrElse(roleDo -> account.setRole(RoleConvertor.toEntity(roleDo)), () -> {
+          throw new CentaurException(ResultCode.ROLE_DOES_NOT_EXIST);
+        });
+    return account;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

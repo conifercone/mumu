@@ -64,7 +64,8 @@ public enum ResultCode implements BaseResultInterface {
   FAILED_TO_RELEASE_DISTRIBUTED_LOCK(5002),
   /*业务错误6001-7999*/
   AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED(6001),
-  ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED(6002);
+  ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED(6002),
+  ROLE_DOES_NOT_EXIST(6003);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

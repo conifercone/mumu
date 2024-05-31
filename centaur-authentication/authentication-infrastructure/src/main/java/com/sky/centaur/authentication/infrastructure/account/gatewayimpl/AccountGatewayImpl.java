@@ -157,6 +157,19 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
+  public void updateRoleById(Account account) {
+    distributedLock.lock();
+    try {
+      AccountDo accountDoSource = AccountConvertor.toDataObject(account);
+      accountRepository.merge(accountDoSource);
+    } finally {
+      distributedLock.unlock();
+    }
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       accountDo.setEnabled(false);
