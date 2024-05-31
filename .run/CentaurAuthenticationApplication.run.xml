@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CentaurAuthenticationApplication"
+    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" value="dev"/>
+    <module name="centaur.centaur-authentication.main"/>
+    <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>
+    <option name="SPRING_BOOT_MAIN_CLASS"
+      value="com.sky.centaur.authentication.CentaurAuthenticationApplication"/>
+    <option name="VM_PARAMETERS"
+      value="-Dcom.sun.management.jmxremote.port=31101 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
+    <method v="2">
+      <option name="Make" enabled="true"/>
+    </method>
+  </configuration>
+</component>
