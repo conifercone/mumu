@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.domain.account.gateway;
 
 import com.sky.centaur.authentication.domain.account.Account;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 /**
  * 用户领域网关
@@ -88,4 +89,14 @@ public interface AccountGateway {
    * 删除当前账户
    */
   void deleteCurrentAccount();
+
+  /**
+   * 查询所有正在使用指定角色的账户
+   *
+   * @param roleId   角色id
+   * @param pageNo   当前页
+   * @param pageSize 每页数量
+   * @return 正在使用指定角色的账户
+   */
+  Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize);
 }

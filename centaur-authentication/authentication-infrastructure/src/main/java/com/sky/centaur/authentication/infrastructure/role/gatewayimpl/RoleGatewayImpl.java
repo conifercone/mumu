@@ -19,12 +19,16 @@ package com.sky.centaur.authentication.infrastructure.role.gatewayimpl;
 import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
 import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
+import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
@@ -41,6 +45,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -57,9 +62,13 @@ public class RoleGatewayImpl implements RoleGateway {
 
   private final DistributedLock distributedLock;
 
+  private final AccountGateway accountGateway;
+
   public RoleGatewayImpl(RoleRepository roleRepository,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider) {
+      ObjectProvider<DistributedLock> distributedLockObjectProvider,
+      AccountGateway accountGateway) {
     this.roleRepository = roleRepository;
+    this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
@@ -75,7 +84,19 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    Optional.ofNullable(id).ifPresent(roleRepository::deleteById);
+    distributedLock.lock();
+    try {
+      Optional.ofNullable(id).ifPresent(roleId -> {
+        Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
+        if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
+          throw new CentaurException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+              allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
+        }
+        roleRepository.deleteById(roleId);
+      });
+    } finally {
+      distributedLock.unlock();
+    }
   }
 
   @Override
@@ -136,7 +157,10 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @NotNull
-  private Page<Role> getRoles(int pageNo, int pageSize, Specification<RoleDo> roleDoSpecification) {
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  protected Page<Role> getRoles(int pageNo, int pageSize,
+      Specification<RoleDo> roleDoSpecification) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);

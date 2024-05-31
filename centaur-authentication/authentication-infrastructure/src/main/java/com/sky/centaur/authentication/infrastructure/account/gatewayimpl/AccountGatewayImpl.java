@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -31,6 +33,9 @@ import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -39,6 +44,10 @@ import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -202,5 +211,35 @@ public class AccountGatewayImpl implements AccountGateway {
     }, () -> {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
     });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize) {
+    Specification<AccountDo> accountDoSpecification = (root, query, cb) -> {
+      List<Predicate> predicateList = new ArrayList<>();
+      Optional.ofNullable(roleId)
+          .ifPresent(
+              id -> predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), id)));
+      return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
+          .where(predicateList.toArray(new Predicate[0]))
+          .getRestriction();
+    };
+    return getAccounts(pageNo, pageSize, accountDoSpecification);
+  }
+
+  @NotNull
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  protected Page<Account> getAccounts(int pageNo, int pageSize,
+      Specification<AccountDo> accountDoSpecification) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
+        pageRequest);
+    List<Account> accounts = repositoryAll.getContent().stream()
+        .map(AccountConvertor::toEntity)
+        .toList();
+    return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());
   }
 }

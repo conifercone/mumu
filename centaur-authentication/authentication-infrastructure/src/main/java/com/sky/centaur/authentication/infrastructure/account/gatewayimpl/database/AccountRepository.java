@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databa
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * 账户基本信息
@@ -25,7 +26,8 @@ import java.util.Optional;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public interface AccountRepository extends BaseJpaRepository<AccountDo, Long> {
+public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
+    JpaSpecificationExecutor<AccountDo> {
 
   Optional<AccountDo> findAccountDoByUsername(String username);
 
