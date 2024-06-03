@@ -88,7 +88,7 @@ springKafka = { module = "org.springframework.kafka:spring-kafka" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
 protobufJava = { module = "com.google.protobuf:protobuf-java" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protoc
-protoc = { module = "com.google.protobuf:protoc" }
+protoc = { module = "com.google.protobuf:protoc", version.ref = "protobufBomVersion" }
 # https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java
 protocGenGrpcJava = { module = "io.grpc:protoc-gen-grpc-java" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-stub
