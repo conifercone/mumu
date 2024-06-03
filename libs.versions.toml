@@ -15,7 +15,7 @@ zookeeperVersion = "3.7.2"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.7.3"
 curatorRecipesVersion = "5.1.0"
-flywayCoreVersion = "10.9.0"
+flywayVersion = "10.13.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 # bom version
@@ -142,8 +142,8 @@ springSecurityTest = { module = "org.springframework.security:spring-security-te
 # https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
 curatorRecipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
-flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayCoreVersion" }
-flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayCoreVersion" }
+flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
+flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
 # https://mvnrepository.com/artifact/com.sun.mail/javax.mail
 javaxMail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
@@ -187,3 +187,4 @@ license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVe
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }
