@@ -74,7 +74,7 @@ subprojects { project ->
     compileJava.dependsOn(processResources)
 
     tasks.withType(KotlinCompile).configureEach {
-        kotlinOptions.freeCompilerArgs += "-Xjsr305=strict"
+        compilerOptions.freeCompilerArgs.add("-Xjsr305=strict")
     }
 
     // 打包自定义设置
@@ -135,6 +135,9 @@ subprojects { project ->
             mavenBom(libs.springBootDependencies.get().toString())
             mavenBom(libs.springCloudDependencies.get().toString())
             mavenBom(libs.bullBom.get().toString())
+            mavenBom(libs.grpcBom.get().toString())
+            mavenBom(libs.protobufBom.get().toString())
+            mavenBom(libs.guavaBom.get().toString())
         }
     }
 
