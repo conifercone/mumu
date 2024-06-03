@@ -120,7 +120,7 @@ subprojects { project ->
         ignoreFailures = true
         header = rootProject.file("source_code_head.txt")
         includes(["**/*.java", "**/*.kt", "**/*.sql", "**/*.xml", "**/*.yml"])
-        excludes(["**/client/api/grpc/*.java", "**/*_.java"])
+        excludes(["**/client/api/grpc/*.java", "**/*_.java", "**/*run.xml"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "kt", "SLASHSTAR_STYLE"
         mapping "sql", "SLASHSTAR_STYLE"
