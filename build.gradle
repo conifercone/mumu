@@ -119,7 +119,7 @@ subprojects { project ->
     license {
         encoding = StandardCharsets.UTF_8.name()
         ignoreFailures = true
-        header = rootProject.file("source_code_head.txt")
+        header = rootProject.file("SOURCE_CODE_HEAD.txt")
         includes(["**/*.java", "**/*.kt", "**/*.sql", "**/*.xml", "**/*.yml"])
         excludes(["**/client/api/grpc/*.java", "**/*_.java", "**/*run.xml"])
         mapping "java", "SLASHSTAR_STYLE"
