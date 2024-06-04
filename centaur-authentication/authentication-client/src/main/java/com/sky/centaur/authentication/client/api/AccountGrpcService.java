@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
@@ -31,6 +33,7 @@ import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -92,6 +95,37 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     }
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
+  public AccountUpdateByIdGrpcCo updateById(AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    if (channel == null) {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return updateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
+      }
+    } else {
+      return updateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
+    }
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<AccountUpdateByIdGrpcCo> syncUpdateById(
+      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncUpdateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
+      }).orElse(null);
+    } else {
+      return syncUpdateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
+    }
+  }
+
   private AccountRegisterGrpcCo registerFromGrpc(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -105,6 +139,24 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
         channel);
     return accountServiceFutureStub.register(accountRegisterGrpcCmd);
+  }
+
+
+  private AccountUpdateByIdGrpcCo updateByIdFromGrpc(
+      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .updateById(accountUpdateByIdGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<AccountUpdateByIdGrpcCo> syncUpdateByIdFromGrpc(
+      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .updateById(accountUpdateByIdGrpcCmd);
   }
 
 }

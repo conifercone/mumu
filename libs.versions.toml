@@ -170,6 +170,8 @@ grpcBom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
 protobufBom = { module = "com.google.protobuf:protobuf-bom", version.ref = "protobufBomVersion" }
 # https://mvnrepository.com/artifact/com.google.guava/guava-bom
 guavaBom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
+# https://mvnrepository.com/artifact/org.springframework/spring-tx
+springTx = { module = "org.springframework:spring-tx" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]

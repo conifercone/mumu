@@ -19,7 +19,7 @@ import com.expediagroup.beans.BeanUtils;
 import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
@@ -109,17 +109,17 @@ public final class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Account toEntity(@NotNull AccountUpdateCo accountUpdateCo) {
-    Optional.ofNullable(accountUpdateCo.getId())
+  public static @NotNull Account toEntity(@NotNull AccountUpdateByIdCo accountUpdateByIdCo) {
+    Optional.ofNullable(accountUpdateByIdCo.getId())
         .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
     AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
-    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateCo.getId());
+    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateByIdCo.getId());
     if (accountDoOptional.isPresent()) {
       Account account = toEntity(accountDoOptional.get());
-      Optional.ofNullable(accountUpdateCo.getAvatarUrl()).ifPresent(account::setAvatarUrl);
-      Optional.ofNullable(accountUpdateCo.getPhone()).ifPresent(account::setPhone);
-      Optional.ofNullable(accountUpdateCo.getSex()).ifPresent(account::setSex);
-      Optional.ofNullable(accountUpdateCo.getEmail()).ifPresent(account::setEmail);
+      Optional.ofNullable(accountUpdateByIdCo.getAvatarUrl()).ifPresent(account::setAvatarUrl);
+      Optional.ofNullable(accountUpdateByIdCo.getPhone()).ifPresent(account::setPhone);
+      Optional.ofNullable(accountUpdateByIdCo.getSex()).ifPresent(account::setSex);
+      Optional.ofNullable(accountUpdateByIdCo.getEmail()).ifPresent(account::setEmail);
       return account;
     } else {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);

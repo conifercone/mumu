@@ -15,8 +15,8 @@
  */
 package com.sky.centaur.authentication.application.account.executor;
 
-import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
@@ -26,25 +26,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账户更新指令执行器
+ * 账户根据id更新指令执行器
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Component
-@Observed(name = "AccountUpdateCmdExe")
-public class AccountUpdateCmdExe {
+@Observed(name = "AccountUpdateByIdCmdExe")
+public class AccountUpdateByIdCmdExe {
 
   private final AccountGateway accountGateway;
 
   @Autowired
-  public AccountUpdateCmdExe(AccountGateway accountGateway) {
+  public AccountUpdateByIdCmdExe(AccountGateway accountGateway) {
     this.accountGateway = accountGateway;
   }
 
-  public AccountUpdateCo execute(@NotNull AccountUpdateCmd accountUpdateCmd) {
-    Account entity = AccountConvertor.toEntity(accountUpdateCmd.getAccountUpdateCo());
+  public AccountUpdateByIdCo execute(@NotNull AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    Account entity = AccountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo());
     accountGateway.updateById(entity);
-    return accountUpdateCmd.getAccountUpdateCo();
+    return accountUpdateByIdCmd.getAccountUpdateByIdCo();
   }
 }

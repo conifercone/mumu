@@ -21,23 +21,25 @@ import com.sky.centaur.authentication.application.account.executor.AccountDisabl
 import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountResetPasswordCmdExe;
-import com.sky.centaur.authentication.application.account.executor.AccountUpdateCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
-import com.sky.centaur.authentication.client.dto.AccountUpdateCmd;
+import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateCo;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -48,7 +50,9 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 账户功能实现
@@ -63,7 +67,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   private final AccountRegisterCmdExe accountRegisterCmdExe;
 
-  private final AccountUpdateCmdExe accountUpdateCmdExe;
+  private final AccountUpdateByIdCmdExe accountUpdateByIdCmdExe;
 
   private final AccountDisableCmdExe accountDisableCmdExe;
 
@@ -79,14 +83,14 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
-      AccountUpdateCmdExe accountUpdateCmdExe, AccountDisableCmdExe accountDisableCmdExe,
+      AccountUpdateByIdCmdExe accountUpdateByIdCmdExe, AccountDisableCmdExe accountDisableCmdExe,
       AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
       AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
       AccountResetPasswordCmdExe accountResetPasswordCmdExe,
       AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
       AccountUpdateRoleCmdExe accountUpdateRoleCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
-    this.accountUpdateCmdExe = accountUpdateCmdExe;
+    this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
     this.accountCurrentLoginQueryCmdExe = accountCurrentLoginQueryCmdExe;
     this.accountOnlineStatisticsCmdExe = accountOnlineStatisticsCmdExe;
@@ -96,11 +100,13 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
     return accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void register(AccountRegisterGrpcCmd request,
       StreamObserver<AccountRegisterGrpcCo> responseObserver) {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
@@ -132,21 +138,59 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  public AccountUpdateCo updateById(AccountUpdateCmd accountUpdateCmd) {
-    return accountUpdateCmdExe.execute(accountUpdateCmd);
+  public AccountUpdateByIdCo updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    return accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
+  }
+
+  @NotNull
+  private static AccountUpdateByIdCo getAccountUpdateByIdCo(
+      @NotNull AccountUpdateByIdGrpcCmd request) {
+    AccountUpdateByIdCo accountUpdateByIdCo = new AccountUpdateByIdCo();
+    AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = request.getAccountUpdateByIdGrpcCo();
+    accountUpdateByIdCo.setId(
+        accountUpdateByIdGrpcCo.hasId() ? accountUpdateByIdGrpcCo.getId().getValue() : null);
+    accountUpdateByIdCo.setAvatarUrl(
+        accountUpdateByIdGrpcCo.hasAvatarUrl() ? accountUpdateByIdGrpcCo.getAvatarUrl().getValue()
+            : null);
+    accountUpdateByIdCo.setPhone(
+        accountUpdateByIdGrpcCo.hasPhone() ? accountUpdateByIdGrpcCo.getPhone().getValue() : null);
+    accountUpdateByIdCo.setSex(accountUpdateByIdGrpcCo.hasSex() ? SexEnum.valueOf(
+        accountUpdateByIdGrpcCo.getSex().name()) : null);
+    return accountUpdateByIdCo;
   }
 
   @Override
+  @PreAuthorize("hasAuthority('message.write')")
+  @Transactional(rollbackFor = Exception.class)
+  public void updateById(AccountUpdateByIdGrpcCmd request,
+      StreamObserver<AccountUpdateByIdGrpcCo> responseObserver) {
+    AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
+    AccountUpdateByIdCo accountUpdateByIdCo = getAccountUpdateByIdCo(
+        request);
+    accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
+    try {
+      accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(request.getAccountUpdateByIdGrpcCo());
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
   public AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
     return accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AccountDisableCo disable(AccountDisableCmd accountDisableCmd) {
     return accountDisableCmdExe.execute(accountDisableCmd);
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
     return accountCurrentLoginQueryCmdExe.execute();
   }
@@ -157,11 +201,13 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
     return accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void deleteCurrentAccount() {
     accountDeleteCurrentCmdExe.execute();
   }

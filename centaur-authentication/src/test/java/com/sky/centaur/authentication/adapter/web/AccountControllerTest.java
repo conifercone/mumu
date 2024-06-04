@@ -81,7 +81,7 @@ public class AccountControllerTest {
   public void updateById() throws Exception {
     @Language("JSON") String userInfo = """
         {
-             "accountUpdateCo": {
+             "accountUpdateByIdCo": {
                  "id": 1,
                  "sex": "MALE"
              }

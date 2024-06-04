@@ -17,22 +17,32 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
+import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AccountGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.SexEnum;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.lognet.springboot.grpc.security.AuthCallCredentials;
+import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -44,14 +54,16 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-public class AccountGrpcServiceTest {
+public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
+  private final MockMvc mockMvc;
   private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
 
   @Autowired
-  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService) {
+  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc) {
     this.accountGrpcService = accountGrpcService;
+    this.mockMvc = mockMvc;
   }
 
   @Test
@@ -88,6 +100,59 @@ public class AccountGrpcServiceTest {
         LOGGER.info("Sync AccountRegisterGrpcCo: {}", syncAccountRegisterGrpcCo);
         Assertions.assertNotNull(syncAccountRegisterGrpcCo);
         Assertions.assertEquals("test", syncAccountRegisterGrpcCo.getUsername());
+        countDownLatch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+    AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd = AccountUpdateByIdGrpcCmd.newBuilder()
+        .setAccountUpdateByIdGrpcCo(
+            AccountUpdateByIdGrpcCo.newBuilder().setId(Int64Value.of(1))
+                .setSex(SexEnum.SEXLESS)
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = accountGrpcService.updateById(
+        accountUpdateByIdGrpcCmd, callCredentials);
+    LOGGER.info("AccountUpdateByIdGrpcCo: {}", accountUpdateByIdGrpcCo);
+    Assertions.assertNotNull(accountUpdateByIdGrpcCo);
+    Assertions.assertEquals(SexEnum.SEXLESS, accountUpdateByIdGrpcCo.getSex());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void syncUpdateById() throws InterruptedException {
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+    AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd = AccountUpdateByIdGrpcCmd.newBuilder()
+        .setAccountUpdateByIdGrpcCo(
+            AccountUpdateByIdGrpcCo.newBuilder().setId(Int64Value.of(1))
+                .setSex(SexEnum.SEXLESS)
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AccountUpdateByIdGrpcCo> accountUpdateByIdGrpcCoListenableFuture = accountGrpcService.syncUpdateById(
+        accountUpdateByIdGrpcCmd, callCredentials);
+    accountUpdateByIdGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = accountUpdateByIdGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AccountUpdateByIdGrpcCo: {}", accountUpdateByIdGrpcCo);
+        Assertions.assertNotNull(accountUpdateByIdGrpcCo);
+        Assertions.assertEquals(SexEnum.SEXLESS, accountUpdateByIdGrpcCo.getSex());
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/wrappers.proto";
 
 option java_multiple_files = true;
 option java_package = "com.sky.centaur.authentication.client.api.grpc";
@@ -6,6 +7,7 @@ option java_outer_classname = "AccountServiceProto";
 
 service AccountService {
   rpc register (AccountRegisterGrpcCmd) returns (AccountRegisterGrpcCo);
+  rpc updateById (AccountUpdateByIdGrpcCmd) returns (AccountUpdateByIdGrpcCo);
 }
 
 message AccountRegisterGrpcCmd {
@@ -20,6 +22,20 @@ message AccountRegisterGrpcCo {
   string avatarUrl = 5;
   string phone = 6;
   SexEnum sex = 7;
+}
+
+message AccountUpdateByIdGrpcCmd{
+  AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = 1;
+}
+
+message AccountUpdateByIdGrpcCo{
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue avatarUrl = 2;
+  google.protobuf.StringValue phone = 3;
+  google.protobuf.StringValue email = 4;
+  oneof sex_wrapper {
+    SexEnum sex = 5;
+  }
 }
 
 enum SexEnum

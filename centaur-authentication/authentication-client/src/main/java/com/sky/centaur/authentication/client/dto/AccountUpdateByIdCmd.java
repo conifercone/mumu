@@ -13,30 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
+package com.sky.centaur.authentication.client.dto;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
+import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 账户信息更新客户端对象
+ * 账户根据id更新指令
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountUpdateCo extends BaseClientObject {
+public class AccountUpdateByIdCmd {
 
-  private Long id;
-
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
-
-  private String email;
+  private AccountUpdateByIdCo accountUpdateByIdCo;
 }

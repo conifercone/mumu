@@ -56,6 +56,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 权限管理
@@ -92,12 +93,14 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AuthorityAddCo add(AuthorityAddCmd authorityAddCmd) {
     return authorityAddCmdExe.execute(authorityAddCmd);
   }
 
   @Override
   @PreAuthorize("hasRole('admin')")
+  @Transactional(rollbackFor = Exception.class)
   public void add(AuthorityAddGrpcCmd request,
       StreamObserver<AuthorityAddGrpcCo> responseObserver) {
     AuthorityAddCmd authorityAddCmd = new AuthorityAddCmd();
@@ -158,11 +161,13 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void deleteById(AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
     authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd) {
     return authorityUpdateCmdExe.execute(authorityUpdateCmd);
   }
@@ -180,6 +185,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @PreAuthorize("hasRole('admin')")
+  @Transactional(rollbackFor = Exception.class)
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
@@ -196,6 +202,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @PreAuthorize("hasRole('admin')")
+  @Transactional(rollbackFor = Exception.class)
   public void updateById(AuthorityUpdateGrpcCmd request,
       StreamObserver<AuthorityUpdateGrpcCo> responseObserver) {
     AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
