@@ -26,26 +26,26 @@
 
 ```text
 centaur
-│  ├─ 📂 centaur-authentication -- 鉴权服务
-│  │  │- 📂 authentication-adapter -- 鉴权服务适配层
-│  │  │- 📂 authentication-application -- 鉴权服务应用层
-│  │  │- 📂 authentication-client -- 鉴权服务客户端
-│  │  │- 📂 authentication-domain -- 鉴权服务领域层
-│  │  │- 📂 authentication-infrastructure -- 鉴权服务基础设施层
-│  │─ 📂 centaur-basis -- 基础模块
-│  │─ 📂 centaur-extension -- 拓展模块
-│  │─ 📂 centaur-log -- 日志服务
-│  │  │- 📂 log-adapter -- 日志服务适配层
-│  │  │- 📂 log-application -- 日志服务应用层
-│  │  │- 📂 log-client -- 日志服务客户端
-│  │  │- 📂 log-domain -- 日志服务领域层
-│  │  │- 📂 log-infrastructure -- 日志服务基础设施层
-│  │─ 📂 centaur-unique -- 唯一性数据生成服务
-│  │  │- 📂 unique-adapter -- 唯一性数据生成服务适配层
-│  │  │- 📂 unique-application -- 唯一性数据生成服务应用层
-│  │  │- 📂 unique-client -- 唯一性数据生成服务客户端
-│  │  │- 📂 unique-domain -- 唯一性数据生成服务领域层
-│  │  │- 📂 unique-infrastructure -- 唯一性数据生成服务基础设施层
+│  ├─ 📂 centaur-authentication -- authentication service
+│  │  │- 📂 authentication-adapter -- authentication service adaptation layer
+│  │  │- 📂 authentication-application -- authentication service application layer
+│  │  │- 📂 authentication-client -- authentication service client
+│  │  │- 📂 authentication-domain -- authentication service domain layer
+│  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
+│  │─ 📂 centaur-basis -- basic module
+│  │─ 📂 centaur-extension -- expansion module
+│  │─ 📂 centaur-log -- log service
+│  │  │- 📂 log-adapter -- log service adaptation layer
+│  │  │- 📂 log-application -- log service application layer
+│  │  │- 📂 log-client -- log service client
+│  │  │- 📂 log-domain -- log service domain layer
+│  │  │- 📂 log-infrastructure -- log service infrastructure layer
+│  │─ 📂 centaur-unique -- unique data generation service
+│  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
+│  │  │- 📂 unique-application -- unique data generation service application layer
+│  │  │- 📂 unique-client -- unique data generation service client
+│  │  │- 📂 unique-domain -- unique data generation service domain layer
+│  │  │- 📂 unique-infrastructure -- Unique data generation service infrastructure layer
 ```
 
 ## Build
