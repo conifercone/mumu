@@ -16,6 +16,7 @@
 package com.sky.centaur.basis.exception;
 
 import com.sky.centaur.basis.response.ResultCode;
+import java.io.Serial;
 
 /**
  * 数据转换异常
@@ -24,6 +25,9 @@ import com.sky.centaur.basis.response.ResultCode;
  * @since 1.0.0
  */
 public class DataConversionException extends CentaurException {
+
+  @Serial
+  private static final long serialVersionUID = -1039551120326053286L;
 
   public DataConversionException() {
     super(ResultCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);

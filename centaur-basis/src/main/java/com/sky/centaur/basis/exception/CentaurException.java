@@ -16,6 +16,7 @@
 package com.sky.centaur.basis.exception;
 
 import com.sky.centaur.basis.response.ResultCode;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,9 @@ import org.jetbrains.annotations.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CentaurException extends RuntimeException {
+
+  @Serial
+  private static final long serialVersionUID = 5646742276995362775L;
 
   private ResultCode resultCode;
 

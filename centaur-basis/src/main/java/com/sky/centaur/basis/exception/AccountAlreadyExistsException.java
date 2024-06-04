@@ -16,6 +16,7 @@
 package com.sky.centaur.basis.exception;
 
 import com.sky.centaur.basis.response.ResultCode;
+import java.io.Serial;
 
 /**
  * 账户已存在
@@ -24,6 +25,9 @@ import com.sky.centaur.basis.response.ResultCode;
  * @since 1.0.0
  */
 public class AccountAlreadyExistsException extends CentaurException {
+
+  @Serial
+  private static final long serialVersionUID = 7383143329621946676L;
 
   public AccountAlreadyExistsException(String accountName) {
     super(ResultCode.ACCOUNT_ALREADY_EXISTS, accountName);
