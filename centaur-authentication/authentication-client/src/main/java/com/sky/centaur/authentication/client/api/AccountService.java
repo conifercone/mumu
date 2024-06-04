@@ -36,19 +36,62 @@ import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
  */
 public interface AccountService {
 
+  /**
+   * 账户注册
+   *
+   * @param accountRegisterCmd 账户注册指令
+   * @return 账户注册客户端对象
+   */
   AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
 
+  /**
+   * 根据id更新账户基本信息
+   *
+   * @param accountUpdateByIdCmd 根据id更新账户基本信息指令
+   * @return 更新后账户基本信息
+   */
   AccountUpdateByIdCo updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
 
+  /**
+   * 根据id更新账户角色信息
+   *
+   * @param accountUpdateRoleCmd 根据id更新账户角色信息指令
+   * @return 更新后角色信息
+   */
   AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd);
 
+  /**
+   * 禁用账户
+   *
+   * @param accountDisableCmd 禁用账户指令
+   * @return 禁用的账户
+   */
   AccountDisableCo disable(AccountDisableCmd accountDisableCmd);
 
+  /**
+   * 查询当前登录账户信息
+   *
+   * @return 当前登录账户信息
+   */
   AccountCurrentLoginQueryCo queryCurrentLoginAccount();
 
+  /**
+   * 查询当前在线账户数量
+   *
+   * @return 在线账户数量
+   */
   AccountOnlineStatisticsCo onlineAccounts();
 
+  /**
+   * 重置密码
+   *
+   * @param accountResetPasswordCmd 重置密码指令
+   * @return 重置的账户
+   */
   AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
 
+  /**
+   * 删除当前账户
+   */
   void deleteCurrentAccount();
 }
