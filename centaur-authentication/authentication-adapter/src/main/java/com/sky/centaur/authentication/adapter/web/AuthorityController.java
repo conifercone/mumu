@@ -25,7 +25,6 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
-import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -71,9 +70,8 @@ public class AuthorityController {
   @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public ResultResponse<?> deleteById(@RequestBody AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
+  public void deleteById(@RequestBody AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
     authorityService.deleteById(authorityDeleteByIdCmd);
-    return ResultResponse.success();
   }
 
   @Operation(summary = "修改权限")

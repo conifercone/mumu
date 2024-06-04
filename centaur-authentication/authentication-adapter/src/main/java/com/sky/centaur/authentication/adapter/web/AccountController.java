@@ -28,7 +28,6 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
-import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -123,8 +122,7 @@ public class AccountController {
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public ResultResponse<?> deleteCurrent() {
+  public void deleteCurrent() {
     accountService.deleteCurrentAccount();
-    return ResultResponse.success();
   }
 }

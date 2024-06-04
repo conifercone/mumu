@@ -23,7 +23,6 @@ import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
-import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -69,9 +68,8 @@ public class RoleController {
   @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public ResultResponse<?> deleteById(@RequestBody RoleDeleteByIdCmd roleDeleteByIdCmd) {
+  public void deleteById(@RequestBody RoleDeleteByIdCmd roleDeleteByIdCmd) {
     roleService.deleteById(roleDeleteByIdCmd);
-    return ResultResponse.success();
   }
 
   @Operation(summary = "更新角色")
