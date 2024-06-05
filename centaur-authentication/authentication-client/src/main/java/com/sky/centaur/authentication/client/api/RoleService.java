@@ -32,11 +32,34 @@ import org.springframework.data.domain.Page;
  */
 public interface RoleService {
 
+  /**
+   * 新增角色
+   *
+   * @param roleAddCmd 角色新增指令
+   * @return 新增角色信息
+   */
   RoleAddCo add(RoleAddCmd roleAddCmd);
 
+  /**
+   * 根据id删除角色
+   *
+   * @param roleDeleteByIdCmd 根据id删除角色指令
+   */
   void deleteById(RoleDeleteByIdCmd roleDeleteByIdCmd);
 
+  /**
+   * 根据id更新角色
+   *
+   * @param roleUpdateCmd 根据id更新角色指令
+   * @return 角色更新内容
+   */
   RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
 
+  /**
+   * 分页查询角色
+   *
+   * @param roleFindAllCmd 分页查询角色指令
+   * @return 查询结果
+   */
   Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
 }
