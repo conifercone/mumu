@@ -22,6 +22,8 @@ import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
@@ -126,6 +128,37 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     }
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
+  public AccountUpdateRoleGrpcCo updateRoleById(AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    if (channel == null) {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return updateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
+      }
+    } else {
+      return updateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
+    }
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<AccountUpdateRoleGrpcCo> syncUpdateRoleById(
+      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncUpdateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
+      }).orElse(null);
+    } else {
+      return syncUpdateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
+    }
+  }
+
   private AccountRegisterGrpcCo registerFromGrpc(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -157,6 +190,23 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel);
     return accountServiceFutureStub.withCallCredentials(callCredentials)
         .updateById(accountUpdateByIdGrpcCmd);
+  }
+
+  private AccountUpdateRoleGrpcCo updateRoleByIdFromGrpc(
+      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .updateRoleById(accountUpdateRoleGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<AccountUpdateRoleGrpcCo> syncUpdateRoleByIdFromGrpc(
+      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .updateRoleById(accountUpdateRoleGrpcCmd);
   }
 
 }

@@ -18,12 +18,15 @@ package com.sky.centaur.authentication.client.grpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AccountGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -153,6 +156,62 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
         LOGGER.info("Sync AccountUpdateByIdGrpcCo: {}", accountUpdateByIdGrpcCo);
         Assertions.assertNotNull(accountUpdateByIdGrpcCo);
         Assertions.assertEquals(SexEnum.SEXLESS, accountUpdateByIdGrpcCo.getSex());
+        countDownLatch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void updateRoleById() throws ExecutionException, InterruptedException, TimeoutException {
+    AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd = AccountUpdateRoleGrpcCmd.newBuilder()
+        .setAccountUpdateRoleGrpcCo(
+            AccountUpdateRoleGrpcCo.newBuilder().setId(Int64Value.of(2))
+                .setRoleCode(StringValue.of("test"))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = accountGrpcService.updateRoleById(
+        accountUpdateRoleGrpcCmd, callCredentials);
+    LOGGER.info("AccountUpdateRoleGrpcCo: {}", accountUpdateRoleGrpcCo);
+    Assertions.assertNotNull(accountUpdateRoleGrpcCo);
+    Assertions.assertTrue(accountUpdateRoleGrpcCo.hasRoleCode());
+    Assertions.assertEquals("test", accountUpdateRoleGrpcCo.getRoleCode().getValue());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void syncUpdateRoleById() throws InterruptedException {
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+    AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd = AccountUpdateRoleGrpcCmd.newBuilder()
+        .setAccountUpdateRoleGrpcCo(
+            AccountUpdateRoleGrpcCo.newBuilder().setId(Int64Value.of(2))
+                .setRoleCode(StringValue.of("test"))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AccountUpdateRoleGrpcCo> accountUpdateRoleGrpcCoListenableFuture = accountGrpcService.syncUpdateRoleById(
+        accountUpdateRoleGrpcCmd, callCredentials);
+    accountUpdateRoleGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = accountUpdateRoleGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AccountUpdateRoleGrpcCo: {}", accountUpdateRoleGrpcCo);
+        Assertions.assertNotNull(accountUpdateRoleGrpcCo);
+        Assertions.assertTrue(accountUpdateRoleGrpcCo.hasRoleCode());
+        Assertions.assertEquals("test", accountUpdateRoleGrpcCo.getRoleCode().getValue());
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

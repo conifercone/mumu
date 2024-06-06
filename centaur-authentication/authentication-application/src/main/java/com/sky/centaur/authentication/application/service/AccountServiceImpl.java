@@ -29,6 +29,8 @@ import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
@@ -181,6 +183,37 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
     return accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
+  }
+
+  @NotNull
+  private static AccountUpdateRoleCo getAccountUpdateRoleCo(
+      @NotNull AccountUpdateRoleGrpcCmd request) {
+    AccountUpdateRoleCo accountUpdateRoleCo = new AccountUpdateRoleCo();
+    AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = request.getAccountUpdateRoleGrpcCo();
+    accountUpdateRoleCo.setId(
+        accountUpdateRoleGrpcCo.hasId() ? accountUpdateRoleGrpcCo.getId().getValue() : null);
+    accountUpdateRoleCo.setRoleCode(
+        accountUpdateRoleGrpcCo.hasRoleCode() ? accountUpdateRoleGrpcCo.getRoleCode().getValue()
+            : null);
+    return accountUpdateRoleCo;
+  }
+
+  @Override
+  @PreAuthorize("hasRole('admin')")
+  @Transactional(rollbackFor = Exception.class)
+  public void updateRoleById(AccountUpdateRoleGrpcCmd request,
+      StreamObserver<AccountUpdateRoleGrpcCo> responseObserver) {
+    AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
+    AccountUpdateRoleCo accountUpdateRoleCo = getAccountUpdateRoleCo(
+        request);
+    accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
+    try {
+      accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(request.getAccountUpdateRoleGrpcCo());
+    responseObserver.onCompleted();
   }
 
   @Override

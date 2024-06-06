@@ -54,20 +54,22 @@ public final class RoleConvertor {
   private RoleConvertor() {
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Role toEntity(@NotNull RoleDo roleDo) {
-    //noinspection DuplicatedCode
-    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = BEAN_TRANSFORMER
-        .skipTransformationForField("authorities")
-        .transform(roleDo, Role.class);
-    Optional.ofNullable(roleDo.getAuthorities()).filter(authorityList -> !CollectionUtils.isEmpty(
-        authorityList)).ifPresent(authorities -> role.setAuthorities(
-        authorityRepository.findAuthorityDoByIdIn(authorities).stream()
-            .map(AuthorityConvertor::toEntity)
-            .collect(Collectors.toList())));
-    return role;
+  public static Role toEntity(RoleDo roleDo) {
+    return Optional.ofNullable(roleDo).map(roleDataObject -> {
+      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
+          AuthorityRepository.class);
+      Role role = BEAN_TRANSFORMER
+          .skipTransformationForField("authorities")
+          .transform(roleDataObject, Role.class);
+      Optional.ofNullable(roleDataObject.getAuthorities())
+          .filter(authorityList -> !CollectionUtils.isEmpty(
+              authorityList)).ifPresent(authorities -> role.setAuthorities(
+              authorityRepository.findAuthorityDoByIdIn(authorities).stream()
+                  .map(AuthorityConvertor::toEntity)
+                  .collect(Collectors.toList())));
+      return role;
+    }).orElse(null);
   }
 
   @Contract("_ -> new")

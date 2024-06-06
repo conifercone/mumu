@@ -8,6 +8,7 @@ option java_outer_classname = "AccountServiceProto";
 service AccountService {
   rpc register (AccountRegisterGrpcCmd) returns (AccountRegisterGrpcCo);
   rpc updateById (AccountUpdateByIdGrpcCmd) returns (AccountUpdateByIdGrpcCo);
+  rpc updateRoleById(AccountUpdateRoleGrpcCmd) returns (AccountUpdateRoleGrpcCo);
 }
 
 message AccountRegisterGrpcCmd {
@@ -36,6 +37,15 @@ message AccountUpdateByIdGrpcCo{
   oneof sex_wrapper {
     SexEnum sex = 5;
   }
+}
+
+message AccountUpdateRoleGrpcCmd{
+  AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = 1;
+}
+
+message AccountUpdateRoleGrpcCo{
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue roleCode = 2;
 }
 
 enum SexEnum
