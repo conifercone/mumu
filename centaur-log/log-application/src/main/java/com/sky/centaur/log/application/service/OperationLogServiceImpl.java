@@ -16,6 +16,7 @@
 package com.sky.centaur.log.application.service;
 
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.log.application.operation.executor.OperationLogFindAllCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogQryCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSubmitCmdExe;
@@ -24,9 +25,11 @@ import com.sky.centaur.log.client.api.grpc.OperationLogServiceEmptyResult;
 import com.sky.centaur.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
+import com.sky.centaur.log.client.dto.OperationLogFindAllCmd;
 import com.sky.centaur.log.client.dto.OperationLogQryCmd;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import io.grpc.stub.StreamObserver;
@@ -36,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,12 +60,16 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
 
   private final OperationLogQryCmdExe operationLogQryCmdExe;
 
+  private final OperationLogFindAllCmdExe operationLogFindAllCmdExe;
+
   @Autowired
   public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
-      OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe) {
+      OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
+      OperationLogFindAllCmdExe operationLogFindAllCmdExe) {
     this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
     this.operationLogSaveCmdExe = operationLogSaveCmdExe;
     this.operationLogQryCmdExe = operationLogQryCmdExe;
+    this.operationLogFindAllCmdExe = operationLogFindAllCmdExe;
   }
 
   @Override
@@ -96,6 +104,11 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
     operationLogQryCmd.setId(id);
     return operationLogQryCmdExe.execute(operationLogQryCmd);
+  }
+
+  @Override
+  public Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
+    return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
   }
 
   @NotNull

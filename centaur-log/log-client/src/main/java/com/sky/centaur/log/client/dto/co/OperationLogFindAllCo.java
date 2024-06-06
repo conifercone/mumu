@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation;
+package com.sky.centaur.log.client.dto.co;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 操作日志领域模型
+ * 操作日志查询所有客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-public class OperationLog {
+@EqualsAndHashCode(callSuper = true)
+public class OperationLogFindAllCo extends BaseClientObject {
 
   /**
    * 唯一标识
@@ -70,16 +75,8 @@ public class OperationLog {
   /**
    * 操作日志的操作时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime operatingTime;
 
-  /**
-   * 操作日志的开始操作时间
-   */
-  private LocalDateTime operatingStartTime;
-
-
-  /**
-   * 操作日志的结束操作时间
-   */
-  private LocalDateTime operatingEndTime;
 }

@@ -16,13 +16,16 @@
 package com.sky.centaur.log.adapter.web;
 
 import com.sky.centaur.log.client.api.OperationLogService;
+import com.sky.centaur.log.client.dto.OperationLogFindAllCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,6 +66,15 @@ public class OperationLogController {
   @API(status = Status.STABLE, since = "1.0.0")
   public OperationLogQryCo findOperationLogById(@RequestParam(value = "id") String id) {
     return operationLogService.findOperationLogById(id);
+  }
+
+  @Operation(summary = "分页查询所有操作日志")
+  @GetMapping("/findAll")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Page<OperationLogFindAllCo> findAll(
+      @RequestBody OperationLogFindAllCmd operationLogFindAllCmd) {
+    return operationLogService.findAll(operationLogFindAllCmd);
   }
 
 }

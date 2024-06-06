@@ -17,6 +17,7 @@ package com.sky.centaur.log.domain.operation.gateway;
 
 import com.sky.centaur.log.domain.operation.OperationLog;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 /**
  * 操作日志领域网关
@@ -47,4 +48,14 @@ public interface OperationLogGateway {
    * @return 操作日志
    */
   Optional<OperationLog> findOperationLogById(String id);
+
+  /**
+   * 分页查询操作日志
+   *
+   * @param operationLog 查询条件
+   * @param pageNo       当前页
+   * @param pageSize     每页数量
+   * @return 查询结果
+   */
+  Page<OperationLog> findAll(OperationLog operationLog, int pageNo, int pageSize);
 }

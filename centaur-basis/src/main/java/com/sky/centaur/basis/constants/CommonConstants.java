@@ -34,6 +34,21 @@ public final class CommonConstants {
   public static final String STRING_FORMAT = "%s";
 
   /**
+   * es 英文映射前缀
+   */
+  public static final String ES_MAPPING_EN_SUFFIX = "en";
+
+  /**
+   * dot
+   */
+  public static final String DOT = ".";
+
+  /**
+   * es 查询英文映射
+   */
+  public static final String ES_QUERY_EN = DOT + ES_MAPPING_EN_SUFFIX;
+
+  /**
    * sql 左右模糊查询模板
    */
   public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = PERCENT_SIGN.concat(PERCENT_SIGN)

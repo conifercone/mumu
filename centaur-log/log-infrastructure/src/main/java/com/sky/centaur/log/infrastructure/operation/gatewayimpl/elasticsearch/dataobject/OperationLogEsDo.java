@@ -22,6 +22,8 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
 
 /**
  * 操作日志es数据对象
@@ -42,13 +44,23 @@ public class OperationLogEsDo {
   /**
    * 日志内容
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+      }
+  )
   private String content;
 
   /**
    * 操作日志的执行人
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+      }
+  )
   private String operator;
 
   /**
@@ -66,19 +78,34 @@ public class OperationLogEsDo {
   /**
    * 扩展参数，记录操作日志的修改详情
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+      }
+  )
   private String detail;
 
   /**
    * 操作日志成功的文本模板
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+      }
+  )
   private String success;
 
   /**
    * 操作日志失败的文本模板
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+      }
+  )
   private String fail;
 
   /**

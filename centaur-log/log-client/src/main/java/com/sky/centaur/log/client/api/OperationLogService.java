@@ -15,9 +15,12 @@
  */
 package com.sky.centaur.log.client.api;
 
+import com.sky.centaur.log.client.dto.OperationLogFindAllCmd;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
+import org.springframework.data.domain.Page;
 
 /**
  * 操作日志api
@@ -27,9 +30,33 @@ import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
  */
 public interface OperationLogService {
 
+  /**
+   * 操作日志提交
+   *
+   * @param operationLogSubmitCmd 操作日志提交指令
+   */
   void submit(OperationLogSubmitCmd operationLogSubmitCmd);
 
+  /**
+   * 操作日志保存
+   *
+   * @param operationLogSaveCmd 操作日志保存指令
+   */
   void save(OperationLogSaveCmd operationLogSaveCmd);
 
+  /**
+   * 根据id查询操作日志
+   *
+   * @param id 操作日志id
+   * @return 查询结果
+   */
   OperationLogQryCo findOperationLogById(String id);
+
+  /**
+   * 分页查询操作日志
+   *
+   * @param operationLogFindAllCmd 分页查询操作日志指令
+   * @return 查询结果
+   */
+  Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd);
 }

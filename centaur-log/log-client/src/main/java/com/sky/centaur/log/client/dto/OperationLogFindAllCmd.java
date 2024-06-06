@@ -13,73 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.operation;
+package com.sky.centaur.log.client.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 操作日志领域模型
+ * 操作日志查询所有指令
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-public class OperationLog {
+public class OperationLogFindAllCmd {
 
-  /**
-   * 唯一标识
-   */
-  private String id;
-
-  /**
-   * 日志内容
-   */
-  private String content;
-
-  /**
-   * 操作日志的执行人
-   */
-  private String operator;
-
-  /**
-   * 操作日志绑定的业务对象标识
-   */
-  private String bizNo;
-
-  /**
-   * 操作日志的种类
-   */
-  private String category;
-
-  /**
-   * 扩展参数，记录操作日志的修改详情
-   */
-  private String detail;
-
-  /**
-   * 操作日志成功的文本模板
-   */
-  private String success;
-
-  /**
-   * 操作日志失败的文本模板
-   */
-  private String fail;
-
-  /**
-   * 操作日志的操作时间
-   */
-  private LocalDateTime operatingTime;
-
+  private OperationLogFindAllCo operationLogFindAllCo;
   /**
    * 操作日志的开始操作时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime operatingStartTime;
-
 
   /**
    * 操作日志的结束操作时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime operatingEndTime;
+  /**
+   * 当前页码
+   */
+  private int pageNo = 0;
+  /**
+   * 每页数量
+   */
+  private int pageSize = 10;
 }

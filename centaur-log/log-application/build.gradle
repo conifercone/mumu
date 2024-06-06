@@ -10,4 +10,5 @@ dependencies {
     implementation libs.grpcSpringBootStarter
     implementation libs.springKafka
     implementation libs.springBootActuator
+    implementation libs.springDataCommons
 }

@@ -28,6 +28,6 @@ import lombok.Data;
 public class RoleFindAllCmd {
 
   private RoleFindAllCo roleFindAllCo;
-  private int pageNo;
-  private int pageSize;
+  private int pageNo = 0;
+  private int pageSize = 10;
 }

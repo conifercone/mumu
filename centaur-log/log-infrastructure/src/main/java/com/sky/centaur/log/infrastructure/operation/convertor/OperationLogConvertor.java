@@ -18,6 +18,7 @@ package com.sky.centaur.log.infrastructure.operation.convertor;
 import com.expediagroup.beans.BeanUtils;
 import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
@@ -85,6 +86,19 @@ public final class OperationLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {
     return BEAN_TRANSFORMER.transform(operationLogEsDo, OperationLog.class);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static @NotNull OperationLog toEntity(
+      @NotNull OperationLogFindAllCo operationLogFindAllCo) {
+    return BEAN_TRANSFORMER.transform(operationLogFindAllCo, OperationLog.class);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static @NotNull OperationLogFindAllCo toFindAllCo(@NotNull OperationLog operationLog) {
+    return BEAN_TRANSFORMER.transform(operationLog, OperationLogFindAllCo.class);
   }
 
 }

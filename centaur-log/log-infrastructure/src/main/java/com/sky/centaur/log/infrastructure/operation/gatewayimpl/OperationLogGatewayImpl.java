@@ -15,19 +15,34 @@
  */
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.CommonConstants.ES_QUERY_EN;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.basis.exception.DataConversionException;
+import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,15 +58,17 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   private final OperationLogEsRepository operationLogEsRepository;
   private final ObjectMapper objectMapper;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final ElasticsearchTemplate elasticsearchTemplate;
 
   @Autowired
   public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
       OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
-      PrimaryKeyGrpcService primaryKeyGrpcService) {
+      PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate) {
     this.operationLogKafkaRepository = operationLogKafkaRepository;
     this.operationLogEsRepository = operationLogEsRepository;
     this.objectMapper = objectMapper;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.elasticsearchTemplate = elasticsearchTemplate;
   }
 
   @Override
@@ -82,5 +99,85 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         () -> operationLog.setFail(String.format("未找到ID为%s的操作日志", id)));
     this.submit(operationLog);
     return optionalOperationLog;
+  }
+
+  @Override
+  public Page<OperationLog> findAll(OperationLog operationLog, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Criteria criteria = new Criteria();
+    Optional.ofNullable(operationLog).ifPresent(optLog -> {
+      Optional.ofNullable(optLog.getId())
+          .ifPresent(id -> criteria.and(
+              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getId)).matches(id)));
+      Optional.ofNullable(optLog.getContent())
+          .ifPresent(content -> {
+            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getContent);
+            criteria.and(
+                new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(content));
+          });
+      Optional.ofNullable(optLog.getOperator())
+          .ifPresent(operator -> {
+            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getOperator);
+            criteria.and(
+                new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(operator));
+          });
+      Optional.ofNullable(optLog.getBizNo())
+          .ifPresent(bizNo -> criteria.and(
+              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getBizNo)).matches(bizNo)));
+      Optional.ofNullable(optLog.getCategory())
+          .ifPresent(category -> criteria.and(
+              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getCategory)).matches(
+                  category)));
+      Optional.ofNullable(optLog.getDetail())
+          .ifPresent(detail -> {
+            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getDetail);
+            criteria.and(
+                new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(detail));
+          });
+      Optional.ofNullable(optLog.getSuccess())
+          .ifPresent(success -> {
+            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getSuccess);
+            criteria.and(
+                new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(success));
+          });
+      Optional.ofNullable(optLog.getFail())
+          .ifPresent(fail -> {
+            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getFail);
+            criteria.and(
+                new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(fail));
+          });
+
+      Optional.ofNullable(optLog.getOperatingTime())
+          .ifPresent(
+              operatingTime -> criteria.and(new Criteria(
+                  BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).matches(
+                  operatingTime)));
+      Optional.ofNullable(optLog.getOperatingStartTime())
+          .ifPresent(
+              operatingStartTime -> criteria.and(
+                  new Criteria(
+                      BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).greaterThan(
+                      operatingStartTime)));
+      Optional.ofNullable(optLog.getOperatingEndTime())
+          .ifPresent(
+              operatingEndTime -> criteria.and(
+                  new Criteria(
+                      BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).lessThan(
+                      operatingEndTime)));
+    });
+    Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
+        .addSort(
+            Sort.by(BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).descending());
+    SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
+        OperationLogEsDo.class);
+    List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
+        .map(SearchHit::getContent).map(OperationLogConvertor::toEntity)
+        .toList();
+    return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
   }
 }
