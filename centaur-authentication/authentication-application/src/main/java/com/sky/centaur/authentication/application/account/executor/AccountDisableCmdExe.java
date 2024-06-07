@@ -16,12 +16,13 @@
 package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 账户禁用指令执行器
@@ -40,8 +41,11 @@ public class AccountDisableCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public AccountDisableCo execute(@NotNull AccountDisableCmd accountDisableCmd) {
-    accountGateway.disable(accountDisableCmd.getAccountDisableCo().getId());
-    return accountDisableCmd.getAccountDisableCo();
+  public void execute(@NotNull AccountDisableCmd accountDisableCmd) {
+    Assert.notNull(accountDisableCmd, "AccountDisableCmd cannot be null");
+    Assert.notNull(accountDisableCmd.getAccountDisableCo(),
+        "AccountDisableCo cannot be null");
+    Optional.ofNullable(accountDisableCmd.getAccountDisableCo().getId())
+        .ifPresent(accountGateway::disable);
   }
 }

@@ -16,14 +16,12 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Empty;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
@@ -68,7 +66,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountRegisterGrpcCo register(AccountRegisterGrpcCmd accountRegisterGrpcCmd)
+  public Empty register(AccountRegisterGrpcCmd accountRegisterGrpcCmd)
       throws ExecutionException, InterruptedException, TimeoutException {
     if (channel == null) {
       Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
@@ -85,7 +83,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<AccountRegisterGrpcCo> syncRegister(
+  public ListenableFuture<Empty> syncRegister(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
@@ -98,7 +96,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountUpdateByIdGrpcCo updateById(AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd,
+  public Empty updateById(AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     if (channel == null) {
@@ -116,7 +114,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<AccountUpdateByIdGrpcCo> syncUpdateById(
+  public ListenableFuture<Empty> syncUpdateById(
       AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
@@ -129,7 +127,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountUpdateRoleGrpcCo updateRoleById(AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd,
+  public Empty updateRoleById(AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     if (channel == null) {
@@ -147,7 +145,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<AccountUpdateRoleGrpcCo> syncUpdateRoleById(
+  public ListenableFuture<Empty> syncUpdateRoleById(
       AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
@@ -159,7 +157,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     }
   }
 
-  private AccountRegisterGrpcCo registerFromGrpc(
+  private Empty registerFromGrpc(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd)
       throws ExecutionException, InterruptedException, TimeoutException {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
@@ -167,7 +165,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     return accountServiceFutureStub.register(accountRegisterGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<AccountRegisterGrpcCo> syncRegisterFromGrpc(
+  private @NotNull ListenableFuture<Empty> syncRegisterFromGrpc(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
         channel);
@@ -175,7 +173,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
 
-  private AccountUpdateByIdGrpcCo updateByIdFromGrpc(
+  private Empty updateByIdFromGrpc(
       AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
@@ -184,7 +182,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         .updateById(accountUpdateByIdGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<AccountUpdateByIdGrpcCo> syncUpdateByIdFromGrpc(
+  private @NotNull ListenableFuture<Empty> syncUpdateByIdFromGrpc(
       AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
         channel);
@@ -192,7 +190,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         .updateById(accountUpdateByIdGrpcCmd);
   }
 
-  private AccountUpdateRoleGrpcCo updateRoleByIdFromGrpc(
+  private Empty updateRoleByIdFromGrpc(
       AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
@@ -201,7 +199,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         .updateRoleById(accountUpdateRoleGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<AccountUpdateRoleGrpcCo> syncUpdateRoleByIdFromGrpc(
+  private @NotNull ListenableFuture<Empty> syncUpdateRoleByIdFromGrpc(
       AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
         channel);

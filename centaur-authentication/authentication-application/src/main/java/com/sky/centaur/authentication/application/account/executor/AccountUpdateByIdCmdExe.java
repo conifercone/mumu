@@ -16,14 +16,13 @@
 package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
-import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 账户根据id更新指令执行器
@@ -42,9 +41,9 @@ public class AccountUpdateByIdCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public AccountUpdateByIdCo execute(@NotNull AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    Account entity = AccountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo());
-    accountGateway.updateById(entity);
-    return accountUpdateByIdCmd.getAccountUpdateByIdCo();
+  public void execute(@NotNull AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    Assert.notNull(accountUpdateByIdCmd, "AccountUpdateByIdCmd cannot be null");
+    AccountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo())
+        .ifPresent(accountGateway::updateById);
   }
 }

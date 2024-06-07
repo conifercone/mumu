@@ -16,12 +16,13 @@
 package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 账户重置密码指令执行器
@@ -40,8 +41,11 @@ public class AccountResetPasswordCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public AccountResetPasswordCo execute(@NotNull AccountResetPasswordCmd accountResetPasswordCmd) {
-    accountGateway.resetPassword(accountResetPasswordCmd.getAccountResetPasswordCo().getId());
-    return accountResetPasswordCmd.getAccountResetPasswordCo();
+  public void execute(@NotNull AccountResetPasswordCmd accountResetPasswordCmd) {
+    Assert.notNull(accountResetPasswordCmd, "AccountResetPasswordCmd cannot be null");
+    Assert.notNull(accountResetPasswordCmd.getAccountResetPasswordCo(),
+        "AccountResetPasswordCo cannot be null");
+    Optional.ofNullable(accountResetPasswordCmd.getAccountResetPasswordCo().getId())
+        .ifPresent(accountGateway::resetPassword);
   }
 }

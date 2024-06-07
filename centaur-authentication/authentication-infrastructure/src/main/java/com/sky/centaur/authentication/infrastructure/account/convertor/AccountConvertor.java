@@ -34,7 +34,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 账户信息转换器
@@ -53,102 +52,117 @@ public final class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Account toEntity(@NotNull AccountDo accountDo) {
-    Account account = new Account(accountDo.getId(), accountDo.getUsername(),
-        accountDo.getPassword(),
-        accountDo.getEnabled(), accountDo.getAccountNonExpired(),
-        accountDo.getCredentialsNonExpired(),
-        accountDo.getAccountNonLocked(), RoleConvertor.toEntity(accountDo.getRole()).orElse(null));
-    account.setFounder(accountDo.getFounder());
-    account.setModifier(accountDo.getModifier());
-    account.setCreationTime(accountDo.getCreationTime());
-    account.setModificationTime(accountDo.getModificationTime());
-    account.setAvatarUrl(accountDo.getAvatarUrl());
-    account.setPhone(accountDo.getPhone());
-    account.setSex(accountDo.getSex());
-    account.setEmail(accountDo.getEmail());
-    return account;
+  public static Optional<Account> toEntity(AccountDo accountDo) {
+    return Optional.ofNullable(accountDo).map(accountDataObject -> {
+      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
+          accountDataObject.getPassword(),
+          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
+          accountDataObject.getCredentialsNonExpired(),
+          accountDataObject.getAccountNonLocked(),
+          RoleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
+      account.setFounder(accountDataObject.getFounder());
+      account.setModifier(accountDataObject.getModifier());
+      account.setCreationTime(accountDataObject.getCreationTime());
+      account.setModificationTime(accountDataObject.getModificationTime());
+      account.setAvatarUrl(accountDataObject.getAvatarUrl());
+      account.setPhone(accountDataObject.getPhone());
+      account.setSex(accountDataObject.getSex());
+      account.setEmail(accountDataObject.getEmail());
+      return account;
+    });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AccountDo toDataObject(@NotNull Account account) {
-    AccountDo accountDo = new AccountDo();
-    accountDo.setId(account.getId());
-    accountDo.setUsername(account.getUsername());
-    accountDo.setPassword(account.getPassword());
-    accountDo.setEnabled(account.isEnabled());
-    accountDo.setCredentialsNonExpired(account.isCredentialsNonExpired());
-    accountDo.setAccountNonLocked(account.isAccountNonLocked());
-    accountDo.setAccountNonExpired(account.isAccountNonExpired());
-    accountDo.setAvatarUrl(account.getAvatarUrl());
-    accountDo.setPhone(account.getPhone());
-    accountDo.setSex(account.getSex());
-    accountDo.setEmail(account.getEmail());
-    Optional.ofNullable(account.getRole())
-        .ifPresent(
-            role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole()).orElse(null)));
-    return accountDo;
+  public static Optional<AccountDo> toDataObject(Account account) {
+    return Optional.ofNullable(account).map(accountDomain -> {
+      AccountDo accountDo = new AccountDo();
+      accountDo.setId(accountDomain.getId());
+      accountDo.setUsername(accountDomain.getUsername());
+      accountDo.setPassword(accountDomain.getPassword());
+      accountDo.setEnabled(accountDomain.isEnabled());
+      accountDo.setCredentialsNonExpired(accountDomain.isCredentialsNonExpired());
+      accountDo.setAccountNonLocked(accountDomain.isAccountNonLocked());
+      accountDo.setAccountNonExpired(accountDomain.isAccountNonExpired());
+      accountDo.setAvatarUrl(accountDomain.getAvatarUrl());
+      accountDo.setPhone(accountDomain.getPhone());
+      accountDo.setSex(accountDomain.getSex());
+      accountDo.setEmail(accountDomain.getEmail());
+      Optional.ofNullable(accountDomain.getRole())
+          .ifPresent(
+              role -> accountDo.setRole(
+                  RoleConvertor.toDataObject(accountDomain.getRole()).orElse(null)));
+      return accountDo;
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Account toEntity(@NotNull AccountRegisterCo accountRegisterCo) {
-    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
-    Account account = new Account(
-        accountRegisterCo.getId() == null ?
-            SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
-            : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
-        accountRegisterCo.getPassword(),
-        roleRepository.findByCode(accountRegisterCo.getRoleCode())
-            .flatMap(RoleConvertor::toEntity).orElse(null));
-    accountRegisterCo.setId(account.getId());
-    account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
-    account.setPhone(accountRegisterCo.getPhone());
-    account.setSex(accountRegisterCo.getSex());
-    account.setEmail(accountRegisterCo.getEmail());
-    return account;
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Account toEntity(@NotNull AccountUpdateByIdCo accountUpdateByIdCo) {
-    Optional.ofNullable(accountUpdateByIdCo.getId())
-        .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-    AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
-    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateByIdCo.getId());
-    if (accountDoOptional.isPresent()) {
-      Account account = toEntity(accountDoOptional.get());
-      Optional.ofNullable(accountUpdateByIdCo.getAvatarUrl()).ifPresent(account::setAvatarUrl);
-      Optional.ofNullable(accountUpdateByIdCo.getPhone()).ifPresent(account::setPhone);
-      Optional.ofNullable(accountUpdateByIdCo.getSex()).ifPresent(account::setSex);
-      Optional.ofNullable(accountUpdateByIdCo.getEmail()).ifPresent(account::setEmail);
+  public static Optional<Account> toEntity(AccountRegisterCo accountRegisterCo) {
+    return Optional.ofNullable(accountRegisterCo).map(accountRegisterClientObject -> {
+      RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
+      Account account = new Account(
+          accountRegisterClientObject.getId() == null ?
+              SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()
+              : accountRegisterClientObject.getId(), accountRegisterClientObject.getUsername(),
+          accountRegisterClientObject.getPassword(),
+          roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
+              .flatMap(RoleConvertor::toEntity).orElse(null));
+      accountRegisterClientObject.setId(account.getId());
+      account.setAvatarUrl(accountRegisterClientObject.getAvatarUrl());
+      account.setPhone(accountRegisterClientObject.getPhone());
+      account.setSex(accountRegisterClientObject.getSex());
+      account.setEmail(accountRegisterClientObject.getEmail());
       return account;
-    } else {
-      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-    }
-
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Account toEntity(@NotNull AccountUpdateRoleCo accountUpdateRoleCo) {
-    Optional.ofNullable(accountUpdateRoleCo.getId())
-        .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-    AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
-    Optional<AccountDo> accountDoOptional = accountRepository.findById(accountUpdateRoleCo.getId());
-    AccountDo accountDo = accountDoOptional.orElseThrow(
-        () -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
-    Account account = toEntity(accountDo);
-    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
-    roleRepository.findByCode(accountUpdateRoleCo.getRoleCode())
-        .ifPresentOrElse(roleDo -> account.setRole(RoleConvertor.toEntity(roleDo).orElse(null)),
-            () -> {
-              throw new CentaurException(ResultCode.ROLE_DOES_NOT_EXIST);
-            });
-    return account;
+  public static Optional<Account> toEntity(AccountUpdateByIdCo accountUpdateByIdCo) {
+    return Optional.ofNullable(accountUpdateByIdCo).map(accountUpdateByIdClientObject -> {
+      Optional.ofNullable(accountUpdateByIdClientObject.getId())
+          .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+      AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
+      return accountRepository.findById(accountUpdateByIdClientObject.getId())
+          .flatMap(AccountConvertor::toEntity).map(account -> {
+            Optional.ofNullable(accountUpdateByIdClientObject.getAvatarUrl())
+                .ifPresent(account::setAvatarUrl);
+            Optional.ofNullable(accountUpdateByIdClientObject.getPhone())
+                .ifPresent(account::setPhone);
+            Optional.ofNullable(accountUpdateByIdClientObject.getSex()).ifPresent(account::setSex);
+            Optional.ofNullable(accountUpdateByIdClientObject.getEmail())
+                .ifPresent(account::setEmail);
+            return account;
+          }).orElse(null);
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AccountCurrentLoginQueryCo toCurrentLoginQueryCo(
-      @NotNull Account account) {
-    return BEAN_TRANSFORMER.transform(account, AccountCurrentLoginQueryCo.class);
+  public static Optional<Account> toEntity(AccountUpdateRoleCo accountUpdateRoleCo) {
+    return Optional.ofNullable(accountUpdateRoleCo).map(accountUpdateRoleClientObject -> {
+      Optional.ofNullable(accountUpdateRoleClientObject.getId())
+          .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+      AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
+      Optional<AccountDo> accountDoOptional = accountRepository.findById(
+          accountUpdateRoleClientObject.getId());
+      AccountDo accountDo = accountDoOptional.orElseThrow(
+          () -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
+      return toEntity(accountDo).map(account -> {
+        RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
+        roleRepository.findByCode(accountUpdateRoleClientObject.getRoleCode())
+            .ifPresentOrElse(roleDo -> account.setRole(RoleConvertor.toEntity(roleDo).orElse(null)),
+                () -> {
+                  throw new CentaurException(ResultCode.ROLE_DOES_NOT_EXIST);
+                });
+        return account;
+      }).orElse(null);
+    });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
+      Account account) {
+    return Optional.ofNullable(account)
+        .map(accountDomain -> BEAN_TRANSFORMER.transform(accountDomain,
+            AccountCurrentLoginQueryCo.class));
   }
 }

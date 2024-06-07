@@ -16,14 +16,13 @@
 package com.sky.centaur.authentication.application.account.executor;
 
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 账户注册指令执行器
@@ -42,9 +41,9 @@ public class AccountRegisterCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public AccountRegisterCo execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
-    Account entity = AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo());
-    accountGateway.register(entity);
-    return accountRegisterCmd.getAccountRegisterCo();
+  public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
+    Assert.notNull(accountRegisterCmd, "AccountRegisterCmd cannot be null");
+    AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
+        .ifPresent(accountGateway::register);
   }
 }

@@ -37,17 +37,17 @@ public class ExtensionProperties {
    * 分布式相关配置
    */
   @NestedConfigurationProperty
-  private DistributedProperties distributed;
+  private DistributedProperties distributed = new DistributedProperties();
 
   /**
    * sql相关配置
    */
   @NestedConfigurationProperty
-  private SqlProperties sql;
+  private SqlProperties sql = new SqlProperties();
 
   /**
    * 认证相关配置
    */
   @NestedConfigurationProperty
-  private AuthenticationProperties authentication;
+  private AuthenticationProperties authentication = new AuthenticationProperties();
 }

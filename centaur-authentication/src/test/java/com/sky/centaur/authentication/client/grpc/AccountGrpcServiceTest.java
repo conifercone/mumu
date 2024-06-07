@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
@@ -39,8 +40,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +60,6 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
 
   @Autowired
   public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc) {
@@ -74,15 +72,13 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
   public void register() throws ExecutionException, InterruptedException, TimeoutException {
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
-            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test")
-                .setPassword("test").setRoleCode("admin").setSex(SexEnum.SEXLESS)
+            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test1")
+                .setPassword("test1").setRoleCode("admin").setSex(SexEnum.SEXLESS)
                 .build())
         .build();
-    AccountRegisterGrpcCo accountRegisterGrpcCo = accountGrpcService.register(
+    Empty empty = accountGrpcService.register(
         accountRegisterGrpcCmd);
-    LOGGER.info("AccountRegisterGrpcCo: {}", accountRegisterGrpcCo);
-    Assertions.assertNotNull(accountRegisterGrpcCo);
-    Assertions.assertEquals("test", accountRegisterGrpcCo.getUsername());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -95,14 +91,12 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
                 .setPassword("test").setRoleCode("admin").setSex(SexEnum.SEXLESS)
                 .build())
         .build();
-    ListenableFuture<AccountRegisterGrpcCo> accountRegisterGrpcCoListenableFuture = accountGrpcService.syncRegister(
+    ListenableFuture<Empty> accountRegisterGrpcCoListenableFuture = accountGrpcService.syncRegister(
         accountRegisterGrpcCmd);
     accountRegisterGrpcCoListenableFuture.addListener(() -> {
       try {
-        AccountRegisterGrpcCo syncAccountRegisterGrpcCo = accountRegisterGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AccountRegisterGrpcCo: {}", syncAccountRegisterGrpcCo);
-        Assertions.assertNotNull(syncAccountRegisterGrpcCo);
-        Assertions.assertEquals("test", syncAccountRegisterGrpcCo.getUsername());
+        Empty empty = accountRegisterGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -126,11 +120,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = accountGrpcService.updateById(
+    Empty empty = accountGrpcService.updateById(
         accountUpdateByIdGrpcCmd, callCredentials);
-    LOGGER.info("AccountUpdateByIdGrpcCo: {}", accountUpdateByIdGrpcCo);
-    Assertions.assertNotNull(accountUpdateByIdGrpcCo);
-    Assertions.assertEquals(SexEnum.SEXLESS, accountUpdateByIdGrpcCo.getSex());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -148,14 +140,12 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AccountUpdateByIdGrpcCo> accountUpdateByIdGrpcCoListenableFuture = accountGrpcService.syncUpdateById(
+    ListenableFuture<Empty> accountUpdateByIdGrpcCoListenableFuture = accountGrpcService.syncUpdateById(
         accountUpdateByIdGrpcCmd, callCredentials);
     accountUpdateByIdGrpcCoListenableFuture.addListener(() -> {
       try {
-        AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = accountUpdateByIdGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AccountUpdateByIdGrpcCo: {}", accountUpdateByIdGrpcCo);
-        Assertions.assertNotNull(accountUpdateByIdGrpcCo);
-        Assertions.assertEquals(SexEnum.SEXLESS, accountUpdateByIdGrpcCo.getSex());
+        Empty empty = accountUpdateByIdGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -180,12 +170,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = accountGrpcService.updateRoleById(
+    Empty empty = accountGrpcService.updateRoleById(
         accountUpdateRoleGrpcCmd, callCredentials);
-    LOGGER.info("AccountUpdateRoleGrpcCo: {}", accountUpdateRoleGrpcCo);
-    Assertions.assertNotNull(accountUpdateRoleGrpcCo);
-    Assertions.assertTrue(accountUpdateRoleGrpcCo.hasRoleCode());
-    Assertions.assertEquals("test", accountUpdateRoleGrpcCo.getRoleCode().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -203,15 +190,12 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AccountUpdateRoleGrpcCo> accountUpdateRoleGrpcCoListenableFuture = accountGrpcService.syncUpdateRoleById(
+    ListenableFuture<Empty> accountUpdateRoleGrpcCoListenableFuture = accountGrpcService.syncUpdateRoleById(
         accountUpdateRoleGrpcCmd, callCredentials);
     accountUpdateRoleGrpcCoListenableFuture.addListener(() -> {
       try {
-        AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = accountUpdateRoleGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AccountUpdateRoleGrpcCo: {}", accountUpdateRoleGrpcCo);
-        Assertions.assertNotNull(accountUpdateRoleGrpcCo);
-        Assertions.assertTrue(accountUpdateRoleGrpcCo.hasRoleCode());
-        Assertions.assertEquals("test", accountUpdateRoleGrpcCo.getRoleCode().getValue());
+        Empty empty = accountUpdateRoleGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

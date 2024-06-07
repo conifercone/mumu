@@ -57,8 +57,8 @@ public class AccountControllerTest {
         {
              "accountRegisterCo": {
                  "id": 31241232131,
-                 "username": "test",
-                 "password": "test",
+                 "username": "test1",
+                 "password": "test1",
                  "enabled": true,
                  "roleCode": "admin",
                  "avatarUrl": "https://github.com/users/conifercone",

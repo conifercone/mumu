@@ -21,12 +21,7 @@ import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
-import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 
 /**
  * 账户功能API
@@ -40,33 +35,29 @@ public interface AccountService {
    * 账户注册
    *
    * @param accountRegisterCmd 账户注册指令
-   * @return 账户注册客户端对象
    */
-  AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd);
+  void register(AccountRegisterCmd accountRegisterCmd);
 
   /**
    * 根据id更新账户基本信息
    *
    * @param accountUpdateByIdCmd 根据id更新账户基本信息指令
-   * @return 更新后账户基本信息
    */
-  AccountUpdateByIdCo updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
+  void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
 
   /**
    * 根据id更新账户角色信息
    *
    * @param accountUpdateRoleCmd 根据id更新账户角色信息指令
-   * @return 更新后角色信息
    */
-  AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd);
+  void updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd);
 
   /**
    * 禁用账户
    *
    * @param accountDisableCmd 禁用账户指令
-   * @return 禁用的账户
    */
-  AccountDisableCo disable(AccountDisableCmd accountDisableCmd);
+  void disable(AccountDisableCmd accountDisableCmd);
 
   /**
    * 查询当前登录账户信息
@@ -86,9 +77,8 @@ public interface AccountService {
    * 重置密码
    *
    * @param accountResetPasswordCmd 重置密码指令
-   * @return 重置的账户
    */
-  AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
+  void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
 
   /**
    * 删除当前账户

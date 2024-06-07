@@ -22,12 +22,7 @@ import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
-import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
-import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -64,33 +59,33 @@ public class AccountController {
   @PostMapping("/register")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountRegisterCo register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
-    return accountService.register(accountRegisterCmd);
+  public void register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
+    accountService.register(accountRegisterCmd);
   }
 
   @Operation(summary = "账户基本信息更新")
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountUpdateByIdCo updateById(@RequestBody AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    return accountService.updateById(accountUpdateByIdCmd);
+  public void updateById(@RequestBody AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    accountService.updateById(accountUpdateByIdCmd);
   }
 
   @Operation(summary = "账户角色更新")
   @PutMapping("/updateRoleById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountUpdateRoleCo updateRoleById(
+  public void updateRoleById(
       @RequestBody AccountUpdateRoleCmd accountUpdateRoleCmd) {
-    return accountService.updateRoleById(accountUpdateRoleCmd);
+    accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
   @Operation(summary = "禁用账户")
   @PutMapping("/disable")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountDisableCo disable(@RequestBody AccountDisableCmd accountDisableCmd) {
-    return accountService.disable(accountDisableCmd);
+  public void disable(@RequestBody AccountDisableCmd accountDisableCmd) {
+    accountService.disable(accountDisableCmd);
   }
 
   @Operation(summary = "获取当前登录账户信息")
@@ -113,9 +108,9 @@ public class AccountController {
   @PutMapping("/resetPassword")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountResetPasswordCo resetPassword(
+  public void resetPassword(
       @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
-    return accountService.resetPassword(accountResetPasswordCmd);
+    accountService.resetPassword(accountResetPasswordCmd);
   }
 
   @Operation(summary = "删除当前账户")

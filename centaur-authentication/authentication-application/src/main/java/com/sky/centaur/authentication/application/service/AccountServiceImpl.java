@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.application.service;
 
+import com.google.protobuf.Empty;
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
@@ -37,10 +38,8 @@ import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
-import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
-import com.sky.centaur.authentication.client.dto.co.AccountResetPasswordCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.enums.SexEnum;
@@ -103,14 +102,14 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountRegisterCo register(AccountRegisterCmd accountRegisterCmd) {
-    return accountRegisterCmdExe.execute(accountRegisterCmd);
+  public void register(AccountRegisterCmd accountRegisterCmd) {
+    accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void register(AccountRegisterGrpcCmd request,
-      StreamObserver<AccountRegisterGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
     AccountRegisterCo accountRegisterCo = getAccountRegisterCo(
         request);
@@ -120,7 +119,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAccountRegisterCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 
@@ -140,8 +139,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  public AccountUpdateByIdCo updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    return accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
+  public void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
   }
 
   @NotNull
@@ -165,7 +164,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @PreAuthorize("hasAuthority('message.write')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdGrpcCmd request,
-      StreamObserver<AccountUpdateByIdGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
     AccountUpdateByIdCo accountUpdateByIdCo = getAccountUpdateByIdCo(
         request);
@@ -175,14 +174,14 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAccountUpdateByIdGrpcCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountUpdateRoleCo updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
-    return accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
+  public void updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
   }
 
   @NotNull
@@ -202,7 +201,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateRoleById(AccountUpdateRoleGrpcCmd request,
-      StreamObserver<AccountUpdateRoleGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
     AccountUpdateRoleCo accountUpdateRoleCo = getAccountUpdateRoleCo(
         request);
@@ -212,14 +211,14 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAccountUpdateRoleGrpcCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountDisableCo disable(AccountDisableCmd accountDisableCmd) {
-    return accountDisableCmdExe.execute(accountDisableCmd);
+  public void disable(AccountDisableCmd accountDisableCmd) {
+    accountDisableCmdExe.execute(accountDisableCmd);
   }
 
   @Override
@@ -235,8 +234,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountResetPasswordCo resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
-    return accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
+  public void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
+    accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
   }
 
   @Override

@@ -103,20 +103,22 @@ public class AccountGatewayImpl implements AccountGateway {
           .build());
       throw new AccountAlreadyExistsException(existingAccount.getUsername());
     };
-    AccountDo dataObject = AccountConvertor.toDataObject(account);
-    // 密码加密
-    dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
-    findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
-        () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
-            accountAlreadyExistsConsumer, () -> {
-              accountRepository.persist(dataObject);
-              operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-                  .setOperationLogSubmitCo(
-                      OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                          .setBizNo(account.getUsername())
-                          .setSuccess(String.format("%s注册成功", account.getUsername())).build())
-                  .build());
-            }));
+    AccountConvertor.toDataObject(account).ifPresent(dataObject -> {
+      // 密码加密
+      dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
+      findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
+          () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
+              accountAlreadyExistsConsumer, () -> {
+                accountRepository.persist(dataObject);
+                operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+                    .setOperationLogSubmitCo(
+                        OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                            .setBizNo(account.getUsername())
+                            .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+                    .build());
+              }));
+    });
+
   }
 
   @Override
@@ -124,7 +126,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
-        .map(AccountConvertor::toEntity);
+        .flatMap(AccountConvertor::toEntity);
   }
 
   @Override
@@ -132,7 +134,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
-        .map(AccountConvertor::toEntity);
+        .flatMap(AccountConvertor::toEntity);
   }
 
   @Override
@@ -144,8 +146,7 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresentOrElse((accountId) -> {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
-            AccountDo accountDoSource = AccountConvertor.toDataObject(account);
-            accountRepository.merge(accountDoSource);
+            AccountConvertor.toDataObject(account).ifPresent(accountRepository::merge);
           } finally {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
@@ -158,13 +159,15 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      AccountDo accountDoSource = AccountConvertor.toDataObject(account);
-      accountRepository.merge(accountDoSource);
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+    AccountConvertor.toDataObject(account).ifPresent(accountDo -> {
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
+      try {
+        accountRepository.merge(accountDo);
+      } finally {
+        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
+      }
+    });
+
   }
 
   @Override
@@ -190,7 +193,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
             loginAccountId -> accountRepository.findById(loginAccountId)
-                .map(AccountConvertor::toEntity))
+                .flatMap(AccountConvertor::toEntity))
         .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
   }
 
@@ -256,7 +259,8 @@ public class AccountGatewayImpl implements AccountGateway {
     Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
         pageRequest);
     List<Account> accounts = repositoryAll.getContent().stream()
-        .map(AccountConvertor::toEntity)
+        .map(accountDo -> AccountConvertor.toEntity(accountDo).orElse(null))
+        .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());
   }
