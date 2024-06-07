@@ -20,10 +20,8 @@ import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import org.springframework.data.domain.Page;
 
 /**
@@ -38,9 +36,8 @@ public interface AuthorityService {
    * 新增权限
    *
    * @param authorityAddCmd 权限新增指令
-   * @return 新增的权限
    */
-  AuthorityAddCo add(AuthorityAddCmd authorityAddCmd);
+  void add(AuthorityAddCmd authorityAddCmd);
 
   /**
    * 根据id删除权限
@@ -53,9 +50,8 @@ public interface AuthorityService {
    * 根据id更新权限
    *
    * @param authorityUpdateCmd 权限更新指令
-   * @return 权限更新内容
    */
-  AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd);
+  void updateById(AuthorityUpdateCmd authorityUpdateCmd);
 
   /**
    * 分页查询权限

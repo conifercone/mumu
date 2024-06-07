@@ -33,10 +33,10 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,10 +77,11 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
-    AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
-    authorityRepository.findById(authority.getId()).ifPresentOrElse(authorityDo -> {
-      throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
-    }, () -> authorityRepository.persist(dataObject));
+    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
+        .ifPresent(dataObject -> authorityRepository.findById(authority.getId())
+            .ifPresentOrElse(authorityDo -> {
+              throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
+            }, () -> authorityRepository.persist(dataObject)));
   }
 
   @Override
@@ -103,14 +104,17 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@NotNull Authority authority) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      AuthorityDo dataObject = AuthorityConvertor.toDataObject(authority);
-      authorityRepository.merge(dataObject);
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+  public void updateById(Authority authority) {
+    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
+        .ifPresent(dataObject -> {
+          Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
+          try {
+            authorityRepository.merge(dataObject);
+          } finally {
+            Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
+          }
+        });
+
   }
 
   @Override
@@ -134,14 +138,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
-        .map(AuthorityConvertor::toEntity)
+        .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+        .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
   public Optional<Authority> findById(Long id) {
-    return Optional.ofNullable(id).flatMap(authorityRepository::findById).map(
+    return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
         AuthorityConvertor::toEntity);
   }
 }

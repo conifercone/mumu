@@ -94,28 +94,26 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AuthorityAddCo add(AuthorityAddCmd authorityAddCmd) {
-    return authorityAddCmdExe.execute(authorityAddCmd);
+  public void add(AuthorityAddCmd authorityAddCmd) {
+    authorityAddCmdExe.execute(authorityAddCmd);
   }
 
   @Override
   @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void add(AuthorityAddGrpcCmd request,
-      StreamObserver<AuthorityAddGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     AuthorityAddCmd authorityAddCmd = new AuthorityAddCmd();
     AuthorityAddCo authorityAddCo = getAuthorityAddCo(
         request);
     authorityAddCmd.setAuthorityAddCo(authorityAddCo);
-    AuthorityAddGrpcCo authorityAddGrpcCo = request.getAuthorityAddCo();
     try {
-      AuthorityAddCo addCo = authorityAddCmdExe.execute(authorityAddCmd);
-      authorityAddGrpcCo = authorityAddGrpcCo.toBuilder().setId(Int64Value.of(addCo.getId()))
-          .build();
+      authorityAddCmdExe.execute(authorityAddCmd);
+
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(authorityAddGrpcCo);
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 
@@ -168,8 +166,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AuthorityUpdateCo updateById(AuthorityUpdateCmd authorityUpdateCmd) {
-    return authorityUpdateCmdExe.execute(authorityUpdateCmd);
+  public void updateById(AuthorityUpdateCmd authorityUpdateCmd) {
+    authorityUpdateCmdExe.execute(authorityUpdateCmd);
   }
 
   @Override
@@ -204,7 +202,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AuthorityUpdateGrpcCmd request,
-      StreamObserver<AuthorityUpdateGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
     AuthorityUpdateCo authorityUpdateCo = getAuthorityUpdateCo(
         request);
@@ -214,7 +212,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getAuthorityUpdateCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 

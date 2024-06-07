@@ -23,11 +23,12 @@ import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 查询权限指令执行器
@@ -46,12 +47,16 @@ public class AuthorityFindAllCmdExe {
     this.authorityGateway = authorityGateway;
   }
 
-  public Page<AuthorityFindAllCo> execute(@NotNull AuthorityFindAllCmd authorityFindAllCmd) {
-    Authority authority = AuthorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo());
+  public Page<AuthorityFindAllCo> execute(AuthorityFindAllCmd authorityFindAllCmd) {
+    Assert.notNull(authorityFindAllCmd, "AuthorityFindAllCmd cannot be null");
+    Authority authority = AuthorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo())
+        .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findAll(authority,
         authorityFindAllCmd.getPageNo(), authorityFindAllCmd.getPageSize());
     List<AuthorityFindAllCo> authorityFindAllCoList = authorities.getContent().stream()
-        .map(AuthorityConvertor::toFindAllCo).toList();
+        .map(authorityDomain -> AuthorityConvertor.toFindAllCo(authorityDomain).orElse(null))
+        .filter(
+            Objects::nonNull).toList();
     return new PageImpl<>(authorityFindAllCoList, authorities.getPageable(),
         authorities.getTotalElements());
   }

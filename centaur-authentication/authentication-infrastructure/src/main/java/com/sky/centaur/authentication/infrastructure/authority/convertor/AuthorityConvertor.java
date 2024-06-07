@@ -33,7 +33,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 权限信息转换器
@@ -52,56 +51,67 @@ public final class AuthorityConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Authority toEntity(@NotNull AuthorityDo authorityDo) {
-    return new Authority(authorityDo.getId(), authorityDo.getCode(), authorityDo.getName());
+  public static Optional<Authority> toEntity(AuthorityDo authorityDo) {
+    return Optional.ofNullable(authorityDo).map(
+        authorityDataObject -> BEAN_TRANSFORMER.transform(authorityDataObject, Authority.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AuthorityDo toDataObject(@NotNull Authority authority) {
-    return BEAN_TRANSFORMER.transform(authority, AuthorityDo.class);
+  public static Optional<AuthorityDo> toDataObject(Authority authority) {
+    return Optional.ofNullable(authority).map(
+        authorityDomain -> BEAN_TRANSFORMER.transform(authorityDomain, AuthorityDo.class));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Authority toEntity(@NotNull AuthorityAddCo authorityAddCo) {
-    Authority authority = BEAN_TRANSFORMER.transform(authorityAddCo, Authority.class);
-    if (authority.getId() == null) {
-      authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
-      authorityAddCo.setId(authority.getId());
-    }
-    return authority;
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Authority toEntity(@NotNull AuthorityUpdateCo authorityUpdateCo) {
-    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    if (authorityUpdateCo.getId() == null) {
-      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
-    }
-    Optional<AuthorityDo> authorityDoOptional = authorityRepository.findById(
-        authorityUpdateCo.getId());
-    if (authorityDoOptional.isPresent()) {
-      Authority authority = toEntity(authorityDoOptional.get());
-      BEAN_TRANSFORMER.skipTransformationForField(BeanUtil.getNullPropertyNames(authorityUpdateCo))
-          .transform(authorityUpdateCo, authority);
+  public static Optional<Authority> toEntity(AuthorityAddCo authorityAddCo) {
+    return Optional.ofNullable(authorityAddCo).map(authorityAddClientObject -> {
+      Authority authority = BEAN_TRANSFORMER.transform(authorityAddClientObject, Authority.class);
+      if (authority.getId() == null) {
+        authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+        authorityAddClientObject.setId(authority.getId());
+      }
       return authority;
-    } else {
-      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
-    }
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Authority toEntity(@NotNull AuthorityFindAllCo authorityFindAllCo) {
-    return BEAN_TRANSFORMER.transform(authorityFindAllCo, Authority.class);
+  public static Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
+    return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
+      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
+          AuthorityRepository.class);
+      if (authorityUpdateClientObject.getId() == null) {
+        throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+      }
+      return authorityRepository.findById(
+              authorityUpdateClientObject.getId()).flatMap(AuthorityConvertor::toEntity)
+          .map(authority -> {
+            BEAN_TRANSFORMER.skipTransformationForField(
+                    BeanUtil.getNullPropertyNames(authorityUpdateClientObject))
+                .transform(authorityUpdateClientObject, authority);
+            return authority;
+          }).orElse(null);
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AuthorityFindByIdCo toFindByIdCo(@NotNull Authority authority) {
-    return BEAN_TRANSFORMER.transform(authority, AuthorityFindByIdCo.class);
+  public static Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
+    return Optional.ofNullable(authorityFindAllCo).map(
+        authorityFindAllClientObject -> BEAN_TRANSFORMER.transform(authorityFindAllClientObject,
+            Authority.class));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull AuthorityFindAllCo toFindAllCo(@NotNull Authority authority) {
-    return BEAN_TRANSFORMER.transform(authority, AuthorityFindAllCo.class);
+  public static Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
+    return Optional.ofNullable(authority).map(
+        authorityDomain -> BEAN_TRANSFORMER.transform(authorityDomain,
+            AuthorityFindByIdCo.class));
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<AuthorityFindAllCo> toFindAllCo(Authority authority) {
+    return Optional.ofNullable(authority).map(
+        authorityDomain -> BEAN_TRANSFORMER.transform(authorityDomain,
+            AuthorityFindAllCo.class));
   }
 }

@@ -21,10 +21,8 @@ import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
-import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -62,8 +60,8 @@ public class AuthorityController {
   @PostMapping("/add")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityAddCo add(@RequestBody AuthorityAddCmd authorityAddCmd) {
-    return authorityService.add(authorityAddCmd);
+  public void add(@RequestBody AuthorityAddCmd authorityAddCmd) {
+    authorityService.add(authorityAddCmd);
   }
 
   @Operation(summary = "根据主键删除权限")
@@ -78,8 +76,8 @@ public class AuthorityController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityUpdateCo updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
-    return authorityService.updateById(authorityUpdateCmd);
+  public void updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
+    authorityService.updateById(authorityUpdateCmd);
   }
 
   @Operation(summary = "查询权限")

@@ -43,7 +43,7 @@ public class AuthorityFindByIdCmdExe {
 
   public AuthorityFindByIdCo execute(AuthorityFindByIdCmd authorityFindByIdCmd) {
     return Optional.ofNullable(authorityFindByIdCmd)
-        .flatMap(findByIdCmd -> authorityGateway.findById(findByIdCmd.getId())).map(
+        .flatMap(findByIdCmd -> authorityGateway.findById(findByIdCmd.getId())).flatMap(
             AuthorityConvertor::toFindByIdCo).orElse(null);
 
   }

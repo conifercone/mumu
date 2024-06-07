@@ -7,9 +7,9 @@ option java_package = "com.sky.centaur.authentication.client.api.grpc";
 option java_outer_classname = "AuthorityServiceProto";
 
 service AuthorityService {
-  rpc add (AuthorityAddGrpcCmd) returns (AuthorityAddGrpcCo);
+  rpc add (AuthorityAddGrpcCmd) returns (google.protobuf.Empty);
   rpc deleteById (AuthorityDeleteByIdGrpcCmd) returns (google.protobuf.Empty);
-  rpc updateById (AuthorityUpdateGrpcCmd) returns (AuthorityUpdateGrpcCo);
+  rpc updateById (AuthorityUpdateGrpcCmd) returns (google.protobuf.Empty);
   rpc findAll (AuthorityFindAllGrpcCmd) returns (PageOfAuthorityFindAllGrpcCo);
 }
 

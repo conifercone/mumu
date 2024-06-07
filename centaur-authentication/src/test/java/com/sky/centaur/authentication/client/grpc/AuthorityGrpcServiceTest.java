@@ -85,11 +85,9 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AuthorityAddGrpcCo authorityAddGrpcCo = authorityGrpcService.add(authorityAddGrpcCmd,
+    Empty empty = authorityGrpcService.add(authorityAddGrpcCmd,
         callCredentials);
-    LOGGER.info("AuthorityAddGrpcCo: {}", authorityAddGrpcCo);
-    Assertions.assertNotNull(authorityAddGrpcCo);
-    Assertions.assertEquals("test", authorityAddGrpcCo.getCode().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -107,15 +105,13 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AuthorityAddGrpcCo> authorityAddGrpcCoFuture = authorityGrpcService.syncAdd(
+    ListenableFuture<Empty> authorityAddGrpcCoFuture = authorityGrpcService.syncAdd(
         authorityAddGrpcCmd,
         callCredentials);
     authorityAddGrpcCoFuture.addListener(() -> {
       try {
-        AuthorityAddGrpcCo syncAuthorityAddGrpcCo = authorityAddGrpcCoFuture.get();
-        LOGGER.info("Sync AuthorityAddGrpcCo: {}", syncAuthorityAddGrpcCo);
-        Assertions.assertNotNull(syncAuthorityAddGrpcCo);
-        Assertions.assertEquals("test", syncAuthorityAddGrpcCo.getCode().getValue());
+        Empty empty = authorityAddGrpcCoFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -184,12 +180,10 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    AuthorityUpdateGrpcCo authorityUpdateGrpcCo = authorityGrpcService.updateById(
+    Empty empty = authorityGrpcService.updateById(
         authorityUpdateGrpcCmd,
         callCredentials);
-    LOGGER.info("AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
-    Assertions.assertNotNull(authorityUpdateGrpcCo);
-    Assertions.assertEquals("test", authorityUpdateGrpcCo.getName().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -207,15 +201,13 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<AuthorityUpdateGrpcCo> authorityUpdateGrpcCoListenableFuture = authorityGrpcService.syncUpdateById(
+    ListenableFuture<Empty> authorityUpdateGrpcCoListenableFuture = authorityGrpcService.syncUpdateById(
         authorityUpdateGrpcCmd,
         callCredentials);
     authorityUpdateGrpcCoListenableFuture.addListener(() -> {
       try {
-        AuthorityUpdateGrpcCo authorityUpdateGrpcCo = authorityUpdateGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AuthorityUpdateGrpcCo: {}", authorityUpdateGrpcCo);
-        Assertions.assertNotNull(authorityUpdateGrpcCo);
-        Assertions.assertEquals("test", authorityUpdateGrpcCo.getName().getValue());
+        Empty empty = authorityUpdateGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

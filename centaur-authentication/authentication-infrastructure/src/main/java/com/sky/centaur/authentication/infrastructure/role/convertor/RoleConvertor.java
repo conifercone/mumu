@@ -31,6 +31,7 @@ import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
@@ -64,7 +65,8 @@ public final class RoleConvertor {
           .filter(authorityList -> !CollectionUtils.isEmpty(
               authorityList)).ifPresent(authorities -> role.setAuthorities(
               authorityRepository.findAuthorityDoByIdIn(authorities).stream()
-                  .map(AuthorityConvertor::toEntity)
+                  .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                  .filter(Objects::nonNull)
                   .collect(Collectors.toList())));
       return role;
     });
@@ -99,7 +101,9 @@ public final class RoleConvertor {
         roleAddClientObject.setId(role.getId());
       }
       role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-              roleAddClientObject.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+              roleAddClientObject.getAuthorities()).stream()
+          .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+          .filter(Objects::nonNull)
           .collect(Collectors.toList()));
       return role;
     });
@@ -120,7 +124,9 @@ public final class RoleConvertor {
         Optional.ofNullable(roleUpdateClientObject.getAuthorities())
             .ifPresent(authorities -> roleDomain.setAuthorities(
                 authorityRepository.findAuthorityDoByIdIn(
-                        authorities).stream().map(AuthorityConvertor::toEntity)
+                        authorities).stream()
+                    .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList())));
         return roleDomain;
       })).orElse(null);
@@ -139,7 +145,8 @@ public final class RoleConvertor {
         role.setAuthorities(
             authorityRepository.findAuthorityDoByIdIn(roleFindAllClientObject.getAuthorities())
                 .stream()
-                .map(AuthorityConvertor::toEntity).collect(
+                .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                .filter(Objects::nonNull).collect(
                     Collectors.toList()));
       }
       return role;

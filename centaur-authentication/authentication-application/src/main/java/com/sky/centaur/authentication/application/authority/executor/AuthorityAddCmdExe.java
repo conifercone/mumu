@@ -17,14 +17,13 @@
 package com.sky.centaur.authentication.application.authority.executor;
 
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
-import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
-import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 添加权限指令执行器
@@ -43,9 +42,9 @@ public class AuthorityAddCmdExe {
     this.authorityGateway = authorityGateway;
   }
 
-  public AuthorityAddCo execute(@NotNull AuthorityAddCmd authorityAddCmd) {
-    Authority authority = AuthorityConvertor.toEntity(authorityAddCmd.getAuthorityAddCo());
-    authorityGateway.add(authority);
-    return authorityAddCmd.getAuthorityAddCo();
+  public void execute(@NotNull AuthorityAddCmd authorityAddCmd) {
+    Assert.notNull(authorityAddCmd, "authorityAddCmd cannot be null");
+    AuthorityConvertor.toEntity(authorityAddCmd.getAuthorityAddCo())
+        .ifPresent(authorityGateway::add);
   }
 }
