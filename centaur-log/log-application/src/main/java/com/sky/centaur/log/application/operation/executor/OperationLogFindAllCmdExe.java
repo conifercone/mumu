@@ -21,6 +21,7 @@ import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,8 @@ public class OperationLogFindAllCmdExe {
       @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
     OperationLog operationLog = OperationLogConvertor.toEntity(
-        Optional.ofNullable(operationLogFindAllCmd.getOperationLogFindAllCo())
-            .orElseGet(OperationLogFindAllCo::new));
+            operationLogFindAllCmd.getOperationLogFindAllCo())
+        .orElseGet(OperationLog::new);
     Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
         .ifPresent(operationLog::setOperatingStartTime);
     Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
@@ -60,7 +61,8 @@ public class OperationLogFindAllCmdExe {
         operationLogFindAllCmd.getPageNo(),
         operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
-        .map(OperationLogConvertor::toFindAllCo).toList();
+        .map(res -> OperationLogConvertor.toFindAllCo(res).orElse(null)).filter(Objects::nonNull)
+        .toList();
     return new PageImpl<>(operationLogFindAllCos, operationLogs.getPageable(),
         operationLogs.getTotalElements());
   }

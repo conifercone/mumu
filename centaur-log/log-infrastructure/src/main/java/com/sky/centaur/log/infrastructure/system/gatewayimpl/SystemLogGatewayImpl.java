@@ -51,16 +51,17 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   public void submit(SystemLog systemLog) {
-    try {
-      systemLogKafkaRepository.send("system-log", objectMapper.writeValueAsString(
-          SystemLogConvertor.toKafkaDataObject(systemLog)));
-    } catch (JsonProcessingException e) {
-      throw new DataConversionException();
-    }
+    SystemLogConvertor.toKafkaDataObject(systemLog).ifPresent(res -> {
+      try {
+        systemLogKafkaRepository.send("system-log", objectMapper.writeValueAsString(res));
+      } catch (JsonProcessingException e) {
+        throw new DataConversionException();
+      }
+    });
   }
 
   @Override
   public void save(SystemLog systemLog) {
-    systemLogEsRepository.save(SystemLogConvertor.toEsDataObject(systemLog));
+    SystemLogConvertor.toEsDataObject(systemLog).ifPresent(systemLogEsRepository::save);
   }
 }

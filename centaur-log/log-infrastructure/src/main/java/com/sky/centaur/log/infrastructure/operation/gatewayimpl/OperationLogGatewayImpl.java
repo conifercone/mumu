@@ -31,6 +31,7 @@ import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -73,23 +74,25 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public void submit(OperationLog operationLog) {
-    try {
-      operationLogKafkaRepository.send("operation-log", objectMapper.writeValueAsString(
-          OperationLogConvertor.toKafkaDataObject(operationLog)));
-    } catch (JsonProcessingException e) {
-      throw new DataConversionException();
-    }
+    OperationLogConvertor.toKafkaDataObject(operationLog).ifPresent(res -> {
+      try {
+        operationLogKafkaRepository.send("operation-log", objectMapper.writeValueAsString(
+            res));
+      } catch (JsonProcessingException e) {
+        throw new DataConversionException();
+      }
+    });
   }
 
   @Override
   public void save(OperationLog operationLog) {
-    operationLogEsRepository.save(OperationLogConvertor.toEsDataObject(operationLog));
+    OperationLogConvertor.toEsDataObject(operationLog).ifPresent(operationLogEsRepository::save);
   }
 
   @Override
   public Optional<OperationLog> findOperationLogById(String id) {
     Optional<OperationLog> optionalOperationLog = operationLogEsRepository.findById(
-        id).map(OperationLogConvertor::toEntity);
+        id).flatMap(OperationLogConvertor::toEntity);
     OperationLog operationLog = new OperationLog();
     operationLog.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
     operationLog.setBizNo(id);
@@ -176,7 +179,9 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
         OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(OperationLogConvertor::toEntity)
+        .map(SearchHit::getContent).map(res -> OperationLogConvertor.toEntity(res).orElse(null))
+        .filter(
+            Objects::nonNull)
         .toList();
     return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
   }

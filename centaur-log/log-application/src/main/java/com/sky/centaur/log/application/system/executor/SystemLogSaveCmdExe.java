@@ -16,12 +16,12 @@
 package com.sky.centaur.log.application.system.executor;
 
 import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
-import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 系统日志保存指令执行器
@@ -40,7 +40,8 @@ public class SystemLogSaveCmdExe {
   }
 
   public void execute(@NotNull SystemLogSaveCmd systemLogSaveCmd) {
-    SystemLogSaveCo systemLogSaveCo = systemLogSaveCmd.getSystemLogSaveCo();
-    systemLogGateway.save(SystemLogConvertor.toEntity(systemLogSaveCo));
+    Assert.notNull(systemLogSaveCmd, "SystemLogSaveCmd cannot be null");
+    SystemLogConvertor.toEntity(systemLogSaveCmd.getSystemLogSaveCo())
+        .ifPresent(systemLogGateway::save);
   }
 }

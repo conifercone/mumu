@@ -16,12 +16,12 @@
 package com.sky.centaur.log.application.system.executor;
 
 import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
-import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 系统日志提交指令执行器
@@ -40,7 +40,8 @@ public class SystemLogSubmitCmdExe {
   }
 
   public void execute(@NotNull SystemLogSubmitCmd systemLogSubmitCmd) {
-    SystemLogSubmitCo systemLogSubmitCo = systemLogSubmitCmd.getSystemLogSubmitCo();
-    systemLogGateway.submit(SystemLogConvertor.toEntity(systemLogSubmitCo));
+    Assert.notNull(systemLogSubmitCmd, "SystemLogSubmitCmd cannot null");
+    SystemLogConvertor.toEntity(systemLogSubmitCmd.getSystemLogSubmitCo())
+        .ifPresent(systemLogGateway::submit);
   }
 }

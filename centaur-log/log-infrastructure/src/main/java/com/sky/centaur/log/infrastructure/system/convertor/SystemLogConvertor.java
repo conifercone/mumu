@@ -31,7 +31,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 系统日志转换器
@@ -50,31 +49,36 @@ public final class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull SystemLogKafkaDo toKafkaDataObject(@NotNull SystemLog systemLog) {
-    return BEAN_TRANSFORMER.transform(systemLog, SystemLogKafkaDo.class);
+  public static Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
+    return Optional.ofNullable(systemLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogKafkaDo.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull SystemLogEsDo toEsDataObject(@NotNull SystemLog systemLog) {
-    return BEAN_TRANSFORMER.transform(systemLog, SystemLogEsDo.class);
+  public static Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
+    return Optional.ofNullable(systemLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogEsDo.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull SystemLog toEntity(@NotNull SystemLogSubmitCo systemLogSubmitCo) {
-    SystemLog systemLog = BEAN_TRANSFORMER.transform(systemLogSubmitCo, SystemLog.class);
-    systemLog.setId(
-        Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
-            .map(span -> span.context().traceId()).orElseGet(() ->
-                String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake())));
-    systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
-    return systemLog;
+  public static Optional<SystemLog> toEntity(SystemLogSubmitCo systemLogSubmitCo) {
+    return Optional.ofNullable(systemLogSubmitCo).map(res -> {
+      SystemLog systemLog = BEAN_TRANSFORMER.transform(res, SystemLog.class);
+      systemLog.setId(
+          Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
+              .map(span -> span.context().traceId()).orElseGet(() ->
+                  String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake())));
+      systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
+      return systemLog;
+    });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull SystemLog toEntity(@NotNull SystemLogSaveCo systemLogSaveCo) {
-    return BEAN_TRANSFORMER.transform(systemLogSaveCo, SystemLog.class);
+  public static Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
+    return Optional.ofNullable(systemLogSaveCo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
   }
 }

@@ -16,12 +16,11 @@
 package com.sky.centaur.log.application.operation.executor;
 
 import com.sky.centaur.log.client.dto.OperationLogSubmitCmd;
-import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 操作日志提交指令执行器
@@ -39,8 +38,9 @@ public class OperationLogSubmitCmdExe {
     this.operationLogGateway = operationLogGateway;
   }
 
-  public void execute(@NotNull OperationLogSubmitCmd operationLogSubmitCmd) {
-    OperationLogSubmitCo operationLogSubmitCo = operationLogSubmitCmd.getOperationLogSubmitCo();
-    operationLogGateway.submit(OperationLogConvertor.toEntity(operationLogSubmitCo));
+  public void execute(OperationLogSubmitCmd operationLogSubmitCmd) {
+    Assert.notNull(operationLogSubmitCmd, "OperationLogSubmitCmd cannot be null");
+    OperationLogConvertor.toEntity(operationLogSubmitCmd.getOperationLogSubmitCo())
+        .ifPresent(operationLogGateway::submit);
   }
 }

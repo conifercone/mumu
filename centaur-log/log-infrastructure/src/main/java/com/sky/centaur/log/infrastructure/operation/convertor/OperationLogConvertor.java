@@ -32,7 +32,6 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 操作日志转换器
@@ -51,54 +50,63 @@ public final class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLogKafkaDo toKafkaDataObject(@NotNull OperationLog operationLog) {
-    return BEAN_TRANSFORMER.transform(operationLog, OperationLogKafkaDo.class);
+  public static Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogKafkaDo.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLogEsDo toEsDataObject(@NotNull OperationLog operationLog) {
-    return BEAN_TRANSFORMER.transform(operationLog, OperationLogEsDo.class);
+  public static Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogEsDo.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLog toEntity(@NotNull OperationLogSubmitCo operationLogSubmitCo) {
-    OperationLog operationLog = BEAN_TRANSFORMER.transform(operationLogSubmitCo,
-        OperationLog.class);
-    operationLog.setId(
-        Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
-            .map(span -> span.context().traceId()).orElseGet(() ->
-                String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()))
-    );
-    operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
-    return operationLog;
+  public static Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
+    return Optional.ofNullable(operationLogSubmitCo).map(res -> {
+      OperationLog operationLog = BEAN_TRANSFORMER.transform(res,
+          OperationLog.class);
+      operationLog.setId(
+          Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
+              .map(span -> span.context().traceId()).orElseGet(() ->
+                  String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()))
+      );
+      operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
+      return operationLog;
+    });
+
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLog toEntity(@NotNull OperationLogSaveCo operationLogSaveCo) {
-    return BEAN_TRANSFORMER.transform(operationLogSaveCo, OperationLog.class);
+  public static Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
+    return Optional.ofNullable(operationLogSaveCo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
   }
 
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLog toEntity(@NotNull OperationLogEsDo operationLogEsDo) {
-    return BEAN_TRANSFORMER.transform(operationLogEsDo, OperationLog.class);
+  public static Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
+    return Optional.ofNullable(operationLogEsDo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLog toEntity(
-      @NotNull OperationLogFindAllCo operationLogFindAllCo) {
-    return BEAN_TRANSFORMER.transform(operationLogFindAllCo, OperationLog.class);
+  public static Optional<OperationLog> toEntity(
+      OperationLogFindAllCo operationLogFindAllCo) {
+    return Optional.ofNullable(operationLogFindAllCo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull OperationLogFindAllCo toFindAllCo(@NotNull OperationLog operationLog) {
-    return BEAN_TRANSFORMER.transform(operationLog, OperationLogFindAllCo.class);
+  public static Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogFindAllCo.class));
   }
 
 }

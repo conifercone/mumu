@@ -16,12 +16,12 @@
 package com.sky.centaur.log.application.operation.executor;
 
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
-import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 操作日志保存指令执行器
@@ -40,7 +40,8 @@ public class OperationLogSaveCmdExe {
   }
 
   public void execute(@NotNull OperationLogSaveCmd operationLogSaveCmd) {
-    OperationLogSaveCo operationLogSaveCo = operationLogSaveCmd.getOperationLogSaveCo();
-    operationLogGateway.save(OperationLogConvertor.toEntity(operationLogSaveCo));
+    Assert.notNull(operationLogSaveCmd, "OperationLogSaveCmd cannot be null");
+    OperationLogConvertor.toEntity(operationLogSaveCmd.getOperationLogSaveCo())
+        .ifPresent(operationLogGateway::save);
   }
 }
