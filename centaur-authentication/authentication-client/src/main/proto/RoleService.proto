@@ -7,9 +7,9 @@ option java_package = "com.sky.centaur.authentication.client.api.grpc";
 option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
-  rpc add (RoleAddGrpcCmd) returns (RoleAddGrpcCo);
+  rpc add (RoleAddGrpcCmd) returns (google.protobuf.Empty);
   rpc deleteById (RoleDeleteByIdGrpcCmd) returns (google.protobuf.Empty);
-  rpc updateById (RoleUpdateGrpcCmd) returns (RoleUpdateGrpcCo);
+  rpc updateById (RoleUpdateGrpcCmd) returns (google.protobuf.Empty);
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
 }
 

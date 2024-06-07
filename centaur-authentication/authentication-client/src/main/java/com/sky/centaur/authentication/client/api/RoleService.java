@@ -19,9 +19,7 @@ import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
-import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import org.springframework.data.domain.Page;
 
 /**
@@ -36,9 +34,8 @@ public interface RoleService {
    * 新增角色
    *
    * @param roleAddCmd 角色新增指令
-   * @return 新增角色信息
    */
-  RoleAddCo add(RoleAddCmd roleAddCmd);
+  void add(RoleAddCmd roleAddCmd);
 
   /**
    * 根据id删除角色
@@ -51,9 +48,8 @@ public interface RoleService {
    * 根据id更新角色
    *
    * @param roleUpdateCmd 根据id更新角色指令
-   * @return 角色更新内容
    */
-  RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd);
+  void updateById(RoleUpdateCmd roleUpdateCmd);
 
   /**
    * 分页查询角色

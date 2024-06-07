@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,11 +48,13 @@ public class RoleFindAllCmdExe {
   }
 
   public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = RoleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo());
+    Role role = RoleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo())
+        .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
         roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
     List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
-        .map(RoleConvertor::toFindAllCo).toList();
+        .map(roleDomain -> RoleConvertor.toFindAllCo(roleDomain).orElse(null))
+        .filter(Objects::nonNull).toList();
     return new PageImpl<>(roleFindAllCoList, roles.getPageable(),
         roles.getTotalElements());
   }

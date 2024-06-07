@@ -35,8 +35,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -55,7 +53,7 @@ public final class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Role toEntity(RoleDo roleDo) {
+  public static Optional<Role> toEntity(RoleDo roleDo) {
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
@@ -69,86 +67,98 @@ public final class RoleConvertor {
                   .map(AuthorityConvertor::toEntity)
                   .collect(Collectors.toList())));
       return role;
-    }).orElse(null);
-  }
-
-  @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull RoleDo toDataObject(@NotNull Role role) {
-    RoleDo roleDo = BEAN_TRANSFORMER
-        .skipTransformationForField("authorities")
-        .transform(role, RoleDo.class);
-    if (!CollectionUtils.isEmpty(role.getAuthorities())) {
-      roleDo.setAuthorities(
-          role.getAuthorities().stream().map(Authority::getId).collect(Collectors.toList()));
-    }
-    return roleDo;
-  }
-
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Role toEntity(@NotNull RoleAddCo roleAddCo) {
-    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = BEAN_TRANSFORMER
-        .skipTransformationForField("authorities")
-        .transform(roleAddCo, Role.class);
-    if (role.getId() == null) {
-      role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
-      roleAddCo.setId(role.getId());
-    }
-    role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-            roleAddCo.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
-        .collect(Collectors.toList()));
-    return role;
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Role toEntity(@NotNull RoleUpdateCo roleUpdateCo) {
-    if (roleUpdateCo.getId() == null) {
-      throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
-    }
-    //noinspection DuplicatedCode
-    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
-    Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateCo.getId());
-    if (roleDoOptional.isPresent()) {
-      Role role = toEntity(roleDoOptional.get());
-      Optional.ofNullable(roleUpdateCo.getName()).ifPresent(role::setName);
-      Optional.ofNullable(roleUpdateCo.getCode()).ifPresent(role::setCode);
-      Optional.ofNullable(roleUpdateCo.getAuthorities())
-          .ifPresent(authorities -> role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-                  authorities).stream().map(AuthorityConvertor::toEntity)
-              .collect(Collectors.toList())));
+  public static Optional<RoleDo> toDataObject(Role role) {
+    return Optional.ofNullable(role).map(roleDomain -> {
+      RoleDo roleDo = BEAN_TRANSFORMER
+          .skipTransformationForField("authorities")
+          .transform(roleDomain, RoleDo.class);
+      if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
+        roleDo.setAuthorities(
+            roleDomain.getAuthorities().stream().map(Authority::getId)
+                .collect(Collectors.toList()));
+      }
+      return roleDo;
+    });
+  }
+
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<Role> toEntity(RoleAddCo roleAddCo) {
+    return Optional.ofNullable(roleAddCo).map(roleAddClientObject -> {
+      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
+          AuthorityRepository.class);
+      Role role = BEAN_TRANSFORMER
+          .skipTransformationForField("authorities")
+          .transform(roleAddClientObject, Role.class);
+      if (role.getId() == null) {
+        role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+        roleAddClientObject.setId(role.getId());
+      }
+      role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
+              roleAddClientObject.getAuthorities()).stream().map(AuthorityConvertor::toEntity)
+          .collect(Collectors.toList()));
       return role;
-    } else {
-      throw new CentaurException(ResultCode.DATA_DOES_NOT_EXIST);
-    }
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull Role toEntity(@NotNull RoleFindAllCo roleFindAllCo) {
-    AuthorityRepository authorityRepository = SpringContextUtil.getBean(AuthorityRepository.class);
-    Role role = BEAN_TRANSFORMER
-        .skipTransformationForField("authorities")
-        .transform(roleFindAllCo, Role.class);
-    if (!CollectionUtils.isEmpty(roleFindAllCo.getAuthorities())) {
-      role.setAuthorities(
-          authorityRepository.findAuthorityDoByIdIn(roleFindAllCo.getAuthorities()).stream()
-              .map(AuthorityConvertor::toEntity).collect(
-                  Collectors.toList()));
-    }
-    return role;
+  public static Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
+    return Optional.ofNullable(roleUpdateCo).map(roleUpdateClientObject -> {
+      Optional.ofNullable(roleUpdateClientObject.getId())
+          .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
+          AuthorityRepository.class);
+      RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
+      Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
+      return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
+        Optional.ofNullable(roleUpdateClientObject.getName()).ifPresent(roleDomain::setName);
+        Optional.ofNullable(roleUpdateClientObject.getCode()).ifPresent(roleDomain::setCode);
+        Optional.ofNullable(roleUpdateClientObject.getAuthorities())
+            .ifPresent(authorities -> roleDomain.setAuthorities(
+                authorityRepository.findAuthorityDoByIdIn(
+                        authorities).stream().map(AuthorityConvertor::toEntity)
+                    .collect(Collectors.toList())));
+        return roleDomain;
+      })).orElse(null);
+    });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static @NotNull RoleFindAllCo toFindAllCo(@NotNull Role role) {
-    RoleFindAllCo roleFindAllCo = BEAN_TRANSFORMER
-        .skipTransformationForField("authorities")
-        .transform(role, RoleFindAllCo.class);
-    if (!CollectionUtils.isEmpty(role.getAuthorities())) {
-      roleFindAllCo.setAuthorities(role.getAuthorities().stream().map(Authority::getId).collect(
-          Collectors.toList()));
-    }
-    return roleFindAllCo;
+  public static Optional<Role> toEntity(RoleFindAllCo roleFindAllCo) {
+    return Optional.ofNullable(roleFindAllCo).map(roleFindAllClientObject -> {
+      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
+          AuthorityRepository.class);
+      Role role = BEAN_TRANSFORMER
+          .skipTransformationForField("authorities")
+          .transform(roleFindAllClientObject, Role.class);
+      if (!CollectionUtils.isEmpty(roleFindAllClientObject.getAuthorities())) {
+        role.setAuthorities(
+            authorityRepository.findAuthorityDoByIdIn(roleFindAllClientObject.getAuthorities())
+                .stream()
+                .map(AuthorityConvertor::toEntity).collect(
+                    Collectors.toList()));
+      }
+      return role;
+    });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<RoleFindAllCo> toFindAllCo(Role role) {
+    return Optional.ofNullable(role).map(roleDomain -> {
+      RoleFindAllCo roleFindAllCo = BEAN_TRANSFORMER
+          .skipTransformationForField("authorities")
+          .transform(roleDomain, RoleFindAllCo.class);
+      if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
+        roleFindAllCo.setAuthorities(
+            roleDomain.getAuthorities().stream().map(Authority::getId).collect(
+                Collectors.toList()));
+      }
+      return roleFindAllCo;
+    });
+
   }
 }

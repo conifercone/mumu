@@ -58,7 +58,7 @@ public final class AccountConvertor {
         accountDo.getPassword(),
         accountDo.getEnabled(), accountDo.getAccountNonExpired(),
         accountDo.getCredentialsNonExpired(),
-        accountDo.getAccountNonLocked(), RoleConvertor.toEntity(accountDo.getRole()));
+        accountDo.getAccountNonLocked(), RoleConvertor.toEntity(accountDo.getRole()).orElse(null));
     account.setFounder(accountDo.getFounder());
     account.setModifier(accountDo.getModifier());
     account.setCreationTime(accountDo.getCreationTime());
@@ -86,7 +86,8 @@ public final class AccountConvertor {
     accountDo.setSex(account.getSex());
     accountDo.setEmail(account.getEmail());
     Optional.ofNullable(account.getRole())
-        .ifPresent(role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole())));
+        .ifPresent(
+            role -> accountDo.setRole(RoleConvertor.toDataObject(account.getRole()).orElse(null)));
     return accountDo;
   }
 
@@ -99,7 +100,7 @@ public final class AccountConvertor {
             : accountRegisterCo.getId(), accountRegisterCo.getUsername(),
         accountRegisterCo.getPassword(),
         roleRepository.findByCode(accountRegisterCo.getRoleCode())
-            .map(RoleConvertor::toEntity).orElse(null));
+            .flatMap(RoleConvertor::toEntity).orElse(null));
     accountRegisterCo.setId(account.getId());
     account.setAvatarUrl(accountRegisterCo.getAvatarUrl());
     account.setPhone(accountRegisterCo.getPhone());
@@ -138,9 +139,10 @@ public final class AccountConvertor {
     Account account = toEntity(accountDo);
     RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
     roleRepository.findByCode(accountUpdateRoleCo.getRoleCode())
-        .ifPresentOrElse(roleDo -> account.setRole(RoleConvertor.toEntity(roleDo)), () -> {
-          throw new CentaurException(ResultCode.ROLE_DOES_NOT_EXIST);
-        });
+        .ifPresentOrElse(roleDo -> account.setRole(RoleConvertor.toEntity(roleDo).orElse(null)),
+            () -> {
+              throw new CentaurException(ResultCode.ROLE_DOES_NOT_EXIST);
+            });
     return account;
   }
 

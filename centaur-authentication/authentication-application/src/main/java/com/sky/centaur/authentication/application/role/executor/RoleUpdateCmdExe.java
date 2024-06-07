@@ -17,7 +17,6 @@
 package com.sky.centaur.authentication.application.role.executor;
 
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -25,6 +24,7 @@ import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * 角色更新指令执行器
@@ -43,9 +43,10 @@ public class RoleUpdateCmdExe {
     this.roleGateway = roleGateway;
   }
 
-  public RoleUpdateCo execute(@NotNull RoleUpdateCmd roleUpdateCmd) {
-    Role role = RoleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo());
+  public void execute(@NotNull RoleUpdateCmd roleUpdateCmd) {
+    Assert.notNull(roleUpdateCmd, "RoleUpdateCmd cannot be null");
+    Assert.notNull(roleUpdateCmd.getRoleUpdateCo(), "RoleUpdateCo cannot be null");
+    Role role = RoleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo()).orElse(null);
     roleGateway.updateById(role);
-    return roleUpdateCmd.getRoleUpdateCo();
   }
 }

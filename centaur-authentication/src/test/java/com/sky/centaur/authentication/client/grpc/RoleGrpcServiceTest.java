@@ -85,11 +85,9 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    RoleAddGrpcCo roleAddGrpcCo = roleGrpcService.add(roleAddGrpcCmd,
+    Empty empty = roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
-    LOGGER.info("RoleAddGrpcCo: {}", roleAddGrpcCo);
-    Assertions.assertNotNull(roleAddGrpcCo);
-    Assertions.assertEquals("test", roleAddGrpcCo.getCode().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -107,15 +105,13 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<RoleAddGrpcCo> roleAddGrpcCoListenableFuture = roleGrpcService.syncAdd(
+    ListenableFuture<Empty> roleAddGrpcCoListenableFuture = roleGrpcService.syncAdd(
         roleAddGrpcCmd,
         callCredentials);
     roleAddGrpcCoListenableFuture.addListener(() -> {
       try {
-        RoleAddGrpcCo syncRoleAddGrpcCo = roleAddGrpcCoListenableFuture.get();
-        LOGGER.info("Sync RoleAddGrpcCo: {}", syncRoleAddGrpcCo);
-        Assertions.assertNotNull(syncRoleAddGrpcCo);
-        Assertions.assertEquals("test", syncRoleAddGrpcCo.getCode().getValue());
+        Empty empty = roleAddGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -183,12 +179,10 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    RoleUpdateGrpcCo roleUpdateGrpcCo = roleGrpcService.updateById(
+    Empty empty = roleGrpcService.updateById(
         roleUpdateGrpcCmd,
         callCredentials);
-    LOGGER.info("RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
-    Assertions.assertNotNull(roleUpdateGrpcCo);
-    Assertions.assertEquals("test", roleUpdateGrpcCo.getName().getValue());
+    Assertions.assertNotNull(empty);
   }
 
   @Test
@@ -205,15 +199,13 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
-    ListenableFuture<RoleUpdateGrpcCo> roleUpdateGrpcCoListenableFuture = roleGrpcService.syncUpdateById(
+    ListenableFuture<Empty> roleUpdateGrpcCoListenableFuture = roleGrpcService.syncUpdateById(
         roleUpdateGrpcCmd,
         callCredentials);
     roleUpdateGrpcCoListenableFuture.addListener(() -> {
       try {
-        RoleUpdateGrpcCo roleUpdateGrpcCo = roleUpdateGrpcCoListenableFuture.get();
-        LOGGER.info("Sync RoleUpdateGrpcCo: {}", roleUpdateGrpcCo);
-        Assertions.assertNotNull(roleUpdateGrpcCo);
-        Assertions.assertEquals("test", roleUpdateGrpcCo.getName().getValue());
+        Empty empty = roleUpdateGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

@@ -85,8 +85,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public RoleAddCo add(RoleAddCmd roleAddCmd) {
-    return roleAddCmdExe.execute(roleAddCmd);
+  public void add(RoleAddCmd roleAddCmd) {
+    roleAddCmdExe.execute(roleAddCmd);
   }
 
   @Override
@@ -97,8 +97,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public RoleUpdateCo updateById(RoleUpdateCmd roleUpdateCmd) {
-    return roleUpdateCmdExe.execute(roleUpdateCmd);
+  public void updateById(RoleUpdateCmd roleUpdateCmd) {
+    roleUpdateCmdExe.execute(roleUpdateCmd);
   }
 
   @Override
@@ -110,18 +110,16 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Override
   @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
-  public void add(RoleAddGrpcCmd request, StreamObserver<RoleAddGrpcCo> responseObserver) {
+  public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
     RoleAddCo roleAddCo = getRoleAddCo(request);
     roleAddCmd.setRoleAddCo(roleAddCo);
-    RoleAddGrpcCo roleAddGrpcCo = request.getRoleAddCo();
     try {
-      RoleAddCo addCo = roleAddCmdExe.execute(roleAddCmd);
-      roleAddGrpcCo = roleAddGrpcCo.toBuilder().setId(Int64Value.of(addCo.getId())).build();
+      roleAddCmdExe.execute(roleAddCmd);
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(roleAddGrpcCo);
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 
@@ -173,7 +171,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(RoleUpdateGrpcCmd request,
-      StreamObserver<RoleUpdateGrpcCo> responseObserver) {
+      StreamObserver<Empty> responseObserver) {
     RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
     RoleUpdateCo roleUpdateCo = getRoleUpdateCo(
         request);
@@ -183,7 +181,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     } catch (CentaurException e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(request.getRoleUpdateCo());
+    responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
 

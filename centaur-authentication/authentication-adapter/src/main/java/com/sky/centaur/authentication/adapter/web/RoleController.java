@@ -20,9 +20,7 @@ import com.sky.centaur.authentication.client.dto.RoleAddCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
-import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
-import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -60,8 +58,8 @@ public class RoleController {
   @PostMapping("/add")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleAddCo add(@RequestBody RoleAddCmd roleAddCmd) {
-    return roleService.add(roleAddCmd);
+  public void add(@RequestBody RoleAddCmd roleAddCmd) {
+    roleService.add(roleAddCmd);
   }
 
   @Operation(summary = "根据id删除角色")
@@ -76,8 +74,8 @@ public class RoleController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleUpdateCo updateById(@RequestBody RoleUpdateCmd roleUpdateCmd) {
-    return roleService.updateById(roleUpdateCmd);
+  public void updateById(@RequestBody RoleUpdateCmd roleUpdateCmd) {
+    roleService.updateById(roleUpdateCmd);
   }
 
   @Operation(summary = "查询角色")

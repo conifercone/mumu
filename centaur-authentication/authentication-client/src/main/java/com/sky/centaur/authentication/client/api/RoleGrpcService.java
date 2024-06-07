@@ -21,13 +21,11 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
-import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
@@ -72,7 +70,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleAddGrpcCo add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials)
+  public Empty add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     if (channel != null) {
       return addFromGrpc(roleAddGrpcCmd, callCredentials);
@@ -89,7 +87,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<RoleAddGrpcCo> syncAdd(RoleAddGrpcCmd roleAddGrpcCmd,
+  public ListenableFuture<Empty> syncAdd(RoleAddGrpcCmd roleAddGrpcCmd,
       AuthCallCredentials callCredentials) {
     if (channel != null) {
       return syncAddFromGrpc(roleAddGrpcCmd, callCredentials);
@@ -135,7 +133,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public RoleUpdateGrpcCo updateById(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+  public Empty updateById(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     //noinspection DuplicatedCode
@@ -154,7 +152,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<RoleUpdateGrpcCo> syncUpdateById(
+  public ListenableFuture<Empty> syncUpdateById(
       RoleUpdateGrpcCmd roleUpdateGrpcCmd,
       AuthCallCredentials callCredentials) {
     if (channel != null) {
@@ -200,7 +198,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     }
   }
 
-  private RoleAddGrpcCo addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
+  private Empty addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
@@ -208,7 +206,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         .get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<RoleAddGrpcCo> syncAddFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
+  private @NotNull ListenableFuture<Empty> syncAddFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
       AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd);
@@ -232,7 +230,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         .deleteById(roleDeleteByIdGrpcCmd);
   }
 
-  private RoleUpdateGrpcCo updateByIdFromGrpc(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
+  private Empty updateByIdFromGrpc(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
       AuthCallCredentials callCredentials)
       throws ExecutionException, InterruptedException, TimeoutException {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
@@ -241,7 +239,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
         .updateById(roleUpdateGrpcCmd).get(3, TimeUnit.SECONDS);
   }
 
-  private @NotNull ListenableFuture<RoleUpdateGrpcCo> syncUpdateByIdFromGrpc(
+  private @NotNull ListenableFuture<Empty> syncUpdateByIdFromGrpc(
       RoleUpdateGrpcCmd roleUpdateGrpcCmd,
       AuthCallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(

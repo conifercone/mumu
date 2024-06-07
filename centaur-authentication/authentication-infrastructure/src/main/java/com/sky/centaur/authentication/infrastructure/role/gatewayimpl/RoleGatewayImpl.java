@@ -34,6 +34,7 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -76,8 +77,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
-    RoleDo roleDo = RoleConvertor.toDataObject(role);
-    roleRepository.persist(roleDo);
+    Optional.ofNullable(role).flatMap(RoleConvertor::toDataObject)
+        .ifPresent(roleRepository::persist);
   }
 
   @Override
@@ -102,14 +103,15 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@NotNull Role role) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      RoleDo roleDo = RoleConvertor.toDataObject(role);
-      roleRepository.merge(roleDo);
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+  public void updateById(Role role) {
+    Optional.ofNullable(role).ifPresent(roleDomain -> {
+      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
+      try {
+        RoleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
+      } finally {
+        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
+      }
+    });
   }
 
   @Override
@@ -165,7 +167,8 @@ public class RoleGatewayImpl implements RoleGateway {
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);
     List<Role> roles = repositoryAll.getContent().stream()
-        .map(RoleConvertor::toEntity)
+        .map(roleDo -> RoleConvertor.toEntity(roleDo).orElse(null))
+        .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }
