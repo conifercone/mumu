@@ -16,6 +16,7 @@
 package com.sky.centaur.log.application.service;
 
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.log.application.system.executor.SystemLogFindAllCmdExe;
 import com.sky.centaur.log.application.system.executor.SystemLogSaveCmdExe;
 import com.sky.centaur.log.application.system.executor.SystemLogSubmitCmdExe;
 import com.sky.centaur.log.client.api.SystemLogService;
@@ -23,8 +24,10 @@ import com.sky.centaur.log.client.api.grpc.SystemLogServiceEmptyResult;
 import com.sky.centaur.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceImplBase;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
+import com.sky.centaur.log.client.dto.SystemLogFindAllCmd;
 import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
 import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -32,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,12 +51,14 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
 
   private final SystemLogSaveCmdExe systemLogSaveCmdExe;
+  private final SystemLogFindAllCmdExe systemLogFindAllCmdExe;
 
   @Autowired
   public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
-      SystemLogSaveCmdExe systemLogSaveCmdExe) {
+      SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe) {
     this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
     this.systemLogSaveCmdExe = systemLogSaveCmdExe;
+    this.systemLogFindAllCmdExe = systemLogFindAllCmdExe;
   }
 
   @Override
@@ -63,6 +69,11 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   @Override
   public void save(SystemLogSaveCmd systemLogSaveCmd) {
     systemLogSaveCmdExe.execute(systemLogSaveCmd);
+  }
+
+  @Override
+  public Page<SystemLogFindAllCo> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
+    return systemLogFindAllCmdExe.execute(systemLogFindAllCmd);
   }
 
   @Override

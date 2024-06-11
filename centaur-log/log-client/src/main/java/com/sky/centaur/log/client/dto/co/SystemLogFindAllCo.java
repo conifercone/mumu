@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.system;
+package com.sky.centaur.log.client.dto.co;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 系统日志领域模型
+ * 系统日志查询所有客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-public class SystemLog {
+@EqualsAndHashCode(callSuper = true)
+public class SystemLogFindAllCo extends BaseClientObject {
 
   /**
    * 唯一标识
@@ -55,16 +60,8 @@ public class SystemLog {
   /**
    * 系统日志的记录时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime recordTime;
 
-  /**
-   * 系统日志的开始记录时间
-   */
-  private LocalDateTime recordStartTime;
-
-
-  /**
-   * 系统日志的结束记录时间
-   */
-  private LocalDateTime recordEndTime;
 }

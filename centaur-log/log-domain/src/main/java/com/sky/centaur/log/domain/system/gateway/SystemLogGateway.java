@@ -16,6 +16,7 @@
 package com.sky.centaur.log.domain.system.gateway;
 
 import com.sky.centaur.log.domain.system.SystemLog;
+import org.springframework.data.domain.Page;
 
 /**
  * 系统日志领域网关
@@ -38,4 +39,14 @@ public interface SystemLogGateway {
    * @param systemLog 系统日志领域对象
    */
   void save(SystemLog systemLog);
+
+  /**
+   * 分页查询系统日志
+   *
+   * @param systemLog 查询条件
+   * @param pageNo    当前页
+   * @param pageSize  每页数量
+   * @return 查询结果
+   */
+  Page<SystemLog> findAll(SystemLog systemLog, int pageNo, int pageSize);
 }

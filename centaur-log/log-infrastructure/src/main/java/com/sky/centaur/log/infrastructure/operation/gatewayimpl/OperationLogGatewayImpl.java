@@ -16,6 +16,7 @@
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl;
 
 import static com.sky.centaur.basis.constants.CommonConstants.ES_QUERY_EN;
+import static com.sky.centaur.basis.constants.CommonConstants.ES_QUERY_SP;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -105,6 +106,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   }
 
   @Override
+  @SuppressWarnings("DuplicatedCode")
   public Page<OperationLog> findAll(OperationLog operationLog, int pageNo, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Criteria criteria = new Criteria();
@@ -117,6 +119,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getContent);
             criteria.and(
                 new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(content).or(propertyName.concat(ES_QUERY_SP))
                     .matches(content));
           });
       Optional.ofNullable(optLog.getOperator())
@@ -124,6 +127,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getOperator);
             criteria.and(
                 new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(operator).or(propertyName.concat(ES_QUERY_SP))
                     .matches(operator));
           });
       Optional.ofNullable(optLog.getBizNo())
@@ -138,6 +142,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getDetail);
             criteria.and(
                 new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(detail).or(propertyName.concat(ES_QUERY_SP))
                     .matches(detail));
           });
       Optional.ofNullable(optLog.getSuccess())
@@ -145,6 +150,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getSuccess);
             criteria.and(
                 new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(success).or(propertyName.concat(ES_QUERY_SP))
                     .matches(success));
           });
       Optional.ofNullable(optLog.getFail())
@@ -152,6 +158,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getFail);
             criteria.and(
                 new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
+                    .matches(fail).or(propertyName.concat(ES_QUERY_SP))
                     .matches(fail));
           });
 

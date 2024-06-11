@@ -39,6 +39,11 @@ public final class CommonConstants {
   public static final String ES_MAPPING_EN_SUFFIX = "en";
 
   /**
+   * es simple映射前缀
+   */
+  public static final String ES_MAPPING_SP_SUFFIX = "sp";
+
+  /**
    * dot
    */
   public static final String DOT = ".";
@@ -47,6 +52,11 @@ public final class CommonConstants {
    * es 查询英文映射
    */
   public static final String ES_QUERY_EN = DOT + ES_MAPPING_EN_SUFFIX;
+
+  /**
+   * es 查询simple映射
+   */
+  public static final String ES_QUERY_SP = DOT + ES_MAPPING_SP_SUFFIX;
 
   /**
    * sql 左右模糊查询模板

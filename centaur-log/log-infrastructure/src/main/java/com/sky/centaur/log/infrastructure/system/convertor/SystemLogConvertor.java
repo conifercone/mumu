@@ -18,6 +18,7 @@ package com.sky.centaur.log.infrastructure.system.convertor;
 import com.expediagroup.beans.BeanUtils;
 import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
+import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.SystemLog;
@@ -80,5 +81,27 @@ public final class SystemLogConvertor {
   public static Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
     return Optional.ofNullable(systemLogSaveCo)
         .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
+    return Optional.ofNullable(systemLogEsDo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<SystemLog> toEntity(
+      SystemLogFindAllCo systemLogFindAllCo) {
+    return Optional.ofNullable(systemLogFindAllCo)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.0")
+  public static Optional<SystemLogFindAllCo> toFindAllCo(SystemLog systemLog) {
+    return Optional.ofNullable(systemLog)
+        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogFindAllCo.class));
   }
 }

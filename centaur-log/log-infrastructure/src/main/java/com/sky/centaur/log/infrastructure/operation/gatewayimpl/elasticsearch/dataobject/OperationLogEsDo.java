@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject;
 
+import com.sky.centaur.basis.constants.CommonConstants;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -47,7 +48,8 @@ public class OperationLogEsDo {
   @MultiField(
       mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
       otherFields = {
-          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
       }
   )
   private String content;
@@ -58,7 +60,8 @@ public class OperationLogEsDo {
   @MultiField(
       mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
       otherFields = {
-          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
       }
   )
   private String operator;
@@ -81,7 +84,8 @@ public class OperationLogEsDo {
   @MultiField(
       mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
       otherFields = {
-          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
       }
   )
   private String detail;
@@ -92,7 +96,8 @@ public class OperationLogEsDo {
   @MultiField(
       mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
       otherFields = {
-          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
       }
   )
   private String success;
@@ -103,7 +108,8 @@ public class OperationLogEsDo {
   @MultiField(
       mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
       otherFields = {
-          @InnerField(suffix = "en", type = FieldType.Text, analyzer = "english", searchAnalyzer = "english")
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
       }
   )
   private String fail;

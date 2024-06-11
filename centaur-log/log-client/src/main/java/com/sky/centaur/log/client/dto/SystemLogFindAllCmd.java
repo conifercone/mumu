@@ -13,58 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.domain.system;
+package com.sky.centaur.log.client.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 系统日志领域模型
+ * 系统日志查询所有指令
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-public class SystemLog {
+public class SystemLogFindAllCmd {
 
-  /**
-   * 唯一标识
-   */
-  private String id;
-
-  /**
-   * 日志内容
-   */
-  private String content;
-
-  /**
-   * 系统日志的种类
-   */
-  private String category;
-
-  /**
-   * 系统日志成功的文本模板
-   */
-  private String success;
-
-  /**
-   * 系统日志失败的文本模板
-   */
-  private String fail;
-
-  /**
-   * 系统日志的记录时间
-   */
-  private LocalDateTime recordTime;
-
+  private SystemLogFindAllCo systemLogFindAllCo;
   /**
    * 系统日志的开始记录时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime recordStartTime;
-
 
   /**
    * 系统日志的结束记录时间
    */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime recordEndTime;
+  /**
+   * 当前页码
+   */
+  private int pageNo = 0;
+  /**
+   * 每页数量
+   */
+  private int pageSize = 10;
 }

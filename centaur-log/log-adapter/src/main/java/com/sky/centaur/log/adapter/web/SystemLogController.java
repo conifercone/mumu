@@ -16,12 +16,16 @@
 package com.sky.centaur.log.adapter.web;
 
 import com.sky.centaur.log.client.api.SystemLogService;
+import com.sky.centaur.log.client.dto.SystemLogFindAllCmd;
 import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
+import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,4 +58,12 @@ public class SystemLogController {
     systemLogService.submit(systemLogSubmitCmd);
   }
 
+  @Operation(summary = "分页查询所有系统日志")
+  @GetMapping("/findAll")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Page<SystemLogFindAllCo> findAll(
+      @RequestBody SystemLogFindAllCmd systemLogFindAllCmd) {
+    return systemLogService.findAll(systemLogFindAllCmd);
+  }
 }

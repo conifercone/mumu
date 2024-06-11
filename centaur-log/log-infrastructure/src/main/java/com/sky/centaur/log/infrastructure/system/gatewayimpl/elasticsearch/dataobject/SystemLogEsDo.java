@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject;
 
+import com.sky.centaur.basis.constants.CommonConstants;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -22,6 +23,8 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
 
 /**
  * 系统日志es数据对象
@@ -42,7 +45,13 @@ public class SystemLogEsDo {
   /**
    * 日志内容
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+      }
+  )
   private String content;
 
   /**
@@ -54,13 +63,25 @@ public class SystemLogEsDo {
   /**
    * 系统日志成功的文本模板
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+      }
+  )
   private String success;
 
   /**
    * 系统日志失败的文本模板
    */
-  @Field(type = FieldType.Text, analyzer = "ik_max_word")
+  @MultiField(
+      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+      otherFields = {
+          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+      }
+  )
   private String fail;
 
   /**
