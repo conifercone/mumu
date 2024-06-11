@@ -54,5 +54,6 @@
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </AsyncRoot>
+    <logger name="org.apache.kafka" level="warn" additivity="false"/>
   </Loggers>
 </Configuration>
