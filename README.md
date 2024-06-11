@@ -19,6 +19,7 @@
 - [Build](#Build)
 - [Dependency Statement](#dependency-statement)
 - [License](#license)
+- [Star History](#star-history)
 
 ## Projects
 
@@ -73,4 +74,4 @@ centaur
 
 ## Star History
 
-![Star History Chart](https://api.star-history.com/svg?repos=conifercone/centaur&type=Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=conifercone/centaur&type=Date)](https://star-history.com/#conifercone/centaur&Date)
