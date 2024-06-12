@@ -74,4 +74,6 @@ centaur
 
 ## Star History
 
-<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=Z2hwX3o2R3hpczhNRk1qMHM2NFZQR3Z2cW5wbWk0NVdWUTRYZTF4Sw==#conifercone/centaur&Date" frameBorder="0"></iframe>
+<iframe style="border:0;width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=Z2hwX3ZBSmJHRWc3WWhSUGRYQzJkM3I1ZTBBaDhoZ3RRejFxRkpZeQ==#conifercone/centaur&Date">
+</iframe>
+
