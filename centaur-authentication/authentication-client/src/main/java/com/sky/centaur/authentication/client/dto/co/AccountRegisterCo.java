@@ -45,4 +45,6 @@ public class AccountRegisterCo extends BaseClientObject {
   private SexEnum sex;
 
   private String email;
+
+  private String timezone;
 }

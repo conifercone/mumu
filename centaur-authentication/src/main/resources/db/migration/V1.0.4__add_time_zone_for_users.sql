@@ -13,34 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
-
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.SexEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-/**
- * 查询当前登录账户信息客户端对象
- *
- * @author kaiyu.shan
- * @since 1.0.0
- */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountCurrentLoginQueryCo extends BaseClientObject {
-
-  private Long id;
-
-  private String username;
-
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
-
-  private String email;
-
-  private String timezone;
-}
+-- users新增列
+-- 时区
+ALTER TABLE users
+    ADD COLUMN time_zone varchar(200);
+comment on column users.time_zone is '时区';

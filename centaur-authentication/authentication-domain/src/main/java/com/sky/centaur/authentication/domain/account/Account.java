@@ -82,6 +82,10 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Setter
   private String email;
 
+  @Getter
+  @Setter
+  private String timezone;
+
   public Account(Long id, String username, String password, Role role) {
     this.id = id;
     this.username = username;

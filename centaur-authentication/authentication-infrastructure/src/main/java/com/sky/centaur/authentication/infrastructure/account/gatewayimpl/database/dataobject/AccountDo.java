@@ -96,4 +96,9 @@ public class AccountDo extends JpaBasisDataObject {
   @Size(max = 200)
   @Column(name = "email", length = 200)
   private String email;
+
+  @Size(max = 200)
+  @Column(name = "timezone", length = 200)
+  private String timezone;
+
 }

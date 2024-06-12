@@ -24,6 +24,8 @@ message AccountRegisterGrpcCo {
   string avatarUrl = 5;
   string phone = 6;
   SexEnum sex = 7;
+  string timezone = 8;
+  string email = 9;
 }
 
 message AccountUpdateByIdGrpcCmd{
@@ -38,6 +40,7 @@ message AccountUpdateByIdGrpcCo{
   oneof sex_wrapper {
     SexEnum sex = 5;
   }
+  google.protobuf.StringValue timezone = 6;
 }
 
 message AccountUpdateRoleGrpcCmd{

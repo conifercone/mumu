@@ -63,7 +63,8 @@ public class AccountControllerTest {
                  "roleCode": "admin",
                  "avatarUrl": "https://github.com/users/conifercone",
                  "phone": "13031723736",
-                 "sex": "MALE"
+                 "sex": "MALE",
+                 "timezone": "UTF+8"
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders

@@ -134,6 +134,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setRoleCode(accountRegisterGrpcCo.getRoleCode());
     accountRegisterCo.setAvatarUrl(accountRegisterGrpcCo.getAvatarUrl());
     accountRegisterCo.setPhone(accountRegisterGrpcCo.getPhone());
+    accountRegisterCo.setEmail(accountRegisterGrpcCo.getEmail());
+    accountRegisterCo.setTimezone(accountRegisterGrpcCo.getTimezone());
     accountRegisterCo.setSex(SexEnum.valueOf(accountRegisterGrpcCo.getSex().name()));
     return accountRegisterCo;
   }
@@ -157,6 +159,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountUpdateByIdGrpcCo.hasPhone() ? accountUpdateByIdGrpcCo.getPhone().getValue() : null);
     accountUpdateByIdCo.setSex(accountUpdateByIdGrpcCo.hasSex() ? SexEnum.valueOf(
         accountUpdateByIdGrpcCo.getSex().name()) : null);
+    accountUpdateByIdCo.setEmail(
+        accountUpdateByIdGrpcCo.hasEmail() ? accountUpdateByIdGrpcCo.getEmail().getValue() : null);
+    accountUpdateByIdCo.setTimezone(
+        accountUpdateByIdGrpcCo.hasTimezone() ? accountUpdateByIdGrpcCo.getTimezone().getValue()
+            : null);
     return accountUpdateByIdCo;
   }
 

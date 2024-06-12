@@ -68,6 +68,7 @@ public final class AccountConvertor {
       account.setPhone(accountDataObject.getPhone());
       account.setSex(accountDataObject.getSex());
       account.setEmail(accountDataObject.getEmail());
+      account.setTimezone(accountDataObject.getTimezone());
       return account;
     });
   }
@@ -88,6 +89,7 @@ public final class AccountConvertor {
       accountDo.setPhone(accountDomain.getPhone());
       accountDo.setSex(accountDomain.getSex());
       accountDo.setEmail(accountDomain.getEmail());
+      accountDo.setTimezone(accountDomain.getTimezone());
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(
@@ -112,6 +114,7 @@ public final class AccountConvertor {
       account.setPhone(accountRegisterClientObject.getPhone());
       account.setSex(accountRegisterClientObject.getSex());
       account.setEmail(accountRegisterClientObject.getEmail());
+      account.setTimezone(accountRegisterClientObject.getTimezone());
       return account;
     });
   }
@@ -131,6 +134,8 @@ public final class AccountConvertor {
             Optional.ofNullable(accountUpdateByIdClientObject.getSex()).ifPresent(account::setSex);
             Optional.ofNullable(accountUpdateByIdClientObject.getEmail())
                 .ifPresent(account::setEmail);
+            Optional.ofNullable(accountUpdateByIdClientObject.getTimezone())
+                .ifPresent(account::setTimezone);
             return account;
           }).orElse(null);
     });
