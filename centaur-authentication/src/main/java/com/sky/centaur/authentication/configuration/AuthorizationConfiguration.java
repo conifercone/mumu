@@ -373,6 +373,9 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
+        if (StringUtils.hasText(account.getTimezone())) {
+          claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
+        }
       }
     };
   }

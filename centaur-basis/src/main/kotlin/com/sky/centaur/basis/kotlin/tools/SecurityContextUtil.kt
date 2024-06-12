@@ -36,6 +36,7 @@ object SecurityContextUtil {
      * Account领域模型id属性名
      */
     private const val ID = "id"
+    private const val TIMEZONE = "timezone"
 
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
@@ -56,12 +57,42 @@ object SecurityContextUtil {
                         }
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
-                        return@map claims[TokenClaimsEnum.ACCOUNT_ID.name].toString().toLong()
+                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.name)) {
+                            return@map claims[TokenClaimsEnum.ACCOUNT_ID.name].toString().toLong()
+                        }
                     }
                 }
                 null
             }
 
+    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    val loginAccountTimezone: Optional<String?>
+        /**
+         * 获取当前登录账户ID
+         *
+         * @return 登录账户ID
+         */
+        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+            .map { authentication: Authentication ->
+                if (authentication.isAuthenticated) {
+                    val principal = authentication.principal
+                    if (principal is UserDetails) {
+                        val beanMap = BeanMap.create(principal)
+                        if (beanMap.containsKey(TIMEZONE)) {
+                            return@map beanMap[TIMEZONE].toString()
+                        }
+                    } else if (principal is ClaimAccessor) {
+                        val claims: Map<String, Any> = principal.claims
+                        if (claims.containsKey(TokenClaimsEnum.TIMEZONE.name)) {
+                            return@map claims[TokenClaimsEnum.TIMEZONE.name].toString()
+                        }
+                    }
+                }
+                null
+            }
+
+    @Suppress("unused")
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
     val tokenValue: Optional<String?>

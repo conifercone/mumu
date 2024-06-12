@@ -22,6 +22,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.basis.exception.DataConversionException;
 import com.sky.centaur.basis.kotlin.tools.BeanUtil;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
@@ -31,6 +33,7 @@ import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationL
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -166,19 +169,28 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           .ifPresent(
               operatingTime -> criteria.and(new Criteria(
                   BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).matches(
-                  operatingTime)));
+                  SecurityContextUtil.getLoginAccountTimezone()
+                      .map(timezone -> CommonUtil.convertToUTC(operatingTime,
+                          ZoneId.of(timezone)))
+                      .orElse(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
           .ifPresent(
               operatingStartTime -> criteria.and(
                   new Criteria(
                       BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).greaterThan(
-                      operatingStartTime)));
+                      SecurityContextUtil.getLoginAccountTimezone()
+                          .map(timezone -> CommonUtil.convertToUTC(operatingStartTime,
+                              ZoneId.of(timezone)))
+                          .orElse(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
           .ifPresent(
               operatingEndTime -> criteria.and(
                   new Criteria(
                       BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).lessThan(
-                      operatingEndTime)));
+                      SecurityContextUtil.getLoginAccountTimezone()
+                          .map(timezone -> CommonUtil.convertToUTC(operatingEndTime,
+                              ZoneId.of(timezone)))
+                          .orElse(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
@@ -189,6 +201,10 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         .map(SearchHit::getContent).map(res -> OperationLogConvertor.toEntity(res).orElse(null))
         .filter(
             Objects::nonNull)
+        .peek(operationLogDomain ->
+            operationLogDomain.setOperatingTime(
+                CommonUtil.convertToAccountZone(operationLogDomain.getOperatingTime(),
+                    ZoneOffset.UTC)))
         .toList();
     return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
   }

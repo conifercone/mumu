@@ -22,12 +22,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.basis.exception.DataConversionException;
 import com.sky.centaur.basis.kotlin.tools.BeanUtil;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.SystemLogKafkaRepository;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -127,19 +131,28 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
           .ifPresent(
               recordTime -> criteria.and(new Criteria(
                   BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).matches(
-                  recordTime)));
+                  SecurityContextUtil.getLoginAccountTimezone()
+                      .map(timezone -> CommonUtil.convertToUTC(recordTime,
+                          ZoneId.of(timezone)))
+                      .orElse(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
           .ifPresent(
               recordStartTime -> criteria.and(
                   new Criteria(
                       BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).greaterThan(
-                      recordStartTime)));
+                      SecurityContextUtil.getLoginAccountTimezone()
+                          .map(timezone -> CommonUtil.convertToUTC(recordStartTime,
+                              ZoneId.of(timezone)))
+                          .orElse(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
           .ifPresent(
               recordEndTime -> criteria.and(
                   new Criteria(
                       BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).lessThan(
-                      recordEndTime)));
+                      SecurityContextUtil.getLoginAccountTimezone()
+                          .map(timezone -> CommonUtil.convertToUTC(recordEndTime,
+                              ZoneId.of(timezone)))
+                          .orElse(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
@@ -150,6 +163,9 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         .map(SearchHit::getContent).map(res -> SystemLogConvertor.toEntity(res).orElse(null))
         .filter(
             Objects::nonNull)
+        .peek(systemLogDomain -> systemLogDomain.setRecordTime(
+            CommonUtil.convertToAccountZone(systemLogDomain.getRecordTime(),
+                ZoneOffset.UTC)))
         .toList();
     return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
 

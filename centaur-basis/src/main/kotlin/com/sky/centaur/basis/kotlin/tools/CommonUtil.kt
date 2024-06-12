@@ -16,6 +16,9 @@
 package com.sky.centaur.basis.kotlin.tools
 
 import org.apiguardian.api.API
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.regex.Pattern
 import javax.mail.internet.AddressException
 import javax.mail.internet.InternetAddress
@@ -64,5 +67,60 @@ object CommonUtil {
             return false
         }
         return true
+    }
+
+    /**
+     * 转换为utc时间
+     *
+     * @param localDateTime 时间
+     * @param zoneId 源时区
+     * @return UTC时区时间
+     */
+    @API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    fun convertToUTC(localDateTime: LocalDateTime, zoneId: ZoneId): LocalDateTime {
+        return convertToZone(localDateTime, zoneId, ZoneOffset.UTC)
+    }
+
+    /**
+     * 转换为指定时区
+     *
+     * @param localDateTime 时间
+     * @param fromZone 源时区
+     * @param toZone 目标时区
+     * @return 指定时区时间
+     */
+    @API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    fun convertToZone(
+        localDateTime: LocalDateTime,
+        fromZone: ZoneId,
+        toZone: ZoneId
+    ): LocalDateTime {
+        val zonedDateTime = localDateTime.atZone(fromZone)
+        val converted = zonedDateTime.withZoneSameInstant(toZone)
+        return converted.toLocalDateTime()
+    }
+
+    /**
+     * 转换为账户时区
+     *
+     * @param localDateTime 时间
+     * @param fromZone 源时区
+     * @return 账户时区时间
+     */
+    @API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    fun convertToAccountZone(
+        localDateTime: LocalDateTime,
+        fromZone: ZoneId
+    ): LocalDateTime {
+        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+            convertToZone(
+                localDateTime,
+                fromZone,
+                ZoneId.of(timezone)
+            )
+        }.orElse(localDateTime)
     }
 }

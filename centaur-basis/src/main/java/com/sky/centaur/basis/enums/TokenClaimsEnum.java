@@ -37,5 +37,10 @@ public enum TokenClaimsEnum {
   /**
    * 账户名
    */
-  ACCOUNT_NAME
+  ACCOUNT_NAME,
+
+  /**
+   * 时区
+   */
+  TIMEZONE
 }
