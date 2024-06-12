@@ -19,7 +19,6 @@
 - [Build](#Build)
 - [Dependency Statement](#dependency-statement)
 - [License](#license)
-- [Star History](#star-history)
 
 ## Projects
 
@@ -71,9 +70,3 @@ centaur
 ## License
 
 [Apache License 2.0](LICENSE) © kaiyu.shan@outlook.com
-
-## Star History
-
-<iframe style="border:0;width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=Z2hwX3ZBSmJHRWc3WWhSUGRYQzJkM3I1ZTBBaDhoZ3RRejFxRkpZeQ==#conifercone/centaur&Date">
-</iframe>
-
