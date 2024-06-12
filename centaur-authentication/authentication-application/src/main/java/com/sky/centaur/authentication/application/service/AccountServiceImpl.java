@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.application.account.executor.AccountCurren
 import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateByIdCmdExe;
@@ -33,6 +34,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
+import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -81,6 +83,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe;
 
   private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
+  private final AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -89,7 +92,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
       AccountResetPasswordCmdExe accountResetPasswordCmdExe,
       AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
-      AccountUpdateRoleCmdExe accountUpdateRoleCmdExe) {
+      AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
+      AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -98,6 +102,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountResetPasswordCmdExe = accountResetPasswordCmdExe;
     this.accountDeleteCurrentCmdExe = accountDeleteCurrentCmdExe;
     this.accountUpdateRoleCmdExe = accountUpdateRoleCmdExe;
+    this.accountPasswordVerifyCmdExe = accountPasswordVerifyCmdExe;
   }
 
   @Override
@@ -249,5 +254,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrentAccount() {
     accountDeleteCurrentCmdExe.execute();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+    return accountPasswordVerifyCmdExe.execute(accountPasswordVerifyCmd);
   }
 }

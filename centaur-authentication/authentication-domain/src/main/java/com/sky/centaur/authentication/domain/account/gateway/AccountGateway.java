@@ -106,4 +106,12 @@ public interface AccountGateway {
    * @return 正在使用指定角色的账户
    */
   Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize);
+
+  /**
+   * 当前登录账户密码是否正确
+   *
+   * @param password 账户密码
+   * @return 密码是否正确
+   */
+  boolean verifyPassword(String password);
 }

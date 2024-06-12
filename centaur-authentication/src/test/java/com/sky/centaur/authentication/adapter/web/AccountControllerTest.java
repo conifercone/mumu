@@ -154,4 +154,21 @@ public class AccountControllerTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(print());
   }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void verifyPassword() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+             "password": "admin"
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/account/verifyPassword").with(csrf())
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
 }

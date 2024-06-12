@@ -17,12 +17,14 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
+import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -119,5 +121,14 @@ public class AccountController {
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrent() {
     accountService.deleteCurrentAccount();
+  }
+
+  @Operation(summary = "校验账户密码")
+  @GetMapping("/verifyPassword")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ResultResponse<Boolean> verifyPassword(
+      @RequestBody AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+    return ResultResponse.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 }

@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
+import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -84,4 +85,12 @@ public interface AccountService {
    * 删除当前账户
    */
   void deleteCurrentAccount();
+
+  /**
+   * 当前登录账户密码是否正确
+   *
+   * @param accountPasswordVerifyCmd 账户密码校验指令
+   * @return 密码是否正确
+   */
+  boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd);
 }

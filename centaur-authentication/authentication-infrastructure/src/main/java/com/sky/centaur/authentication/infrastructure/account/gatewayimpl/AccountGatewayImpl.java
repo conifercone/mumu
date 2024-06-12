@@ -250,6 +250,17 @@ public class AccountGatewayImpl implements AccountGateway {
     return getAccounts(pageNo, pageSize, accountDoSpecification);
   }
 
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  public boolean verifyPassword(String password) {
+    return SecurityContextUtil.getLoginAccountId()
+        .map(accountId -> accountRepository.findById(accountId)
+            .map(accountDo -> passwordEncoder.matches(password, accountDo.getPassword()))
+            .orElseThrow(() -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST)))
+        .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
+  }
+
   @NotNull
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
