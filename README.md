@@ -74,4 +74,4 @@ centaur
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=conifercone/centaur&type=Date)](https://star-history.com/#conifercone/centaur&Date)
+<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=Z2hwX3o2R3hpczhNRk1qMHM2NFZQR3Z2cW5wbWk0NVdWUTRYZTF4Sw==#conifercone/centaur&Date" frameBorder="0"></iframe>
