@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -130,5 +131,14 @@ public class AccountController {
   public ResultResponse<Boolean> verifyPassword(
       @RequestBody AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return ResultResponse.success(accountService.verifyPassword(accountPasswordVerifyCmd));
+  }
+
+  @Operation(summary = "修改账户密码")
+  @PutMapping("/changePassword")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.0")
+  public void changePassword(
+      @RequestBody AccountChangePasswordCmd accountChangePasswordCmd) {
+    accountService.changePassword(accountChangePasswordCmd);
   }
 }

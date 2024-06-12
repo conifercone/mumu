@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -93,4 +94,13 @@ public interface AccountService {
    * @return 密码是否正确
    */
   boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd);
+
+  /**
+   * 修改账户密码
+   *
+   * @param accountChangePasswordCmd 修改账户密码指令
+   */
+  void changePassword(AccountChangePasswordCmd accountChangePasswordCmd);
+
+
 }

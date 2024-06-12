@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Empty;
+import com.sky.centaur.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
@@ -33,6 +34,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
+import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -84,6 +86,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
   private final AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe;
+  private final AccountChangePasswordCmdExe accountChangePasswordCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -93,7 +96,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountResetPasswordCmdExe accountResetPasswordCmdExe,
       AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
       AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
-      AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe) {
+      AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
+      AccountChangePasswordCmdExe accountChangePasswordCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -103,6 +107,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountDeleteCurrentCmdExe = accountDeleteCurrentCmdExe;
     this.accountUpdateRoleCmdExe = accountUpdateRoleCmdExe;
     this.accountPasswordVerifyCmdExe = accountPasswordVerifyCmdExe;
+    this.accountChangePasswordCmdExe = accountChangePasswordCmdExe;
   }
 
   @Override
@@ -260,5 +265,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return accountPasswordVerifyCmdExe.execute(accountPasswordVerifyCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void changePassword(AccountChangePasswordCmd accountChangePasswordCmd) {
+    accountChangePasswordCmdExe.execute(accountChangePasswordCmd);
   }
 }

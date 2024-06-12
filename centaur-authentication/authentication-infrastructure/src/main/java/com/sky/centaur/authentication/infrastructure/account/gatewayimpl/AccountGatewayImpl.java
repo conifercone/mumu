@@ -261,6 +261,23 @@ public class AccountGatewayImpl implements AccountGateway {
         .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
   }
 
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "1.0.0")
+  public void changePassword(String originalPassword, String newPassword) {
+    if (verifyPassword(originalPassword)) {
+      AccountDo newAccountDo = SecurityContextUtil.getLoginAccountId()
+          .map(accountId -> accountRepository.findById(accountId)
+              .stream()
+              .peek(accountDo -> accountDo.setPassword(passwordEncoder.encode(newPassword)))
+              .findAny().orElseThrow(() -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST)))
+          .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
+      accountRepository.merge(newAccountDo);
+    } else {
+      throw new CentaurException(ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT);
+    }
+  }
+
   @NotNull
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")

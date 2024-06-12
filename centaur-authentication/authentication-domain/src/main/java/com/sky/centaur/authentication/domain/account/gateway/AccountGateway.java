@@ -114,4 +114,12 @@ public interface AccountGateway {
    * @return 密码是否正确
    */
   boolean verifyPassword(String password);
+
+  /**
+   * 修改账户密码
+   *
+   * @param originalPassword 原始密码
+   * @param newPassword      新密码
+   */
+  void changePassword(String originalPassword, String newPassword);
 }
