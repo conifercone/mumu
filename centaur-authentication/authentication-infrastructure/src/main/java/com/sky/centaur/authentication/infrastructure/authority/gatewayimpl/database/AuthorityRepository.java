@@ -31,5 +31,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long>,
     JpaSpecificationExecutor<AuthorityDo> {
 
+  /**
+   * 查询所有在id集合中的权限
+   *
+   * @param ids id集合
+   * @return 权限数据对象集合
+   */
   List<AuthorityDo> findAuthorityDoByIdIn(Collection<Long> ids);
 }

@@ -30,5 +30,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
     JpaSpecificationExecutor<RoleDo> {
 
+  /**
+   * 根据编码查询角色
+   *
+   * @param code 角色编码
+   * @return 角色数据对象
+   */
   Optional<RoleDo> findByCode(String code);
 }

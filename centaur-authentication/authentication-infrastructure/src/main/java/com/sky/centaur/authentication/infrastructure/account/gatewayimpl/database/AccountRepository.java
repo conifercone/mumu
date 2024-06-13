@@ -29,8 +29,20 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
     JpaSpecificationExecutor<AccountDo> {
 
+  /**
+   * 根据用户名查询账户
+   *
+   * @param username 用户名
+   * @return 账户数据对象
+   */
   Optional<AccountDo> findAccountDoByUsername(String username);
 
+  /**
+   * 根据邮箱查询账户
+   *
+   * @param email 邮箱地址
+   * @return 账户数据对象
+   */
   Optional<AccountDo> findAccountDoByEmail(String email);
 
 }
