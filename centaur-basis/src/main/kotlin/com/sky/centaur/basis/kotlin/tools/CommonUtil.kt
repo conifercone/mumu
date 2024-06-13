@@ -123,4 +123,37 @@ object CommonUtil {
             )
         }.orElse(localDateTime)
     }
+
+    /**
+     * UTC时区转换为账户时区
+     *
+     * @param localDateTime 时间
+     * @return 账户时区时间
+     */
+    @API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    fun convertUTCToAccountZone(
+        localDateTime: LocalDateTime
+    ): LocalDateTime {
+        return convertToAccountZone(localDateTime, ZoneOffset.UTC)
+    }
+
+    /**
+     * 账户时区转换为UTC时区
+     *
+     * @param localDateTime 时间
+     * @return UTC时区时间
+     */
+    @API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    fun convertAccountZoneToUTC(
+        localDateTime: LocalDateTime
+    ): LocalDateTime {
+        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+            convertToUTC(
+                localDateTime,
+                ZoneId.of(timezone)
+            )
+        }.orElse(localDateTime)
+    }
 }
