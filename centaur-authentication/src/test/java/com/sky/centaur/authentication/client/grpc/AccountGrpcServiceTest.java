@@ -22,6 +22,8 @@ import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
 import com.sky.centaur.authentication.client.api.AccountGrpcService;
+import com.sky.centaur.authentication.client.api.grpc.AccountDisableGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountDisableGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
@@ -195,6 +197,53 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
     accountUpdateRoleGrpcCoListenableFuture.addListener(() -> {
       try {
         Empty empty = accountUpdateRoleGrpcCoListenableFuture.get();
+        Assertions.assertNotNull(empty);
+        countDownLatch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = countDownLatch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void disable() throws ExecutionException, InterruptedException, TimeoutException {
+    AccountDisableGrpcCmd accountDisableGrpcCmd = AccountDisableGrpcCmd.newBuilder()
+        .setAccountDisableGrpcCo(
+            AccountDisableGrpcCo.newBuilder().setId(Int64Value.of(2))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    Empty empty = accountGrpcService.disable(
+        accountDisableGrpcCmd, callCredentials);
+    Assertions.assertNotNull(empty);
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void syncDisable() throws InterruptedException {
+    CountDownLatch countDownLatch = new CountDownLatch(1);
+    AccountDisableGrpcCmd accountDisableGrpcCmd = AccountDisableGrpcCmd.newBuilder()
+        .setAccountDisableGrpcCo(
+            AccountDisableGrpcCo.newBuilder().setId(Int64Value.of(2))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<Empty> emptyListenableFuture = accountGrpcService.syncDisable(
+        accountDisableGrpcCmd, callCredentials);
+    emptyListenableFuture.addListener(() -> {
+      try {
+        Empty empty = emptyListenableFuture.get();
         Assertions.assertNotNull(empty);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {

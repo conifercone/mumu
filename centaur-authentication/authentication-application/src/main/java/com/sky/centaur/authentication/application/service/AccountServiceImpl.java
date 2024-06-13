@@ -27,6 +27,8 @@ import com.sky.centaur.authentication.application.account.executor.AccountResetP
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.api.grpc.AccountDisableGrpcCmd;
+import com.sky.centaur.authentication.client.api.grpc.AccountDisableGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
@@ -42,6 +44,7 @@ import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import com.sky.centaur.authentication.client.dto.co.AccountDisableCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -236,6 +239,33 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void disable(AccountDisableCmd accountDisableCmd) {
     accountDisableCmdExe.execute(accountDisableCmd);
+  }
+
+  @NotNull
+  private static AccountDisableCo getAccountDisableCo(
+      @NotNull AccountDisableGrpcCmd request) {
+    AccountDisableCo accountDisableCo = new AccountDisableCo();
+    AccountDisableGrpcCo accountDisableGrpcCo = request.getAccountDisableGrpcCo();
+    accountDisableCo.setId(
+        accountDisableGrpcCo.hasId() ? accountDisableGrpcCo.getId().getValue() : null);
+    return accountDisableCo;
+  }
+
+  @Override
+  @PreAuthorize("hasRole('admin')")
+  @Transactional(rollbackFor = Exception.class)
+  public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
+    AccountDisableCmd accountDisableCmd = new AccountDisableCmd();
+    AccountDisableCo accountDisableCo = getAccountDisableCo(
+        request);
+    accountDisableCmd.setAccountDisableCo(accountDisableCo);
+    try {
+      accountDisableCmdExe.execute(accountDisableCmd);
+    } catch (CentaurException e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
+    responseObserver.onNext(Empty.newBuilder().build());
+    responseObserver.onCompleted();
   }
 
   @Override

@@ -10,6 +10,7 @@ service AccountService {
   rpc register (AccountRegisterGrpcCmd) returns (google.protobuf.Empty);
   rpc updateById (AccountUpdateByIdGrpcCmd) returns (google.protobuf.Empty);
   rpc updateRoleById(AccountUpdateRoleGrpcCmd) returns (google.protobuf.Empty);
+  rpc disable(AccountDisableGrpcCmd) returns (google.protobuf.Empty);
 }
 
 message AccountRegisterGrpcCmd {
@@ -58,4 +59,12 @@ enum SexEnum
   FEMALE = 1;
   GREY = 2;
   SEXLESS = 3;
+}
+
+message AccountDisableGrpcCmd{
+  AccountDisableGrpcCo accountDisableGrpcCo = 1;
+}
+
+message AccountDisableGrpcCo{
+  google.protobuf.Int64Value id = 1;
 }

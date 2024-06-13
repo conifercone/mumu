@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.api;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
+import com.sky.centaur.authentication.client.api.grpc.AccountDisableGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc;
 import com.sky.centaur.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
@@ -157,6 +158,37 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     }
   }
 
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Empty disable(AccountDisableGrpcCmd accountDisableGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    if (channel == null) {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return disableFromGrpc(accountDisableGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
+      }
+    } else {
+      return disableFromGrpc(accountDisableGrpcCmd, callCredentials);
+    }
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public ListenableFuture<Empty> syncDisable(
+      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials) {
+    if (channel == null) {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncDisableFromGrpc(accountDisableGrpcCmd, callCredentials);
+      }).orElse(null);
+    } else {
+      return syncDisableFromGrpc(accountDisableGrpcCmd, callCredentials);
+    }
+  }
+
   private Empty registerFromGrpc(
       AccountRegisterGrpcCmd accountRegisterGrpcCmd)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -205,6 +237,23 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel);
     return accountServiceFutureStub.withCallCredentials(callCredentials)
         .updateRoleById(accountUpdateRoleGrpcCmd);
+  }
+
+  private Empty disableFromGrpc(
+      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .disable(accountDisableGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<Empty> syncDisableFromGrpc(
+      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials) {
+    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+        channel);
+    return accountServiceFutureStub.withCallCredentials(callCredentials)
+        .disable(accountDisableGrpcCmd);
   }
 
 }
