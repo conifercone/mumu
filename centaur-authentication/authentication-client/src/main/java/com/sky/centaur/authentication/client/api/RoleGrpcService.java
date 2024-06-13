@@ -57,9 +57,9 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   private static final Logger LOGGER = LoggerFactory.getLogger(RoleGrpcService.class);
 
   public RoleGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

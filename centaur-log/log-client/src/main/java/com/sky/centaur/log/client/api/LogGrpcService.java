@@ -33,13 +33,13 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class LogGrpcService {
 
-  private final DiscoveryClient consulDiscoveryClient;
+  private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
-  public LogGrpcService(DiscoveryClient consulDiscoveryClient,
+  public LogGrpcService(DiscoveryClient discoveryClient,
       @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    this.consulDiscoveryClient = consulDiscoveryClient;
+    this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
@@ -57,7 +57,7 @@ class LogGrpcService {
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("grpc-log");
+    List<ServiceInstance> instances = discoveryClient.getInstances("grpc-log");
     return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 

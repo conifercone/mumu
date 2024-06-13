@@ -57,9 +57,9 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcService.class);
 
   public AuthorityGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

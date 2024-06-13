@@ -54,9 +54,9 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcService.class);
 
   public AccountGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

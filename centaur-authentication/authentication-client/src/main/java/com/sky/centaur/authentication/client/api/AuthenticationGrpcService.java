@@ -33,13 +33,13 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class AuthenticationGrpcService {
 
-  private final DiscoveryClient consulDiscoveryClient;
+  private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
-  public AuthenticationGrpcService(DiscoveryClient consulDiscoveryClient,
+  public AuthenticationGrpcService(DiscoveryClient discoveryClient,
       @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    this.consulDiscoveryClient = consulDiscoveryClient;
+    this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
@@ -57,7 +57,7 @@ class AuthenticationGrpcService {
   }
 
   protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = consulDiscoveryClient.getInstances("grpc-authentication");
+    List<ServiceInstance> instances = discoveryClient.getInstances("grpc-authentication");
     return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
   }
 

@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.io.Serial;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -40,23 +42,16 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class Authority extends BasisDomainModel implements GrantedAuthority {
 
   @Serial
   private static final long serialVersionUID = -5474154746791467326L;
-  
+
   private Long id;
   private String code;
   private String name;
-
-  /**
-   * all properties constructor
-   */
-  public Authority(Long id, String code, String name) {
-    this.id = id;
-    this.code = code;
-    this.name = name;
-  }
 
   @Override
   public String getAuthority() {
