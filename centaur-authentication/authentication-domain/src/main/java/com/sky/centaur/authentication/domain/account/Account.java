@@ -24,7 +24,8 @@ import com.sky.centaur.basis.enums.SexEnum;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -108,11 +109,11 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Override
   public Collection<Authority> getAuthorities() {
-    List<Authority> authorities = this.role.getAuthorities();
-    Authority authority = new Authority();
-    authority.setCode("ROLE_".concat(this.role.getCode()));
-    authorities.add(authority);
-    return authorities;
+    return Optional.ofNullable(this.role)
+        .flatMap((accountRole) -> Optional.ofNullable(accountRole.getAuthorities()))
+        .stream().peek(authorities -> authorities.add(
+            Authority.builder().code("ROLE_".concat(this.role.getCode())).build())).findAny()
+        .orElse(Collections.emptyList());
   }
 
   public void setAuthorities(Collection<Authority> authorities) {

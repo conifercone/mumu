@@ -18,7 +18,9 @@ package com.sky.centaur.basis.domain;
 
 import java.time.OffsetDateTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 基础领域模型
@@ -28,6 +30,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
 public abstract class BasisDomainModel implements DomainModel {
 
   /**

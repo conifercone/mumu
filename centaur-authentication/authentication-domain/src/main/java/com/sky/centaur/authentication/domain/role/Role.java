@@ -21,11 +21,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 角色领域模型
@@ -40,21 +42,13 @@ import lombok.ToString;
 @JsonDeserialize
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class Role extends BasisDomainModel {
 
   private Long id;
   private String code;
   private String name;
   private List<Authority> authorities;
-
-  /**
-   * all properties constructor
-   */
-  public Role(Long id, String code, String name, List<Authority> authorities) {
-    this.id = id;
-    this.code = code;
-    this.name = name;
-    this.authorities = authorities;
-  }
 
 }
