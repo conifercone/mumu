@@ -6,7 +6,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/centaur)
 ![GitHub top language](https://img.shields.io/github/languages/top/conifercone/centaur)
 [![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-[![centaur version](https://img.shields.io/badge/centaur-1.0.0--SNAPSHOT-brightgreen)](https://github.com/conifercone/centaur)
+![GitHub Release](https://img.shields.io/github/v/release/conifercone/centaur)
 [![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
 [![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur)
 [![GitHub language count](https://img.shields.io/github/languages/count/conifercone/centaur)](https://github.com/conifercone/centaur)
