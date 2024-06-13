@@ -46,9 +46,9 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenGrpcService.class);
 
   public TokenGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

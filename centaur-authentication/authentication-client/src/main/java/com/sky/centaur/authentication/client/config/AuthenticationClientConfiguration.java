@@ -35,26 +35,26 @@ import org.springframework.context.annotation.Configuration;
 public class AuthenticationClientConfiguration {
 
   @Bean
-  public TokenGrpcService tokenGrpcService(DiscoveryClient consulDiscoveryClient,
+  public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new TokenGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new TokenGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public AccountGrpcService accountGrpcService(DiscoveryClient consulDiscoveryClient,
+  public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new AccountGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new AccountGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public AuthorityGrpcService authorityGrpcService(DiscoveryClient consulDiscoveryClient,
+  public AuthorityGrpcService authorityGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new AuthorityGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new AuthorityGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public RoleGrpcService roleGrpcService(DiscoveryClient consulDiscoveryClient,
+  public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new RoleGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new RoleGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

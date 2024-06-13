@@ -37,9 +37,9 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
   private ManagedChannel channel;
 
   public OperationLogGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

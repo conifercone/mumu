@@ -34,14 +34,14 @@ import org.springframework.context.annotation.Configuration;
 public class LogClientConfiguration {
 
   @Bean
-  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient consulDiscoveryClient,
+  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new OperationLogGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new OperationLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient consulDiscoveryClient,
+  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new SystemLogGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new SystemLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

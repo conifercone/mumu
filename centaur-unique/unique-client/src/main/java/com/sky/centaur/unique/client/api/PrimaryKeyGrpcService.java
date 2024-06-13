@@ -53,9 +53,9 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
   private static final Logger LOGGER = LoggerFactory.getLogger(PrimaryKeyGrpcService.class);
 
   public PrimaryKeyGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Override

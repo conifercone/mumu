@@ -35,9 +35,9 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
   private ManagedChannel channel;
 
   public SystemLogGrpcService(
-      DiscoveryClient consulDiscoveryClient,
+      DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
 

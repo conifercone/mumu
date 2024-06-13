@@ -33,8 +33,8 @@ import org.springframework.context.annotation.Configuration;
 public class UniqueClientConfiguration {
 
   @Bean
-  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient consulDiscoveryClient,
+  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new PrimaryKeyGrpcService(consulDiscoveryClient, grpcClientInterceptorObjectProvider);
+    return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 }
