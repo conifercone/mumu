@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.log.configuration;
+package com.sky.centaur.mail.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -22,19 +22,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * swagger配置文件
+ * swagger配置类
  *
  * @author kaiyu.shan
- * @since 1.0.0
+ * @since 1.0.1
  */
 @Configuration
 public class SwaggerConfiguration {
 
   @Bean
-  public OpenAPI logOpenAPI() {
+  public OpenAPI mailOpenAPI() {
     return new OpenAPI()
-        .info(new Info().title("centaur log")
-            .description("centaur log API document")
+        .info(new Info().title("centaur mail")
+            .description("centaur mail API document")
             .version("v1")
             .license(new License().name("Apache 2.0")
                 .url("https://www.apache.org/licenses/LICENSE-2.0")));
