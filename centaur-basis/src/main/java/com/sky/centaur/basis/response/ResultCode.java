@@ -65,7 +65,9 @@ public enum ResultCode implements BaseResultInterface {
   /*业务错误6001-7999*/
   AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED(6001),
   ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED(6002),
-  ROLE_DOES_NOT_EXIST(6003);
+  ROLE_DOES_NOT_EXIST(6003),
+  FILE_CONTENT_CANNOT_BE_EMPTY(6004),
+  FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY(6005);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

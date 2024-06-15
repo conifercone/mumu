@@ -5,6 +5,9 @@ apply plugin: libs.plugins.getSpringboot().get().getPluginId()
 
 dependencies {
     implementation project(":centaur-extension")
+    implementation project(":centaur-file:file-infrastructure")
+    implementation project(":centaur-file:file-adapter")
+    implementation project(":centaur-file:file-application")
     implementation libs.consulDiscovery
     implementation libs.consulConfig
     implementation libs.bundles.micrometer
