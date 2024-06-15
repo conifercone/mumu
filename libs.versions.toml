@@ -18,6 +18,7 @@ curatorRecipesVersion = "5.1.0"
 flywayVersion = "10.13.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
+minioVersion = '8.5.10'
 # bom version
 bullBomVersion = '2.2.4'
 grpcBomVersion = '1.58.0'
@@ -176,6 +177,8 @@ protobufBom = { module = "com.google.protobuf:protobuf-bom", version.ref = "prot
 guavaBom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
 # https://mvnrepository.com/artifact/org.springframework/spring-tx
 springTx = { module = "org.springframework:spring-tx" }
+# https://mvnrepository.com/artifact/io.minio/minio
+minio = { module = "io.minio:minio", version.ref = "minioVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
