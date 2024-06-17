@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 public interface StreamFileGateway {
 
-  void uploadFile(StreamFile streamFile) throws Exception;
+  void uploadFile(StreamFile streamFile);
 
   Optional<InputStream> download(StreamFile streamFile);
 

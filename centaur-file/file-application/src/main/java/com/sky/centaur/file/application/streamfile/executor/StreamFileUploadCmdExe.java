@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.file.application.streamfile.executor;
 
-import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
 import com.sky.centaur.file.domain.stream.gateway.StreamFileGateway;
 import com.sky.centaur.file.infrastructure.streamfile.convertor.StreamFileConvertor;
@@ -43,13 +41,7 @@ public class StreamFileUploadCmdExe {
   public void execute(StreamFileUploadCmd streamFileUploadCmd) {
     Assert.notNull(streamFileUploadCmd, "StreamFileUploadCmd cannot be null");
     StreamFileConvertor.toEntity(streamFileUploadCmd.getStreamFileUploadCo())
-        .ifPresent(uploadCmd -> {
-              try {
-                streamFileGateway.uploadFile(uploadCmd);
-              } catch (Exception e) {
-                throw new CentaurException(ResultCode.FILE_UPLOAD_FAILED);
-              }
-            }
+        .ifPresent(streamFileGateway::uploadFile
         );
   }
 }

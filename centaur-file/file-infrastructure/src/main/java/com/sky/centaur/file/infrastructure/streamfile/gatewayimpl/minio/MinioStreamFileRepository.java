@@ -59,15 +59,21 @@ public class MinioStreamFileRepository {
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFileMinioDo streamFileMinioDo) throws Exception {
+  public void uploadFile(StreamFileMinioDo streamFileMinioDo) {
     if (streamFileMinioDo != null) {
-      minioClient.putObject(
-          PutObjectArgs.builder()
-              .bucket(streamFileMinioDo.getStorageAddress())
-              .object(streamFileMinioDo.getName())
-              .stream(streamFileMinioDo.getContent(), streamFileMinioDo.getContent().available(),
-                  -1)
-              .build());
+      try {
+        minioClient.putObject(
+            PutObjectArgs.builder()
+                .bucket(streamFileMinioDo.getStorageAddress())
+                .object(streamFileMinioDo.getName())
+                .stream(streamFileMinioDo.getContent(), streamFileMinioDo.getContent().available(),
+                    -1)
+                .build());
+      } catch (ErrorResponseException | InsufficientDataException | InternalException |
+               InvalidKeyException | InvalidResponseException | IOException |
+               NoSuchAlgorithmException | ServerException | XmlParserException e) {
+        throw new CentaurException(ResultCode.FILE_UPLOAD_FAILED);
+      }
     }
   }
 
@@ -77,9 +83,15 @@ public class MinioStreamFileRepository {
    * @param storageAddress 文件存储地址
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public void createStorageAddress(String storageAddress) throws Exception {
+  public void createStorageAddress(String storageAddress) {
     if (!storageAddressExists(storageAddress)) {
-      minioClient.makeBucket(MakeBucketArgs.builder().bucket(storageAddress).build());
+      try {
+        minioClient.makeBucket(MakeBucketArgs.builder().bucket(storageAddress).build());
+      } catch (ErrorResponseException | InsufficientDataException | InternalException |
+               InvalidKeyException | InvalidResponseException | IOException |
+               NoSuchAlgorithmException | ServerException | XmlParserException e) {
+        throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CREATION_FAILED);
+      }
     }
   }
 
@@ -89,9 +101,16 @@ public class MinioStreamFileRepository {
    * @param storageAddress 文件存储地址
    * @return 是否存在
    */
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   @API(status = Status.STABLE, since = "1.0.1")
-  public boolean storageAddressExists(String storageAddress) throws Exception {
-    return minioClient.bucketExists(BucketExistsArgs.builder().bucket(storageAddress).build());
+  public boolean storageAddressExists(String storageAddress) {
+    try {
+      return minioClient.bucketExists(BucketExistsArgs.builder().bucket(storageAddress).build());
+    } catch (ErrorResponseException | InsufficientDataException | InternalException |
+             InvalidKeyException | InvalidResponseException | IOException |
+             NoSuchAlgorithmException | ServerException | XmlParserException e) {
+      return false;
+    }
   }
 
   /**

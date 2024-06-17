@@ -72,7 +72,9 @@ public enum ResultCode implements BaseResultInterface {
   FILE_NAME_CANNOT_BE_EMPTY(6007),
   FILE_UPLOAD_FAILED(6008),
   INPUT_STREAM_CONVERSION_FAILED(6009),
-  FILE_DOES_NOT_EXIST(6010);
+  FILE_DOES_NOT_EXIST(6010),
+  THE_FILE_STORAGE_ADDRESS_DOES_NOT_EXIST(6011),
+  FILE_STORAGE_ADDRESS_CREATION_FAILED(6012);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

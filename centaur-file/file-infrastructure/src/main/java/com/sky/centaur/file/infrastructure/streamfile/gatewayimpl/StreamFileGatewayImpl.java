@@ -51,7 +51,7 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFile streamFile) throws Exception {
+  public void uploadFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
         .flatMap(StreamFileConvertor::toMinioDo)
         .filter(minioDo -> minioDo.getContent() != null && StringUtils.hasText(
@@ -72,6 +72,8 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
         file -> {
           if (ObjectUtils.isEmpty(file.getStorageAddress())) {
             throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+          } else if (!minioStreamFileRepository.storageAddressExists(file.getStorageAddress())) {
+            throw new CentaurException(ResultCode.THE_FILE_STORAGE_ADDRESS_DOES_NOT_EXIST);
           }
           if (ObjectUtils.isEmpty(file.getName())) {
             throw new CentaurException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
