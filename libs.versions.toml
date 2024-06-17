@@ -19,6 +19,7 @@ flywayVersion = "10.13.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.10'
+commonsIoVersion = '2.16.1'
 # bom version
 bullBomVersion = '2.2.4'
 grpcBomVersion = '1.58.0'
@@ -110,6 +111,8 @@ grpcClientSpringBootStarter = { module = "io.github.lognet:grpc-client-spring-bo
 redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 commonsLang3 = { module = "org.apache.commons:commons-lang3" }
+# https://mvnrepository.com/artifact/commons-io/commons-io
+commonsIo = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
 # https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper

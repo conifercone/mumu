@@ -15,11 +15,26 @@
  */
 package com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio;
 
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.StatObjectArgs;
+import io.minio.errors.ErrorResponseException;
+import io.minio.errors.InsufficientDataException;
+import io.minio.errors.InternalException;
+import io.minio.errors.InvalidResponseException;
+import io.minio.errors.ServerException;
+import io.minio.errors.XmlParserException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +92,48 @@ public class MinioStreamFileRepository {
   @API(status = Status.STABLE, since = "1.0.1")
   public boolean storageAddressExists(String storageAddress) throws Exception {
     return minioClient.bucketExists(BucketExistsArgs.builder().bucket(storageAddress).build());
+  }
+
+  /**
+   * 获取文件流
+   *
+   * @param streamFileMinioDo 流式文件minio数据对象
+   * @return 二进制流
+   */
+  @API(status = Status.STABLE, since = "1.0.1")
+  public Optional<InputStream> download(StreamFileMinioDo streamFileMinioDo) {
+    return Optional.ofNullable(streamFileMinioDo).map(minioDo -> {
+      try {
+        return minioClient.getObject(
+            GetObjectArgs.builder()
+                .bucket(minioDo.getStorageAddress())
+                .object(minioDo.getName())
+                .build());
+      } catch (ErrorResponseException | InsufficientDataException | InternalException |
+               InvalidKeyException | InvalidResponseException | IOException |
+               NoSuchAlgorithmException | ServerException | XmlParserException e) {
+        throw new CentaurException(ResultCode.FILE_DOWNLOAD_FAILED);
+      }
+    });
+  }
+
+
+  /**
+   * 判断文件是否存在
+   *
+   * @param streamFileMinioDo 流式文件minio数据对象
+   * @return 是否存在
+   */
+  @API(status = Status.STABLE, since = "1.0.1")
+  public boolean existed(StreamFileMinioDo streamFileMinioDo) {
+    boolean exist = true;
+    try {
+      minioClient.statObject(StatObjectArgs.builder().bucket(streamFileMinioDo.getStorageAddress())
+          .object(streamFileMinioDo.getName()).build());
+    } catch (Exception e) {
+      exist = false;
+    }
+    return exist;
   }
 
 }

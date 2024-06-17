@@ -15,7 +15,9 @@
  */
 package com.sky.centaur.file.client.api;
 
+import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
 import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import java.io.InputStream;
 
 /**
  * 流式文件接口
@@ -26,4 +28,6 @@ import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
 public interface StreamFileService {
 
   void uploadFile(StreamFileUploadCmd streamFileUploadCmd);
+
+  InputStream download(StreamFileDownloadCmd streamFileDownloadCmd);
 }

@@ -17,39 +17,38 @@ package com.sky.centaur.file.application.streamfile.executor;
 
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
-import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
 import com.sky.centaur.file.domain.stream.gateway.StreamFileGateway;
 import com.sky.centaur.file.infrastructure.streamfile.convertor.StreamFileConvertor;
+import java.io.InputStream;
+import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * 流式文件上传指令执行器
+ * 流式文件下载指令执行器
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Component
-public class StreamFileUploadCmdExe {
+public class StreamFileDownloadCmdExe {
 
   private final StreamFileGateway streamFileGateway;
 
   @Autowired
-  public StreamFileUploadCmdExe(StreamFileGateway streamFileGateway) {
+  public StreamFileDownloadCmdExe(StreamFileGateway streamFileGateway) {
     this.streamFileGateway = streamFileGateway;
   }
 
-  public void execute(StreamFileUploadCmd streamFileUploadCmd) {
-    Assert.notNull(streamFileUploadCmd, "StreamFileUploadCmd cannot be null");
-    StreamFileConvertor.toEntity(streamFileUploadCmd.getStreamFileUploadCo())
-        .ifPresent(uploadCmd -> {
-              try {
-                streamFileGateway.uploadFile(uploadCmd);
-              } catch (Exception e) {
-                throw new CentaurException(ResultCode.FILE_UPLOAD_FAILED);
-              }
-            }
-        );
+  public InputStream execute(StreamFileDownloadCmd streamFileDownloadCmd) {
+    Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
+    Supplier<CentaurException> downloadFailed = () -> new CentaurException(
+        ResultCode.FILE_DOWNLOAD_FAILED);
+    return StreamFileConvertor.toEntity(streamFileDownloadCmd.getStreamFileDownloadCo())
+        .map(streamFile -> streamFileGateway.download(streamFile)
+            .orElseThrow(downloadFailed)
+        ).orElseThrow(downloadFailed);
   }
 }

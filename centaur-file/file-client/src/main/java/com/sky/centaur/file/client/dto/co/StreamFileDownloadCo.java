@@ -17,22 +17,16 @@ package com.sky.centaur.file.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 流式文件上传客户端对象
+ * 流式文件下载客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StreamFileUploadCo {
-
-  /**
-   * 文件内容
-   */
-  private MultipartFile content;
+public class StreamFileDownloadCo {
 
   /**
    * 存储地址
@@ -40,7 +34,12 @@ public class StreamFileUploadCo {
   private String storageAddress;
 
   /**
-   * 文件名(可以不包含文件拓展名,默认取当前上传文件的文件拓展名)
+   * 源文件名(包含文件拓展名) eg: test.log
    */
   private String name;
+
+  /**
+   * 下载重命名(包含文件拓展名) eg: test.log
+   */
+  private String rename;
 }

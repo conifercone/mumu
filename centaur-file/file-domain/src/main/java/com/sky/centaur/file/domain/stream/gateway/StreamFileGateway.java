@@ -16,6 +16,8 @@
 package com.sky.centaur.file.domain.stream.gateway;
 
 import com.sky.centaur.file.domain.stream.StreamFile;
+import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * 流式文件领域网关
@@ -26,5 +28,7 @@ import com.sky.centaur.file.domain.stream.StreamFile;
 public interface StreamFileGateway {
 
   void uploadFile(StreamFile streamFile) throws Exception;
+
+  Optional<InputStream> download(StreamFile streamFile);
 
 }

@@ -17,6 +17,7 @@ package com.sky.centaur.extension.processor.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
 import com.sky.centaur.basis.client.dto.co.ClientObject;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -64,6 +65,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @ExceptionHandler(CentaurException.class)
   public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException,
       @NotNull HttpServletResponse response) {
+    response.setContentType("application/json");
+    response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(centaurException.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -81,6 +84,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @ExceptionHandler(Exception.class)
   public ResultResponse<?> handleException(@NotNull Exception exception,
       @NotNull HttpServletResponse response) {
+    response.setContentType("application/json");
+    response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(exception.getMessage());
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()

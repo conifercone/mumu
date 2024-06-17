@@ -152,6 +152,7 @@ subprojects { project ->
         implementation libs.apiguardian
         implementation libs.guava
         implementation libs.commonsLang3
+        implementation libs.commonsIo
         implementation libs.bullMapTransformer
         implementation libs.bullBeanTransformer
         implementation libs.jacksonModuleKotlin

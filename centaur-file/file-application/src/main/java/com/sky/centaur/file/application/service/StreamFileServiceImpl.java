@@ -15,9 +15,12 @@
  */
 package com.sky.centaur.file.application.service;
 
+import com.sky.centaur.file.application.streamfile.executor.StreamFileDownloadCmdExe;
 import com.sky.centaur.file.application.streamfile.executor.StreamFileUploadCmdExe;
 import com.sky.centaur.file.client.api.StreamFileService;
+import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
 import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,14 +34,23 @@ import org.springframework.stereotype.Service;
 public class StreamFileServiceImpl implements StreamFileService {
 
   private final StreamFileUploadCmdExe streamFileUploadCmdExe;
+  private final StreamFileDownloadCmdExe streamFileDownloadCmdExe;
 
   @Autowired
-  public StreamFileServiceImpl(StreamFileUploadCmdExe streamFileUploadCmdExe) {
+  public StreamFileServiceImpl(StreamFileUploadCmdExe streamFileUploadCmdExe,
+      StreamFileDownloadCmdExe streamFileDownloadCmdExe) {
     this.streamFileUploadCmdExe = streamFileUploadCmdExe;
+    this.streamFileDownloadCmdExe = streamFileDownloadCmdExe;
   }
 
   @Override
   public void uploadFile(StreamFileUploadCmd streamFileUploadCmd) {
     streamFileUploadCmdExe.execute(streamFileUploadCmd);
   }
+
+  @Override
+  public InputStream download(StreamFileDownloadCmd streamFileDownloadCmd) {
+    return streamFileDownloadCmdExe.execute(streamFileDownloadCmd);
+  }
+
 }

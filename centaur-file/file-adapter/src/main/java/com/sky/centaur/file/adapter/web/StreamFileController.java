@@ -18,13 +18,22 @@ package com.sky.centaur.file.adapter.web;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.file.client.api.StreamFileService;
+import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
 import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.IOUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,5 +70,27 @@ public class StreamFileController {
         StreamFileUploadCmd.class);
     fileUploadCmd.getStreamFileUploadCo().setContent(file);
     streamFileService.uploadFile(fileUploadCmd);
+  }
+
+  @Operation(summary = "文件下载")
+  @GetMapping("/download")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.1")
+  public void download(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd,
+      HttpServletResponse response)
+      throws IOException {
+    Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
+    Assert.notNull(streamFileDownloadCmd.getStreamFileDownloadCo(),
+        "StreamFileDownloadCo cannot be null");
+    response.setHeader("Content-Disposition",
+        "attachment;filename=" + (ObjectUtils.isEmpty(
+            streamFileDownloadCmd.getStreamFileDownloadCo().getRename())
+            ? streamFileDownloadCmd.getStreamFileDownloadCo().getName()
+            : streamFileDownloadCmd.getStreamFileDownloadCo()
+                .getRename()));
+    response.setContentType("application/force-download");
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+    IOUtils.copy(streamFileService.download(streamFileDownloadCmd), response.getOutputStream());
+
   }
 }

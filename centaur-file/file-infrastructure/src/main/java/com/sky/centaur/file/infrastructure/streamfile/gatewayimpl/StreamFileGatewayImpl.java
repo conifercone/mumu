@@ -23,11 +23,13 @@ import com.sky.centaur.file.infrastructure.streamfile.convertor.StreamFileConver
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.MinioStreamFileRepository;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import io.micrometer.observation.annotation.Observed;
+import java.io.InputStream;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -61,5 +63,23 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
       throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
     }
     minioStreamFileRepository.uploadFile(streamFileMinioDo);
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "1.0.1")
+  public Optional<InputStream> download(StreamFile streamFile) {
+    return Optional.ofNullable(streamFile).flatMap(StreamFileConvertor::toMinioDo).filter(
+        file -> {
+          if (ObjectUtils.isEmpty(file.getStorageAddress())) {
+            throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+          }
+          if (ObjectUtils.isEmpty(file.getName())) {
+            throw new CentaurException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
+          }
+          if (!minioStreamFileRepository.existed(file)) {
+            throw new CentaurException(ResultCode.FILE_DOES_NOT_EXIST);
+          }
+          return Boolean.TRUE;
+        }).flatMap(minioStreamFileRepository::download);
   }
 }

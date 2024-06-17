@@ -17,13 +17,16 @@ package com.sky.centaur.file.infrastructure.streamfile.convertor;
 
 import com.expediagroup.beans.BeanUtils;
 import com.expediagroup.beans.transformer.BeanTransformer;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
 import com.sky.centaur.file.client.dto.co.StreamFileUploadCo;
 import com.sky.centaur.file.domain.stream.StreamFile;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import java.io.IOException;
 import java.util.Optional;
+import org.apache.commons.io.IOUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
@@ -57,11 +60,37 @@ public final class StreamFileConvertor {
                   StreamFile.class);
           if (ObjectUtils.isEmpty(streamFile.getName())) {
             streamFile.setName(uploadCo.getContent().getOriginalFilename());
+          } else if (!streamFile.getName().contains(CommonConstants.DOT)) {
+            String originalFilename = uploadCo.getContent().getOriginalFilename();
+            if (ObjectUtils.isEmpty(originalFilename)) {
+              throw new CentaurException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
+            }
+            streamFile.setName(streamFile.getName().concat(CommonConstants.DOT).concat(
+                originalFilename.substring(originalFilename.lastIndexOf(CommonConstants.DOT) + 1)));
           }
           try {
-            streamFile.setContent(uploadCo.getContent().getInputStream());
+            streamFile.setContent(
+                IOUtils.toBufferedInputStream(uploadCo.getContent().getInputStream()));
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CentaurException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
+          }
+          return streamFile;
+        });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.1")
+  public static Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
+    return Optional.ofNullable(streamFileDownloadCo)
+        .map(downloadCo -> {
+          StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
+              .transform(downloadCo,
+                  StreamFile.class);
+          if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
+            throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+          }
+          if (ObjectUtils.isEmpty(streamFile.getName())) {
+            throw new CentaurException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
           }
           return streamFile;
         });
@@ -72,9 +101,17 @@ public final class StreamFileConvertor {
   public static Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
         .map(file -> {
-          StreamFileMinioDo transform = BEAN_TRANSFORMER.transform(file,
-              StreamFileMinioDo.class);
-          transform.setContent(streamFile.getContent());
+          StreamFileMinioDo transform = BEAN_TRANSFORMER.skipTransformationForField("content")
+              .transform(file,
+                  StreamFileMinioDo.class);
+          try {
+            if (streamFile.getContent() != null) {
+              transform.setContent(
+                  IOUtils.toBufferedInputStream(streamFile.getContent()));
+            }
+          } catch (IOException e) {
+            throw new CentaurException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
+          }
           return transform;
         });
   }

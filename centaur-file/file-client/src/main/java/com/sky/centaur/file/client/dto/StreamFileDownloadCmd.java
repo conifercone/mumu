@@ -13,34 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.file.client.dto.co;
+package com.sky.centaur.file.client.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 流式文件上传客户端对象
+ * 流式文件下载指令
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class StreamFileUploadCo {
+public class StreamFileDownloadCmd {
 
-  /**
-   * 文件内容
-   */
-  private MultipartFile content;
-
-  /**
-   * 存储地址
-   */
-  private String storageAddress;
-
-  /**
-   * 文件名(可以不包含文件拓展名,默认取当前上传文件的文件拓展名)
-   */
-  private String name;
+  private StreamFileDownloadCo streamFileDownloadCo;
 }
