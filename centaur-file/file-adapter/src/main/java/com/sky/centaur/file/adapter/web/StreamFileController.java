@@ -93,6 +93,15 @@ public class StreamFileController {
     response.setContentType("application/force-download");
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     IOUtils.copy(streamFileService.download(streamFileDownloadCmd), response.getOutputStream());
+  }
 
+  @Operation(summary = "获取字符串格式的文件内容")
+  @GetMapping("/stringContent")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.1")
+  public String getStringContent(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd)
+      throws IOException {
+    return IOUtils.toString(streamFileService.download(streamFileDownloadCmd),
+        StandardCharsets.UTF_8);
   }
 }

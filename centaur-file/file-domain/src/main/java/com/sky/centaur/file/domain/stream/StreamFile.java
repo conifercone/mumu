@@ -48,5 +48,5 @@ public class StreamFile extends BasisDomainModel {
   /**
    * 文件大小
    */
-  private long size;
+  private Long size;
 }

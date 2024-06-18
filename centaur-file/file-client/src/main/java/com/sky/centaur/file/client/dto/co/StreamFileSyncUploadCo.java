@@ -56,7 +56,7 @@ public class StreamFileSyncUploadCo {
   /**
    * 文件大小
    */
-  private long size;
+  private Long size;
 
   public String getName() {
     if (ObjectUtils.isEmpty(name)) {
