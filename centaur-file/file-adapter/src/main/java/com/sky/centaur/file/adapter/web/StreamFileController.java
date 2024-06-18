@@ -15,14 +15,14 @@
  */
 package com.sky.centaur.file.adapter.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.file.client.api.StreamFileService;
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
-import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
@@ -60,16 +60,18 @@ public class StreamFileController {
     this.streamFileService = streamFileService;
   }
 
-  @Operation(summary = "文件上传")
-  @PostMapping("/upload")
+  @Operation(summary = "异步文件上传")
+  @PostMapping("/sync/upload")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.1")
-  public void add(@RequestParam("streamFileUploadCmd") String streamFileUploadCmd,
-      @RequestParam("file") MultipartFile file) throws JsonProcessingException {
-    StreamFileUploadCmd fileUploadCmd = objectMapper.readValue(streamFileUploadCmd,
-        StreamFileUploadCmd.class);
-    fileUploadCmd.getStreamFileUploadCo().setContent(file);
-    streamFileService.uploadFile(fileUploadCmd);
+  public void syncUpload(@RequestParam("streamFileSyncUploadCmd") String streamFileSyncUploadCmd,
+      @RequestParam("file") MultipartFile file) throws IOException {
+    StreamFileSyncUploadCmd fileUploadCmd = objectMapper.readValue(streamFileSyncUploadCmd,
+        StreamFileSyncUploadCmd.class);
+    fileUploadCmd.getStreamFileSyncUploadCo().setContent(new ByteArrayInputStream(file.getBytes()));
+    fileUploadCmd.getStreamFileSyncUploadCo().setOriginName(file.getOriginalFilename());
+    fileUploadCmd.getStreamFileSyncUploadCo().setSize(file.getSize());
+    streamFileService.syncUploadFile(fileUploadCmd);
   }
 
   @Operation(summary = "文件下载")

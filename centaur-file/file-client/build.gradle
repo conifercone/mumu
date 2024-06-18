@@ -1,3 +1,4 @@
 dependencies {
     implementation libs.springWeb
+    implementation project(":centaur-basis")
 }

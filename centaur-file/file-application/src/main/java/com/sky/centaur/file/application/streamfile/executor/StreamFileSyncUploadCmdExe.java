@@ -15,32 +15,34 @@
  */
 package com.sky.centaur.file.application.streamfile.executor;
 
-import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import com.sky.centaur.file.domain.stream.gateway.StreamFileGateway;
 import com.sky.centaur.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * 流式文件上传指令执行器
+ * 流式文件异步上传指令执行器
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Component
-public class StreamFileUploadCmdExe {
+public class StreamFileSyncUploadCmdExe {
 
   private final StreamFileGateway streamFileGateway;
 
   @Autowired
-  public StreamFileUploadCmdExe(StreamFileGateway streamFileGateway) {
+  public StreamFileSyncUploadCmdExe(StreamFileGateway streamFileGateway) {
     this.streamFileGateway = streamFileGateway;
   }
 
-  public void execute(StreamFileUploadCmd streamFileUploadCmd) {
-    Assert.notNull(streamFileUploadCmd, "StreamFileUploadCmd cannot be null");
-    StreamFileConvertor.toEntity(streamFileUploadCmd.getStreamFileUploadCo())
+  @Async
+  public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
+    Assert.notNull(streamFileSyncUploadCmd, "StreamFileSyncUploadCmd cannot be null");
+    StreamFileConvertor.toEntity(streamFileSyncUploadCmd.getStreamFileSyncUploadCo())
         .ifPresent(streamFileGateway::uploadFile
         );
   }

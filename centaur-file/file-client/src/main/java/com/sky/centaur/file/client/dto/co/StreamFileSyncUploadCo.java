@@ -16,23 +16,27 @@
 package com.sky.centaur.file.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sky.centaur.basis.constants.CommonConstants;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import java.io.InputStream;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.ObjectUtils;
 
 /**
- * 流式文件上传客户端对象
+ * 流式文件异步上传客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StreamFileUploadCo {
+public class StreamFileSyncUploadCo {
 
   /**
    * 文件内容
    */
-  private MultipartFile content;
+  private InputStream content;
 
   /**
    * 存储地址
@@ -43,4 +47,27 @@ public class StreamFileUploadCo {
    * 文件名(可以不包含文件拓展名,默认取当前上传文件的文件拓展名)
    */
   private String name;
+
+  /**
+   * 源文件名
+   */
+  private String originName;
+
+  /**
+   * 文件大小
+   */
+  private long size;
+
+  public String getName() {
+    if (ObjectUtils.isEmpty(name)) {
+      return originName;
+    } else if (!name.contains(CommonConstants.DOT)) {
+      if (ObjectUtils.isEmpty(originName)) {
+        throw new CentaurException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
+      }
+      return name.concat(CommonConstants.DOT).concat(
+          originName.substring(originName.lastIndexOf(CommonConstants.DOT) + 1));
+    }
+    return name;
+  }
 }

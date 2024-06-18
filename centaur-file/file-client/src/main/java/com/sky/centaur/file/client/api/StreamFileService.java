@@ -16,7 +16,7 @@
 package com.sky.centaur.file.client.api;
 
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
-import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import java.io.InputStream;
 
 /**
@@ -27,7 +27,7 @@ import java.io.InputStream;
  */
 public interface StreamFileService {
 
-  void uploadFile(StreamFileUploadCmd streamFileUploadCmd);
+  void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
 
   InputStream download(StreamFileDownloadCmd streamFileDownloadCmd);
 }

@@ -16,10 +16,10 @@
 package com.sky.centaur.file.application.service;
 
 import com.sky.centaur.file.application.streamfile.executor.StreamFileDownloadCmdExe;
-import com.sky.centaur.file.application.streamfile.executor.StreamFileUploadCmdExe;
+import com.sky.centaur.file.application.streamfile.executor.StreamFileSyncUploadCmdExe;
 import com.sky.centaur.file.client.api.StreamFileService;
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
-import com.sky.centaur.file.client.dto.StreamFileUploadCmd;
+import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,19 +33,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class StreamFileServiceImpl implements StreamFileService {
 
-  private final StreamFileUploadCmdExe streamFileUploadCmdExe;
+  private final StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe;
   private final StreamFileDownloadCmdExe streamFileDownloadCmdExe;
 
   @Autowired
-  public StreamFileServiceImpl(StreamFileUploadCmdExe streamFileUploadCmdExe,
+  public StreamFileServiceImpl(StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe,
       StreamFileDownloadCmdExe streamFileDownloadCmdExe) {
-    this.streamFileUploadCmdExe = streamFileUploadCmdExe;
+    this.streamFileSyncUploadCmdExe = streamFileSyncUploadCmdExe;
     this.streamFileDownloadCmdExe = streamFileDownloadCmdExe;
   }
 
   @Override
-  public void uploadFile(StreamFileUploadCmd streamFileUploadCmd) {
-    streamFileUploadCmdExe.execute(streamFileUploadCmd);
+  public void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
+    streamFileSyncUploadCmdExe.execute(streamFileSyncUploadCmd);
   }
 
   @Override

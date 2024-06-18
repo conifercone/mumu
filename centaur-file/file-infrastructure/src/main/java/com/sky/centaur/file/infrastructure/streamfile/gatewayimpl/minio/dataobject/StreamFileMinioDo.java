@@ -41,4 +41,9 @@ public class StreamFileMinioDo {
    * 文件名
    */
   private String name;
+
+  /**
+   * 文件大小
+   */
+  private long size;
 }

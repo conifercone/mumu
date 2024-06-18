@@ -17,6 +17,7 @@ package com.sky.centaur.file;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 文件服务
@@ -25,6 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.1
  */
 @SpringBootApplication
+@EnableAsync
 public class CentaurFileApplication {
 
   public static void main(String[] args) {

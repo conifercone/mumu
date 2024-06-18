@@ -60,13 +60,13 @@ public class MinioStreamFileRepository {
 
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(StreamFileMinioDo streamFileMinioDo) {
-    if (streamFileMinioDo != null) {
+    Optional.ofNullable(streamFileMinioDo).ifPresent(minioDo -> {
       try {
         minioClient.putObject(
             PutObjectArgs.builder()
-                .bucket(streamFileMinioDo.getStorageAddress())
-                .object(streamFileMinioDo.getName())
-                .stream(streamFileMinioDo.getContent(), streamFileMinioDo.getContent().available(),
+                .bucket(minioDo.getStorageAddress())
+                .object(minioDo.getName())
+                .stream(minioDo.getContent(), minioDo.getContent().available(),
                     -1)
                 .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
@@ -74,7 +74,8 @@ public class MinioStreamFileRepository {
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
         throw new CentaurException(ResultCode.FILE_UPLOAD_FAILED);
       }
-    }
+    });
+
   }
 
   /**

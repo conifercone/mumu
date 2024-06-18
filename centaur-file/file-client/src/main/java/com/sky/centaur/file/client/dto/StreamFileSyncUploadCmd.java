@@ -15,17 +15,17 @@
  */
 package com.sky.centaur.file.client.dto;
 
-import com.sky.centaur.file.client.dto.co.StreamFileUploadCo;
+import com.sky.centaur.file.client.dto.co.StreamFileSyncUploadCo;
 import lombok.Data;
 
 /**
- * 流式文件上传指令
+ * 流式文件异步上传指令
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
 @Data
-public class StreamFileUploadCmd {
+public class StreamFileSyncUploadCmd {
 
-  private StreamFileUploadCo streamFileUploadCo;
+  private StreamFileSyncUploadCo streamFileSyncUploadCo;
 }
