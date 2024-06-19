@@ -61,12 +61,12 @@ public class MinioStreamFileRepository {
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(StreamFileMinioDo streamFileMinioDo) {
     Optional.ofNullable(streamFileMinioDo).ifPresent(minioDo -> {
-      try {
+      try (InputStream minioDoContent = minioDo.getContent()) {
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket(minioDo.getStorageAddress())
                 .object(minioDo.getName())
-                .stream(minioDo.getContent(), minioDo.getContent().available(),
+                .stream(minioDoContent, minioDoContent.available(),
                     -1)
                 .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |

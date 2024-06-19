@@ -63,7 +63,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException, ServletException {
     if (authException instanceof UsernameNotFoundException usernameNotFoundException) {
-      LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode());
+      LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder()
@@ -80,7 +80,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
       response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
       ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
     } else if (authException instanceof InvalidBearerTokenException invalidBearerTokenException) {
-      LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+      LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder()

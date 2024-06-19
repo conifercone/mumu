@@ -23,6 +23,8 @@ import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
 import com.sky.centaur.file.client.dto.co.StreamFileSyncUploadCo;
 import com.sky.centaur.file.domain.stream.StreamFile;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -49,13 +51,18 @@ public final class StreamFileConvertor {
   public static Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
     return Optional.ofNullable(streamFileSyncUploadCo)
         .map(uploadCo -> {
-          if (uploadCo.getContent() == null) {
-            throw new CentaurException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY);
-          }
           StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
               .transform(uploadCo,
                   StreamFile.class);
-          streamFile.setContent(uploadCo.getContent());
+          try (InputStream streamFileContent = uploadCo.getContent()) {
+            if (streamFileContent == null) {
+              throw new CentaurException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY);
+            } else {
+              streamFile.setContent(streamFileContent);
+            }
+          } catch (IOException e) {
+            throw new CentaurException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
+          }
           return streamFile;
         });
   }
@@ -86,8 +93,12 @@ public final class StreamFileConvertor {
           StreamFileMinioDo transform = BEAN_TRANSFORMER.skipTransformationForField("content")
               .transform(file,
                   StreamFileMinioDo.class);
-          if (streamFile.getContent() != null) {
-            transform.setContent(streamFile.getContent());
+          try (InputStream streamFileContent = streamFile.getContent()) {
+            if (streamFileContent != null) {
+              transform.setContent(streamFileContent);
+            }
+          } catch (IOException e) {
+            throw new CentaurException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
           }
           return transform;
         });

@@ -40,7 +40,7 @@ public class ResourceServerAuthenticationEntryPoint implements AuthenticationEnt
       jakarta.servlet.http.@NotNull HttpServletResponse response,
       AuthenticationException authException)
       throws IOException {
-    LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+    LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
     response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
     ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
   }

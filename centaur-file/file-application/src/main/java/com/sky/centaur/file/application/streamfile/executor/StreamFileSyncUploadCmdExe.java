@@ -43,7 +43,6 @@ public class StreamFileSyncUploadCmdExe {
   public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
     Assert.notNull(streamFileSyncUploadCmd, "StreamFileSyncUploadCmd cannot be null");
     StreamFileConvertor.toEntity(streamFileSyncUploadCmd.getStreamFileSyncUploadCo())
-        .ifPresent(streamFileGateway::uploadFile
-        );
+        .ifPresent(streamFileGateway::uploadFile);
   }
 }
