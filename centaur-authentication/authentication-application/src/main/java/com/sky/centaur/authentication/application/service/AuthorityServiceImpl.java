@@ -44,7 +44,6 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
-import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -110,7 +109,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     try {
       authorityAddCmdExe.execute(authorityAddCmd);
 
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -191,7 +190,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     authorityDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
       authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -209,7 +208,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     authorityUpdateCmd.setAuthorityUpdateCo(authorityUpdateCo);
     try {
       authorityUpdateCmdExe.execute(authorityUpdateCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -235,7 +234,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
                   StringValue.of(authorityFindAllCo.getName())).build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(authorityFindAllCos.getTotalPages());
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(builder.build());

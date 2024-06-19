@@ -50,7 +50,6 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.enums.SexEnum;
-import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -129,7 +128,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
     try {
       accountRegisterCmdExe.execute(accountRegisterCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -191,7 +190,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
     try {
       accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -228,7 +227,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
     try {
       accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -261,7 +260,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountDisableCmd.setAccountDisableCo(accountDisableCo);
     try {
       accountDisableCmdExe.execute(accountDisableCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());

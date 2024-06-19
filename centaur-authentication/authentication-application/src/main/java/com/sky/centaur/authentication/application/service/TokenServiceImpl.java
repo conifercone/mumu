@@ -22,7 +22,6 @@ import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import com.sky.centaur.authentication.client.dto.TokenValidityCmd;
 import com.sky.centaur.authentication.client.dto.co.TokenValidityCo;
-import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -67,7 +66,7 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
       TokenValidityCo execute = tokenValidityCmdExe.execute(tokenValidityCmd);
       tokenValidityGrpcCo = tokenValidityGrpcCo.toBuilder().setValidity(execute.isValidity())
           .setToken(tokenValidityCo.getToken()).build();
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(tokenValidityGrpcCo);

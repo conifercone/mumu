@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.log.application.service;
 
-import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.log.application.system.executor.SystemLogFindAllCmdExe;
 import com.sky.centaur.log.application.system.executor.SystemLogSaveCmdExe;
 import com.sky.centaur.log.application.system.executor.SystemLogSubmitCmdExe;
@@ -85,7 +84,7 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
     systemLogSubmitCmd.setSystemLogSubmitCo(systemLogSubmitCo);
     try {
       systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     SystemLogServiceEmptyResult build = SystemLogServiceEmptyResult.newBuilder().build();
