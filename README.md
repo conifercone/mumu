@@ -37,12 +37,24 @@ centaur
 │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
 │  │─ 📂 centaur-basis -- basic module
 │  │─ 📂 centaur-extension -- expansion module
+│  │─ 📂 centaur-file -- file service
+│  │  │- 📂 file-adapter -- file service adaptation layer
+│  │  │- 📂 file-application -- file service application layer
+│  │  │- 📂 file-client -- file service client
+│  │  │- 📂 file-domain -- file service domain layer
+│  │  │- 📂 file-infrastructure -- file service infrastructure layer
 │  │─ 📂 centaur-log -- log service
 │  │  │- 📂 log-adapter -- log service adaptation layer
 │  │  │- 📂 log-application -- log service application layer
 │  │  │- 📂 log-client -- log service client
 │  │  │- 📂 log-domain -- log service domain layer
 │  │  │- 📂 log-infrastructure -- log service infrastructure layer
+│  │─ 📂 centaur-mail -- mail service
+│  │  │- 📂 mail-adapter -- mail service adaptation layer
+│  │  │- 📂 mail-application -- mail service application layer
+│  │  │- 📂 mail-client -- mail service client
+│  │  │- 📂 mail-domain -- mail service domain layer
+│  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
 │  │─ 📂 centaur-unique -- unique data generation service
 │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
 │  │  │- 📂 unique-application -- unique data generation service application layer
