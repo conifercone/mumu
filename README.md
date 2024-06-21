@@ -55,16 +55,17 @@ centaur
 
 ### infrastructure
 
-| name          | releases |
-|---------------|----------|
-| apisix        | 3.8.0    |
-| elasticsearch | 8.12.0   |
-| kafka         | 3.4      |
-| postgresql    | 15.1     |
-| redis         | latest   |
-| zookeeper     | 3.8      |
-| consul        | 1.15.4   |
-| zipkin        | 3.19.0   |
+| name          | releases                     |
+|---------------|------------------------------|
+| apisix        | 3.8.0                        |
+| elasticsearch | 8.12.0                       |
+| kafka         | 3.4                          |
+| postgresql    | 15.1                         |
+| redis         | latest                       |
+| zookeeper     | 3.8                          |
+| consul        | 1.15.4                       |
+| minio         | RELEASE.2024-06-13T22-53-53Z |
+| zipkin        | 3.19.0                       |
 
 ## Dependency Statement
 
