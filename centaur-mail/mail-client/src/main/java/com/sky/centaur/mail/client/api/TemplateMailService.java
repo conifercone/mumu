@@ -25,6 +25,11 @@ import com.sky.centaur.mail.client.dto.TemplateMailSendCmd;
  */
 public interface TemplateMailService {
 
+  /**
+   * 发送模板邮件
+   *
+   * @param templateMailSendCmd 模板邮件发送指令
+   */
   void sendMail(TemplateMailSendCmd templateMailSendCmd);
 
 }

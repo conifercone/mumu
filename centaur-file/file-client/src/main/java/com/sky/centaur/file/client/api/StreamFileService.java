@@ -27,7 +27,18 @@ import java.io.InputStream;
  */
 public interface StreamFileService {
 
+  /**
+   * 异步文件上传
+   *
+   * @param streamFileSyncUploadCmd 流文件异步上传指令
+   */
   void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
 
+  /**
+   * 下载
+   *
+   * @param streamFileDownloadCmd 流文件下载指令
+   * @return 文件流
+   */
   InputStream download(StreamFileDownloadCmd streamFileDownloadCmd);
 }
