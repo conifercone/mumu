@@ -17,6 +17,10 @@ dependencies {
     testImplementation(libs.springbootTest) {
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
+    testImplementation libs.jasypt
+    testImplementation libs.springSecurityTest
+    testImplementation libs.grpcClientSpringBootStarter
+    testImplementation libs.springWeb
     implementation libs.springBootMail
     implementation libs.springBootThymeleaf
     implementation libs.jasypt

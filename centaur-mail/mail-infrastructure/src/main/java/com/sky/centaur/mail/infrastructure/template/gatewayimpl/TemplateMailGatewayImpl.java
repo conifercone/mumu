@@ -16,8 +16,6 @@
 package com.sky.centaur.mail.infrastructure.template.gatewayimpl;
 
 import com.google.common.base.Charsets;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
@@ -36,6 +34,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
@@ -85,39 +84,35 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
           AuthHeader.builder().bearer().tokenSupplier(
               () -> ByteBuffer.wrap(bytes))
       );
-      ListenableFuture<StreamFileDownloadGrpcResult> streamFileDownloadGrpcResultListenableFuture = streamFileGrpcService.syncDownload(
-          streamFileDownloadGrpcCmd,
-          callCredentials);
-      streamFileDownloadGrpcResultListenableFuture.addListener(() -> {
-        try {
-          StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileDownloadGrpcResultListenableFuture.get();
-          Optional<TemplateMailThymeleafDo> thymeleafDo = TemplateMailConvertor.toThymeleafDo(
-              templateMailDomain);
-          thymeleafDo.ifPresent(thDo -> {
-            thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()
-                .toStringUtf8());
-            thymeleafTemplateMailRepository.processTemplate(thDo).ifPresent(mailContent -> {
-              try {
-                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true,
-                    Charsets.UTF_8.name());
-                mimeMessageHelper.setFrom(templateMailDomain.getFrom());
-                mimeMessageHelper.setTo(templateMailDomain.getTo());
-                mimeMessageHelper.setSubject(templateMailDomain.getSubject());
-                mimeMessageHelper.setText(mailContent, true);
-                javaMailSender.send(mimeMessage);
-              } catch (Exception e) {
-                LOGGER.error(ResultCode.EMAIL_SENDING_EXCEPTION.getResultMsg(), e);
-                throw new CentaurException(ResultCode.EMAIL_SENDING_EXCEPTION);
-              }
-            });
+      try {
+        StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
+            streamFileDownloadGrpcCmd,
+            callCredentials);
+        Optional<TemplateMailThymeleafDo> thymeleafDo = TemplateMailConvertor.toThymeleafDo(
+            templateMailDomain);
+        thymeleafDo.ifPresent(thDo -> {
+          thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()
+              .toStringUtf8());
+          thymeleafTemplateMailRepository.processTemplate(thDo).ifPresent(mailContent -> {
+            try {
+              MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+              MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true,
+                  Charsets.UTF_8.name());
+              mimeMessageHelper.setFrom(templateMailDomain.getFrom());
+              mimeMessageHelper.setTo(templateMailDomain.getTo());
+              mimeMessageHelper.setSubject(templateMailDomain.getSubject());
+              mimeMessageHelper.setText(mailContent, true);
+              javaMailSender.send(mimeMessage);
+            } catch (Exception e) {
+              LOGGER.error(ResultCode.EMAIL_SENDING_EXCEPTION.getResultMsg(), e);
+              throw new CentaurException(ResultCode.EMAIL_SENDING_EXCEPTION);
+            }
           });
-        } catch (InterruptedException | ExecutionException e) {
-          LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
-          throw new CentaurException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
-        }
-      }, MoreExecutors.directExecutor());
+        });
+      } catch (InterruptedException | TimeoutException | ExecutionException e) {
+        LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
+        throw new CentaurException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
+      }
     });
-
   }
 }
