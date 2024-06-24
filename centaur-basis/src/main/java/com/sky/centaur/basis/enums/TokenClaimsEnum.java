@@ -42,5 +42,10 @@ public enum TokenClaimsEnum {
   /**
    * 时区
    */
-  TIMEZONE
+  TIMEZONE,
+
+  /**
+   * 语言偏好
+   */
+  LANGUAGE
 }

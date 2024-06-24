@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.basis.kotlin.tools
 
+import com.sky.centaur.basis.enums.LanguageEnum
 import com.sky.centaur.basis.enums.TokenClaimsEnum
 import org.apiguardian.api.API
 import org.springframework.cglib.beans.BeanMap
@@ -37,6 +38,7 @@ object SecurityContextUtil {
      */
     private const val ID = "id"
     private const val TIMEZONE = "timezone"
+    private const val LANGUAGE = "language"
 
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
@@ -86,6 +88,33 @@ object SecurityContextUtil {
                         val claims: Map<String, Any> = principal.claims
                         if (claims.containsKey(TokenClaimsEnum.TIMEZONE.name)) {
                             return@map claims[TokenClaimsEnum.TIMEZONE.name].toString()
+                        }
+                    }
+                }
+                null
+            }
+
+    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @JvmStatic
+    val loginAccountLanguage: Optional<LanguageEnum?>
+        /**
+         * 获取当前登录账户语言偏好
+         *
+         * @return 登录账户语言偏好
+         */
+        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+            .map { authentication: Authentication ->
+                if (authentication.isAuthenticated) {
+                    val principal = authentication.principal
+                    if (principal is UserDetails) {
+                        val beanMap = BeanMap.create(principal)
+                        if (beanMap.containsKey(LANGUAGE)) {
+                            return@map beanMap[LANGUAGE] as LanguageEnum?
+                        }
+                    } else if (principal is ClaimAccessor) {
+                        val claims: Map<String, Any> = principal.claims
+                        if (claims.containsKey(TokenClaimsEnum.LANGUAGE.name)) {
+                            return@map LanguageEnum.valueOf(claims[TokenClaimsEnum.LANGUAGE.name].toString())
                         }
                     }
                 }

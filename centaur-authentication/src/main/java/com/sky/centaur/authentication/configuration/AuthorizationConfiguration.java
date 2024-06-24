@@ -376,6 +376,9 @@ public class AuthorizationConfiguration {
         if (StringUtils.hasText(account.getTimezone())) {
           claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
         }
+        Optional.ofNullable(account.getLanguage())
+            .ifPresent(
+                languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
       }
     };
   }
