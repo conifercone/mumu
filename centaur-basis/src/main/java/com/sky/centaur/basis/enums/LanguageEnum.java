@@ -13,35 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.LanguageEnum;
-import com.sky.centaur.basis.enums.SexEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+package com.sky.centaur.basis.enums;
 
 /**
- * 账户信息更新客户端对象
+ * 语言偏好枚举
  *
  * @author kaiyu.shan
- * @since 1.0.0
+ * @see <a href="https://zh.wikipedia.org/wiki/ISO_639-1">ISO 639-1</a>
+ * @since 1.0.1
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountUpdateByIdCo extends BaseClientObject {
+public enum LanguageEnum {
 
-  private Long id;
+  /**
+   * 汉语（中文）
+   */
+  ZH,
 
-  private String avatarUrl;
-
-  private String phone;
-
-  private SexEnum sex;
-
-  private String email;
-
-  private String timezone;
-
-  private LanguageEnum language;
+  /**
+   * 英语
+   */
+  EN
 }

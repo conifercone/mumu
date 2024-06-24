@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databa
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
+import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -100,5 +101,10 @@ public class AccountDo extends JpaBasisDataObject {
   @Size(max = 200)
   @Column(name = "timezone", length = 200)
   private String timezone;
+
+  @Column(name = "language", columnDefinition = "language(0, 0)")
+  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Enumerated(EnumType.STRING)
+  private LanguageEnum language;
 
 }

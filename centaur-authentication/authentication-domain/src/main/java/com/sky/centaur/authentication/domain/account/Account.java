@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import java.io.Serial;
 import java.util.ArrayList;
@@ -86,6 +87,10 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Getter
   @Setter
   private String timezone;
+
+  @Getter
+  @Setter
+  private LanguageEnum language;
 
   public Account(Long id, String username, String password, Role role) {
     this.id = id;

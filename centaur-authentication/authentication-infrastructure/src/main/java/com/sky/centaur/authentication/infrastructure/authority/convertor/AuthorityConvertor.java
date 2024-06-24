@@ -86,6 +86,7 @@ public final class AuthorityConvertor {
       return authorityRepository.findById(
               authorityUpdateClientObject.getId()).flatMap(AuthorityConvertor::toEntity)
           .map(authority -> {
+            BEAN_TRANSFORMER.resetFieldsTransformationSkip();
             BEAN_TRANSFORMER.skipTransformationForField(
                     BeanUtil.getNullPropertyNames(authorityUpdateClientObject))
                 .transform(authorityUpdateClientObject, authority);

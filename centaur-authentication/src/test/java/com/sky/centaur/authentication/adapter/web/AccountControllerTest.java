@@ -64,6 +64,7 @@ public class AccountControllerTest {
                  "avatarUrl": "https://github.com/users/conifercone",
                  "phone": "13031723736",
                  "sex": "MALE",
+                 "language": "ZH",
                  "timezone": "UTF+8"
              }
          }""";

@@ -51,6 +51,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
     return Optional.ofNullable(streamFileSyncUploadCo)
         .map(uploadCo -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
           StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
               .transform(uploadCo,
                   StreamFile.class);
@@ -72,6 +73,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
     return Optional.ofNullable(streamFileDownloadCo)
         .map(downloadCo -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
           StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
               .transform(downloadCo,
                   StreamFile.class);
@@ -90,6 +92,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
         .map(file -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
           StreamFileMinioDo transform = BEAN_TRANSFORMER.skipTransformationForField("content")
               .transform(file,
                   StreamFileMinioDo.class);

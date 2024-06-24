@@ -60,15 +60,10 @@ public final class AccountConvertor {
           accountDataObject.getCredentialsNonExpired(),
           accountDataObject.getAccountNonLocked(),
           RoleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
-      account.setFounder(accountDataObject.getFounder());
-      account.setModifier(accountDataObject.getModifier());
-      account.setCreationTime(accountDataObject.getCreationTime());
-      account.setModificationTime(accountDataObject.getModificationTime());
-      account.setAvatarUrl(accountDataObject.getAvatarUrl());
-      account.setPhone(accountDataObject.getPhone());
-      account.setSex(accountDataObject.getSex());
-      account.setEmail(accountDataObject.getEmail());
-      account.setTimezone(accountDataObject.getTimezone());
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+      BEAN_TRANSFORMER.skipTransformationForField("id", "username", "password", "enabled",
+              "accountNonExpired", "credentialsNonExpired", "role", "accountNonLocked")
+          .transform(accountDataObject, account);
       return account;
     });
   }
@@ -77,19 +72,9 @@ public final class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AccountDo> toDataObject(Account account) {
     return Optional.ofNullable(account).map(accountDomain -> {
-      AccountDo accountDo = new AccountDo();
-      accountDo.setId(accountDomain.getId());
-      accountDo.setUsername(accountDomain.getUsername());
-      accountDo.setPassword(accountDomain.getPassword());
-      accountDo.setEnabled(accountDomain.isEnabled());
-      accountDo.setCredentialsNonExpired(accountDomain.isCredentialsNonExpired());
-      accountDo.setAccountNonLocked(accountDomain.isAccountNonLocked());
-      accountDo.setAccountNonExpired(accountDomain.isAccountNonExpired());
-      accountDo.setAvatarUrl(accountDomain.getAvatarUrl());
-      accountDo.setPhone(accountDomain.getPhone());
-      accountDo.setSex(accountDomain.getSex());
-      accountDo.setEmail(accountDomain.getEmail());
-      accountDo.setTimezone(accountDomain.getTimezone());
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+      AccountDo accountDo = BEAN_TRANSFORMER.skipTransformationForField("role")
+          .transform(accountDomain, AccountDo.class);
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(
@@ -109,12 +94,11 @@ public final class AccountConvertor {
           accountRegisterClientObject.getPassword(),
           roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
               .flatMap(RoleConvertor::toEntity).orElse(null));
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+      BEAN_TRANSFORMER.skipTransformationForField("id", "username", "password", "enabled",
+              "accountNonExpired", "credentialsNonExpired", "role", "accountNonLocked")
+          .transform(accountRegisterClientObject, account);
       accountRegisterClientObject.setId(account.getId());
-      account.setAvatarUrl(accountRegisterClientObject.getAvatarUrl());
-      account.setPhone(accountRegisterClientObject.getPhone());
-      account.setSex(accountRegisterClientObject.getSex());
-      account.setEmail(accountRegisterClientObject.getEmail());
-      account.setTimezone(accountRegisterClientObject.getTimezone());
       return account;
     });
   }
@@ -136,6 +120,8 @@ public final class AccountConvertor {
                 .ifPresent(account::setEmail);
             Optional.ofNullable(accountUpdateByIdClientObject.getTimezone())
                 .ifPresent(account::setTimezone);
+            Optional.ofNullable(accountUpdateByIdClientObject.getLanguage())
+                .ifPresent(account::setLanguage);
             return account;
           }).orElse(null);
     });

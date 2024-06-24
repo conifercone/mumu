@@ -58,6 +58,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       Role role = BEAN_TRANSFORMER
           .skipTransformationForField("authorities")
           .transform(roleDataObject, Role.class);
@@ -75,6 +76,7 @@ public final class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<RoleDo> toDataObject(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       RoleDo roleDo = BEAN_TRANSFORMER
           .skipTransformationForField("authorities")
           .transform(roleDomain, RoleDo.class);
@@ -93,6 +95,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleAddCo).map(roleAddClientObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       Role role = BEAN_TRANSFORMER
           .skipTransformationForField("authorities")
           .transform(roleAddClientObject, Role.class);
@@ -138,6 +141,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleFindAllCo).map(roleFindAllClientObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       Role role = BEAN_TRANSFORMER
           .skipTransformationForField("authorities")
           .transform(roleFindAllClientObject, Role.class);
@@ -156,6 +160,7 @@ public final class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       RoleFindAllCo roleFindAllCo = BEAN_TRANSFORMER
           .skipTransformationForField("authorities")
           .transform(roleDomain, RoleFindAllCo.class);
