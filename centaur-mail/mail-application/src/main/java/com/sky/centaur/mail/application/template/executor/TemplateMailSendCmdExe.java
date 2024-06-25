@@ -19,8 +19,10 @@ import com.sky.centaur.mail.client.dto.TemplateMailSendCmd;
 import com.sky.centaur.mail.domain.template.gateway.TemplateMailGateway;
 import com.sky.centaur.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * 模板邮件发送指令执行器
@@ -33,6 +35,9 @@ public class TemplateMailSendCmdExe {
 
   private final TemplateMailGateway templateMailGateway;
 
+  @Value("${spring.mail.username}")
+  private String username;
+
   @Autowired
   public TemplateMailSendCmdExe(TemplateMailGateway templateMailGateway) {
     this.templateMailGateway = templateMailGateway;
@@ -40,6 +45,9 @@ public class TemplateMailSendCmdExe {
 
   public void execute(TemplateMailSendCmd templateMailSendCmd) {
     Assert.notNull(templateMailSendCmd, "TemplateMailSendCmd cannot be null");
+    if (!StringUtils.hasText(templateMailSendCmd.getTemplateMailSendCo().getFrom())) {
+      templateMailSendCmd.getTemplateMailSendCo().setFrom(username);
+    }
     TemplateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())
         .ifPresent(templateMailGateway::sendMail);
   }

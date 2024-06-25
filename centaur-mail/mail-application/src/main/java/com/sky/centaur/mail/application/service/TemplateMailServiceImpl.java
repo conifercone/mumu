@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,8 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
 
   private final TemplateMailSendCmdExe templateMailSendCmdExe;
   private final ObjectMapper objectMapper = new ObjectMapper();
+  @Value("${spring.mail.username}")
+  private String username;
 
   @Autowired
   public TemplateMailServiceImpl(TemplateMailSendCmdExe templateMailSendCmdExe) {
@@ -72,7 +75,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     templateMailSendCo.setName(
         templateMailSendGrpcCo.hasName() ? templateMailSendGrpcCo.getName().getValue() : null);
     templateMailSendCo.setFrom(
-        templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : null);
+        templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : username);
     templateMailSendCo.setAddress(
         templateMailSendGrpcCo.hasAddress() ? templateMailSendGrpcCo.getAddress().getValue()
             : null);
