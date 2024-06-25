@@ -17,6 +17,7 @@
 package com.sky.centaur.unique;
 
 import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
+import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)
+@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.unique.**")
 public class CentaurUniqueApplication {
 
   public static void main(String[] args) {

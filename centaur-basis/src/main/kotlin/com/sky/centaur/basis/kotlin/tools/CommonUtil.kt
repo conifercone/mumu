@@ -16,6 +16,7 @@
 package com.sky.centaur.basis.kotlin.tools
 
 import org.apiguardian.api.API
+import java.security.SecureRandom
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -32,6 +33,10 @@ import javax.mail.internet.InternetAddress
 object CommonUtil {
     private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
     private val EMAIL_PATTERN: Pattern = Pattern.compile(EMAIL_REGEX)
+
+    @Suppress("SpellCheckingInspection")
+    private const val CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    private val RANDOM = SecureRandom()
 
     /**
      * 校验邮箱地址格式的方法
@@ -155,5 +160,23 @@ object CommonUtil {
                 ZoneId.of(timezone)
             )
         }.orElse(localDateTime)
+    }
+
+    /**
+     * 随机生成指定长度的字符串
+     *
+     * @param length 长度
+     * @return 生成结果
+     */
+    @API(status = API.Status.STABLE, since = "1.0.1")
+    @JvmStatic
+    fun generateRandomString(length: Int): String {
+        require(length > 0) { "Length must be a positive number." }
+
+        val stringBuilder = StringBuilder(length)
+        repeat(length) {
+            stringBuilder.append(CHARACTERS[RANDOM.nextInt(CHARACTERS.length)])
+        }
+        return stringBuilder.toString()
     }
 }

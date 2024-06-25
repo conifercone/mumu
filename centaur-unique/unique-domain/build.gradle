@@ -2,4 +2,5 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection GrUnresolvedAccess
 dependencies {
+    implementation project(":centaur-basis")
 }

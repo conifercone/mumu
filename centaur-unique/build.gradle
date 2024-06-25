@@ -22,4 +22,6 @@ dependencies {
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation libs.protobufJava
+    testImplementation libs.grpcClientSpringBootStarter
+    implementation libs.redisOmSpring
 }
