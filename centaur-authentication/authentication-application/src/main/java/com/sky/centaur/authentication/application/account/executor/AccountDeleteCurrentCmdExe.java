@@ -15,8 +15,12 @@
  */
 package com.sky.centaur.authentication.application.account.executor;
 
+import com.sky.centaur.authentication.application.CaptchaVerify;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import io.micrometer.observation.annotation.Observed;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,16 +32,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Observed(name = "AccountDeleteCurrentCmdExe")
-public class AccountDeleteCurrentCmdExe {
+public class AccountDeleteCurrentCmdExe extends CaptchaVerify {
 
   private final AccountGateway accountGateway;
 
   @Autowired
-  public AccountDeleteCurrentCmdExe(AccountGateway accountGateway) {
+  public AccountDeleteCurrentCmdExe(AccountGateway accountGateway,
+      CaptchaGrpcService captchaGrpcService) {
+    super(captchaGrpcService);
     this.accountGateway = accountGateway;
   }
 
-  public void execute() {
+  public void execute(@NotNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+    verifyCaptcha(accountDeleteCurrentCmd.getCaptchaId(), accountDeleteCurrentCmd.getCaptcha());
     accountGateway.deleteCurrentAccount();
   }
 }

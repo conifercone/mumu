@@ -37,6 +37,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -305,8 +306,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deleteCurrentAccount() {
-    accountDeleteCurrentCmdExe.execute();
+  public void deleteCurrentAccount(AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+    accountDeleteCurrentCmdExe.execute(accountDeleteCurrentCmd);
   }
 
   @Override

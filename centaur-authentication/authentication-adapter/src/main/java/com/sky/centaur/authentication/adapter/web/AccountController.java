@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -120,8 +121,8 @@ public class AccountController {
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteCurrent() {
-    accountService.deleteCurrentAccount();
+  public void deleteCurrent(@RequestBody AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+    accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
   }
 
   @Operation(summary = "校验账户密码")

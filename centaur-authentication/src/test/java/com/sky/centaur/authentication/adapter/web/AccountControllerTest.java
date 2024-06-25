@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.basis.enums.LanguageEnum;
@@ -208,6 +209,28 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .put("/account/changePassword").with(csrf())
             .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteCurrent() throws Exception {
+    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
+        .setSimpleCaptchaGeneratedGrpcCo(
+            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
+                .setTtl(Int64Value.of(500))).build();
+    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
+        simpleCaptchaGeneratedGrpcCmd);
+    AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
+    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
+    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
+    mockMvc.perform(MockMvcRequestBuilders
+            .delete("/account/deleteCurrent").with(csrf())
+            .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
