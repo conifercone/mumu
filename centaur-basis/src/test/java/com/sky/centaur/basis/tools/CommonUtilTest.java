@@ -16,6 +16,8 @@
 package com.sky.centaur.basis.tools;
 
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
+import java.time.ZoneId;
+import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +33,11 @@ public class CommonUtilTest {
   public void generateRandomString() {
     String randomString = CommonUtil.generateRandomString(4);
     Assertions.assertNotNull(randomString);
+  }
+
+  @Test
+  public void getAvailableZoneIds() {
+    Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
+    availableZoneIds.forEach(System.out::println);
   }
 }

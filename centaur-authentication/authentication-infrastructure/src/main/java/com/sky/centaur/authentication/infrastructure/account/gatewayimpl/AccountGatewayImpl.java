@@ -34,6 +34,7 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -104,6 +105,14 @@ public class AccountGatewayImpl implements AccountGateway {
       throw new AccountAlreadyExistsException(existingAccount.getUsername());
     };
     AccountConvertor.toDataObject(account).ifPresent(dataObject -> {
+      if (StringUtils.hasText(dataObject.getTimezone())) {
+        try {
+          //noinspection ResultOfMethodCallIgnored
+          ZoneId.of(dataObject.getTimezone());
+        } catch (Exception e) {
+          throw new CentaurException(ResultCode.TIME_ZONE_IS_NOT_AVAILABLE);
+        }
+      }
       // 密码加密
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
