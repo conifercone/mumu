@@ -144,15 +144,30 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       @NotNull AccountRegisterGrpcCmd request) {
     AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
     AccountRegisterGrpcCo accountRegisterGrpcCo = request.getAccountRegisterCo();
-    accountRegisterCo.setId(accountRegisterGrpcCo.getId());
-    accountRegisterCo.setUsername(accountRegisterGrpcCo.getUsername());
-    accountRegisterCo.setPassword(accountRegisterGrpcCo.getPassword());
-    accountRegisterCo.setRoleCode(accountRegisterGrpcCo.getRoleCode());
-    accountRegisterCo.setAvatarUrl(accountRegisterGrpcCo.getAvatarUrl());
-    accountRegisterCo.setPhone(accountRegisterGrpcCo.getPhone());
-    accountRegisterCo.setEmail(accountRegisterGrpcCo.getEmail());
-    accountRegisterCo.setTimezone(accountRegisterGrpcCo.getTimezone());
-    accountRegisterCo.setSex(SexEnum.valueOf(accountRegisterGrpcCo.getSex().name()));
+    accountRegisterCo.setId(
+        accountRegisterGrpcCo.hasId() ? accountRegisterGrpcCo.getId().getValue() : null);
+    accountRegisterCo.setUsername(
+        accountRegisterGrpcCo.hasUsername() ? accountRegisterGrpcCo.getUsername().getValue()
+            : null);
+    accountRegisterCo.setPassword(
+        accountRegisterGrpcCo.hasPassword() ? accountRegisterGrpcCo.getPassword().getValue()
+            : null);
+    accountRegisterCo.setRoleCode(
+        accountRegisterGrpcCo.hasRoleCode() ? accountRegisterGrpcCo.getRoleCode().getValue()
+            : null);
+    accountRegisterCo.setAvatarUrl(
+        accountRegisterGrpcCo.hasAvatarUrl() ? accountRegisterGrpcCo.getAvatarUrl().getValue()
+            : null);
+    accountRegisterCo.setPhone(
+        accountRegisterGrpcCo.hasPhone() ? accountRegisterGrpcCo.getPhone().getValue() : null);
+    accountRegisterCo.setEmail(
+        accountRegisterGrpcCo.hasEmail() ? accountRegisterGrpcCo.getEmail().getValue() : null);
+    accountRegisterCo.setTimezone(
+        accountRegisterGrpcCo.hasTimezone() ? accountRegisterGrpcCo.getTimezone().getValue()
+            : null);
+    accountRegisterCo.setSex(
+        accountRegisterGrpcCo.hasSex() ? SexEnum.valueOf(accountRegisterGrpcCo.getSex().name())
+            : null);
     return accountRegisterCo;
   }
 

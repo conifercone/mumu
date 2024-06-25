@@ -20,15 +20,17 @@ message AccountRegisterGrpcCmd {
 }
 
 message AccountRegisterGrpcCo {
-  int64 id = 1;
-  string username = 2;
-  string password = 3;
-  string roleCode = 4;
-  string avatarUrl = 5;
-  string phone = 6;
-  SexEnum sex = 7;
-  string timezone = 8;
-  string email = 9;
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue username = 2;
+  google.protobuf.StringValue password = 3;
+  google.protobuf.StringValue roleCode = 4;
+  google.protobuf.StringValue avatarUrl = 5;
+  google.protobuf.StringValue phone = 6;
+  oneof sex_wrapper {
+    SexEnum sex = 7;
+  }
+  google.protobuf.StringValue timezone = 8;
+  google.protobuf.StringValue email = 9;
 }
 
 message AccountUpdateByIdGrpcCmd{

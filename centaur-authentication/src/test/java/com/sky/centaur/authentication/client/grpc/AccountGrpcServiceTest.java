@@ -87,8 +87,10 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
         simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
-            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test1")
-                .setPassword("test1").setRoleCode("admin").setSex(SexEnum.SEXLESS)
+            AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(926369451)).setUsername(
+                    StringValue.of("test1"))
+                .setPassword(StringValue.of("test1")).setRoleCode(StringValue.of("admin"))
+                .setSex(SexEnum.SEXLESS)
                 .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId())
         .setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget())
         .build();
@@ -109,8 +111,10 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
         simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
-            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test1")
-                .setPassword("test1").setRoleCode("admin").setSex(SexEnum.SEXLESS)
+            AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(926369451)).setUsername(
+                    StringValue.of("test1"))
+                .setPassword(StringValue.of("test1")).setRoleCode(StringValue.of("admin"))
+                .setSex(SexEnum.SEXLESS)
                 .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId())
         .setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget())
         .build();
