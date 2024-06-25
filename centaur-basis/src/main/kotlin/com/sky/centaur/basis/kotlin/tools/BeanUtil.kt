@@ -73,5 +73,4 @@ object BeanUtil {
             throw RuntimeException("Failed to extract property name from getter method", e)
         }
     }
-
 }
