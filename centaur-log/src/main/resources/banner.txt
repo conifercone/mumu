@@ -1,10 +1,8 @@
- _
-| |
-| |     ___   __ _
-| |    / _ \ / _` |
-| |___| (_) | (_| |
-|______\___/ \__, |
-              __/ |
-             |___/
+,--.
+|  |    ,---. ,---.
+|  |   | .-. | .-. |
+|  '--.' '-' ' '-' '
+`-----' `---'.`-  /
+             `---'
 ${application.title} : ${application.formatted-version}
 Spring Boot Version : ${spring-boot.formatted-version}
