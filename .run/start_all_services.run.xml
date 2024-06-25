@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start_all_services" type="CompoundRunConfigurationType">
+    <toRun name="CentaurAuthenticationApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurFileApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurLogApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurMailApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurSmsApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurUniqueApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
