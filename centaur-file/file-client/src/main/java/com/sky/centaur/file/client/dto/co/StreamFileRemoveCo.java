@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.file.domain.stream.gateway;
+package com.sky.centaur.file.client.dto.co;
 
-import com.sky.centaur.file.domain.stream.StreamFile;
-import java.io.InputStream;
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
 /**
- * 流式文件领域网关
+ * 流式文件删除客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public interface StreamFileGateway {
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class StreamFileRemoveCo {
 
-  void uploadFile(StreamFile streamFile);
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
 
-  Optional<InputStream> download(StreamFile streamFile);
+  /**
+   * 源文件名(包含文件拓展名) eg: test.log
+   */
+  private String name;
 
-  void removeFile(StreamFile streamFile);
 }

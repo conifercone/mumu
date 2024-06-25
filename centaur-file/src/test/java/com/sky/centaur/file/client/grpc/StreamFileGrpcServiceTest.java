@@ -17,6 +17,7 @@ package com.sky.centaur.file.client.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -25,6 +26,8 @@ import com.sky.centaur.file.client.api.StreamFileGrpcService;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcResult;
+import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCmd;
+import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCo;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -108,6 +111,55 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
             .toStringUtf8();
         Assertions.assertTrue(StringUtils.hasText(fileContent));
         LOGGER.info("SyncDownload result: {}", fileContent);
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  public void removeFile() throws ExecutionException, InterruptedException, TimeoutException {
+    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
+        .setStreamFileRemoveGrpcCo(
+            StreamFileRemoveGrpcCo.newBuilder().setName(StringValue.of("test2.log"))
+                .setStorageAddress(StringValue.of("test"))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken().orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    Empty empty = streamFileGrpcService.removeFile(
+        streamFileRemoveGrpcCmd,
+        callCredentials);
+    Assertions.assertNotNull(empty);
+  }
+
+  @Test
+  public void syncRemoveFile() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
+        .setStreamFileRemoveGrpcCo(
+            StreamFileRemoveGrpcCo.newBuilder().setName(StringValue.of("test2.log"))
+                .setStorageAddress(StringValue.of("test"))
+                .build())
+        .build();
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+        AuthHeader.builder().bearer().tokenSupplier(
+            () -> ByteBuffer.wrap(getToken().orElseThrow(
+                () -> new CentaurException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<Empty> emptyListenableFuture = streamFileGrpcService.syncRemoveFile(
+        streamFileRemoveGrpcCmd,
+        callCredentials);
+    emptyListenableFuture.addListener(() -> {
+      try {
+        Empty empty = emptyListenableFuture.get();
+        Assertions.assertNotNull(empty);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

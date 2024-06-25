@@ -18,6 +18,7 @@ package com.sky.centaur.file.adapter.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.file.client.api.StreamFileService;
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
+import com.sky.centaur.file.client.dto.StreamFileRemoveCmd;
 import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +32,7 @@ import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,5 +105,13 @@ public class StreamFileController {
       throws IOException {
     return IOUtils.toString(streamFileService.download(streamFileDownloadCmd),
         StandardCharsets.UTF_8);
+  }
+
+  @Operation(summary = "删除文件")
+  @DeleteMapping("/remove")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.1")
+  public void removeFile(@RequestBody StreamFileRemoveCmd streamFileRemoveCmd) {
+    streamFileService.removeFile(streamFileRemoveCmd);
   }
 }

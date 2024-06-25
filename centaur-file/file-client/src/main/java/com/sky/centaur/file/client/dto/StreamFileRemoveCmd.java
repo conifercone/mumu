@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.file.domain.stream.gateway;
+package com.sky.centaur.file.client.dto;
 
-import com.sky.centaur.file.domain.stream.StreamFile;
-import java.io.InputStream;
-import java.util.Optional;
+import com.sky.centaur.file.client.dto.co.StreamFileRemoveCo;
+import lombok.Data;
 
 /**
- * 流式文件领域网关
+ * 流式文件删除指令
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public interface StreamFileGateway {
+@Data
+public class StreamFileRemoveCmd {
 
-  void uploadFile(StreamFile streamFile);
-
-  Optional<InputStream> download(StreamFile streamFile);
-
-  void removeFile(StreamFile streamFile);
+  private StreamFileRemoveCo streamFileRemoveCo;
 }

@@ -84,4 +84,13 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
           return Boolean.TRUE;
         }).flatMap(minioStreamFileRepository::download);
   }
+
+  @Override
+  @API(status = Status.STABLE, since = "1.0.1")
+  public void removeFile(StreamFile streamFile) {
+    StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
+        .flatMap(StreamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
+        .orElseThrow(() -> new CentaurException(ResultCode.FILE_DOES_NOT_EXIST));
+    minioStreamFileRepository.removeFile(streamFileMinioDo);
+  }
 }

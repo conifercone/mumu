@@ -20,6 +20,7 @@ import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
+import com.sky.centaur.file.client.dto.co.StreamFileRemoveCo;
 import com.sky.centaur.file.client.dto.co.StreamFileSyncUploadCo;
 import com.sky.centaur.file.domain.stream.StreamFile;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
@@ -65,6 +66,18 @@ public final class StreamFileConvertor {
             throw new CentaurException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
           }
           return streamFile;
+        });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.1")
+  public static Optional<StreamFile> toEntity(StreamFileRemoveCo streamFileRemoveCo) {
+    return Optional.ofNullable(streamFileRemoveCo)
+        .map(removeCo -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER
+              .transform(removeCo,
+                  StreamFile.class);
         });
   }
 

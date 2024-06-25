@@ -16,6 +16,7 @@
 package com.sky.centaur.file.client.api;
 
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
+import com.sky.centaur.file.client.dto.StreamFileRemoveCmd;
 import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import java.io.InputStream;
 
@@ -41,4 +42,11 @@ public interface StreamFileService {
    * @return 文件流
    */
   InputStream download(StreamFileDownloadCmd streamFileDownloadCmd);
+
+  /**
+   * 删除文件
+   *
+   * @param streamFileRemoveCmd 流文件删除指令
+   */
+  void removeFile(StreamFileRemoveCmd streamFileRemoveCmd);
 }

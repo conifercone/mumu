@@ -23,6 +23,7 @@ import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
@@ -156,4 +157,25 @@ public class MinioStreamFileRepository {
     return exist;
   }
 
+  /**
+   * 删除文件
+   *
+   * @param streamFileMinioDo 流式文件minio数据对象
+   */
+  @API(status = Status.STABLE, since = "1.0.1")
+  public void removeFile(StreamFileMinioDo streamFileMinioDo) {
+    Optional.ofNullable(streamFileMinioDo).ifPresent(streamFileMinioDomainObject -> {
+      try {
+        minioClient.removeObject(
+            RemoveObjectArgs.builder()
+                .bucket(streamFileMinioDomainObject.getStorageAddress())
+                .object(streamFileMinioDomainObject.getName())
+                .build());
+      } catch (ErrorResponseException | InsufficientDataException | InternalException |
+               InvalidKeyException | InvalidResponseException | IOException |
+               NoSuchAlgorithmException | ServerException | XmlParserException e) {
+        throw new CentaurException(ResultCode.FILE_DELETION_FAILED);
+      }
+    });
+  }
 }

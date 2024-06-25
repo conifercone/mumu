@@ -18,9 +18,11 @@ package com.sky.centaur.file.client.api;
 import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Empty;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcResult;
+import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc;
 import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceFutureStub;
 import io.grpc.ManagedChannel;
@@ -97,6 +99,38 @@ public class StreamFileGrpcService extends FileGrpcService implements
     }
   }
 
+  @API(status = Status.STABLE, since = "1.0.1")
+  public Empty removeFile(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    if (channel != null) {
+      return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+    } else {
+      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
+      if (managedChannelUsePlaintext.isPresent()) {
+        channel = managedChannelUsePlaintext.get();
+        return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+      } else {
+        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
+        throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
+      }
+    }
+  }
+
+  @API(status = Status.STABLE, since = "1.0.1")
+  public ListenableFuture<Empty> syncRemoveFile(
+      StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    if (channel != null) {
+      return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+    } else {
+      return getManagedChannelUsePlaintext().map(managedChannel -> {
+        channel = managedChannel;
+        return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+      }).orElse(null);
+    }
+  }
+
 
   private StreamFileDownloadGrpcResult downloadFromGrpc(
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
@@ -115,6 +149,25 @@ public class StreamFileGrpcService extends FileGrpcService implements
         channel);
     return streamFileServiceFutureStub.withCallCredentials(callCredentials)
         .download(streamFileDownloadGrpcCmd);
+  }
+
+  private Empty removeFileFromGrpc(
+      StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+      AuthCallCredentials callCredentials)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+        channel);
+    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
+        .removeFile(streamFileRemoveGrpcCmd).get(3, TimeUnit.SECONDS);
+  }
+
+  private @NotNull ListenableFuture<Empty> syncRemoveFileFromGrpc(
+      StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+      AuthCallCredentials callCredentials) {
+    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+        channel);
+    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
+        .removeFile(streamFileRemoveGrpcCmd);
   }
 
 }

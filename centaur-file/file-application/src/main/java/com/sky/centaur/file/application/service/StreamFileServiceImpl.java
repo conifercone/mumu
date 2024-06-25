@@ -17,16 +17,22 @@ package com.sky.centaur.file.application.service;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
+import com.google.protobuf.Empty;
 import com.sky.centaur.file.application.streamfile.executor.StreamFileDownloadCmdExe;
+import com.sky.centaur.file.application.streamfile.executor.StreamFileRemoveCmdExe;
 import com.sky.centaur.file.application.streamfile.executor.StreamFileSyncUploadCmdExe;
 import com.sky.centaur.file.client.api.StreamFileService;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcResult;
+import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCmd;
+import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCo;
 import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceImplBase;
 import com.sky.centaur.file.client.dto.StreamFileDownloadCmd;
+import com.sky.centaur.file.client.dto.StreamFileRemoveCmd;
 import com.sky.centaur.file.client.dto.StreamFileSyncUploadCmd;
 import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
+import com.sky.centaur.file.client.dto.co.StreamFileRemoveCo;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -51,12 +57,15 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
 
   private final StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe;
   private final StreamFileDownloadCmdExe streamFileDownloadCmdExe;
+  private final StreamFileRemoveCmdExe streamFileRemoveCmdExe;
 
   @Autowired
   public StreamFileServiceImpl(StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe,
-      StreamFileDownloadCmdExe streamFileDownloadCmdExe) {
+      StreamFileDownloadCmdExe streamFileDownloadCmdExe,
+      StreamFileRemoveCmdExe streamFileRemoveCmdExe) {
     this.streamFileSyncUploadCmdExe = streamFileSyncUploadCmdExe;
     this.streamFileDownloadCmdExe = streamFileDownloadCmdExe;
+    this.streamFileRemoveCmdExe = streamFileRemoveCmdExe;
   }
 
   @Override
@@ -67,6 +76,11 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   @Override
   public InputStream download(StreamFileDownloadCmd streamFileDownloadCmd) {
     return streamFileDownloadCmdExe.execute(streamFileDownloadCmd);
+  }
+
+  @Override
+  public void removeFile(StreamFileRemoveCmd streamFileRemoveCmd) {
+    streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
   }
 
   @NotNull
@@ -102,5 +116,30 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
+  }
+
+  @NotNull
+  private static StreamFileRemoveCo getStreamFileRemoveCo(
+      @NotNull StreamFileRemoveGrpcCmd request) {
+    StreamFileRemoveCo streamFileRemoveCo = new StreamFileRemoveCo();
+    StreamFileRemoveGrpcCo streamFileRemoveGrpcCo = request.getStreamFileRemoveGrpcCo();
+    streamFileRemoveCo.setName(
+        streamFileRemoveGrpcCo.hasName() ? streamFileRemoveGrpcCo.getName().getValue() : null);
+    streamFileRemoveCo.setStorageAddress(
+        streamFileRemoveGrpcCo.hasStorageAddress() ? streamFileRemoveGrpcCo.getStorageAddress()
+            .getValue() : null);
+    return streamFileRemoveCo;
+  }
+
+  @Override
+  @PreAuthorize("hasRole('admin')")
+  public void removeFile(StreamFileRemoveGrpcCmd request, @NotNull StreamObserver<Empty> responseObserver) {
+    StreamFileRemoveCmd streamFileRemoveCmd = new StreamFileRemoveCmd();
+    StreamFileRemoveCo streamFileRemoveCo = getStreamFileRemoveCo(
+        request);
+    streamFileRemoveCmd.setStreamFileRemoveCo(streamFileRemoveCo);
+    streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
+    responseObserver.onNext(Empty.newBuilder().build());
+    responseObserver.onCompleted();
   }
 }
