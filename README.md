@@ -55,6 +55,12 @@ centaur
 │  │  │- 📂 mail-client -- mail service client
 │  │  │- 📂 mail-domain -- mail service domain layer
 │  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
+│  │─ 📂 centaur-sms -- sms service
+│  │  │- 📂 sms-adapter -- sms service adaptation layer
+│  │  │- 📂 sms-application -- sms service application layer
+│  │  │- 📂 sms-client -- sms service client
+│  │  │- 📂 sms-domain -- sms service domain layer
+│  │  │- 📂 sms-infrastructure -- sms service infrastructure layer
 │  │─ 📂 centaur-unique -- unique data generation service
 │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
 │  │  │- 📂 unique-application -- unique data generation service application layer
