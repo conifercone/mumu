@@ -15,11 +15,22 @@
  */
 package com.sky.centaur.authentication.application.account.executor;
 
+import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import io.micrometer.observation.annotation.Observed;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -35,14 +46,30 @@ import org.springframework.util.Assert;
 public class AccountRegisterCmdExe {
 
   private final AccountGateway accountGateway;
+  private final CaptchaGrpcService captchaGrpcService;
+  private static final Logger LOGGER = LoggerFactory.getLogger(AccountRegisterCmdExe.class);
 
   @Autowired
-  public AccountRegisterCmdExe(AccountGateway accountGateway) {
+  public AccountRegisterCmdExe(AccountGateway accountGateway,
+      CaptchaGrpcService captchaGrpcService) {
     this.accountGateway = accountGateway;
+    this.captchaGrpcService = captchaGrpcService;
   }
 
   public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
     Assert.notNull(accountRegisterCmd, "AccountRegisterCmd cannot be null");
+    try {
+      if (!captchaGrpcService.verifySimpleCaptcha(
+          SimpleCaptchaVerifyGrpcCmd.newBuilder().setSimpleCaptchaVerifyGrpcCo(
+              SimpleCaptchaVerifyGrpcCo.newBuilder()
+                  .setId(Int64Value.of(accountRegisterCmd.getCaptchaId())).setSource(
+                      StringValue.of(accountRegisterCmd.getCaptcha())).build()).build()).getResult()) {
+        throw new CentaurException(ResultCode.CAPTCHA_INCORRECT);
+      }
+    } catch (ExecutionException | InterruptedException | TimeoutException e) {
+      LOGGER.error(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION.getResultMsg(), e);
+      throw new CentaurException(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION);
+    }
     AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
         .ifPresent(accountGateway::register);
   }

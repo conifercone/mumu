@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.grpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
+import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.AuthenticationRequired;
@@ -33,6 +34,9 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.SexEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -62,21 +66,31 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
   private final MockMvc mockMvc;
+  private final CaptchaGrpcService captchaGrpcService;
 
   @Autowired
-  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc) {
+  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc,
+      CaptchaGrpcService captchaGrpcService) {
     this.accountGrpcService = accountGrpcService;
     this.mockMvc = mockMvc;
+    this.captchaGrpcService = captchaGrpcService;
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void register() throws ExecutionException, InterruptedException, TimeoutException {
+    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
+        .setSimpleCaptchaGeneratedGrpcCo(
+            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
+                .setTtl(Int64Value.of(500))).build();
+    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
+        simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
             AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test1")
                 .setPassword("test1").setRoleCode("admin").setSex(SexEnum.SEXLESS)
-                .build())
+                .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId())
+        .setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget())
         .build();
     Empty empty = accountGrpcService.register(
         accountRegisterGrpcCmd);
@@ -85,13 +99,20 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void syncRegister() throws InterruptedException {
+  public void syncRegister() throws InterruptedException, ExecutionException, TimeoutException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
+    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
+        .setSimpleCaptchaGeneratedGrpcCo(
+            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
+                .setTtl(Int64Value.of(500))).build();
+    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
+        simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterGrpcCmd accountRegisterGrpcCmd = AccountRegisterGrpcCmd.newBuilder()
         .setAccountRegisterCo(
-            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test")
-                .setPassword("test").setRoleCode("admin").setSex(SexEnum.SEXLESS)
-                .build())
+            AccountRegisterGrpcCo.newBuilder().setId(926369451).setUsername("test1")
+                .setPassword("test1").setRoleCode("admin").setSex(SexEnum.SEXLESS)
+                .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId())
+        .setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget())
         .build();
     ListenableFuture<Empty> accountRegisterGrpcCoListenableFuture = accountGrpcService.syncRegister(
         accountRegisterGrpcCmd);

@@ -120,9 +120,13 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void register(AccountRegisterGrpcCmd request,
+  public void register(@NotNull AccountRegisterGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
+    accountRegisterCmd.setCaptchaId(
+        request.hasCaptchaId() ? request.getCaptchaId().getValue() : null);
+    accountRegisterCmd.setCaptcha(
+        request.hasCaptcha() ? request.getCaptcha().getValue() : null);
     AccountRegisterCo accountRegisterCo = getAccountRegisterCo(
         request);
     accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);

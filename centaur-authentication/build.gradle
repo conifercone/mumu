@@ -27,6 +27,7 @@ dependencies {
     testImplementation libs.jasypt
     testImplementation libs.springSecurityTest
     testImplementation libs.grpcClientSpringBootStarter
+    testImplementation project(":centaur-unique:unique-client")
     implementation libs.flywayCore
     implementation libs.flywayDatabasePostgresql
     implementation libs.hibernateTypes63
