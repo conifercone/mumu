@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.token.redis.dataobject;
+package com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject;
 
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
@@ -23,14 +23,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * oidc id token redis数据对象
+ * token redis数据对象
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
 @Data
-@Document(value = "oidcIdToken")
-public class OidcIdTokenRedisDo {
+@Document(value = "token")
+public class TokenRedisDo {
 
   @Id
   @Indexed

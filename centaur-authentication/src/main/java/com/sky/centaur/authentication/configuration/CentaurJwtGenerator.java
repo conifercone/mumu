@@ -15,10 +15,10 @@
  */
 package com.sky.centaur.authentication.configuration;
 
-import com.sky.centaur.authentication.infrastructure.token.redis.OidcIdTokenRepository;
-import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
-import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.OidcIdTokenRedisDo;
-import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.TokenRedisDo;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDo;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.TokenRedisDo;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

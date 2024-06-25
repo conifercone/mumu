@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.token.redis;
+package com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis;
 
 import com.redis.om.spring.repository.RedisDocumentRepository;
-import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.TokenRedisDo;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.TokenRedisDo;
 
 /**
  * token redis repository

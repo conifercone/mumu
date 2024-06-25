@@ -13,18 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.infrastructure.token.redis;
+package com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject;
 
-import com.redis.om.spring.repository.RedisDocumentRepository;
-import com.sky.centaur.authentication.infrastructure.token.redis.dataobject.OidcIdTokenRedisDo;
+import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
+import com.redis.om.spring.annotations.TextIndexed;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * oidc id token redis repository
+ * oidc id token redis数据对象
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public interface OidcIdTokenRepository extends
-    RedisDocumentRepository<OidcIdTokenRedisDo, Integer> {
+@Data
+@Document(value = "oidcIdToken")
+public class OidcIdTokenRedisDo {
 
+  @Id
+  @Indexed
+  private Integer id;
+
+  /**
+   * token值
+   */
+  @TextIndexed
+  private String tokenValue;
+
+  /**
+   * 存活时间
+   */
+  @TimeToLive
+  private Long ttl = 5L;
 }
