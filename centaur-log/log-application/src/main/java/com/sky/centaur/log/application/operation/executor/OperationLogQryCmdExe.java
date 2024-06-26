@@ -50,6 +50,7 @@ public class OperationLogQryCmdExe {
     AtomicReference<OperationLogQryCo> operationLogQryCo = new AtomicReference<>();
     operationLogGateway.findOperationLogById(
         operationLogQryCmd.getId()).ifPresent(operationLog -> {
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       OperationLogQryCo operationLogQryCoTmp = BEAN_TRANSFORMER.transform(operationLog,
           OperationLogQryCo.class);
       operationLogQryCo.set(operationLogQryCoTmp);

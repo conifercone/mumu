@@ -24,6 +24,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 鉴权服务
@@ -37,6 +38,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.authentication.**")
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
+@EnableTransactionManagement
 public class CentaurAuthenticationApplication {
 
   public static void main(String[] args) {

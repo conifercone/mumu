@@ -33,6 +33,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
@@ -47,6 +48,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@DynamicInsert
 public class AccountDo extends JpaBasisDataObject {
 
   @Id

@@ -171,6 +171,5 @@ public final class RoleConvertor {
       }
       return roleFindAllCo;
     });
-
   }
 }

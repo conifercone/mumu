@@ -55,8 +55,11 @@ public final class TemplateMailConvertor {
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
     return Optional.ofNullable(templateMailSendCo)
-        .map(templateMailSendClientObject -> BEAN_TRANSFORMER
-            .transform(templateMailSendCo,
-                TemplateMail.class));
+        .map(templateMailSendClientObject -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER
+              .transform(templateMailSendCo,
+                  TemplateMail.class);
+        });
   }
 }

@@ -44,8 +44,11 @@ public final class CaptchaConvertor {
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).map(
-        simpleCaptchaDomain -> BEAN_TRANSFORMER.transform(simpleCaptchaDomain,
-            SimpleCaptchaDo.class));
+        simpleCaptchaDomain -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(simpleCaptchaDomain,
+              SimpleCaptchaDo.class);
+        });
   }
 
   @Contract("_ -> new")
@@ -53,8 +56,11 @@ public final class CaptchaConvertor {
   public static Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo) {
     return Optional.ofNullable(simpleCaptchaGeneratedCo).map(
-        simpleCaptchaGeneratedClientObject -> BEAN_TRANSFORMER.transform(
-            simpleCaptchaGeneratedClientObject, SimpleCaptcha.class));
+        simpleCaptchaGeneratedClientObject -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(
+              simpleCaptchaGeneratedClientObject, SimpleCaptcha.class);
+        });
   }
 
   @Contract("_ -> new")
@@ -62,8 +68,11 @@ public final class CaptchaConvertor {
   public static Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaVerifyCo simpleCaptchaVerifyCo) {
     return Optional.ofNullable(simpleCaptchaVerifyCo).map(
-        simpleCaptchaVerifyClientObject -> BEAN_TRANSFORMER.transform(
-            simpleCaptchaVerifyClientObject, SimpleCaptcha.class));
+        simpleCaptchaVerifyClientObject -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(
+              simpleCaptchaVerifyClientObject, SimpleCaptcha.class);
+        });
   }
 
   @Contract("_ -> new")
@@ -71,7 +80,10 @@ public final class CaptchaConvertor {
   public static Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
       SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).map(
-        simpleCaptchaDomain -> BEAN_TRANSFORMER.transform(
-            simpleCaptchaDomain, SimpleCaptchaGeneratedCo.class));
+        simpleCaptchaDomain -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(
+              simpleCaptchaDomain, SimpleCaptchaGeneratedCo.class);
+        });
   }
 }

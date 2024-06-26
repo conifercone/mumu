@@ -25,6 +25,7 @@ allprojects { project ->
     // 定义maven仓库地址
     repositories {
         mavenCentral()
+        maven { url "https://repo.spring.io/milestone" }
     }
 
     configurations.configureEach {

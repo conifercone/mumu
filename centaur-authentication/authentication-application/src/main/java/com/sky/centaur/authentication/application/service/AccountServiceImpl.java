@@ -173,6 +173,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
   }

@@ -57,6 +57,7 @@ public class OperationLogConsumer {
     OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
         OperationLogKafkaDo.class);
     OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
+    BEAN_TRANSFORMER.resetFieldsTransformationSkip();
     OperationLogSaveCo operationLogSaveCo = BEAN_TRANSFORMER.transform(operationLogKafkaDo,
         OperationLogSaveCo.class);
     operationLogSaveCmd.setOperationLogSaveCo(operationLogSaveCo);

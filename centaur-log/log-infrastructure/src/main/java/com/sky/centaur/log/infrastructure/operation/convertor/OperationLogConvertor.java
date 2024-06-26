@@ -52,20 +52,27 @@ public final class OperationLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogKafkaDo.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLogKafkaDo.class);
+        });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogEsDo.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLogEsDo.class);
+        });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
     return Optional.ofNullable(operationLogSubmitCo).map(res -> {
+      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
       OperationLog operationLog = BEAN_TRANSFORMER.transform(res,
           OperationLog.class);
       operationLog.setId(
@@ -83,7 +90,10 @@ public final class OperationLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
     return Optional.ofNullable(operationLogSaveCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLog.class);
+        });
   }
 
 
@@ -91,7 +101,10 @@ public final class OperationLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
     return Optional.ofNullable(operationLogEsDo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLog.class);
+        });
   }
 
   @Contract("_ -> new")
@@ -99,14 +112,20 @@ public final class OperationLogConvertor {
   public static Optional<OperationLog> toEntity(
       OperationLogFindAllCo operationLogFindAllCo) {
     return Optional.ofNullable(operationLogFindAllCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLog.class);
+        });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogFindAllCo.class));
+        .map(res -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(res, OperationLogFindAllCo.class);
+        });
   }
 
 }

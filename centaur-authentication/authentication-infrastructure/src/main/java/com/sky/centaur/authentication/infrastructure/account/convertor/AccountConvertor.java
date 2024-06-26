@@ -153,7 +153,10 @@ public final class AccountConvertor {
   public static Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
       Account account) {
     return Optional.ofNullable(account)
-        .map(accountDomain -> BEAN_TRANSFORMER.transform(accountDomain,
-            AccountCurrentLoginQueryCo.class));
+        .map(accountDomain -> {
+          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
+          return BEAN_TRANSFORMER.transform(accountDomain,
+              AccountCurrentLoginQueryCo.class);
+        });
   }
 }

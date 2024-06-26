@@ -58,6 +58,7 @@ public class SystemLogConsumer {
     SystemLogKafkaDo systemLogKafkaDo = objectMapper.readValue(systemLog,
         SystemLogKafkaDo.class);
     SystemLogSaveCmd systemLogSaveCmd = new SystemLogSaveCmd();
+    BEAN_TRANSFORMER.resetFieldsTransformationSkip();
     SystemLogSaveCo systemLogSaveCo = BEAN_TRANSFORMER.transform(systemLogKafkaDo,
         SystemLogSaveCo.class);
     systemLogSaveCmd.setSystemLogSaveCo(systemLogSaveCo);

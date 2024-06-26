@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Type;
 
 /**
@@ -43,6 +44,7 @@ import org.hibernate.annotations.Type;
 @Setter
 @Entity
 @Table(name = "roles")
+@DynamicInsert
 public class RoleDo extends JpaBasisDataObject {
 
   @Id
