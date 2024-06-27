@@ -19,6 +19,8 @@ import com.sky.centaur.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 import com.sky.centaur.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import com.sky.centaur.unique.domain.captcha.Captcha.SimpleCaptcha;
 import com.sky.centaur.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -36,11 +38,13 @@ public interface CaptchaMapper {
 
   CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaDo toDataObject(SimpleCaptcha simpleCaptcha);
 
   @Mappings(value = {
       @Mapping(target = "source", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo);
 
   @Mappings(value = {
@@ -48,7 +52,9 @@ public interface CaptchaMapper {
       @Mapping(target = "target", ignore = true),
       @Mapping(target = "ttl", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaVerifyCo simpleCaptchaVerifyCo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);
 }

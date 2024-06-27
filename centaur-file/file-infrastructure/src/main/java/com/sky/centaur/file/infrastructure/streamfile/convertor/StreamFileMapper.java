@@ -20,6 +20,8 @@ import com.sky.centaur.file.client.dto.co.StreamFileRemoveCo;
 import com.sky.centaur.file.client.dto.co.StreamFileSyncUploadCo;
 import com.sky.centaur.file.domain.stream.StreamFile;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -44,6 +46,7 @@ public interface StreamFileMapper {
       @Mapping(target = "modificationTime", ignore = true),
       @Mapping(target = "modifier", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
 
   @Mappings(value = {
@@ -54,6 +57,7 @@ public interface StreamFileMapper {
       @Mapping(target = "modifier", ignore = true),
       @Mapping(target = "size", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileRemoveCo streamFileRemoveCo);
 
   @Mappings(value = {
@@ -64,11 +68,12 @@ public interface StreamFileMapper {
       @Mapping(target = "modifier", ignore = true),
       @Mapping(target = "size", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileDownloadCo streamFileDownloadCo);
 
   @Mappings(value = {
       @Mapping(target = "content", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   StreamFileMinioDo toMinioDo(StreamFile streamFile);
-
 }

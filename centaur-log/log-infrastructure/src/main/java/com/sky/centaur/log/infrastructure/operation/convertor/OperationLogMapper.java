@@ -22,6 +22,8 @@ import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -49,29 +51,36 @@ public interface OperationLogMapper {
       @Mapping(target = "operatingStartTime", ignore = true),
       @Mapping(target = "operatingTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSubmitCo operationLogSubmitCo);
 
   @Mappings(value = {
       @Mapping(target = "operatingEndTime", ignore = true),
       @Mapping(target = "operatingStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSaveCo operationLogSaveCo);
 
   @Mappings(value = {
       @Mapping(target = "operatingEndTime", ignore = true),
       @Mapping(target = "operatingStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogEsDo operationLogEsDo);
 
   @Mappings(value = {
       @Mapping(target = "operatingEndTime", ignore = true),
       @Mapping(target = "operatingStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogFindAllCo operationLogFindAllCo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLogFindAllCo toFindAllCo(OperationLog operationLog);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLogQryCo toQryCo(OperationLog operationLog);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCo toSaveCo(OperationLogKafkaDo operationLogKafkaDo);
 }

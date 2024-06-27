@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -42,11 +44,13 @@ public interface AccountMapper {
       @Mapping(target = "role", ignore = true),
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
   @Mappings(value = {
       @Mapping(target = "role", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
   @Mappings(value = {
@@ -57,6 +61,7 @@ public interface AccountMapper {
       @Mapping(target = "modificationTime", ignore = true),
       @Mapping(target = "modifier", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
 
   @Mappings(value = {
@@ -67,7 +72,9 @@ public interface AccountMapper {
       @Mapping(target = "modificationTime", ignore = true),
       @Mapping(target = "modifier", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
 }

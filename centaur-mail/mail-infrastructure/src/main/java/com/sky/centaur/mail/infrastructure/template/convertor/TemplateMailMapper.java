@@ -18,6 +18,8 @@ package com.sky.centaur.mail.infrastructure.template.convertor;
 import com.sky.centaur.mail.client.dto.co.TemplateMailSendCo;
 import com.sky.centaur.mail.domain.template.TemplateMail;
 import com.sky.centaur.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -36,6 +38,7 @@ public interface TemplateMailMapper {
   TemplateMailMapper INSTANCE = Mappers.getMapper(TemplateMailMapper.class);
 
   @Mapping(target = "content", ignore = true)
+  @API(status = Status.STABLE, since = "1.0.1")
   TemplateMailThymeleafDo toThymeleafDo(TemplateMail templateMail);
 
   @Mappings(value = {
@@ -44,5 +47,6 @@ public interface TemplateMailMapper {
       @Mapping(target = "modificationTime", ignore = true),
       @Mapping(target = "modifier", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   TemplateMail toEntity(TemplateMailSendCo templateMailSendCo);
 }

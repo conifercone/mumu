@@ -21,6 +21,8 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -37,17 +39,24 @@ public interface AuthorityMapper {
 
   AuthorityMapper INSTANCE = Mappers.getMapper(AuthorityMapper.class);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityDo authorityDo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityAddCo authorityAddCo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityFindAllCo authorityFindAllCo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AuthorityUpdateCo authorityUpdateCo, @MappingTarget Authority authority);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindByIdCo toFindByIdCo(Authority authority);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindAllCo toFindAllCo(Authority authority);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   AuthorityDo toDataObject(Authority authority);
 }

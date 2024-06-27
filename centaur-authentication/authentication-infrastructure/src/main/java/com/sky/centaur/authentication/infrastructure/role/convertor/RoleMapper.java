@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -41,31 +43,37 @@ public interface RoleMapper {
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleDo roleDo);
 
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCo roleAddCo);
 
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleFindAllCo roleFindAllCo);
 
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
 
   @Mappings(value = {
       @Mapping(target = "authorities", ignore = true),
       @Mapping(target = "users", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
 }

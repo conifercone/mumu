@@ -21,6 +21,8 @@ import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -38,8 +40,10 @@ public interface SystemLogMapper {
 
   SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLogKafkaDo toKafkaDataObject(SystemLog systemLog);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLogEsDo toEsDataObject(SystemLog systemLog);
 
   @Mappings(value = {
@@ -48,27 +52,33 @@ public interface SystemLogMapper {
       @Mapping(target = "recordStartTime", ignore = true),
       @Mapping(target = "recordTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSubmitCo systemLogSubmitCo);
 
   @Mappings(value = {
       @Mapping(target = "recordEndTime", ignore = true),
       @Mapping(target = "recordStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSaveCo systemLogSaveCo);
 
   @Mappings(value = {
       @Mapping(target = "recordEndTime", ignore = true),
       @Mapping(target = "recordStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogEsDo systemLogEsDo);
 
   @Mappings(value = {
       @Mapping(target = "recordEndTime", ignore = true),
       @Mapping(target = "recordStartTime", ignore = true)
   })
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogFindAllCo systemLogFindAllCo);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
 
+  @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);
 }
