@@ -60,9 +60,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

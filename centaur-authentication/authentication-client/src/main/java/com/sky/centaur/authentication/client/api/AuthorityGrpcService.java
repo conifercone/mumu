@@ -60,9 +60,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

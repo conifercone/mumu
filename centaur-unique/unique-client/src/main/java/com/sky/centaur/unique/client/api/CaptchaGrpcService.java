@@ -57,9 +57,7 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   public SimpleCaptchaGeneratedGrpcCo generateSimpleCaptcha(
