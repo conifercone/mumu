@@ -16,7 +16,6 @@
 
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
@@ -25,7 +24,6 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
@@ -42,10 +40,6 @@ import org.jetbrains.annotations.Contract;
  */
 public final class AuthorityConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new com.expediagroup.beans.BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private AuthorityConvertor() {
   }
 
@@ -53,27 +47,19 @@ public final class AuthorityConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<Authority> toEntity(AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(
-        authorityDataObject -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(authorityDataObject, Authority.class);
-        });
+        AuthorityMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AuthorityDo> toDataObject(Authority authority) {
-    return Optional.ofNullable(authority).map(
-        authorityDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(authorityDomain, AuthorityDo.class);
-        });
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<Authority> toEntity(AuthorityAddCo authorityAddCo) {
     return Optional.ofNullable(authorityAddCo).map(authorityAddClientObject -> {
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      Authority authority = BEAN_TRANSFORMER.transform(authorityAddClientObject, Authority.class);
+      Authority authority = AuthorityMapper.INSTANCE.toEntity(authorityAddClientObject);
       if (authority.getId() == null) {
         authority.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
         authorityAddClientObject.setId(authority.getId());
@@ -93,10 +79,7 @@ public final class AuthorityConvertor {
       return authorityRepository.findById(
               authorityUpdateClientObject.getId()).flatMap(AuthorityConvertor::toEntity)
           .map(authority -> {
-            BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-            BEAN_TRANSFORMER.skipTransformationForField(
-                    BeanUtil.getNullPropertyNames(authorityUpdateClientObject))
-                .transform(authorityUpdateClientObject, authority);
+            AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
             return authority;
           }).orElse(null);
     });
@@ -104,31 +87,16 @@ public final class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
-    return Optional.ofNullable(authorityFindAllCo).map(
-        authorityFindAllClientObject -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(authorityFindAllClientObject,
-              Authority.class);
-        });
+    return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
-    return Optional.ofNullable(authority).map(
-        authorityDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(authorityDomain,
-              AuthorityFindByIdCo.class);
-        });
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AuthorityFindAllCo> toFindAllCo(Authority authority) {
-    return Optional.ofNullable(authority).map(
-        authorityDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(authorityDomain,
-              AuthorityFindAllCo.class);
-        });
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo);
   }
 }

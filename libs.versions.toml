@@ -19,9 +19,9 @@ flywayVersion = "10.13.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.10'
+mapstructVersion = '1.5.5.Final'
 commonsIoVersion = '2.16.1'
 # bom version
-bullBomVersion = '2.2.4'
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
 protobufBomVersion = '3.25.1'
@@ -166,12 +166,6 @@ hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 # https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bom
-bullBom = { module = "com.expediagroup.beans:bull-bom", version.ref = "bullBomVersion" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bean-transformer
-bullBeanTransformer = { module = "com.expediagroup.beans:bull-bean-transformer" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-map-transformer
-bullMapTransformer = { module = "com.expediagroup.beans:bull-map-transformer" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-bom
 grpcBom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
@@ -182,6 +176,10 @@ guavaBom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersi
 springTx = { module = "org.springframework:spring-tx" }
 # https://mvnrepository.com/artifact/io.minio/minio
 minio = { module = "io.minio:minio", version.ref = "minioVersion" }
+# https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
+# https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
+mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
