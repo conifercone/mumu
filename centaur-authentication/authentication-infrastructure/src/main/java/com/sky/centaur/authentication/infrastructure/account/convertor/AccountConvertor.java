@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -43,10 +41,6 @@ import org.jetbrains.annotations.Contract;
  */
 public final class AccountConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private AccountConvertor() {
   }
 
@@ -60,10 +54,7 @@ public final class AccountConvertor {
           accountDataObject.getCredentialsNonExpired(),
           accountDataObject.getAccountNonLocked(),
           RoleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      BEAN_TRANSFORMER.skipTransformationForField("id", "username", "password", "enabled",
-              "accountNonExpired", "credentialsNonExpired", "role", "accountNonLocked")
-          .transform(accountDataObject, account);
+      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
       return account;
     });
   }
@@ -72,9 +63,7 @@ public final class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AccountDo> toDataObject(Account account) {
     return Optional.ofNullable(account).map(accountDomain -> {
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      AccountDo accountDo = BEAN_TRANSFORMER.skipTransformationForField("role")
-          .transform(accountDomain, AccountDo.class);
+      AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountDomain);
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(
@@ -94,10 +83,7 @@ public final class AccountConvertor {
           accountRegisterClientObject.getPassword(),
           roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
               .flatMap(RoleConvertor::toEntity).orElse(null));
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      BEAN_TRANSFORMER.skipTransformationForField("id", "username", "password", "enabled",
-              "accountNonExpired", "credentialsNonExpired", "role", "accountNonLocked")
-          .transform(accountRegisterClientObject, account);
+      AccountMapper.INSTANCE.toEntity(accountRegisterClientObject, account);
       accountRegisterClientObject.setId(account.getId());
       return account;
     });
@@ -111,17 +97,7 @@ public final class AccountConvertor {
       AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
           .flatMap(AccountConvertor::toEntity).map(account -> {
-            Optional.ofNullable(accountUpdateByIdClientObject.getAvatarUrl())
-                .ifPresent(account::setAvatarUrl);
-            Optional.ofNullable(accountUpdateByIdClientObject.getPhone())
-                .ifPresent(account::setPhone);
-            Optional.ofNullable(accountUpdateByIdClientObject.getSex()).ifPresent(account::setSex);
-            Optional.ofNullable(accountUpdateByIdClientObject.getEmail())
-                .ifPresent(account::setEmail);
-            Optional.ofNullable(accountUpdateByIdClientObject.getTimezone())
-                .ifPresent(account::setTimezone);
-            Optional.ofNullable(accountUpdateByIdClientObject.getLanguage())
-                .ifPresent(account::setLanguage);
+            AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
             return account;
           }).orElse(null);
     });
@@ -152,11 +128,6 @@ public final class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
       Account account) {
-    return Optional.ofNullable(account)
-        .map(accountDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(accountDomain,
-              AccountCurrentLoginQueryCo.class);
-        });
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
   }
 }

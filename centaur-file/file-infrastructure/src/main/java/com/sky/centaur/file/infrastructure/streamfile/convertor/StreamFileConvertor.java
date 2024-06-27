@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.file.infrastructure.streamfile.convertor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
@@ -40,10 +38,6 @@ import org.springframework.util.ObjectUtils;
  */
 public final class StreamFileConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private StreamFileConvertor() {
   }
 
@@ -52,10 +46,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
     return Optional.ofNullable(streamFileSyncUploadCo)
         .map(uploadCo -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
-              .transform(uploadCo,
-                  StreamFile.class);
+          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
           try (InputStream streamFileContent = uploadCo.getContent()) {
             if (streamFileContent == null) {
               throw new CentaurException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY);
@@ -72,13 +63,7 @@ public final class StreamFileConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<StreamFile> toEntity(StreamFileRemoveCo streamFileRemoveCo) {
-    return Optional.ofNullable(streamFileRemoveCo)
-        .map(removeCo -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER
-              .transform(removeCo,
-                  StreamFile.class);
-        });
+    return Optional.ofNullable(streamFileRemoveCo).map(StreamFileMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -86,10 +71,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
     return Optional.ofNullable(streamFileDownloadCo)
         .map(downloadCo -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          StreamFile streamFile = BEAN_TRANSFORMER.skipTransformationForField("content")
-              .transform(downloadCo,
-                  StreamFile.class);
+          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(downloadCo);
           if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
             throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
           }
@@ -105,10 +87,7 @@ public final class StreamFileConvertor {
   public static Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
         .map(file -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          StreamFileMinioDo transform = BEAN_TRANSFORMER.skipTransformationForField("content")
-              .transform(file,
-                  StreamFileMinioDo.class);
+          StreamFileMinioDo transform = StreamFileMapper.INSTANCE.toMinioDo(file);
           try (InputStream streamFileContent = streamFile.getContent()) {
             if (streamFileContent != null) {
               transform.setContent(streamFileContent);

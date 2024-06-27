@@ -16,11 +16,10 @@
 
 package com.sky.centaur.log.application.operation.executor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.log.client.dto.OperationLogQryCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
+import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogMapper;
 import java.util.concurrent.atomic.AtomicReference;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +36,6 @@ public class OperationLogQryCmdExe {
 
   private final OperationLogGateway operationLogGateway;
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   @Autowired
   public OperationLogQryCmdExe(OperationLogGateway operationLogGateway) {
     this.operationLogGateway = operationLogGateway;
@@ -50,9 +45,7 @@ public class OperationLogQryCmdExe {
     AtomicReference<OperationLogQryCo> operationLogQryCo = new AtomicReference<>();
     operationLogGateway.findOperationLogById(
         operationLogQryCmd.getId()).ifPresent(operationLog -> {
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      OperationLogQryCo operationLogQryCoTmp = BEAN_TRANSFORMER.transform(operationLog,
-          OperationLogQryCo.class);
+      OperationLogQryCo operationLogQryCoTmp = OperationLogMapper.INSTANCE.toQryCo(operationLog);
       operationLogQryCo.set(operationLogQryCoTmp);
     });
     return operationLogQryCo.get();

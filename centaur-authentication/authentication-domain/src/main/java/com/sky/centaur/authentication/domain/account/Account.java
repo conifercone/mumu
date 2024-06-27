@@ -41,7 +41,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since 1.0.0
  */
 @JsonDeserialize
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)

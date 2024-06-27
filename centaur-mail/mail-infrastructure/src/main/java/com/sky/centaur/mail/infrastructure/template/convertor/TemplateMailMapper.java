@@ -18,33 +18,31 @@ package com.sky.centaur.mail.infrastructure.template.convertor;
 import com.sky.centaur.mail.client.dto.co.TemplateMailSendCo;
 import com.sky.centaur.mail.domain.template.TemplateMail;
 import com.sky.centaur.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
-import java.util.Optional;
-import org.apiguardian.api.API;
-import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
 
 /**
- * 模板邮件转换器
+ * TemplateMail mapstruct转换器
  *
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public final class TemplateMailConvertor {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface TemplateMailMapper {
 
-  private TemplateMailConvertor() {
-  }
+  TemplateMailMapper INSTANCE = Mappers.getMapper(TemplateMailMapper.class);
 
-  @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<TemplateMailThymeleafDo> toThymeleafDo(TemplateMail templateMail) {
-    return Optional.ofNullable(templateMail)
-        .map(TemplateMailMapper.INSTANCE::toThymeleafDo);
-  }
+  @Mapping(target = "content", ignore = true)
+  TemplateMailThymeleafDo toThymeleafDo(TemplateMail templateMail);
 
-  @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
-    return Optional.ofNullable(templateMailSendCo)
-        .map(TemplateMailMapper.INSTANCE::toEntity);
-  }
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
+  TemplateMail toEntity(TemplateMailSendCo templateMailSendCo);
 }

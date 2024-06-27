@@ -74,6 +74,10 @@ subprojects { project ->
 
     compileJava.dependsOn(processResources)
 
+    compileJava {
+        options.compilerArgs << "-Amapstruct.unmappedTargetPolicy=IGNORE"
+    }
+
     tasks.withType(KotlinCompile).configureEach {
         compilerOptions.freeCompilerArgs.add("-Xjsr305=strict")
     }
@@ -134,7 +138,6 @@ subprojects { project ->
         imports {
             mavenBom(libs.springBootDependencies.get().toString())
             mavenBom(libs.springCloudDependencies.get().toString())
-            mavenBom(libs.bullBom.get().toString())
             mavenBom(libs.grpcBom.get().toString())
             mavenBom(libs.protobufBom.get().toString())
             mavenBom(libs.guavaBom.get().toString())
@@ -152,12 +155,13 @@ subprojects { project ->
         implementation libs.guava
         implementation libs.commonsLang3
         implementation libs.commonsIo
-        implementation libs.bullMapTransformer
-        implementation libs.bullBeanTransformer
         implementation libs.jacksonModuleKotlin
         implementation libs.kotlinReflect
         testImplementation libs.junitJupiter
         annotationProcessor libs.springBootConfigurationProcessor
+        implementation libs.mapstruct
+        annotationProcessor libs.mapstructProcessor
+        testAnnotationProcessor libs.mapstructProcessor
     }
 
     test {

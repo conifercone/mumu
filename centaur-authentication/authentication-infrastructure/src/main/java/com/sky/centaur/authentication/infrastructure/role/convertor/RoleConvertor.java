@@ -16,8 +16,6 @@
 
 package com.sky.centaur.authentication.infrastructure.role.convertor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
@@ -46,10 +44,6 @@ import org.springframework.util.CollectionUtils;
  */
 public final class RoleConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private RoleConvertor() {
   }
 
@@ -58,10 +52,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      Role role = BEAN_TRANSFORMER
-          .skipTransformationForField("authorities")
-          .transform(roleDataObject, Role.class);
+      Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       Optional.ofNullable(roleDataObject.getAuthorities())
           .filter(authorityList -> !CollectionUtils.isEmpty(
               authorityList)).ifPresent(authorities -> role.setAuthorities(
@@ -76,10 +67,7 @@ public final class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<RoleDo> toDataObject(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      RoleDo roleDo = BEAN_TRANSFORMER
-          .skipTransformationForField("authorities")
-          .transform(roleDomain, RoleDo.class);
+      RoleDo roleDo = RoleMapper.INSTANCE.toDataObject(roleDomain);
       if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
         roleDo.setAuthorities(
             roleDomain.getAuthorities().stream().map(Authority::getId)
@@ -95,10 +83,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleAddCo).map(roleAddClientObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      Role role = BEAN_TRANSFORMER
-          .skipTransformationForField("authorities")
-          .transform(roleAddClientObject, Role.class);
+      Role role = RoleMapper.INSTANCE.toEntity(roleAddClientObject);
       if (role.getId() == null) {
         role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
         roleAddClientObject.setId(role.getId());
@@ -122,8 +107,7 @@ public final class RoleConvertor {
       RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
       Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
-        Optional.ofNullable(roleUpdateClientObject.getName()).ifPresent(roleDomain::setName);
-        Optional.ofNullable(roleUpdateClientObject.getCode()).ifPresent(roleDomain::setCode);
+        RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
         Optional.ofNullable(roleUpdateClientObject.getAuthorities())
             .ifPresent(authorities -> roleDomain.setAuthorities(
                 authorityRepository.findAuthorityDoByIdIn(
@@ -141,10 +125,7 @@ public final class RoleConvertor {
     return Optional.ofNullable(roleFindAllCo).map(roleFindAllClientObject -> {
       AuthorityRepository authorityRepository = SpringContextUtil.getBean(
           AuthorityRepository.class);
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      Role role = BEAN_TRANSFORMER
-          .skipTransformationForField("authorities")
-          .transform(roleFindAllClientObject, Role.class);
+      Role role = RoleMapper.INSTANCE.toEntity(roleFindAllClientObject);
       if (!CollectionUtils.isEmpty(roleFindAllClientObject.getAuthorities())) {
         role.setAuthorities(
             authorityRepository.findAuthorityDoByIdIn(roleFindAllClientObject.getAuthorities())
@@ -160,10 +141,7 @@ public final class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
-      BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-      RoleFindAllCo roleFindAllCo = BEAN_TRANSFORMER
-          .skipTransformationForField("authorities")
-          .transform(roleDomain, RoleFindAllCo.class);
+      RoleFindAllCo roleFindAllCo = RoleMapper.INSTANCE.toFindAllCo(roleDomain);
       if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
         roleFindAllCo.setAuthorities(
             roleDomain.getAuthorities().stream().map(Authority::getId).collect(

@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.unique.infrastructure.captcha.convertor;
 
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 import com.sky.centaur.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import com.sky.centaur.unique.domain.captcha.Captcha.SimpleCaptcha;
@@ -33,57 +32,34 @@ import org.jetbrains.annotations.Contract;
  */
 public final class CaptchaConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new com.expediagroup.beans.BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private CaptchaConvertor() {
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
-    return Optional.ofNullable(simpleCaptcha).map(
-        simpleCaptchaDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(simpleCaptchaDomain,
-              SimpleCaptchaDo.class);
-        });
+    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo) {
-    return Optional.ofNullable(simpleCaptchaGeneratedCo).map(
-        simpleCaptchaGeneratedClientObject -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(
-              simpleCaptchaGeneratedClientObject, SimpleCaptcha.class);
-        });
+    return Optional.ofNullable(simpleCaptchaGeneratedCo).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaVerifyCo simpleCaptchaVerifyCo) {
-    return Optional.ofNullable(simpleCaptchaVerifyCo).map(
-        simpleCaptchaVerifyClientObject -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(
-              simpleCaptchaVerifyClientObject, SimpleCaptcha.class);
-        });
+    return Optional.ofNullable(simpleCaptchaVerifyCo).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public static Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
       SimpleCaptcha simpleCaptcha) {
-    return Optional.ofNullable(simpleCaptcha).map(
-        simpleCaptchaDomain -> {
-          BEAN_TRANSFORMER.resetFieldsTransformationSkip();
-          return BEAN_TRANSFORMER.transform(
-              simpleCaptchaDomain, SimpleCaptchaGeneratedCo.class);
-        });
+    return Optional.ofNullable(simpleCaptcha)
+        .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedCo);
   }
 }
