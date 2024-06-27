@@ -33,8 +33,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -49,8 +47,6 @@ public class TemplateMailGrpcService extends MailGrpcService implements
     DisposableBean {
 
   private ManagedChannel channel;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(TemplateMailGrpcService.class);
 
   public TemplateMailGrpcService(
       DiscoveryClient discoveryClient,
@@ -77,7 +73,6 @@ public class TemplateMailGrpcService extends MailGrpcService implements
         channel = managedChannelUsePlaintext.get();
         return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }

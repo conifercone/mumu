@@ -84,7 +84,9 @@ public enum ResultCode implements BaseResultInterface {
   CAPTCHA_INCORRECT(6019),
   CAPTCHA_VERIFICATION_EXCEPTION(6020),
   TIME_ZONE_IS_NOT_AVAILABLE(6021),
-  FILE_DELETION_FAILED(6022);
+  FILE_DELETION_FAILED(6022),
+  CAPTCHA_ID_CANNOT_BE_EMPTY(6023),
+  CAPTCHA_CANNOT_BE_EMPTY(6024);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

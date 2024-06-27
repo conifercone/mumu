@@ -34,8 +34,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -50,8 +48,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 public class CaptchaGrpcService extends UniqueGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaGrpcService.class);
 
   public CaptchaGrpcService(
       DiscoveryClient discoveryClient,
@@ -77,7 +73,6 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
         channel = managedChannelUsePlaintext.get();
         return generateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
@@ -106,7 +101,6 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
         channel = managedChannelUsePlaintext.get();
         return verifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }

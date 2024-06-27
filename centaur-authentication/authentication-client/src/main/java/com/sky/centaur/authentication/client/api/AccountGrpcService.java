@@ -35,8 +35,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -50,8 +48,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 public class AccountGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcService.class);
 
   public AccountGrpcService(
       DiscoveryClient discoveryClient,
@@ -75,7 +71,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel = managedChannelUsePlaintext.get();
         return registerFromGrpc(accountRegisterGrpcCmd);
       } else {
-        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
       }
     } else {
@@ -106,7 +101,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel = managedChannelUsePlaintext.get();
         return updateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
       }
     } else {
@@ -137,7 +131,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel = managedChannelUsePlaintext.get();
         return updateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
       }
     } else {
@@ -168,7 +161,6 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
         channel = managedChannelUsePlaintext.get();
         return disableFromGrpc(accountDisableGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(ResultCode.GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(ResultCode.GRPC_SERVICE_NOT_FOUND);
       }
     } else {

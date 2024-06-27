@@ -22,6 +22,7 @@ import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
@@ -43,12 +44,16 @@ public class CaptchaVerify {
   }
 
   public void verifyCaptcha(Long captchaId, String captcha) {
+    Long captchaIdNotNull = Optional.ofNullable(captchaId)
+        .orElseThrow(() -> new CentaurException(ResultCode.CAPTCHA_ID_CANNOT_BE_EMPTY));
+    String captchaNotNull = Optional.ofNullable(captcha)
+        .orElseThrow(() -> new CentaurException(ResultCode.CAPTCHA_CANNOT_BE_EMPTY));
     try {
       if (!captchaGrpcService.verifySimpleCaptcha(
               SimpleCaptchaVerifyGrpcCmd.newBuilder().setSimpleCaptchaVerifyGrpcCo(
                   SimpleCaptchaVerifyGrpcCo.newBuilder()
-                      .setId(Int64Value.of(captchaId)).setSource(
-                          StringValue.of(captcha)).build()).build())
+                      .setId(Int64Value.of(captchaIdNotNull)).setSource(
+                          StringValue.of(captchaNotNull)).build()).build())
           .getResult()) {
         throw new CentaurException(ResultCode.CAPTCHA_INCORRECT);
       }
