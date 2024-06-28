@@ -21,6 +21,7 @@ import com.sky.centaur.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -44,9 +45,7 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {

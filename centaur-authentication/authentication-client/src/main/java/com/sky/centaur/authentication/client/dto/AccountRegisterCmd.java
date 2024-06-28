@@ -28,4 +28,8 @@ import lombok.Data;
 public class AccountRegisterCmd {
 
   private AccountRegisterCo accountRegisterCo;
+
+  private Long captchaId;
+
+  private String captcha;
 }

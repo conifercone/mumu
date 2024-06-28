@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,4 +44,6 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
   private String email;
 
   private String timezone;
+
+  private LanguageEnum language;
 }

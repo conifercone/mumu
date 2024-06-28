@@ -37,6 +37,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
@@ -50,7 +51,6 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.basis.enums.SexEnum;
-import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -121,15 +121,19 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void register(AccountRegisterGrpcCmd request,
+  public void register(@NotNull AccountRegisterGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
+    accountRegisterCmd.setCaptchaId(
+        request.hasCaptchaId() ? request.getCaptchaId().getValue() : null);
+    accountRegisterCmd.setCaptcha(
+        request.hasCaptcha() ? request.getCaptcha().getValue() : null);
     AccountRegisterCo accountRegisterCo = getAccountRegisterCo(
         request);
     accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
     try {
       accountRegisterCmdExe.execute(accountRegisterCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -141,19 +145,35 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       @NotNull AccountRegisterGrpcCmd request) {
     AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
     AccountRegisterGrpcCo accountRegisterGrpcCo = request.getAccountRegisterCo();
-    accountRegisterCo.setId(accountRegisterGrpcCo.getId());
-    accountRegisterCo.setUsername(accountRegisterGrpcCo.getUsername());
-    accountRegisterCo.setPassword(accountRegisterGrpcCo.getPassword());
-    accountRegisterCo.setRoleCode(accountRegisterGrpcCo.getRoleCode());
-    accountRegisterCo.setAvatarUrl(accountRegisterGrpcCo.getAvatarUrl());
-    accountRegisterCo.setPhone(accountRegisterGrpcCo.getPhone());
-    accountRegisterCo.setEmail(accountRegisterGrpcCo.getEmail());
-    accountRegisterCo.setTimezone(accountRegisterGrpcCo.getTimezone());
-    accountRegisterCo.setSex(SexEnum.valueOf(accountRegisterGrpcCo.getSex().name()));
+    accountRegisterCo.setId(
+        accountRegisterGrpcCo.hasId() ? accountRegisterGrpcCo.getId().getValue() : null);
+    accountRegisterCo.setUsername(
+        accountRegisterGrpcCo.hasUsername() ? accountRegisterGrpcCo.getUsername().getValue()
+            : null);
+    accountRegisterCo.setPassword(
+        accountRegisterGrpcCo.hasPassword() ? accountRegisterGrpcCo.getPassword().getValue()
+            : null);
+    accountRegisterCo.setRoleCode(
+        accountRegisterGrpcCo.hasRoleCode() ? accountRegisterGrpcCo.getRoleCode().getValue()
+            : null);
+    accountRegisterCo.setAvatarUrl(
+        accountRegisterGrpcCo.hasAvatarUrl() ? accountRegisterGrpcCo.getAvatarUrl().getValue()
+            : null);
+    accountRegisterCo.setPhone(
+        accountRegisterGrpcCo.hasPhone() ? accountRegisterGrpcCo.getPhone().getValue() : null);
+    accountRegisterCo.setEmail(
+        accountRegisterGrpcCo.hasEmail() ? accountRegisterGrpcCo.getEmail().getValue() : null);
+    accountRegisterCo.setTimezone(
+        accountRegisterGrpcCo.hasTimezone() ? accountRegisterGrpcCo.getTimezone().getValue()
+            : null);
+    accountRegisterCo.setSex(
+        accountRegisterGrpcCo.hasSex() ? SexEnum.valueOf(accountRegisterGrpcCo.getSex().name())
+            : null);
     return accountRegisterCo;
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
   }
@@ -191,7 +211,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
     try {
       accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -228,7 +248,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
     try {
       accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -261,7 +281,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountDisableCmd.setAccountDisableCo(accountDisableCo);
     try {
       accountDisableCmdExe.execute(accountDisableCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -287,8 +307,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deleteCurrentAccount() {
-    accountDeleteCurrentCmdExe.execute();
+  public void deleteCurrentAccount(AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+    accountDeleteCurrentCmdExe.execute(accountDeleteCurrentCmd);
   }
 
   @Override

@@ -15,13 +15,12 @@
  */
 package com.sky.centaur.log.application.consumer.system;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.client.api.SystemLogService;
 import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
+import com.sky.centaur.log.infrastructure.system.convertor.SystemLogMapper;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,6 @@ public class SystemLogConsumer {
 
   private final SystemLogService systemLogService;
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
 
   @Autowired
   public SystemLogConsumer(ObjectMapper objectMapper, SystemLogService systemLogService) {
@@ -58,8 +53,7 @@ public class SystemLogConsumer {
     SystemLogKafkaDo systemLogKafkaDo = objectMapper.readValue(systemLog,
         SystemLogKafkaDo.class);
     SystemLogSaveCmd systemLogSaveCmd = new SystemLogSaveCmd();
-    SystemLogSaveCo systemLogSaveCo = BEAN_TRANSFORMER.transform(systemLogKafkaDo,
-        SystemLogSaveCo.class);
+    SystemLogSaveCo systemLogSaveCo = SystemLogMapper.INSTANCE.toSaveCo(systemLogKafkaDo);
     systemLogSaveCmd.setSystemLogSaveCo(systemLogSaveCo);
     systemLogService.save(systemLogSaveCmd);
   }

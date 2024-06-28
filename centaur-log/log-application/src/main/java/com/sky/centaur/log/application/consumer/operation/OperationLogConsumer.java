@@ -15,13 +15,12 @@
  */
 package com.sky.centaur.log.application.consumer.operation;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
+import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogMapper;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,6 @@ public class OperationLogConsumer {
 
   private final OperationLogService operationLogService;
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   @Autowired
   public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService) {
     this.objectMapper = objectMapper;
@@ -57,8 +52,8 @@ public class OperationLogConsumer {
     OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
         OperationLogKafkaDo.class);
     OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
-    OperationLogSaveCo operationLogSaveCo = BEAN_TRANSFORMER.transform(operationLogKafkaDo,
-        OperationLogSaveCo.class);
+    OperationLogSaveCo operationLogSaveCo = OperationLogMapper.INSTANCE.toSaveCo(
+        operationLogKafkaDo);
     operationLogSaveCmd.setOperationLogSaveCo(operationLogSaveCo);
     operationLogService.save(operationLogSaveCmd);
   }

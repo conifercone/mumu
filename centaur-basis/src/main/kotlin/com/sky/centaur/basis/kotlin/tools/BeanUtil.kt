@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.basis.kotlin.tools
 
-import org.springframework.beans.BeanWrapper
-import org.springframework.beans.BeanWrapperImpl
 import java.io.Serializable
 import java.lang.invoke.SerializedLambda
 import java.util.*
@@ -28,26 +26,6 @@ import java.util.*
  * @since 1.0.0
  */
 object BeanUtil {
-    /**
-     * 获取当前对象中属性值为null的所有属性名
-     *
-     * @param source 操作对象
-     * @return 为null的所有属性名
-     */
-    @JvmStatic
-    fun getNullPropertyNames(source: Any?): Array<String> {
-        val src: BeanWrapper = BeanWrapperImpl(source!!)
-        val pds = src.propertyDescriptors
-
-        val emptyNames: MutableSet<String> = HashSet()
-        for (pd in pds) {
-            val srcValue = src.getPropertyValue(pd.name)
-            if (srcValue == null) {
-                emptyNames.add(pd.name)
-            }
-        }
-        return emptyNames.toTypedArray()
-    }
 
     @FunctionalInterface
     interface GetterFunction<T, R> : (T) -> R, Serializable
@@ -73,5 +51,4 @@ object BeanUtil {
             throw RuntimeException("Failed to extract property name from getter method", e)
         }
     }
-
 }

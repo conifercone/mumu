@@ -20,6 +20,7 @@ import com.sky.centaur.log.client.api.grpc.SystemLogServiceGrpc.SystemLogService
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import java.util.Optional;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -43,9 +44,7 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   public void submit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {

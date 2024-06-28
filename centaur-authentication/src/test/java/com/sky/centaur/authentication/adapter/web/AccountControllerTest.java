@@ -18,7 +18,19 @@ package com.sky.centaur.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.Int32Value;
+import com.google.protobuf.Int64Value;
+import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
+import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.basis.enums.LanguageEnum;
+import com.sky.centaur.basis.enums.SexEnum;
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
+import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,37 +56,51 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountControllerTest {
 
   private final MockMvc mockMvc;
+  private final CaptchaGrpcService captchaGrpcService;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired
-  public AccountControllerTest(MockMvc mockMvc) {
+  public AccountControllerTest(MockMvc mockMvc, CaptchaGrpcService captchaGrpcService) {
     this.mockMvc = mockMvc;
+    this.captchaGrpcService = captchaGrpcService;
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "accountRegisterCo": {
-                 "id": 31241232131,
-                 "username": "test1",
-                 "password": "test1",
-                 "enabled": true,
-                 "roleCode": "admin",
-                 "avatarUrl": "https://github.com/users/conifercone",
-                 "phone": "13031723736",
-                 "sex": "MALE",
-                 "timezone": "UTF+8"
-             }
-         }""";
+    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
+        .setSimpleCaptchaGeneratedGrpcCo(
+            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
+                .setTtl(Int64Value.of(500))).build();
+    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
+        simpleCaptchaGeneratedGrpcCmd);
+    AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
+    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
+    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
+    AccountRegisterCo accountRegisterCo = getAccountRegisterCo();
+    accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/account/register").with(csrf())
-            .content(userInfo.getBytes())
+            .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(print());
+  }
+
+  private static @NotNull AccountRegisterCo getAccountRegisterCo() {
+    AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
+    accountRegisterCo.setId(31241232131L);
+    accountRegisterCo.setUsername("test1");
+    accountRegisterCo.setPassword("test1");
+    accountRegisterCo.setRoleCode("admin");
+    accountRegisterCo.setAvatarUrl("https://github.com/users/conifercone");
+    accountRegisterCo.setPhone("13031723736");
+    accountRegisterCo.setSex(SexEnum.MALE);
+    accountRegisterCo.setLanguage(LanguageEnum.ZH);
+    accountRegisterCo.setTimezone("UTF+8");
+    return accountRegisterCo;
   }
 
   @Test
@@ -183,6 +209,28 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .put("/account/changePassword").with(csrf())
             .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteCurrent() throws Exception {
+    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
+        .setSimpleCaptchaGeneratedGrpcCo(
+            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
+                .setTtl(Int64Value.of(500))).build();
+    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
+        simpleCaptchaGeneratedGrpcCmd);
+    AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
+    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
+    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
+    mockMvc.perform(MockMvcRequestBuilders
+            .delete("/account/deleteCurrent").with(csrf())
+            .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

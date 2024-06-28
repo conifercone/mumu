@@ -68,7 +68,7 @@ public class GrpcExceptionAdvice {
   public Status handle(AuthenticationException authenticationException,
       @SuppressWarnings("unused") GRpcExceptionScope scope) {
     if (authenticationException != null) {
-      LOGGER.error(ResultCode.UNAUTHORIZED.getResultCode());
+      LOGGER.error(ResultCode.UNAUTHORIZED.getResultMsg());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultCode())

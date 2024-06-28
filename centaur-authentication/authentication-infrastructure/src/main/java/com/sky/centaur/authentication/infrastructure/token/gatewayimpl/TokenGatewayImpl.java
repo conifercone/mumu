@@ -16,7 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.token.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.token.gateway.TokenGateway;
-import com.sky.centaur.authentication.infrastructure.token.redis.TokenRepository;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

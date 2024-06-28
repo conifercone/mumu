@@ -40,19 +40,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class JpaBasisDataObject extends BasisDataObject {
 
   @CreationTimestamp
-  @Column(name = "creation_time", updatable = false)
+  @Column(name = "creation_time", updatable = false, nullable = false)
   private OffsetDateTime creationTime;
 
   @CreatedBy
-  @Column(name = "founder", updatable = false)
+  @Column(name = "founder", updatable = false, nullable = false)
   private Long founder;
 
   @LastModifiedBy
-  @Column(name = "modifier")
+  @Column(name = "modifier", nullable = false)
   private Long modifier;
 
   @UpdateTimestamp
-  @Column(name = "modification_time")
+  @Column(name = "modification_time", nullable = false)
   private OffsetDateTime modificationTime;
 
   @Override

@@ -37,8 +37,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -54,8 +52,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   private ManagedChannel channel;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcService.class);
-
   public AuthorityGrpcService(
       DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
@@ -64,9 +60,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -81,7 +75,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         channel = managedChannelUsePlaintext.get();
         return addFromGrpc(authorityAddGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
@@ -113,7 +106,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         channel = managedChannelUsePlaintext.get();
         return deleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
@@ -146,7 +138,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         channel = managedChannelUsePlaintext.get();
         return updateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }
@@ -179,7 +170,6 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
         channel = managedChannelUsePlaintext.get();
         return findAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
       } else {
-        LOGGER.error(GRPC_SERVICE_NOT_FOUND.getResultMsg());
         throw new CentaurException(GRPC_SERVICE_NOT_FOUND);
       }
     }

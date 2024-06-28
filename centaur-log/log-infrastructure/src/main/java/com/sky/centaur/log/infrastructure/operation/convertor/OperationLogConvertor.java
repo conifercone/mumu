@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
@@ -41,33 +39,26 @@ import org.jetbrains.annotations.Contract;
  */
 public final class OperationLogConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private OperationLogConvertor() {
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogKafkaDo.class));
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogEsDo.class));
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
     return Optional.ofNullable(operationLogSubmitCo).map(res -> {
-      OperationLog operationLog = BEAN_TRANSFORMER.transform(res,
-          OperationLog.class);
+      OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
       operationLog.setId(
           Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
               .map(span -> span.context().traceId()).orElseGet(() ->
@@ -82,31 +73,27 @@ public final class OperationLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
-    return Optional.ofNullable(operationLogSaveCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+    return Optional.ofNullable(operationLogSaveCo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
-    return Optional.ofNullable(operationLogEsDo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+    return Optional.ofNullable(operationLogEsDo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLog> toEntity(
       OperationLogFindAllCo operationLogFindAllCo) {
-    return Optional.ofNullable(operationLogFindAllCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLog.class));
+    return Optional.ofNullable(operationLogFindAllCo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, OperationLogFindAllCo.class));
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllCo);
   }
 
 }

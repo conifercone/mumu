@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databa
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
+import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
@@ -46,6 +48,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@DynamicInsert
 public class AccountDo extends JpaBasisDataObject {
 
   @Id
@@ -66,39 +69,44 @@ public class AccountDo extends JpaBasisDataObject {
   @Column(name = "enabled", nullable = false)
   private Boolean enabled = true;
 
-  @Column(name = "credentials_non_expired")
+  @Column(name = "credentials_non_expired", nullable = false)
   private Boolean credentialsNonExpired;
 
-  @Column(name = "account_non_locked")
+  @Column(name = "account_non_locked", nullable = false)
   private Boolean accountNonLocked;
 
-  @Column(name = "account_non_expired")
+  @Column(name = "account_non_expired", nullable = false)
   private Boolean accountNonExpired;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "role_id")
+  @JoinColumn(name = "role_id", nullable = false)
   private RoleDo role;
 
   @Size(max = 200)
-  @Column(name = "avatar_url", length = 200)
+  @Column(name = "avatar_url", length = 200, nullable = false)
   private String avatarUrl;
 
   @Size(max = 200)
-  @Column(name = "phone", length = 200)
+  @Column(name = "phone", length = 200, nullable = false)
   private String phone;
 
 
-  @Column(name = "sex", columnDefinition = "sex(0, 0)")
+  @Column(name = "sex", columnDefinition = "sex(0, 0)", nullable = false)
   @JdbcType(PostgreSQLEnumJdbcType.class)
   @Enumerated(EnumType.STRING)
   private SexEnum sex;
 
   @Size(max = 200)
-  @Column(name = "email", length = 200)
+  @Column(name = "email", length = 200, nullable = false)
   private String email;
 
   @Size(max = 200)
-  @Column(name = "timezone", length = 200)
+  @Column(name = "timezone", length = 200, nullable = false)
   private String timezone;
+
+  @Column(name = "language", columnDefinition = "language(0, 0)", nullable = false)
+  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Enumerated(EnumType.STRING)
+  private LanguageEnum language;
 
 }

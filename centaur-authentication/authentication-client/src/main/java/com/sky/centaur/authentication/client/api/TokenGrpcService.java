@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -53,9 +54,7 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

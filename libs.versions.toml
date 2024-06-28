@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "3.3.0"
+springbootVersion = "3.3.1"
 springCloudVersion = "2023.0.2"
 # dependence version
 apiguardianVersion = '1.1.2'
@@ -9,17 +9,19 @@ swagger3Version = '2.3.0'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
-redisOmSpringVersion = "0.9.1"
+redisOmSpringVersion = "0.9.3"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.7.2"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.7.3"
+hypersistenceUtilsVersion = "3.7.7"
 curatorRecipesVersion = "5.1.0"
 flywayVersion = "10.13.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
+minioVersion = '8.5.10'
+mapstructVersion = '1.5.5.Final'
+commonsIoVersion = '2.16.1'
 # bom version
-bullBomVersion = '2.2.4'
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
 protobufBomVersion = '3.25.1'
@@ -79,6 +81,10 @@ swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", ver
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 springBootLog4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+springBootMail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
+springBootThymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf" }
 # https://mvnrepository.com/artifact/p6spy/p6spy
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
@@ -105,6 +111,8 @@ grpcClientSpringBootStarter = { module = "io.github.lognet:grpc-client-spring-bo
 redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 commonsLang3 = { module = "org.apache.commons:commons-lang3" }
+# https://mvnrepository.com/artifact/commons-io/commons-io
+commonsIo = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
 # https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
@@ -158,12 +166,6 @@ hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 # https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bom
-bullBom = { module = "com.expediagroup.beans:bull-bom", version.ref = "bullBomVersion" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-bean-transformer
-bullBeanTransformer = { module = "com.expediagroup.beans:bull-bean-transformer" }
-# https://mvnrepository.com/artifact/com.expediagroup.beans/bull-map-transformer
-bullMapTransformer = { module = "com.expediagroup.beans:bull-map-transformer" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-bom
 grpcBom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
@@ -172,6 +174,12 @@ protobufBom = { module = "com.google.protobuf:protobuf-bom", version.ref = "prot
 guavaBom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
 # https://mvnrepository.com/artifact/org.springframework/spring-tx
 springTx = { module = "org.springframework:spring-tx" }
+# https://mvnrepository.com/artifact/io.minio/minio
+minio = { module = "io.minio:minio", version.ref = "minioVersion" }
+# https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
+# https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
+mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
@@ -189,4 +197,3 @@ license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVe
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
-flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }

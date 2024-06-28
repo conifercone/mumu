@@ -41,7 +41,6 @@ import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
-import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -116,7 +115,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleAddCmd.setRoleAddCo(roleAddCo);
     try {
       roleAddCmdExe.execute(roleAddCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -147,7 +146,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
       roleDeleteByIdCmdExe.execute(roleDeleteByIdCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -178,7 +177,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleUpdateCmd.setRoleUpdateCo(roleUpdateCo);
     try {
       roleUpdateCmdExe.execute(roleUpdateCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(Empty.newBuilder().build());
@@ -222,7 +221,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
               .build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     responseObserver.onNext(builder.build());

@@ -16,6 +16,7 @@
 
 package com.sky.centaur.unique.client;
 
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
@@ -36,5 +37,11 @@ public class UniqueClientConfiguration {
   public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+  }
+
+  @Bean
+  public CaptchaGrpcService captchaGrpcService(DiscoveryClient discoveryClient,
+      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new CaptchaGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 }

@@ -36,7 +36,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @since 1.0.0
  */
 @Getter
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonDeserialize
 @Setter

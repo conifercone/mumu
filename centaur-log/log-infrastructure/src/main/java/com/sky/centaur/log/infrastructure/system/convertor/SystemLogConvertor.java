@@ -15,8 +15,6 @@
  */
 package com.sky.centaur.log.infrastructure.system.convertor;
 
-import com.expediagroup.beans.BeanUtils;
-import com.expediagroup.beans.transformer.BeanTransformer;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
@@ -41,10 +39,6 @@ import org.jetbrains.annotations.Contract;
  */
 public final class SystemLogConvertor {
 
-  private static final BeanTransformer BEAN_TRANSFORMER = new BeanUtils().getTransformer()
-      .setDefaultValueForMissingField(true)
-      .setDefaultValueForMissingPrimitiveField(false);
-
   private SystemLogConvertor() {
   }
 
@@ -52,21 +46,21 @@ public final class SystemLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogKafkaDo.class));
+        .map(SystemLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogEsDo.class));
+        .map(SystemLogMapper.INSTANCE::toEsDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLog> toEntity(SystemLogSubmitCo systemLogSubmitCo) {
     return Optional.ofNullable(systemLogSubmitCo).map(res -> {
-      SystemLog systemLog = BEAN_TRANSFORMER.transform(res, SystemLog.class);
+      SystemLog systemLog = SystemLogMapper.INSTANCE.toEntity(res);
       systemLog.setId(
           Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
               .map(span -> span.context().traceId()).orElseGet(() ->
@@ -80,14 +74,14 @@ public final class SystemLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
     return Optional.ofNullable(systemLogSaveCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+        .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
     return Optional.ofNullable(systemLogEsDo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+        .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -95,13 +89,13 @@ public final class SystemLogConvertor {
   public static Optional<SystemLog> toEntity(
       SystemLogFindAllCo systemLogFindAllCo) {
     return Optional.ofNullable(systemLogFindAllCo)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLog.class));
+        .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public static Optional<SystemLogFindAllCo> toFindAllCo(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(res -> BEAN_TRANSFORMER.transform(res, SystemLogFindAllCo.class));
+        .map(SystemLogMapper.INSTANCE::toFindAllCo);
   }
 }

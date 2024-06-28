@@ -74,7 +74,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       // 判断redis中是否存在token
       if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
           TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
         return;
@@ -84,7 +84,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       try {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultCode());
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
         return;

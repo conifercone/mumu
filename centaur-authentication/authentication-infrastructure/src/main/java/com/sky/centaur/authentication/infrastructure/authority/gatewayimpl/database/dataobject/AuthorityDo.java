@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * 权限基本信息数据对象
@@ -38,6 +39,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "authorities")
 @RequiredArgsConstructor
+@DynamicInsert
 public class AuthorityDo extends JpaBasisDataObject {
 
   @Id
@@ -50,7 +52,7 @@ public class AuthorityDo extends JpaBasisDataObject {
   private String code;
 
   @Size(max = 200)
-  @Column(name = "name", length = 200)
+  @Column(name = "name", nullable = false, length = 200)
   private String name;
 
 }

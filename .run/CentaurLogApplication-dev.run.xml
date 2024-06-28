@@ -1,20 +1,18 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CentaurLogApplication-dev"
-    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="dev"/>
-    <module name="centaur.centaur-log.main"/>
-    <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.sky.centaur.log.CentaurLogApplication"/>
-    <option name="VM_PARAMETERS"
-      value="-Dcom.sun.management.jmxremote.port=31201 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
+  <configuration default="false" name="CentaurLogApplication-dev" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev" />
+    <module name="centaur.centaur-log.main" />
+    <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.sky.centaur.log.CentaurLogApplication" />
+    <option name="VM_PARAMETERS" value="-Dcom.sun.management.jmxremote.port=31201 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dlog4j2.disableJmx=true" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.sky.centaur.log.*"/>
-        <option name="ENABLED" value="true"/>
+        <option name="PATTERN" value="com.sky.centaur.log.*" />
+        <option name="ENABLED" value="true" />
       </pattern>
     </extension>
     <method v="2">
-      <option name="Make" enabled="true"/>
+      <option name="Make" enabled="true" />
     </method>
   </configuration>
 </component>

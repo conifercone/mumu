@@ -1,0 +1,35 @@
+syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "com.sky.centaur.file.client.api.grpc";
+option java_outer_classname = "StreamFileServiceProto";
+
+service StreamFileService {
+  rpc download (StreamFileDownloadGrpcCmd) returns (StreamFileDownloadGrpcResult);
+  rpc removeFile (StreamFileRemoveGrpcCmd) returns (google.protobuf.Empty);
+}
+
+message StreamFileDownloadGrpcCmd {
+  StreamFileDownloadGrpcCo streamFileDownloadGrpcCo = 1;
+}
+
+message StreamFileDownloadGrpcCo {
+  google.protobuf.StringValue storageAddress = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue rename = 3;
+}
+
+message StreamFileDownloadGrpcResult {
+  google.protobuf.BytesValue fileContent = 1;
+}
+
+message StreamFileRemoveGrpcCmd {
+  StreamFileRemoveGrpcCo streamFileRemoveGrpcCo = 1;
+}
+
+message StreamFileRemoveGrpcCo {
+  google.protobuf.StringValue storageAddress = 1;
+  google.protobuf.StringValue name = 2;
+}

@@ -16,7 +16,6 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply(false)
     alias(libs.plugins.kotlinPluginSpring) apply(false)
     alias(libs.plugins.kotlinPluginJpa) apply(false)
-    alias(libs.plugins.flyway) apply(false)
 }
 
 allprojects { project ->
@@ -26,6 +25,7 @@ allprojects { project ->
     // 定义maven仓库地址
     repositories {
         mavenCentral()
+        maven { url "https://repo.spring.io/milestone" }
     }
 
     configurations.configureEach {
@@ -74,6 +74,10 @@ subprojects { project ->
 
     compileJava.dependsOn(processResources)
 
+    compileJava {
+        options.compilerArgs << "-Amapstruct.unmappedTargetPolicy=IGNORE"
+    }
+
     tasks.withType(KotlinCompile).configureEach {
         compilerOptions.freeCompilerArgs.add("-Xjsr305=strict")
     }
@@ -120,11 +124,10 @@ subprojects { project ->
         encoding = StandardCharsets.UTF_8.name()
         ignoreFailures = true
         header = rootProject.file("SOURCE_CODE_HEAD.txt")
-        includes(["**/*.java", "**/*.kt", "**/*.sql", "**/*.xml", "**/*.yml"])
+        includes(["**/*.java", "**/*.kt", "**/*.xml", "**/*.yml"])
         excludes(["**/client/api/grpc/*.java", "**/*_.java", "**/*run.xml"])
         mapping "java", "SLASHSTAR_STYLE"
         mapping "kt", "SLASHSTAR_STYLE"
-        mapping "sql", "SLASHSTAR_STYLE"
         mapping "xml", "XML_STYLE"
         mapping "yml", "SCRIPT_STYLE"
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
@@ -135,7 +138,6 @@ subprojects { project ->
         imports {
             mavenBom(libs.springBootDependencies.get().toString())
             mavenBom(libs.springCloudDependencies.get().toString())
-            mavenBom(libs.bullBom.get().toString())
             mavenBom(libs.grpcBom.get().toString())
             mavenBom(libs.protobufBom.get().toString())
             mavenBom(libs.guavaBom.get().toString())
@@ -152,12 +154,14 @@ subprojects { project ->
         implementation libs.apiguardian
         implementation libs.guava
         implementation libs.commonsLang3
-        implementation libs.bullMapTransformer
-        implementation libs.bullBeanTransformer
+        implementation libs.commonsIo
         implementation libs.jacksonModuleKotlin
         implementation libs.kotlinReflect
         testImplementation libs.junitJupiter
         annotationProcessor libs.springBootConfigurationProcessor
+        implementation libs.mapstruct
+        annotationProcessor libs.mapstructProcessor
+        testAnnotationProcessor libs.mapstructProcessor
     }
 
     test {

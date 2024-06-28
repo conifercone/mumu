@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Type;
 
 /**
@@ -43,6 +44,7 @@ import org.hibernate.annotations.Type;
 @Setter
 @Entity
 @Table(name = "roles")
+@DynamicInsert
 public class RoleDo extends JpaBasisDataObject {
 
   @Id
@@ -50,7 +52,7 @@ public class RoleDo extends JpaBasisDataObject {
   private Long id;
 
   @Size(max = 200)
-  @Column(name = "name", length = 200)
+  @Column(name = "name", nullable = false, length = 200)
   private String name;
 
   @Size(max = 100)
@@ -61,7 +63,7 @@ public class RoleDo extends JpaBasisDataObject {
   @OneToMany(mappedBy = "role")
   private Set<AccountDo> users = new LinkedHashSet<>();
 
-  @Column(name = "authorities", columnDefinition = "bigint[]")
+  @Column(name = "authorities", nullable = false, columnDefinition = "bigint[]")
   @Type(ListArrayType.class)
   private List<Long> authorities;
 

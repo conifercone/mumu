@@ -5,7 +5,7 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/conifercone/centaur)
 ![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/centaur)
 ![GitHub top language](https://img.shields.io/github/languages/top/conifercone/centaur)
-[![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 ![GitHub Release](https://img.shields.io/github/v/release/conifercone/centaur)
 [![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
 [![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur)
@@ -37,12 +37,30 @@ centaur
 │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
 │  │─ 📂 centaur-basis -- basic module
 │  │─ 📂 centaur-extension -- expansion module
+│  │─ 📂 centaur-file -- file service
+│  │  │- 📂 file-adapter -- file service adaptation layer
+│  │  │- 📂 file-application -- file service application layer
+│  │  │- 📂 file-client -- file service client
+│  │  │- 📂 file-domain -- file service domain layer
+│  │  │- 📂 file-infrastructure -- file service infrastructure layer
 │  │─ 📂 centaur-log -- log service
 │  │  │- 📂 log-adapter -- log service adaptation layer
 │  │  │- 📂 log-application -- log service application layer
 │  │  │- 📂 log-client -- log service client
 │  │  │- 📂 log-domain -- log service domain layer
 │  │  │- 📂 log-infrastructure -- log service infrastructure layer
+│  │─ 📂 centaur-mail -- mail service
+│  │  │- 📂 mail-adapter -- mail service adaptation layer
+│  │  │- 📂 mail-application -- mail service application layer
+│  │  │- 📂 mail-client -- mail service client
+│  │  │- 📂 mail-domain -- mail service domain layer
+│  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
+│  │─ 📂 centaur-sms -- sms service
+│  │  │- 📂 sms-adapter -- sms service adaptation layer
+│  │  │- 📂 sms-application -- sms service application layer
+│  │  │- 📂 sms-client -- sms service client
+│  │  │- 📂 sms-domain -- sms service domain layer
+│  │  │- 📂 sms-infrastructure -- sms service infrastructure layer
 │  │─ 📂 centaur-unique -- unique data generation service
 │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
 │  │  │- 📂 unique-application -- unique data generation service application layer
@@ -55,16 +73,17 @@ centaur
 
 ### infrastructure
 
-| name          | releases |
-|---------------|----------|
-| apisix        | 3.8.0    |
-| elasticsearch | 8.12.0   |
-| kafka         | 3.4      |
-| postgresql    | 15.1     |
-| redis         | latest   |
-| zookeeper     | 3.8      |
-| consul        | 1.15.4   |
-| zipkin        | 3.19.0   |
+| name          | releases                     |
+|---------------|------------------------------|
+| apisix        | 3.8.0                        |
+| elasticsearch | 8.12.0                       |
+| kafka         | 3.4                          |
+| postgresql    | 15.1                         |
+| redis         | latest                       |
+| zookeeper     | 3.8                          |
+| consul        | 1.15.4                       |
+| minio         | RELEASE.2024-06-13T22-53-53Z |
+| zipkin        | 3.19.0                       |
 
 ## Dependency Statement
 

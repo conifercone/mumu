@@ -15,14 +15,15 @@
  */
 package com.sky.centaur.authentication.application.account.executor;
 
+import com.sky.centaur.authentication.application.CaptchaVerify;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 账户注册指令执行器
@@ -32,17 +33,19 @@ import org.springframework.util.Assert;
  */
 @Component
 @Observed(name = "AccountRegisterCmdExe")
-public class AccountRegisterCmdExe {
+public class AccountRegisterCmdExe extends CaptchaVerify {
 
   private final AccountGateway accountGateway;
 
   @Autowired
-  public AccountRegisterCmdExe(AccountGateway accountGateway) {
+  public AccountRegisterCmdExe(AccountGateway accountGateway,
+      CaptchaGrpcService captchaGrpcService) {
+    super(captchaGrpcService);
     this.accountGateway = accountGateway;
   }
 
   public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
-    Assert.notNull(accountRegisterCmd, "AccountRegisterCmd cannot be null");
+    verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
     AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
         .ifPresent(accountGateway::register);
   }

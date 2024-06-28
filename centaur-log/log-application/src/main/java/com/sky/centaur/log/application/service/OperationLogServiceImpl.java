@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.log.application.service;
 
-import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.log.application.operation.executor.OperationLogFindAllCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogQryCmdExe;
 import com.sky.centaur.log.application.operation.executor.OperationLogSaveCmdExe;
@@ -91,7 +90,7 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     operationLogSubmitCmd.setOperationLogSubmitCo(operationLogSubmitCo);
     try {
       operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-    } catch (CentaurException e) {
+    } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
     OperationLogServiceEmptyResult build = OperationLogServiceEmptyResult.newBuilder().build();

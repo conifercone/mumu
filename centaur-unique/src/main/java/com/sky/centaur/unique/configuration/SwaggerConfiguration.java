@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
   @Bean
-  public OpenAPI authenticationOpenAPI() {
+  public OpenAPI uniqueOpenAPI() {
     return new OpenAPI()
         .info(new Info().title("centaur unique")
             .description("centaur unique API document")

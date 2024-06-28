@@ -66,9 +66,7 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
 
   @Override
   public void destroy() {
-    if (channel != null) {
-      channel.shutdown();
-    }
+    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
   public Long snowflake() {
