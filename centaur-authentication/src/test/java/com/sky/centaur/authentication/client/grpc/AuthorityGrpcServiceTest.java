@@ -36,7 +36,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -73,7 +72,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void add() throws ExecutionException, InterruptedException, TimeoutException {
+  public void add() {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
             AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test_code"))
@@ -123,7 +122,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void deleteById() {
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
         .setId(Int64Value.of(3L))
         .build();
@@ -168,7 +167,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void updateById() {
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
             AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(
@@ -218,7 +217,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
+  public void findAll() {
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
         .setAuthorityFindAllCo(
             AuthorityFindAllGrpcCo.newBuilder().setName(StringValue.of("数据"))

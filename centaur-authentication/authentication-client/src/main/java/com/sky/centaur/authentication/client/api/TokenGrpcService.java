@@ -16,20 +16,15 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc;
-import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceFutureStub;
+import com.sky.centaur.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -43,8 +38,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 public class TokenGrpcService extends AuthenticationGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(TokenGrpcService.class);
 
   public TokenGrpcService(
       DiscoveryClient discoveryClient,
@@ -62,21 +55,17 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
     if (channel == null) {
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
-        return extracted(tokenValidityGrpcCmd);
+        return validityFromGrpc(tokenValidityGrpcCmd);
       }).orElse(null);
     } else {
-      return extracted(tokenValidityGrpcCmd);
+      return validityFromGrpc(tokenValidityGrpcCmd);
     }
   }
 
-  private @Nullable TokenValidityGrpcCo extracted(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
-    TokenServiceFutureStub tokenServiceFutureStub = TokenServiceGrpc.newFutureStub(channel);
-    try {
-      return tokenServiceFutureStub.validity(tokenValidityGrpcCmd).get(3, TimeUnit.SECONDS);
-    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      LOGGER.error(e.getMessage());
-      return null;
-    }
+  private @Nullable TokenValidityGrpcCo validityFromGrpc(
+      TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+    TokenServiceBlockingStub tokenServiceBlockingStub = TokenServiceGrpc.newBlockingStub(channel);
+    return tokenServiceBlockingStub.validity(tokenValidityGrpcCmd);
   }
 
 }

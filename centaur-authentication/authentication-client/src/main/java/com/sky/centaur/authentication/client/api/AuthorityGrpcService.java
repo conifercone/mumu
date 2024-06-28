@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc;
+import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceBlockingStub;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceFutureStub;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
@@ -30,9 +31,6 @@ import com.sky.centaur.basis.exception.CentaurException;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -65,8 +63,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Empty add(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     if (channel != null) {
       return addFromGrpc(authorityAddGrpcCmd, callCredentials);
     } else {
@@ -95,8 +92,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Empty deleteById(AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return deleteByIdFromGrpc(authorityDeleteByIdGrpcCmd, callCredentials);
@@ -127,8 +123,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Empty updateById(AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return updateByIdFromGrpc(authorityUpdateGrpcCmd, callCredentials);
@@ -159,8 +154,7 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.0")
   public PageOfAuthorityFindAllGrpcCo findAll(AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return findAllFromGrpc(authorityFindAllGrpcCmd, callCredentials);
@@ -190,12 +184,11 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   }
 
   private Empty addFromGrpc(AuthorityAddGrpcCmd authorityAddGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    AuthorityServiceBlockingStub authorityServiceBlockingStub = AuthorityServiceGrpc.newBlockingStub(
         channel);
-    return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .add(authorityAddGrpcCmd).get(3, TimeUnit.SECONDS);
+    return authorityServiceBlockingStub.withCallCredentials(callCredentials)
+        .add(authorityAddGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncAddFromGrpc(
@@ -208,12 +201,11 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   }
 
   private Empty deleteByIdFromGrpc(AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    AuthorityServiceBlockingStub authorityServiceBlockingStub = AuthorityServiceGrpc.newBlockingStub(
         channel);
-    return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(authorityDeleteByIdGrpcCmd).get(3, TimeUnit.SECONDS);
+    return authorityServiceBlockingStub.withCallCredentials(callCredentials)
+        .deleteById(authorityDeleteByIdGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncDeleteByIdFromGrpc(
@@ -226,12 +218,11 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
   }
 
   private Empty updateByIdFromGrpc(AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    AuthorityServiceBlockingStub authorityServiceBlockingStub = AuthorityServiceGrpc.newBlockingStub(
         channel);
-    return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .updateById(authorityUpdateGrpcCmd).get(3, TimeUnit.SECONDS);
+    return authorityServiceBlockingStub.withCallCredentials(callCredentials)
+        .updateById(authorityUpdateGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncUpdateByIdFromGrpc(
@@ -245,12 +236,11 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
 
   private PageOfAuthorityFindAllGrpcCo findAllFromGrpc(
       AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    AuthorityServiceBlockingStub authorityServiceBlockingStub = AuthorityServiceGrpc.newBlockingStub(
         channel);
-    return authorityServiceFutureStub.withCallCredentials(callCredentials)
-        .findAll(authorityFindAllGrpcCmd).get(3, TimeUnit.SECONDS);
+    return authorityServiceBlockingStub.withCallCredentials(callCredentials)
+        .findAll(authorityFindAllGrpcCmd);
   }
 
   private @NotNull ListenableFuture<PageOfAuthorityFindAllGrpcCo> syncFindAllFromGrpc(

@@ -24,13 +24,11 @@ import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import com.sky.centaur.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc;
+import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceBlockingStub;
 import com.sky.centaur.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceFutureStub;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -63,8 +61,7 @@ public class StreamFileGrpcService extends FileGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.1")
   public StreamFileDownloadGrpcResult download(StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     if (channel != null) {
       return downloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
     } else {
@@ -94,8 +91,7 @@ public class StreamFileGrpcService extends FileGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty removeFile(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     if (channel != null) {
       return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
     } else {
@@ -126,12 +122,11 @@ public class StreamFileGrpcService extends FileGrpcService implements
 
   private StreamFileDownloadGrpcResult downloadFromGrpc(
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    StreamFileServiceBlockingStub streamFileServiceBlockingStub = StreamFileServiceGrpc.newBlockingStub(
         channel);
-    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
-        .download(streamFileDownloadGrpcCmd).get(3, TimeUnit.SECONDS);
+    return streamFileServiceBlockingStub.withCallCredentials(callCredentials)
+        .download(streamFileDownloadGrpcCmd);
   }
 
   private @NotNull ListenableFuture<StreamFileDownloadGrpcResult> syncDownloadFromGrpc(
@@ -145,12 +140,11 @@ public class StreamFileGrpcService extends FileGrpcService implements
 
   private Empty removeFileFromGrpc(
       StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    StreamFileServiceBlockingStub streamFileServiceBlockingStub = StreamFileServiceGrpc.newBlockingStub(
         channel);
-    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
-        .removeFile(streamFileRemoveGrpcCmd).get(3, TimeUnit.SECONDS);
+    return streamFileServiceBlockingStub.withCallCredentials(callCredentials)
+        .removeFile(streamFileRemoveGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncRemoveFileFromGrpc(

@@ -33,8 +33,6 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
@@ -109,7 +107,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
             }
           });
         });
-      } catch (InterruptedException | TimeoutException | ExecutionException e) {
+      } catch (Exception e) {
         LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
         throw new CentaurException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
       }

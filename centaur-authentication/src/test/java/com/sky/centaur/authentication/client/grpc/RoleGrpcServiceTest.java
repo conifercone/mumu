@@ -36,7 +36,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -73,7 +72,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void add() throws ExecutionException, InterruptedException, TimeoutException {
+  public void add() {
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
             RoleAddGrpcCo.newBuilder().setCode(StringValue.of("test")).setName(
@@ -123,7 +122,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void deleteById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void deleteById() {
     RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
         .setId(Int64Value.of(2L))
         .build();
@@ -168,7 +167,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void updateById() {
     RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
         .setRoleUpdateCo(
             RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(StringValue.of("test"))
@@ -216,7 +215,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  public void findAll() throws ExecutionException, InterruptedException, TimeoutException {
+  public void findAll() {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
         .setRoleFindAllCo(
             RoleFindAllGrpcCo.newBuilder().setName(StringValue.of("管理员"))

@@ -28,7 +28,6 @@ import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -58,8 +57,7 @@ public class CaptchaGrpcServiceTest {
   }
 
   @Test
-  public void generateSimpleCaptcha()
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public void generateSimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
         .setSimpleCaptchaGeneratedGrpcCo(
             SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
@@ -94,8 +92,7 @@ public class CaptchaGrpcServiceTest {
   }
 
   @Test
-  public void verifySimpleCaptcha()
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public void verifySimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
         .setSimpleCaptchaGeneratedGrpcCo(
             SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
@@ -116,7 +113,7 @@ public class CaptchaGrpcServiceTest {
 
   @Test
   public void syncVerifySimpleCaptcha()
-      throws InterruptedException, ExecutionException, TimeoutException {
+      throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
         .setSimpleCaptchaGeneratedGrpcCo(

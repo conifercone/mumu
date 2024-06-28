@@ -20,19 +20,14 @@ import com.github.yitter.idgen.YitIdHelper;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc;
+import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceBlockingStub;
 import com.sky.centaur.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceFutureStub;
 import com.sky.centaur.unique.client.api.grpc.SnowflakeResult;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
@@ -49,8 +44,6 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
     InitializingBean {
 
   private ManagedChannel channel;
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(PrimaryKeyGrpcService.class);
 
   public PrimaryKeyGrpcService(
       DiscoveryClient discoveryClient,
@@ -91,17 +84,11 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
     }
   }
 
-  private @Nullable Long snowflakeFromGrpc() {
-    PrimaryKeyServiceFutureStub primaryKeyServiceFutureStub = PrimaryKeyServiceGrpc.newFutureStub(
+  private @NotNull Long snowflakeFromGrpc() {
+    PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
         channel);
-    ListenableFuture<SnowflakeResult> snowflake = primaryKeyServiceFutureStub.snowflake(
-        Empty.newBuilder().build());
-    try {
-      return snowflake.get(3, TimeUnit.SECONDS).getId();
-    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      LOGGER.error(e.getMessage());
-      return null;
-    }
+    return primaryKeyServiceBlockingStub.snowflake(
+        Empty.newBuilder().build()).getId();
   }
 
   private @NotNull ListenableFuture<SnowflakeResult> syncSnowflakeFromGrpc() {
