@@ -76,8 +76,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void add() throws ExecutionException, InterruptedException, TimeoutException {
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test"))
-                .setName(StringValue.of("test"))
+            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test_code"))
+                .setName(StringValue.of("test_name"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(

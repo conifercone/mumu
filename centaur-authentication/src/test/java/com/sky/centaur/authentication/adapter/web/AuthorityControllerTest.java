@@ -57,8 +57,8 @@ public class AuthorityControllerTest {
         {
             "authorityAddCo": {
                 "id": 412354321321,
-                "code": "test",
-                "name": "test"
+                "code": "test_code",
+                "name": "test_name"
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders

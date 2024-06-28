@@ -78,10 +78,11 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
     Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
-        .ifPresent(dataObject -> authorityRepository.findById(authority.getId())
-            .ifPresentOrElse(authorityDo -> {
-              throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
-            }, () -> authorityRepository.persist(dataObject)));
+        .filter(authorityDo -> !authorityRepository.existsByIdOrCode(authorityDo.getId(),
+            authorityDo.getCode()))
+        .ifPresentOrElse(authorityRepository::persist, () -> {
+          throw new CentaurException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
+        });
   }
 
   @Override
