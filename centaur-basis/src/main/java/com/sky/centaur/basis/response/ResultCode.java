@@ -87,7 +87,8 @@ public enum ResultCode implements BaseResultInterface {
   FILE_DELETION_FAILED(6022),
   CAPTCHA_ID_CANNOT_BE_EMPTY(6023),
   CAPTCHA_CANNOT_BE_EMPTY(6024),
-  AUTHORITY_CODE_OR_ID_ALREADY_EXISTS(6025);
+  AUTHORITY_CODE_OR_ID_ALREADY_EXISTS(6025),
+  ROLE_CODE_OR_ID_ALREADY_EXISTS(6026);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

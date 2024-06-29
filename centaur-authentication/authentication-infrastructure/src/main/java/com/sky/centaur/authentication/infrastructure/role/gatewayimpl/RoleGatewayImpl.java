@@ -78,7 +78,10 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
     Optional.ofNullable(role).flatMap(RoleConvertor::toDataObject)
-        .ifPresent(roleRepository::persist);
+        .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
+        .ifPresentOrElse(roleRepository::persist, () -> {
+          throw new CentaurException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
+        });
   }
 
   @Override
