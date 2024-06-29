@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -95,16 +94,18 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
-    Consumer<Account> accountAlreadyExistsConsumer = (existingAccount) -> {
+    Runnable accountAlreadyExistsRunnable = () -> {
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                  .setBizNo(existingAccount.getUsername())
+                  .setBizNo(account.getUsername())
                   .setFail(ResultCode.ACCOUNT_ALREADY_EXISTS.getResultMsg()).build())
           .build());
-      throw new AccountAlreadyExistsException(existingAccount.getUsername());
+      throw new AccountAlreadyExistsException(account.getUsername());
     };
-    AccountConvertor.toDataObject(account).ifPresent(dataObject -> {
+    AccountConvertor.toDataObject(account).filter(
+        accountDo -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
+            account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
       if (StringUtils.hasText(dataObject.getTimezone())) {
         try {
           //noinspection ResultOfMethodCallIgnored
@@ -115,18 +116,14 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       // 密码加密
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
-      findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
-          () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
-              accountAlreadyExistsConsumer, () -> {
-                accountRepository.persist(dataObject);
-                operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-                    .setOperationLogSubmitCo(
-                        OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                            .setBizNo(account.getUsername())
-                            .setSuccess(String.format("%s注册成功", account.getUsername())).build())
-                    .build());
-              }));
-    });
+      accountRepository.persist(dataObject);
+      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+          .setOperationLogSubmitCo(
+              OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                  .setBizNo(account.getUsername())
+                  .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+          .build());
+    }, accountAlreadyExistsRunnable);
 
   }
 

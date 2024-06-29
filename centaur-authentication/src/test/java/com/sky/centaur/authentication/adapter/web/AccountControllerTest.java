@@ -99,7 +99,8 @@ public class AccountControllerTest {
     accountRegisterCo.setPhone("13031723736");
     accountRegisterCo.setSex(SexEnum.MALE);
     accountRegisterCo.setLanguage(LanguageEnum.ZH);
-    accountRegisterCo.setTimezone("UTF+8");
+    accountRegisterCo.setTimezone("Asia/Shanghai");
+    accountRegisterCo.setEmail("547913250@qq.com");
     return accountRegisterCo;
   }
 
