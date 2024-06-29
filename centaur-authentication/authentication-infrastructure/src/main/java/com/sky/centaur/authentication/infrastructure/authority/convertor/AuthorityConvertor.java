@@ -79,7 +79,13 @@ public final class AuthorityConvertor {
       return authorityRepository.findById(
               authorityUpdateClientObject.getId()).flatMap(AuthorityConvertor::toEntity)
           .map(authority -> {
+            String codeBeforeUpdate = authority.getCode();
             AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
+            String codeAfterUpdate = authority.getCode();
+            if (!codeBeforeUpdate.equals(codeAfterUpdate) && authorityRepository.existsByCode(
+                codeAfterUpdate)) {
+              throw new CentaurException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
+            }
             return authority;
           }).orElse(null);
     });

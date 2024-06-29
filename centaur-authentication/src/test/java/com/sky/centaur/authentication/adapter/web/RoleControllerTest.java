@@ -79,7 +79,7 @@ public class RoleControllerTest {
   public void deleteById() throws Exception {
     @Language("JSON") String role = """
         {
-            "id": 451235432
+            "id": 0
          }""";
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/role/deleteById").with(csrf())
@@ -97,7 +97,7 @@ public class RoleControllerTest {
     @Language("JSON") String role = """
         {
              "roleUpdateCo": {
-                 "id": 451235432,
+                 "id": 0,
                  "code": "test"
              }
          }""";

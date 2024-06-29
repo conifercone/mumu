@@ -49,4 +49,12 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @return 是否存在
    */
   boolean existsByIdOrCode(Long id, @Size(max = 50) @NotNull String code);
+
+  /**
+   * 判断权限编码是否已存在
+   *
+   * @param code 权限code
+   * @return 是否存在
+   */
+  boolean existsByCode(String code);
 }

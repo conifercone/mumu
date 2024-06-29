@@ -76,7 +76,7 @@ public class AuthorityControllerTest {
   public void deleteById() throws Exception {
     @Language("JSON") String authority = """
         {
-           "id": 1
+           "id": 3
         }""";
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/authority/deleteById").with(csrf())
@@ -94,8 +94,8 @@ public class AuthorityControllerTest {
     @Language("JSON") String authority = """
         {
             "authorityUpdateCo": {
-                "id": 1,
-                "name": "updated"
+                "id": 3,
+                "code": "test_updated"
             }
         }""";
     mockMvc.perform(MockMvcRequestBuilders
