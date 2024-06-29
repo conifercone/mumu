@@ -73,9 +73,11 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void add() {
+    deleteById();
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test_code"))
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(778223))
+                .setCode(StringValue.of("test_code"))
                 .setName(StringValue.of("test_name"))
                 .build())
         .build();
@@ -92,11 +94,13 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void syncAdd() throws InterruptedException {
+    deleteById();
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setCode(StringValue.of("test"))
-                .setName(StringValue.of("test"))
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(778223))
+                .setCode(StringValue.of("test_code"))
+                .setName(StringValue.of("test_name"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -124,7 +128,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() {
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(3L))
+        .setId(Int64Value.of(778223))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -142,7 +146,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void syncDeleteById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(3L))
+        .setId(Int64Value.of(778223))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -168,10 +172,11 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateById() {
+    add();
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(
-                    StringValue.of("test"))
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(778223)).setName(
+                    StringValue.of("test_updated"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -188,11 +193,12 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void syncUpdateById() throws InterruptedException {
+    add();
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
         .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(
-                    StringValue.of("test"))
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(778223)).setName(
+                    StringValue.of("test_updated"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
