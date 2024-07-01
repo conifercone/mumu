@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
-import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
@@ -30,6 +29,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
  * 操作日志转换器
@@ -37,32 +37,39 @@ import org.jetbrains.annotations.Contract;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public final class OperationLogConvertor {
+@Component
+public class OperationLogConvertor {
 
-  private OperationLogConvertor() {
+
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final Tracer tracer;
+
+  public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService, Tracer tracer) {
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.tracer = tracer;
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
+  public Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
+  public Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
+  public Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
     return Optional.ofNullable(operationLogSubmitCo).map(res -> {
       OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
       operationLog.setId(
-          Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
+          Optional.ofNullable(tracer.currentSpan())
               .map(span -> span.context().traceId()).orElseGet(() ->
-                  String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake()))
+                  String.valueOf(primaryKeyGrpcService.snowflake()))
       );
       operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
       return operationLog;
@@ -72,27 +79,27 @@ public final class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
+  public Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
     return Optional.ofNullable(operationLogSaveCo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
+  public Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
     return Optional.ofNullable(operationLogEsDo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLog> toEntity(
+  public Optional<OperationLog> toEntity(
       OperationLogFindAllCo operationLogFindAllCo) {
     return Optional.ofNullable(operationLogFindAllCo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
+  public Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllCo);
   }
 

@@ -65,11 +65,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   private final RoleGateway roleGateway;
 
+  private final AuthorityConvertor authorityConvertor;
+
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway) {
+      ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
+      AuthorityConvertor authorityConvertor) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
+    this.authorityConvertor = authorityConvertor;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
@@ -77,7 +81,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
-    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
+    Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
         .filter(authorityDo -> !authorityRepository.existsByIdOrCode(authorityDo.getId(),
             authorityDo.getCode()))
         .ifPresentOrElse(authorityRepository::persist, () -> {
@@ -106,7 +110,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Authority authority) {
-    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
+    Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
         .ifPresent(dataObject -> {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
@@ -139,7 +143,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
-        .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+        .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
         .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
@@ -148,6 +152,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   public Optional<Authority> findById(Long id) {
     return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
-        AuthorityConvertor::toEntity);
+        authorityConvertor::toEntity);
   }
 }

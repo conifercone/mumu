@@ -57,13 +57,16 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   private final StreamFileGrpcService streamFileGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(
       TemplateMailGatewayImpl.class);
+  private final TemplateMailConvertor templateMailConvertor;
 
   @Autowired
   public TemplateMailGatewayImpl(ThymeleafTemplateMailRepository thymeleafTemplateMailRepository,
-      JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService) {
+      JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService,
+      TemplateMailConvertor templateMailConvertor) {
     this.thymeleafTemplateMailRepository = thymeleafTemplateMailRepository;
     this.javaMailSender = javaMailSender;
     this.streamFileGrpcService = streamFileGrpcService;
+    this.templateMailConvertor = templateMailConvertor;
   }
 
   @Override
@@ -86,7 +89,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
             streamFileDownloadGrpcCmd,
             callCredentials);
-        Optional<TemplateMailThymeleafDo> thymeleafDo = TemplateMailConvertor.toThymeleafDo(
+        Optional<TemplateMailThymeleafDo> thymeleafDo = templateMailConvertor.toThymeleafDo(
             templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
           thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()

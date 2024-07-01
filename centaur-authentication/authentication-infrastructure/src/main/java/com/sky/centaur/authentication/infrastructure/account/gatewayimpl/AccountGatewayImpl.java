@@ -65,29 +65,26 @@ import org.springframework.util.StringUtils;
 public class AccountGatewayImpl implements AccountGateway {
 
   private final AccountRepository accountRepository;
-
   private final TokenRepository tokenRepository;
-
   private final PasswordEncoder passwordEncoder;
-
   private final OperationLogGrpcService operationLogGrpcService;
-
   private final DistributedLock distributedLock;
-
   private final ExtensionProperties extensionProperties;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
       PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties, AccountConvertor accountConvertor) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.extensionProperties = extensionProperties;
+    this.accountConvertor = accountConvertor;
   }
 
   @Override
@@ -103,7 +100,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .build());
       throw new AccountAlreadyExistsException(account.getUsername());
     };
-    AccountConvertor.toDataObject(account).filter(
+    accountConvertor.toDataObject(account).filter(
         accountDo -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
             account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
       if (StringUtils.hasText(dataObject.getTimezone())) {
@@ -132,7 +129,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
-        .flatMap(AccountConvertor::toEntity);
+        .flatMap(accountConvertor::toEntity);
   }
 
   @Override
@@ -140,7 +137,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
-        .flatMap(AccountConvertor::toEntity);
+        .flatMap(accountConvertor::toEntity);
   }
 
   @Override
@@ -152,7 +149,7 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresentOrElse((accountId) -> {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
-            AccountConvertor.toDataObject(account).ifPresent(accountRepository::merge);
+            accountConvertor.toDataObject(account).ifPresent(accountRepository::merge);
           } finally {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
@@ -165,7 +162,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    AccountConvertor.toDataObject(account).ifPresent(accountDo -> {
+    accountConvertor.toDataObject(account).ifPresent(accountDo -> {
       Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
         accountRepository.merge(accountDo);
@@ -199,7 +196,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
             loginAccountId -> accountRepository.findById(loginAccountId)
-                .flatMap(AccountConvertor::toEntity))
+                .flatMap(accountConvertor::toEntity))
         .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
   }
 
@@ -293,7 +290,7 @@ public class AccountGatewayImpl implements AccountGateway {
     Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
         pageRequest);
     List<Account> accounts = repositoryAll.getContent().stream()
-        .map(accountDo -> AccountConvertor.toEntity(accountDo).orElse(null))
+        .map(accountDo -> accountConvertor.toEntity(accountDo).orElse(null))
         .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());

@@ -28,6 +28,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -36,14 +37,13 @@ import org.springframework.util.ObjectUtils;
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public final class StreamFileConvertor {
+@Component
+public class StreamFileConvertor {
 
-  private StreamFileConvertor() {
-  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
+  public Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
     return Optional.ofNullable(streamFileSyncUploadCo)
         .map(uploadCo -> {
           StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
@@ -62,13 +62,13 @@ public final class StreamFileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<StreamFile> toEntity(StreamFileRemoveCo streamFileRemoveCo) {
+  public Optional<StreamFile> toEntity(StreamFileRemoveCo streamFileRemoveCo) {
     return Optional.ofNullable(streamFileRemoveCo).map(StreamFileMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
+  public Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
     return Optional.ofNullable(streamFileDownloadCo)
         .map(downloadCo -> {
           StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(downloadCo);
@@ -84,7 +84,7 @@ public final class StreamFileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
+  public Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
         .map(file -> {
           StreamFileMinioDo transform = StreamFileMapper.INSTANCE.toMinioDo(file);

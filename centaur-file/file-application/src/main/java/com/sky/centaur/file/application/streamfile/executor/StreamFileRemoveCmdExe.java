@@ -32,15 +32,18 @@ import org.springframework.util.Assert;
 public class StreamFileRemoveCmdExe {
 
   private final StreamFileGateway streamFileGateway;
+  private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileRemoveCmdExe(StreamFileGateway streamFileGateway) {
+  public StreamFileRemoveCmdExe(StreamFileGateway streamFileGateway,
+      StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
+    this.streamFileConvertor = streamFileConvertor;
   }
 
   public void execute(StreamFileRemoveCmd streamFileRemoveCmd) {
     Assert.notNull(streamFileRemoveCmd, "StreamFileRemoveCmd cannot be null");
-    StreamFileConvertor.toEntity(streamFileRemoveCmd.getStreamFileRemoveCo())
+    streamFileConvertor.toEntity(streamFileRemoveCmd.getStreamFileRemoveCo())
         .ifPresent(streamFileGateway::removeFile);
   }
 }

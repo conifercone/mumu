@@ -33,15 +33,18 @@ import org.springframework.util.Assert;
 public class SystemLogSaveCmdExe {
 
   private final SystemLogGateway systemLogGateway;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
-  public SystemLogSaveCmdExe(SystemLogGateway systemLogGateway) {
+  public SystemLogSaveCmdExe(SystemLogGateway systemLogGateway,
+      SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   public void execute(@NotNull SystemLogSaveCmd systemLogSaveCmd) {
     Assert.notNull(systemLogSaveCmd, "SystemLogSaveCmd cannot be null");
-    SystemLogConvertor.toEntity(systemLogSaveCmd.getSystemLogSaveCo())
+    systemLogConvertor.toEntity(systemLogSaveCmd.getSystemLogSaveCo())
         .ifPresent(systemLogGateway::save);
   }
 }

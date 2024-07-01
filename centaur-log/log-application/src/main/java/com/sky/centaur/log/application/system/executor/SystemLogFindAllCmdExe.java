@@ -40,16 +40,19 @@ import org.springframework.util.Assert;
 public class SystemLogFindAllCmdExe {
 
   private final SystemLogGateway systemLogGateway;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
-  public SystemLogFindAllCmdExe(SystemLogGateway systemLogGateway) {
+  public SystemLogFindAllCmdExe(SystemLogGateway systemLogGateway,
+      SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   public Page<SystemLogFindAllCo> execute(
       @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
-    SystemLog systemLog = SystemLogConvertor.toEntity(
+    SystemLog systemLog = systemLogConvertor.toEntity(
             systemLogFindAllCmd.getSystemLogFindAllCo())
         .orElseGet(SystemLog::new);
     Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
@@ -61,7 +64,7 @@ public class SystemLogFindAllCmdExe {
         systemLogFindAllCmd.getPageNo(),
         systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
-        .map(res -> SystemLogConvertor.toFindAllCo(res).orElse(null)).filter(Objects::nonNull)
+        .map(res -> systemLogConvertor.toFindAllCo(res).orElse(null)).filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(systemLogFindAllCos, systemLogs.getPageable(),
         systemLogs.getTotalElements());

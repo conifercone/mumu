@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
  * 验证码对象转换类
@@ -30,34 +31,33 @@ import org.jetbrains.annotations.Contract;
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public final class CaptchaConvertor {
+@Component
+public class CaptchaConvertor {
 
-  private CaptchaConvertor() {
-  }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
+  public Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<SimpleCaptcha> toEntity(
+  public Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo) {
     return Optional.ofNullable(simpleCaptchaGeneratedCo).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<SimpleCaptcha> toEntity(
+  public Optional<SimpleCaptcha> toEntity(
       SimpleCaptchaVerifyCo simpleCaptchaVerifyCo) {
     return Optional.ofNullable(simpleCaptchaVerifyCo).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
+  public Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
       SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha)
         .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedCo);

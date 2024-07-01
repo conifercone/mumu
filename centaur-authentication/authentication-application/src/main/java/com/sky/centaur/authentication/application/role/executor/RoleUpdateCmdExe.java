@@ -37,16 +37,18 @@ import org.springframework.util.Assert;
 public class RoleUpdateCmdExe {
 
   private final RoleGateway roleGateway;
+  private final RoleConvertor roleConvertor;
 
   @Autowired
-  public RoleUpdateCmdExe(RoleGateway roleGateway) {
+  public RoleUpdateCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
     this.roleGateway = roleGateway;
+    this.roleConvertor = roleConvertor;
   }
 
   public void execute(@NotNull RoleUpdateCmd roleUpdateCmd) {
     Assert.notNull(roleUpdateCmd, "RoleUpdateCmd cannot be null");
     Assert.notNull(roleUpdateCmd.getRoleUpdateCo(), "RoleUpdateCo cannot be null");
-    Role role = RoleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo()).orElse(null);
+    Role role = roleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo()).orElse(null);
     roleGateway.updateById(role);
   }
 }

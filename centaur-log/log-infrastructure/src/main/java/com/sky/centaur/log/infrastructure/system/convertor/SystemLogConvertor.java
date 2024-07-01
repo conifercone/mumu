@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.log.infrastructure.system.convertor;
 
-import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
@@ -30,6 +29,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
  * 系统日志转换器
@@ -37,34 +37,41 @@ import org.jetbrains.annotations.Contract;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public final class SystemLogConvertor {
+@Component
+public class SystemLogConvertor {
 
-  private SystemLogConvertor() {
+
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final Tracer tracer;
+
+  public SystemLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService, Tracer tracer) {
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.tracer = tracer;
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
+  public Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
         .map(SystemLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
+  public Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
         .map(SystemLogMapper.INSTANCE::toEsDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLog> toEntity(SystemLogSubmitCo systemLogSubmitCo) {
+  public Optional<SystemLog> toEntity(SystemLogSubmitCo systemLogSubmitCo) {
     return Optional.ofNullable(systemLogSubmitCo).map(res -> {
       SystemLog systemLog = SystemLogMapper.INSTANCE.toEntity(res);
       systemLog.setId(
-          Optional.ofNullable(SpringContextUtil.getBean(Tracer.class).currentSpan())
+          Optional.ofNullable(tracer.currentSpan())
               .map(span -> span.context().traceId()).orElseGet(() ->
-                  String.valueOf(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake())));
+                  String.valueOf(primaryKeyGrpcService.snowflake())));
       systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
       return systemLog;
     });
@@ -72,21 +79,21 @@ public final class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
+  public Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
     return Optional.ofNullable(systemLogSaveCo)
         .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
+  public Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
     return Optional.ofNullable(systemLogEsDo)
         .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLog> toEntity(
+  public Optional<SystemLog> toEntity(
       SystemLogFindAllCo systemLogFindAllCo) {
     return Optional.ofNullable(systemLogFindAllCo)
         .map(SystemLogMapper.INSTANCE::toEntity);
@@ -94,7 +101,7 @@ public final class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<SystemLogFindAllCo> toFindAllCo(SystemLog systemLog) {
+  public Optional<SystemLogFindAllCo> toFindAllCo(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
         .map(SystemLogMapper.INSTANCE::toFindAllCo);
   }

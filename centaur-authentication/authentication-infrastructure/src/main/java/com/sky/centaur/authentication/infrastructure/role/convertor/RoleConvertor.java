@@ -26,7 +26,6 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Objects;
@@ -34,6 +33,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -43,22 +44,32 @@ import org.springframework.util.StringUtils;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public final class RoleConvertor {
+@Component
+public class RoleConvertor {
 
-  private RoleConvertor() {
+  private final AuthorityConvertor authorityConvertor;
+  private final RoleRepository roleRepository;
+  private final AuthorityRepository authorityRepository;
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+
+  @Autowired
+  public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
+      AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService) {
+    this.authorityConvertor = authorityConvertor;
+    this.roleRepository = roleRepository;
+    this.authorityRepository = authorityRepository;
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<Role> toEntity(RoleDo roleDo) {
+  public Optional<Role> toEntity(RoleDo roleDo) {
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
-      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
-          AuthorityRepository.class);
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       Optional.ofNullable(roleDataObject.getAuthorities())
           .filter(authorityList -> !CollectionUtils.isEmpty(
               authorityList)).ifPresent(authorities -> role.setAuthorities(
               authorityRepository.findAuthorityDoByIdIn(authorities).stream()
-                  .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                  .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
                   .filter(Objects::nonNull)
                   .collect(Collectors.toList())));
       return role;
@@ -66,7 +77,7 @@ public final class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<RoleDo> toDataObject(Role role) {
+  public Optional<RoleDo> toDataObject(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
       RoleDo roleDo = RoleMapper.INSTANCE.toDataObject(roleDomain);
       if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
@@ -80,18 +91,16 @@ public final class RoleConvertor {
 
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<Role> toEntity(RoleAddCo roleAddCo) {
+  public Optional<Role> toEntity(RoleAddCo roleAddCo) {
     return Optional.ofNullable(roleAddCo).map(roleAddClientObject -> {
-      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
-          AuthorityRepository.class);
       Role role = RoleMapper.INSTANCE.toEntity(roleAddClientObject);
       if (role.getId() == null) {
-        role.setId(SpringContextUtil.getBean(PrimaryKeyGrpcService.class).snowflake());
+        role.setId(primaryKeyGrpcService.snowflake());
         roleAddClientObject.setId(role.getId());
       }
       role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
               roleAddClientObject.getAuthorities()).stream()
-          .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+          .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
           .filter(Objects::nonNull)
           .collect(Collectors.toList()));
       return role;
@@ -99,13 +108,10 @@ public final class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
+  public Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
     return Optional.ofNullable(roleUpdateCo).map(roleUpdateClientObject -> {
       Optional.ofNullable(roleUpdateClientObject.getId())
           .orElseThrow(() -> new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
-          AuthorityRepository.class);
-      RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
       Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
         String codeBeforeUpdated = roleDomain.getCode();
@@ -119,7 +125,7 @@ public final class RoleConvertor {
             .ifPresent(authorities -> roleDomain.setAuthorities(
                 authorityRepository.findAuthorityDoByIdIn(
                         authorities).stream()
-                    .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                    .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList())));
         return roleDomain;
@@ -128,16 +134,14 @@ public final class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<Role> toEntity(RoleFindAllCo roleFindAllCo) {
+  public Optional<Role> toEntity(RoleFindAllCo roleFindAllCo) {
     return Optional.ofNullable(roleFindAllCo).map(roleFindAllClientObject -> {
-      AuthorityRepository authorityRepository = SpringContextUtil.getBean(
-          AuthorityRepository.class);
       Role role = RoleMapper.INSTANCE.toEntity(roleFindAllClientObject);
       if (!CollectionUtils.isEmpty(roleFindAllClientObject.getAuthorities())) {
         role.setAuthorities(
             authorityRepository.findAuthorityDoByIdIn(roleFindAllClientObject.getAuthorities())
                 .stream()
-                .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+                .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
                 .filter(Objects::nonNull).collect(
                     Collectors.toList()));
       }
@@ -146,7 +150,7 @@ public final class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public static Optional<RoleFindAllCo> toFindAllCo(Role role) {
+  public Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
       RoleFindAllCo roleFindAllCo = RoleMapper.INSTANCE.toFindAllCo(roleDomain);
       if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {

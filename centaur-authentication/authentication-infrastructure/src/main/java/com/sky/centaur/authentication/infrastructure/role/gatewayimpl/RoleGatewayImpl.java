@@ -60,24 +60,24 @@ import org.springframework.util.StringUtils;
 public class RoleGatewayImpl implements RoleGateway {
 
   private final RoleRepository roleRepository;
-
   private final DistributedLock distributedLock;
-
   private final AccountGateway accountGateway;
+  private final RoleConvertor roleConvertor;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      AccountGateway accountGateway) {
+      AccountGateway accountGateway, RoleConvertor roleConvertor) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+    this.roleConvertor = roleConvertor;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
-    Optional.ofNullable(role).flatMap(RoleConvertor::toDataObject)
+    Optional.ofNullable(role).flatMap(roleConvertor::toDataObject)
         .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
         .ifPresentOrElse(roleRepository::persist, () -> {
           throw new CentaurException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
@@ -110,7 +110,7 @@ public class RoleGatewayImpl implements RoleGateway {
     Optional.ofNullable(role).ifPresent(roleDomain -> {
       Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
-        RoleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
+        roleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -170,7 +170,7 @@ public class RoleGatewayImpl implements RoleGateway {
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);
     List<Role> roles = repositoryAll.getContent().stream()
-        .map(roleDo -> RoleConvertor.toEntity(roleDo).orElse(null))
+        .map(roleDo -> roleConvertor.toEntity(roleDo).orElse(null))
         .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());

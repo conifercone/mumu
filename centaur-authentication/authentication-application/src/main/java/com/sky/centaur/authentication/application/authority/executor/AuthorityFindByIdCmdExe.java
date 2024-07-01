@@ -35,16 +35,19 @@ import org.springframework.stereotype.Component;
 public class AuthorityFindByIdCmdExe {
 
   private final AuthorityGateway authorityGateway;
+  private final AuthorityConvertor authorityConvertor;
 
   @Autowired
-  public AuthorityFindByIdCmdExe(AuthorityGateway authorityGateway) {
+  public AuthorityFindByIdCmdExe(AuthorityGateway authorityGateway,
+      AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
+    this.authorityConvertor = authorityConvertor;
   }
 
   public AuthorityFindByIdCo execute(AuthorityFindByIdCmd authorityFindByIdCmd) {
     return Optional.ofNullable(authorityFindByIdCmd)
         .flatMap(findByIdCmd -> authorityGateway.findById(findByIdCmd.getId())).flatMap(
-            AuthorityConvertor::toFindByIdCo).orElse(null);
+            authorityConvertor::toFindByIdCo).orElse(null);
 
   }
 }

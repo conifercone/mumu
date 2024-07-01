@@ -33,15 +33,18 @@ import org.springframework.util.Assert;
 public class SystemLogSubmitCmdExe {
 
   private final SystemLogGateway systemLogGateway;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
-  public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway) {
+  public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway,
+      SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   public void execute(@NotNull SystemLogSubmitCmd systemLogSubmitCmd) {
     Assert.notNull(systemLogSubmitCmd, "SystemLogSubmitCmd cannot null");
-    SystemLogConvertor.toEntity(systemLogSubmitCmd.getSystemLogSubmitCo())
+    systemLogConvertor.toEntity(systemLogSubmitCmd.getSystemLogSubmitCo())
         .ifPresent(systemLogGateway::submit);
   }
 }

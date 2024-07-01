@@ -36,17 +36,20 @@ import org.springframework.util.Assert;
 public class StreamFileDownloadCmdExe {
 
   private final StreamFileGateway streamFileGateway;
+  private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileDownloadCmdExe(StreamFileGateway streamFileGateway) {
+  public StreamFileDownloadCmdExe(StreamFileGateway streamFileGateway,
+      StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
+    this.streamFileConvertor = streamFileConvertor;
   }
 
   public InputStream execute(StreamFileDownloadCmd streamFileDownloadCmd) {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
     Supplier<CentaurException> downloadFailed = () -> new CentaurException(
         ResultCode.FILE_DOWNLOAD_FAILED);
-    return StreamFileConvertor.toEntity(streamFileDownloadCmd.getStreamFileDownloadCo())
+    return streamFileConvertor.toEntity(streamFileDownloadCmd.getStreamFileDownloadCo())
         .map(streamFile -> streamFileGateway.download(streamFile)
             .orElseThrow(downloadFailed)
         ).orElseThrow(downloadFailed);
