@@ -58,4 +58,12 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
   boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
       @Size(max = 200) String email);
 
+  /**
+   * 邮箱地址是否存在
+   *
+   * @param email 账户邮箱地址
+   * @return true:邮箱地址已存在 false:邮箱地址不存在
+   */
+  boolean existsByEmail(String email);
+
 }

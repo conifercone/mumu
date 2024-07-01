@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.util.StringUtils;
 
 /**
  * 权限信息转换器
@@ -82,7 +83,8 @@ public final class AuthorityConvertor {
             String codeBeforeUpdate = authority.getCode();
             AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
             String codeAfterUpdate = authority.getCode();
-            if (!codeBeforeUpdate.equals(codeAfterUpdate) && authorityRepository.existsByCode(
+            if (StringUtils.hasText(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
+                && authorityRepository.existsByCode(
                 codeAfterUpdate)) {
               throw new CentaurException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
             }

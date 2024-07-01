@@ -32,6 +32,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.util.StringUtils;
 
 /**
  * 账户信息转换器
@@ -97,7 +98,14 @@ public final class AccountConvertor {
       AccountRepository accountRepository = SpringContextUtil.getBean(AccountRepository.class);
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
           .flatMap(AccountConvertor::toEntity).map(account -> {
+            String emailBeforeUpdated = account.getEmail();
             AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
+            String emailAfterUpdated = account.getEmail();
+            if (StringUtils.hasText(emailAfterUpdated) && !emailAfterUpdated.equals(
+                emailBeforeUpdated
+            ) && accountRepository.existsByEmail(emailAfterUpdated)) {
+              throw new CentaurException(ResultCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
+            }
             return account;
           }).orElse(null);
     });

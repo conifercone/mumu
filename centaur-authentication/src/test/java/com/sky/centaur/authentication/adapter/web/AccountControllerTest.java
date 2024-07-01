@@ -111,7 +111,7 @@ public class AccountControllerTest {
         {
              "accountUpdateByIdCo": {
                  "id": 1,
-                 "sex": "MALE"
+                 "email": ""
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders
