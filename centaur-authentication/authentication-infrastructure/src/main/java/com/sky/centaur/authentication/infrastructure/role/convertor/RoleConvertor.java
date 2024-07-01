@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 角色信息转换器
@@ -107,7 +108,13 @@ public final class RoleConvertor {
       RoleRepository roleRepository = SpringContextUtil.getBean(RoleRepository.class);
       Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
+        String codeBeforeUpdated = roleDomain.getCode();
         RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
+        String codeAfterUpdated = roleDomain.getCode();
+        if (StringUtils.hasText(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
+            && roleRepository.existsByCode(codeAfterUpdated)) {
+          throw new CentaurException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
+        }
         Optional.ofNullable(roleUpdateClientObject.getAuthorities())
             .ifPresent(authorities -> roleDomain.setAuthorities(
                 authorityRepository.findAuthorityDoByIdIn(

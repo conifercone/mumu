@@ -98,7 +98,7 @@ public class RoleControllerTest {
         {
              "roleUpdateCo": {
                  "id": 0,
-                 "code": "test"
+                 "code": "test_updated"
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders

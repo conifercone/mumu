@@ -48,4 +48,12 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 是否存在
    */
   boolean existsByIdOrCode(Long id, @Size(max = 100) @NotNull String code);
+
+  /**
+   * 角色code是否存在
+   *
+   * @param code 角色code
+   * @return 是否存在
+   */
+  boolean existsByCode(String code);
 }
