@@ -66,4 +66,12 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    */
   boolean existsByEmail(String email);
 
+  /**
+   * 账户名是否存在
+   *
+   * @param username 账户名
+   * @return true:账户名已存在 false:账户名不存在
+   */
+  boolean existsByUsername(String username);
+
 }

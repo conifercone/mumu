@@ -91,7 +91,8 @@ public enum ResultCode implements BaseResultInterface {
   ROLE_CODE_OR_ID_ALREADY_EXISTS(6026),
   AUTHORITY_CODE_ALREADY_EXISTS(6027),
   ACCOUNT_EMAIL_ALREADY_EXISTS(6028),
-  ROLE_CODE_ALREADY_EXISTS(6029);
+  ROLE_CODE_ALREADY_EXISTS(6029),
+  ACCOUNT_NAME_ALREADY_EXISTS(6030);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

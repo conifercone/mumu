@@ -108,12 +108,19 @@ public class AccountConvertor {
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
           .flatMap(this::toEntity).map(account -> {
             String emailBeforeUpdated = account.getEmail();
+            String usernameBeforeUpdated = account.getUsername();
             AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
             String emailAfterUpdated = account.getEmail();
+            String usernameAfterUpdated = account.getUsername();
             if (StringUtils.hasText(emailAfterUpdated) && !emailAfterUpdated.equals(
                 emailBeforeUpdated
             ) && accountRepository.existsByEmail(emailAfterUpdated)) {
               throw new CentaurException(ResultCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
+            }
+            if (StringUtils.hasText(usernameAfterUpdated) && !usernameAfterUpdated.equals(
+                usernameBeforeUpdated
+            ) && accountRepository.existsByUsername(usernameAfterUpdated)) {
+              throw new CentaurException(ResultCode.ACCOUNT_NAME_ALREADY_EXISTS);
             }
             return account;
           }).orElse(null);
