@@ -10,4 +10,5 @@ dependencies {
     }
     implementation libs.zookeeper
     implementation libs.redisOmSpring
+    annotationProcessor libs.redisOmSpring
 }

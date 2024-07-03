@@ -24,4 +24,5 @@ dependencies {
     testImplementation libs.protobufJava
     testImplementation libs.grpcClientSpringBootStarter
     implementation libs.redisOmSpring
+    annotationProcessor libs.redisOmSpring
 }
