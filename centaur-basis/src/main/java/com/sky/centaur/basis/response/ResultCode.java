@@ -15,7 +15,9 @@
  */
 package com.sky.centaur.basis.response;
 
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
+import java.util.Locale;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
@@ -108,6 +110,9 @@ public enum ResultCode implements BaseResultInterface {
 
   @Override
   public @NotNull String getResultMsg() {
-    return messageSource.getMessage(getResultCode(), null, LocaleContextHolder.getLocale());
+    return messageSource.getMessage(getResultCode(), null,
+        SecurityContextUtil.getLoginAccountLanguage()
+            .map(languageEnum -> Locale.of(languageEnum.name()))
+            .orElse(LocaleContextHolder.getLocale()));
   }
 }
