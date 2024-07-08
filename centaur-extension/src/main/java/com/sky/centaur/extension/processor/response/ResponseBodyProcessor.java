@@ -130,25 +130,20 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     if (VOID.equals(getReturnName(returnType))) {
       return ResultResponse.success();
     }
-    if (body instanceof ResultResponse) {
-      return body;
-    } else if (body instanceof String) {
-      // string类型返回要单独json序列化返回一下，不然会报转换异常
-      try {
-        return objectMapper.writeValueAsString(ResultResponse.success(body));
-      } catch (JsonProcessingException e) {
-        throw new RuntimeException(e);
+    return switch (body) {
+      case ResultResponse<?> resultResponse -> resultResponse;
+      case String string -> {
+        try {
+          yield objectMapper.writeValueAsString(ResultResponse.success(string));
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
       }
-    } else if (body != null) {
-      if (body instanceof ClientObject) {
-        return ResultResponse.success(body);
-      } else if (body instanceof Page<?>) {
-        return ResultResponse.success(body);
-      }
-      return body;
-    } else {
-      return ResultResponse.success();
-    }
+      case ClientObject clientObject -> ResultResponse.success(clientObject);
+      case Page<?> page -> ResultResponse.success(page);
+      case null -> ResultResponse.success();
+      default -> body;
+    };
   }
 
   private @NotNull String getReturnName(MethodParameter returnType) {
