@@ -17,9 +17,12 @@ package com.sky.centaur.authentication.infrastructure.token.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.token.gateway.TokenGateway;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,15 +36,25 @@ import org.springframework.stereotype.Component;
 public class TokenGatewayImpl implements TokenGateway {
 
   private final TokenRepository tokenRepository;
+  private final JwtDecoder jwtDecoder;
 
   @Autowired
-  public TokenGatewayImpl(TokenRepository tokenRepository) {
+  public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder) {
     this.tokenRepository = tokenRepository;
+    this.jwtDecoder = jwtDecoder;
   }
 
   @Override
   public boolean validity(String token) {
-    return Optional.ofNullable(token).map(res -> tokenRepository.existsById(res.hashCode()))
+    return Optional.ofNullable(token).map(tokenValue -> {
+          try {
+            Jwt jwt = jwtDecoder.decode(tokenValue);
+            return tokenRepository.existsById(
+                Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+          } catch (Exception e) {
+            return false;
+          }
+        })
         .orElse(false);
   }
 }

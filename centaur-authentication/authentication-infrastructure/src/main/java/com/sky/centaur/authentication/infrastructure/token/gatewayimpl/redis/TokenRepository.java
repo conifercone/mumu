@@ -25,6 +25,6 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dat
  * @since 1.0.0
  */
 public interface TokenRepository extends
-    RedisDocumentRepository<TokenRedisDo, Integer> {
+    RedisDocumentRepository<TokenRedisDo, Long> {
 
 }

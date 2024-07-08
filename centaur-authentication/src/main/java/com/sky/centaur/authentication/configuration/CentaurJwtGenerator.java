@@ -19,6 +19,7 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.Oid
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDo;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.TokenRedisDo;
+import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -217,13 +218,14 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       TokenRedisDo tokenRedisDo = new TokenRedisDo();
-      tokenRedisDo.setId(tokenValue.hashCode());
+      tokenRedisDo.setId(Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
       tokenRedisDo.setTokenValue(tokenValue);
       tokenRedisDo.setTtl(between.toSeconds());
       tokenRepository.save(tokenRedisDo);
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
       OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
-      oidcIdTokenRedisDo.setId(tokenValue.hashCode());
+      oidcIdTokenRedisDo.setId(
+          Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
       oidcIdTokenRedisDo.setTokenValue(tokenValue);
       oidcIdTokenRedisDo.setTtl(between.toSeconds());
       oidcIdTokenRepository.save(oidcIdTokenRedisDo);
