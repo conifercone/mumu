@@ -81,6 +81,8 @@ swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", ver
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 springBootLog4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+springBootValidation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
 springBootMail = { module = "org.springframework.boot:spring-boot-starter-mail" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf

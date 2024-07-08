@@ -26,6 +26,7 @@ import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ValidationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -79,6 +80,24 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       return ResultResponse.failure(centaurException.getResultCode(), centaurException.getData());
     }
     return ResultResponse.failure(centaurException.getResultCode());
+  }
+
+  @ExceptionHandler(ValidationException.class)
+  public ResultResponse<?> handleException(@NotNull ValidationException validationException,
+      @NotNull HttpServletResponse response) {
+    response.setContentType("application/json");
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    LOGGER.error(validationException.getMessage());
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder().setContent(validationException.getMessage())
+                .setCategory("validationException")
+                .setFail(ExceptionUtils.getStackTrace(validationException)).build())
+        .build());
+    return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
+        validationException.getMessage()
+            .substring(validationException.getMessage().indexOf(": ") + 2));
   }
 
   @ExceptionHandler(Exception.class)

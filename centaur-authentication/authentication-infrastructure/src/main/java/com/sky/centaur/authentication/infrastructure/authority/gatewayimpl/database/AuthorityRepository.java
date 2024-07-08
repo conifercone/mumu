@@ -23,6 +23,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 权限基本信息
@@ -30,6 +31,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author kaiyu.shan
  * @since 1.0.0
  */
+@Validated
 public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long>,
     JpaSpecificationExecutor<AuthorityDo> {
 
@@ -48,7 +50,8 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @param code 权限code
    * @return 是否存在
    */
-  boolean existsByIdOrCode(Long id, @Size(max = 50) @NotNull String code);
+  boolean existsByIdOrCode(Long id,
+      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 
   /**
    * 判断权限编码是否已存在
@@ -56,5 +59,6 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @param code 权限code
    * @return 是否存在
    */
-  boolean existsByCode(String code);
+  boolean existsByCode(
+      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 }

@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.TokenValidityGrpcCo;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
 import jakarta.servlet.FilterChain;
@@ -28,6 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +69,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(@NotNull HttpServletRequest request,
       @NotNull HttpServletResponse response,
       @NotNull FilterChain filterChain) throws ServletException, IOException {
-    String authHeader = request.getHeader(TOKEN_HEADER);
+    CentaurHttpServletRequestWrapper centaurHttpServletRequestWrapper = new CentaurHttpServletRequestWrapper(
+        request);
+    String authHeader = centaurHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
+    SecurityContextUtil.getLoginAccountLanguage()
+        .ifPresent(languageEnum -> centaurHttpServletRequestWrapper.setLocale(
+            Locale.of(languageEnum.name())));
     // 存在token
     if (StringUtils.hasText(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
@@ -97,11 +104,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 .orElse(null));
         // 重新设置回用户对象
         authenticationToken.setDetails(
-            new WebAuthenticationDetailsSource().buildDetails(request));
+            new WebAuthenticationDetailsSource().buildDetails(centaurHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextUtil.getLoginAccountLanguage()
+            .ifPresent(languageEnum -> centaurHttpServletRequestWrapper.setLocale(
+                Locale.of(languageEnum.name())));
       }
     }
     // 放行
-    filterChain.doFilter(request, response);
+    filterChain.doFilter(centaurHttpServletRequestWrapper, response);
   }
 }

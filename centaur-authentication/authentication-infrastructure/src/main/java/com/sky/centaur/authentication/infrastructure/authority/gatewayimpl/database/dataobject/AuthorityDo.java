@@ -46,12 +46,12 @@ public class AuthorityDo extends JpaBasisDataObject {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Size(max = 50)
+  @Size(max = 50, message = "{authority.code.validation.size}")
   @NotNull
   @Column(name = "code", nullable = false, length = 50)
   private String code;
 
-  @Size(max = 200)
+  @Size(max = 200, message = "{authority.name.validation.size}")
   @Column(name = "name", nullable = false, length = 200)
   private String name;
 

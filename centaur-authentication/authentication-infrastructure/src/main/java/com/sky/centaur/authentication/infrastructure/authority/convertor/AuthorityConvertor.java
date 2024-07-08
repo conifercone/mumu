@@ -26,6 +26,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import jakarta.validation.Valid;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 权限信息转换器
@@ -41,6 +43,7 @@ import org.springframework.util.StringUtils;
  * @since 1.0.0
  */
 @Component
+@Validated
 public class AuthorityConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
@@ -55,19 +58,19 @@ public class AuthorityConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityDo authorityDo) {
+  public Optional<Authority> toEntity(@Valid AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(
         AuthorityMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityDo> toDataObject(Authority authority) {
+  public Optional<AuthorityDo> toDataObject(@Valid Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityAddCo authorityAddCo) {
+  public Optional<Authority> toEntity(@Valid AuthorityAddCo authorityAddCo) {
     return Optional.ofNullable(authorityAddCo).map(authorityAddClientObject -> {
       Authority authority = AuthorityMapper.INSTANCE.toEntity(authorityAddClientObject);
       if (authority.getId() == null) {
@@ -79,7 +82,7 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
+  public Optional<Authority> toEntity(@Valid AuthorityUpdateCo authorityUpdateCo) {
     return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
       if (authorityUpdateClientObject.getId() == null) {
         throw new CentaurException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
@@ -101,17 +104,17 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
+  public Optional<Authority> toEntity(@Valid AuthorityFindAllCo authorityFindAllCo) {
     return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
+  public Optional<AuthorityFindByIdCo> toFindByIdCo(@Valid Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityFindAllCo> toFindAllCo(Authority authority) {
+  public Optional<AuthorityFindAllCo> toFindAllCo(@Valid Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo);
   }
 }
