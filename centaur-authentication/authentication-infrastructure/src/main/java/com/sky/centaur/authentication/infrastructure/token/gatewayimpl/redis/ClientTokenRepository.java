@@ -13,44 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis;
 
-package com.sky.centaur.basis.enums;
+import com.redis.om.spring.repository.RedisDocumentRepository;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDo;
 
 /**
- * Token声言
+ * client token redis repository
  *
  * @author kaiyu.shan
- * @since 1.0.0
+ * @since 1.0.2
  */
-public enum TokenClaimsEnum {
+public interface ClientTokenRepository extends
+    RedisDocumentRepository<ClientTokenRedisDo, String> {
 
-  /**
-   * 权限
-   */
-  AUTHORITIES,
-
-  /**
-   * 账户ID
-   */
-  ACCOUNT_ID,
-
-  /**
-   * 账户名
-   */
-  ACCOUNT_NAME,
-
-  /**
-   * 时区
-   */
-  TIMEZONE,
-
-  /**
-   * 语言偏好
-   */
-  LANGUAGE,
-
-  /**
-   * 授权类型
-   */
-  AUTHORIZATION_GRANT_TYPE
 }

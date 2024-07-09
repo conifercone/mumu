@@ -30,6 +30,7 @@ import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
@@ -67,6 +68,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.jackson2.CoreJackson2Module;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -76,6 +78,7 @@ import org.springframework.security.oauth2.server.authorization.JdbcOAuth2Author
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -89,7 +92,6 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Acce
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -174,7 +176,9 @@ public class AuthorizationConfiguration {
     // authorization endpoint
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
-                new LoginUrlAuthenticationEntryPoint("http://localhost:31100/login"),
+                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                    operationLogGrpcService,
+                    systemLogGrpcService),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
                 new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
@@ -202,11 +206,13 @@ public class AuthorizationConfiguration {
       OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
       TokenRepository tokenRepository,
       OidcIdTokenRepository oidcIdTokenRepository,
+      ClientTokenRepository clientTokenRepository,
       RefreshTokenRepository refreshTokenRepository) {
     CentaurJwtGenerator jwtGenerator = new CentaurJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
     jwtGenerator.setTokenRepository(tokenRepository);
     jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
+    jwtGenerator.setClientTokenRepository(clientTokenRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     CentaurOAuth2RefreshTokenGenerator refreshTokenGenerator = new CentaurOAuth2RefreshTokenGenerator();
     refreshTokenGenerator.setRefreshTokenRepository(refreshTokenRepository);
@@ -375,12 +381,27 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
+            context.getAuthorizationGrantType().getValue());
         if (StringUtils.hasText(account.getTimezone())) {
           claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
         }
         Optional.ofNullable(account.getLanguage())
             .ifPresent(
                 languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
+      } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(
+          context.getAuthorizationGrantType())) {
+        JwtClaimsSet.Builder claims = context.getClaims();
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
+            context.getAuthorizationGrantType().getValue());
+        Set<String> authoritySet = Optional.ofNullable(
+                ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
+                    .getPrincipal()).getRegisteredClient()
+            )
+            .map(RegisteredClient::getScopes)
+            .orElse(Collections.emptySet());
+        // 去重
+        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
       }
     };
   }

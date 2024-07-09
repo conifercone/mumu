@@ -13,44 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject;
 
-package com.sky.centaur.basis.enums;
+import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
+import com.redis.om.spring.annotations.TextIndexed;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * Token声言
+ * client token redis数据对象
  *
  * @author kaiyu.shan
- * @since 1.0.0
+ * @since 1.0.2
  */
-public enum TokenClaimsEnum {
+@Data
+@Document(value = "clientToken")
+public class ClientTokenRedisDo {
+
+  @Id
+  @Indexed
+  private String id;
 
   /**
-   * 权限
+   * client token值
    */
-  AUTHORITIES,
+  @TextIndexed
+  private String clientTokenValue;
 
   /**
-   * 账户ID
+   * 存活时间
    */
-  ACCOUNT_ID,
-
-  /**
-   * 账户名
-   */
-  ACCOUNT_NAME,
-
-  /**
-   * 时区
-   */
-  TIMEZONE,
-
-  /**
-   * 语言偏好
-   */
-  LANGUAGE,
-
-  /**
-   * 授权类型
-   */
-  AUTHORIZATION_GRANT_TYPE
+  @TimeToLive
+  private Long ttl = 5L;
 }

@@ -16,11 +16,14 @@
 package com.sky.centaur.authentication.infrastructure.token.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.token.gateway.TokenGateway;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.enums.OAuth2Enum;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
@@ -37,11 +40,14 @@ public class TokenGatewayImpl implements TokenGateway {
 
   private final TokenRepository tokenRepository;
   private final JwtDecoder jwtDecoder;
+  private final ClientTokenRepository clientTokenRepository;
 
   @Autowired
-  public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder) {
+  public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder,
+      ClientTokenRepository clientTokenRepository) {
     this.tokenRepository = tokenRepository;
     this.jwtDecoder = jwtDecoder;
+    this.clientTokenRepository = clientTokenRepository;
   }
 
   @Override
@@ -49,8 +55,15 @@ public class TokenGatewayImpl implements TokenGateway {
     return Optional.ofNullable(token).map(tokenValue -> {
           try {
             Jwt jwt = jwtDecoder.decode(tokenValue);
-            return tokenRepository.existsById(
-                Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+            String claimAsString = jwt.getClaimAsString(
+                TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name());
+            if (OAuth2Enum.GRANT_TYPE_PASSWORD.name().equals(claimAsString)) {
+              return tokenRepository.existsById(
+                  Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+            } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
+              return clientTokenRepository.existsById(jwt.getClaimAsString("sub"));
+            }
+            return false;
           } catch (Exception e) {
             return false;
           }

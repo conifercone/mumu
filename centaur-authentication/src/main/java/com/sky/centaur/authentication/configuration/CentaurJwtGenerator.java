@@ -15,10 +15,13 @@
  */
 package com.sky.centaur.authentication.configuration;
 
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDo;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDo;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dataobject.TokenRedisDo;
+import com.sky.centaur.basis.enums.OAuth2Enum;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
 import java.time.Instant;
@@ -69,6 +72,8 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   private TokenRepository tokenRepository;
   @Setter
   private OidcIdTokenRepository oidcIdTokenRepository;
+  @Setter
+  private ClientTokenRepository clientTokenRepository;
 
   /**
    * Constructs a {@code JwtGenerator} using the provided parameters.
@@ -217,11 +222,20 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Instant jwtExpiresAt = jwt.getExpiresAt();
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
-      TokenRedisDo tokenRedisDo = new TokenRedisDo();
-      tokenRedisDo.setId(Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
-      tokenRedisDo.setTokenValue(tokenValue);
-      tokenRedisDo.setTtl(between.toSeconds());
-      tokenRepository.save(tokenRedisDo);
+      if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
+        ClientTokenRedisDo tokenRedisDo = new ClientTokenRedisDo();
+        tokenRedisDo.setId(jwt.getClaimAsString("sub"));
+        tokenRedisDo.setClientTokenValue(tokenValue);
+        tokenRedisDo.setTtl(between.toSeconds());
+        clientTokenRepository.save(tokenRedisDo);
+      } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
+          .equals(context.getAuthorizationGrantType().getValue())) {
+        TokenRedisDo tokenRedisDo = new TokenRedisDo();
+        tokenRedisDo.setId(Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+        tokenRedisDo.setTokenValue(tokenValue);
+        tokenRedisDo.setTtl(between.toSeconds());
+        tokenRepository.save(tokenRedisDo);
+      }
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
       OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
       oidcIdTokenRedisDo.setId(
