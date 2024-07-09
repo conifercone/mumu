@@ -30,6 +30,9 @@ import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
@@ -41,6 +44,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -360,7 +364,8 @@ public class AuthorizationConfiguration {
    * @return OAuth2TokenCustomizer的实例
    */
   @Bean
-  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
+  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
+      AuthorityRepository authorityRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -399,8 +404,21 @@ public class AuthorizationConfiguration {
                     .getPrincipal()).getRegisteredClient()
             )
             .map(RegisteredClient::getScopes)
+            .map(scopes -> {
+              Set<String> roles = scopes.stream().filter(scope -> scope.startsWith("ROLE_"))
+                  .map(scope -> scope.substring("ROLE_".length()))
+                  .collect(Collectors.toSet());
+              List<Long> authoritiesIds = roleRepository.findByCodeIn(new ArrayList<>(roles))
+                  .stream()
+                  .flatMap(opt -> opt.stream().flatMap(obj -> obj.getAuthorities().stream()))
+                  .distinct().toList();
+              List<AuthorityDo> authorityDos = authorityRepository.findAllById(authoritiesIds);
+              Set<String> authorityCodesFromRoles = authorityDos.stream().map(AuthorityDo::getCode)
+                  .collect(Collectors.toSet());
+              authorityCodesFromRoles.addAll(scopes);
+              return authorityCodesFromRoles;
+            })
             .orElse(Collections.emptySet());
-        // 去重
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
       }
     };

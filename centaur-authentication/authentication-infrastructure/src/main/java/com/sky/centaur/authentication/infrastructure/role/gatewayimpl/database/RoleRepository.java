@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.d
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -56,4 +57,12 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 是否存在
    */
   boolean existsByCode(String code);
+
+  /**
+   * 根据code集合查询所有角色
+   *
+   * @param codes code集合
+   * @return 角色集合
+   */
+  Optional<List<RoleDo>> findByCodeIn(List<String> codes);
 }
