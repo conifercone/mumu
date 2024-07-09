@@ -37,7 +37,7 @@
       <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" />
-        <SizeBasedTriggeringPolicy size="10MB" />
+        <SizeBasedTriggeringPolicy size="250MB" />
         <OnStartupTriggeringPolicy />
       </Policies>
       <DefaultRolloverStrategy max="5">
