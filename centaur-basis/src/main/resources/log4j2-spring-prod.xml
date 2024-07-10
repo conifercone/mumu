@@ -38,7 +38,6 @@
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" />
         <SizeBasedTriggeringPolicy size="250MB" />
-        <OnStartupTriggeringPolicy />
       </Policies>
       <DefaultRolloverStrategy max="5">
         <Delete basePath="${LOG_PATH}/" maxDepth="1">
