@@ -22,6 +22,8 @@ import com.sky.centaur.basis.enums.OAuth2Enum;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -41,6 +43,8 @@ public class TokenGatewayImpl implements TokenGateway {
   private final TokenRepository tokenRepository;
   private final JwtDecoder jwtDecoder;
   private final ClientTokenRepository clientTokenRepository;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      TokenGatewayImpl.class);
 
   @Autowired
   public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder,
@@ -65,6 +69,7 @@ public class TokenGatewayImpl implements TokenGateway {
             }
             return false;
           } catch (Exception e) {
+            LOGGER.error(token, e);
             return false;
           }
         })
