@@ -111,7 +111,6 @@ public class AccountGatewayImpl implements AccountGateway {
           throw new CentaurException(ResultCode.TIME_ZONE_IS_NOT_AVAILABLE);
         }
       }
-      // 密码加密
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
