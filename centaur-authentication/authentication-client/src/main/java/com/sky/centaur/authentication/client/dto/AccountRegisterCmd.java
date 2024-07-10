@@ -27,9 +27,18 @@ import lombok.Data;
 @Data
 public class AccountRegisterCmd {
 
+  /**
+   * 账户注册信息
+   */
   private AccountRegisterCo accountRegisterCo;
 
+  /**
+   * 验证码ID
+   */
   private Long captchaId;
 
+  /**
+   * 验证码内容
+   */
   private String captcha;
 }
