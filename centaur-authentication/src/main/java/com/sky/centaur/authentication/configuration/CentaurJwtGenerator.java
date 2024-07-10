@@ -229,7 +229,9 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         tokenRedisDo.setTtl(between.toSeconds());
         clientTokenRepository.save(tokenRedisDo);
       } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
-          .equals(context.getAuthorizationGrantType().getValue())) {
+          .equals(context.getAuthorizationGrantType().getValue())
+          || AuthorizationGrantType.REFRESH_TOKEN
+          .equals(context.getAuthorizationGrantType())) {
         TokenRedisDo tokenRedisDo = new TokenRedisDo();
         tokenRedisDo.setId(Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
         tokenRedisDo.setTokenValue(tokenValue);

@@ -57,7 +57,7 @@ public class TokenGatewayImpl implements TokenGateway {
             Jwt jwt = jwtDecoder.decode(tokenValue);
             String claimAsString = jwt.getClaimAsString(
                 TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name());
-            if (OAuth2Enum.GRANT_TYPE_PASSWORD.name().equals(claimAsString)) {
+            if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
               return tokenRepository.existsById(
                   Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
             } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
