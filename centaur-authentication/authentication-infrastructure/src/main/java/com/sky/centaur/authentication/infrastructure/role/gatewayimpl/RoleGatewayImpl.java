@@ -88,19 +88,14 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      Optional.ofNullable(id).ifPresent(roleId -> {
-        Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
-        if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
-          throw new CentaurException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-              allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
-        }
-        roleRepository.deleteById(roleId);
-      });
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+    Optional.ofNullable(id).ifPresent(roleId -> {
+      Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
+      if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
+        throw new CentaurException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+            allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
+      }
+      roleRepository.deleteById(roleId);
+    });
   }
 
   @Override

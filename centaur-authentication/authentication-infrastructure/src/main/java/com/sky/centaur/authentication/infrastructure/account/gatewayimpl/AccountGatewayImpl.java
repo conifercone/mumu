@@ -145,14 +145,8 @@ public class AccountGatewayImpl implements AccountGateway {
   public void updateById(@NotNull Account account) {
     SecurityContextUtil.getLoginAccountId()
         .filter(res -> Objects.equals(res, account.getId()))
-        .ifPresentOrElse((accountId) -> {
-          Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-          try {
-            accountConvertor.toDataObject(account).ifPresent(accountRepository::merge);
-          } finally {
-            Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-          }
-        }, () -> {
+        .ifPresentOrElse((accountId) -> accountConvertor.toDataObject(account)
+            .ifPresent(accountRepository::merge), () -> {
           throw new CentaurException(ResultCode.UNAUTHORIZED);
         });
   }
@@ -169,24 +163,18 @@ public class AccountGatewayImpl implements AccountGateway {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
     });
-
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
-        accountDo.setEnabled(false);
-        accountRepository.merge(accountDo);
-      }, () -> {
-        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-      });
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+    accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
+      accountDo.setEnabled(false);
+      accountRepository.merge(accountDo);
+    }, () -> {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+    });
   }
 
   @Override
@@ -224,14 +212,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrentAccount() {
-    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-      try {
-        accountRepository.deleteById(accountId);
-      } finally {
-        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-      }
-    }, () -> {
+    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountRepository::deleteById, () -> {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
     });
   }

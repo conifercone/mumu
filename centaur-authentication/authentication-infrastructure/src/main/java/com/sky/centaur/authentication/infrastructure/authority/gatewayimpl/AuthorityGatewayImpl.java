@@ -93,17 +93,12 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-      if (!CollectionUtils.isEmpty(authorities.getContent())) {
-        throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-            authorities.getContent().stream().map(Role::getCode).toList());
-      }
-      Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
+    Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
+    if (!CollectionUtils.isEmpty(authorities.getContent())) {
+      throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+          authorities.getContent().stream().map(Role::getCode).toList());
     }
+    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
   }
 
   @Override
@@ -119,7 +114,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
         });
-
   }
 
   @Override
