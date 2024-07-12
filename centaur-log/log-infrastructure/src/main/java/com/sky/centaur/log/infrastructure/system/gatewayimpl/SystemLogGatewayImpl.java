@@ -25,6 +25,7 @@ import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
@@ -75,7 +76,8 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
   public void submit(SystemLog systemLog) {
     systemLogConvertor.toKafkaDataObject(systemLog).ifPresent(res -> {
       try {
-        systemLogKafkaRepository.send("system-log", objectMapper.writeValueAsString(res));
+        systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
+            objectMapper.writeValueAsString(res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }

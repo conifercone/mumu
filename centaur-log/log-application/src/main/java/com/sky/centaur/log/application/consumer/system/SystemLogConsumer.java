@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.client.api.SystemLogService;
 import com.sky.centaur.log.client.dto.SystemLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogMapper;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
@@ -48,7 +49,7 @@ public class SystemLogConsumer {
     this.systemLogService = systemLogService;
   }
 
-  @KafkaListener(topics = {"system-log"})
+  @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
   public void handle(String systemLog) throws JsonProcessingException {
     SystemLogKafkaDo systemLogKafkaDo = objectMapper.readValue(systemLog,
         SystemLogKafkaDo.class);

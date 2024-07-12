@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.log.client.api.OperationLogService;
 import com.sky.centaur.log.client.dto.OperationLogSaveCmd;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogMapper;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import io.micrometer.observation.annotation.Observed;
@@ -47,7 +48,7 @@ public class OperationLogConsumer {
     this.operationLogService = operationLogService;
   }
 
-  @KafkaListener(topics = {"operation-log"})
+  @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
   public void handle(String operationLog) throws JsonProcessingException {
     OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
         OperationLogKafkaDo.class);

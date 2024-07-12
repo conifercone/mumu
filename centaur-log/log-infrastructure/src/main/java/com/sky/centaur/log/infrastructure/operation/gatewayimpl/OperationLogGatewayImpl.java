@@ -25,6 +25,7 @@ import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
@@ -81,8 +82,9 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   public void submit(OperationLog operationLog) {
     operationLogConvertor.toKafkaDataObject(operationLog).ifPresent(res -> {
       try {
-        operationLogKafkaRepository.send("operation-log", objectMapper.writeValueAsString(
-            res));
+        operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
+            objectMapper.writeValueAsString(
+                res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }

@@ -29,6 +29,11 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("centaur.log")
 public class LogProperties {
 
+  public static final String OPERATION_LOG_ES_INDEX_NAME = "operation-log";
+  public static final String SYSTEM_LOG_ES_INDEX_NAME = "system-log";
+  public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "operation-log";
+  public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "system-log";
+
   @NestedConfigurationProperty
   private Elasticsearch elasticsearch = new Elasticsearch();
 
