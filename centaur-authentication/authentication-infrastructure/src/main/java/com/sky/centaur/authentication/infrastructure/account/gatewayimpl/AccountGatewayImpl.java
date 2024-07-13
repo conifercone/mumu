@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -66,6 +67,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   private final AccountRepository accountRepository;
   private final TokenRepository tokenRepository;
+  private final RefreshTokenRepository refreshTokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final OperationLogGrpcService operationLogGrpcService;
   private final DistributedLock distributedLock;
@@ -74,12 +76,14 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
+      RefreshTokenRepository refreshTokenRepository,
       PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       ExtensionProperties extensionProperties, AccountConvertor accountConvertor) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
+    this.refreshTokenRepository = refreshTokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -172,6 +176,8 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       accountDo.setEnabled(false);
       accountRepository.merge(accountDo);
+      tokenRepository.deleteById(id);
+      refreshTokenRepository.deleteById(id);
     }, () -> {
       throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -212,7 +218,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrentAccount() {
-    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountRepository::deleteById, () -> {
+    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
+      accountRepository.deleteById(accountId);
+      tokenRepository.deleteById(accountId);
+      refreshTokenRepository.deleteById(accountId);
+    }, () -> {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
     });
   }
