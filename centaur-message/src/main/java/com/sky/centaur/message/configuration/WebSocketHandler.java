@@ -74,18 +74,17 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
   @Override
   public void handlerRemoved(@NotNull ChannelHandlerContext ctx) {
     messageProperties.getWebSocket().getChannelGroup().remove(ctx.channel());
-    removeUserId(ctx);
+    removeAccountId(ctx);
   }
 
   @Override
   public void exceptionCaught(@NotNull ChannelHandlerContext ctx, @NotNull Throwable cause) {
     messageProperties.getWebSocket().getChannelGroup().remove(ctx.channel());
-    removeUserId(ctx);
+    removeAccountId(ctx);
     ctx.close();
   }
 
-
-  private void removeUserId(@NotNull ChannelHandlerContext ctx) {
+  private void removeAccountId(@NotNull ChannelHandlerContext ctx) {
     AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
     Optional.ofNullable(ctx.channel().attr(key).get())
         .ifPresent(value -> messageProperties.getWebSocket().getAccountChannelMap()
