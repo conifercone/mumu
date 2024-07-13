@@ -4,6 +4,7 @@
     <toRun name="CentaurFileApplication-dev" type="SpringBootApplicationConfigurationType" />
     <toRun name="CentaurLogApplication-dev" type="SpringBootApplicationConfigurationType" />
     <toRun name="CentaurMailApplication-dev" type="SpringBootApplicationConfigurationType" />
+    <toRun name="CentaurMessageApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="CentaurSmsApplication-dev" type="SpringBootApplicationConfigurationType" />
     <toRun name="CentaurUniqueApplication-dev" type="SpringBootApplicationConfigurationType" />
     <method v="2" />
