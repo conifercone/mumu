@@ -63,7 +63,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     long accountId = messageTextJsonNode.get(
             CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, TokenClaimsEnum.ACCOUNT_ID.name()))
         .longValue();
-    messageProperties.getWebSocket().getUserChannelMap().put(accountId, ctx.channel());
+    messageProperties.getWebSocket().getAccountChannelMap().put(accountId, ctx.channel());
     // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
     AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
     ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
@@ -88,7 +88,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
   private void removeUserId(@NotNull ChannelHandlerContext ctx) {
     AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
     Optional.ofNullable(ctx.channel().attr(key).get())
-        .ifPresent(value -> messageProperties.getWebSocket().getUserChannelMap()
+        .ifPresent(value -> messageProperties.getWebSocket().getAccountChannelMap()
             .remove(Long.parseLong(value)));
   }
 }

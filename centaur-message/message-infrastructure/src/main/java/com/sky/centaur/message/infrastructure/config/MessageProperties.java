@@ -52,7 +52,7 @@ public class MessageProperties {
      * 存放用户与Chanel的对应信息，用于给指定用户发送消息
      */
     @Getter
-    private final ConcurrentHashMap<Long, Channel> userChannelMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Channel> accountChannelMap = new ConcurrentHashMap<>();
 
     /**
      * 路径
