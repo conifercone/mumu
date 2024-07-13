@@ -31,6 +31,7 @@ dependencies {
     implementation libs.flywayDatabasePostgresql
     implementation libs.hibernateTypes63
     implementation libs.redisOmSpring
+    implementation libs.jobrunrSpringBoot3Starter
     annotationProcessor libs.redisOmSpring
     implementation libs.caffeine
 }

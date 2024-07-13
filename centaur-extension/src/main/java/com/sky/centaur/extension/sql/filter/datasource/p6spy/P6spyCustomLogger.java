@@ -53,7 +53,7 @@ public class P6spyCustomLogger extends FormattedLogger {
   @Override
   public void logSQL(int connectionId, String now, long elapsed,
       Category category, String prepared, String sql, String url) {
-    if (!Strings.isNullOrEmpty(sql)) {
+    if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
       String LF = "\n";
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(LF).append("====>");

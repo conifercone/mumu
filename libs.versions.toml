@@ -21,6 +21,7 @@ disruptorVersion = '4.0.0'
 minioVersion = '8.5.10'
 mapstructVersion = '1.5.5.Final'
 commonsIoVersion = '2.16.1'
+jobrunrSpringBoot3StarterVersion = '7.2.2'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
@@ -182,6 +183,8 @@ minio = { module = "io.minio:minio", version.ref = "minioVersion" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 # https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
+# https://mvnrepository.com/artifact/org.jobrunr/jobrunr-spring-boot-3-starter
+jobrunrSpringBoot3Starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
 
 [bundles]
 jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
