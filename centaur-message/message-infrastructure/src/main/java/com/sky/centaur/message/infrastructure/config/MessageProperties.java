@@ -49,7 +49,7 @@ public class MessageProperties {
     private final ChannelGroup channelGroup = new DefaultChannelGroup(
         GlobalEventExecutor.INSTANCE);
     /**
-     * 存放用户与Chanel的对应信息，用于给指定用户发送消息
+     * 存放账户与Chanel的对应信息，用于给指定账户发送消息
      */
     @Getter
     private final ConcurrentHashMap<Long, Channel> accountChannelMap = new ConcurrentHashMap<>();

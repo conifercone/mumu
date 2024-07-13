@@ -64,7 +64,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, TokenClaimsEnum.ACCOUNT_ID.name()))
         .longValue();
     messageProperties.getWebSocket().getAccountChannelMap().put(accountId, ctx.channel());
-    // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
+    // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
     AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
     ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
     // 回复消息
