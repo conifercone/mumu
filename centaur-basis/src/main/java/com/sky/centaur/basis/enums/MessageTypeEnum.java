@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.sky.centaur.basis.enums;
 
 /**
- * 消息服务
+ * 消息类型枚举
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-@SpringBootApplication
-public class CentaurMessageApplication {
-
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurMessageApplication.class, args);
-  }
+public enum MessageTypeEnum {
+  TEXT,
+  IMAGE
 }

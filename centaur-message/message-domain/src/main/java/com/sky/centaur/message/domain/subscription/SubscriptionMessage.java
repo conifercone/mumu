@@ -13,21 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message;
+package com.sky.centaur.message.domain.subscription;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.sky.centaur.basis.domain.BasisDomainModel;
+import com.sky.centaur.basis.enums.MessageTypeEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
- * 消息服务
+ * 订阅消息
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-@SpringBootApplication
-public class CentaurMessageApplication {
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
+public class SubscriptionMessage extends BasisDomainModel {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CentaurMessageApplication.class, args);
-  }
+  private Long subscriptionAccountId;
+
+  private byte[] message;
+
+  private MessageTypeEnum messageType;
 }
