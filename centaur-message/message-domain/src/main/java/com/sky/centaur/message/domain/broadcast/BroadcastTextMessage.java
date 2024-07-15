@@ -25,7 +25,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 广播消息
+ * 广播文本消息
  *
  * @author kaiyu.shan
  * @since 1.0.2
@@ -36,9 +36,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class BroadcastMessage extends BasisDomainModel {
+public class BroadcastTextMessage extends BasisDomainModel {
 
-  private byte[] message;
+  private String message;
 
   private MessageTypeEnum messageType;
 }

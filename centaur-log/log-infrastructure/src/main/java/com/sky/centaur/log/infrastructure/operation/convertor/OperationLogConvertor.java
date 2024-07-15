@@ -29,6 +29,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,6 +45,7 @@ public class OperationLogConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final Tracer tracer;
 
+  @Autowired
   public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService, Tracer tracer) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.tracer = tracer;

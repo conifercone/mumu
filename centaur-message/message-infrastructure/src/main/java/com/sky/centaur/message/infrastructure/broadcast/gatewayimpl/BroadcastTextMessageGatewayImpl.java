@@ -13,34 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.subscription;
+package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl;
 
-import com.sky.centaur.basis.domain.BasisDomainModel;
-import com.sky.centaur.basis.enums.MessageTypeEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import com.sky.centaur.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
+import org.springframework.stereotype.Component;
 
 /**
- * 订阅消息
+ * 广播文本消息领域网关实现
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-@Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder(toBuilder = true)
-public class SubscriptionMessage extends BasisDomainModel {
+@Component
+public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGateway {
 
-  private Long subscriptionAccountId;
-
-  private byte[] message;
-
-  private MessageTypeEnum messageType;
 }

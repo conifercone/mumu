@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -48,6 +49,7 @@ public class AccountConvertor {
   private final RoleRepository roleRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
 
+  @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
       RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService) {
     this.roleConvertor = roleConvertor;
