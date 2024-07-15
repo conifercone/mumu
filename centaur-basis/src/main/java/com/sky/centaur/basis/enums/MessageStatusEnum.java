@@ -33,9 +33,5 @@ public enum MessageStatusEnum {
   /**
    * 已归档
    */
-  ARCHIVED,
-  /**
-   * 已删除
-   */
-  REMOVED
+  ARCHIVED
 }
