@@ -57,18 +57,24 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
    * 读取数据
    */
   @Override
-  protected void channelRead0(@NotNull ChannelHandlerContext ctx, @NotNull TextWebSocketFrame msg)
-      throws Exception {
-    JsonNode messageTextJsonNode = objectMapper.readTree(msg.text());
-    long accountId = messageTextJsonNode.get(
-            CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, TokenClaimsEnum.ACCOUNT_ID.name()))
-        .longValue();
-    messageProperties.getWebSocket().getAccountChannelMap().put(accountId, ctx.channel());
-    // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
-    AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
-    ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
-    // 回复消息
-    ctx.channel().writeAndFlush(new TextWebSocketFrame("Server connection successful!"));
+  protected void channelRead0(@NotNull ChannelHandlerContext ctx, @NotNull TextWebSocketFrame msg) {
+    Optional.ofNullable(msg.text()).ifPresent(messageText -> {
+      try {
+        JsonNode messageTextJsonNode = objectMapper.readTree(messageText);
+        long accountId = messageTextJsonNode.get(
+                CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL,
+                    TokenClaimsEnum.ACCOUNT_ID.name()))
+            .longValue();
+        messageProperties.getWebSocket().getAccountChannelMap().put(accountId, ctx.channel());
+        // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+        AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
+        ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
+        // 回复消息
+        ctx.channel().writeAndFlush(new TextWebSocketFrame("Server connection successful!"));
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   @Override
