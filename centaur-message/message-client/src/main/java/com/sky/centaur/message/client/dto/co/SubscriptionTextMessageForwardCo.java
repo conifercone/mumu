@@ -16,7 +16,7 @@
 package com.sky.centaur.message.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.basis.enums.MessageTypeEnum;
+import com.sky.centaur.basis.enums.MessageStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,5 +34,5 @@ public class SubscriptionTextMessageForwardCo extends BaseClientObject {
 
   private String message;
 
-  private MessageTypeEnum messageType;
+  private MessageStatusEnum messageStatus;
 }

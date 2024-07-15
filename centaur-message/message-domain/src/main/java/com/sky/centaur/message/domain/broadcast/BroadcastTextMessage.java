@@ -16,7 +16,7 @@
 package com.sky.centaur.message.domain.broadcast;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
-import com.sky.centaur.basis.enums.MessageTypeEnum;
+import com.sky.centaur.basis.enums.MessageStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,5 +40,5 @@ public class BroadcastTextMessage extends BasisDomainModel {
 
   private String message;
 
-  private MessageTypeEnum messageType;
+  private MessageStatusEnum messageStatus;
 }

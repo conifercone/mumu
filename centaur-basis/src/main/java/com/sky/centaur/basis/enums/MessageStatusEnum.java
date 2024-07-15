@@ -16,12 +16,12 @@
 package com.sky.centaur.basis.enums;
 
 /**
- * 消息类型枚举
+ * 消息状态枚举
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-public enum MessageTypeEnum {
-  TEXT,
-  IMAGE
+public enum MessageStatusEnum {
+  HAVE_READ,
+  UNREAD
 }
