@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 订阅文本消息领域网关实现类
+ * 文本订阅消息领域网关实现类
  *
  * @author kaiyu.shan
  * @since 1.0.2

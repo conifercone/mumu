@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 
 /**
- * 订阅文本消息转换器转换器
+ * 文本订阅消息转换器转换器
  *
  * @author kaiyu.shan
  * @since 1.0.2

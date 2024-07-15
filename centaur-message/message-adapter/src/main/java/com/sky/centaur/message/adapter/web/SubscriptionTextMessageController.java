@@ -29,14 +29,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 订阅文本消息管理
+ * 文本订阅消息管理
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
 @RestController
 @RequestMapping("/subscriptionTextMsg")
-@Tag(name = "订阅文本消息管理")
+@Tag(name = "文本订阅消息管理")
 public class SubscriptionTextMessageController {
 
   private final SubscriptionTextMessageService subscriptionTextMessageService;
@@ -47,7 +47,7 @@ public class SubscriptionTextMessageController {
     this.subscriptionTextMessageService = subscriptionTextMessageService;
   }
 
-  @Operation(summary = "转发订阅文本消息")
+  @Operation(summary = "转发文本订阅消息")
   @PostMapping("/forward")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.2")

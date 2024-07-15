@@ -19,7 +19,7 @@ import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import lombok.Data;
 
 /**
- * 订阅文本消息转发指令
+ * 文本订阅消息转发指令
  *
  * @author kaiyu.shan
  * @since 1.0.2

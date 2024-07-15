@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * 订阅文本消息转发指令执行器
+ * 文本订阅消息转发指令执行器
  *
  * @author kaiyu.shan
  * @since 1.0.2

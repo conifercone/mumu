@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 订阅文本消息转发客户端对象
+ * 文本订阅消息转发客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.2

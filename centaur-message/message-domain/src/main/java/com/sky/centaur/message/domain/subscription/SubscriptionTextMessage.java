@@ -25,7 +25,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 订阅文本消息
+ * 文本订阅消息
  *
  * @author kaiyu.shan
  * @since 1.0.2

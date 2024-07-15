@@ -18,7 +18,7 @@ package com.sky.centaur.message.client.api;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 
 /**
- * 订阅文本消息service
+ * 文本订阅消息service
  *
  * @author kaiyu.shan
  * @since 1.0.2

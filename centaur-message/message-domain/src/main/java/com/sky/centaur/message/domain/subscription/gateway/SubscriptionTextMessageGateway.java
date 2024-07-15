@@ -18,7 +18,7 @@ package com.sky.centaur.message.domain.subscription.gateway;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 
 /**
- * 订阅文本消息领域网关
+ * 文本订阅消息领域网关
  *
  * @author kaiyu.shan
  * @since 1.0.2
