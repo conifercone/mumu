@@ -22,6 +22,6 @@ package com.sky.centaur.basis.enums;
  * @since 1.0.2
  */
 public enum MessageStatusEnum {
-  HAVE_READ,
+  READ,
   UNREAD
 }
