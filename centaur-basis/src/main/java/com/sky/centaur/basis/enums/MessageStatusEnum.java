@@ -22,6 +22,16 @@ package com.sky.centaur.basis.enums;
  * @since 1.0.2
  */
 public enum MessageStatusEnum {
+  /**
+   * 已读的
+   */
   READ,
-  UNREAD
+  /**
+   * 未读的
+   */
+  UNREAD,
+  /**
+   * 归档的
+   */
+  ARCHIVED
 }
