@@ -11,6 +11,8 @@ dependencies {
     implementation project(":centaur-message:message-application")
     implementation project(":centaur-extension")
     implementation libs.netty
+    implementation libs.springBootDataJpa
+    implementation libs.postgresql
     implementation libs.consulDiscovery
     implementation libs.consulConfig
     implementation libs.bundles.micrometer
@@ -24,4 +26,9 @@ dependencies {
     testImplementation libs.springWeb
     implementation libs.jasypt
     implementation libs.swagger3Ui
+    implementation libs.flywayCore
+    implementation libs.flywayDatabasePostgresql
+    implementation libs.hibernateTypes63
+    implementation libs.redisOmSpring
+    annotationProcessor libs.redisOmSpring
 }

@@ -15,8 +15,16 @@
  */
 package com.sky.centaur.message;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
+import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 消息服务
@@ -25,6 +33,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.2
  */
 @SpringBootApplication
+@EnableConfigurationProperties
+@EnableJpaAuditing(auditorAwareRef = "centaurJpaAuditorAware")
+@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.message.**")
+@EnableMethodSecurity
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
+@EnableTransactionManagement
 public class CentaurMessageApplication {
 
   public static void main(String[] args) {
