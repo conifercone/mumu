@@ -4,14 +4,14 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 plugins {
-    id(libs.plugins.dependencyManagement.get().pluginId) version (libs.plugins.dependencyManagement.get().version.toString())
-    id(libs.plugins.springboot.get().pluginId) version (libs.plugins.springboot.get().version.toString()) apply false
-    id(libs.plugins.lombok.get().pluginId) version (libs.plugins.lombok.get().version.toString())
-    id(libs.plugins.protobuf.get().pluginId) version (libs.plugins.protobuf.get().version.toString()) apply false
-    id(libs.plugins.license.get().pluginId) version (libs.plugins.license.get().version.toString())
-    id(libs.plugins.kotlinJvm.get().pluginId) version (libs.plugins.kotlinJvm.get().version.toString())
-    id(libs.plugins.kotlinPluginSpring.get().pluginId) version (libs.plugins.kotlinPluginSpring.get().version.toString())
-    id(libs.plugins.kotlinPluginJpa.get().pluginId) version (libs.plugins.kotlinPluginJpa.get().version.toString())
+    id(libs.plugins.dependencyManagement.get().pluginId) version libs.plugins.dependencyManagement.get().version.toString()
+    id(libs.plugins.springboot.get().pluginId) version libs.plugins.springboot.get().version.toString() apply false
+    id(libs.plugins.lombok.get().pluginId) version libs.plugins.lombok.get().version.toString()
+    id(libs.plugins.protobuf.get().pluginId) version libs.plugins.protobuf.get().version.toString() apply false
+    id(libs.plugins.license.get().pluginId) version libs.plugins.license.get().version.toString()
+    id(libs.plugins.kotlinJvm.get().pluginId) version libs.plugins.kotlinJvm.get().version.toString()
+    id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.plugins.kotlinPluginSpring.get().version.toString()
+    id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.plugins.kotlinPluginJpa.get().version.toString()
 }
 
 allprojects {
