@@ -1,8 +1,0 @@
-//file:noinspection DependencyNotationArgument
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GrUnresolvedAccess
-dependencies {
-    implementation project(":centaur-basis")
-    implementation libs.springSecurityCore
-    implementation libs.springDataCommons
-}

@@ -1,0 +1,16 @@
+dependencies {
+    implementation(project(":centaur-message:message-domain"))
+    implementation(project(":centaur-message:message-client"))
+    implementation(project(":centaur-unique:unique-client"))
+    implementation(project(":centaur-extension"))
+    implementation(libs.netty)
+    implementation(libs.springBootDataJpa)
+    implementation(libs.protobufJava)
+    implementation(libs.springSecurityCore)
+    implementation(libs.jakartaValidationApi)
+    implementation(libs.hibernateTypes63)
+    implementation(libs.postgresql)
+    implementation(libs.redisOmSpring)
+    annotationProcessor(libs.redisOmSpring)
+    annotationProcessor(libs.hibernateJpamodelgen)
+}

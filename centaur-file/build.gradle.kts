@@ -1,0 +1,22 @@
+apply(from = "../scripts/springboot.gradle")
+
+dependencies {
+    implementation(project(":centaur-authentication:authentication-client"))
+    implementation(project(":centaur-extension"))
+    implementation(project(":centaur-file:file-infrastructure"))
+    implementation(project(":centaur-file:file-adapter"))
+    implementation(project(":centaur-file:file-client"))
+    implementation(project(":centaur-file:file-application"))
+    implementation(libs.consulDiscovery)
+    implementation(libs.consulConfig)
+    implementation(libs.bundles.micrometer)
+    implementation(libs.grpcSpringBootStarter)
+    testImplementation(libs.springbootTest)
+    testImplementation(libs.jasypt)
+    testImplementation(libs.springSecurityTest)
+    testImplementation(libs.grpcClientSpringBootStarter)
+    testImplementation(libs.springWeb)
+    implementation(libs.jasypt)
+    implementation(libs.swagger3Ui)
+    implementation(libs.minio)
+}
