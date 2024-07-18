@@ -15,12 +15,15 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
+import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,11 +35,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubscriptionTextMessageConvertor {
 
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+
+  @Autowired
+  public SubscriptionTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
+  }
+
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<SubscriptionTextMessage> toEntity(
       SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo) {
-    return Optional.ofNullable(subscriptionTextMessageForwardCo).map(
-        SubscriptionTextMessageMapper.INSTANCE::toEntity);
+    return Optional.ofNullable(subscriptionTextMessageForwardCo)
+        .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
+          SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
+          entity.setSenderId(senderAccountId);
+          Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
+          }, () -> {
+            Long id = primaryKeyGrpcService.snowflake();
+            entity.setId(id);
+            res.setId(id);
+          });
+          return entity;
+        }));
   }
 }

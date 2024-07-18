@@ -20,6 +20,8 @@ import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -35,6 +37,9 @@ public interface SubscriptionTextMessageMapper {
   SubscriptionTextMessageMapper INSTANCE = Mappers.getMapper(SubscriptionTextMessageMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.2")
+  @Mappings(value = {
+      @Mapping(target = "senderId", ignore = true)
+  })
   SubscriptionTextMessage toEntity(
       SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo);
 }

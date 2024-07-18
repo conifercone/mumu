@@ -38,7 +38,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class SubscriptionTextMessage extends BasisDomainModel {
 
-  private Long subscriptionAccountId;
+  private Long id;
+
+  private Long senderId;
+
+  private Long receiverId;
 
   private String message;
 

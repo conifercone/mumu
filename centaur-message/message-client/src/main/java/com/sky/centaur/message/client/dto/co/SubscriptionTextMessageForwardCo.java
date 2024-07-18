@@ -30,7 +30,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class SubscriptionTextMessageForwardCo extends BaseClientObject {
 
-  private Long subscriptionAccountId;
+  private Long id;
+
+  private Long receiverId;
 
   private String message;
 

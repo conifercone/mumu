@@ -43,7 +43,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(subscriptionMessage -> Optional.ofNullable(
             messageProperties.getWebSocket().getAccountChannelMap()
-                .get(subscriptionMessage.getSubscriptionAccountId()))
+                .get(subscriptionMessage.getReceiverId()))
         .ifPresent(channel -> channel.writeAndFlush(
             new TextWebSocketFrame(subscriptionMessage.getMessage()))));
   }

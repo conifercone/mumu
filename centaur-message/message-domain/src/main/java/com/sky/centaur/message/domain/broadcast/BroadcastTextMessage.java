@@ -17,6 +17,7 @@ package com.sky.centaur.message.domain.broadcast;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,16 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class BroadcastTextMessage extends BasisDomainModel {
+
+  private Long id;
+
+  private Long senderId;
+
+  private Collection<Long> receiverIds;
+
+  private Long readQuantity;
+
+  private Long unreadQuantity;
 
   private String message;
 
