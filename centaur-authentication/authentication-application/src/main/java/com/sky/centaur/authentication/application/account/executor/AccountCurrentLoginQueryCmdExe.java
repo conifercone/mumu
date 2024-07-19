@@ -35,15 +35,18 @@ import org.springframework.stereotype.Component;
 public class AccountCurrentLoginQueryCmdExe {
 
   private final AccountGateway accountGateway;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
-  public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway) {
+  public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway,
+      AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
+    this.accountConvertor = accountConvertor;
   }
 
   public AccountCurrentLoginQueryCo execute() {
     return accountGateway.queryCurrentLoginAccount()
-        .flatMap(AccountConvertor::toCurrentLoginQueryCo)
+        .flatMap(accountConvertor::toCurrentLoginQueryCo)
         .orElseThrow(() -> new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

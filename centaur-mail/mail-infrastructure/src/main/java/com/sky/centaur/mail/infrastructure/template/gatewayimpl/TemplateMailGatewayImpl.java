@@ -33,8 +33,6 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
@@ -59,13 +57,16 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   private final StreamFileGrpcService streamFileGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(
       TemplateMailGatewayImpl.class);
+  private final TemplateMailConvertor templateMailConvertor;
 
   @Autowired
   public TemplateMailGatewayImpl(ThymeleafTemplateMailRepository thymeleafTemplateMailRepository,
-      JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService) {
+      JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService,
+      TemplateMailConvertor templateMailConvertor) {
     this.thymeleafTemplateMailRepository = thymeleafTemplateMailRepository;
     this.javaMailSender = javaMailSender;
     this.streamFileGrpcService = streamFileGrpcService;
+    this.templateMailConvertor = templateMailConvertor;
   }
 
   @Override
@@ -88,7 +89,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
             streamFileDownloadGrpcCmd,
             callCredentials);
-        Optional<TemplateMailThymeleafDo> thymeleafDo = TemplateMailConvertor.toThymeleafDo(
+        Optional<TemplateMailThymeleafDo> thymeleafDo = templateMailConvertor.toThymeleafDo(
             templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
           thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()
@@ -109,7 +110,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
             }
           });
         });
-      } catch (InterruptedException | TimeoutException | ExecutionException e) {
+      } catch (Exception e) {
         LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
         throw new CentaurException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
       }

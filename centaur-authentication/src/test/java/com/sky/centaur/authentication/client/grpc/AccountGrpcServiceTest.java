@@ -41,7 +41,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -78,7 +77,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void register() throws ExecutionException, InterruptedException, TimeoutException {
+  public void register() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
         .setSimpleCaptchaGeneratedGrpcCo(
             SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
@@ -101,7 +100,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void syncRegister() throws InterruptedException, ExecutionException, TimeoutException {
+  public void syncRegister() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
         .setSimpleCaptchaGeneratedGrpcCo(
@@ -135,7 +134,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void updateById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void updateById() {
     AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd = AccountUpdateByIdGrpcCmd.newBuilder()
         .setAccountUpdateByIdGrpcCo(
             AccountUpdateByIdGrpcCo.newBuilder().setId(Int64Value.of(1))
@@ -185,7 +184,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void updateRoleById() throws ExecutionException, InterruptedException, TimeoutException {
+  public void updateRoleById() {
     AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd = AccountUpdateRoleGrpcCmd.newBuilder()
         .setAccountUpdateRoleGrpcCo(
             AccountUpdateRoleGrpcCo.newBuilder().setId(Int64Value.of(2))
@@ -234,7 +233,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   @Transactional(rollbackFor = Exception.class)
-  public void disable() throws ExecutionException, InterruptedException, TimeoutException {
+  public void disable() {
     AccountDisableGrpcCmd accountDisableGrpcCmd = AccountDisableGrpcCmd.newBuilder()
         .setAccountDisableGrpcCo(
             AccountDisableGrpcCo.newBuilder().setId(Int64Value.of(2))

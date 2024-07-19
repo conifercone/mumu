@@ -21,7 +21,10 @@ package com.sky.centaur.basis.constants;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-public class PgSqlFunctionNameConstants {
+public final class PgSqlFunctionNameConstants {
+
+  private PgSqlFunctionNameConstants() {
+  }
 
   public static final String ANY_PG = "any_pg";
 }

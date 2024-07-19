@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.configuration;
 
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ public class KafkaConfiguration {
    */
   @Bean
   public NewTopic operationLog() {
-    return TopicBuilder.name("operation-log")
+    return TopicBuilder.name(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME)
         .partitions(10)
         .replicas(1)
         .build();
@@ -51,7 +52,7 @@ public class KafkaConfiguration {
    */
   @Bean
   public NewTopic systemLog() {
-    return TopicBuilder.name("system-log")
+    return TopicBuilder.name(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME)
         .partitions(10)
         .replicas(1)
         .build();

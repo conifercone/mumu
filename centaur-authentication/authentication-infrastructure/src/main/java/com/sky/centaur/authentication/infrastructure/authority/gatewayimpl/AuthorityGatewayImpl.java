@@ -65,11 +65,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   private final RoleGateway roleGateway;
 
+  private final AuthorityConvertor authorityConvertor;
+
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway) {
+      ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
+      AuthorityConvertor authorityConvertor) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
+    this.authorityConvertor = authorityConvertor;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
   }
 
@@ -77,35 +81,31 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Authority authority) {
-    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
-        .ifPresent(dataObject -> authorityRepository.findById(authority.getId())
-            .ifPresentOrElse(authorityDo -> {
-              throw new CentaurException(ResultCode.DATA_ALREADY_EXISTS, authorityDo.getId());
-            }, () -> authorityRepository.persist(dataObject)));
+    Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
+        .filter(authorityDo -> !authorityRepository.existsByIdOrCode(authorityDo.getId(),
+            authorityDo.getCode()))
+        .ifPresentOrElse(authorityRepository::persist, () -> {
+          throw new CentaurException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
+        });
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(Long id) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-      if (!CollectionUtils.isEmpty(authorities.getContent())) {
-        throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-            authorities.getContent().stream().map(Role::getCode).toList());
-      }
-      Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
+    Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
+    if (!CollectionUtils.isEmpty(authorities.getContent())) {
+      throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+          authorities.getContent().stream().map(Role::getCode).toList());
     }
+    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Authority authority) {
-    Optional.ofNullable(authority).flatMap(AuthorityConvertor::toDataObject)
+    Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
         .ifPresent(dataObject -> {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
@@ -114,7 +114,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
         });
-
   }
 
   @Override
@@ -138,7 +137,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
-        .map(authorityDo -> AuthorityConvertor.toEntity(authorityDo).orElse(null))
+        .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
         .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
@@ -147,6 +146,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   public Optional<Authority> findById(Long id) {
     return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
-        AuthorityConvertor::toEntity);
+        authorityConvertor::toEntity);
   }
 }

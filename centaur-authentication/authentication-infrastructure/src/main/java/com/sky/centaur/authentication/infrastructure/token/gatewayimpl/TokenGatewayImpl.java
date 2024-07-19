@@ -16,10 +16,18 @@
 package com.sky.centaur.authentication.infrastructure.token.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.token.gateway.TokenGateway;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.enums.OAuth2Enum;
+import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,15 +41,38 @@ import org.springframework.stereotype.Component;
 public class TokenGatewayImpl implements TokenGateway {
 
   private final TokenRepository tokenRepository;
+  private final JwtDecoder jwtDecoder;
+  private final ClientTokenRepository clientTokenRepository;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      TokenGatewayImpl.class);
 
   @Autowired
-  public TokenGatewayImpl(TokenRepository tokenRepository) {
+  public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder,
+      ClientTokenRepository clientTokenRepository) {
     this.tokenRepository = tokenRepository;
+    this.jwtDecoder = jwtDecoder;
+    this.clientTokenRepository = clientTokenRepository;
   }
 
   @Override
   public boolean validity(String token) {
-    return Optional.ofNullable(token).map(res -> tokenRepository.existsById(res.hashCode()))
+    return Optional.ofNullable(token).map(tokenValue -> {
+          try {
+            Jwt jwt = jwtDecoder.decode(tokenValue);
+            String claimAsString = jwt.getClaimAsString(
+                TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name());
+            if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
+              return tokenRepository.existsById(
+                  Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+            } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
+              return clientTokenRepository.existsById(jwt.getClaimAsString("sub"));
+            }
+            return false;
+          } catch (Exception e) {
+            LOGGER.error(token, e);
+            return false;
+          }
+        })
         .orElse(false);
   }
 }

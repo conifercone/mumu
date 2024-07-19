@@ -31,6 +31,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
@@ -62,42 +63,63 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException, ServletException {
-    if (authException instanceof UsernameNotFoundException usernameNotFoundException) {
-      LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg());
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-          .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder()
-                  .setContent(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
-                  .setCategory("exception")
-                  .setFail(ExceptionUtils.getStackTrace(usernameNotFoundException)).build())
-          .build());
-      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setOperationLogSubmitCo(
-              OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                  .setBizNo(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
-                  .setFail(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg()).build())
-          .build());
-      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-      ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
-    } else if (authException instanceof InvalidBearerTokenException invalidBearerTokenException) {
-      LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-          .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder()
-                  .setContent(ResultCode.INVALID_TOKEN.getResultCode())
-                  .setCategory("exception")
-                  .setFail(ExceptionUtils.getStackTrace(invalidBearerTokenException)).build())
-          .build());
-      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setOperationLogSubmitCo(
-              OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                  .setBizNo(ResultCode.INVALID_TOKEN.getResultCode())
-                  .setFail(ResultCode.INVALID_TOKEN.getResultMsg()).build())
-          .build());
-      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-      ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
-    } else {
-      super.commence(request, response, authException);
+    switch (authException) {
+      case UsernameNotFoundException usernameNotFoundException -> {
+        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg());
+        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+            .setSystemLogSubmitCo(
+                SystemLogSubmitGrpcCo.newBuilder()
+                    .setContent(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
+                    .setCategory("exception")
+                    .setFail(ExceptionUtils.getStackTrace(usernameNotFoundException)).build())
+            .build());
+        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+            .setOperationLogSubmitCo(
+                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
+                    .setBizNo(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
+                    .setFail(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg()).build())
+            .build());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
+      }
+      case InvalidBearerTokenException invalidBearerTokenException -> {
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
+        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+            .setSystemLogSubmitCo(
+                SystemLogSubmitGrpcCo.newBuilder()
+                    .setContent(ResultCode.INVALID_TOKEN.getResultCode())
+                    .setCategory("exception")
+                    .setFail(ExceptionUtils.getStackTrace(invalidBearerTokenException)).build())
+            .build());
+        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+            .setOperationLogSubmitCo(
+                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
+                    .setBizNo(ResultCode.INVALID_TOKEN.getResultCode())
+                    .setFail(ResultCode.INVALID_TOKEN.getResultMsg()).build())
+            .build());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+      }
+      case InsufficientAuthenticationException insufficientAuthenticationException -> {
+        LOGGER.error(ResultCode.INVALID_SCOPE.getResultMsg());
+        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+            .setSystemLogSubmitCo(
+                SystemLogSubmitGrpcCo.newBuilder()
+                    .setContent(ResultCode.INVALID_SCOPE.getResultCode())
+                    .setCategory("exception")
+                    .setFail(ExceptionUtils.getStackTrace(insufficientAuthenticationException))
+                    .build())
+            .build());
+        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+            .setOperationLogSubmitCo(
+                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
+                    .setBizNo(ResultCode.INVALID_SCOPE.getResultCode())
+                    .setFail(ResultCode.INVALID_SCOPE.getResultMsg()).build())
+            .build());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_SCOPE);
+      }
+      case null, default -> super.commence(request, response, authException);
     }
   }
 }

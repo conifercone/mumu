@@ -41,19 +41,21 @@ import org.springframework.stereotype.Component;
 public class RoleFindAllCmdExe {
 
   private final RoleGateway roleGateway;
+  private final RoleConvertor roleConvertor;
 
   @Autowired
-  public RoleFindAllCmdExe(RoleGateway roleGateway) {
+  public RoleFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
     this.roleGateway = roleGateway;
+    this.roleConvertor = roleConvertor;
   }
 
   public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = RoleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo())
+    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo())
         .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
         roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
     List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
-        .map(roleDomain -> RoleConvertor.toFindAllCo(roleDomain).orElse(null))
+        .map(roleDomain -> roleConvertor.toFindAllCo(roleDomain).orElse(null))
         .filter(Objects::nonNull).toList();
     return new PageImpl<>(roleFindAllCoList, roles.getPageable(),
         roles.getTotalElements());

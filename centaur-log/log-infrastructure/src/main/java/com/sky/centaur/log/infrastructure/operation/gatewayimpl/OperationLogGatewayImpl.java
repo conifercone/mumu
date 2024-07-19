@@ -25,6 +25,7 @@ import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
@@ -62,24 +63,28 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   private final ObjectMapper objectMapper;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final ElasticsearchTemplate elasticsearchTemplate;
+  private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
   public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
       OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
-      PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate) {
+      PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate,
+      OperationLogConvertor operationLogConvertor) {
     this.operationLogKafkaRepository = operationLogKafkaRepository;
     this.operationLogEsRepository = operationLogEsRepository;
     this.objectMapper = objectMapper;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.elasticsearchTemplate = elasticsearchTemplate;
+    this.operationLogConvertor = operationLogConvertor;
   }
 
   @Override
   public void submit(OperationLog operationLog) {
-    OperationLogConvertor.toKafkaDataObject(operationLog).ifPresent(res -> {
+    operationLogConvertor.toKafkaDataObject(operationLog).ifPresent(res -> {
       try {
-        operationLogKafkaRepository.send("operation-log", objectMapper.writeValueAsString(
-            res));
+        operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
+            objectMapper.writeValueAsString(
+                res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }
@@ -88,13 +93,13 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public void save(OperationLog operationLog) {
-    OperationLogConvertor.toEsDataObject(operationLog).ifPresent(operationLogEsRepository::save);
+    operationLogConvertor.toEsDataObject(operationLog).ifPresent(operationLogEsRepository::save);
   }
 
   @Override
   public Optional<OperationLog> findOperationLogById(String id) {
     Optional<OperationLog> optionalOperationLog = operationLogEsRepository.findById(
-        id).flatMap(OperationLogConvertor::toEntity);
+        id).flatMap(operationLogConvertor::toEntity);
     OperationLog operationLog = new OperationLog();
     operationLog.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
     operationLog.setBizNo(id);
@@ -187,7 +192,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
         OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(res -> OperationLogConvertor.toEntity(res).orElse(null))
+        .map(SearchHit::getContent).map(res -> operationLogConvertor.toEntity(res).orElse(null))
         .filter(
             Objects::nonNull)
         .peek(operationLogDomain ->

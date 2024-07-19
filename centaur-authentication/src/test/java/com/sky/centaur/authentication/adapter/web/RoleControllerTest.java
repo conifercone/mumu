@@ -57,7 +57,7 @@ public class RoleControllerTest {
         {
              "roleAddCo": {
                  "id": 451235432,
-                 "code": "test",
+                 "code": "test_code",
                  "name": "测试角色",
                  "authorities": [
                      1,2
@@ -79,7 +79,7 @@ public class RoleControllerTest {
   public void deleteById() throws Exception {
     @Language("JSON") String role = """
         {
-            "id": 1
+            "id": 0
          }""";
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/role/deleteById").with(csrf())
@@ -97,8 +97,8 @@ public class RoleControllerTest {
     @Language("JSON") String role = """
         {
              "roleUpdateCo": {
-                 "id": 1,
-                 "code": "test"
+                 "id": 0,
+                 "code": "test_updated"
              }
          }""";
     mockMvc.perform(MockMvcRequestBuilders

@@ -34,7 +34,7 @@ public class TokenRedisDo {
 
   @Id
   @Indexed
-  private Integer id;
+  private Long id;
 
   /**
    * token值

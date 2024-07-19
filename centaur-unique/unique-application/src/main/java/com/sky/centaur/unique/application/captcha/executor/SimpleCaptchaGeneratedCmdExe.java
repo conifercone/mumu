@@ -36,17 +36,20 @@ import org.springframework.util.Assert;
 public class SimpleCaptchaGeneratedCmdExe {
 
   private final CaptchaGateway captchaGateway;
+  private final CaptchaConvertor captchaConvertor;
 
   @Autowired
-  public SimpleCaptchaGeneratedCmdExe(CaptchaGateway captchaGateway) {
+  public SimpleCaptchaGeneratedCmdExe(CaptchaGateway captchaGateway,
+      CaptchaConvertor captchaConvertor) {
     this.captchaGateway = captchaGateway;
+    this.captchaConvertor = captchaConvertor;
   }
 
   public SimpleCaptchaGeneratedCo execute(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     Assert.notNull(simpleCaptchaGeneratedCmd, "SimpleCaptchaGeneratedCmd cannot be null");
-    return CaptchaConvertor.toEntity(simpleCaptchaGeneratedCmd.getSimpleCaptchaGeneratedCo())
+    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd.getSimpleCaptchaGeneratedCo())
         .map(captchaGateway::generateSimpleCaptcha)
-        .flatMap(CaptchaConvertor::toSimpleCaptchaGeneratedCo)
+        .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
         .orElseThrow(() -> new CentaurException(
             ResultCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
   }

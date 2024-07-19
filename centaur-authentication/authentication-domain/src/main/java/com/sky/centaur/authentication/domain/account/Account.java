@@ -52,6 +52,7 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Getter
   private Long id;
 
+  @Setter
   private String username;
 
   private String password;

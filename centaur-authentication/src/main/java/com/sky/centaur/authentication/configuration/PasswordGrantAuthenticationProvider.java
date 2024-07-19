@@ -134,7 +134,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     // Initialize the OAuth2Authorization
     OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization.withRegisteredClient(
             registeredClient)
-        .principalName(clientPrincipal.getName())
+        .principalName(username)
         .authorizedScopes(requestScopeSet)
         .attribute(Principal.class.getName(), usernamePasswordAuthenticationToken)
         .authorizationGrantType(authorizationGrantType);

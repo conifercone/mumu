@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.domain.authority;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -50,7 +51,11 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
   private static final long serialVersionUID = -5474154746791467326L;
 
   private Long id;
+
+  @Size(max = 50, message = "{authority.code.validation.size}")
   private String code;
+
+  @Size(max = 200, message = "{authority.name.validation.size}")
   private String name;
 
   @Override

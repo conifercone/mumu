@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
+import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -39,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -66,45 +66,47 @@ import org.springframework.util.StringUtils;
 public class AccountGatewayImpl implements AccountGateway {
 
   private final AccountRepository accountRepository;
-
   private final TokenRepository tokenRepository;
-
+  private final RefreshTokenRepository refreshTokenRepository;
   private final PasswordEncoder passwordEncoder;
-
   private final OperationLogGrpcService operationLogGrpcService;
-
   private final DistributedLock distributedLock;
-
   private final ExtensionProperties extensionProperties;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
+      RefreshTokenRepository refreshTokenRepository,
       PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties, AccountConvertor accountConvertor) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
+    this.refreshTokenRepository = refreshTokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.extensionProperties = extensionProperties;
+    this.accountConvertor = accountConvertor;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
-    Consumer<Account> accountAlreadyExistsConsumer = (existingAccount) -> {
+    Runnable accountAlreadyExistsRunnable = () -> {
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                  .setBizNo(existingAccount.getUsername())
+                  .setBizNo(account.getUsername())
                   .setFail(ResultCode.ACCOUNT_ALREADY_EXISTS.getResultMsg()).build())
           .build());
-      throw new AccountAlreadyExistsException(existingAccount.getUsername());
+      throw new AccountAlreadyExistsException(account.getUsername());
     };
-    AccountConvertor.toDataObject(account).ifPresent(dataObject -> {
+    accountConvertor.toDataObject(account).filter(
+        accountDo -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
+            account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
       if (StringUtils.hasText(dataObject.getTimezone())) {
         try {
           //noinspection ResultOfMethodCallIgnored
@@ -113,20 +115,15 @@ public class AccountGatewayImpl implements AccountGateway {
           throw new CentaurException(ResultCode.TIME_ZONE_IS_NOT_AVAILABLE);
         }
       }
-      // 密码加密
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
-      findAccountByUsername(dataObject.getUsername()).ifPresentOrElse(accountAlreadyExistsConsumer,
-          () -> findAccountByEmail(dataObject.getEmail()).ifPresentOrElse(
-              accountAlreadyExistsConsumer, () -> {
-                accountRepository.persist(dataObject);
-                operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-                    .setOperationLogSubmitCo(
-                        OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-                            .setBizNo(account.getUsername())
-                            .setSuccess(String.format("%s注册成功", account.getUsername())).build())
-                    .build());
-              }));
-    });
+      accountRepository.persist(dataObject);
+      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+          .setOperationLogSubmitCo(
+              OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
+                  .setBizNo(account.getUsername())
+                  .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+          .build());
+    }, accountAlreadyExistsRunnable);
 
   }
 
@@ -135,7 +132,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
     return accountRepository.findAccountDoByUsername(username)
-        .flatMap(AccountConvertor::toEntity);
+        .flatMap(accountConvertor::toEntity);
   }
 
   @Override
@@ -143,7 +140,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
     return accountRepository.findAccountDoByEmail(email)
-        .flatMap(AccountConvertor::toEntity);
+        .flatMap(accountConvertor::toEntity);
   }
 
   @Override
@@ -152,14 +149,8 @@ public class AccountGatewayImpl implements AccountGateway {
   public void updateById(@NotNull Account account) {
     SecurityContextUtil.getLoginAccountId()
         .filter(res -> Objects.equals(res, account.getId()))
-        .ifPresentOrElse((accountId) -> {
-          Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-          try {
-            AccountConvertor.toDataObject(account).ifPresent(accountRepository::merge);
-          } finally {
-            Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-          }
-        }, () -> {
+        .ifPresentOrElse((accountId) -> accountConvertor.toDataObject(account)
+            .ifPresent(accountRepository::merge), () -> {
           throw new CentaurException(ResultCode.UNAUTHORIZED);
         });
   }
@@ -168,7 +159,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    AccountConvertor.toDataObject(account).ifPresent(accountDo -> {
+    accountConvertor.toDataObject(account).ifPresent(accountDo -> {
       Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
         accountRepository.merge(accountDo);
@@ -176,24 +167,20 @@ public class AccountGatewayImpl implements AccountGateway {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
     });
-
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long id) {
-    Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-    try {
-      accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
-        accountDo.setEnabled(false);
-        accountRepository.merge(accountDo);
-      }, () -> {
-        throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
-      });
-    } finally {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-    }
+    accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
+      accountDo.setEnabled(false);
+      accountRepository.merge(accountDo);
+      tokenRepository.deleteById(id);
+      refreshTokenRepository.deleteById(id);
+    }, () -> {
+      throw new CentaurException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+    });
   }
 
   @Override
@@ -202,7 +189,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public Optional<Account> queryCurrentLoginAccount() {
     return SecurityContextUtil.getLoginAccountId().map(
             loginAccountId -> accountRepository.findById(loginAccountId)
-                .flatMap(AccountConvertor::toEntity))
+                .flatMap(accountConvertor::toEntity))
         .orElseThrow(() -> new CentaurException(ResultCode.UNAUTHORIZED));
   }
 
@@ -232,12 +219,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrentAccount() {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-      try {
-        accountRepository.deleteById(accountId);
-      } finally {
-        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-      }
+      accountRepository.deleteById(accountId);
+      tokenRepository.deleteById(accountId);
+      refreshTokenRepository.deleteById(accountId);
     }, () -> {
       throw new CentaurException(ResultCode.UNAUTHORIZED);
     });
@@ -296,7 +280,7 @@ public class AccountGatewayImpl implements AccountGateway {
     Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
         pageRequest);
     List<Account> accounts = repositoryAll.getContent().stream()
-        .map(accountDo -> AccountConvertor.toEntity(accountDo).orElse(null))
+        .map(accountDo -> accountConvertor.toEntity(accountDo).orElse(null))
         .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());

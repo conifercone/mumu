@@ -33,15 +33,18 @@ import org.springframework.util.Assert;
 public class SimpleCaptchaVerifyCmdExe {
 
   private final CaptchaGateway captchaGateway;
+  private final CaptchaConvertor captchaConvertor;
 
   @Autowired
-  public SimpleCaptchaVerifyCmdExe(CaptchaGateway captchaGateway) {
+  public SimpleCaptchaVerifyCmdExe(CaptchaGateway captchaGateway,
+      CaptchaConvertor captchaConvertor) {
     this.captchaGateway = captchaGateway;
+    this.captchaConvertor = captchaConvertor;
   }
 
   public boolean execute(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
     Assert.notNull(simpleCaptchaVerifyCmd, "SimpleCaptchaVerifyCmd cannot be null");
-    return CaptchaConvertor.toEntity(simpleCaptchaVerifyCmd.getSimpleCaptchaVerifyCo())
+    return captchaConvertor.toEntity(simpleCaptchaVerifyCmd.getSimpleCaptchaVerifyCo())
         .map(captchaGateway::verifySimpleCaptcha)
         .orElse(false);
   }

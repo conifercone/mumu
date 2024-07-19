@@ -1,6 +1,0 @@
-//file:noinspection DependencyNotationArgument
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GrUnresolvedAccess
-dependencies {
-    implementation libs.springDataCommons
-}

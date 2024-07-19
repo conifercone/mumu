@@ -47,5 +47,10 @@ public enum TokenClaimsEnum {
   /**
    * 语言偏好
    */
-  LANGUAGE
+  LANGUAGE,
+
+  /**
+   * 授权类型
+   */
+  AUTHORIZATION_GRANT_TYPE
 }

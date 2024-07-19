@@ -35,15 +35,17 @@ import org.springframework.util.Assert;
 public class AccountUpdateByIdCmdExe {
 
   private final AccountGateway accountGateway;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
-  public AccountUpdateByIdCmdExe(AccountGateway accountGateway) {
+  public AccountUpdateByIdCmdExe(AccountGateway accountGateway, AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
+    this.accountConvertor = accountConvertor;
   }
 
   public void execute(@NotNull AccountUpdateByIdCmd accountUpdateByIdCmd) {
     Assert.notNull(accountUpdateByIdCmd, "AccountUpdateByIdCmd cannot be null");
-    AccountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo())
+    accountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo())
         .ifPresent(accountGateway::updateById);
   }
 }

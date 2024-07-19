@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
  * 模板邮件转换器
@@ -29,21 +30,19 @@ import org.jetbrains.annotations.Contract;
  * @author kaiyu.shan
  * @since 1.0.1
  */
-public final class TemplateMailConvertor {
-
-  private TemplateMailConvertor() {
-  }
+@Component
+public class TemplateMailConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<TemplateMailThymeleafDo> toThymeleafDo(TemplateMail templateMail) {
+  public Optional<TemplateMailThymeleafDo> toThymeleafDo(TemplateMail templateMail) {
     return Optional.ofNullable(templateMail)
         .map(TemplateMailMapper.INSTANCE::toThymeleafDo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public static Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
+  public Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
     return Optional.ofNullable(templateMailSendCo)
         .map(TemplateMailMapper.INSTANCE::toEntity);
   }

@@ -33,16 +33,19 @@ import org.springframework.util.Assert;
 public class StreamFileSyncUploadCmdExe {
 
   private final StreamFileGateway streamFileGateway;
+  private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileSyncUploadCmdExe(StreamFileGateway streamFileGateway) {
+  public StreamFileSyncUploadCmdExe(StreamFileGateway streamFileGateway,
+      StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
+    this.streamFileConvertor = streamFileConvertor;
   }
 
   @Async
   public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
     Assert.notNull(streamFileSyncUploadCmd, "StreamFileSyncUploadCmd cannot be null");
-    StreamFileConvertor.toEntity(streamFileSyncUploadCmd.getStreamFileSyncUploadCo())
+    streamFileConvertor.toEntity(streamFileSyncUploadCmd.getStreamFileSyncUploadCo())
         .ifPresent(streamFileGateway::uploadFile);
   }
 }

@@ -32,7 +32,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -65,7 +64,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  public void download() throws ExecutionException, InterruptedException, TimeoutException {
+  public void download() {
     StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
         .setStreamFileDownloadGrpcCo(
             StreamFileDownloadGrpcCo.newBuilder().setName(StringValue.of("test2.log"))
@@ -121,7 +120,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  public void removeFile() throws ExecutionException, InterruptedException, TimeoutException {
+  public void removeFile() {
     StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
         .setStreamFileRemoveGrpcCo(
             StreamFileRemoveGrpcCo.newBuilder().setName(StringValue.of("test2.log"))

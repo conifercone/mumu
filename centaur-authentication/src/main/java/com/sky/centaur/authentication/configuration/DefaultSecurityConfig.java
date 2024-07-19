@@ -22,6 +22,8 @@ import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.JwtAuthenticationTokenFilter;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
+import com.sky.centaur.log.client.api.OperationLogGrpcService;
+import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +35,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -55,7 +56,9 @@ public class DefaultSecurityConfig {
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
       JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
-      ResourceServerProperties resourceServerProperties)
+      ResourceServerProperties resourceServerProperties,
+      OperationLogGrpcService operationLogGrpcService,
+      SystemLogGrpcService systemLogGrpcService)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -88,11 +91,12 @@ public class DefaultSecurityConfig {
         UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exceptions) -> exceptions
         .defaultAuthenticationEntryPointFor(
-            new LoginUrlAuthenticationEntryPoint("http://localhost:31100/login"),
+            new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                operationLogGrpcService,
+                systemLogGrpcService),
             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
         )
     );
     return http.build();
   }
-
 }

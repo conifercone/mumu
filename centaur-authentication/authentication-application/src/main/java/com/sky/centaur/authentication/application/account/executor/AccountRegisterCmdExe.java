@@ -36,17 +36,19 @@ import org.springframework.stereotype.Component;
 public class AccountRegisterCmdExe extends CaptchaVerify {
 
   private final AccountGateway accountGateway;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountRegisterCmdExe(AccountGateway accountGateway,
-      CaptchaGrpcService captchaGrpcService) {
+      CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
     super(captchaGrpcService);
     this.accountGateway = accountGateway;
+    this.accountConvertor = accountConvertor;
   }
 
   public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
     verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
-    AccountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
+    accountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
         .ifPresent(accountGateway::register);
   }
 }

@@ -40,12 +40,14 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
 
   private final PrimaryKeyGateway primaryKeyGateway;
   private final SimpleCaptchaRepository simpleCaptchaRepository;
+  private final CaptchaConvertor captchaConvertor;
 
   @Autowired
   public CaptchaGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
-      SimpleCaptchaRepository simpleCaptchaRepository) {
+      SimpleCaptchaRepository simpleCaptchaRepository, CaptchaConvertor captchaConvertor) {
     this.primaryKeyGateway = primaryKeyGateway;
     this.simpleCaptchaRepository = simpleCaptchaRepository;
+    this.captchaConvertor = captchaConvertor;
   }
 
   @Override
@@ -66,7 +68,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
           }
           Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new CentaurException(
               ResultCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
-          return CaptchaConvertor.toDataObject(simpleCaptchaDomain);
+          return captchaConvertor.toDataObject(simpleCaptchaDomain);
         }).orElseThrow(() -> new CentaurException(ResultCode.DATA_CONVERSION_FAILED));
     simpleCaptchaRepository.save(simpleCaptchaDo);
     return simpleCaptcha;

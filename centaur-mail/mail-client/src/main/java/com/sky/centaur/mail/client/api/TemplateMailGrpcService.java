@@ -22,13 +22,11 @@ import com.google.protobuf.Empty;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.mail.client.api.grpc.TemplateMailSendGrpcCmd;
 import com.sky.centaur.mail.client.api.grpc.TemplateMailServiceGrpc;
+import com.sky.centaur.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServiceBlockingStub;
 import com.sky.centaur.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServiceFutureStub;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -61,8 +59,7 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty sendMail(TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     if (channel != null) {
       return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
     } else {
@@ -93,12 +90,11 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   private Empty sendMailFromGrpc(
       TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    TemplateMailServiceFutureStub templateMailServiceFutureStub = TemplateMailServiceGrpc.newFutureStub(
+      AuthCallCredentials callCredentials) {
+    TemplateMailServiceBlockingStub templateMailServiceBlockingStub = TemplateMailServiceGrpc.newBlockingStub(
         channel);
-    return templateMailServiceFutureStub.withCallCredentials(callCredentials)
-        .sendMail(templateMailSendGrpcCmd).get(3, TimeUnit.SECONDS);
+    return templateMailServiceBlockingStub.withCallCredentials(callCredentials)
+        .sendMail(templateMailSendGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncSendMailFromGrpc(

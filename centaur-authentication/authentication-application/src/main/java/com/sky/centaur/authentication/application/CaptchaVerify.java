@@ -23,8 +23,6 @@ import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +55,7 @@ public class CaptchaVerify {
           .getResult()) {
         throw new CentaurException(ResultCode.CAPTCHA_INCORRECT);
       }
-    } catch (ExecutionException | InterruptedException | TimeoutException e) {
+    } catch (Exception e) {
       LOGGER.error(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION.getResultMsg(), e);
       throw new CentaurException(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION);
     }

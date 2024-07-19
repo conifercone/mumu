@@ -1,0 +1,23 @@
+apply(from = "../scripts/springboot.gradle")
+
+dependencies {
+    implementation(project(":centaur-authentication:authentication-client"))
+    implementation(project(":centaur-mail:mail-infrastructure"))
+    implementation(project(":centaur-mail:mail-adapter"))
+    implementation(project(":centaur-mail:mail-client"))
+    implementation(project(":centaur-mail:mail-application"))
+    implementation(project(":centaur-extension"))
+    implementation(libs.consulDiscovery)
+    implementation(libs.consulConfig)
+    implementation(libs.bundles.micrometer)
+    implementation(libs.grpcSpringBootStarter)
+    testImplementation(libs.springbootTest)
+    testImplementation(libs.jasypt)
+    testImplementation(libs.springSecurityTest)
+    testImplementation(libs.grpcClientSpringBootStarter)
+    testImplementation(libs.springWeb)
+    implementation(libs.springBootMail)
+    implementation(libs.springBootThymeleaf)
+    implementation(libs.jasypt)
+    implementation(libs.swagger3Ui)
+}

@@ -34,13 +34,16 @@ import org.springframework.util.StringUtils;
 public class TemplateMailSendCmdExe {
 
   private final TemplateMailGateway templateMailGateway;
+  private final TemplateMailConvertor templateMailConvertor;
 
   @Value("${spring.mail.username}")
   private String username;
 
   @Autowired
-  public TemplateMailSendCmdExe(TemplateMailGateway templateMailGateway) {
+  public TemplateMailSendCmdExe(TemplateMailGateway templateMailGateway,
+      TemplateMailConvertor templateMailConvertor) {
     this.templateMailGateway = templateMailGateway;
+    this.templateMailConvertor = templateMailConvertor;
   }
 
   public void execute(TemplateMailSendCmd templateMailSendCmd) {
@@ -48,7 +51,7 @@ public class TemplateMailSendCmdExe {
     if (!StringUtils.hasText(templateMailSendCmd.getTemplateMailSendCo().getFrom())) {
       templateMailSendCmd.getTemplateMailSendCo().setFrom(username);
     }
-    TemplateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())
+    templateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())
         .ifPresent(templateMailGateway::sendMail);
   }
 }

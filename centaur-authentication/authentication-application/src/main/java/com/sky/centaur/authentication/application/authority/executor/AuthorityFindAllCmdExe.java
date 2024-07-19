@@ -41,20 +41,23 @@ import org.springframework.util.Assert;
 public class AuthorityFindAllCmdExe {
 
   private final AuthorityGateway authorityGateway;
+  private final AuthorityConvertor authorityConvertor;
 
   @Autowired
-  public AuthorityFindAllCmdExe(AuthorityGateway authorityGateway) {
+  public AuthorityFindAllCmdExe(AuthorityGateway authorityGateway,
+      AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
+    this.authorityConvertor = authorityConvertor;
   }
 
   public Page<AuthorityFindAllCo> execute(AuthorityFindAllCmd authorityFindAllCmd) {
     Assert.notNull(authorityFindAllCmd, "AuthorityFindAllCmd cannot be null");
-    Authority authority = AuthorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo())
+    Authority authority = authorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo())
         .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findAll(authority,
         authorityFindAllCmd.getPageNo(), authorityFindAllCmd.getPageSize());
     List<AuthorityFindAllCo> authorityFindAllCoList = authorities.getContent().stream()
-        .map(authorityDomain -> AuthorityConvertor.toFindAllCo(authorityDomain).orElse(null))
+        .map(authorityDomain -> authorityConvertor.toFindAllCo(authorityDomain).orElse(null))
         .filter(
             Objects::nonNull).toList();
     return new PageImpl<>(authorityFindAllCoList, authorities.getPageable(),

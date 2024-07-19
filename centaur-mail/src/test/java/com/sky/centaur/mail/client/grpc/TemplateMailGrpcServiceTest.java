@@ -29,7 +29,6 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,7 +58,7 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  public void sendMail() throws ExecutionException, InterruptedException, TimeoutException {
+  public void sendMail() {
     @Language("JSON") String data = """
         {
                     "verifyCode": [

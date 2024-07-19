@@ -20,6 +20,7 @@ import static com.sky.centaur.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.unique.client.api.grpc.CaptchaServiceGrpc;
+import com.sky.centaur.unique.client.api.grpc.CaptchaServiceGrpc.CaptchaServiceBlockingStub;
 import com.sky.centaur.unique.client.api.grpc.CaptchaServiceGrpc.CaptchaServiceFutureStub;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
@@ -29,9 +30,6 @@ import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.DisposableBean;
@@ -61,8 +59,7 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
   }
 
   public SimpleCaptchaGeneratedGrpcCo generateSimpleCaptcha(
-      SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
     if (channel != null) {
       return generateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
     } else {
@@ -84,13 +81,12 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncGenerateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
-      }).orElse(null);
+      }).orElseThrow(() -> new CentaurException(GRPC_SERVICE_NOT_FOUND));
     }
   }
 
   public SimpleCaptchaVerifyGrpcResult verifySimpleCaptcha(
-      SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd) {
     if (channel != null) {
       return verifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
     } else {
@@ -112,18 +108,15 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
       return getManagedChannelUsePlaintext().map(managedChannel -> {
         channel = managedChannel;
         return syncVerifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
-      }).orElse(null);
+      }).orElseThrow(() -> new CentaurException(GRPC_SERVICE_NOT_FOUND));
     }
   }
 
   private @Nullable SimpleCaptchaGeneratedGrpcCo generateSimpleCaptchaFromGrpc(
-      SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    CaptchaServiceFutureStub captchaServiceFutureStub = CaptchaServiceGrpc.newFutureStub(
+      SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
+    CaptchaServiceBlockingStub captchaServiceBlockingStub = CaptchaServiceGrpc.newBlockingStub(
         channel);
-    ListenableFuture<SimpleCaptchaGeneratedGrpcCo> simpleCaptchaGeneratedGrpcCoListenableFuture = captchaServiceFutureStub.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
-    return simpleCaptchaGeneratedGrpcCoListenableFuture.get(3, TimeUnit.SECONDS);
+    return captchaServiceBlockingStub.generateSimpleCaptcha(simpleCaptchaGeneratedGrpcCmd);
   }
 
   private @NotNull ListenableFuture<SimpleCaptchaGeneratedGrpcCo> syncGenerateSimpleCaptchaFromGrpc(
@@ -135,13 +128,10 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
   }
 
   private @Nullable SimpleCaptchaVerifyGrpcResult verifySimpleCaptchaFromGrpc(
-      SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    CaptchaServiceFutureStub captchaServiceFutureStub = CaptchaServiceGrpc.newFutureStub(
+      SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd) {
+    CaptchaServiceBlockingStub captchaServiceBlockingStub = CaptchaServiceGrpc.newBlockingStub(
         channel);
-    ListenableFuture<SimpleCaptchaVerifyGrpcResult> simpleCaptchaVerifyGrpcResultListenableFuture = captchaServiceFutureStub.verifySimpleCaptcha(
-        simpleCaptchaVerifyGrpcCmd);
-    return simpleCaptchaVerifyGrpcResultListenableFuture.get(3, TimeUnit.SECONDS);
+    return captchaServiceBlockingStub.verifySimpleCaptcha(simpleCaptchaVerifyGrpcCmd);
   }
 
   private @NotNull ListenableFuture<SimpleCaptchaVerifyGrpcResult> syncVerifySimpleCaptchaFromGrpc(

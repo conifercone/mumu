@@ -17,6 +17,8 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databa
 
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -44,5 +46,32 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 账户数据对象
    */
   Optional<AccountDo> findAccountDoByEmail(String email);
+
+  /**
+   * 根据id或者username或者email判断用户是否存在
+   *
+   * @param id       用户id
+   * @param username 用户名
+   * @param email    用户邮箱地址
+   * @return 是否存在
+   */
+  boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
+      @Size(max = 200) String email);
+
+  /**
+   * 邮箱地址是否存在
+   *
+   * @param email 账户邮箱地址
+   * @return true:邮箱地址已存在 false:邮箱地址不存在
+   */
+  boolean existsByEmail(String email);
+
+  /**
+   * 账户名是否存在
+   *
+   * @param username 账户名
+   * @return true:账户名已存在 false:账户名不存在
+   */
+  boolean existsByUsername(String username);
 
 }

@@ -33,6 +33,8 @@ public class AccountUpdateByIdCo extends BaseClientObject {
 
   private Long id;
 
+  private String username;
+
   private String avatarUrl;
 
   private String phone;

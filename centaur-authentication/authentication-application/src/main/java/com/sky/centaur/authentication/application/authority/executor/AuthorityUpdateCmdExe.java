@@ -36,15 +36,18 @@ import org.springframework.util.Assert;
 public class AuthorityUpdateCmdExe {
 
   private final AuthorityGateway authorityGateway;
+  private final AuthorityConvertor authorityConvertor;
 
   @Autowired
-  public AuthorityUpdateCmdExe(AuthorityGateway authorityGateway) {
+  public AuthorityUpdateCmdExe(AuthorityGateway authorityGateway,
+      AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
+    this.authorityConvertor = authorityConvertor;
   }
 
   public void execute(@NotNull AuthorityUpdateCmd authorityUpdateCmd) {
     Assert.notNull(authorityUpdateCmd, "AuthorityUpdateCmd cannot be null");
-    AuthorityConvertor.toEntity(authorityUpdateCmd.getAuthorityUpdateCo())
+    authorityConvertor.toEntity(authorityUpdateCmd.getAuthorityUpdateCo())
         .ifPresent(authorityGateway::updateById);
   }
 }

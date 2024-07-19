@@ -15,7 +15,9 @@
  */
 package com.sky.centaur.basis.response;
 
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
+import java.util.Locale;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
@@ -86,7 +88,15 @@ public enum ResultCode implements BaseResultInterface {
   TIME_ZONE_IS_NOT_AVAILABLE(6021),
   FILE_DELETION_FAILED(6022),
   CAPTCHA_ID_CANNOT_BE_EMPTY(6023),
-  CAPTCHA_CANNOT_BE_EMPTY(6024);
+  CAPTCHA_CANNOT_BE_EMPTY(6024),
+  AUTHORITY_CODE_OR_ID_ALREADY_EXISTS(6025),
+  ROLE_CODE_OR_ID_ALREADY_EXISTS(6026),
+  AUTHORITY_CODE_ALREADY_EXISTS(6027),
+  ACCOUNT_EMAIL_ALREADY_EXISTS(6028),
+  ROLE_CODE_ALREADY_EXISTS(6029),
+  ACCOUNT_NAME_ALREADY_EXISTS(6030),
+  WEBSOCKET_SERVER_CONNECTION_FAILED(6031),
+  WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL(6032);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 
@@ -102,6 +112,9 @@ public enum ResultCode implements BaseResultInterface {
 
   @Override
   public @NotNull String getResultMsg() {
-    return messageSource.getMessage(getResultCode(), null, LocaleContextHolder.getLocale());
+    return messageSource.getMessage(getResultCode(), null,
+        SecurityContextUtil.getLoginAccountLanguage()
+            .map(languageEnum -> Locale.of(languageEnum.name()))
+            .orElse(LocaleContextHolder.getLocale()));
   }
 }

@@ -43,17 +43,20 @@ import org.springframework.util.StringUtils;
 public class StreamFileGatewayImpl implements StreamFileGateway {
 
   private final MinioStreamFileRepository minioStreamFileRepository;
+  private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileGatewayImpl(MinioStreamFileRepository minioStreamFileRepository) {
+  public StreamFileGatewayImpl(MinioStreamFileRepository minioStreamFileRepository,
+      StreamFileConvertor streamFileConvertor) {
     this.minioStreamFileRepository = minioStreamFileRepository;
+    this.streamFileConvertor = streamFileConvertor;
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-        .flatMap(StreamFileConvertor::toMinioDo)
+        .flatMap(streamFileConvertor::toMinioDo)
         .filter(minioDo -> minioDo.getContent() != null && StringUtils.hasText(
             minioDo.getName()))
         .orElseThrow(() -> new CentaurException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY));
@@ -68,7 +71,7 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<InputStream> download(StreamFile streamFile) {
-    return Optional.ofNullable(streamFile).flatMap(StreamFileConvertor::toMinioDo).filter(
+    return Optional.ofNullable(streamFile).flatMap(streamFileConvertor::toMinioDo).filter(
         file -> {
           if (ObjectUtils.isEmpty(file.getStorageAddress())) {
             throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
@@ -89,7 +92,7 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-        .flatMap(StreamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
+        .flatMap(streamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
         .orElseThrow(() -> new CentaurException(ResultCode.FILE_DOES_NOT_EXIST));
     minioStreamFileRepository.removeFile(streamFileMinioDo);
   }

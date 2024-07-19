@@ -24,6 +24,7 @@ import com.sky.centaur.authentication.client.api.grpc.RoleAddGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc;
+import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceBlockingStub;
 import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -31,9 +32,6 @@ import com.sky.centaur.basis.response.ResultCode;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -64,8 +62,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Empty add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public Empty add(RoleAddGrpcCmd roleAddGrpcCmd, AuthCallCredentials callCredentials) {
     if (channel != null) {
       return addFromGrpc(roleAddGrpcCmd, callCredentials);
     } else {
@@ -94,8 +91,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Empty deleteById(RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return deleteByIdFromGrpc(roleDeleteByIdGrpcCmd, callCredentials);
@@ -126,8 +122,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Empty updateById(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return updateByIdFromGrpc(roleUpdateGrpcCmd, callCredentials);
@@ -158,8 +153,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "1.0.0")
   public PageOfRoleFindAllGrpcCo findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
+      AuthCallCredentials callCredentials) {
     //noinspection DuplicatedCode
     if (channel != null) {
       return findAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
@@ -189,11 +183,9 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private Empty addFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd)
-        .get(3, TimeUnit.SECONDS);
+      AuthCallCredentials callCredentials) {
+    RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
+    return roleServiceBlockingStub.withCallCredentials(callCredentials).add(roleAddGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncAddFromGrpc(RoleAddGrpcCmd roleAddGrpcCmd,
@@ -203,12 +195,10 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private Empty deleteByIdFromGrpc(RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
-        channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials)
-        .deleteById(roleDeleteByIdGrpcCmd).get(3, TimeUnit.SECONDS);
+      AuthCallCredentials callCredentials) {
+    RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
+    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+        .deleteById(roleDeleteByIdGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncDeleteByIdFromGrpc(
@@ -221,12 +211,10 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private Empty updateByIdFromGrpc(RoleUpdateGrpcCmd roleUpdateGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
-        channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials)
-        .updateById(roleUpdateGrpcCmd).get(3, TimeUnit.SECONDS);
+      AuthCallCredentials callCredentials) {
+    RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
+    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+        .updateById(roleUpdateGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncUpdateByIdFromGrpc(
@@ -240,12 +228,10 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   private PageOfRoleFindAllGrpcCo findAllFromGrpc(
       RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-      AuthCallCredentials callCredentials)
-      throws ExecutionException, InterruptedException, TimeoutException {
-    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
-        channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials)
-        .findAll(roleFindAllGrpcCmd).get(3, TimeUnit.SECONDS);
+      AuthCallCredentials callCredentials) {
+    RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
+    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+        .findAll(roleFindAllGrpcCmd);
   }
 
   private @NotNull ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAllFromGrpc(

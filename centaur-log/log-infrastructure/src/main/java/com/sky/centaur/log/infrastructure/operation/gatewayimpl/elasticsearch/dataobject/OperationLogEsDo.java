@@ -16,6 +16,7 @@
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject;
 
 import com.sky.centaur.basis.constants.CommonConstants;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -32,7 +33,7 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
  * @author kaiyu.shan
  * @since 1.0.0
  */
-@Document(indexName = "operation-log")
+@Document(indexName = LogProperties.OPERATION_LOG_ES_INDEX_NAME)
 @Data
 public class OperationLogEsDo {
 

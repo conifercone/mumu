@@ -25,6 +25,7 @@ import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
+import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
@@ -55,28 +56,28 @@ import org.springframework.stereotype.Component;
 public class SystemLogGatewayImpl implements SystemLogGateway {
 
   private final SystemLogKafkaRepository systemLogKafkaRepository;
-
   private final SystemLogEsRepository systemLogEsRepository;
-
   private final ObjectMapper objectMapper;
-
   private final ElasticsearchTemplate elasticsearchTemplate;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
   public SystemLogGatewayImpl(SystemLogKafkaRepository systemLogKafkaRepository,
       SystemLogEsRepository systemLogEsRepository, ObjectMapper objectMapper,
-      ElasticsearchTemplate elasticsearchTemplate) {
+      ElasticsearchTemplate elasticsearchTemplate, SystemLogConvertor systemLogConvertor) {
     this.systemLogKafkaRepository = systemLogKafkaRepository;
     this.systemLogEsRepository = systemLogEsRepository;
     this.objectMapper = objectMapper;
     this.elasticsearchTemplate = elasticsearchTemplate;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   @Override
   public void submit(SystemLog systemLog) {
-    SystemLogConvertor.toKafkaDataObject(systemLog).ifPresent(res -> {
+    systemLogConvertor.toKafkaDataObject(systemLog).ifPresent(res -> {
       try {
-        systemLogKafkaRepository.send("system-log", objectMapper.writeValueAsString(res));
+        systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
+            objectMapper.writeValueAsString(res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }
@@ -85,7 +86,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   public void save(SystemLog systemLog) {
-    SystemLogConvertor.toEsDataObject(systemLog).ifPresent(systemLogEsRepository::save);
+    systemLogConvertor.toEsDataObject(systemLog).ifPresent(systemLogEsRepository::save);
   }
 
   @Override
@@ -148,7 +149,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     SearchHits<SystemLogEsDo> searchHits = elasticsearchTemplate.search(query,
         SystemLogEsDo.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(res -> SystemLogConvertor.toEntity(res).orElse(null))
+        .map(SearchHit::getContent).map(res -> systemLogConvertor.toEntity(res).orElse(null))
         .filter(
             Objects::nonNull)
         .peek(systemLogDomain -> systemLogDomain.setRecordTime(

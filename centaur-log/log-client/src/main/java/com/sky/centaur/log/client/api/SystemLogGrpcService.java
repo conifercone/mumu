@@ -51,14 +51,14 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
     if (channel == null) {
       getManagedChannelUsePlaintext().ifPresent(managedChannel -> {
         channel = managedChannel;
-        submitFromGrpc(systemLogSubmitGrpcCmd);
+        syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
       });
     } else {
-      submitFromGrpc(systemLogSubmitGrpcCmd);
+      syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
     }
   }
 
-  private void submitFromGrpc(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
+  private void syncSubmitFromGrpc(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     SystemLogServiceFutureStub systemLogServiceFutureStub = SystemLogServiceGrpc.newFutureStub(
         channel);
     //noinspection ResultOfMethodCallIgnored
