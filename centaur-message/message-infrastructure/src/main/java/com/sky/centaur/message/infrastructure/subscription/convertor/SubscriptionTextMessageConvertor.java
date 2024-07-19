@@ -18,6 +18,7 @@ package com.sky.centaur.message.infrastructure.subscription.convertor;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import org.apiguardian.api.API;
@@ -58,5 +59,13 @@ public class SubscriptionTextMessageConvertor {
           });
           return entity;
         }));
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.2")
+  public Optional<SubscriptionTextMessageDo> toDataObject(
+      SubscriptionTextMessage subscriptionTextMessage) {
+    return Optional.ofNullable(subscriptionTextMessage)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
   }
 }

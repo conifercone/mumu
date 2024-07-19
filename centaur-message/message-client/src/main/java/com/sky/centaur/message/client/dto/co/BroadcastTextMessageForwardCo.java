@@ -13,17 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.broadcast.gateway;
+package com.sky.centaur.message.client.dto.co;
 
-import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import com.sky.centaur.basis.enums.MessageStatusEnum;
+import java.util.Collection;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 广播文本消息领域网关
+ * 文本广播消息转发客户端对象
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-public interface BroadcastTextMessageGateway {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class BroadcastTextMessageForwardCo extends BaseClientObject {
 
-  void forwardMsg(BroadcastTextMessage msg);
+  private Long id;
+
+  private Collection<Long> receiverIds;
+
+  private String message;
+
+  private MessageStatusEnum messageStatus;
 }

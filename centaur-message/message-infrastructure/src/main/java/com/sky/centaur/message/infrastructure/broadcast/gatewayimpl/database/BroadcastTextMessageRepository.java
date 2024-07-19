@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.broadcast.gateway;
+package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database;
 
-import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 广播文本消息领域网关
+ * 广播文本消息
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-public interface BroadcastTextMessageGateway {
+public interface BroadcastTextMessageRepository extends
+    BaseJpaRepository<BroadcastTextMessageDo, Long>,
+    JpaSpecificationExecutor<BroadcastTextMessageDo> {
 
-  void forwardMsg(BroadcastTextMessage msg);
 }

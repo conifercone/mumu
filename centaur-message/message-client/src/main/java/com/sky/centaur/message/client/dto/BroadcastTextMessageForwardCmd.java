@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.broadcast.gateway;
+package com.sky.centaur.message.client.dto;
 
-import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
+import lombok.Data;
 
 /**
- * 广播文本消息领域网关
+ * 文本广播消息转发指令
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-public interface BroadcastTextMessageGateway {
+@Data
+public class BroadcastTextMessageForwardCmd {
 
-  void forwardMsg(BroadcastTextMessage msg);
+  private BroadcastTextMessageForwardCo broadcastTextMessageForwardCo;
 }

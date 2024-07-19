@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.infrastructure.subscription.convertor;
+package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
-import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
-import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
-import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
+import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -27,22 +27,25 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * SubscriptionTextMessage mapstruct转换器
+ * BroadcastTextMessage mapstruct转换器
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface SubscriptionTextMessageMapper {
+public interface BroadcastTextMessageMapper {
 
-  SubscriptionTextMessageMapper INSTANCE = Mappers.getMapper(SubscriptionTextMessageMapper.class);
+  BroadcastTextMessageMapper INSTANCE = Mappers.getMapper(BroadcastTextMessageMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.2")
   @Mappings(value = {
-      @Mapping(target = "senderId", ignore = true)
+      @Mapping(target = "readQuantity", ignore = true),
+      @Mapping(target = "senderId", ignore = true),
+      @Mapping(target = "unreadQuantity", ignore = true)
   })
-  SubscriptionTextMessage toEntity(
-      SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo);
+  BroadcastTextMessage toEntity(
+      BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
 
-  SubscriptionTextMessageDo toDataObject(SubscriptionTextMessage subscriptionTextMessage);
+  @API(status = Status.STABLE, since = "1.0.2")
+  BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);
 }

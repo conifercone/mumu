@@ -15,9 +15,9 @@
  */
 package com.sky.centaur.message.application.service;
 
-import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
-import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
-import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
+import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageForwardCmdExe;
+import com.sky.centaur.message.client.api.BroadcastTextMessageService;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
@@ -26,27 +26,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 文本订阅消息service实现类
+ * 文本广播消息service实现类
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
 @Service
 @GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
-@Observed(name = "SubscriptionTextMessageServiceImpl")
-public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessageService {
+@Observed(name = "BroadcastTextMessageServiceImpl")
+public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageService {
 
-  private final SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe;
+  private final BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe;
 
   @Autowired
-  public SubscriptionTextMessageServiceImpl(
-      SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe) {
-    this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
+  public BroadcastTextMessageServiceImpl(
+      BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe) {
+    this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
   }
 
   @Override
   @Transactional
-  public void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
-    subscriptionTextMessageForwardCmdExe.execute(subscriptionTextMessageForwardCmd);
+  public void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+    broadcastTextMessageForwardCmdExe.execute(broadcastTextMessageForwardCmd);
   }
 }

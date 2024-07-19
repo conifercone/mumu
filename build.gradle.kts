@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 plugins {
-    id(libs.plugins.dependencyManagement.get().pluginId) version libs.plugins.dependencyManagement.get().version.toString()
     id(libs.plugins.springboot.get().pluginId) version libs.plugins.springboot.get().version.toString() apply false
     id(libs.plugins.lombok.get().pluginId) version libs.plugins.lombok.get().version.toString()
     id(libs.plugins.protobuf.get().pluginId) version libs.plugins.protobuf.get().version.toString() apply false
@@ -41,7 +40,6 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
-    apply(plugin = rootProject.libs.plugins.dependencyManagement.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
     apply(plugin = rootProject.libs.plugins.license.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinJvm.get().pluginId)
@@ -108,17 +106,13 @@ subprojects {
         ext["organization"] = "kaiyu.shan@outlook.com"
     }
 
-    dependencyManagement {
-        imports {
-            mavenBom(rootProject.libs.springBootDependencies.get().toString())
-            mavenBom(rootProject.libs.springCloudDependencies.get().toString())
-            mavenBom(rootProject.libs.grpcBom.get().toString())
-            mavenBom(rootProject.libs.protobufBom.get().toString())
-            mavenBom(rootProject.libs.guavaBom.get().toString())
-        }
-    }
-
     dependencies {
+        implementation(platform(rootProject.libs.springBootDependencies))
+        annotationProcessor(platform(rootProject.libs.springBootDependencies))
+        implementation(platform(rootProject.libs.springCloudDependencies))
+        implementation(platform(rootProject.libs.grpcBom))
+        implementation(platform(rootProject.libs.protobufBom))
+        implementation(platform(rootProject.libs.guavaBom))
         implementation(rootProject.libs.springboot)
         implementation(rootProject.libs.springBootLog4j2)
         implementation(rootProject.libs.springBootValidation)

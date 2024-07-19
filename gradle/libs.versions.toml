@@ -31,7 +31,6 @@ protobufPluginVersion = '0.9.4'
 lombookPluginVersion = 'latest.release'
 kotlinPluginVersion = '2.0.0'
 licensePluginVersion = '0.16.1'
-dependencyManagementPluginVersion = "1.1.4"
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -99,7 +98,7 @@ protobufJava = { module = "com.google.protobuf:protobuf-java" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protoc
 protoc = { module = "com.google.protobuf:protoc", version.ref = "protobufBomVersion" }
 # https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java
-protocGenGrpcJava = { module = "io.grpc:protoc-gen-grpc-java" }
+protocGenGrpcJava = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpcBomVersion" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-stub
 grpcStub = { module = "io.grpc:grpc-stub" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-protobuf
@@ -194,7 +193,6 @@ micrometer = ["micrometerTracing", "micrometerRegistryPrometheus", "micrometerTr
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
-dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementPluginVersion" }
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
 idea = { id = "idea" }

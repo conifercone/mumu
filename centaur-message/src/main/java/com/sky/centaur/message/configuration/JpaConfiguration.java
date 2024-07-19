@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.broadcast.gateway;
 
-import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+package com.sky.centaur.message.configuration;
+
+import io.hypersistence.utils.spring.repository.BaseJpaRepositoryImpl;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * 广播文本消息领域网关
+ * jpa配置
  *
  * @author kaiyu.shan
  * @since 1.0.2
  */
-public interface BroadcastTextMessageGateway {
+@Configuration
+@EnableJpaRepositories(
+    value = "com.sky.centaur.message.infrastructure",
+    repositoryBaseClass = BaseJpaRepositoryImpl.class
+)
+public class JpaConfiguration {
 
-  void forwardMsg(BroadcastTextMessage msg);
 }
