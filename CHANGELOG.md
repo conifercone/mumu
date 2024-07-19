@@ -9,17 +9,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- v1.0.2 SMS integrates Alibaba Cloud and Huawei Cloud SMS platform.
-- v1.0.2 SMS implements SMS verification code sending function.
-- v1.0.2 SMS adds a new option to switch SMS platforms based on configuration files.
+- v1.0.3 Added read interface for subscribing messages.
+- v1.0.3 A new read interface has been added to the broadcast message.
+- v1.0.3 A new archiving interface is added to the subscription message.
 
 ### Changed
 
-- v1.0.2 Added SMS verification code for account registration.
-- v1.0.2 Internationalization exceptions prompt switching of abnormal content according to account
-  language preference.
+- v1.0.3 Broadcast text messages have new read and unread attributes.
 
 ### Removed
+
+## [1.0.2] - 2024-07-19
+
+### Added
+
+- integrate redis-om-spring annotation processor
+- Exception prompt content adapts to user language preference.
+- Added parameter verification for permission-related functions.
+- The permission module adds refresh_token redis storage and validity verification.
+- The permission module adds client token redis storage and verification.
+- A new data initialization script is added to the permission module.
+- The message module and permission module are integrated with jobrunr-spring-boot-3-starter.
+- Added message module.
+- The messaging module adds websocket netty implementation.
+- The message module implements the subscription text message forwarding function.
+- The message module implements the broadcast text message publishing function.
+
+### Fixed
+
+- Fixed permission name format prompt information error.
+- Fixed the problem of token validity verification failure.
+
+### Changed
+
+- Permission code adds unique constraints.
+- Modify the grpc synchronization calling method.
+- Update the authority grpc interface unit test logic to ensure integrity and independence.
+- Add unique verification to role code.
+- Add unique verification to the account email address.
+- When updating permissions, determine whether the updated code already exists.
+- When updating an account, check whether the updated email address already exists.
+- When the role is updated, a uniqueness check is added to the code.
+- The lombok gradle plugin is modified to latest.release.
+- When updating an account, verify whether the updated account name is unique.
+- Unified authentication service database table index name naming convention.
+- Under password authentication, principalName is changed to the user name.
+- The client token combines the permissions of the role and the permissions in the client itself.
+- The upper limit of log file size is adjusted to 250MB.
+- The gradle version is upgraded to 8.9.
+- Operation logs and system logs kafka topic name & elasticsearch index name are extracted into
+  LogProperties.
+- When the account is disabled and deleted, the current account login information will be cleared.
+- PgSqlFunctionNameConstants adds final access modifier.
+- Gradle is migrated from groovy to kotlin.
+
+### Removed
+
+- Remove log4j2 OnStartupTriggeringPolicy policy.
+- Delete the -Xmx, -XX:MaxMetaspaceSize configuration in gradle jvmargs.
 
 ## [1.0.1] - 2024-06-28
 
@@ -73,7 +120,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.1...develop
+[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.2...develop
+[1.0.2]: https://github.com/conifercone/centaur/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/conifercone/centaur/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/conifercone/centaur/releases/tag/v1.0.0
 [//]: # (@formatter:on)
