@@ -101,11 +101,11 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
-        LOGGER.error(ResultCode.INVALID_SCOPE.getResultMsg());
+        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg());
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
-                    .setContent(ResultCode.INVALID_SCOPE.getResultCode())
+                    .setContent(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultCode())
                     .setCategory("exception")
                     .setFail(ExceptionUtils.getStackTrace(insufficientAuthenticationException))
                     .build())
@@ -113,11 +113,11 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
             .setOperationLogSubmitCo(
                 OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                    .setBizNo(ResultCode.INVALID_SCOPE.getResultCode())
-                    .setFail(ResultCode.INVALID_SCOPE.getResultMsg()).build())
+                    .setBizNo(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultCode())
+                    .setFail(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg()).build())
             .build());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_SCOPE);
+        ResultResponse.exceptionResponse(response, ResultCode.INSUFFICIENT_AUTHENTICATION);
       }
       case null, default -> super.commence(request, response, authException);
     }
