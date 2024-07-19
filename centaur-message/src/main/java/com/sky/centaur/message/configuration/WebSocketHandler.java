@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.CaseFormat;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -69,9 +71,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
         AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
         ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
-        ctx.channel().writeAndFlush(new TextWebSocketFrame("Server connection successful!"));
+        ctx.channel().writeAndFlush(new TextWebSocketFrame(
+            ResultCode.WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL.getResultMsg()));
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new CentaurException(ResultCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
       }
     });
   }
