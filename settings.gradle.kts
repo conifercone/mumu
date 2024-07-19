@@ -1,5 +1,3 @@
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GrUnresolvedAccess
 pluginManagement {
     repositories {
         mavenCentral()
