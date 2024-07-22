@@ -236,6 +236,7 @@ public class AccountGatewayImpl implements AccountGateway {
       Optional.ofNullable(roleId)
           .ifPresent(
               id -> predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), id)));
+      assert query != null;
       return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
