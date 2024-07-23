@@ -3,7 +3,7 @@ dependencies {
     implementation(project(":centaur-unique:unique-client"))
     implementation(project(":centaur-unique:unique-domain"))
     implementation(project(":centaur-unique:unique-infrastructure"))
-    implementation(libs.grpcStub)
-    implementation(libs.grpcSpringBootStarter)
-    implementation(libs.springBootActuator)
+    implementation(libs.grpc.stub)
+    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.spring.boot.starter.actuator)
 }

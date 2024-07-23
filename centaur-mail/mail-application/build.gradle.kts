@@ -3,8 +3,8 @@ dependencies {
     implementation(project(":centaur-mail:mail-infrastructure"))
     implementation(project(":centaur-mail:mail-domain"))
     implementation(project(":centaur-extension"))
-    implementation(libs.grpcStub)
-    implementation(libs.grpcSpringBootStarter)
-    implementation(libs.springBootActuator)
-    implementation(libs.springSecurityCore)
+    implementation(libs.grpc.stub)
+    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.security.core)
 }

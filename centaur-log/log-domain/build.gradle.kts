@@ -1,3 +1,3 @@
 dependencies {
-    implementation(libs.springDataCommons)
+    implementation(libs.spring.data.commons)
 }

@@ -3,5 +3,5 @@ dependencies {
     implementation(project(":centaur-file:file-client"))
     implementation(project(":centaur-extension"))
     implementation(libs.minio)
-    implementation(libs.springWeb)
+    implementation(libs.spring.web)
 }
