@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.gatewayimpl;
 
+import com.sky.centaur.basis.enums.MessageStatusEnum;
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
@@ -59,5 +61,16 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
               subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
               channel.writeAndFlush(new TextWebSocketFrame(subscriptionMessage.getMessage()));
             })));
+  }
+
+  @Override
+  @Transactional
+  public void readMsgById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
+        .ifPresent(subscriptionTextMessageDo -> {
+          subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.READ);
+          subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
+        });
   }
 }

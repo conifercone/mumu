@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.client.api;
+package com.sky.centaur.message.client.dto;
 
-import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
-import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import lombok.Data;
 
 /**
- * 文本订阅消息service
+ * 文本订阅消息根据ID已读指令
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.3
  */
-public interface SubscriptionTextMessageService {
+@Data
+public class SubscriptionTextMessageReadByIdCmd {
 
-  void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
-
-  void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd);
+  private Long id;
 }

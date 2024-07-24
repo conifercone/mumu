@@ -17,6 +17,8 @@ package com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database
 
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
@@ -29,4 +31,5 @@ public interface SubscriptionTextMessageRepository extends
     BaseJpaRepository<SubscriptionTextMessageDo, Long>,
     JpaSpecificationExecutor<SubscriptionTextMessageDo> {
 
+  Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(Long id, @NotNull Long receiverId);
 }

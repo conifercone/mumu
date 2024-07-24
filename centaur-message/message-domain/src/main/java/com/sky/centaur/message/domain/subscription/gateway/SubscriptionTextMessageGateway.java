@@ -26,4 +26,6 @@ import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 public interface SubscriptionTextMessageGateway {
 
   void forwardMsg(SubscriptionTextMessage msg);
+
+  void readMsgById(Long id);
 }

@@ -16,8 +16,10 @@
 package com.sky.centaur.message.application.service;
 
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
+import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
@@ -37,16 +39,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessageService {
 
   private final SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe;
+  private final SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe;
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
-      SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe) {
+      SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe,
+      SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
+    this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
   }
 
   @Override
   @Transactional
   public void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageForwardCmdExe.execute(subscriptionTextMessageForwardCmd);
+  }
+
+  @Override
+  @Transactional
+  public void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
+    subscriptionTextMessageReadByIdCmdExe.execute(subscriptionTextMessageReadByIdCmd);
   }
 }

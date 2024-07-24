@@ -17,6 +17,7 @@ package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -54,5 +55,14 @@ public class SubscriptionTextMessageController {
   public void forward(
       @RequestBody SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
+  }
+
+  @Operation(summary = "根据ID已读文本订阅消息")
+  @PostMapping("/readMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void readMsgById(
+      @RequestBody SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
+    subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
   }
 }
