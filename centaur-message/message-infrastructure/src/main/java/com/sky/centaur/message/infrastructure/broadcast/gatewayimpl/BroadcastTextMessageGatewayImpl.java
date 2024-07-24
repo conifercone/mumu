@@ -17,6 +17,7 @@ package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl;
 
 import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
+import com.sky.centaur.basis.enums.MessageStatusEnum;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
@@ -88,6 +89,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                 cb.function(ANY_PG, Long.class, root.get(BroadcastTextMessageDo_.RECEIVER_IDS))
             ));
             predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.id), msgId));
+            predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.messageStatus),
+                MessageStatusEnum.UNREAD));
             assert query != null;
             return query.where(predicateList.toArray(new Predicate[0])).getRestriction();
           };
