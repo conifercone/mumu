@@ -68,7 +68,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void readMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
-        .ifPresent(subscriptionTextMessageDo -> {
+        .filter(subscriptionTextMessageDo -> MessageStatusEnum.UNREAD.equals(
+            subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
           subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.READ);
           subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
         });
