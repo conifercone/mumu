@@ -21,6 +21,7 @@ import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import org.apiguardian.api.API;
@@ -55,14 +56,18 @@ public class BroadcastTextMessageConvertor {
         .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
           BroadcastTextMessage entity = BroadcastTextMessageMapper.INSTANCE.toEntity(res);
           entity.setSenderId(senderAccountId);
+          entity.setReadReceiverIds(Collections.emptyList());
           Optional.ofNullable(entity.getReceiverIds())
-              .ifPresentOrElse(receiverIds -> entity.setUnreadQuantity((long) receiverIds.size()),
+              .ifPresentOrElse(receiverIds -> {
+                    entity.setUnreadQuantity((long) receiverIds.size());
+                    entity.setUnreadReceiverIds(receiverIds);
+                  },
                   () -> {
-                    entity.setReceiverIds(
-                        Collections.list(
-                            messageProperties.getWebSocket().getAccountChannelMap().keys()));
-                    entity.setUnreadQuantity(
-                        (long) messageProperties.getWebSocket().getAccountChannelMap().size());
+                    ArrayList<Long> receiverIds = Collections.list(
+                        messageProperties.getWebSocket().getAccountChannelMap().keys());
+                    entity.setReceiverIds(receiverIds);
+                    entity.setUnreadReceiverIds(receiverIds);
+                    entity.setUnreadQuantity((long) receiverIds.size());
                   });
           Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
           }, () -> {

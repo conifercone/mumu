@@ -15,13 +15,23 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
+
+import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import com.sky.centaur.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo_;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,5 +74,35 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                           .ifPresent(accountChannel -> accountChannel.writeAndFlush(
                               new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
                 }))));
+  }
+
+  @Override
+  @Transactional
+  public void readMsgById(Long id) {
+    Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId().ifPresent(
+        accountId -> {
+          Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            predicateList.add(cb.equal(
+                cb.literal(accountId),
+                cb.function(ANY_PG, Long.class, root.get(BroadcastTextMessageDo_.RECEIVER_IDS))
+            ));
+            predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.id), msgId));
+            assert query != null;
+            return query.where(predicateList.toArray(new Predicate[0])).getRestriction();
+          };
+          broadcastTextMessageRepository.findOne(broadcastTextMessageDoSpecification)
+              .ifPresent(broadcastTextMessageDo -> {
+                AtomicLong readQuantity = new AtomicLong(broadcastTextMessageDo.getReadQuantity());
+                broadcastTextMessageDo.setReadQuantity(readQuantity.incrementAndGet());
+                Optional.ofNullable(broadcastTextMessageDo.getReadReceiverIds())
+                    .filter(readReceiverIds -> !readReceiverIds.contains(accountId))
+                    .ifPresent(readReceiverIds -> readReceiverIds.add(accountId));
+                Optional.ofNullable(broadcastTextMessageDo.getUnreadReceiverIds())
+                    .filter(unreadReceiverIds -> unreadReceiverIds.contains(accountId))
+                    .ifPresent(unreadReceiverIds -> unreadReceiverIds.remove(accountId));
+                broadcastTextMessageRepository.merge(broadcastTextMessageDo);
+              });
+        }));
   }
 }

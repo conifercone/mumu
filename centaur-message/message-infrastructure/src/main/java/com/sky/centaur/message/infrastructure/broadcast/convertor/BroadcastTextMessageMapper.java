@@ -41,7 +41,9 @@ public interface BroadcastTextMessageMapper {
   @Mappings(value = {
       @Mapping(target = "readQuantity", ignore = true),
       @Mapping(target = "senderId", ignore = true),
-      @Mapping(target = "unreadQuantity", ignore = true)
+      @Mapping(target = "unreadQuantity", ignore = true),
+      @Mapping(target = "readReceiverIds", ignore = true),
+      @Mapping(target = "unreadReceiverIds", ignore = true)
   })
   BroadcastTextMessage toEntity(
       BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);

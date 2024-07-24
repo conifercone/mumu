@@ -16,8 +16,10 @@
 package com.sky.centaur.message.application.service;
 
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageForwardCmdExe;
+import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
@@ -37,16 +39,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageService {
 
   private final BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe;
+  private final BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe;
 
   @Autowired
   public BroadcastTextMessageServiceImpl(
-      BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe) {
+      BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe,
+      BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe) {
     this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
+    this.broadcastTextMessageReadByIdCmdExe = broadcastTextMessageReadByIdCmdExe;
   }
 
   @Override
   @Transactional
   public void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageForwardCmdExe.execute(broadcastTextMessageForwardCmd);
+  }
+
+  @Override
+  @Transactional
+  public void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
+    broadcastTextMessageReadByIdCmdExe.execute(broadcastTextMessageReadByIdCmd);
   }
 }

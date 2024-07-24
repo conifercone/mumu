@@ -17,6 +17,7 @@ package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -54,5 +55,14 @@ public class BroadcastTextMessageController {
   public void forward(
       @RequestBody BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageService.forwardMsg(broadcastTextMessageForwardCmd);
+  }
+
+  @Operation(summary = "根据ID已读文本广播消息")
+  @PostMapping("/readMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void readMsgById(
+      @RequestBody BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
+    broadcastTextMessageService.readMsgById(broadcastTextMessageReadByIdCmd);
   }
 }

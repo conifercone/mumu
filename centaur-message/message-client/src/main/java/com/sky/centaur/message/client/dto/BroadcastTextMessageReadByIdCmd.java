@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.broadcast.gateway;
+package com.sky.centaur.message.client.dto;
 
-import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import lombok.Data;
 
 /**
- * 广播文本消息领域网关
+ * 文本广播消息根据ID已读指令
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.3
  */
-public interface BroadcastTextMessageGateway {
+@Data
+public class BroadcastTextMessageReadByIdCmd {
 
-  void forwardMsg(BroadcastTextMessage msg);
-
-  void readMsgById(Long id);
+  private Long id;
 }
