@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.message.domain.subscription.gateway;
+package com.sky.centaur.message.client.dto;
 
-import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
+import lombok.Data;
 
 /**
- * 文本订阅消息领域网关
+ * 文本订阅消息根据ID删除指令
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.3
  */
-public interface SubscriptionTextMessageGateway {
+@Data
+public class SubscriptionTextMessageDeleteByIdCmd {
 
-  void forwardMsg(SubscriptionTextMessage msg);
-
-  void readMsgById(Long id);
-
-  void deleteMsgById(Long id);
+  private Long id;
 }

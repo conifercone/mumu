@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.client.api;
 
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 
@@ -29,4 +30,6 @@ public interface SubscriptionTextMessageService {
   void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
 
   void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd);
+
+  void deleteMsgById(SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd);
 }

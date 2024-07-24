@@ -16,6 +16,7 @@
 package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,5 +66,14 @@ public class SubscriptionTextMessageController {
   public void readMsgById(
       @RequestBody SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
     subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID删除文本订阅消息")
+  @DeleteMapping("/deleteMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void deleteMsgById(
+      @RequestBody SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
+    subscriptionTextMessageService.deleteMsgById(subscriptionTextMessageDeleteByIdCmd);
   }
 }

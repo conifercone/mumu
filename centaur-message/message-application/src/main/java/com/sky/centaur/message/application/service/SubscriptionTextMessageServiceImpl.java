@@ -15,9 +15,11 @@
  */
 package com.sky.centaur.message.application.service;
 
+import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageDeleteByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -40,13 +42,16 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
 
   private final SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe;
   private final SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe;
+  private final SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe;
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
       SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe,
-      SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe) {
+      SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe,
+      SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
     this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
+    this.subscriptionTextMessageDeleteByIdCmdExe = subscriptionTextMessageDeleteByIdCmdExe;
   }
 
   @Override
@@ -59,5 +64,12 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   @Transactional
   public void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
     subscriptionTextMessageReadByIdCmdExe.execute(subscriptionTextMessageReadByIdCmd);
+  }
+
+  @Override
+  @Transactional
+  public void deleteMsgById(
+      SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
+    subscriptionTextMessageDeleteByIdCmdExe.execute(subscriptionTextMessageDeleteByIdCmd);
   }
 }

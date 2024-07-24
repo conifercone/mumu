@@ -73,4 +73,12 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
           subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
         });
   }
+
+  @Override
+  @Transactional
+  public void deleteMsgById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
+        .ifPresent(
+            accountId -> subscriptionTextMessageRepository.deleteByIdAndReceiverId(id, accountId));
+  }
 }
