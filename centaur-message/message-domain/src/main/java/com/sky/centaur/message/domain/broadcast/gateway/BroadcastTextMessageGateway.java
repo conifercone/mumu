@@ -16,6 +16,8 @@
 package com.sky.centaur.message.domain.broadcast.gateway;
 
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 /**
  * 广播文本消息领域网关
@@ -25,9 +27,30 @@ import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
  */
 public interface BroadcastTextMessageGateway {
 
+  /**
+   * 消息转发
+   *
+   * @param msg 文本广播消息
+   * @since 1.0.2
+   */
+  @API(status = Status.STABLE, since = "1.0.2")
   void forwardMsg(BroadcastTextMessage msg);
 
+  /**
+   * 根据ID已读消息
+   *
+   * @param id 消息ID
+   * @since 1.0.3
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
   void readMsgById(Long id);
 
+  /**
+   * 根据ID删除消息
+   *
+   * @param id 消息ID
+   * @since 1.0.3
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(Long id);
 }

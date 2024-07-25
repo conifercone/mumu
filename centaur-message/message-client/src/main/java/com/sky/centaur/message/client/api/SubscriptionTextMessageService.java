@@ -18,6 +18,8 @@ package com.sky.centaur.message.client.api;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 /**
  * 文本订阅消息service
@@ -27,9 +29,28 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
  */
 public interface SubscriptionTextMessageService {
 
+  /**
+   * 消息转发
+   *
+   * @param subscriptionTextMessageForwardCmd 文本订阅消息转发指令
+   * @since 1.0.2
+   */
+  @API(status = Status.STABLE, since = "1.0.2")
   void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
 
+  /**
+   * 根据ID已读消息
+   *
+   * @param subscriptionTextMessageReadByIdCmd 文本订阅消息根据ID已读指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
   void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd);
 
+  /**
+   * 根据ID删除消息
+   *
+   * @param subscriptionTextMessageDeleteByIdCmd 文本订阅消息根据ID删除指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd);
 }
