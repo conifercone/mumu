@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
@@ -109,6 +110,11 @@ public class BroadcastTextMessageConvertor {
   public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
       BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo);
+        .map(broadcastTextMessageEntity -> {
+          BroadcastTextMessageFindAllYouSendCo findAllYouSendCo = BroadcastTextMessageMapper.INSTANCE.toFindAllYouSendCo(
+              broadcastTextMessageEntity);
+          CommonUtil.convertToAccountZone(findAllYouSendCo);
+          return findAllYouSendCo;
+        });
   }
 }

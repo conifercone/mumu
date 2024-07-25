@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.basis.exception.CentaurException;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
@@ -152,6 +153,11 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
       Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
+    return Optional.ofNullable(account).map(accountEntity -> {
+      AccountCurrentLoginQueryCo currentLoginQueryCo = AccountMapper.INSTANCE.toCurrentLoginQueryCo(
+          accountEntity);
+      CommonUtil.convertToAccountZone(currentLoginQueryCo);
+      return currentLoginQueryCo;
+    });
   }
 }

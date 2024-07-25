@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.basis.kotlin.tools
 
+import com.sky.centaur.basis.client.dto.co.BaseClientObject
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
@@ -127,6 +128,27 @@ object CommonUtil {
                 ZoneId.of(timezone)
             )
         }.orElse(localDateTime)
+    }
+
+    /**
+     * 转换为账户时区
+     *
+     * @param baseClientObject 客户端对象
+     */
+    @API(status = API.Status.STABLE, since = "1.0.3")
+    @JvmStatic
+    fun convertToAccountZone(
+        baseClientObject: BaseClientObject
+    ) {
+        SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
+            val targetZoneId = ZoneId.of(timezone)
+            val creationTimeZonedDateTime =
+                baseClientObject.creationTime.atZoneSameInstant(targetZoneId)
+            val modificationTimeZonedDateTime =
+                baseClientObject.modificationTime.atZoneSameInstant(targetZoneId)
+            baseClientObject.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
+            baseClientObject.modificationTime = modificationTimeZonedDateTime.toOffsetDateTime()
+        }
     }
 
     /**
