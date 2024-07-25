@@ -31,7 +31,8 @@ public interface SubscriptionTextMessageRepository extends
     BaseJpaRepository<SubscriptionTextMessageDo, Long>,
     JpaSpecificationExecutor<SubscriptionTextMessageDo> {
 
-  Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(Long id, @NotNull Long receiverId);
+  Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(@NotNull Long id,
+      @NotNull Long receiverId);
 
   void deleteByIdAndReceiverId(@NotNull Long id, @NotNull Long receiverId);
 }
