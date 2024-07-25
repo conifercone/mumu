@@ -108,4 +108,13 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
               });
         }));
   }
+
+  @Override
+  @Transactional
+  public void deleteMsgById(Long id) {
+    Optional.ofNullable(id)
+        .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
+            broadcastTextMessageRepository.deleteByIdAndSenderId(id, accountId)
+        );
+  }
 }

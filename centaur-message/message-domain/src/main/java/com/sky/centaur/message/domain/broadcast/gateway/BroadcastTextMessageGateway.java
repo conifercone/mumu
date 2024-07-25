@@ -28,4 +28,6 @@ public interface BroadcastTextMessageGateway {
   void forwardMsg(BroadcastTextMessage msg);
 
   void readMsgById(Long id);
+
+  void deleteMsgById(Long id);
 }

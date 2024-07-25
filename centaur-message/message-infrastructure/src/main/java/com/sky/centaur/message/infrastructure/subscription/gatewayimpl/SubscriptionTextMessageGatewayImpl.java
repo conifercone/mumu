@@ -80,6 +80,6 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(
-            accountId -> subscriptionTextMessageRepository.deleteByIdAndReceiverId(id, accountId));
+            accountId -> subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId));
   }
 }

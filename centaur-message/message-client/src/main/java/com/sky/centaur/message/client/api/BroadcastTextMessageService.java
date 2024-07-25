@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.client.api;
 
+import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 
@@ -29,4 +30,6 @@ public interface BroadcastTextMessageService {
   void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd);
 
   void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd);
+
+  void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd);
 }

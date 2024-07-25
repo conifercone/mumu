@@ -34,5 +34,5 @@ public interface SubscriptionTextMessageRepository extends
   Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(@NotNull Long id,
       @NotNull Long receiverId);
 
-  void deleteByIdAndReceiverId(@NotNull Long id, @NotNull Long receiverId);
+  void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 }

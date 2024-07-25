@@ -16,6 +16,7 @@
 package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,5 +66,14 @@ public class BroadcastTextMessageController {
   public void readMsgById(
       @RequestBody BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
     broadcastTextMessageService.readMsgById(broadcastTextMessageReadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID删除文本广播消息")
+  @DeleteMapping("/deleteMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void deleteMsgById(
+      @RequestBody BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
+    broadcastTextMessageService.deleteMsgById(broadcastTextMessageDeleteByIdCmd);
   }
 }

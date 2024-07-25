@@ -15,9 +15,11 @@
  */
 package com.sky.centaur.message.application.service;
 
+import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageDeleteByIdCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -40,13 +42,16 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
 
   private final BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe;
   private final BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe;
+  private final BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe;
 
   @Autowired
   public BroadcastTextMessageServiceImpl(
       BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe,
-      BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe) {
+      BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe,
+      BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe) {
     this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
     this.broadcastTextMessageReadByIdCmdExe = broadcastTextMessageReadByIdCmdExe;
+    this.broadcastTextMessageDeleteByIdCmdExe = broadcastTextMessageDeleteByIdCmdExe;
   }
 
   @Override
@@ -59,5 +64,11 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   @Transactional
   public void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
     broadcastTextMessageReadByIdCmdExe.execute(broadcastTextMessageReadByIdCmd);
+  }
+
+  @Override
+  @Transactional
+  public void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
+    broadcastTextMessageDeleteByIdCmdExe.execute(broadcastTextMessageDeleteByIdCmd);
   }
 }
