@@ -16,6 +16,7 @@
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
@@ -85,5 +86,29 @@ public class BroadcastTextMessageConvertor {
       BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
         .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessage> toEntity(
+      BroadcastTextMessageDo broadcastTextMessageDo) {
+    return Optional.ofNullable(broadcastTextMessageDo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessage> toEntity(
+      BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
+    return Optional.ofNullable(broadcastTextMessageFindAllYouSendCo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
+      BroadcastTextMessage broadcastTextMessage) {
+    return Optional.ofNullable(broadcastTextMessage)
+        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo);
   }
 }

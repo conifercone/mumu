@@ -16,8 +16,10 @@
 package com.sky.centaur.message.domain.broadcast.gateway;
 
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import jakarta.annotation.Nullable;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 
 /**
  * 广播文本消息领域网关
@@ -53,4 +55,17 @@ public interface BroadcastTextMessageGateway {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(Long id);
+
+  /**
+   * 分页查询所有当前登录用户转发的文本广播消息
+   *
+   * @param broadcastTextMessage 查询条件
+   * @param pageNo               页码
+   * @param pageSize             每页数量
+   * @return 查询结果
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<BroadcastTextMessage> findAllYouSend(@Nullable BroadcastTextMessage broadcastTextMessage,
+      int pageNo,
+      int pageSize);
 }

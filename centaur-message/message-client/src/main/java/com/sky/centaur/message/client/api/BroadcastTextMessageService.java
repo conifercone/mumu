@@ -16,10 +16,13 @@
 package com.sky.centaur.message.client.api;
 
 import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 
 /**
  * 文本广播消息service
@@ -53,4 +56,13 @@ public interface BroadcastTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd);
+
+  /**
+   * 查询所有当前用户发送消息
+   *
+   * @param broadcastTextMessageFindAllYouSendCmd 文本广播消息查询所有当前用户发送消息指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 }

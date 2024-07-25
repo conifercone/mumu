@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
@@ -50,4 +51,25 @@ public interface BroadcastTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);
+
+  @API(status = Status.STABLE, since = "1.0.3")
+  BroadcastTextMessage toEntity(BroadcastTextMessageDo broadcastTextMessageDo);
+
+  @Mappings(value = {
+      @Mapping(target = "id", ignore = true),
+      @Mapping(target = "readQuantity", ignore = true),
+      @Mapping(target = "readReceiverIds", ignore = true),
+      @Mapping(target = "receiverIds", ignore = true),
+      @Mapping(target = "senderId", ignore = true),
+      @Mapping(target = "unreadQuantity", ignore = true),
+      @Mapping(target = "unreadReceiverIds", ignore = true)
+  })
+  @API(status = Status.STABLE, since = "1.0.3")
+  BroadcastTextMessage toEntity(
+      BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo);
+
+
+  @API(status = Status.STABLE, since = "1.0.3")
+  BroadcastTextMessageFindAllYouSendCo toFindAllYouSendCo(
+      BroadcastTextMessage broadcastTextMessage);
 }

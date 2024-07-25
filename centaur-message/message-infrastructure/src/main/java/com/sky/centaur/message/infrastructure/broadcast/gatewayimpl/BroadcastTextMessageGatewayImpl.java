@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
 import static com.sky.centaur.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
 import com.sky.centaur.basis.enums.MessageStatusEnum;
@@ -29,12 +30,18 @@ import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * 广播文本消息领域网关实现
@@ -116,5 +123,42 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
         .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
             broadcastTextMessageRepository.deleteByIdAndSenderId(id, accountId)
         );
+  }
+
+  @Override
+  public Page<BroadcastTextMessage> findAllYouSend(BroadcastTextMessage broadcastTextMessage,
+      int pageNo,
+      int pageSize) {
+    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+      Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        Optional.ofNullable(broadcastTextMessage).ifPresent(broadcastTextMessageEntity -> {
+          Optional.ofNullable(broadcastTextMessageEntity.getMessage()).filter(StringUtils::hasText)
+              .ifPresent(
+                  message -> predicateList.add(cb.like(root.get(BroadcastTextMessageDo_.message),
+                      String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, message))));
+          Optional.ofNullable(broadcastTextMessageEntity.getMessageStatus()).ifPresent(
+              messageStatusEnum -> predicateList.add(
+                  cb.equal(root.get(BroadcastTextMessageDo_.messageStatus), messageStatusEnum)));
+        });
+        predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.senderId), accountId));
+        assert query != null;
+        return query.orderBy(cb.desc(root.get(BroadcastTextMessageDo_.creationTime)))
+            .where(predicateList.toArray(new Predicate[0]))
+            .getRestriction();
+      };
+      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      Page<BroadcastTextMessageDo> repositoryAll = broadcastTextMessageRepository.findAll(
+          broadcastTextMessageDoSpecification,
+          pageRequest);
+      List<BroadcastTextMessage> broadcastTextMessages = repositoryAll.getContent().stream()
+          .map(
+              broadcastTextMessageDo -> broadcastTextMessageConvertor.toEntity(
+                      broadcastTextMessageDo)
+                  .orElse(null))
+          .filter(Objects::nonNull)
+          .toList();
+      return new PageImpl<>(broadcastTextMessages, pageRequest, repositoryAll.getTotalElements());
+    }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 }

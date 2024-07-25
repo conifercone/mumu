@@ -16,16 +16,20 @@
 package com.sky.centaur.message.application.service;
 
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageDeleteByIdCmdExe;
+import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageFindAllYouSendCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,15 +47,18 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   private final BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe;
   private final BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe;
   private final BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe;
+  private final BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe;
 
   @Autowired
   public BroadcastTextMessageServiceImpl(
       BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe,
       BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe,
-      BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe) {
+      BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe,
+      BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe) {
     this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
     this.broadcastTextMessageReadByIdCmdExe = broadcastTextMessageReadByIdCmdExe;
     this.broadcastTextMessageDeleteByIdCmdExe = broadcastTextMessageDeleteByIdCmdExe;
+    this.broadcastTextMessageFindAllYouSendCmdExe = broadcastTextMessageFindAllYouSendCmdExe;
   }
 
   @Override
@@ -70,5 +77,11 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   @Transactional
   public void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
     broadcastTextMessageDeleteByIdCmdExe.execute(broadcastTextMessageDeleteByIdCmd);
+  }
+
+  @Override
+  public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    return broadcastTextMessageFindAllYouSendCmdExe.execute(broadcastTextMessageFindAllYouSendCmd);
   }
 }
