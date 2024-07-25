@@ -76,9 +76,21 @@ public interface SystemLogMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogFindAllCo systemLogFindAllCo);
 
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
 
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);
 }
