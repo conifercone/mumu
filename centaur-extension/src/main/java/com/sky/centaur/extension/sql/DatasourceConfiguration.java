@@ -17,6 +17,7 @@ package com.sky.centaur.extension.sql;
 
 import com.google.common.base.Strings;
 import com.p6spy.engine.spy.P6DataSource;
+import com.sky.centaur.basis.constants.BeanNameConstants;
 import com.sky.centaur.basis.dataobject.jpa.CentaurJpaAuditorAware;
 import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.sql.filter.datasource.DataSourceFilter;
@@ -96,9 +97,8 @@ public class DatasourceConfiguration {
     return new DatasourceFilterChainImpl(dataSourceFilters);
   }
 
-  @Bean
+  @Bean(name = BeanNameConstants.CENTAUR_JPA_AUDITOR_AWARE)
   public CentaurJpaAuditorAware centaurJpaAuditorAware() {
     return new CentaurJpaAuditorAware();
   }
-
 }
