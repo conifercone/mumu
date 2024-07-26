@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableJpaAuditing(auditorAwareRef = BeanNameConstants.CENTAUR_JPA_AUDITOR_AWARE)
-@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.message.**")
+@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.message.infrastructure.**")
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement
