@@ -16,10 +16,13 @@
 package com.sky.centaur.message.client.api;
 
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 
 /**
  * 文本订阅消息service
@@ -53,4 +56,13 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd);
+
+  /**
+   * 查询所有当前用户发送消息
+   *
+   * @param subscriptionTextMessageFindAllYouSendCmd 文本订阅消息查询所有当前用户发送消息指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 }

@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.gatewayimpl;
 
+import static com.sky.centaur.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
+
 import com.sky.centaur.basis.enums.MessageStatusEnum;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
@@ -22,11 +24,23 @@ import com.sky.centaur.message.domain.subscription.gateway.SubscriptionTextMessa
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import com.sky.centaur.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.SubscriptionTextMessageRepository;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo_;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * 文本订阅消息领域网关实现类
@@ -81,5 +95,43 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(
             accountId -> subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId));
+  }
+
+  @Override
+  public Page<SubscriptionTextMessage> findAllYouSend(
+      SubscriptionTextMessage subscriptionTextMessage, int pageNo, int pageSize) {
+    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+      Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        Optional.ofNullable(subscriptionTextMessage).ifPresent(subscriptionTextMessageEntity -> {
+          Optional.ofNullable(subscriptionTextMessageEntity.getMessage())
+              .filter(StringUtils::hasText)
+              .ifPresent(
+                  message -> predicateList.add(cb.like(root.get(SubscriptionTextMessageDo_.message),
+                      String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, message))));
+          Optional.ofNullable(subscriptionTextMessageEntity.getMessageStatus()).ifPresent(
+              messageStatusEnum -> predicateList.add(
+                  cb.equal(root.get(SubscriptionTextMessageDo_.messageStatus), messageStatusEnum)));
+        });
+        predicateList.add(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), accountId));
+        assert query != null;
+        return query.orderBy(cb.desc(root.get(SubscriptionTextMessageDo_.creationTime)))
+            .where(predicateList.toArray(new Predicate[0]))
+            .getRestriction();
+      };
+      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
+          subscriptionTextMessageDoSpecification,
+          pageRequest);
+      List<SubscriptionTextMessage> subscriptionTextMessages = repositoryAll.getContent().stream()
+          .map(
+              subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toEntity(
+                      subscriptionTextMessageDo)
+                  .orElse(null))
+          .filter(Objects::nonNull)
+          .toList();
+      return new PageImpl<>(subscriptionTextMessages, pageRequest,
+          repositoryAll.getTotalElements());
+    }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 }

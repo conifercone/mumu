@@ -15,7 +15,9 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
@@ -67,5 +69,34 @@ public class SubscriptionTextMessageConvertor {
       SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
         .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<SubscriptionTextMessage> toEntity(
+      SubscriptionTextMessageDo subscriptionTextMessageDo) {
+    return Optional.ofNullable(subscriptionTextMessageDo)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<SubscriptionTextMessage> toEntity(
+      SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
+    return Optional.ofNullable(subscriptionTextMessageFindAllYouSendCo)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<SubscriptionTextMessageFindAllYouSendCo> toFindAllYouSendCo(
+      SubscriptionTextMessage subscriptionTextMessage) {
+    return Optional.ofNullable(subscriptionTextMessage)
+        .map(subscriptionTextMessageEntity -> {
+          SubscriptionTextMessageFindAllYouSendCo findAllYouSendCo = SubscriptionTextMessageMapper.INSTANCE.toFindAllYouSendCo(
+              subscriptionTextMessageEntity);
+          CommonUtil.convertToAccountZone(findAllYouSendCo);
+          return findAllYouSendCo;
+        });
   }
 }

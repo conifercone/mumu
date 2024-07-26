@@ -18,6 +18,7 @@ package com.sky.centaur.message.domain.subscription.gateway;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 
 /**
  * 文本订阅消息领域网关
@@ -53,4 +54,16 @@ public interface SubscriptionTextMessageGateway {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void deleteMsgById(Long id);
+
+  /**
+   * 查询所有你发送的消息
+   *
+   * @param subscriptionTextMessage 文本订阅消息
+   * @param pageNo                  当前页码
+   * @param pageSize                当前页数量
+   * @return 查询结果
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<SubscriptionTextMessage> findAllYouSend(SubscriptionTextMessage subscriptionTextMessage,
+      int pageNo, int pageSize);
 }
