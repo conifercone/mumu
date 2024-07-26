@@ -21,6 +21,7 @@ import java.security.SecureRandom
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.*
 import java.util.regex.Pattern
 import javax.mail.internet.AddressException
 import javax.mail.internet.InternetAddress
@@ -140,14 +141,20 @@ object CommonUtil {
     fun convertToAccountZone(
         baseClientObject: BaseClientObject
     ) {
-        SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
-            val targetZoneId = ZoneId.of(timezone)
-            val creationTimeZonedDateTime =
-                baseClientObject.creationTime.atZoneSameInstant(targetZoneId)
-            val modificationTimeZonedDateTime =
-                baseClientObject.modificationTime.atZoneSameInstant(targetZoneId)
-            baseClientObject.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
-            baseClientObject.modificationTime = modificationTimeZonedDateTime.toOffsetDateTime()
+        Optional.ofNullable(baseClientObject).ifPresent { baseCo ->
+            SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
+                val targetZoneId = ZoneId.of(timezone)
+                Optional.ofNullable(baseCo.creationTime).ifPresent {
+                    val creationTimeZonedDateTime =
+                        baseCo.creationTime.atZoneSameInstant(targetZoneId)
+                    baseCo.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
+                }
+                Optional.ofNullable(baseCo.modificationTime).ifPresent {
+                    val modificationTimeZonedDateTime =
+                        baseCo.modificationTime.atZoneSameInstant(targetZoneId)
+                    baseCo.modificationTime = modificationTimeZonedDateTime.toOffsetDateTime()
+                }
+            }
         }
     }
 
