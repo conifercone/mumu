@@ -24,7 +24,6 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
@@ -111,19 +110,11 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindByIdCo> toFindByIdCo(@Valid Authority authority) {
-    return Optional.ofNullable(authority).map(authorityEntity -> {
-      AuthorityFindByIdCo findByIdCo = AuthorityMapper.INSTANCE.toFindByIdCo(authorityEntity);
-      CommonUtil.convertToAccountZone(findByIdCo);
-      return findByIdCo;
-    });
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindAllCo> toFindAllCo(@Valid Authority authority) {
-    return Optional.ofNullable(authority).map(authorityEntity -> {
-      AuthorityFindAllCo findAllCo = AuthorityMapper.INSTANCE.toFindAllCo(authorityEntity);
-      CommonUtil.convertToAccountZone(findAllCo);
-      return findAllCo;
-    });
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo);
   }
 }

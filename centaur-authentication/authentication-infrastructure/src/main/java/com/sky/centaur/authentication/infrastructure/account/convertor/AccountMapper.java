@@ -20,8 +20,10 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -77,4 +79,10 @@ public interface AccountMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget AccountCurrentLoginQueryCo accountCurrentLoginQueryCo) {
+    CommonUtil.convertToAccountZone(accountCurrentLoginQueryCo);
+  }
 }

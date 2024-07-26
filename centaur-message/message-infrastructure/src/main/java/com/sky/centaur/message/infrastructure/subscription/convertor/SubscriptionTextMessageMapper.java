@@ -15,14 +15,17 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
@@ -58,4 +61,10 @@ public interface SubscriptionTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(
       SubscriptionTextMessage subscriptionTextMessage);
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
+    CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllYouSendCo);
+  }
 }

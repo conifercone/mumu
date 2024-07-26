@@ -26,7 +26,6 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.exception.CentaurException;
-import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Objects;
@@ -159,7 +158,6 @@ public class RoleConvertor {
             roleDomain.getAuthorities().stream().map(Authority::getId).collect(
                 Collectors.toList()));
       }
-      CommonUtil.convertToAccountZone(roleFindAllCo);
       return roleFindAllCo;
     });
   }

@@ -15,14 +15,17 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
@@ -72,4 +75,10 @@ public interface BroadcastTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessageFindAllYouSendCo toFindAllYouSendCo(
       BroadcastTextMessage broadcastTextMessage);
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
+    CommonUtil.convertToAccountZone(broadcastTextMessageFindAllYouSendCo);
+  }
 }

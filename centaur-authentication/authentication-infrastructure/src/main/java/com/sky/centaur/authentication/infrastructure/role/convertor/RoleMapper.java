@@ -20,8 +20,10 @@ import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -76,4 +78,9 @@ public interface RoleMapper {
   })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
+    CommonUtil.convertToAccountZone(roleFindAllCo);
+  }
 }
