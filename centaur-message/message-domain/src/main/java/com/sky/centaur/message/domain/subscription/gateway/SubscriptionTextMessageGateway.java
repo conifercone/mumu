@@ -47,6 +47,15 @@ public interface SubscriptionTextMessageGateway {
   void readMsgById(Long id);
 
   /**
+   * 根据ID未读消息
+   *
+   * @param id 消息ID
+   * @since 1.0.3
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void unreadMsgById(Long id);
+
+  /**
    * 根据ID删除消息
    *
    * @param id 消息ID

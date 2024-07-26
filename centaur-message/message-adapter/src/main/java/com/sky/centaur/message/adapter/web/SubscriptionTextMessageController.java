@@ -20,6 +20,7 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,6 +71,15 @@ public class SubscriptionTextMessageController {
   public void readMsgById(
       @RequestBody SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
     subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID未读文本订阅消息")
+  @PostMapping("/unreadMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void unreadMsgById(
+      @RequestBody SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
+    subscriptionTextMessageService.unreadMsgById(subscriptionTextMessageUnreadByIdCmd);
   }
 
   @Operation(summary = "根据ID删除文本订阅消息")

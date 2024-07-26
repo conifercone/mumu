@@ -91,6 +91,18 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   @Override
   @Transactional
+  public void unreadMsgById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
+        .filter(subscriptionTextMessageDo -> MessageStatusEnum.READ.equals(
+            subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
+          subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.UNREAD);
+          subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
+        });
+  }
+
+  @Override
+  @Transactional
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(

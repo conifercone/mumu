@@ -19,6 +19,7 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -48,6 +49,14 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd);
+
+  /**
+   * 根据ID未读消息
+   *
+   * @param subscriptionTextMessageUnreadByIdCmd 文本订阅消息根据ID未读指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void unreadMsgById(SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd);
 
   /**
    * 根据ID删除消息
