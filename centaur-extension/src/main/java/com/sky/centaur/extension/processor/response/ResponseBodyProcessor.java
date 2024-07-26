@@ -66,7 +66,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @ExceptionHandler(CentaurException.class)
   public ResultResponse<?> handleCentaurException(@NotNull CentaurException centaurException,
       @NotNull HttpServletResponse response) {
-    response.setContentType("application/json");
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(centaurException.getMessage());
@@ -85,7 +85,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @ExceptionHandler(ValidationException.class)
   public ResultResponse<?> handleException(@NotNull ValidationException validationException,
       @NotNull HttpServletResponse response) {
-    response.setContentType("application/json");
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     LOGGER.error(validationException.getMessage());
@@ -103,7 +103,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @ExceptionHandler(Exception.class)
   public ResultResponse<?> handleException(@NotNull Exception exception,
       @NotNull HttpServletResponse response) {
-    response.setContentType("application/json");
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(exception.getMessage());
