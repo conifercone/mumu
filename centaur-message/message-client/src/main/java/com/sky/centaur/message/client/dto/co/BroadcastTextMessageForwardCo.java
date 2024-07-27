@@ -17,6 +17,7 @@ package com.sky.centaur.message.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
+import jakarta.validation.constraints.NotBlank;
 import java.util.Collection;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +36,7 @@ public class BroadcastTextMessageForwardCo extends BaseClientObject {
 
   private Collection<Long> receiverIds;
 
+  @NotBlank(message = "{text.message.validation.not.blank}")
   private String message;
 
   private MessageStatusEnum messageStatus;

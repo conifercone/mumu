@@ -61,7 +61,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-      @RequestBody SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+      @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
   }
 

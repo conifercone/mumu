@@ -60,7 +60,7 @@ public class BroadcastTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-      @RequestBody BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+      @RequestBody @Valid BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageService.forwardMsg(broadcastTextMessageForwardCmd);
   }
 
