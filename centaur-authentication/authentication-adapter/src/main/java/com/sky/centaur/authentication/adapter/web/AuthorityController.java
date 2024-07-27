@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,8 @@ public class AuthorityController {
   @GetMapping("/findAll")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<AuthorityFindAllCo> findAll(@RequestBody AuthorityFindAllCmd authorityFindAllCmd) {
+  public Page<AuthorityFindAllCo> findAll(
+      @RequestBody @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
   }
 

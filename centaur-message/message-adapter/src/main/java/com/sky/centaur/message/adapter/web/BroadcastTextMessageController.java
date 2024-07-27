@@ -23,6 +23,7 @@ import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,7 @@ public class BroadcastTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
-      @RequestBody BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+      @RequestBody @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageService.findAllYouSend(broadcastTextMessageFindAllYouSendCmd);
   }
 }

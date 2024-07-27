@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ public class RoleController {
   @GetMapping("/findAll")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<RoleFindAllCo> findAll(@RequestBody RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllCo> findAll(@RequestBody @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
   }
 }

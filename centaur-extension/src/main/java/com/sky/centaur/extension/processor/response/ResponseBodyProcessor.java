@@ -27,6 +27,7 @@ import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
+import java.util.Objects;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -98,6 +100,26 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
         validationException.getMessage()
             .substring(validationException.getMessage().indexOf(": ") + 2));
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResultResponse<?> handleException(
+      @NotNull MethodArgumentNotValidException methodArgumentNotValidException,
+      @NotNull HttpServletResponse response) {
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    LOGGER.error(methodArgumentNotValidException.getMessage());
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder()
+                .setContent(methodArgumentNotValidException.getMessage())
+                .setCategory("methodArgumentNotValidException")
+                .setFail(ExceptionUtils.getStackTrace(methodArgumentNotValidException)).build())
+        .build());
+    return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
+        Objects.requireNonNull(methodArgumentNotValidException.getFieldError())
+            .getDefaultMessage());
   }
 
   @ExceptionHandler(Exception.class)
