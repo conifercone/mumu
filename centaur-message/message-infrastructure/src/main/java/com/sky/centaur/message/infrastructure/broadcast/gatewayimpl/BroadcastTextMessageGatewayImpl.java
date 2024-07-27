@@ -93,7 +93,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             List<Predicate> predicateList = new ArrayList<>();
             predicateList.add(cb.equal(
                 cb.literal(accountId),
-                cb.function(ANY_PG, Long.class, root.get(BroadcastTextMessageDo_.RECEIVER_IDS))
+                cb.function(ANY_PG, Long.class,
+                    root.get(BroadcastTextMessageDo_.UNREAD_RECEIVER_IDS))
             ));
             predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.id), msgId));
             predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.messageStatus),
