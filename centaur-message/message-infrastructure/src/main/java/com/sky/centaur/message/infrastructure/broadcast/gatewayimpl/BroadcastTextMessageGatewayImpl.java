@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -57,6 +58,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   private final MessageProperties messageProperties;
   private final BroadcastTextMessageRepository broadcastTextMessageRepository;
 
+  @Autowired
   public BroadcastTextMessageGatewayImpl(
       BroadcastTextMessageConvertor broadcastTextMessageConvertor,
       MessageProperties messageProperties,

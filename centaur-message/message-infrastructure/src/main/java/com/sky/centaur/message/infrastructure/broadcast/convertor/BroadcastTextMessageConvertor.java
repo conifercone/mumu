@@ -28,6 +28,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,6 +44,7 @@ public class BroadcastTextMessageConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
 
+  @Autowired
   public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
       MessageProperties messageProperties) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
