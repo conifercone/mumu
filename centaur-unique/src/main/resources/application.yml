@@ -36,7 +36,7 @@ spring:
           enabled: true
           delay: 1000
         prefixes: centaur
-        acl-token: ${consul_token:e1da9899-6008-1999-07f6-f78c7d99715b}
+        acl-token: ${consul_token}
       discovery:
         register: true
         instance-id: ${spring.application.name}
@@ -44,4 +44,4 @@ spring:
         port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
-        acl-token: ${consul_token:e1da9899-6008-1999-07f6-f78c7d99715b}
+        acl-token: ${consul_token}
