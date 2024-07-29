@@ -23,6 +23,7 @@ import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import com.sky.centaur.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageArchivedRepository;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo_;
@@ -57,15 +58,18 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   private final BroadcastTextMessageConvertor broadcastTextMessageConvertor;
   private final MessageProperties messageProperties;
   private final BroadcastTextMessageRepository broadcastTextMessageRepository;
+  private final BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository;
 
   @Autowired
   public BroadcastTextMessageGatewayImpl(
       BroadcastTextMessageConvertor broadcastTextMessageConvertor,
       MessageProperties messageProperties,
-      BroadcastTextMessageRepository broadcastTextMessageRepository) {
+      BroadcastTextMessageRepository broadcastTextMessageRepository,
+      BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository) {
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
     this.messageProperties = messageProperties;
     this.broadcastTextMessageRepository = broadcastTextMessageRepository;
+    this.broadcastTextMessageArchivedRepository = broadcastTextMessageArchivedRepository;
   }
 
   @Override
@@ -124,7 +128,10 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
         .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
-            broadcastTextMessageRepository.deleteByIdAndSenderId(id, accountId)
+            {
+              broadcastTextMessageRepository.deleteByIdAndSenderId(id, accountId);
+              broadcastTextMessageArchivedRepository.deleteByIdAndSenderId(id, accountId);
+            }
         );
   }
 
@@ -163,5 +170,16 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
           .toList();
       return new PageImpl<>(broadcastTextMessages, pageRequest, repositoryAll.getTotalElements());
     }).orElse(new PageImpl<>(Collections.emptyList()));
+  }
+
+  @Override
+  @Transactional
+  public void archiveMsgById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
+        .ifPresent(broadcastTextMessageDo -> {
+          broadcastTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
+          broadcastTextMessageRepository.merge(broadcastTextMessageDo);
+        });
   }
 }

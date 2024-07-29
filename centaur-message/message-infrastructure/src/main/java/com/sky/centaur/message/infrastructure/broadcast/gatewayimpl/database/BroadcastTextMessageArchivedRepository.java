@@ -15,23 +15,21 @@
  */
 package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database;
 
-import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 广播文本消息
+ * 广播文本归档消息
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.3
  */
-public interface BroadcastTextMessageRepository extends
-    BaseJpaRepository<BroadcastTextMessageDo, Long>,
-    JpaSpecificationExecutor<BroadcastTextMessageDo> {
+public interface BroadcastTextMessageArchivedRepository extends
+    BaseJpaRepository<BroadcastTextMessageArchivedDo, Long>,
+    JpaSpecificationExecutor<BroadcastTextMessageArchivedDo> {
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 
-  Optional<BroadcastTextMessageDo> findByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 }

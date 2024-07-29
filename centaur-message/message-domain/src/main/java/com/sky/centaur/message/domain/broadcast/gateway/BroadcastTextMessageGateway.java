@@ -68,4 +68,13 @@ public interface BroadcastTextMessageGateway {
   Page<BroadcastTextMessage> findAllYouSend(@Nullable BroadcastTextMessage broadcastTextMessage,
       int pageNo,
       int pageSize);
+
+  /**
+   * 根据ID归档消息
+   *
+   * @param id 消息ID
+   * @since 1.0.3
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void archiveMsgById(Long id);
 }

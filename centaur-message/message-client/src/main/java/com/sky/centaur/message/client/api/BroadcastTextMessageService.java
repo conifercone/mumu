@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.client.api;
 
+import com.sky.centaur.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
@@ -65,4 +66,12 @@ public interface BroadcastTextMessageService {
   @API(status = Status.STABLE, since = "1.0.3")
   Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
       BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
+
+  /**
+   * 根据ID归档消息
+   *
+   * @param broadcastTextMessageArchiveByIdCmd 文本广播消息根据ID归档指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void archiveMsgById(BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd);
 }
