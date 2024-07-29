@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,7 +66,7 @@ public class BroadcastTextMessageController {
   }
 
   @Operation(summary = "根据ID已读文本广播消息")
-  @PostMapping("/readMsgById")
+  @PutMapping("/readMsgById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void readMsgById(

@@ -15,27 +15,20 @@
  */
 package com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database;
 
-import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 订阅文本消息
+ * 订阅文本归档消息
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.3
  */
-public interface SubscriptionTextMessageRepository extends
-    BaseJpaRepository<SubscriptionTextMessageDo, Long>,
-    JpaSpecificationExecutor<SubscriptionTextMessageDo> {
-
-  Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(@NotNull Long id,
-      @NotNull Long receiverId);
-
-  Optional<SubscriptionTextMessageDo> findByIdAndSenderId(@NotNull Long id,
-      @NotNull Long senderId);
+public interface SubscriptionTextMessageArchivedRepository extends
+    BaseJpaRepository<SubscriptionTextMessageArchivedDo, Long>,
+    JpaSpecificationExecutor<SubscriptionTextMessageArchivedDo> {
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 }

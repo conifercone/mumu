@@ -23,6 +23,7 @@ import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import com.sky.centaur.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.SubscriptionTextMessageArchivedRepository;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.SubscriptionTextMessageRepository;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo_;
@@ -53,15 +54,18 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   private final MessageProperties messageProperties;
   private final SubscriptionTextMessageRepository subscriptionTextMessageRepository;
+  private final SubscriptionTextMessageArchivedRepository subscriptionTextMessageArchivedRepository;
   private final SubscriptionTextMessageConvertor subscriptionTextMessageConvertor;
 
   @Autowired
   public SubscriptionTextMessageGatewayImpl(MessageProperties messageProperties,
       SubscriptionTextMessageRepository subscriptionTextMessageRepository,
-      SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
+      SubscriptionTextMessageConvertor subscriptionTextMessageConvertor,
+      SubscriptionTextMessageArchivedRepository subscriptionTextMessageArchivedRepository) {
     this.messageProperties = messageProperties;
     this.subscriptionTextMessageRepository = subscriptionTextMessageRepository;
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
+    this.subscriptionTextMessageArchivedRepository = subscriptionTextMessageArchivedRepository;
   }
 
   @Override
@@ -106,7 +110,10 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(
-            accountId -> subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId));
+            accountId -> {
+              subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId);
+              subscriptionTextMessageArchivedRepository.deleteByIdAndSenderId(id, accountId);
+            });
   }
 
   @Override
@@ -145,5 +152,16 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
       return new PageImpl<>(subscriptionTextMessages, pageRequest,
           repositoryAll.getTotalElements());
     }).orElse(new PageImpl<>(Collections.emptyList()));
+  }
+
+  @Override
+  @Transactional
+  public void archiveMsgById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
+        .ifPresent(subscriptionTextMessageDo -> {
+          subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
+          subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
+        });
   }
 }

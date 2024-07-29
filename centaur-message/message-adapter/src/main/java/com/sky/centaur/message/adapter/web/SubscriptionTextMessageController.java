@@ -16,6 +16,7 @@
 package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
@@ -32,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +68,7 @@ public class SubscriptionTextMessageController {
   }
 
   @Operation(summary = "根据ID已读文本订阅消息")
-  @PostMapping("/readMsgById")
+  @PutMapping("/readMsgById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void readMsgById(
@@ -75,7 +77,7 @@ public class SubscriptionTextMessageController {
   }
 
   @Operation(summary = "根据ID未读文本订阅消息")
-  @PostMapping("/unreadMsgById")
+  @PutMapping("/unreadMsgById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void unreadMsgById(
@@ -99,5 +101,14 @@ public class SubscriptionTextMessageController {
   public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
       @RequestBody @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
+  }
+
+  @Operation(summary = "根据ID归档文本订阅消息")
+  @PutMapping("/archiveMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void archiveMsgById(
+      @RequestBody SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
+    subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
   }
 }

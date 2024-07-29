@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.client.api;
 
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
@@ -74,4 +75,12 @@ public interface SubscriptionTextMessageService {
   @API(status = Status.STABLE, since = "1.0.3")
   Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
       SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
+
+  /**
+   * 根据ID归档消息
+   *
+   * @param subscriptionTextMessageArchiveByIdCmd 文本订阅消息根据ID归档指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void archiveMsgById(SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd);
 }

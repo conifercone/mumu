@@ -15,12 +15,14 @@
  */
 package com.sky.centaur.message.application.service;
 
+import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageArchiveByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageDeleteByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageFindAllYouSendCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageReadByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageUnreadByIdCmdExe;
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
@@ -51,6 +53,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   private final SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe;
   private final SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe;
   private final SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe;
+  private final SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe;
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
@@ -58,12 +61,14 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
       SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe,
       SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe,
       SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe,
-      SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe) {
+      SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe,
+      SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
     this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
     this.subscriptionTextMessageDeleteByIdCmdExe = subscriptionTextMessageDeleteByIdCmdExe;
     this.subscriptionTextMessageFindAllYouSendCmdExe = subscriptionTextMessageFindAllYouSendCmdExe;
     this.subscriptionTextMessageUnreadByIdCmdExe = subscriptionTextMessageUnreadByIdCmdExe;
+    this.subscriptionTextMessageArchiveByIdCmdExe = subscriptionTextMessageArchiveByIdCmdExe;
   }
 
   @Override
@@ -97,5 +102,12 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
       SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageFindAllYouSendCmdExe.execute(
         subscriptionTextMessageFindAllYouSendCmd);
+  }
+
+  @Override
+  @Transactional
+  public void archiveMsgById(
+      SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
+    subscriptionTextMessageArchiveByIdCmdExe.execute(subscriptionTextMessageArchiveByIdCmd);
   }
 }
