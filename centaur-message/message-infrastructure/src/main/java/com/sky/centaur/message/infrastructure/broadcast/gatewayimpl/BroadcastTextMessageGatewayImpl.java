@@ -43,6 +43,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -81,6 +82,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                 broadcastTextMessage)
             .ifPresent(broadcastTextMessageDo -> Optional.ofNullable(
                     broadcastTextMessageDo.getReceiverIds())
+                .filter(receiverIds -> !CollectionUtils.isEmpty(receiverIds))
                 .ifPresent(receiverIds -> {
                   broadcastTextMessageRepository.persist(broadcastTextMessageDo);
                   receiverIds.forEach(
