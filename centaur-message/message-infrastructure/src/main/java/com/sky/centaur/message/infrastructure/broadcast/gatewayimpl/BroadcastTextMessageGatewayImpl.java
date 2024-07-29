@@ -82,13 +82,14 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                 broadcastTextMessage)
             .ifPresent(broadcastTextMessageDo -> Optional.ofNullable(
                     broadcastTextMessageDo.getReceiverIds())
-                .filter(receiverIds -> !CollectionUtils.isEmpty(receiverIds))
                 .ifPresent(receiverIds -> {
-                  broadcastTextMessageRepository.persist(broadcastTextMessageDo);
-                  receiverIds.forEach(
-                      receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
-                          .ifPresent(accountChannel -> accountChannel.writeAndFlush(
-                              new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
+                  if (!CollectionUtils.isEmpty(receiverIds)) {
+                    broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+                    receiverIds.forEach(
+                        receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
+                            .ifPresent(accountChannel -> accountChannel.writeAndFlush(
+                                new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
+                  }
                 }))));
   }
 
