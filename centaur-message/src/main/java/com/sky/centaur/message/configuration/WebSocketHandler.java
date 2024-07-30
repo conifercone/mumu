@@ -81,8 +81,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
               AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
               ctx.channel().attr(receiverAccountIdKey)
                   .setIfAbsent(String.valueOf(receiverAccountId));
-              ctx.channel().writeAndFlush(new TextWebSocketFrame(
-                  ResultCode.WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL.getResultMsg()));
             }, () -> {
               messageProperties.getWebSocket()
                   .getAccountBroadcastChannelMap()
@@ -91,8 +89,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
               AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
               ctx.channel().attr(receiverAccountIdKey)
                   .setIfAbsent(String.valueOf(receiverAccountId));
-              ctx.channel().writeAndFlush(new TextWebSocketFrame(
-                  ResultCode.WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL.getResultMsg()));
             });
       } catch (Exception e) {
         throw new CentaurException(ResultCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
