@@ -16,6 +16,7 @@
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
@@ -92,5 +93,13 @@ public class SubscriptionTextMessageConvertor {
       SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
         .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<SubscriptionTextMessageFindAllWithSomeOneCo> toFindAllWithSomeOne(
+      SubscriptionTextMessage subscriptionTextMessage) {
+    return Optional.ofNullable(subscriptionTextMessage)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne);
   }
 }

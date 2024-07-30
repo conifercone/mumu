@@ -17,10 +17,12 @@ package com.sky.centaur.message.client.api;
 
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -83,4 +85,14 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd);
+
+  /**
+   * 查询所有和某人的消息记录
+   *
+   * @param subscriptionTextMessageFindAllWithSomeOneCmd 文本订阅消息查询所有和某人的消息记录指令
+   * @return 查询结果
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
+      SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd);
 }

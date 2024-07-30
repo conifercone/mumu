@@ -18,10 +18,12 @@ package com.sky.centaur.message.adapter.web;
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -110,5 +112,15 @@ public class SubscriptionTextMessageController {
   public void archiveMsgById(
       @RequestBody SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Operation(summary = "查询所有和某人的消息记录")
+  @GetMapping("/findAllWithSomeOne")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
+      @RequestBody @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
+        subscriptionTextMessageFindAllWithSomeOneCmd);
   }
 }

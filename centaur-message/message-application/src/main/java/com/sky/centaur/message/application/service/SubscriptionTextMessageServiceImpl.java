@@ -17,6 +17,7 @@ package com.sky.centaur.message.application.service;
 
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageArchiveByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageDeleteByIdCmdExe;
+import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageFindAllWithSomeOneCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageFindAllYouSendCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageReadByIdCmdExe;
@@ -24,10 +25,12 @@ import com.sky.centaur.message.application.subscription.executor.SubscriptionTex
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -54,6 +57,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   private final SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe;
   private final SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe;
   private final SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe;
+  private final SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe;
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
@@ -62,13 +66,15 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
       SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe,
       SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe,
       SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe,
-      SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe) {
+      SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe,
+      SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
     this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
     this.subscriptionTextMessageDeleteByIdCmdExe = subscriptionTextMessageDeleteByIdCmdExe;
     this.subscriptionTextMessageFindAllYouSendCmdExe = subscriptionTextMessageFindAllYouSendCmdExe;
     this.subscriptionTextMessageUnreadByIdCmdExe = subscriptionTextMessageUnreadByIdCmdExe;
     this.subscriptionTextMessageArchiveByIdCmdExe = subscriptionTextMessageArchiveByIdCmdExe;
+    this.subscriptionTextMessageFindAllWithSomeOneCmdExe = subscriptionTextMessageFindAllWithSomeOneCmdExe;
   }
 
   @Override
@@ -109,5 +115,12 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   public void archiveMsgById(
       SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageArchiveByIdCmdExe.execute(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Override
+  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
+      SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    return subscriptionTextMessageFindAllWithSomeOneCmdExe.execute(
+        subscriptionTextMessageFindAllWithSomeOneCmd);
   }
 }

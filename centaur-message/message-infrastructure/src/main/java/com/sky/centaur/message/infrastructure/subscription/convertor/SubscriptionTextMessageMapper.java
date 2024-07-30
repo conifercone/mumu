@@ -16,6 +16,7 @@
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
@@ -62,9 +63,19 @@ public interface SubscriptionTextMessageMapper {
   SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(
       SubscriptionTextMessage subscriptionTextMessage);
 
+  @API(status = Status.STABLE, since = "1.0.3")
+  SubscriptionTextMessageFindAllWithSomeOneCo toFindAllWithSomeOne(
+      SubscriptionTextMessage subscriptionTextMessage);
+
   @AfterMapping
   default void convertToAccountTimezone(
       @MappingTarget SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
     CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllYouSendCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget SubscriptionTextMessageFindAllWithSomeOneCo subscriptionTextMessageFindAllWithSomeOneCo) {
+    CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllWithSomeOneCo);
   }
 }

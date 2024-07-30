@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -138,19 +139,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-      Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
-          subscriptionTextMessageDoSpecification,
-          pageRequest);
-      List<SubscriptionTextMessage> subscriptionTextMessages = repositoryAll.getContent().stream()
-          .map(
-              subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toEntity(
-                      subscriptionTextMessageDo)
-                  .orElse(null))
-          .filter(Objects::nonNull)
-          .toList();
-      return new PageImpl<>(subscriptionTextMessages, pageRequest,
-          repositoryAll.getTotalElements());
+      return getSubscriptionTextMessages(pageNo, pageSize, subscriptionTextMessageDoSpecification);
     }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
@@ -163,5 +152,44 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
           subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
           subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
         });
+  }
+
+  @Override
+  public Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(
+      int pageNo, int pageSize, Long receiverId) {
+    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+      Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        predicateList.add(
+            cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), accountId),
+                cb.equal(root.get(SubscriptionTextMessageDo_.receiverId), receiverId))));
+        predicateList.add(
+            cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), receiverId),
+                cb.equal(root.get(SubscriptionTextMessageDo_.receiverId), accountId))));
+        assert query != null;
+        return query.orderBy(cb.desc(root.get(SubscriptionTextMessageDo_.creationTime)))
+            .where(predicateList.toArray(new Predicate[0]))
+            .getRestriction();
+      };
+      return getSubscriptionTextMessages(pageNo, pageSize, subscriptionTextMessageDoSpecification);
+    }).orElse(new PageImpl<>(Collections.emptyList()));
+  }
+
+  @NotNull
+  private PageImpl<SubscriptionTextMessage> getSubscriptionTextMessages(int pageNo, int pageSize,
+      Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
+        subscriptionTextMessageDoSpecification,
+        pageRequest);
+    List<SubscriptionTextMessage> subscriptionTextMessages = repositoryAll.getContent().stream()
+        .map(
+            subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toEntity(
+                    subscriptionTextMessageDo)
+                .orElse(null))
+        .filter(Objects::nonNull)
+        .toList();
+    return new PageImpl<>(subscriptionTextMessages, pageRequest,
+        repositoryAll.getTotalElements());
   }
 }

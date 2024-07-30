@@ -84,4 +84,16 @@ public interface SubscriptionTextMessageGateway {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(Long id);
+
+  /**
+   * 查询所有和某人的消息记录
+   *
+   * @param pageNo     当前页码
+   * @param pageSize   当前页数量
+   * @param receiverId 接收者ID
+   * @return 查询结果
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(int pageNo, int pageSize,
+      Long receiverId);
 }
