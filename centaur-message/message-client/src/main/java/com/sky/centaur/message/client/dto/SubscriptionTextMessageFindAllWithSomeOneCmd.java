@@ -16,6 +16,7 @@
 package com.sky.centaur.message.client.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -27,6 +28,7 @@ import lombok.Data;
 @Data
 public class SubscriptionTextMessageFindAllWithSomeOneCmd {
 
+  @NotNull(message = "{receiver.id.validation.not.null}")
   private Long receiverId;
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
