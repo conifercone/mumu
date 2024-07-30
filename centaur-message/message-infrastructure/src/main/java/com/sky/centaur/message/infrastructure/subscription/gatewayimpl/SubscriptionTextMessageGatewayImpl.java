@@ -73,8 +73,9 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Transactional
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(subscriptionMessage -> Optional.ofNullable(
-            messageProperties.getWebSocket().getAccountChannelMap()
-                .get(subscriptionMessage.getReceiverId()))
+            messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
+                .get(subscriptionMessage.getReceiverId())
+                .get(msg.getSenderId()))
         .ifPresent(channel -> subscriptionTextMessageConvertor.toDataObject(msg)
             .ifPresent(subscriptionTextMessageDo -> {
               subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);

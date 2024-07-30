@@ -77,7 +77,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Transactional
   public void forwardMsg(BroadcastTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(broadcastTextMessage -> Optional.ofNullable(
-            messageProperties.getWebSocket().getAccountChannelMap())
+            messageProperties.getWebSocket().getAccountBroadcastChannelMap())
         .ifPresent(allOnlineAccountChannels -> broadcastTextMessageConvertor.toDataObject(
                 broadcastTextMessage)
             .ifPresent(broadcastTextMessageDo -> Optional.ofNullable(

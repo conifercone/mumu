@@ -67,7 +67,7 @@ public class BroadcastTextMessageConvertor {
                   },
                   () -> {
                     ArrayList<Long> receiverIds = Collections.list(
-                        messageProperties.getWebSocket().getAccountChannelMap().keys());
+                        messageProperties.getWebSocket().getAccountBroadcastChannelMap().keys());
                     entity.setReceiverIds(receiverIds);
                     entity.setUnreadReceiverIds(receiverIds);
                     entity.setUnreadQuantity((long) receiverIds.size());
