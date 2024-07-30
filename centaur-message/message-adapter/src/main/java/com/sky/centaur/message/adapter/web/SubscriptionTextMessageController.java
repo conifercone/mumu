@@ -74,7 +74,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void readMsgById(
-      @RequestBody SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
+      @RequestBody @Valid SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
     subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
   }
 
@@ -83,7 +83,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void unreadMsgById(
-      @RequestBody SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
+      @RequestBody @Valid SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
     subscriptionTextMessageService.unreadMsgById(subscriptionTextMessageUnreadByIdCmd);
   }
 
@@ -92,7 +92,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void deleteMsgById(
-      @RequestBody SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
+      @RequestBody @Valid SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
     subscriptionTextMessageService.deleteMsgById(subscriptionTextMessageDeleteByIdCmd);
   }
 
@@ -110,7 +110,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.3")
   public void archiveMsgById(
-      @RequestBody SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
+      @RequestBody @Valid SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
   }
 

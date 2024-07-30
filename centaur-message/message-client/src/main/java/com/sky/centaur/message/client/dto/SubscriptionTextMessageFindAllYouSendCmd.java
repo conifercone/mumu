@@ -16,6 +16,7 @@
 package com.sky.centaur.message.client.dto;
 
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ import lombok.Data;
 @Data
 public class SubscriptionTextMessageFindAllYouSendCmd {
 
+  @Nullable
   private SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo;
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;

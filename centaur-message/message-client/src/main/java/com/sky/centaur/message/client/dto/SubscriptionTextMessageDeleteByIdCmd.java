@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.client.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -26,5 +27,6 @@ import lombok.Data;
 @Data
 public class SubscriptionTextMessageDeleteByIdCmd {
 
+  @NotNull(message = "{message.id.validation.not.null}")
   private Long id;
 }
