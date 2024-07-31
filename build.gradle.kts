@@ -57,12 +57,17 @@ subprojects {
     }
 
     signing {
-        useInMemoryPgpKeys(
-            System.getenv("CENTAUR_SIGNING_KEY_ID") as String,
-            file(System.getenv("CENTAUR_SIGNING_KEY_FILE") as String).readText(),
-            System.getenv("CENTAUR_SIGNING_PASSWORD") as String
-        )
-        sign(configurations.runtimeElements.get())
+        if (System.getenv("CENTAUR_SIGNING_KEY_ID") != null && System.getenv("CENTAUR_SIGNING_KEY_FILE") != null && System.getenv(
+                "CENTAUR_SIGNING_PASSWORD"
+            ) != null
+        ) {
+            useInMemoryPgpKeys(
+                System.getenv("CENTAUR_SIGNING_KEY_ID") as String,
+                file(System.getenv("CENTAUR_SIGNING_KEY_FILE") as String).readText(),
+                System.getenv("CENTAUR_SIGNING_PASSWORD") as String
+            )
+            sign(configurations.runtimeElements.get())
+        }
     }
 
     tasks.withType<JavaCompile> {
