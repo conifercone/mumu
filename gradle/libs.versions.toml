@@ -196,6 +196,7 @@ springboot = { id = "org.springframework.boot", version.ref = "springbootVersion
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
+signing = { id = "signing" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
 license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }

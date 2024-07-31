@@ -11,6 +11,7 @@ plugins {
     id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
+    id(libs.plugins.signing.get().pluginId)
 }
 
 allprojects {
@@ -40,6 +41,7 @@ allprojects {
 
 subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
@@ -52,6 +54,15 @@ subprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
+    }
+
+    signing {
+        useInMemoryPgpKeys(
+            System.getenv("CENTAUR_SIGNING_KEY_ID") as String,
+            file(System.getenv("CENTAUR_SIGNING_KEY_FILE") as String).readText(),
+            System.getenv("CENTAUR_SIGNING_PASSWORD") as String
+        )
+        sign(configurations.runtimeElements.get())
     }
 
     tasks.withType<JavaCompile> {
