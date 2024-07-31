@@ -16,6 +16,8 @@
 package com.sky.centaur.extension.translation;
 
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 
 /**
  * 简单文本翻译接口
@@ -25,7 +27,9 @@ import java.util.Optional;
  */
 public interface SimpleTextTranslation {
 
+  @API(status = Status.STABLE, since = "1.0.3")
   String translate(String text, String targetLanguage) throws Exception;
 
+  @API(status = Status.STABLE, since = "1.0.3")
   Optional<String> translateToAccountLanguageIfPossible(String text);
 }

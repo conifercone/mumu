@@ -19,6 +19,8 @@ import com.deepl.api.Translator;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
 
@@ -37,11 +39,13 @@ public class DeeplSimpleTextTranslation implements SimpleTextTranslation {
   }
 
   @Override
+  @API(status = Status.STABLE, since = "1.0.3")
   public String translate(String text, @NotNull String targetLanguage) throws Exception {
     return deeplTranslator.translateText(text, null, targetLanguage).getText();
   }
 
   @Override
+  @API(status = Status.STABLE, since = "1.0.3")
   public Optional<String> translateToAccountLanguageIfPossible(String text) {
     return Optional.ofNullable(text).filter(StringUtils::hasText)
         .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
