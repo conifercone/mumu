@@ -21,13 +21,10 @@ import com.aliyun.alimt20181012.models.GetDetectLanguageResponse;
 import com.aliyun.alimt20181012.models.TranslateGeneralRequest;
 import com.aliyun.alimt20181012.models.TranslateGeneralResponse;
 import com.aliyun.teautil.models.RuntimeOptions;
-import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import com.sky.centaur.extension.translation.SimpleTextTranslation;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.StringUtils;
 
 /**
  * 阿里云简单文本翻译
@@ -65,19 +62,5 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
     TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
         translateGeneralRequest, runtime);
     return translateGeneralResponse.getBody().getData().getTranslated();
-  }
-
-  @Override
-  @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<String> translateToAccountLanguageIfPossible(String text) {
-    return Optional.ofNullable(text).filter(StringUtils::hasText)
-        .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
-          try {
-            return this.translate(text, languageEnum.name().toLowerCase());
-          } catch (Exception e) {
-            // ignore
-          }
-          return null;
-        });
   }
 }
