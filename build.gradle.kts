@@ -25,8 +25,8 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(0, "seconds")
-            cacheDynamicVersionsFor(0, "seconds")
+            cacheChangingModulesFor(0, TimeUnit.SECONDS)
+            cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
         }
         resolutionStrategy.dependencySubstitution {
             substitute(module("org.springframework.boot:spring-boot-starter-tomcat:${rootProject.libs.versions.springbootVersion}}"))
@@ -57,14 +57,17 @@ subprojects {
     }
 
     signing {
-        if (System.getenv("CENTAUR_SIGNING_KEY_ID") != null && System.getenv("CENTAUR_SIGNING_KEY_FILE") != null && System.getenv(
-                "CENTAUR_SIGNING_PASSWORD"
-            ) != null
+        val centaurSigningKeyId = "CENTAUR_SIGNING_KEY_ID"
+        val centaurSigningKeyFile = "CENTAUR_SIGNING_KEY_FILE"
+        val centaurSigningPassword = "CENTAUR_SIGNING_PASSWORD"
+        if (System.getenv(centaurSigningKeyId) != null &&
+            System.getenv(centaurSigningKeyFile) != null &&
+            System.getenv(centaurSigningPassword) != null
         ) {
             useInMemoryPgpKeys(
-                System.getenv("CENTAUR_SIGNING_KEY_ID") as String,
-                file(System.getenv("CENTAUR_SIGNING_KEY_FILE") as String).readText(),
-                System.getenv("CENTAUR_SIGNING_PASSWORD") as String
+                System.getenv(centaurSigningKeyId) as String,
+                file(System.getenv(centaurSigningKeyFile) as String).readText(),
+                System.getenv(centaurSigningPassword) as String
             )
             sign(configurations.runtimeElements.get())
         }
