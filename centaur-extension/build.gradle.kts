@@ -10,4 +10,5 @@ dependencies {
     compileOnly(libs.spring.boot.starter.data.jpa)
     implementation(libs.micrometer.tracing)
     implementation(libs.alimt)
+    implementation(libs.deepl)
 }

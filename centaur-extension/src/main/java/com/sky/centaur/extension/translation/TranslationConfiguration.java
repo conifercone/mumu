@@ -16,6 +16,7 @@
 package com.sky.centaur.extension.translation;
 
 import com.sky.centaur.extension.translation.aliyun.AliyunTranslationConfiguration;
+import com.sky.centaur.extension.translation.deepl.DeeplTranslationConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ConditionalOnProperty(prefix = "centaur.extension.translation", value = "enabled", havingValue = "true")
-@Import(value = {AliyunTranslationConfiguration.class})
+@Import(value = {AliyunTranslationConfiguration.class, DeeplTranslationConfiguration.class})
 public class TranslationConfiguration {
 
 }

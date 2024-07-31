@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.translation;
+package com.sky.centaur.extension.translation.deepl;
 
-import com.sky.centaur.extension.translation.aliyun.AliyunTranslationProperties;
-import com.sky.centaur.extension.translation.deepl.DeeplTranslationProperties;
 import lombok.Data;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 机器翻译属性
+ * deepl翻译属性
  *
  * @author kaiyu.shan
  * @since 1.0.3
  */
 @Data
-public class TranslationProperties {
+public class DeeplTranslationProperties {
+
+  private String accessKey;
 
   private boolean enabled;
-
-  @NestedConfigurationProperty
-  private AliyunTranslationProperties aliyun = new AliyunTranslationProperties();
-
-  @NestedConfigurationProperty
-  private DeeplTranslationProperties deepl = new DeeplTranslationProperties();
 }
