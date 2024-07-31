@@ -15,8 +15,8 @@ plugins {
 }
 
 allprojects {
-    group = "com.sky"
-    version = "1.0.3-SNAPSHOT"
+    group = findProperty("group")!! as String
+    version = findProperty("version")!! as String
 
     repositories {
         mavenCentral()
