@@ -19,6 +19,7 @@ import com.deepl.api.Translator;
 import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ import org.springframework.context.annotation.Configuration;
 public class DeeplTranslationConfiguration {
 
   @Bean
+  @ConditionalOnMissingBean(Translator.class)
   public Translator deeplTranslator(ExtensionProperties extensionProperties) {
     return new Translator(extensionProperties.getTranslation().getDeepl().getAccessKey());
   }

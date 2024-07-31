@@ -20,6 +20,7 @@ import com.aliyun.teaopenapi.models.Config;
 import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Configuration;
 public class AliyunTranslationConfiguration {
 
   @Bean
+  @ConditionalOnMissingBean(Client.class)
   public Client alimtClient(ExtensionProperties extensionProperties) throws Exception {
     AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
         .getAliyun();
@@ -49,7 +51,7 @@ public class AliyunTranslationConfiguration {
   }
 
   @Bean
-  public SimpleTextTranslation simpleTextTranslation(Client client) {
-    return new AliyunSimpleTextTranslation(client);
+  public SimpleTextTranslation simpleTextTranslation(Client alimtClient) {
+    return new AliyunSimpleTextTranslation(alimtClient);
   }
 }
