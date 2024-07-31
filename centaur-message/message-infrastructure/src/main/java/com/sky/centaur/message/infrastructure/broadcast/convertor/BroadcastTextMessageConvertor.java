@@ -16,6 +16,7 @@
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
@@ -28,6 +29,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,12 +45,15 @@ public class BroadcastTextMessageConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
   public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      MessageProperties messageProperties) {
+      MessageProperties messageProperties,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
+    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @Contract("_ -> new")
@@ -111,6 +116,13 @@ public class BroadcastTextMessageConvertor {
   public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
       BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo);
+        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+        .map(broadcastTextMessageFindAllYouSendCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      broadcastTextMessageFindAllYouSendCo.getMessage()))
+              .ifPresent(broadcastTextMessageFindAllYouSendCo::setMessage);
+          return broadcastTextMessageFindAllYouSendCo;
+        });
   }
 }

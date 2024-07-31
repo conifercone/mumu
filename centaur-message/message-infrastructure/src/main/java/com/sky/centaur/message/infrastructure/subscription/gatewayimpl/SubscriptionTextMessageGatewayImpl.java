@@ -72,15 +72,16 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional
   public void forwardMsg(SubscriptionTextMessage msg) {
-    Optional.ofNullable(msg).ifPresent(subscriptionMessage -> Optional.ofNullable(
-            messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
-                .get(subscriptionMessage.getReceiverId())
-                .get(msg.getSenderId()))
-        .ifPresent(channel -> subscriptionTextMessageConvertor.toDataObject(msg)
-            .ifPresent(subscriptionTextMessageDo -> {
-              subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
-              channel.writeAndFlush(new TextWebSocketFrame(subscriptionMessage.getMessage()));
-            })));
+    Optional.ofNullable(msg)
+        .flatMap(subscriptionTextMessageConvertor::toDataObject)
+        .ifPresent(subscriptionMessageDo -> Optional.ofNullable(
+                messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
+                    .get(subscriptionMessageDo.getReceiverId()))
+            .flatMap(res -> Optional.ofNullable(res.get(subscriptionMessageDo.getSenderId())))
+            .ifPresentOrElse(channel -> {
+              subscriptionTextMessageRepository.persist(subscriptionMessageDo);
+              channel.writeAndFlush(new TextWebSocketFrame(subscriptionMessageDo.getMessage()));
+            }, () -> subscriptionTextMessageRepository.persist(subscriptionMessageDo)));
   }
 
   @Override

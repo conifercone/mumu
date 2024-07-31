@@ -22,6 +22,7 @@ minioVersion = '8.5.11'
 mapstructVersion = '1.5.5.Final'
 commonsIoVersion = '2.16.1'
 jobrunrSpringBoot3StarterVersion = '7.2.2'
+alimtVersion = '1.3.1'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
@@ -186,6 +187,8 @@ mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.re
 jobrunr-spring-boot3-starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
 # https://mvnrepository.com/artifact/io.netty/netty-all
 netty = { module = "io.netty:netty-all" }
+# https://mvnrepository.com/artifact/com.aliyun/alimt20181012
+alimt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

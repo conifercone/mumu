@@ -16,6 +16,7 @@
 package com.sky.centaur.message.infrastructure.subscription.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,10 +41,13 @@ import org.springframework.stereotype.Component;
 public class SubscriptionTextMessageConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
-  public SubscriptionTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+  public SubscriptionTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @Contract("_ -> new")
@@ -92,7 +97,14 @@ public class SubscriptionTextMessageConvertor {
   public Optional<SubscriptionTextMessageFindAllYouSendCo> toFindAllYouSendCo(
       SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendCo);
+        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+        .map(subscriptionTextMessageFindAllYouSendCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      subscriptionTextMessageFindAllYouSendCo.getMessage()))
+              .ifPresent(subscriptionTextMessageFindAllYouSendCo::setMessage);
+          return subscriptionTextMessageFindAllYouSendCo;
+        });
   }
 
   @Contract("_ -> new")
@@ -100,6 +112,13 @@ public class SubscriptionTextMessageConvertor {
   public Optional<SubscriptionTextMessageFindAllWithSomeOneCo> toFindAllWithSomeOne(
       SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne);
+        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne)
+        .map(subscriptionTextMessageFindAllWithSomeOneCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      subscriptionTextMessageFindAllWithSomeOneCo.getMessage()))
+              .ifPresent(subscriptionTextMessageFindAllWithSomeOneCo::setMessage);
+          return subscriptionTextMessageFindAllWithSomeOneCo;
+        });
   }
 }
