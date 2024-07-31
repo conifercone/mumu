@@ -25,12 +25,14 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -48,12 +50,15 @@ public class AuthorityConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AuthorityRepository authorityRepository;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
   public AuthorityConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      AuthorityRepository authorityRepository) {
+      AuthorityRepository authorityRepository,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.authorityRepository = authorityRepository;
+    this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
   }
 
   @Contract("_ -> new")
@@ -110,11 +115,25 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindByIdCo> toFindByIdCo(@Valid Authority authority) {
-    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo);
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo)
+        .map(authorityFindByIdCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      authorityFindByIdCo.getName()))
+              .ifPresent(authorityFindByIdCo::setName);
+          return authorityFindByIdCo;
+        });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindAllCo> toFindAllCo(@Valid Authority authority) {
-    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo);
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo)
+        .map(authorityFindAllCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      authorityFindAllCo.getName()))
+              .ifPresent(authorityFindAllCo::setName);
+          return authorityFindAllCo;
+        });
   }
 }

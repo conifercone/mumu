@@ -27,12 +27,14 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.R
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -51,14 +53,17 @@ public class RoleConvertor {
   private final RoleRepository roleRepository;
   private final AuthorityRepository authorityRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
-      AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService) {
+      AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -158,6 +163,12 @@ public class RoleConvertor {
             roleDomain.getAuthorities().stream().map(Authority::getId).collect(
                 Collectors.toList()));
       }
+      return roleFindAllCo;
+    }).map(roleFindAllCo -> {
+      Optional.ofNullable(simpleTextTranslation).flatMap(
+              simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                  roleFindAllCo.getName()))
+          .ifPresent(roleFindAllCo::setName);
       return roleFindAllCo;
     });
   }
