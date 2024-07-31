@@ -39,10 +39,12 @@ public class AliyunTranslationConfiguration {
 
   @Bean
   public Client alimtClient(ExtensionProperties extensionProperties) throws Exception {
+    AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
+        .getAliyun();
     Config config = new Config()
-        .setAccessKeyId(extensionProperties.getTranslation().getAliyun().getAccessKeyId())
-        .setAccessKeySecret(extensionProperties.getTranslation().getAliyun().getAccessKeySecret());
-    config.endpoint = extensionProperties.getTranslation().getAliyun().getEndpoint();
+        .setAccessKeyId(aliyunTranslationProperties.getAccessKeyId())
+        .setAccessKeySecret(aliyunTranslationProperties.getAccessKeySecret());
+    config.endpoint = aliyunTranslationProperties.getEndpoint();
     return new Client(config);
   }
 
