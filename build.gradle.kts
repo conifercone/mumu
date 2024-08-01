@@ -145,6 +145,7 @@ subprojects {
         implementation(rootProject.libs.apiguardian.api)
         implementation(rootProject.libs.guava)
         implementation(rootProject.libs.commons.lang3)
+        implementation(rootProject.libs.commons.text)
         implementation(rootProject.libs.commons.io)
         implementation(rootProject.libs.jackson.module.kotlin)
         implementation(rootProject.libs.kotlin.reflect)

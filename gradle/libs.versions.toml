@@ -21,9 +21,11 @@ disruptorVersion = '4.0.0'
 minioVersion = '8.5.11'
 mapstructVersion = '1.5.5.Final'
 commonsIoVersion = '2.16.1'
+commonsTextVersion = '1.12.0'
 jobrunrSpringBoot3StarterVersion = '7.2.2'
 alimtVersion = '1.3.1'
 deeplVersion = '1.5.0'
+asciitableVersion = '0.3.2'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
@@ -115,6 +117,8 @@ grpc-client-spring-boot-starter = { module = "io.github.lognet:grpc-client-sprin
 redis-om-spring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 commons-lang3 = { module = "org.apache.commons:commons-lang3" }
+# https://mvnrepository.com/artifact/org.apache.commons/commons-text
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsTextVersion" }
 # https://mvnrepository.com/artifact/commons-io/commons-io
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
@@ -192,6 +196,8 @@ netty = { module = "io.netty:netty-all" }
 alimt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
 # https://mvnrepository.com/artifact/com.deepl.api/deepl-java
 deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
+# https://mvnrepository.com/artifact/de.vandermeer/asciitable
+asciitable = { module = "de.vandermeer:asciitable", version.ref = "asciitableVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
