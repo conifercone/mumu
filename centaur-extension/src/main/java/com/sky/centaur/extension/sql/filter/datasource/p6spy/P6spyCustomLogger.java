@@ -22,10 +22,10 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import de.vandermeer.asciitable.AsciiTable;
 import io.micrometer.tracing.Tracer;
+import java.util.Map;
 import java.util.Optional;
-import java.util.PriorityQueue;
 import java.util.UUID;
-import lombok.Data;
+import java.util.concurrent.ConcurrentSkipListMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -44,9 +44,8 @@ public class P6spyCustomLogger extends FormattedLogger {
   private static final Logger LOGGER = LoggerFactory.getLogger(P6spyCustomLogger.class);
   public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
   private static final int MAX_LOG_SIZE = 10;
-  private final PriorityQueue<LogEntry> logEntries = new PriorityQueue<>(
-      (e1, e2) -> Long.compare(e2.executionTime, e1.executionTime)
-  );
+  private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
+      (a, b) -> Long.compare(b, a));
 
   @Override
   public void logException(Exception e) {
@@ -63,11 +62,11 @@ public class P6spyCustomLogger extends FormattedLogger {
       Category category, String prepared, String sql, String url) {
     if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
       if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
-        if (logEntries.stream().noneMatch(logEntry -> logEntry.getSql().equals(sql))) {
-          logEntries.add(new LogEntry(sql, elapsed));
+        if (!slowQueries.containsValue(sql)) {
+          slowQueries.put(elapsed, sql);
         }
-        if (logEntries.size() > MAX_LOG_SIZE) {
-          logEntries.poll();
+        if (slowQueries.size() > MAX_LOG_SIZE) {
+          slowQueries.pollLastEntry();
         }
         logTopSQLs();
       }
@@ -123,25 +122,17 @@ public class P6spyCustomLogger extends FormattedLogger {
     this.strategy = new P6spyCustomStrategy();
   }
 
-  @Data
-  private static class LogEntry {
-
-    private String sql;
-    private long executionTime;
-
-    LogEntry(String sql, long executionTime) {
-      this.sql = sql;
-      this.executionTime = executionTime;
-    }
-  }
-
   private void logTopSQLs() {
     AsciiTable at = new AsciiTable();
-    for (LogEntry entry : logEntries) {
+    at.addRule();
+    at.addRow("Execution time", null, null, null, null, null, null, "SQL");
+    for (Map.Entry<Long, String> entry : slowQueries.entrySet()) {
       at.addRule();
-      String sql = entry.sql.replaceAll("\\r?\\n", "");
-      at.addRow(sql);
+      String sql = entry.getValue().replaceAll("\\r?\\n", "");
+      at.addRow(entry.getKey().toString().concat("ms"), null, null, null, null, null, null, sql);
     }
+    at.addRule();
+    at.addRow("", "", "", "", "", "", "", "");
     at.addRule();
     LOGGER.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
         at.render(100));
