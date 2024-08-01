@@ -51,6 +51,7 @@ public class AliyunTranslationConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean(SimpleTextTranslation.class)
   public SimpleTextTranslation simpleTextTranslation(Client alimtClient) {
     return new AliyunSimpleTextTranslation(alimtClient);
   }

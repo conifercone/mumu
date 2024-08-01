@@ -44,6 +44,7 @@ public class DeeplTranslationConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean(SimpleTextTranslation.class)
   public SimpleTextTranslation simpleTextTranslation(Translator deeplTranslator) {
     return new DeeplSimpleTextTranslation(deeplTranslator);
   }
