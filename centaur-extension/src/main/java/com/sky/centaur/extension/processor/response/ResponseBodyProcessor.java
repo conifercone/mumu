@@ -122,6 +122,25 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
             .getDefaultMessage());
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResultResponse<?> handleException(
+      @NotNull IllegalArgumentException illegalArgumentException,
+      @NotNull HttpServletResponse response) {
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    LOGGER.error(illegalArgumentException.getMessage());
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder()
+                .setContent(illegalArgumentException.getMessage())
+                .setCategory("illegalArgumentException")
+                .setFail(ExceptionUtils.getStackTrace(illegalArgumentException)).build())
+        .build());
+    return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
+        illegalArgumentException.getMessage());
+  }
+
   @ExceptionHandler(Exception.class)
   public ResultResponse<?> handleException(@NotNull Exception exception,
       @NotNull HttpServletResponse response) {
