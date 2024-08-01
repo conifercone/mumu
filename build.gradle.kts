@@ -12,6 +12,7 @@ plugins {
     id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.signing.get().pluginId)
+    id(libs.plugins.projectReport.get().pluginId)
 }
 
 allprojects {
@@ -42,6 +43,7 @@ allprojects {
 subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
     apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.projectReport.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
