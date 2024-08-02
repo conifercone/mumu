@@ -36,12 +36,6 @@ centaur
 │  │  │- 📂 authentication-domain -- authentication service domain layer
 │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
 │  │─ 📂 centaur-basis -- basic module
-│  │─ 📂 centaur-brms -- business rule management system service
-│  │  │- 📂 brms-adapter -- business rule management system service adaptation layer
-│  │  │- 📂 brms-application -- business rule management system service application layer
-│  │  │- 📂 brms-client -- business rule management system service client
-│  │  │- 📂 brms-domain -- business rule management system service domain layer
-│  │  │- 📂 brms-infrastructure -- business rule management system service infrastructure layer
 │  │─ 📂 centaur-extension -- expansion module
 │  │─ 📂 centaur-file -- file service
 │  │  │- 📂 file-adapter -- file service adaptation layer
