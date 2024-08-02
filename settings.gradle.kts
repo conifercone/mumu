@@ -87,4 +87,14 @@ include("centaur-message:message-client")
 findProject(":centaur-message:message-client")?.name = "message-client"
 include("centaur-message:message-infrastructure")
 findProject(":centaur-message:message-infrastructure")?.name = "message-infrastructure"
-
+include("centaur-brms")
+include("centaur-brms:brms-adapter")
+findProject(":centaur-brms:brms-adapter")?.name = "brms-adapter"
+include("centaur-brms:brms-application")
+findProject(":centaur-brms:brms-application")?.name = "brms-application"
+include("centaur-brms:brms-domain")
+findProject(":centaur-brms:brms-domain")?.name = "brms-domain"
+include("centaur-brms:brms-client")
+findProject(":centaur-brms:brms-client")?.name = "brms-client"
+include("centaur-brms:brms-infrastructure")
+findProject(":centaur-brms:brms-infrastructure")?.name = "brms-infrastructure"
