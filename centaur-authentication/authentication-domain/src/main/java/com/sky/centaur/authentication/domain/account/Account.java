@@ -24,6 +24,7 @@ import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -98,6 +99,8 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Setter
   private LocalDate birthday;
 
+  private final int age = 0;
+
   public Account(Long id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
@@ -159,5 +162,11 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Override
   public boolean isCredentialsNonExpired() {
     return this.credentialsNonExpired;
+  }
+
+  public int getAge() {
+    return Optional.ofNullable(this.birthday)
+        .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
+        .orElse(0);
   }
 }
