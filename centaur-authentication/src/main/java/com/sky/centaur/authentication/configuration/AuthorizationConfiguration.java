@@ -37,6 +37,7 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.Cli
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
@@ -405,8 +406,9 @@ public class AuthorizationConfiguration {
             )
             .map(RegisteredClient::getScopes)
             .map(scopes -> {
-              Set<String> roles = scopes.stream().filter(scope -> scope.startsWith("ROLE_"))
-                  .map(scope -> scope.substring("ROLE_".length()))
+              Set<String> roles = scopes.stream()
+                  .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
+                  .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
                   .collect(Collectors.toSet());
               List<Long> authoritiesIds = roleRepository.findByCodeIn(new ArrayList<>(roles))
                   .stream()

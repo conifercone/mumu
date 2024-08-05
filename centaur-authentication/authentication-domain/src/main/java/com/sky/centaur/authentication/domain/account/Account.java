@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
@@ -126,7 +127,8 @@ public class Account extends BasisDomainModel implements UserDetails {
     return Optional.ofNullable(this.role)
         .flatMap((accountRole) -> Optional.ofNullable(accountRole.getAuthorities()))
         .stream().peek(authorities -> authorities.add(
-            Authority.builder().code("ROLE_".concat(this.role.getCode())).build())).findAny()
+            Authority.builder().code(CommonConstants.ROLE_PREFIX.concat(this.role.getCode()))
+                .build())).findAny()
         .orElse(Collections.emptyList());
   }
 

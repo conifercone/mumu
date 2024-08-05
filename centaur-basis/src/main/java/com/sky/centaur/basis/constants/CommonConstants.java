@@ -64,4 +64,9 @@ public final class CommonConstants {
   public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = PERCENT_SIGN.concat(PERCENT_SIGN)
       .concat(
           STRING_FORMAT).concat(PERCENT_SIGN).concat(PERCENT_SIGN);
+
+  /**
+   * 角色前缀
+   */
+  public static final String ROLE_PREFIX = "ROLE_";
 }
