@@ -23,6 +23,9 @@ package com.sky.centaur.basis.constants;
  */
 public final class CommonConstants {
 
+  private CommonConstants() {
+  }
+
   /**
    * 百分号
    */
