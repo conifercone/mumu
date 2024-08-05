@@ -23,6 +23,7 @@ import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import java.io.Serial;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -92,6 +93,10 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Getter
   @Setter
   private LanguageEnum language;
+
+  @Getter
+  @Setter
+  private LocalDate birthday;
 
   public Account(Long id, String username, String password, Role role) {
     this.id = id;

@@ -18,6 +18,8 @@ package com.sky.centaur.authentication.client.dto.co;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,6 +33,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AccountUpdateByIdCo extends BaseClientObject {
 
+  @NotNull(message = "{account.id.validation.not.null}")
   private Long id;
 
   private String username;
@@ -46,4 +49,6 @@ public class AccountUpdateByIdCo extends BaseClientObject {
   private String timezone;
 
   private LanguageEnum language;
+
+  private LocalDate birthday;
 }

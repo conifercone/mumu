@@ -18,6 +18,9 @@ package com.sky.centaur.authentication.client.dto.co;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,8 +36,10 @@ public class AccountRegisterCo extends BaseClientObject {
 
   private Long id;
 
+  @NotBlank(message = "{account.username.validation.not.blank}")
   private String username;
 
+  @NotBlank(message = "{account.password.validation.not.blank}")
   private String password;
 
   private String roleCode;
@@ -45,9 +50,13 @@ public class AccountRegisterCo extends BaseClientObject {
 
   private SexEnum sex;
 
+  @NotBlank(message = "{account.email.validation.not.blank}")
   private String email;
 
   private String timezone;
 
   private LanguageEnum language;
+
+  @NotNull(message = "{account.birthday.validation.not.null}")
+  private LocalDate birthday;
 }

@@ -30,9 +30,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
@@ -108,5 +110,10 @@ public class AccountDo extends JpaBasisDataObject {
   @JdbcType(PostgreSQLEnumJdbcType.class)
   @Enumerated(EnumType.STRING)
   private LanguageEnum language;
+
+  @NotNull
+  @ColumnDefault("'1970-01-01'::date")
+  @Column(name = "birthday", nullable = false)
+  private LocalDate birthday;
 
 }
