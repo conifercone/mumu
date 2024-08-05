@@ -24,7 +24,7 @@ commonsIoVersion = '2.16.1'
 jobrunrSpringBoot3StarterVersion = '7.2.2'
 # bom version
 grpcBomVersion = '1.58.0'
-guavaBomVersion = '33.1.0-jre'
+guavaBomVersion = '33.2.1-jre'
 protobufBomVersion = '3.25.1'
 # plugin version
 protobufPluginVersion = '0.9.4'
