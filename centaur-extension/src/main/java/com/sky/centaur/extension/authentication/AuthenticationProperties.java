@@ -47,16 +47,15 @@ public class AuthenticationProperties {
     /**
      * 密钥地址
      */
-    private String keyPath;
+    private String jksKeyPath;
     /**
      * 密钥密码
      */
-    private String keyPassword;
+    private String jksKeyPassword;
 
     /**
      * 密钥对
      */
-    private String keyPair = "jwt";
-
+    private String jksKeyPair = "jwt";
   }
 }

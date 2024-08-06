@@ -322,7 +322,7 @@ public class AuthorizationConfiguration {
     if (rsa.isAutomaticGenerated()) {
       keyPair = generateRsaKey();
     } else {
-      keyPair = loadKeyPair(rsa.getKeyPath(), rsa.getKeyPassword(), rsa.getKeyPair());
+      keyPair = loadKeyPair(rsa.getJksKeyPath(), rsa.getJksKeyPassword(), rsa.getJksKeyPair());
     }
     RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
