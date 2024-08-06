@@ -16,8 +16,10 @@
 package com.sky.centaur.mail.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.util.Map;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 模板邮件发送客户端对象
@@ -26,8 +28,9 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TemplateMailSendCo {
+public class TemplateMailSendCo extends BaseClientObject {
 
   /**
    * 模板地址
