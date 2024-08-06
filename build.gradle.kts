@@ -62,9 +62,9 @@ subprojects {
         val centaurSigningKeyId = "CENTAUR_SIGNING_KEY_ID"
         val centaurSigningKeyFile = "CENTAUR_SIGNING_KEY_FILE"
         val centaurSigningPassword = "CENTAUR_SIGNING_PASSWORD"
-        if (System.getenv(centaurSigningKeyId) != null &&
-            System.getenv(centaurSigningKeyFile) != null &&
-            System.getenv(centaurSigningPassword) != null
+        if (!System.getenv(centaurSigningKeyId).isNullOrBlank() &&
+            !System.getenv(centaurSigningKeyFile).isNullOrBlank() &&
+            !System.getenv(centaurSigningPassword).isNullOrBlank()
         ) {
             useInMemoryPgpKeys(
                 System.getenv(centaurSigningKeyId) as String,
