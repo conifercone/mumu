@@ -139,7 +139,7 @@ public class AuthorizationConfiguration {
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder)
+      PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -188,12 +188,13 @@ public class AuthorizationConfiguration {
     // authorization endpoint
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(
+                    String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService))
         )
@@ -201,7 +202,8 @@ public class AuthorizationConfiguration {
         .oauth2ResourceServer((resourceServer) -> resourceServer
             .jwt(withDefaults())
             .authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(
+                    String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())

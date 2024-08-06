@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.client.config.ResourceServerProperties.Pol
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -58,7 +59,7 @@ public class DefaultSecurityConfig {
       JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
       ResourceServerProperties resourceServerProperties,
       OperationLogGrpcService operationLogGrpcService,
-      SystemLogGrpcService systemLogGrpcService)
+      SystemLogGrpcService systemLogGrpcService, @Value("${server.port}") Integer port)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -91,7 +92,7 @@ public class DefaultSecurityConfig {
         UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exceptions) -> exceptions
         .defaultAuthenticationEntryPointFor(
-            new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+            new CentaurAuthenticationEntryPoint(String.format("http://localhost:%s/login", port),
                 operationLogGrpcService,
                 systemLogGrpcService),
             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
