@@ -13,26 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.client.dto;
+package com.sky.centaur.extension.validator;
 
-import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import lombok.Data;
+import com.sky.centaur.extension.annotations.NotBlankOrNull;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
- * 权限查询指令
+ * NotBlankOrNull Validator
  *
  * @author kaiyu.shan
- * @since 1.0.0
+ * @since 1.0.3
  */
-@Data
-public class AuthorityFindAllCmd {
+public class NotBlankOrNullValidator implements ConstraintValidator<NotBlankOrNull, String> {
 
-  @Valid
-  private AuthorityFindAllCo authorityFindAllCo;
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  @Override
+  public boolean isValid(String value, ConstraintValidatorContext context) {
+    // Return true if value is null, or if value is not null and not blank
+    return value == null || !value.trim().isEmpty();
+  }
 }

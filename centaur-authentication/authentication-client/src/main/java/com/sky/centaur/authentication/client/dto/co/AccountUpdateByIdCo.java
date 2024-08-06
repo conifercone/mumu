@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.client.dto.co;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
+import com.sky.centaur.extension.annotations.NotBlankOrNull;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class AccountUpdateByIdCo extends BaseClientObject {
   @NotNull(message = "{account.id.validation.not.null}")
   private Long id;
 
+  @NotBlankOrNull(message = "{account.username.validation.not.blank}")
   private String username;
 
   private String avatarUrl;
@@ -44,6 +46,7 @@ public class AccountUpdateByIdCo extends BaseClientObject {
 
   private SexEnum sex;
 
+  @NotBlankOrNull(message = "{account.email.validation.not.blank}")
   private String email;
 
   private String timezone;

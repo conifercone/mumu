@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.dto;
 
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ import lombok.Data;
 @Data
 public class RoleFindAllCmd {
 
+  @Valid
   private RoleFindAllCo roleFindAllCo;
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
