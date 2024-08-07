@@ -33,7 +33,7 @@ protobufBomVersion = '3.25.3'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
-kotlinPluginVersion = '2.0.0'
+kotlinPluginVersion = '2.0.10'
 licensePluginVersion = '0.16.1'
 
 [libraries]
