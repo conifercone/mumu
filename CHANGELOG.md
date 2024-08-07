@@ -9,13 +9,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- v1.0.3 Added read interface for subscribing messages.
-- v1.0.3 A new read interface has been added to the broadcast message.
-- v1.0.3 A new archiving interface is added to the subscription message.
+- v1.0.4 Machine translation adds Microsoft Translate option.
+- v1.0.4 Extension module adds rule engine expansion implementation.
 
 ### Changed
 
-- v1.0.3 Broadcast text messages have new read and unread attributes.
+### Removed
+
+## [1.0.3] - 2024-08-07
+
+### Added
+
+- Added custom jks key function.
+- Added NotBlankOrNull verification annotation.
+- CommonConstants adds private constructor.
+- Added age attribute to account model.
+- Added birthday attribute to account.
+- Added slow sql statistics function.
+- Added project-report plugin.
+- Added IllegalArgumentException global exception handling.
+- Added signature plugin.
+- Added machine translation function.
+- Text subscription messages have been added to query all and someone’s message records.
+- Text broadcast message forwarding adds receiver verification.
+- Added text broadcast message archiving function based on ID.
+- Added the function of archiving text subscription messages based on ID.
+- Added text subscription and broadcast message archive tables.
+- New index.
+- New trigger for text broadcast messages.
+- Text subscription message adds unread message interface based on ID.
+- Client object conversion adds post-processing.
+- Added BeanNameConstants.
+- Text subscription message adds a new interface for querying all current users to send messages.
+- New basic properties for top-level client objects.
+- Text broadcast message has a new interface for querying all current users sending messages.
+- Added the ability to delete text broadcast messages based on ID.
+- Added read text broadcast message based on ID.
+- Added the ability to delete text subscription messages based on ID.
+- Added the ability to subscribe to messages based on ID read text.
+
+### Fixed
+
+- Fix permission verification exception.
+- Fix spelling errors.
+
+### Changed
+
+- Modify the default branch of GitHub actions to develop.
+- Standardize libs.versions.toml key value naming.
+- spring-cloud upgraded to 2023.0.3.
+- Exclude logback globally.
+- redis-om-spring upgraded to 0.9.4.
+- Add restrictions based on ID read text subscription messages.
+- Add restrictions on read text broadcast messages based on ID.
+- SubscriptionTextMessageRepository#findByIdAndReceiverId parameter adds NotNull annotation.
+- Unified modify the EnableRedisDocumentRepositories annotation range.
+- Pagination query uniformly adds page number and current page number parameter value verification.
+- Optimize subscription and broadcast channel storage logic.
+- Group and version are extracted into the gradle.properties file.
 
 ### Removed
 
@@ -23,7 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- integrate redis-om-spring annotation processor
+- integrate redis-om-spring annotation processor.
 - Exception prompt content adapts to user language preference.
 - Added parameter verification for permission-related functions.
 - The permission module adds refresh_token redis storage and validity verification.
@@ -53,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The lombok gradle plugin is modified to latest.release.
 - When updating an account, verify whether the updated account name is unique.
 - Unified authentication service database table index name naming convention.
-- Under password authentication, principalName is changed to the user name.
+- Under password authentication, principalName is changed to the username.
 - The client token combines the permissions of the role and the permissions in the client itself.
 - The upper limit of log file size is adjusted to 250MB.
 - The gradle version is upgraded to 8.9.
@@ -120,7 +171,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.2...develop
+[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.3...develop
+[1.0.3]: https://github.com/conifercone/centaur/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/conifercone/centaur/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/conifercone/centaur/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/conifercone/centaur/releases/tag/v1.0.0
