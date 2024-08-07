@@ -77,7 +77,7 @@ public class AuthorityController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
+  public void updateById(@RequestBody @Valid AuthorityUpdateCmd authorityUpdateCmd) {
     authorityService.updateById(authorityUpdateCmd);
   }
 

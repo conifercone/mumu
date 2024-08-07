@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AuthorityUpdateCo extends BaseClientObject {
 
+  @NotNull(message = "{id.validation.not.null}")
   private Long id;
 
   @Size(max = 50, message = "{authority.code.validation.size}")
