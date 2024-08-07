@@ -72,4 +72,9 @@ public final class CommonConstants {
    * 角色前缀
    */
   public static final String ROLE_PREFIX = "ROLE_";
+
+  /**
+   * 慢sql表头
+   */
+  public static final String SLOW_SQL_TABLE_HEADER = "┌─────────┬────────────────────────────────────────────────────────────────────┐";
 }
