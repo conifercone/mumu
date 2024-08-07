@@ -74,12 +74,17 @@ public class P6spyCustomLogger extends FormattedLogger {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(LF).append("====>");
       stringBuilder.append("trace-id:[");
-      String traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
-          .flatMap(applicationContext -> Optional.ofNullable(
-              applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
-              tracer -> Optional.ofNullable(tracer.currentSpan())
-                  .map(span -> span.context().traceId())
-          ).orElse(null);
+      String traceId = null;
+      try {
+        traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
+            .flatMap(applicationContext -> Optional.ofNullable(
+                applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
+                tracer -> Optional.ofNullable(tracer.currentSpan())
+                    .map(span -> span.context().traceId())
+            ).orElse(null);
+      } catch (Exception e) {
+        // ignore
+      }
       if (Strings.isNullOrEmpty(traceId)) {
         String uuid = String.valueOf(UUID.randomUUID());
         stringBuilder.append(uuid);

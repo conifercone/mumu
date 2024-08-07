@@ -59,6 +59,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -139,7 +140,8 @@ public class AuthorizationConfiguration {
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port)
+      PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port,
+      SwaggerUiConfigProperties swaggerUiConfigProperties)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -191,12 +193,12 @@ public class AuthorizationConfiguration {
                 new CentaurAuthenticationEntryPoint(
                     String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
-                    systemLogGrpcService),
+                    systemLogGrpcService, swaggerUiConfigProperties),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
                 new CentaurAuthenticationEntryPoint(String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
-                    systemLogGrpcService))
+                    systemLogGrpcService, swaggerUiConfigProperties))
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
@@ -205,7 +207,7 @@ public class AuthorizationConfiguration {
                 new CentaurAuthenticationEntryPoint(
                     String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
-                    systemLogGrpcService)));
+                    systemLogGrpcService, swaggerUiConfigProperties)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 

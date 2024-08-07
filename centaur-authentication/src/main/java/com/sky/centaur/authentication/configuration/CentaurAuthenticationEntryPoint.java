@@ -31,6 +31,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
+import org.springdoc.core.utils.Constants;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -52,12 +54,15 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
   private final OperationLogGrpcService operationLogGrpcService;
 
   private final SystemLogGrpcService systemLogGrpcService;
+  private final SwaggerUiConfigProperties swaggerUiConfigProperties;
 
   public CentaurAuthenticationEntryPoint(String loginFormUrl,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
+      SwaggerUiConfigProperties swaggerUiConfigProperties) {
     super(loginFormUrl);
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
+    this.swaggerUiConfigProperties = swaggerUiConfigProperties;
   }
 
   @Override
@@ -101,6 +106,12 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
+        if (swaggerUiConfigProperties.isDisableSwaggerDefaultUrl() && request.getRequestURI()
+            .equals(swaggerUiConfigProperties.getPath())) {
+          super.commence(request, response, authException);
+        } else if (Constants.DEFAULT_SWAGGER_UI_PATH.equals(request.getRequestURI())) {
+          super.commence(request, response, authException);
+        }
         LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg());
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(

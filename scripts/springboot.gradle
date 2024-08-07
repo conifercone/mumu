@@ -18,3 +18,7 @@ bootJar {
 bootBuildImage {
     imageName.set("conifercone/${project.name}:${project.version}")
 }
+
+dependencies {
+    developmentOnly(libs.spring.boot.devtools)
+}
