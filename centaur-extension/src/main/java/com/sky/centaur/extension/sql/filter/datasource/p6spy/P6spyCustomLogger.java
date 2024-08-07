@@ -45,7 +45,7 @@ import org.slf4j.MDC;
 public class P6spyCustomLogger extends FormattedLogger {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(P6spyCustomLogger.class);
-  public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1L;
+  public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
   private static final int MAX_LOG_SIZE = 10;
   private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
       (a, b) -> Long.compare(b, a));
