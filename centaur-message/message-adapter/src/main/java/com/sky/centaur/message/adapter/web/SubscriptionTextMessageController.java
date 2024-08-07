@@ -16,13 +16,26 @@
 package com.sky.centaur.message.adapter.web;
 
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
+import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,7 +65,62 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-      @RequestBody SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+      @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
+  }
+
+  @Operation(summary = "根据ID已读文本订阅消息")
+  @PutMapping("/readMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void readMsgById(
+      @RequestBody @Valid SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
+    subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID未读文本订阅消息")
+  @PutMapping("/unreadMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void unreadMsgById(
+      @RequestBody @Valid SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
+    subscriptionTextMessageService.unreadMsgById(subscriptionTextMessageUnreadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID删除文本订阅消息")
+  @DeleteMapping("/deleteMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void deleteMsgById(
+      @RequestBody @Valid SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
+    subscriptionTextMessageService.deleteMsgById(subscriptionTextMessageDeleteByIdCmd);
+  }
+
+  @Operation(summary = "查询所有当前用户发送消息")
+  @GetMapping("/findAllYouSend")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+      @RequestBody @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
+  }
+
+  @Operation(summary = "根据ID归档文本订阅消息")
+  @PutMapping("/archiveMsgById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void archiveMsgById(
+      @RequestBody @Valid SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
+    subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Operation(summary = "查询所有和某人的消息记录")
+  @GetMapping("/findAllWithSomeOne")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
+      @RequestBody @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
+        subscriptionTextMessageFindAllWithSomeOneCmd);
   }
 }

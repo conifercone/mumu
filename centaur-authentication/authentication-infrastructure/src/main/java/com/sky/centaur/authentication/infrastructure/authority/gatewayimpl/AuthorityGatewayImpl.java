@@ -129,6 +129,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
               String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
       Optional.ofNullable(authority.getId())
           .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityDo_.id), id)));
+      assert query != null;
       return query.orderBy(cb.desc(root.get(AuthorityDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();

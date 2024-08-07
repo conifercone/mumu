@@ -85,7 +85,7 @@ class SpringContextUtil : ApplicationContextAware {
          */
         @JvmStatic
         @Suppress("UNCHECKED_CAST")
-        fun <T> getBean(clazz: Class<T>): T {
+        fun <T : Any> getBean(clazz: Class<T>): T {
             return BEAN_CLASS_CACHE.computeIfAbsent(
                 clazz
             ) { getApplicationContext()!!.getBean(clazz) } as T

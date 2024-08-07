@@ -21,6 +21,7 @@ import com.sky.centaur.log.client.dto.SystemLogSubmitCmd;
 import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class SystemLogController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<SystemLogFindAllCo> findAll(
-      @RequestBody SystemLogFindAllCmd systemLogFindAllCmd) {
+      @RequestBody @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogService.findAll(systemLogFindAllCmd);
   }
 }

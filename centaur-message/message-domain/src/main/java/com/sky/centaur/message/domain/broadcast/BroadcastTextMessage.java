@@ -52,4 +52,8 @@ public class BroadcastTextMessage extends BasisDomainModel {
   private String message;
 
   private MessageStatusEnum messageStatus;
+
+  private Collection<Long> readReceiverIds;
+
+  private Collection<Long> unreadReceiverIds;
 }

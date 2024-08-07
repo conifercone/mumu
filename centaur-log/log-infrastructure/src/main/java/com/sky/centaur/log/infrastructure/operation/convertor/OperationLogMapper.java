@@ -76,11 +76,30 @@ public interface OperationLogMapper {
   OperationLog toEntity(OperationLogFindAllCo operationLogFindAllCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
+  @Mappings(value = {
+
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   OperationLogFindAllCo toFindAllCo(OperationLog operationLog);
 
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogQryCo toQryCo(OperationLog operationLog);
 
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCo toSaveCo(OperationLogKafkaDo operationLogKafkaDo);
 }

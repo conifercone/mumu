@@ -16,11 +16,13 @@
 package com.sky.centaur.file.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.io.InputStream;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -30,8 +32,9 @@ import org.springframework.util.ObjectUtils;
  * @since 1.0.1
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StreamFileSyncUploadCo {
+public class StreamFileSyncUploadCo extends BaseClientObject {
 
   /**
    * 文件内容

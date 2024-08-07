@@ -15,11 +15,13 @@
  */
 package com.sky.centaur.basis.kotlin.tools
 
+import com.sky.centaur.basis.client.dto.co.BaseClientObject
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.*
 import java.util.regex.Pattern
 import javax.mail.internet.AddressException
 import javax.mail.internet.InternetAddress
@@ -127,6 +129,33 @@ object CommonUtil {
                 ZoneId.of(timezone)
             )
         }.orElse(localDateTime)
+    }
+
+    /**
+     * 转换为账户时区
+     *
+     * @param baseClientObject 客户端对象
+     */
+    @API(status = API.Status.STABLE, since = "1.0.3")
+    @JvmStatic
+    fun convertToAccountZone(
+        baseClientObject: BaseClientObject
+    ) {
+        Optional.ofNullable(baseClientObject).ifPresent { baseCo ->
+            SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
+                val targetZoneId = ZoneId.of(timezone)
+                Optional.ofNullable(baseCo.creationTime).ifPresent {
+                    val creationTimeZonedDateTime =
+                        baseCo.creationTime.atZoneSameInstant(targetZoneId)
+                    baseCo.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
+                }
+                Optional.ofNullable(baseCo.modificationTime).ifPresent {
+                    val modificationTimeZonedDateTime =
+                        baseCo.modificationTime.atZoneSameInstant(targetZoneId)
+                    baseCo.modificationTime = modificationTimeZonedDateTime.toOffsetDateTime()
+                }
+            }
+        }
     }
 
     /**

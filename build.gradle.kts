@@ -4,18 +4,20 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 plugins {
-    id(libs.plugins.springboot.get().pluginId) version libs.plugins.springboot.get().version.toString() apply false
-    id(libs.plugins.lombok.get().pluginId) version libs.plugins.lombok.get().version.toString()
-    id(libs.plugins.protobuf.get().pluginId) version libs.plugins.protobuf.get().version.toString() apply false
-    id(libs.plugins.license.get().pluginId) version libs.plugins.license.get().version.toString()
-    id(libs.plugins.kotlinJvm.get().pluginId) version libs.plugins.kotlinJvm.get().version.toString()
-    id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.plugins.kotlinPluginSpring.get().version.toString()
-    id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.plugins.kotlinPluginJpa.get().version.toString()
+    id(libs.plugins.springboot.get().pluginId) version libs.versions.springbootVersion apply false
+    id(libs.plugins.lombok.get().pluginId) version libs.versions.lombokPluginVersion
+    id(libs.plugins.protobuf.get().pluginId) version libs.versions.protobufPluginVersion apply false
+    id(libs.plugins.license.get().pluginId) version libs.versions.licensePluginVersion
+    id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
+    id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
+    id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
+    id(libs.plugins.signing.get().pluginId)
+    id(libs.plugins.projectReport.get().pluginId)
 }
 
 allprojects {
-    group = "com.sky"
-    version = "1.0.2"
+    group = findProperty("group")!! as String
+    version = findProperty("version")!! as String
 
     repositories {
         mavenCentral()
@@ -24,20 +26,24 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(0, "seconds")
-            cacheDynamicVersionsFor(0, "seconds")
+            cacheChangingModulesFor(0, TimeUnit.SECONDS)
+            cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
         }
         resolutionStrategy.dependencySubstitution {
             substitute(module("org.springframework.boot:spring-boot-starter-tomcat:${rootProject.libs.versions.springbootVersion}}"))
                 .using(module("org.springframework.boot:spring-boot-starter-undertow:${rootProject.libs.versions.springbootVersion}}"))
         }
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+        exclude(group = "ch.qos.logback", module = "logback-core")
     }
 
 }
 
 subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.projectReport.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
@@ -49,6 +55,23 @@ subprojects {
     java {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+
+    signing {
+        val centaurSigningKeyId = "CENTAUR_SIGNING_KEY_ID"
+        val centaurSigningKeyFile = "CENTAUR_SIGNING_KEY_FILE"
+        val centaurSigningPassword = "CENTAUR_SIGNING_PASSWORD"
+        if (!System.getenv(centaurSigningKeyId).isNullOrBlank() &&
+            !System.getenv(centaurSigningKeyFile).isNullOrBlank() &&
+            !System.getenv(centaurSigningPassword).isNullOrBlank()
+        ) {
+            useInMemoryPgpKeys(
+                System.getenv(centaurSigningKeyId) as String,
+                file(System.getenv(centaurSigningKeyFile) as String).readText(),
+                System.getenv(centaurSigningPassword) as String
+            )
+            sign(configurations.runtimeElements.get())
         }
     }
 
@@ -107,29 +130,30 @@ subprojects {
     }
 
     dependencies {
-        implementation(platform(rootProject.libs.springBootDependencies))
-        annotationProcessor(platform(rootProject.libs.springBootDependencies))
-        implementation(platform(rootProject.libs.springCloudDependencies))
-        implementation(platform(rootProject.libs.grpcBom))
-        implementation(platform(rootProject.libs.protobufBom))
-        implementation(platform(rootProject.libs.guavaBom))
-        implementation(rootProject.libs.springboot)
-        implementation(rootProject.libs.springBootLog4j2)
-        implementation(rootProject.libs.springBootValidation)
+        implementation(platform(rootProject.libs.spring.boot.dependencies))
+        annotationProcessor(platform(rootProject.libs.spring.boot.dependencies))
+        implementation(platform(rootProject.libs.spring.cloud.dependencies))
+        implementation(platform(rootProject.libs.grpc.bom))
+        implementation(platform(rootProject.libs.protobuf.bom))
+        implementation(platform(rootProject.libs.guava.bom))
+        implementation(rootProject.libs.spring.boot.starter)
+        implementation(rootProject.libs.spring.boot.starter.log4j2)
+        implementation(rootProject.libs.spring.boot.starter.validation)
         implementation(rootProject.libs.disruptor)
         implementation(rootProject.libs.bundles.jackson)
-        implementation(rootProject.libs.jetbrainsAnnotations)
-        implementation(rootProject.libs.apiguardian)
+        implementation(rootProject.libs.jetbrains.annotations)
+        implementation(rootProject.libs.apiguardian.api)
         implementation(rootProject.libs.guava)
-        implementation(rootProject.libs.commonsLang3)
-        implementation(rootProject.libs.commonsIo)
-        implementation(rootProject.libs.jacksonModuleKotlin)
-        implementation(rootProject.libs.kotlinReflect)
-        testImplementation(rootProject.libs.junitJupiter)
-        annotationProcessor(rootProject.libs.springBootConfigurationProcessor)
+        implementation(rootProject.libs.commons.lang3)
+        implementation(rootProject.libs.commons.text)
+        implementation(rootProject.libs.commons.io)
+        implementation(rootProject.libs.jackson.module.kotlin)
+        implementation(rootProject.libs.kotlin.reflect)
+        testImplementation(rootProject.libs.junit.jupiter)
+        annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
         implementation(rootProject.libs.mapstruct)
-        annotationProcessor(rootProject.libs.mapstructProcessor)
-        testAnnotationProcessor(rootProject.libs.mapstructProcessor)
+        annotationProcessor(rootProject.libs.mapstruct.processor)
+        testAnnotationProcessor(rootProject.libs.mapstruct.processor)
     }
 
     tasks.named<Test>("test") {

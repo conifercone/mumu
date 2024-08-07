@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)
-@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.unique.**")
+@EnableRedisDocumentRepositories(basePackages = "com.sky.centaur.unique.infrastructure.**")
 public class CentaurUniqueApplication {
 
   public static void main(String[] args) {

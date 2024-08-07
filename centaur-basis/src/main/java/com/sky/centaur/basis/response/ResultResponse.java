@@ -26,6 +26,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.MediaType;
 
 /**
  * 响应信息
@@ -101,7 +102,7 @@ public class ResultResponse<T> implements Serializable {
   private static void applicationJsonResponse(@NotNull HttpServletResponse response,
       String jsonResult)
       throws IOException {
-    response.setContentType("application/json");
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.getWriter().print(jsonResult);
   }

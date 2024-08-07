@@ -55,6 +55,12 @@ public interface CaptchaMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaVerifyCo simpleCaptchaVerifyCo);
 
+  @Mappings(value = {
+      @Mapping(target = "creationTime", ignore = true),
+      @Mapping(target = "founder", ignore = true),
+      @Mapping(target = "modificationTime", ignore = true),
+      @Mapping(target = "modifier", ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);
 }

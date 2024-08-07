@@ -1,5 +1,5 @@
 dependencies {
     implementation(project(":centaur-basis"))
-    implementation(libs.springSecurityCore)
-    implementation(libs.springDataCommons)
+    implementation(libs.spring.security.core)
+    implementation(libs.spring.data.commons)
 }

@@ -15,12 +15,72 @@
  */
 package com.sky.centaur.basis.client.dto.co;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * 基础co
  *
  * @author kaiyu.shan
  * @since 1.0.0
  */
+@SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
 public abstract class BaseClientObject implements ClientObject {
 
+  /**
+   * 创建时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private OffsetDateTime creationTime;
+
+  /**
+   * 创建人
+   */
+  private Long founder;
+
+  /**
+   * 修改人
+   */
+  private Long modifier;
+
+  /**
+   * 修改时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private OffsetDateTime modificationTime;
+
+  public OffsetDateTime getCreationTime() {
+    return creationTime;
+  }
+
+  public void setCreationTime(OffsetDateTime creationTime) {
+    this.creationTime = creationTime;
+  }
+
+  public Long getFounder() {
+    return founder;
+  }
+
+  public void setFounder(Long founder) {
+    this.founder = founder;
+  }
+
+  public Long getModifier() {
+    return modifier;
+  }
+
+  public void setModifier(Long modifier) {
+    this.modifier = modifier;
+  }
+
+  public OffsetDateTime getModificationTime() {
+    return modificationTime;
+  }
+
+  public void setModificationTime(OffsetDateTime modificationTime) {
+    this.modificationTime = modificationTime;
+  }
 }

@@ -1,66 +1,70 @@
 [versions]
-springbootVersion = "3.3.1"
-springCloudVersion = "2023.0.2"
+springbootVersion = "3.3.2"
+springCloudVersion = "2023.0.3"
 # dependence version
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '24.0.0'
 jasyptVersion = '3.0.5'
-swagger3Version = '2.3.0'
+swagger3Version = '2.6.0'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
-redisOmSpringVersion = "0.9.3"
+redisOmSpringVersion = "0.9.4"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.2"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.7.7"
+hypersistenceUtilsVersion = "3.8.2"
 curatorRecipesVersion = "5.7.0"
-flywayVersion = "10.13.0"
+flywayVersion = "10.16.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
-minioVersion = '8.5.10'
+minioVersion = '8.5.11'
 mapstructVersion = '1.5.5.Final'
 commonsIoVersion = '2.16.1'
+commonsTextVersion = '1.12.0'
 jobrunrSpringBoot3StarterVersion = '7.2.2'
+alimtVersion = '1.3.1'
+deeplVersion = '1.5.0'
+asciitableVersion = '0.3.2'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.1.0-jre'
-protobufBomVersion = '3.25.1'
+protobufBomVersion = '3.25.3'
 # plugin version
 protobufPluginVersion = '0.9.4'
-lombookPluginVersion = 'latest.release'
+lombokPluginVersion = 'latest.release'
 kotlinPluginVersion = '2.0.0'
 licensePluginVersion = '0.16.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
-junitJupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
-springboot = { module = "org.springframework.boot:spring-boot-starter" }
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-springbootTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 # https://mvnrepository.com/artifact/org.apiguardian/apiguardian-api
-apiguardian = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
+apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
 # https://mvnrepository.com/artifact/org.jetbrains/annotations
-jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
-springBootDependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
-springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
-jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
-springBootOauth2AuthorizationServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
+spring-boot-starter-oauth2-authorization-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
-springBootOauth2ResourceServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
+spring-boot-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
-springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 # https://mvnrepository.com/artifact/org.postgresql/postgresql
 postgresql = { module = "org.postgresql:postgresql" }
 # https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
@@ -68,135 +72,145 @@ jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", versi
 # https://mvnrepository.com/artifact/com.google.guava/guava
 guava = { module = "com.google.guava:guava" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
-springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 # https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
-springCloudDependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
+spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
 # https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-discovery
-consulDiscovery = { module = "org.springframework.cloud:spring-cloud-starter-consul-discovery" }
+spring-cloud-starter-consul-discovery = { module = "org.springframework.cloud:spring-cloud-starter-consul-discovery" }
 # https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-config
-consulConfig = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
+spring-cloud-starter-consul-config = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
 # https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
-springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
-springBootLog4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
+spring-boot-starter-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
-springBootValidation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
-springBootMail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+spring-boot-starter-mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
-springBootThymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf" }
+spring-boot-starter-thymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf" }
 # https://mvnrepository.com/artifact/p6spy/p6spy
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
-springBootDataElasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
+spring-boot-starter-data-elasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
 # https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
-springKafka = { module = "org.springframework.kafka:spring-kafka" }
+spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
-protobufJava = { module = "com.google.protobuf:protobuf-java" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protoc
-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobufBomVersion" }
+protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobufBomVersion" }
 # https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java
-protocGenGrpcJava = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpcBomVersion" }
+protoc-gen-grpc-java = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpcBomVersion" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-stub
-grpcStub = { module = "io.grpc:grpc-stub" }
+grpc-stub = { module = "io.grpc:grpc-stub" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-protobuf
-grpcProtobuf = { module = "io.grpc:grpc-protobuf" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
 # https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
-annotationApi = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
+javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
 # https://mvnrepository.com/artifact/io.github.lognet/grpc-spring-boot-starter
-grpcSpringBootStarter = { module = "io.github.lognet:grpc-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+grpc-spring-boot-starter = { module = "io.github.lognet:grpc-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 # https://mvnrepository.com/artifact/io.github.lognet/grpc-client-spring-boot-starter
-grpcClientSpringBootStarter = { module = "io.github.lognet:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+grpc-client-spring-boot-starter = { module = "io.github.lognet:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 # https://mvnrepository.com/artifact/com.redis.om/redis-om-spring
-redisOmSpring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
+redis-om-spring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-commonsLang3 = { module = "org.apache.commons:commons-lang3" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3" }
+# https://mvnrepository.com/artifact/org.apache.commons/commons-text
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsTextVersion" }
 # https://mvnrepository.com/artifact/commons-io/commons-io
-commonsIo = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
+commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 # https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
 # https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
 zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeperVersion" }
 # https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
-yitterIdGenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
+yitter-idgenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
 # https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
-micrometerTracing = { module = "io.micrometer:micrometer-tracing" }
+micrometer-tracing = { module = "io.micrometer:micrometer-tracing" }
 # https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
-micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
 # https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing-bridge-otel
-micrometerTracingBridgeOtel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
+micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
 # https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-exporter-zipkin
-opentelemetryExporterZipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
+opentelemetry-exporter-zipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
-springBootStarterAop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 # https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
-jakartaValidationApi = { module = "jakarta.validation:jakarta.validation-api" }
+jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
 # https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
-hibernateTypes63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
+hypersistence-utils-hibernate63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-springSecurityCore = { module = "org.springframework.security:spring-security-core" }
+spring-security-core = { module = "org.springframework.security:spring-security-core" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto
-springSecurityCrypto = { module = "org.springframework.security:spring-security-crypto" }
+spring-security-crypto = { module = "org.springframework.security:spring-security-crypto" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-core
-springSecurityOauth2Core = { module = "org.springframework.security:spring-security-oauth2-core" }
+spring-security-oauth2-core = { module = "org.springframework.security:spring-security-oauth2-core" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose
-springSecurityOauth2Jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
+spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
-springDataCommons = { module = "org.springframework.data:spring-data-commons" }
+spring-data-commons = { module = "org.springframework.data:spring-data-commons" }
 # https://mvnrepository.com/artifact/org.springframework/spring-web
-springWeb = { module = "org.springframework:spring-web" }
+spring-web = { module = "org.springframework:spring-web" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
-springSecurityTest = { module = "org.springframework.security:spring-security-test" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
 # https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
-curatorRecipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
+curator-recipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
-flywayCore = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
-flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
 # https://mvnrepository.com/artifact/com.sun.mail/javax.mail
-javaxMail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
+javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
-jakartaServletApi = { module = "jakarta.servlet:jakarta.servlet-api" }
+jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 # https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
-hibernateJpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
+hibernate-jpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
 # https://mvnrepository.com/artifact/com.lmax/disruptor
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 # https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-bom
-grpcBom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
+grpc-bom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
 # https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
-protobufBom = { module = "com.google.protobuf:protobuf-bom", version.ref = "protobufBomVersion" }
+protobuf-bom = { module = "com.google.protobuf:protobuf-bom", version.ref = "protobufBomVersion" }
 # https://mvnrepository.com/artifact/com.google.guava/guava-bom
-guavaBom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
+guava-bom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
 # https://mvnrepository.com/artifact/org.springframework/spring-tx
-springTx = { module = "org.springframework:spring-tx" }
+spring-tx = { module = "org.springframework:spring-tx" }
 # https://mvnrepository.com/artifact/io.minio/minio
 minio = { module = "io.minio:minio", version.ref = "minioVersion" }
 # https://mvnrepository.com/artifact/org.mapstruct/mapstruct
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 # https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
-mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
 # https://mvnrepository.com/artifact/org.jobrunr/jobrunr-spring-boot-3-starter
-jobrunrSpringBoot3Starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
+jobrunr-spring-boot3-starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
 # https://mvnrepository.com/artifact/io.netty/netty-all
 netty = { module = "io.netty:netty-all" }
+# https://mvnrepository.com/artifact/com.aliyun/alimt20181012
+alimt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
+# https://mvnrepository.com/artifact/com.deepl.api/deepl-java
+deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
+# https://mvnrepository.com/artifact/de.vandermeer/asciitable
+asciitable = { module = "de.vandermeer:asciitable", version.ref = "asciitableVersion" }
 
 [bundles]
-jackson = ["jacksonCore", "jacksonDatabind", "jacksonAnnotations", "jacksonDatatypeJsr310"]
-micrometer = ["micrometerTracing", "micrometerRegistryPrometheus", "micrometerTracingBridgeOtel", "opentelemetryExporterZipkin", "springBootStarterAop", "springBootActuator", "springBootStarterWeb"]
+jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
+micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
 java = { id = "java" }
 javaLibrary = { id = "java-library" }
 idea = { id = "idea" }
-lombok = { id = "io.freefair.lombok", version.ref = "lombookPluginVersion" }
+projectReport = { id = "project-report" }
+signing = { id = "signing" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
 license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }

@@ -16,16 +16,21 @@
 package com.sky.centaur.message.infrastructure.broadcast.convertor;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,11 +45,15 @@ public class BroadcastTextMessageConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
+  private final SimpleTextTranslation simpleTextTranslation;
 
+  @Autowired
   public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      MessageProperties messageProperties) {
+      MessageProperties messageProperties,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
+    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @Contract("_ -> new")
@@ -55,14 +64,18 @@ public class BroadcastTextMessageConvertor {
         .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
           BroadcastTextMessage entity = BroadcastTextMessageMapper.INSTANCE.toEntity(res);
           entity.setSenderId(senderAccountId);
+          entity.setReadReceiverIds(Collections.emptyList());
           Optional.ofNullable(entity.getReceiverIds())
-              .ifPresentOrElse(receiverIds -> entity.setUnreadQuantity((long) receiverIds.size()),
+              .ifPresentOrElse(receiverIds -> {
+                    entity.setUnreadQuantity((long) receiverIds.size());
+                    entity.setUnreadReceiverIds(receiverIds);
+                  },
                   () -> {
-                    entity.setReceiverIds(
-                        Collections.list(
-                            messageProperties.getWebSocket().getAccountChannelMap().keys()));
-                    entity.setUnreadQuantity(
-                        (long) messageProperties.getWebSocket().getAccountChannelMap().size());
+                    ArrayList<Long> receiverIds = Collections.list(
+                        messageProperties.getWebSocket().getAccountBroadcastChannelMap().keys());
+                    entity.setReceiverIds(receiverIds);
+                    entity.setUnreadReceiverIds(receiverIds);
+                    entity.setUnreadQuantity((long) receiverIds.size());
                   });
           Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
           }, () -> {
@@ -80,5 +93,36 @@ public class BroadcastTextMessageConvertor {
       BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
         .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessage> toEntity(
+      BroadcastTextMessageDo broadcastTextMessageDo) {
+    return Optional.ofNullable(broadcastTextMessageDo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessage> toEntity(
+      BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
+    return Optional.ofNullable(broadcastTextMessageFindAllYouSendCo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
+      BroadcastTextMessage broadcastTextMessage) {
+    return Optional.ofNullable(broadcastTextMessage)
+        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+        .map(broadcastTextMessageFindAllYouSendCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      broadcastTextMessageFindAllYouSendCo.getMessage()))
+              .ifPresent(broadcastTextMessageFindAllYouSendCo::setMessage);
+          return broadcastTextMessageFindAllYouSendCo;
+        });
   }
 }

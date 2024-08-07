@@ -131,6 +131,7 @@ public class RoleGatewayImpl implements RoleGateway {
               cb.literal(authority.getId()),
               cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
           ))));
+      assert query != null;
       return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
@@ -149,6 +150,7 @@ public class RoleGatewayImpl implements RoleGateway {
               cb.literal(id),
               cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
           )));
+      assert query != null;
       return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();

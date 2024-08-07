@@ -16,6 +16,9 @@
 package com.sky.centaur.authentication.client.dto;
 
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -30,15 +33,18 @@ public class AccountRegisterCmd {
   /**
    * 账户注册信息
    */
+  @Valid
   private AccountRegisterCo accountRegisterCo;
 
   /**
    * 验证码ID
    */
+  @NotNull(message = "{captcha.id.validation.not.null}")
   private Long captchaId;
 
   /**
    * 验证码内容
    */
+  @NotBlank(message = "{captcha.validation.not.blank}")
   private String captcha;
 }

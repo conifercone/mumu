@@ -15,7 +15,15 @@
  */
 package com.sky.centaur.message.client.api;
 
+import com.sky.centaur.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.data.domain.Page;
 
 /**
  * 文本广播消息service
@@ -25,5 +33,45 @@ import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
  */
 public interface BroadcastTextMessageService {
 
+  /**
+   * 消息转发
+   *
+   * @param broadcastTextMessageForwardCmd 文本广播消息转发指令
+   * @since 1.0.2
+   */
+  @API(status = Status.STABLE, since = "1.0.2")
   void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd);
+
+  /**
+   * 根据ID已读消息
+   *
+   * @param broadcastTextMessageReadByIdCmd 文本广播消息根据ID已读指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd);
+
+  /**
+   * 根据ID删除消息
+   *
+   * @param broadcastTextMessageDeleteByIdCmd 文本广播消息根据ID删除指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd);
+
+  /**
+   * 查询所有当前用户发送消息
+   *
+   * @param broadcastTextMessageFindAllYouSendCmd 文本广播消息查询所有当前用户发送消息指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
+
+  /**
+   * 根据ID归档消息
+   *
+   * @param broadcastTextMessageArchiveByIdCmd 文本广播消息根据ID归档指令
+   */
+  @API(status = Status.STABLE, since = "1.0.3")
+  void archiveMsgById(BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd);
 }

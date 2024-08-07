@@ -86,4 +86,16 @@ public class BroadcastTextMessageDo extends JpaBasisDataObject {
   @Enumerated(EnumType.STRING)
   @ColumnDefault("'UNREAD'::message_status")
   private MessageStatusEnum messageStatus;
+
+  @NotNull
+  @ColumnDefault("'{}'::bigint[]")
+  @Column(name = "read_receiver_ids", nullable = false, columnDefinition = "bigint[]")
+  @Type(ListArrayType.class)
+  private List<Long> readReceiverIds;
+
+  @NotNull
+  @ColumnDefault("'{}'::bigint[]")
+  @Column(name = "unread_receiver_ids", nullable = false, columnDefinition = "bigint[]")
+  @Type(ListArrayType.class)
+  private List<Long> unreadReceiverIds;
 }

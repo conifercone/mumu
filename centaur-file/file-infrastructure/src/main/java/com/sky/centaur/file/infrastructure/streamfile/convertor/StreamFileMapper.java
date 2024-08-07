@@ -40,21 +40,13 @@ public interface StreamFileMapper {
   StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
 
   @Mappings(value = {
-      @Mapping(target = "content", ignore = true),
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = "content", ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
 
   @Mappings(value = {
       @Mapping(target = "content", ignore = true),
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true),
       @Mapping(target = "size", ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
@@ -62,10 +54,6 @@ public interface StreamFileMapper {
 
   @Mappings(value = {
       @Mapping(target = "content", ignore = true),
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true),
       @Mapping(target = "size", ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")

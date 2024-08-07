@@ -21,6 +21,7 @@ import com.sky.centaur.extension.distributed.lock.zookeeper.ZookeeperConfigurati
 import com.sky.centaur.extension.processor.grpc.GrpcExceptionAdvice;
 import com.sky.centaur.extension.processor.response.ResponseBodyProcessor;
 import com.sky.centaur.extension.sql.DatasourceConfiguration;
+import com.sky.centaur.extension.translation.TranslationConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -33,7 +34,8 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
-    ZookeeperConfiguration.class, CentaurCorsConfiguration.class, DatasourceConfiguration.class})
+    ZookeeperConfiguration.class, CentaurCorsConfiguration.class, DatasourceConfiguration.class,
+    TranslationConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 

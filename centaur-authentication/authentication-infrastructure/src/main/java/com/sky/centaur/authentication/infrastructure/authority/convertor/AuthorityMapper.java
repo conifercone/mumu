@@ -21,8 +21,10 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -59,4 +61,14 @@ public interface AuthorityMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityDo toDataObject(Authority authority);
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget AuthorityFindByIdCo authorityFindByIdCo) {
+    CommonUtil.convertToAccountZone(authorityFindByIdCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget AuthorityFindAllCo authorityFindAllCo) {
+    CommonUtil.convertToAccountZone(authorityFindAllCo);
+  }
 }

@@ -16,6 +16,7 @@
 package com.sky.centaur.extension.authentication;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * 认证相关配置
@@ -30,4 +31,31 @@ public class AuthenticationProperties {
    * 初始密码
    */
   private String initialPassword = "3c380190e5c34f3bc97cae24ac6062";
+
+  @NestedConfigurationProperty
+  private Rsa rsa = new Rsa();
+
+
+  @Data
+  public static class Rsa {
+
+    /**
+     * 自动生成
+     */
+    private boolean automaticGenerated = true;
+
+    /**
+     * 密钥地址
+     */
+    private String jksKeyPath;
+    /**
+     * 密钥密码
+     */
+    private String jksKeyPassword;
+
+    /**
+     * 密钥对
+     */
+    private String jksKeyPair = "jwt";
+  }
 }

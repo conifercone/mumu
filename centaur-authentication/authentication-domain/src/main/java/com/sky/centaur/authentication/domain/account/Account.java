@@ -19,10 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import java.io.Serial;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -93,6 +96,12 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Setter
   private LanguageEnum language;
 
+  @Getter
+  @Setter
+  private LocalDate birthday;
+
+  private final int age = 0;
+
   public Account(Long id, String username, String password, Role role) {
     this.id = id;
     this.username = username;
@@ -118,7 +127,8 @@ public class Account extends BasisDomainModel implements UserDetails {
     return Optional.ofNullable(this.role)
         .flatMap((accountRole) -> Optional.ofNullable(accountRole.getAuthorities()))
         .stream().peek(authorities -> authorities.add(
-            Authority.builder().code("ROLE_".concat(this.role.getCode())).build())).findAny()
+            Authority.builder().code(CommonConstants.ROLE_PREFIX.concat(this.role.getCode()))
+                .build())).findAny()
         .orElse(Collections.emptyList());
   }
 
@@ -154,5 +164,11 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Override
   public boolean isCredentialsNonExpired() {
     return this.credentialsNonExpired;
+  }
+
+  public int getAge() {
+    return Optional.ofNullable(this.birthday)
+        .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
+        .orElse(0);
   }
 }

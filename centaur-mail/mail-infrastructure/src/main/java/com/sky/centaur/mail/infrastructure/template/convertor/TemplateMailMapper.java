@@ -22,7 +22,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -41,12 +40,6 @@ public interface TemplateMailMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   TemplateMailThymeleafDo toThymeleafDo(TemplateMail templateMail);
 
-  @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   TemplateMail toEntity(TemplateMailSendCo templateMailSendCo);
 }

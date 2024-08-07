@@ -206,7 +206,7 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
       Assert.isTrue(StringUtils.hasText(initialPassword),
-          "the initial password cannot be empty,please check if the setting centaur.extension.authentication.initial-password");
+          ResultCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getResultMsg());
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
     }, () -> {
@@ -236,6 +236,7 @@ public class AccountGatewayImpl implements AccountGateway {
       Optional.ofNullable(roleId)
           .ifPresent(
               id -> predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), id)));
+      assert query != null;
       return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();

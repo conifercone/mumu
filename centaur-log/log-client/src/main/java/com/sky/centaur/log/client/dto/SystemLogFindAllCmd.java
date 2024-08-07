@@ -17,6 +17,7 @@ package com.sky.centaur.log.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
+import jakarta.validation.constraints.Min;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,9 +48,11 @@ public class SystemLogFindAllCmd {
   /**
    * 当前页码
    */
+  @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
   /**
    * 每页数量
    */
+  @Min(value = 1, message = "{page.size.validation.min.size}")
   private int pageSize = 10;
 }

@@ -17,17 +17,17 @@ package com.sky.centaur.message.configuration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.CaseFormat;
-import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -44,6 +44,9 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
 
   private final MessageProperties messageProperties;
+
+  public static final String SENDER_ACCOUNT_ID = "senderAccountId";
+  public static final String RECEIVER_ACCOUNT_ID = "receiverAccountId";
 
   public WebSocketHandler(MessageProperties messageProperties) {
     this.messageProperties = messageProperties;
@@ -63,16 +66,30 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     Optional.ofNullable(msg.text()).ifPresent(messageText -> {
       try {
         JsonNode messageTextJsonNode = objectMapper.readTree(messageText);
-        long accountId = messageTextJsonNode.get(
-                CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL,
-                    TokenClaimsEnum.ACCOUNT_ID.name()))
+        long receiverAccountId = messageTextJsonNode.get(RECEIVER_ACCOUNT_ID)
             .longValue();
-        messageProperties.getWebSocket().getAccountChannelMap().put(accountId, ctx.channel());
-        // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
-        AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
-        ctx.channel().attr(key).setIfAbsent(String.valueOf(accountId));
-        ctx.channel().writeAndFlush(new TextWebSocketFrame(
-            ResultCode.WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL.getResultMsg()));
+        Optional.ofNullable(messageTextJsonNode.get(SENDER_ACCOUNT_ID))
+            .ifPresentOrElse(senderAccountStringId -> {
+              long senderAccountId = senderAccountStringId.longValue();
+              ConcurrentHashMap<Long, Channel> longChannelConcurrentHashMap = messageProperties.getWebSocket()
+                  .getAccountSubscriptionChannelMap()
+                  .computeIfAbsent(receiverAccountId, key -> new ConcurrentHashMap<>());
+              longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, key -> ctx.channel());
+              // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+              AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
+              ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
+              AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+              ctx.channel().attr(receiverAccountIdKey)
+                  .setIfAbsent(String.valueOf(receiverAccountId));
+            }, () -> {
+              messageProperties.getWebSocket()
+                  .getAccountBroadcastChannelMap()
+                  .computeIfAbsent(receiverAccountId, key -> ctx.channel());
+              // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+              AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+              ctx.channel().attr(receiverAccountIdKey)
+                  .setIfAbsent(String.valueOf(receiverAccountId));
+            });
       } catch (Exception e) {
         throw new CentaurException(ResultCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
       }
@@ -93,9 +110,17 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
   }
 
   private void removeAccountId(@NotNull ChannelHandlerContext ctx) {
-    AttributeKey<String> key = AttributeKey.valueOf(TokenClaimsEnum.ACCOUNT_ID.name());
-    Optional.ofNullable(ctx.channel().attr(key).get())
-        .ifPresent(value -> messageProperties.getWebSocket().getAccountChannelMap()
-            .remove(Long.parseLong(value)));
+    AttributeKey<String> senderAccountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
+    AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+    Optional.ofNullable(ctx.channel().attr(receiverAccountIdKey).get())
+        .ifPresent(
+            receiverAccountId -> Optional.ofNullable(ctx.channel().attr(senderAccountIdKey).get())
+                .ifPresentOrElse(
+                    senderAccountId -> messageProperties.getWebSocket()
+                        .getAccountSubscriptionChannelMap()
+                        .get(Long.parseLong(receiverAccountId))
+                        .remove(Long.parseLong(senderAccountId)),
+                    () -> messageProperties.getWebSocket().getAccountBroadcastChannelMap()
+                        .remove(Long.parseLong(receiverAccountId))));
   }
 }

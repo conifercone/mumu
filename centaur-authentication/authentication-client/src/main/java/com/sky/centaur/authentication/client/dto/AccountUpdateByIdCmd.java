@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.dto;
 
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 /**
@@ -27,5 +28,6 @@ import lombok.Data;
 @Data
 public class AccountUpdateByIdCmd {
 
+  @Valid
   private AccountUpdateByIdCo accountUpdateByIdCo;
 }

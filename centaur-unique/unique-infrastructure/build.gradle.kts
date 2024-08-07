@@ -6,6 +6,6 @@ dependencies {
         exclude(group = "org.apache.zookeeper", module = "zookeeper")
     }
     implementation(libs.zookeeper)
-    implementation(libs.redisOmSpring)
-    annotationProcessor(libs.redisOmSpring)
+    implementation(libs.redis.om.spring)
+    annotationProcessor(libs.redis.om.spring)
 }

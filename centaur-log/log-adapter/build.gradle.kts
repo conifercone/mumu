@@ -1,7 +1,7 @@
 dependencies {
     implementation(project(":centaur-log:log-client"))
     implementation(project(":centaur-log:log-domain"))
-    implementation(libs.springBootStarterWeb)
+    implementation(libs.spring.boot.starter.web)
     implementation(libs.swagger3Ui)
-    implementation(libs.springDataCommons)
+    implementation(libs.spring.data.commons)
 }

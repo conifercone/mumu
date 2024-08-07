@@ -57,6 +57,7 @@ public enum ResultCode implements BaseResultInterface {
   ACCOUNT_LOCKED(2012),
   PASSWORD_EXPIRED(2013),
   ACCOUNT_HAS_EXPIRED(2014),
+  INSUFFICIENT_AUTHENTICATION(2015),
   /*grpc错误3001-3999*/
   GRPC_SERVICE_NOT_FOUND(3001),
   /*数据转换错误4001-4999*/
@@ -96,7 +97,7 @@ public enum ResultCode implements BaseResultInterface {
   ROLE_CODE_ALREADY_EXISTS(6029),
   ACCOUNT_NAME_ALREADY_EXISTS(6030),
   WEBSOCKET_SERVER_CONNECTION_FAILED(6031),
-  WEBSOCKET_SERVER_CONNECTION_SUCCESSFUL(6032);
+  THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY(6032);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

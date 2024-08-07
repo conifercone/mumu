@@ -19,6 +19,7 @@ package com.sky.centaur.extension;
 import com.sky.centaur.extension.authentication.AuthenticationProperties;
 import com.sky.centaur.extension.distributed.DistributedProperties;
 import com.sky.centaur.extension.sql.SqlProperties;
+import com.sky.centaur.extension.translation.TranslationProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -50,4 +51,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private AuthenticationProperties authentication = new AuthenticationProperties();
+
+  /**
+   * 机器翻译相关配置
+   */
+  @NestedConfigurationProperty
+  private TranslationProperties translation = new TranslationProperties();
 }

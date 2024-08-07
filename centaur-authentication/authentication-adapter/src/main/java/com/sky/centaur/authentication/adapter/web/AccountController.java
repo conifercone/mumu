@@ -29,6 +29,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class AccountController {
   @PostMapping("/register")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void register(@RequestBody AccountRegisterCmd accountRegisterCmd) {
+  public void register(@RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
   }
 
@@ -71,7 +72,7 @@ public class AccountController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody AccountUpdateByIdCmd accountUpdateByIdCmd) {
+  public void updateById(@RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
   }
 

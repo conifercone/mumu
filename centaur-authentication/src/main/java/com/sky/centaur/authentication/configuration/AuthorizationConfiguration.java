@@ -37,7 +37,11 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.Cli
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.extension.ExtensionProperties;
+import com.sky.centaur.extension.authentication.AuthenticationProperties;
+import com.sky.centaur.extension.authentication.AuthenticationProperties.Rsa;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import java.security.KeyPair;
@@ -57,10 +61,12 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -95,6 +101,7 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -109,6 +116,7 @@ import org.springframework.util.StringUtils;
  * @since 1.0.0
  */
 @Configuration
+@EnableConfigurationProperties(ExtensionProperties.class)
 public class AuthorizationConfiguration {
 
   /**
@@ -131,7 +139,7 @@ public class AuthorizationConfiguration {
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       CentaurAuthenticationFailureHandler centaurAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder)
+      PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -180,12 +188,13 @@ public class AuthorizationConfiguration {
     // authorization endpoint
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(
+                    String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService))
         )
@@ -193,7 +202,8 @@ public class AuthorizationConfiguration {
         .oauth2ResourceServer((resourceServer) -> resourceServer
             .jwt(withDefaults())
             .authenticationEntryPoint(
-                new CentaurAuthenticationEntryPoint("http://localhost:31100/login",
+                new CentaurAuthenticationEntryPoint(
+                    String.format("http://localhost:%s/login", port),
                     operationLogGrpcService,
                     systemLogGrpcService)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -307,8 +317,15 @@ public class AuthorizationConfiguration {
    * @return jwks实例
    */
   @Bean
-  public JWKSource<SecurityContext> jwkSource() {
-    KeyPair keyPair = generateRsaKey();
+  public JWKSource<SecurityContext> jwkSource(ExtensionProperties extensionProperties) {
+    AuthenticationProperties authentication = extensionProperties.getAuthentication();
+    Rsa rsa = authentication.getRsa();
+    KeyPair keyPair;
+    if (rsa.isAutomaticGenerated()) {
+      keyPair = generateRsaKey();
+    } else {
+      keyPair = loadKeyPair(rsa.getJksKeyPath(), rsa.getJksKeyPassword(), rsa.getJksKeyPair());
+    }
     RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
     RSAKey rsaKey = new RSAKey.Builder(publicKey)
@@ -405,8 +422,9 @@ public class AuthorizationConfiguration {
             )
             .map(RegisteredClient::getScopes)
             .map(scopes -> {
-              Set<String> roles = scopes.stream().filter(scope -> scope.startsWith("ROLE_"))
-                  .map(scope -> scope.substring("ROLE_".length()))
+              Set<String> roles = scopes.stream()
+                  .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
+                  .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
                   .collect(Collectors.toSet());
               List<Long> authoritiesIds = roleRepository.findByCodeIn(new ArrayList<>(roles))
                   .stream()
@@ -427,5 +445,11 @@ public class AuthorizationConfiguration {
   @Bean
   public com.fasterxml.jackson.databind.Module dateTimeModule() {
     return new JavaTimeModule();
+  }
+
+  private KeyPair loadKeyPair(String keyPath, @NotNull String keyPassword, String keyPair) {
+    KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
+        new FileSystemResource(keyPath), keyPassword.toCharArray());
+    return keyStoreKeyFactory.getKeyPair(keyPair, keyPassword.toCharArray());
   }
 }

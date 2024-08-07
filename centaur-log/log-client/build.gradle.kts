@@ -7,22 +7,22 @@ plugins {
 
 dependencies {
     implementation(project(":centaur-basis"))
-    implementation(libs.consulDiscovery)
-    implementation(libs.protobufJava)
-    implementation(libs.grpcStub)
-    implementation(libs.grpcProtobuf)
-    implementation(libs.annotationApi)
-    implementation(libs.springBootActuator)
-    implementation(libs.springDataCommons)
+    implementation(libs.spring.cloud.starter.consul.discovery)
+    implementation(libs.protobuf.java)
+    implementation(libs.grpc.stub)
+    implementation(libs.grpc.protobuf)
+    implementation(libs.javax.annotation.api)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.data.commons)
 }
 
 protobuf {
     protoc {
-        artifact = libs.protoc.get().toString()
+        artifact = libs.protobuf.protoc.get().toString()
     }
     plugins {
         id("grpc") {
-            artifact = libs.protocGenGrpcJava.get().toString()
+            artifact = libs.protoc.gen.grpc.java.get().toString()
         }
     }
     generateProtoTasks {

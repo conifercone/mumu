@@ -87,4 +87,3 @@ include("centaur-message:message-client")
 findProject(":centaur-message:message-client")?.name = "message-client"
 include("centaur-message:message-infrastructure")
 findProject(":centaur-message:message-infrastructure")?.name = "message-infrastructure"
-

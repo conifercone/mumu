@@ -16,7 +16,9 @@
 package com.sky.centaur.file.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 流式文件删除客户端对象
@@ -25,8 +27,9 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StreamFileRemoveCo {
+public class StreamFileRemoveCo extends BaseClientObject {
 
   /**
    * 存储地址

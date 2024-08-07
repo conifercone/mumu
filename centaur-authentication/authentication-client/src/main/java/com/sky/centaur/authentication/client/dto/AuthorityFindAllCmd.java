@@ -16,6 +16,8 @@
 package com.sky.centaur.authentication.client.dto;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 /**
@@ -27,7 +29,10 @@ import lombok.Data;
 @Data
 public class AuthorityFindAllCmd {
 
+  @Valid
   private AuthorityFindAllCo authorityFindAllCo;
+  @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
+  @Min(value = 1, message = "{page.size.validation.min.size}")
   private int pageSize = 10;
 }
