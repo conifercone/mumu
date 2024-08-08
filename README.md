@@ -23,6 +23,7 @@
 - [Build](#Build)
 - [Dependency Statement](#dependency-statement)
 - [License](#license)
+- [Contributors](#contributors)
 
 ## Projects
 
@@ -99,3 +100,9 @@ centaur
 ## License
 
 [Apache License 2.0](LICENSE) © kaiyu.shan@outlook.com
+
+## Contributors
+
+<a href="https://github.com/conifercone/centaur/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="https://github.com/conifercone/centaur/graphs/contributors"/>
+</a>
