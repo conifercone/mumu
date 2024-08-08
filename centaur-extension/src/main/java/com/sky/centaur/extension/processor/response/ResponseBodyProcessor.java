@@ -22,16 +22,19 @@ import com.sky.centaur.basis.client.dto.co.ClientObject;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import java.util.Objects;
+import java.util.Optional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -59,10 +62,13 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
   private final SystemLogGrpcService systemLogGrpcService;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
-  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService) {
+  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.systemLogGrpcService = systemLogGrpcService;
+    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @ExceptionHandler(CentaurException.class)
@@ -138,7 +144,11 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
                 .setFail(ExceptionUtils.getStackTrace(illegalArgumentException)).build())
         .build());
     return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
-        illegalArgumentException.getMessage());
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+                textTranslation -> textTranslation.translateToAccountLanguageIfPossible(
+                    illegalArgumentException.getMessage()))
+            .orElse(illegalArgumentException.getMessage())
+    );
   }
 
   @ExceptionHandler(Exception.class)
