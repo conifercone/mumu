@@ -21,7 +21,6 @@ import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class SystemLogFindAllCmdExe {
         systemLogFindAllCmd.getPageNo(),
         systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
-        .map(res -> systemLogConvertor.toFindAllCo(res).orElse(null)).filter(Objects::nonNull)
+        .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(systemLogFindAllCos, systemLogs.getPageable(),
         systemLogs.getTotalElements());

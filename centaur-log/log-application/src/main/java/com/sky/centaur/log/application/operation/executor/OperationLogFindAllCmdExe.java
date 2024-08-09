@@ -21,7 +21,6 @@ import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,8 @@ public class OperationLogFindAllCmdExe {
         operationLogFindAllCmd.getPageNo(),
         operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
-        .map(res -> operationLogConvertor.toFindAllCo(res).orElse(null)).filter(Objects::nonNull)
+        .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)
+        .map(Optional::get)
         .toList();
     return new PageImpl<>(operationLogFindAllCos, operationLogs.getPageable(),
         operationLogs.getTotalElements());

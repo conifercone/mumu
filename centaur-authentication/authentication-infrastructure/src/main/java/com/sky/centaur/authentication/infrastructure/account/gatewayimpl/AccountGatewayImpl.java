@@ -281,8 +281,9 @@ public class AccountGatewayImpl implements AccountGateway {
     Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
         pageRequest);
     List<Account> accounts = repositoryAll.getContent().stream()
-        .map(accountDo -> accountConvertor.toEntity(accountDo).orElse(null))
-        .filter(Objects::nonNull)
+        .map(accountConvertor::toEntity)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .toList();
     return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());
   }

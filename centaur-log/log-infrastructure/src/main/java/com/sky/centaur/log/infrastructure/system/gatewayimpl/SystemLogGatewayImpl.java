@@ -31,7 +31,6 @@ import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.Syste
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.SystemLogKafkaRepository;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -149,9 +148,8 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     SearchHits<SystemLogEsDo> searchHits = elasticsearchTemplate.search(query,
         SystemLogEsDo.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(res -> systemLogConvertor.toEntity(res).orElse(null))
-        .filter(
-            Objects::nonNull)
+        .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .peek(systemLogDomain -> systemLogDomain.setRecordTime(
             CommonUtil.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
         .toList();

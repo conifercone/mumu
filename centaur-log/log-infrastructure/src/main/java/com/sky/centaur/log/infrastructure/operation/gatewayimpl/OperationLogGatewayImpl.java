@@ -34,7 +34,6 @@ import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -192,9 +191,8 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
         OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(res -> operationLogConvertor.toEntity(res).orElse(null))
-        .filter(
-            Objects::nonNull)
+        .map(SearchHit::getContent).map(operationLogConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .peek(operationLogDomain ->
             operationLogDomain.setOperatingTime(
                 CommonUtil.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))

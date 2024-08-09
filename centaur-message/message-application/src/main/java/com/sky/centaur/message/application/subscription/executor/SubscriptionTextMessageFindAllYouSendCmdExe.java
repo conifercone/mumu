@@ -21,7 +21,7 @@ import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import com.sky.centaur.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,11 +61,8 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
         subscriptionTextMessageFindAllYouSendCmd.getPageSize());
     List<SubscriptionTextMessageFindAllYouSendCo> subscriptionTextMessageFindAllYouSendCos = allYouSend.getContent()
         .stream()
-        .map(subscriptionTextMessage -> subscriptionTextMessageConvertor.toFindAllYouSendCo(
-                subscriptionTextMessage)
-            .orElse(null))
-        .filter(
-            Objects::nonNull).toList();
+        .map(subscriptionTextMessageConvertor::toFindAllYouSendCo)
+        .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllYouSendCos, allYouSend.getPageable(),
         allYouSend.getTotalElements());
   }

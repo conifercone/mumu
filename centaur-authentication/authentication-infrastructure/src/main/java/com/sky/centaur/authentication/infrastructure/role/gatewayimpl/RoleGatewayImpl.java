@@ -34,7 +34,6 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -167,8 +166,8 @@ public class RoleGatewayImpl implements RoleGateway {
     Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
         pageRequest);
     List<Role> roles = repositoryAll.getContent().stream()
-        .map(roleDo -> roleConvertor.toEntity(roleDo).orElse(null))
-        .filter(Objects::nonNull)
+        .map(roleConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }

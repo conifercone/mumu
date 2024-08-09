@@ -33,7 +33,6 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -138,8 +137,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
-        .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
-        .filter(Objects::nonNull)
+        .map(authorityConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }

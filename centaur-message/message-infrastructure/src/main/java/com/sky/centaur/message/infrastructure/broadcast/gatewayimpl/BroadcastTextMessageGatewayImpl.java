@@ -33,7 +33,6 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,11 +164,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
           broadcastTextMessageDoSpecification,
           pageRequest);
       List<BroadcastTextMessage> broadcastTextMessages = repositoryAll.getContent().stream()
-          .map(
-              broadcastTextMessageDo -> broadcastTextMessageConvertor.toEntity(
-                      broadcastTextMessageDo)
-                  .orElse(null))
-          .filter(Objects::nonNull)
+          .map(broadcastTextMessageConvertor::toEntity)
+          .filter(Optional::isPresent).map(Optional::get)
           .toList();
       return new PageImpl<>(broadcastTextMessages, pageRequest, repositoryAll.getTotalElements());
     }).orElse(new PageImpl<>(Collections.emptyList()));
