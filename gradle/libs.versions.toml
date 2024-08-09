@@ -198,8 +198,6 @@ alimt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
 deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
 # https://mvnrepository.com/artifact/de.vandermeer/asciitable
 asciitable = { module = "de.vandermeer:asciitable", version.ref = "asciitableVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
-spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
