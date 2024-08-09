@@ -70,7 +70,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
       AuthenticationException authException) throws IOException, ServletException {
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
-        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg());
+        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg(), usernameNotFoundException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
@@ -88,7 +88,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
       case InvalidBearerTokenException invalidBearerTokenException -> {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), invalidBearerTokenException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
@@ -112,7 +112,8 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         } else if (Constants.DEFAULT_SWAGGER_UI_PATH.equals(request.getRequestURI())) {
           super.commence(request, response, authException);
         }
-        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg());
+        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg(),
+            insufficientAuthenticationException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
