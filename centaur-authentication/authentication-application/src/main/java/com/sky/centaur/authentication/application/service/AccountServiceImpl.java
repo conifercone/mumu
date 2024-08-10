@@ -58,7 +58,6 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -201,7 +200,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasAuthority('message.write')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -238,7 +236,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateRoleById(AccountUpdateRoleGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -272,7 +269,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
     AccountDisableCmd accountDisableCmd = new AccountDisableCmd();

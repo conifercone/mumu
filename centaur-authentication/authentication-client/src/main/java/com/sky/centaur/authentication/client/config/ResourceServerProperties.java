@@ -33,6 +33,9 @@ public class ResourceServerProperties {
   @NestedConfigurationProperty
   private List<Policy> policies;
 
+  @NestedConfigurationProperty
+  private List<Grpc> grpcs;
+
 
   @Data
   public static class Policy {
@@ -47,5 +50,34 @@ public class ResourceServerProperties {
 
     private boolean permitAll;
 
+  }
+
+  /**
+   * grpc方法权限
+   *
+   * @since 1.0.4
+   */
+  @Data
+  public static class Grpc {
+
+    private String serviceFullPath;
+
+    @NestedConfigurationProperty
+    private List<GrpcPolicy> grpcPolicies;
+  }
+
+  /**
+   * grpc方法权限策略
+   *
+   * @since 1.0.4
+   */
+  @Data
+  public static class GrpcPolicy {
+
+    private String method;
+
+    private String authority;
+
+    private String role;
   }
 }

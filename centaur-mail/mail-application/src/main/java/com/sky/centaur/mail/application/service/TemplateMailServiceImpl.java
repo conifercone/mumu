@@ -36,7 +36,6 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 /**
@@ -95,7 +94,6 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   public void sendMail(TemplateMailSendGrpcCmd request, StreamObserver<Empty> responseObserver) {
     TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
     TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(

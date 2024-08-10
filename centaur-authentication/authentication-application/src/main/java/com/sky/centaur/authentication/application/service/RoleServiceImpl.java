@@ -50,7 +50,6 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,7 +106,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
@@ -137,7 +135,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -167,7 +164,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(RoleUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -200,7 +196,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {

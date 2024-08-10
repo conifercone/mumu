@@ -53,7 +53,6 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,7 +97,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void add(AuthorityAddGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -181,7 +179,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -198,7 +195,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AuthorityUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -216,7 +212,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();

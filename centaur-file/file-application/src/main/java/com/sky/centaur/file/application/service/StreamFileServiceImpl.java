@@ -41,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 /**
@@ -100,7 +99,6 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   }
 
   @Override
-  @PreAuthorize("hasAuthority('message.read')")
   public void download(StreamFileDownloadGrpcCmd request,
       @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
     StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
@@ -132,8 +130,8 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
-  public void removeFile(StreamFileRemoveGrpcCmd request, @NotNull StreamObserver<Empty> responseObserver) {
+  public void removeFile(StreamFileRemoveGrpcCmd request,
+      @NotNull StreamObserver<Empty> responseObserver) {
     StreamFileRemoveCmd streamFileRemoveCmd = new StreamFileRemoveCmd();
     StreamFileRemoveCo streamFileRemoveCo = getStreamFileRemoveCo(
         request);
