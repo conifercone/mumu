@@ -40,5 +40,5 @@ public class QRCode extends BasisDomainModel {
 
   private int height = 300;
 
-  private ImageFormatEnum imageFormat = ImageFormatEnum.JPEG;
+  private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
 }
