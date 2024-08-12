@@ -17,8 +17,8 @@ package com.sky.centaur.unique.adapter.web;
 
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.response.ResultResponse;
-import com.sky.centaur.unique.client.api.QRCodeService;
-import com.sky.centaur.unique.client.dto.QRCodeGenerateCmd;
+import com.sky.centaur.unique.client.api.BarCodeService;
+import com.sky.centaur.unique.client.dto.BarCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,31 +33,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 二维码相关接口
+ * 条形码相关接口
  *
  * @author kaiyu.shan
  * @since 1.0.4
  */
 @RestController
-@RequestMapping("/qrCode")
-@Tag(name = "二维码管理")
-public class QRCodeController {
+@RequestMapping("/barCode")
+@Tag(name = "条形码管理")
+public class BarCodeController {
 
-  private final QRCodeService qrCodeService;
+  private final BarCodeService barCodeService;
 
   @Autowired
-  public QRCodeController(QRCodeService qrCodeService) {
-    this.qrCodeService = qrCodeService;
+  public BarCodeController(BarCodeService barCodeService) {
+    this.barCodeService = barCodeService;
   }
 
-  @Operation(summary = "生成二维码（返回Base64格式的图片数据链接）")
+  @Operation(summary = "生成条形码（返回Base64格式的图片数据链接）")
   @GetMapping("/dataUrl")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
   public ResultResponse<String> dataUrlGenerate(
-      @RequestBody @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
+      @RequestBody @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
     return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-        qrCodeGenerateCmd.getQrCodeGenerateCo().getImageFormat().getMimeType(),
-        Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));
+        barCodeGenerateCmd.getBarCodeGenerateCo().getImageFormat().getMimeType(),
+        Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
   }
 }
