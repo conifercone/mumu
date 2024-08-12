@@ -77,7 +77,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    LOGGER.error(centaurException.getMessage());
+    LOGGER.error(centaurException.getMessage(), centaurException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(centaurException.getMessage())
@@ -96,7 +96,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(validationException.getMessage());
+    LOGGER.error(validationException.getMessage(), validationException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(validationException.getMessage())
@@ -115,7 +115,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(methodArgumentNotValidException.getMessage());
+    LOGGER.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
@@ -135,7 +135,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(illegalArgumentException.getMessage());
+    LOGGER.error(illegalArgumentException.getMessage(), illegalArgumentException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
@@ -157,7 +157,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    LOGGER.error(exception.getMessage());
+    LOGGER.error(exception.getMessage(), exception);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(exception.getMessage())
