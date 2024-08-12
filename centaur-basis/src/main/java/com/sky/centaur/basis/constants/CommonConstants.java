@@ -79,6 +79,11 @@ public final class CommonConstants {
   public static final String AUTHORITY_PREFIX = "SCOPE_";
 
   /**
+   * data url模板
+   */
+  public static final String DATA_URL_TEMPLATE = "data:%s;base64,%s";
+
+  /**
    * 慢sql表头
    */
   public static final String SLOW_SQL_TABLE_HEADER = "┌─────────┬────────────────────────────────────────────────────────────────────┐";
