@@ -50,11 +50,11 @@ public class QRCodeController {
     this.qrCodeService = qrCodeService;
   }
 
-  @Operation(summary = "定制生成二维码")
-  @GetMapping("/customize")
+  @Operation(summary = "生成二维码（返回Base64格式的图片数据链接）")
+  @GetMapping("/dataUrl")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
-  public ResultResponse<String> customizeGenerate(
+  public ResultResponse<String> dataUrlGenerate(
       @RequestBody @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
     return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
         qrCodeGenerateCmd.getQrCodeGenerateCo().getImageFormat().getMimeType(),
