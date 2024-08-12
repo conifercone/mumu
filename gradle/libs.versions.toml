@@ -28,7 +28,7 @@ deeplVersion = '1.5.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
 # bom version
-grpcBomVersion = '1.58.0'
+grpcBomVersion = '1.66.0'
 guavaBomVersion = '33.1.0-jre'
 protobufBomVersion = '3.25.3'
 # plugin version
