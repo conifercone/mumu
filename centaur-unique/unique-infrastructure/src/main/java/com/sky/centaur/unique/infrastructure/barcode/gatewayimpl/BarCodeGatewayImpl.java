@@ -74,7 +74,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   }
 
   private @Nullable BufferedImage insertWords(BufferedImage image, @NotNull BarCode barCode) {
-    if (StringUtils.hasLength(barCode.getFootWord())) {
+    if (StringUtils.hasLength(barCode.getFootContent())) {
       BufferedImage outImage = new BufferedImage(barCode.getWidth(), barCode.getHeight() + 20,
           BufferedImage.TYPE_INT_RGB);
       Graphics2D g2d = outImage.createGraphics();
@@ -90,12 +90,12 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
       // 字体、字型、字号
       g2d.setFont(new Font("微软雅黑", Font.PLAIN, 16));
       //文字长度
-      int strWidth = g2d.getFontMetrics().stringWidth(barCode.getFootWord());
+      int strWidth = g2d.getFontMetrics().stringWidth(barCode.getFootContent());
       //总长度减去文字长度的一半  （居中显示）
       int wordStartX = (barCode.getWidth() - strWidth) / 2;
       //height + (outImage.getHeight() - height) / 2 + 12
       int wordStartY = barCode.getHeight() + 20;
-      g2d.drawString(barCode.getFootWord(), wordStartX, wordStartY);
+      g2d.drawString(barCode.getFootContent(), wordStartX, wordStartY);
       g2d.dispose();
       outImage.flush();
       return outImage;

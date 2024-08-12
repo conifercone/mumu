@@ -39,5 +39,5 @@ public class BarCodeGenerateCo extends BaseClientObject {
 
   private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
 
-  private String footWord;
+  private String footContent;
 }

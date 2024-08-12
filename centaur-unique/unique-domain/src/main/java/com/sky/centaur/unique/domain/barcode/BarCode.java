@@ -42,5 +42,5 @@ public class BarCode extends BasisDomainModel {
 
   private ImageFormatEnum imageFormat;
 
-  private String footWord;
+  private String footContent;
 }
