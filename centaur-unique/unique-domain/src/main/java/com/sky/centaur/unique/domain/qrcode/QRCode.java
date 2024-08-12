@@ -36,9 +36,9 @@ public class QRCode extends BasisDomainModel {
 
   private String content;
 
-  private int width = 300;
+  private int width;
 
-  private int height = 300;
+  private int height;
 
-  private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
+  private ImageFormatEnum imageFormat;
 }

@@ -33,9 +33,9 @@ public class QRCodeGenerateCo extends BaseClientObject {
 
   private String content;
 
-  private int width;
+  private int width = 300;
 
-  private int height;
+  private int height = 300;
 
-  private ImageFormatEnum imageFormat;
+  private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
 }
