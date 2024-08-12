@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.config;
 
+import com.sky.centaur.basis.constants.CommonConstants;
 import io.grpc.MethodDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -72,7 +74,11 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
                     methods.hasAnyRole(grpcPolicy.getRole());
                   } else if (org.springframework.util.StringUtils.hasText(
                       grpcPolicy.getAuthority())) {
-                    methods.hasAnyAuthority(grpcPolicy.getAuthority());
+                    Assert.isTrue(
+                        !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                        "Permission configuration cannot be empty and cannot start with SCOPE_");
+                    methods.hasAnyAuthority(
+                        CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()));
                   }
                 } catch (ClassNotFoundException | InvocationTargetException |
                          IllegalAccessException | NoSuchMethodException e) {

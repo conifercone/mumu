@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.domain.authority;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
@@ -60,6 +61,6 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
 
   @Override
   public String getAuthority() {
-    return code;
+    return CommonConstants.AUTHORITY_PREFIX.concat(code);
   }
 }

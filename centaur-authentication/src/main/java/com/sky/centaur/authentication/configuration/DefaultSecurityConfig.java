@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.JwtAuthenticationTokenFilter;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -73,7 +75,10 @@ public class DefaultSecurityConfig {
               if (StringUtils.hasText(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
               } else if (StringUtils.hasText(policy.getAuthority())) {
-                authorizedUrl.hasAuthority(policy.getAuthority());
+                Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                    "Permission configuration cannot be empty and cannot start with SCOPE_");
+                authorizedUrl.hasAuthority(
+                    CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();
               }

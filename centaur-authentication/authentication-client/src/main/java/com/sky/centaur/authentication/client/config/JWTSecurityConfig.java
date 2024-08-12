@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.config;
 
 import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,6 +33,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -65,7 +67,10 @@ public class JWTSecurityConfig {
               if (StringUtils.hasText(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
               } else if (StringUtils.hasText(policy.getAuthority())) {
-                authorizedUrl.hasAuthority(policy.getAuthority());
+                Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                    "Permission configuration cannot be empty and cannot start with SCOPE_");
+                authorizedUrl.hasAuthority(
+                    CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();
               }
@@ -92,7 +97,7 @@ public class JWTSecurityConfig {
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
     grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.name());
-    grantedAuthoritiesConverter.setAuthorityPrefix("");
+    grantedAuthoritiesConverter.setAuthorityPrefix(CommonConstants.AUTHORITY_PREFIX);
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
