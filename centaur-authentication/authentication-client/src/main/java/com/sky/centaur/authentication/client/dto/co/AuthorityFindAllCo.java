@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import com.sky.centaur.extension.annotations.GenerateDescription;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class AuthorityFindAllCo extends BaseClientObject {
 
   private Long id;

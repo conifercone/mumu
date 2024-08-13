@@ -7,6 +7,7 @@ plugins {
 dependencies {
     implementation(project(":centaur-authentication:authentication-domain"))
     implementation(project(":centaur-extension"))
+    annotationProcessor(project(":centaur-extension"))
     implementation(libs.protobuf.java)
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)

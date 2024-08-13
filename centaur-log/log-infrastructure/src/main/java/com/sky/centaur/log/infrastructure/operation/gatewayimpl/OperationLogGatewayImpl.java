@@ -21,7 +21,6 @@ import static com.sky.centaur.basis.constants.CommonConstants.ES_QUERY_SP;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.basis.exception.DataConversionException;
-import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.operation.OperationLog;
 import com.sky.centaur.log.domain.operation.gateway.OperationLogGateway;
@@ -29,6 +28,7 @@ import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
+import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo4Desc;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.time.LocalDateTime;
@@ -118,10 +118,10 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     Optional.ofNullable(operationLog).ifPresent(optLog -> {
       Optional.ofNullable(optLog.getId())
           .ifPresent(id -> criteria.and(
-              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getId)).matches(id)));
+              new Criteria(OperationLogEsDo4Desc.id).matches(id)));
       Optional.ofNullable(optLog.getContent())
           .ifPresent(content -> {
-            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getContent);
+            String propertyName = OperationLogEsDo4Desc.content;
             criteria.and(
                 new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
                     .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -129,7 +129,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getOperator())
           .ifPresent(operator -> {
-            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getOperator);
+            String propertyName = OperationLogEsDo4Desc.operator;
             criteria.and(
                 new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
                     .matches(operator).or(propertyName.concat(ES_QUERY_SP))
@@ -137,14 +137,14 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getBizNo())
           .ifPresent(bizNo -> criteria.and(
-              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getBizNo)).matches(bizNo)));
+              new Criteria(OperationLogEsDo4Desc.bizNo).matches(bizNo)));
       Optional.ofNullable(optLog.getCategory())
           .ifPresent(category -> criteria.and(
-              new Criteria(BeanUtil.getPropertyName(OperationLogEsDo::getCategory)).matches(
+              new Criteria(OperationLogEsDo4Desc.category).matches(
                   category)));
       Optional.ofNullable(optLog.getDetail())
           .ifPresent(detail -> {
-            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getDetail);
+            String propertyName = OperationLogEsDo4Desc.detail;
             criteria.and(
                 new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
                     .matches(detail).or(propertyName.concat(ES_QUERY_SP))
@@ -152,7 +152,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getSuccess())
           .ifPresent(success -> {
-            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getSuccess);
+            String propertyName = OperationLogEsDo4Desc.success;
             criteria.and(
                 new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
                     .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -160,7 +160,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getFail())
           .ifPresent(fail -> {
-            String propertyName = BeanUtil.getPropertyName(OperationLogEsDo::getFail);
+            String propertyName = OperationLogEsDo4Desc.fail;
             criteria.and(
                 new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
                     .matches(fail).or(propertyName.concat(ES_QUERY_SP))
@@ -170,24 +170,24 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
       Optional.ofNullable(optLog.getOperatingTime())
           .ifPresent(
               operatingTime -> criteria.and(new Criteria(
-                  BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).matches(
+                  OperationLogEsDo4Desc.operatingTime).matches(
                   CommonUtil.convertAccountZoneToUTC(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
           .ifPresent(
               operatingStartTime -> criteria.and(
                   new Criteria(
-                      BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).greaterThan(
+                      OperationLogEsDo4Desc.operatingTime).greaterThan(
                       CommonUtil.convertAccountZoneToUTC(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
           .ifPresent(
               operatingEndTime -> criteria.and(
                   new Criteria(
-                      BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).lessThan(
+                      OperationLogEsDo4Desc.operatingTime).lessThan(
                       CommonUtil.convertAccountZoneToUTC(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
-            Sort.by(BeanUtil.getPropertyName(OperationLogEsDo::getOperatingTime)).descending());
+            Sort.by(OperationLogEsDo4Desc.operatingTime).descending());
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
         OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()

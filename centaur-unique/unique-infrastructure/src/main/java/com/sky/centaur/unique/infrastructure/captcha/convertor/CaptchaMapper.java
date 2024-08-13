@@ -16,8 +16,10 @@
 package com.sky.centaur.unique.infrastructure.captcha.convertor;
 
 import com.sky.centaur.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import com.sky.centaur.unique.client.dto.co.SimpleCaptchaGeneratedCo4Desc;
 import com.sky.centaur.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import com.sky.centaur.unique.domain.captcha.Captcha.SimpleCaptcha;
+import com.sky.centaur.unique.domain.captcha.SimpleCaptcha4Desc;
 import com.sky.centaur.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -42,24 +44,24 @@ public interface CaptchaMapper {
   SimpleCaptchaDo toDataObject(SimpleCaptcha simpleCaptcha);
 
   @Mappings(value = {
-      @Mapping(target = "source", ignore = true)
+      @Mapping(target = SimpleCaptcha4Desc.source, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo);
 
   @Mappings(value = {
-      @Mapping(target = "length", ignore = true),
-      @Mapping(target = "target", ignore = true),
-      @Mapping(target = "ttl", ignore = true)
+      @Mapping(target = SimpleCaptcha4Desc.length, ignore = true),
+      @Mapping(target = SimpleCaptcha4Desc.target, ignore = true),
+      @Mapping(target = SimpleCaptcha4Desc.ttl, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaVerifyCo simpleCaptchaVerifyCo);
 
   @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.creationTime, ignore = true),
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.founder, ignore = true),
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modifier, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);

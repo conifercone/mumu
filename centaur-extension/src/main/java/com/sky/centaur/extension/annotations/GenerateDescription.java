@@ -13,42 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.sky.centaur.extension.annotations;
 
-package com.sky.centaur.unique.client.dto.co;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.extension.annotations.GenerateDescription;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
- * 简单验证码生成客户端对象
+ * 描述信息生成注解
  *
  * @author kaiyu.shan
- * @since 1.0.1
+ * @since 1.0.4
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@GenerateDescription
-public class SimpleCaptchaGeneratedCo extends BaseClientObject {
+@Documented
+@Inherited
+@Target({ElementType.TYPE})
+@Retention(RUNTIME)
+public @interface GenerateDescription {
 
-  /**
-   * 验证码id
-   */
-  private Long id;
-
-  /**
-   * 验证码目标值
-   */
-  private String target;
-
-  /**
-   * 有效期
-   */
-  private Long ttl;
-
-  /**
-   * 验证码长度
-   */
-  private Integer length;
 }

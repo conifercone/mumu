@@ -12,4 +12,8 @@ dependencies {
     implementation(libs.alimt)
     implementation(libs.asciitable)
     implementation(libs.deepl)
+    implementation(libs.javapoet)
+    implementation(libs.auto.service)
+    annotationProcessor(libs.auto.service)
+    implementation(libs.jakarta.persistence.api)
 }

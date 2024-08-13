@@ -21,7 +21,6 @@ import static com.sky.centaur.basis.constants.CommonConstants.ES_QUERY_SP;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.centaur.basis.exception.DataConversionException;
-import com.sky.centaur.basis.kotlin.tools.BeanUtil;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.log.domain.system.SystemLog;
 import com.sky.centaur.log.domain.system.gateway.SystemLogGateway;
@@ -29,6 +28,7 @@ import com.sky.centaur.log.infrastructure.config.LogProperties;
 import com.sky.centaur.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
+import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo4Desc;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.SystemLogKafkaRepository;
 import java.util.List;
 import java.util.Optional;
@@ -96,10 +96,10 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     Optional.ofNullable(systemLog).ifPresent(sysLog -> {
       Optional.ofNullable(sysLog.getId())
           .ifPresent(id -> criteria.and(
-              new Criteria(BeanUtil.getPropertyName(SystemLogEsDo::getId)).matches(id)));
+              new Criteria(SystemLogEsDo4Desc.id).matches(id)));
       Optional.ofNullable(sysLog.getContent())
           .ifPresent(content -> {
-            String propertyName = BeanUtil.getPropertyName(SystemLogEsDo::getContent);
+            String propertyName = SystemLogEsDo4Desc.content;
             criteria.and(
                 new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
                     .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -107,11 +107,11 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
           });
       Optional.ofNullable(sysLog.getCategory())
           .ifPresent(category -> criteria.and(
-              new Criteria(BeanUtil.getPropertyName(SystemLogEsDo::getCategory)).matches(
+              new Criteria(SystemLogEsDo4Desc.category).matches(
                   category)));
       Optional.ofNullable(sysLog.getSuccess())
           .ifPresent(success -> {
-            String propertyName = BeanUtil.getPropertyName(SystemLogEsDo::getSuccess);
+            String propertyName = SystemLogEsDo4Desc.success;
             criteria.and(
                 new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
                     .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -119,7 +119,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
           });
       Optional.ofNullable(sysLog.getFail())
           .ifPresent(fail -> {
-            String propertyName = BeanUtil.getPropertyName(SystemLogEsDo::getFail);
+            String propertyName = SystemLogEsDo4Desc.fail;
             criteria.and(
                 new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
                     .matches(fail));
@@ -127,24 +127,24 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
       Optional.ofNullable(sysLog.getRecordTime())
           .ifPresent(
               recordTime -> criteria.and(new Criteria(
-                  BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).matches(
+                  SystemLogEsDo4Desc.recordTime).matches(
                   CommonUtil.convertAccountZoneToUTC(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
           .ifPresent(
               recordStartTime -> criteria.and(
                   new Criteria(
-                      BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).greaterThan(
+                      SystemLogEsDo4Desc.recordTime).greaterThan(
                       CommonUtil.convertAccountZoneToUTC(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
           .ifPresent(
               recordEndTime -> criteria.and(
                   new Criteria(
-                      BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).lessThan(
+                      SystemLogEsDo4Desc.recordTime).lessThan(
                       CommonUtil.convertAccountZoneToUTC(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
-            Sort.by(BeanUtil.getPropertyName(SystemLogEsDo::getRecordTime)).descending());
+            Sort.by(SystemLogEsDo4Desc.recordTime).descending());
     SearchHits<SystemLogEsDo> searchHits = elasticsearchTemplate.search(query,
         SystemLogEsDo.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()

@@ -16,6 +16,7 @@
 package com.sky.centaur.unique.domain.captcha;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import com.sky.centaur.extension.annotations.GenerateDescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +43,7 @@ public class Captcha extends BasisDomainModel {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
+  @GenerateDescription
   public static class SimpleCaptcha {
 
     /**
