@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.metamodel;
+package com.sky.centaur.processor.metamodel;
 
 import com.google.auto.service.AutoService;
-import com.sky.centaur.basis.kotlin.tools.ObjectUtil;
-import com.sky.centaur.extension.annotations.GenerateDescription;
+import com.sky.centaur.basis.annotations.CustomDescription;
+import com.sky.centaur.basis.annotations.GenerateDescription;
+import com.sky.centaur.processor.kotlin.tools.ObjectUtil;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -58,7 +59,7 @@ import org.springframework.util.CollectionUtils;
  */
 @SuppressWarnings("unused")
 @SupportedAnnotationTypes(
-    value = {"com.sky.centaur.extension.annotations.GenerateDescription"}
+    value = {"com.sky.centaur.basis.annotations.GenerateDescription"}
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
@@ -151,6 +152,18 @@ public class MetamodelGenerator extends AbstractProcessor {
             .build();
         builder.addField(fieldSpec);
       });
+    }
+    if (annotatedElement.getAnnotation(GenerateDescription.class) != null) {
+      GenerateDescription generateDescription = annotatedElement.getAnnotation(
+          GenerateDescription.class);
+      CustomDescription[] customs = generateDescription.customs();
+      for (CustomDescription custom : customs) {
+        FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+            .initializer("$S", custom.value())
+            .build();
+        builder.addField(fieldSpec);
+      }
     }
     builder.addAnnotation(AnnotationSpec.builder(Generated.class)
         .addMember("value", "$S", this.getClass().getName())

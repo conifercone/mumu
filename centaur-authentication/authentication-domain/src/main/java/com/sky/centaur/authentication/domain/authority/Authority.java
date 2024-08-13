@@ -61,6 +61,10 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
 
   @Override
   public String getAuthority() {
+    if (code.startsWith(CommonConstants.ROLE_PREFIX) || code.startsWith(
+        CommonConstants.AUTHORITY_PREFIX)) {
+      return code;
+    }
     return CommonConstants.AUTHORITY_PREFIX.concat(code);
   }
 }

@@ -15,8 +15,8 @@
  */
 package com.sky.centaur.unique.domain.captcha;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
-import com.sky.centaur.extension.annotations.GenerateDescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

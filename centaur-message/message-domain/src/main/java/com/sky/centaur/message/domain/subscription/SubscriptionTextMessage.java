@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.domain.subscription;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
+@GenerateDescription
 public class SubscriptionTextMessage extends BasisDomainModel {
 
   private Long id;

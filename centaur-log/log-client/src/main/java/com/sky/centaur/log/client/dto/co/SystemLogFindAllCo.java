@@ -16,6 +16,7 @@
 package com.sky.centaur.log.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -30,6 +31,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class SystemLogFindAllCo extends BaseClientObject {
 
   /**

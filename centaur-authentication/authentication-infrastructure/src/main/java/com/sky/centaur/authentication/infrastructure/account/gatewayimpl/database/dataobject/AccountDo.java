@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
@@ -51,6 +52,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
+@GenerateDescription
 public class AccountDo extends JpaBasisDataObject {
 
   @Id

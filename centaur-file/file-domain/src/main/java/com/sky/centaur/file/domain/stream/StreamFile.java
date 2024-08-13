@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.file.domain.stream;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.io.InputStream;
 import lombok.Data;
@@ -28,6 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class StreamFile extends BasisDomainModel {
 
   /**

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.io.InputStream;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
+@GenerateDescription
 public class StreamFileMinioDo {
 
   /**

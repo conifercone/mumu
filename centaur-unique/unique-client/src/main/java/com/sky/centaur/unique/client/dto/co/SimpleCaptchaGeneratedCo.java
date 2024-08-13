@@ -16,8 +16,8 @@
 
 package com.sky.centaur.unique.client.dto.co;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
-import com.sky.centaur.extension.annotations.GenerateDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

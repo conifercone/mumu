@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
@@ -45,6 +46,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "roles")
 @DynamicInsert
+@GenerateDescription
 public class RoleDo extends JpaBasisDataObject {
 
   @Id

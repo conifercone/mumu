@@ -19,7 +19,9 @@ import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.Account4Desc;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo4Desc;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -43,28 +45,28 @@ public interface AccountMapper {
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
   @Mappings(value = {
-      @Mapping(target = "role", ignore = true),
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Account4Desc.role, ignore = true),
+      @Mapping(target = Account4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
   @Mappings(value = {
-      @Mapping(target = "role", ignore = true)
+      @Mapping(target = AccountDo4Desc.role, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
   @Mappings(value = {
-      @Mapping(target = "role", ignore = true),
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Account4Desc.role, ignore = true),
+      @Mapping(target = Account4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
 
   @Mappings(value = {
-      @Mapping(target = "role", ignore = true),
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Account4Desc.role, ignore = true),
+      @Mapping(target = Account4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);

@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.basis.annotations.CustomDescription;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.LanguageEnum;
@@ -48,6 +50,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@GenerateDescription(customs = {
+    @CustomDescription(name = "authorities", value = "authorities")
+})
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Serial

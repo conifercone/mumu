@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.util.Map;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
+@GenerateDescription
 public class TemplateMailThymeleafDo {
 
   private String content;

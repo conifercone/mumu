@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.client.dto.co;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -28,6 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class SystemLogSaveCo extends BaseClientObject {
 
   /**

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.domain.operation;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
+@GenerateDescription
 public class OperationLog {
 
   /**

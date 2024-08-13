@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.annotations;
+package com.sky.centaur.basis.annotations;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -24,15 +24,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 描述信息生成注解
+ * 自定义描述
  *
  * @author kaiyu.shan
  * @since 1.0.4
  */
 @Documented
 @Inherited
-@Target({ElementType.TYPE})
+@Target({ElementType.ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface GenerateDescription {
+public @interface CustomDescription {
 
+  String name() default "";
+
+  String value() default "";
 }

@@ -63,6 +63,7 @@ centaur
 │  │  │- 📂 message-client -- message service client
 │  │  │- 📂 message-domain -- message service domain layer
 │  │  │- 📂 message-infrastructure -- message service infrastructure layer
+│  │─ 📂 centaur-processor -- processor module
 │  │─ 📂 centaur-sms -- sms service
 │  │  │- 📂 sms-adapter -- sms service adaptation layer
 │  │  │- 📂 sms-application -- sms service application layer

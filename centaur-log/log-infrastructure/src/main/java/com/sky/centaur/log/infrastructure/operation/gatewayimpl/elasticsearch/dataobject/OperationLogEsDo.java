@@ -15,8 +15,8 @@
  */
 package com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.constants.CommonConstants;
-import com.sky.centaur.extension.annotations.GenerateDescription;
 import com.sky.centaur.log.infrastructure.config.LogProperties;
 import java.time.LocalDateTime;
 import lombok.Data;

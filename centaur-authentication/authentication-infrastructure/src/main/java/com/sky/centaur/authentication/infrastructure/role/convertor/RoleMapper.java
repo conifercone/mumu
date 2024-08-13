@@ -17,9 +17,12 @@ package com.sky.centaur.authentication.infrastructure.role.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
+import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo4Desc;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.authentication.domain.role.Role4Desc;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo4Desc;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -43,38 +46,38 @@ public interface RoleMapper {
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Role4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleDo roleDo);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Role4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCo roleAddCo);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Role4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleFindAllCo roleFindAllCo);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = Role4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true)
+      @Mapping(target = RoleFindAllCo4Desc.authorities, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
 
   @Mappings(value = {
-      @Mapping(target = "authorities", ignore = true),
-      @Mapping(target = "users", ignore = true)
+      @Mapping(target = RoleDo4Desc.authorities, ignore = true),
+      @Mapping(target = RoleDo4Desc.users, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);

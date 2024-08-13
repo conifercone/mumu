@@ -19,6 +19,7 @@ import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage4Desc;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -43,11 +44,11 @@ public interface BroadcastTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   @Mappings(value = {
-      @Mapping(target = "readQuantity", ignore = true),
-      @Mapping(target = "senderId", ignore = true),
-      @Mapping(target = "unreadQuantity", ignore = true),
-      @Mapping(target = "readReceiverIds", ignore = true),
-      @Mapping(target = "unreadReceiverIds", ignore = true)
+      @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.senderId, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
   })
   BroadcastTextMessage toEntity(
       BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
@@ -59,13 +60,13 @@ public interface BroadcastTextMessageMapper {
   BroadcastTextMessage toEntity(BroadcastTextMessageDo broadcastTextMessageDo);
 
   @Mappings(value = {
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "readQuantity", ignore = true),
-      @Mapping(target = "readReceiverIds", ignore = true),
-      @Mapping(target = "receiverIds", ignore = true),
-      @Mapping(target = "senderId", ignore = true),
-      @Mapping(target = "unreadQuantity", ignore = true),
-      @Mapping(target = "unreadReceiverIds", ignore = true)
+      @Mapping(target = BroadcastTextMessage4Desc.id, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.receiverIds, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.senderId, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(

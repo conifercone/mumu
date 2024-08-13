@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     implementation(project(":centaur-basis"))
+    annotationProcessor(project(":centaur-processor"))
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.protobuf.java)
     implementation(libs.grpc.stub)

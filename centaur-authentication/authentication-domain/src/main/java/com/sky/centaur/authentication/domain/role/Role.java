@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.domain.role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
+@GenerateDescription
 public class Role extends BasisDomainModel {
 
   private Long id;
