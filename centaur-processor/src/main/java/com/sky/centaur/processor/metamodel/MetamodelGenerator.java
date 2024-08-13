@@ -45,6 +45,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -68,17 +69,17 @@ import org.springframework.util.CollectionUtils;
 @AutoService(Processor.class)
 public class MetamodelGenerator extends AbstractProcessor {
 
-  private ProcessingEnvironment processingEnvironment;
   private Messager messager;
-  public static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
+  private Elements elementUtils;
+  private Types typeUtils;
+  private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
-    this.processingEnvironment = processingEnv;
-    processingEnvironment.getElementUtils();
-    processingEnvironment.getTypeUtils();
-    messager = processingEnvironment.getMessager();
+    elementUtils = processingEnv.getElementUtils();
+    typeUtils = processingEnv.getTypeUtils();
+    messager = processingEnv.getMessager();
     messager.printMessage(Diagnostic.Kind.NOTE, "🎉 Centaur Entity Metamodel Generator");
   }
 
@@ -111,8 +112,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     final String packageName;
     final String genEntityName;
 
-    PackageElement packageElement = processingEnvironment.getElementUtils()
-        .getPackageOf(annotatedElement);
+    PackageElement packageElement = elementUtils.getPackageOf(annotatedElement);
     if (packageElement.isUnnamed()) {
       messager.printMessage(Diagnostic.Kind.WARNING,
           "Class " + annotatedElement.getSimpleName() + " has an unnamed package.");
@@ -132,16 +132,15 @@ public class MetamodelGenerator extends AbstractProcessor {
     Builder builder = TypeSpec.classBuilder(genEntityName)
         .addModifiers(Modifier.PUBLIC)
         .addModifiers(Modifier.ABSTRACT);
-    Types types = processingEnvironment.getTypeUtils();
     List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(
             Collectors.toSet());
-    ObjectUtil.getSuperclassElement(annotatedElement, types)
+    ObjectUtil.getSuperclassElement(annotatedElement, typeUtils)
         .ifPresent(superClassElement -> {
           List<VariableElement> superClassFields = ObjectUtil.getFields(superClassElement);
           superClassFields.forEach(superClassField -> {
-            if (ObjectUtil.hasGetterSetter(superClassField, types) && !collect.contains(
+            if (ObjectUtil.hasGetterSetter(superClassField, typeUtils) && !collect.contains(
                 superClassField.getSimpleName().toString())) {
               fields.add(superClassField);
             }
@@ -150,7 +149,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     if (!CollectionUtils.isEmpty(fields)) {
       fields.stream()
           .filter(field -> field.getModifiers().contains(Modifier.PUBLIC) || (
-              ObjectUtil.hasGetterSetter(field, types) || (field.getAnnotation(
+              ObjectUtil.hasGetterSetter(field, typeUtils) || (field.getAnnotation(
                   Getter.class) != null && field.getAnnotation(
                   Setter.class) != null) || annotatedElement.getAnnotation(Data.class) != null | (
                   annotatedElement.getAnnotation(
