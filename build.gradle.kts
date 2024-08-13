@@ -99,6 +99,7 @@ subprojects {
             attributes(
                 "Implementation-Title" to archiveBaseName.get(),
                 "Implementation-Version" to archiveVersion.get(),
+                "Application-Version" to archiveVersion.get(),
                 "Built-Gradle" to gradle.gradleVersion,
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
