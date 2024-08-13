@@ -48,6 +48,9 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
@@ -76,7 +79,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     processingEnvironment.getElementUtils();
     processingEnvironment.getTypeUtils();
     messager = processingEnvironment.getMessager();
-    messager.printMessage(Diagnostic.Kind.NOTE, "🍃 Centaur Entity Metamodel Generator");
+    messager.printMessage(Diagnostic.Kind.NOTE, "🎉 Centaur Entity Metamodel Generator");
   }
 
   @Override
@@ -145,13 +148,24 @@ public class MetamodelGenerator extends AbstractProcessor {
           });
         });
     if (!CollectionUtils.isEmpty(fields)) {
-      fields.forEach(field -> {
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer("$S", field.getSimpleName().toString())
-            .build();
-        builder.addField(fieldSpec);
-      });
+      fields.stream()
+          .filter(field -> field.getModifiers().contains(Modifier.PUBLIC) || (
+              ObjectUtil.hasGetterSetter(field, types) || (field.getAnnotation(
+                  Getter.class) != null && field.getAnnotation(
+                  Setter.class) != null) || annotatedElement.getAnnotation(Data.class) != null | (
+                  annotatedElement.getAnnotation(
+                      Getter.class) != null && annotatedElement.getAnnotation(
+                      Setter.class) != null)))
+          .forEach(field -> {
+            FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer("$S", field.getSimpleName().toString())
+                .addJavadoc(String.format(
+                    "@see %s.%s#%s",
+                    packageName, entityName, field.getSimpleName()))
+                .build();
+            builder.addField(fieldSpec);
+          });
     }
     if (annotatedElement.getAnnotation(GenerateDescription.class) != null) {
       GenerateDescription generateDescription = annotatedElement.getAnnotation(
@@ -169,6 +183,10 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addMember("value", "$S", this.getClass().getName())
         .addMember("date", "$S", LocalDateTime.now().toString())
         .build());
+    builder.addJavadoc(
+        "The current class is automatically generated, please do not modify it.\n" + String.format(
+            "@see %s.%s",
+            packageName, entityName));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
