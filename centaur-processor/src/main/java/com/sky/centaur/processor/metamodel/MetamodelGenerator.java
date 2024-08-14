@@ -179,6 +179,9 @@ public class MetamodelGenerator extends AbstractProcessor {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer("$S", custom.value())
+            .addJavadoc(String.format(
+                "@see %s.%s {@link %s}",
+                packageName, entityName, GenerateDescription.class.getName()))
             .build();
         builder.addField(fieldSpec);
       }
