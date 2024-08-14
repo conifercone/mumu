@@ -25,10 +25,13 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 import jakarta.annotation.Generated;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.processing.AbstractProcessor;
@@ -52,6 +55,7 @@ import javax.tools.JavaFileObject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
@@ -182,10 +186,13 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addMember("value", "$S", this.getClass().getName())
         .addMember("date", "$S", LocalDateTime.now().toString())
         .build());
+    String author = getGitUserName().map(
+        gitUserName -> getGitEmail().map(gitEmail -> String.format("%s<%s>", gitUserName, gitEmail))
+            .orElse("")).orElse("");
     builder.addJavadoc(
-        "The current class is automatically generated, please do not modify it.\n" + String.format(
-            "@see %s.%s",
-            packageName, entityName));
+        "The current class is automatically generated, please do not modify it.\n"
+            + (StringUtils.isNotBlank(author) ? String.format(
+            "@author %s\n", author) : "") + String.format("@see %s.%s", packageName, entityName));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
@@ -193,5 +200,33 @@ public class MetamodelGenerator extends AbstractProcessor {
     Writer writer = builderFile.openWriter();
     javaFile.writeTo(writer);
     writer.close();
+  }
+
+  private Optional<String> getGitEmail() {
+    try {
+      ProcessBuilder processBuilder = new ProcessBuilder("git", "config", "user.email");
+      processBuilder.redirectErrorStream(true);
+      Process process = processBuilder.start();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      String email = reader.readLine();
+      process.waitFor();
+      return Optional.of(email);
+    } catch (IOException | InterruptedException e) {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<String> getGitUserName() {
+    try {
+      ProcessBuilder processBuilder = new ProcessBuilder("git", "config", "user.name");
+      processBuilder.redirectErrorStream(true);
+      Process process = processBuilder.start();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      String userName = reader.readLine();
+      process.waitFor();
+      return Optional.of(userName);
+    } catch (IOException | InterruptedException e) {
+      return Optional.empty();
+    }
   }
 }
