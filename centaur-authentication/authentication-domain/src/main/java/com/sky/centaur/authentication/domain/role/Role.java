@@ -48,9 +48,24 @@ import lombok.experimental.SuperBuilder;
 @GenerateDescription
 public class Role extends BasisDomainModel {
 
+  /**
+   * 角色id
+   */
   private Long id;
+
+  /**
+   * 角色编码
+   */
   private String code;
+
+  /**
+   * 角色名称
+   */
   private String name;
+
+  /**
+   * 角色权限
+   */
   private List<Authority> authorities;
 
 }

@@ -51,11 +51,20 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
   @Serial
   private static final long serialVersionUID = -5474154746791467326L;
 
+  /**
+   * 权限id
+   */
   private Long id;
 
+  /**
+   * 权限编码
+   */
   @Size(max = 50, message = "{authority.code.validation.size}")
   private String code;
 
+  /**
+   * 权限名称
+   */
   @Size(max = 200, message = "{authority.name.validation.size}")
   private String name;
 
