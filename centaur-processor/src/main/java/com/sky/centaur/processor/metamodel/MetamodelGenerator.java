@@ -29,7 +29,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -182,9 +183,12 @@ public class MetamodelGenerator extends AbstractProcessor {
         builder.addField(fieldSpec);
       }
     }
+    OffsetDateTime dateTime = OffsetDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+    String formattedDateTime = dateTime.format(formatter);
     builder.addAnnotation(AnnotationSpec.builder(Generated.class)
         .addMember("value", "$S", this.getClass().getName())
-        .addMember("date", "$S", LocalDateTime.now().toString())
+        .addMember("date", "$S", formattedDateTime)
         .build());
     String author = getGitUserName().map(
         gitUserName -> getGitEmail().map(gitEmail -> String.format("%s<%s>", gitUserName, gitEmail))
