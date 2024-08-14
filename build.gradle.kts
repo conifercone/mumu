@@ -69,7 +69,7 @@ subprojects {
                 file(System.getenv(centaurSigningKeyFile) as String).readText(),
                 System.getenv(centaurSigningPassword) as String
             )
-            sign(configurations.runtimeElements.get())
+            sign(tasks["jar"])
         }
     }
 

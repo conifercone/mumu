@@ -16,6 +16,10 @@ bootJar {
     }
 }
 
+signing {
+    sign(tasks.bootJar)
+}
+
 bootBuildImage {
     imageName.set("conifercone/${project.name}:${project.version}")
 }
