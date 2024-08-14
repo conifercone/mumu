@@ -1,4 +1,4 @@
-![centaur](./logo.png)
+![centaur](./logo.svg)
 
 # centaur
 
