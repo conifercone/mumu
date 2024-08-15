@@ -137,6 +137,33 @@ public class MetamodelGenerator extends AbstractProcessor {
     Builder builder = TypeSpec.classBuilder(genEntityName)
         .addModifiers(Modifier.PUBLIC)
         .addModifiers(Modifier.ABSTRACT);
+    generateFields(annotatedElement, packageName, entityName, builder);
+    OffsetDateTime dateTime = OffsetDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+    String formattedDateTime = dateTime.format(formatter);
+    builder.addAnnotation(AnnotationSpec.builder(Generated.class)
+        .addMember("value", "$S", this.getClass().getName())
+        .addMember("date", "$S", formattedDateTime)
+        .build());
+    String author = getGitUserName().map(
+        gitUserName -> getGitEmail().map(gitEmail -> String.format("%s<%s>", gitUserName, gitEmail))
+            .orElse("")).orElse("");
+    builder.addJavadoc(
+        "The current class is automatically generated, please do not modify it.\n"
+            + (StringUtils.isNotBlank(author) ? String.format(
+            "@author %s\n", author) : "") + String.format("@see %s.%s", packageName, entityName));
+    JavaFile javaFile = JavaFile
+        .builder(packageName, builder.build())
+        .build();
+    JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(qualifiedGenEntityName);
+    Writer writer = builderFile.openWriter();
+    javaFile.writeTo(writer);
+    writer.close();
+  }
+
+  private void generateFields(@NotNull Element annotatedElement, String packageName,
+      String entityName,
+      Builder builder) {
     List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(
@@ -186,27 +213,6 @@ public class MetamodelGenerator extends AbstractProcessor {
         builder.addField(fieldSpec);
       }
     }
-    OffsetDateTime dateTime = OffsetDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
-    String formattedDateTime = dateTime.format(formatter);
-    builder.addAnnotation(AnnotationSpec.builder(Generated.class)
-        .addMember("value", "$S", this.getClass().getName())
-        .addMember("date", "$S", formattedDateTime)
-        .build());
-    String author = getGitUserName().map(
-        gitUserName -> getGitEmail().map(gitEmail -> String.format("%s<%s>", gitUserName, gitEmail))
-            .orElse("")).orElse("");
-    builder.addJavadoc(
-        "The current class is automatically generated, please do not modify it.\n"
-            + (StringUtils.isNotBlank(author) ? String.format(
-            "@author %s\n", author) : "") + String.format("@see %s.%s", packageName, entityName));
-    JavaFile javaFile = JavaFile
-        .builder(packageName, builder.build())
-        .build();
-    JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(qualifiedGenEntityName);
-    Writer writer = builderFile.openWriter();
-    javaFile.writeTo(writer);
-    writer.close();
   }
 
   private Optional<String> getGitEmail() {
