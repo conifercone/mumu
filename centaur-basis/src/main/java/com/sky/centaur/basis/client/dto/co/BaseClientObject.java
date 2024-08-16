@@ -55,7 +55,7 @@ public abstract class BaseClientObject implements ClientObject {
   /**
    * 已归档
    */
-  private Boolean archived = false;
+  private Boolean archived;
 
   public OffsetDateTime getCreationTime() {
     return creationTime;

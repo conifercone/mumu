@@ -23,7 +23,6 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -58,9 +57,8 @@ public class JpaBasisDataObject extends BasisDataObject {
   private OffsetDateTime modificationTime;
 
   @NotNull
-  @ColumnDefault("false")
   @Column(name = "archived", nullable = false)
-  private Boolean archived = false;
+  private Boolean archived;
 
   @Override
   public Long getFounder() {

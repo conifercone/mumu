@@ -17,7 +17,6 @@
 package com.sky.centaur.basis.domain;
 
 import java.time.OffsetDateTime;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -60,6 +59,5 @@ public abstract class BasisDomainModel implements DomainModel {
   /**
    * 已归档
    */
-  @Builder.Default
-  private Boolean archived = false;
+  private Boolean archived;
 }
