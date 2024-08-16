@@ -86,6 +86,15 @@ public interface SubscriptionTextMessageGateway {
   void archiveMsgById(Long id);
 
   /**
+   * 根据ID从归档中恢复消息
+   *
+   * @param id 消息ID
+   * @since 1.0.4
+   */
+  @API(status = Status.STABLE, since = "1.0.4")
+  void recoverMsgFromArchiveById(Long id);
+
+  /**
    * 查询所有和某人的消息记录
    *
    * @param pageNo     当前页码

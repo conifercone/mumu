@@ -21,6 +21,7 @@ import com.sky.centaur.message.application.subscription.executor.SubscriptionTex
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageFindAllYouSendCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageReadByIdCmdExe;
+import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import com.sky.centaur.message.application.subscription.executor.SubscriptionTextMessageUnreadByIdCmdExe;
 import com.sky.centaur.message.client.api.SubscriptionTextMessageService;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
@@ -29,6 +30,7 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSome
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
@@ -58,6 +60,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   private final SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe;
   private final SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe;
   private final SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe;
+  private final SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe;
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
@@ -67,7 +70,8 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
       SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe,
       SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe,
       SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe,
-      SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe) {
+      SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe,
+      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
     this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
     this.subscriptionTextMessageDeleteByIdCmdExe = subscriptionTextMessageDeleteByIdCmdExe;
@@ -75,6 +79,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
     this.subscriptionTextMessageUnreadByIdCmdExe = subscriptionTextMessageUnreadByIdCmdExe;
     this.subscriptionTextMessageArchiveByIdCmdExe = subscriptionTextMessageArchiveByIdCmdExe;
     this.subscriptionTextMessageFindAllWithSomeOneCmdExe = subscriptionTextMessageFindAllWithSomeOneCmdExe;
+    this.subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe = subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -115,6 +120,14 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   public void archiveMsgById(
       SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageArchiveByIdCmdExe.execute(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional
+  public void recoverMsgFromArchiveById(
+      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
+    subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(
+        subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
   }
 
   @Override

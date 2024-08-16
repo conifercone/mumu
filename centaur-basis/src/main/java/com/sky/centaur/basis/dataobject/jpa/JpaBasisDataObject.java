@@ -20,7 +20,6 @@ import com.sky.centaur.basis.dataobject.BasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,7 +55,6 @@ public class JpaBasisDataObject extends BasisDataObject {
   @Column(name = "modification_time", nullable = false)
   private OffsetDateTime modificationTime;
 
-  @NotNull
   @Column(name = "archived", nullable = false)
   private Boolean archived;
 

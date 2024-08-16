@@ -22,6 +22,7 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSome
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
@@ -112,6 +113,16 @@ public class SubscriptionTextMessageController {
   public void archiveMsgById(
       @RequestBody @Valid SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据ID从存档中恢复消息指令")
+  @PutMapping("/recoverMsgFromArchiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverMsgFromArchiveById(
+      @RequestBody @Valid SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
+    subscriptionTextMessageService.recoverMsgFromArchiveById(
+        subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
   }
 
   @Operation(summary = "查询所有和某人的消息记录")

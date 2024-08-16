@@ -18,6 +18,7 @@ package com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
@@ -31,4 +32,7 @@ public interface SubscriptionTextMessageArchivedRepository extends
     JpaSpecificationExecutor<SubscriptionTextMessageArchivedDo> {
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
+
+  Optional<SubscriptionTextMessageArchivedDo> findByIdAndSenderId(@NotNull Long id,
+      @NotNull Long senderId);
 }

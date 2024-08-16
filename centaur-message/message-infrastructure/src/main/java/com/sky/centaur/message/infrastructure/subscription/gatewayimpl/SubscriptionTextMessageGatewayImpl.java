@@ -156,6 +156,18 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
+  @Transactional
+  public void recoverMsgFromArchiveById(Long id) {
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
+                accountId)))
+        .ifPresent(subscriptionTextMessageArchivedDo -> {
+          subscriptionTextMessageArchivedDo.setArchived(false);
+          subscriptionTextMessageArchivedRepository.merge(subscriptionTextMessageArchivedDo);
+        });
+  }
+
+  @Override
   public Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(
       int pageNo, int pageSize, Long receiverId) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
