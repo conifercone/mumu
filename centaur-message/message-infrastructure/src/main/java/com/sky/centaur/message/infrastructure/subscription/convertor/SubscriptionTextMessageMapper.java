@@ -21,6 +21,7 @@ import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSe
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage4Desc;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -67,6 +68,14 @@ public interface SubscriptionTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllWithSomeOneCo toFindAllWithSomeOne(
       SubscriptionTextMessage subscriptionTextMessage);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  SubscriptionTextMessageArchivedDo toArchiveDo(
+      SubscriptionTextMessageDo subscriptionTextMessageDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  SubscriptionTextMessageDo toDataObject(
+      SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(

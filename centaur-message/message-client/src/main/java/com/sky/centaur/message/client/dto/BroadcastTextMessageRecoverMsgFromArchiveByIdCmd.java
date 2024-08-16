@@ -15,19 +15,16 @@
  */
 package com.sky.centaur.message.client.dto;
 
-import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
-import jakarta.validation.Valid;
 import lombok.Data;
 
 /**
- * 文本广播消息转发指令
+ * 文本广播消息根据ID从存档中恢复消息指令
  *
  * @author kaiyu.shan
- * @since 1.0.2
+ * @since 1.0.4
  */
 @Data
-public class BroadcastTextMessageForwardCmd {
+public class BroadcastTextMessageRecoverMsgFromArchiveByIdCmd {
 
-  @Valid
-  private BroadcastTextMessageForwardCo broadcastTextMessageForwardCo;
+  private Long id;
 }

@@ -21,6 +21,7 @@ import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -100,5 +101,15 @@ public class BroadcastTextMessageController {
   public void archiveMsgById(
       @RequestBody BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
     broadcastTextMessageService.archiveMsgById(broadcastTextMessageArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据ID从存档中恢复消息指令")
+  @PutMapping("/recoverMsgFromArchiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverMsgFromArchiveById(
+      @RequestBody BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {
+    broadcastTextMessageService.recoverMsgFromArchiveById(
+        broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
   }
 }

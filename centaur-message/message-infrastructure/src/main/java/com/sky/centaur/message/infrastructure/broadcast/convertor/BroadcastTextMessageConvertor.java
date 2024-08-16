@@ -20,6 +20,7 @@ import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import com.sky.centaur.message.infrastructure.config.MessageProperties;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
@@ -124,5 +125,21 @@ public class BroadcastTextMessageConvertor {
               .ifPresent(broadcastTextMessageFindAllYouSendCo::setMessage);
           return broadcastTextMessageFindAllYouSendCo;
         });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<BroadcastTextMessageArchivedDo> toArchiveDo(
+      BroadcastTextMessageDo broadcastTextMessageDo) {
+    return Optional.ofNullable(broadcastTextMessageDo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<BroadcastTextMessageDo> toDataObject(
+      BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo) {
+    return Optional.ofNullable(broadcastTextMessageArchivedDo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
   }
 }

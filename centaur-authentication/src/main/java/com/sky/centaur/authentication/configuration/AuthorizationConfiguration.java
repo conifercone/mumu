@@ -107,7 +107,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -154,10 +153,7 @@ public class AuthorizationConfiguration {
               if (StringUtils.hasText(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
               } else if (StringUtils.hasText(policy.getAuthority())) {
-                Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
-                    "Permission configuration cannot be empty and cannot start with SCOPE_");
-                authorizedUrl.hasAuthority(
-                    CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
+                authorizedUrl.hasAuthority(policy.getAuthority());
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();
               }

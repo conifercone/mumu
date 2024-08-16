@@ -88,6 +88,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                         receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
                             .ifPresent(accountChannel -> accountChannel.writeAndFlush(
                                 new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
+                  } else {
+                    broadcastTextMessageRepository.persist(broadcastTextMessageDo);
                   }
                 }))));
   }
@@ -174,11 +176,28 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Override
   @Transactional
   public void archiveMsgById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-        .ifPresent(broadcastTextMessageDo -> {
-          broadcastTextMessageDo.setArchived(true);
-          broadcastTextMessageRepository.merge(broadcastTextMessageDo);
-        });
+        .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchiveDo(
+            broadcastTextMessageDo).ifPresent(broadcastTextMessageArchivedDo -> {
+          broadcastTextMessageArchivedDo.setArchived(true);
+          broadcastTextMessageRepository.delete(broadcastTextMessageDo);
+          broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
+        }));
+  }
+
+  @Override
+  @Transactional
+  public void recoverMsgFromArchiveById(Long id) {
+    //noinspection DuplicatedCode
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId, accountId)))
+        .ifPresent(broadcastTextMessageArchivedDo -> broadcastTextMessageConvertor.toDataObject(
+            broadcastTextMessageArchivedDo).ifPresent(broadcastTextMessageDo -> {
+          broadcastTextMessageDo.setArchived(false);
+          broadcastTextMessageArchivedRepository.delete(broadcastTextMessageArchivedDo);
+          broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+        }));
   }
 }

@@ -77,4 +77,13 @@ public interface BroadcastTextMessageGateway {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(Long id);
+
+  /**
+   * 根据ID从归档中恢复消息
+   *
+   * @param id 消息ID
+   * @since 1.0.4
+   */
+  @API(status = Status.STABLE, since = "1.0.4")
+  void recoverMsgFromArchiveById(Long id);
 }

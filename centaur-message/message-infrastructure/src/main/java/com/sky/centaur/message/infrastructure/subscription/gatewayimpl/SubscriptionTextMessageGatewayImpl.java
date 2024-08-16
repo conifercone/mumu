@@ -147,24 +147,33 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional
   public void archiveMsgById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-        .ifPresent(subscriptionTextMessageDo -> {
-          subscriptionTextMessageDo.setArchived(true);
-          subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
-        });
+        .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchiveDo(
+            subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedDo -> {
+          subscriptionTextMessageArchivedDo.setArchived(true);
+          subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
+          subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedDo);
+        }));
   }
 
   @Override
   @Transactional
   public void recoverMsgFromArchiveById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
                 accountId)))
-        .ifPresent(subscriptionTextMessageArchivedDo -> {
-          subscriptionTextMessageArchivedDo.setArchived(false);
-          subscriptionTextMessageArchivedRepository.merge(subscriptionTextMessageArchivedDo);
-        });
+        .ifPresent(
+            subscriptionTextMessageArchivedDo -> subscriptionTextMessageConvertor.toDataObject(
+                    subscriptionTextMessageArchivedDo)
+                .ifPresent(subscriptionTextMessageDo -> {
+                  subscriptionTextMessageDo.setArchived(false);
+                  subscriptionTextMessageArchivedRepository.delete(
+                      subscriptionTextMessageArchivedDo);
+                  subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
+                }));
   }
 
   @Override

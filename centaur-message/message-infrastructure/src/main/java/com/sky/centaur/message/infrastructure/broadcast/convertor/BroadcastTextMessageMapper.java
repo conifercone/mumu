@@ -20,6 +20,7 @@ import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendC
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage4Desc;
+import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -72,6 +73,12 @@ public interface BroadcastTextMessageMapper {
   BroadcastTextMessage toEntity(
       BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo);
 
+  @API(status = Status.STABLE, since = "1.0.4")
+  BroadcastTextMessageArchivedDo toArchiveDo(BroadcastTextMessageDo broadcastTextMessageDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  BroadcastTextMessageDo toDataObject(
+      BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessageFindAllYouSendCo toFindAllYouSendCo(
