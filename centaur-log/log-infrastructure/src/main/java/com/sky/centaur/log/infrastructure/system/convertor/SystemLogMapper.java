@@ -83,7 +83,8 @@ public interface SystemLogMapper {
       @Mapping(target = SystemLogFindAllCo4Desc.creationTime, ignore = true),
       @Mapping(target = SystemLogFindAllCo4Desc.founder, ignore = true),
       @Mapping(target = SystemLogFindAllCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SystemLogFindAllCo4Desc.modifier, ignore = true)
+      @Mapping(target = SystemLogFindAllCo4Desc.modifier, ignore = true),
+      @Mapping(target = SystemLogFindAllCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
@@ -92,7 +93,8 @@ public interface SystemLogMapper {
       @Mapping(target = SystemLogSaveCo4Desc.creationTime, ignore = true),
       @Mapping(target = SystemLogSaveCo4Desc.founder, ignore = true),
       @Mapping(target = SystemLogSaveCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SystemLogSaveCo4Desc.modifier, ignore = true)
+      @Mapping(target = SystemLogSaveCo4Desc.modifier, ignore = true),
+      @Mapping(target = SystemLogSaveCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);

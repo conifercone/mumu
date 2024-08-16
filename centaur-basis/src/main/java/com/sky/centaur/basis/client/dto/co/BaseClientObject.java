@@ -52,6 +52,11 @@ public abstract class BaseClientObject implements ClientObject {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private OffsetDateTime modificationTime;
 
+  /**
+   * 已归档
+   */
+  private Boolean archived = false;
+
   public OffsetDateTime getCreationTime() {
     return creationTime;
   }
@@ -82,5 +87,13 @@ public abstract class BaseClientObject implements ClientObject {
 
   public void setModificationTime(OffsetDateTime modificationTime) {
     this.modificationTime = modificationTime;
+  }
+
+  public Boolean getArchived() {
+    return archived;
+  }
+
+  public void setArchived(Boolean archived) {
+    this.archived = archived;
   }
 }

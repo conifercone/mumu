@@ -29,9 +29,5 @@ public enum MessageStatusEnum {
   /**
    * 未读
    */
-  UNREAD,
-  /**
-   * 已归档
-   */
-  ARCHIVED
+  UNREAD
 }

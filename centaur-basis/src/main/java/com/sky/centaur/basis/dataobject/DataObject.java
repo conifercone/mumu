@@ -33,4 +33,6 @@ public interface DataObject {
   OffsetDateTime getCreationTime();
 
   OffsetDateTime getModificationTime();
+
+  Boolean isArchived();
 }

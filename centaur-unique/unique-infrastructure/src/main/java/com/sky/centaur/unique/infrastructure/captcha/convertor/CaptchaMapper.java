@@ -61,7 +61,8 @@ public interface CaptchaMapper {
       @Mapping(target = SimpleCaptchaGeneratedCo4Desc.creationTime, ignore = true),
       @Mapping(target = SimpleCaptchaGeneratedCo4Desc.founder, ignore = true),
       @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modifier, ignore = true)
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modifier, ignore = true),
+      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);

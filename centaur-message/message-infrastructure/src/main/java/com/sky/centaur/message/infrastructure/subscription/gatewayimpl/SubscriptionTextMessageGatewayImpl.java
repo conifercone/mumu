@@ -150,7 +150,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
         .ifPresent(subscriptionTextMessageDo -> {
-          subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
+          subscriptionTextMessageDo.setArchived(true);
           subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
         });
   }

@@ -177,7 +177,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
         .ifPresent(broadcastTextMessageDo -> {
-          broadcastTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
+          broadcastTextMessageDo.setArchived(true);
           broadcastTextMessageRepository.merge(broadcastTextMessageDo);
         });
   }

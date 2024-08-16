@@ -85,7 +85,8 @@ public interface OperationLogMapper {
       @Mapping(target = OperationLogFindAllCo4Desc.creationTime, ignore = true),
       @Mapping(target = OperationLogFindAllCo4Desc.founder, ignore = true),
       @Mapping(target = OperationLogFindAllCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = OperationLogFindAllCo4Desc.modifier, ignore = true)
+      @Mapping(target = OperationLogFindAllCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogFindAllCo4Desc.archived, ignore = true)
   })
   OperationLogFindAllCo toFindAllCo(OperationLog operationLog);
 
@@ -93,7 +94,8 @@ public interface OperationLogMapper {
       @Mapping(target = OperationLogQryCo4Desc.creationTime, ignore = true),
       @Mapping(target = OperationLogQryCo4Desc.founder, ignore = true),
       @Mapping(target = OperationLogQryCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = OperationLogQryCo4Desc.modifier, ignore = true)
+      @Mapping(target = OperationLogQryCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogQryCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogQryCo toQryCo(OperationLog operationLog);
@@ -102,7 +104,8 @@ public interface OperationLogMapper {
       @Mapping(target = OperationLogSaveCo4Desc.creationTime, ignore = true),
       @Mapping(target = OperationLogSaveCo4Desc.founder, ignore = true),
       @Mapping(target = OperationLogSaveCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = OperationLogSaveCo4Desc.modifier, ignore = true)
+      @Mapping(target = OperationLogSaveCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogSaveCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCo toSaveCo(OperationLogKafkaDo operationLogKafkaDo);
