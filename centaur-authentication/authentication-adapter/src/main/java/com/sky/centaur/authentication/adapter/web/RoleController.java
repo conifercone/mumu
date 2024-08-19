@@ -17,8 +17,10 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
+import com.sky.centaur.authentication.client.dto.RoleArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
+import com.sky.centaur.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,5 +87,22 @@ public class RoleController {
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<RoleFindAllCo> findAll(@RequestBody @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
+  }
+
+  @Operation(summary = "根据id归档角色")
+  @PutMapping("/archiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void archiveById(@RequestBody RoleArchiveByIdCmd roleArchiveByIdCmd) {
+    roleService.archiveById(roleArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据id从归档中恢复角色")
+  @PutMapping("/recoverFromArchiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverFromArchiveById(
+      @RequestBody RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {
+    roleService.recoverFromArchiveById(roleRecoverFromArchiveByIdCmd);
   }
 }

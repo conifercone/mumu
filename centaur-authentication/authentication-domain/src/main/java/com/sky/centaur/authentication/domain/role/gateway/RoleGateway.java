@@ -66,4 +66,18 @@ public interface RoleGateway {
    * @return 查询结果
    */
   Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize);
+
+  /**
+   * 根据id归档
+   *
+   * @param id 权限id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从存档中恢复
+   *
+   * @param id 权限id
+   */
+  void recoverFromArchiveById(Long id);
 }

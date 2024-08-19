@@ -24,7 +24,10 @@ import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo_;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -62,14 +65,17 @@ public class RoleGatewayImpl implements RoleGateway {
   private final DistributedLock distributedLock;
   private final AccountGateway accountGateway;
   private final RoleConvertor roleConvertor;
+  private final RoleArchivedRepository roleArchivedRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      AccountGateway accountGateway, RoleConvertor roleConvertor) {
+      AccountGateway accountGateway, RoleConvertor roleConvertor,
+      RoleArchivedRepository roleArchivedRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.roleConvertor = roleConvertor;
+    this.roleArchivedRepository = roleArchivedRepository;
   }
 
   @Override
@@ -77,7 +83,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
     Optional.ofNullable(role).flatMap(roleConvertor::toDataObject)
-        .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
+        .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode())
+            && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
         .ifPresentOrElse(roleRepository::persist, () -> {
           throw new CentaurException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
         });
@@ -94,6 +101,7 @@ public class RoleGatewayImpl implements RoleGateway {
             allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
       }
       roleRepository.deleteById(roleId);
+      roleArchivedRepository.deleteById(roleId);
     });
   }
 
@@ -154,7 +162,31 @@ public class RoleGatewayImpl implements RoleGateway {
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
     };
-    return getRoles(pageNo, pageSize, roleDoSpecification);
+    Page<Role> rolePage = getRoles(pageNo, pageSize, roleDoSpecification);
+    if (CollectionUtils.isEmpty(rolePage.getContent())) {
+      Specification<RoleArchivedDo> roleArchivedDoSpecification = (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        Optional.ofNullable(authorityId)
+            .ifPresent(id -> predicateList.add(cb.equal(
+                cb.literal(id),
+                cb.function(ANY_PG, Long.class, root.get(RoleArchivedDo_.authorities))
+            )));
+        assert query != null;
+        return query.orderBy(cb.desc(root.get(RoleArchivedDo_.creationTime)))
+            .where(predicateList.toArray(new Predicate[0]))
+            .getRestriction();
+      };
+      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      Page<RoleArchivedDo> repositoryAll = roleArchivedRepository.findAll(
+          roleArchivedDoSpecification,
+          pageRequest);
+      List<Role> roles = repositoryAll.getContent().stream()
+          .map(roleConvertor::toEntity)
+          .filter(Optional::isPresent).map(Optional::get)
+          .toList();
+      return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
+    }
+    return rolePage;
   }
 
   @NotNull
@@ -170,5 +202,27 @@ public class RoleGatewayImpl implements RoleGateway {
         .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(Long id) {
+    Optional.ofNullable(id).flatMap(roleRepository::findById)
+        .flatMap(roleConvertor::toArchivedDo).ifPresent(roleArchivedDo -> {
+          roleArchivedDo.setArchived(true);
+          roleArchivedRepository.persist(roleArchivedDo);
+          roleRepository.deleteById(roleArchivedDo.getId());
+        });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(Long id) {
+    Optional.ofNullable(id).flatMap(roleArchivedRepository::findById)
+        .flatMap(roleConvertor::toDataObject).ifPresent(roleDo -> {
+          roleDo.setArchived(false);
+          roleArchivedRepository.deleteById(roleDo.getId());
+          roleRepository.persist(roleDo);
+        });
   }
 }

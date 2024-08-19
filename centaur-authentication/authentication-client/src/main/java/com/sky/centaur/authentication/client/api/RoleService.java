@@ -16,8 +16,10 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
+import com.sky.centaur.authentication.client.dto.RoleArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
+import com.sky.centaur.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
 import org.springframework.data.domain.Page;
@@ -58,4 +60,20 @@ public interface RoleService {
    * @return 查询结果
    */
   Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
+
+
+  /**
+   * 根据id归档角色
+   *
+   * @param roleArchiveByIdCmd 根据id归档角色指令
+   */
+  void archiveById(RoleArchiveByIdCmd roleArchiveByIdCmd);
+
+  /**
+   * 通过id从存档中恢复
+   *
+   * @param roleRecoverFromArchiveByIdCmd 通过id从存档中恢复指令
+   */
+  void recoverFromArchiveById(
+      RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd);
 }

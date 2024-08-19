@@ -23,7 +23,9 @@ import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -33,6 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,23 +56,43 @@ public class RoleConvertor {
   private final AuthorityRepository authorityRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final SimpleTextTranslation simpleTextTranslation;
+  private final RoleArchivedRepository roleArchivedRepository;
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
       AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
+      RoleArchivedRepository roleArchivedRepository) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
+    this.roleArchivedRepository = roleArchivedRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleDo roleDo) {
+    //noinspection DuplicatedCode
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       Optional.ofNullable(roleDataObject.getAuthorities())
+          .filter(authorityList -> !CollectionUtils.isEmpty(
+              authorityList)).ifPresent(authorities -> role.setAuthorities(
+              authorityRepository.findAuthorityDoByIdIn(authorities).stream()
+                  .map(authorityConvertor::toEntity)
+                  .filter(Optional::isPresent).map(Optional::get)
+                  .collect(Collectors.toList())));
+      return role;
+    });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<Role> toEntity(RoleArchivedDo roleArchivedDo) {
+    //noinspection DuplicatedCode
+    return Optional.ofNullable(roleArchivedDo).map(roleArchivedDataObject -> {
+      Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
+      Optional.ofNullable(roleArchivedDataObject.getAuthorities())
           .filter(authorityList -> !CollectionUtils.isEmpty(
               authorityList)).ifPresent(authorities -> role.setAuthorities(
               authorityRepository.findAuthorityDoByIdIn(authorities).stream()
@@ -122,7 +145,8 @@ public class RoleConvertor {
         RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
         String codeAfterUpdated = roleDomain.getCode();
         if (StringUtils.hasText(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
-            && roleRepository.existsByCode(codeAfterUpdated)) {
+            && (roleRepository.existsByCode(codeAfterUpdated)
+            || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new CentaurException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
         }
         Optional.ofNullable(roleUpdateClientObject.getAuthorities())
@@ -170,5 +194,17 @@ public class RoleConvertor {
           .ifPresent(roleFindAllCo::setName);
       return roleFindAllCo;
     });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<RoleArchivedDo> toArchivedDo(RoleDo roleDo) {
+    return Optional.ofNullable(roleDo).map(RoleMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<RoleDo> toDataObject(RoleArchivedDo roleArchivedDo) {
+    return Optional.ofNullable(roleArchivedDo).map(RoleMapper.INSTANCE::toDataObject);
   }
 }

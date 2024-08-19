@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo4Desc;
 import com.sky.centaur.authentication.client.dto.co.RoleUpdateCo;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.Role4Desc;
+import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo4Desc;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
@@ -81,6 +82,21 @@ public interface RoleMapper {
   })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  RoleArchivedDo toArchivedDo(RoleDo roleDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  @Mappings(value = {
+      @Mapping(target = RoleDo4Desc.users, ignore = true)
+  })
+  RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  @Mappings(value = {
+      @Mapping(target = Role4Desc.authorities, ignore = true)
+  })
+  Role toEntity(RoleArchivedDo roleArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {

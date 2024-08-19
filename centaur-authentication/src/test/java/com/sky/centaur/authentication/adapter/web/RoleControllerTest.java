@@ -131,4 +131,38 @@ public class RoleControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById() throws Exception {
+    @Language("JSON") String role = """
+        {
+            "id": 0
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/role/archiveById").with(csrf())
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById() throws Exception {
+    @Language("JSON") String role = """
+        {
+            "id": 0
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/role/recoverFromArchiveById").with(csrf())
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
 }
