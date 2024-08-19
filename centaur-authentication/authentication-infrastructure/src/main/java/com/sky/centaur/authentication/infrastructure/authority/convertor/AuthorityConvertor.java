@@ -21,6 +21,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
@@ -52,14 +53,17 @@ public class AuthorityConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AuthorityRepository authorityRepository;
   private final SimpleTextTranslation simpleTextTranslation;
+  private final AuthorityArchivedRepository authorityArchivedRepository;
 
   @Autowired
   public AuthorityConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
       AuthorityRepository authorityRepository,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
+      AuthorityArchivedRepository authorityArchivedRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.authorityRepository = authorityRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
+    this.authorityArchivedRepository = authorityArchivedRepository;
   }
 
   @Contract("_ -> new")
@@ -100,8 +104,9 @@ public class AuthorityConvertor {
             AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
             String codeAfterUpdate = authority.getCode();
             if (StringUtils.hasText(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
-                && authorityRepository.existsByCode(
-                codeAfterUpdate)) {
+                && (authorityRepository.existsByCode(
+                codeAfterUpdate) || authorityArchivedRepository.existsByCode(
+                codeAfterUpdate))) {
               throw new CentaurException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
             }
             return authority;

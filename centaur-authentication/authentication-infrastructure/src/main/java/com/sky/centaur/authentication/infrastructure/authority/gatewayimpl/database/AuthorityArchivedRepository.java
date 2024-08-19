@@ -17,7 +17,10 @@ package com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.data
 
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 权限归档基本信息
@@ -25,7 +28,26 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author kaiyu.shan
  * @since 1.0.4
  */
+@Validated
 public interface AuthorityArchivedRepository extends BaseJpaRepository<AuthorityArchivedDo, Long>,
     JpaSpecificationExecutor<AuthorityArchivedDo> {
 
+  /**
+   * 判断是否存在指定id和code的权限
+   *
+   * @param id   权限id
+   * @param code 权限code
+   * @return 是否存在
+   */
+  boolean existsByIdOrCode(Long id,
+      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+
+  /**
+   * 判断权限编码是否已存在
+   *
+   * @param code 权限code
+   * @return 是否存在
+   */
+  boolean existsByCode(
+      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 }

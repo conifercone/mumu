@@ -83,6 +83,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void add(Authority authority) {
     Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
         .filter(authorityDo -> !authorityRepository.existsByIdOrCode(authorityDo.getId(),
+            authorityDo.getCode()) && !authorityArchivedRepository.existsByIdOrCode(
+            authorityDo.getId(),
             authorityDo.getCode()))
         .ifPresentOrElse(authorityRepository::persist, () -> {
           throw new CentaurException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
@@ -98,7 +100,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           authorities.getContent().stream().map(Role::getCode).toList());
     }
-    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
+    Optional.ofNullable(id).ifPresent(authorityId -> {
+      authorityRepository.deleteById(authorityId);
+      authorityArchivedRepository.deleteById(authorityId);
+    });
   }
 
   @Override
