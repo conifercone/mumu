@@ -73,7 +73,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(BroadcastTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(broadcastTextMessage -> Optional.ofNullable(
             messageProperties.getWebSocket().getAccountBroadcastChannelMap())
@@ -95,7 +95,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
     Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId().ifPresent(
         accountId -> {
@@ -128,7 +128,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
         .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
@@ -174,7 +174,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
@@ -188,7 +188,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(

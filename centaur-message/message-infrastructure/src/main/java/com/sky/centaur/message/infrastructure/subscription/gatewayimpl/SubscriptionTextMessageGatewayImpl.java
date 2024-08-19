@@ -69,7 +69,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg)
         .flatMap(subscriptionTextMessageConvertor::toDataObject)
@@ -84,7 +84,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
@@ -96,7 +96,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
@@ -108,7 +108,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(
@@ -145,7 +145,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
@@ -159,7 +159,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(

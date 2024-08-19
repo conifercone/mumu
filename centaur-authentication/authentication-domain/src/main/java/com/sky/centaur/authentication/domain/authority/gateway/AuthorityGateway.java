@@ -65,4 +65,19 @@ public interface AuthorityGateway {
    * @return 权限信息
    */
   Optional<Authority> findById(Long id);
+
+
+  /**
+   * 根据id归档权限
+   *
+   * @param id 权限id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从存档中恢复
+   *
+   * @param id 权限id
+   */
+  void recoverFromArchiveById(Long id);
 }

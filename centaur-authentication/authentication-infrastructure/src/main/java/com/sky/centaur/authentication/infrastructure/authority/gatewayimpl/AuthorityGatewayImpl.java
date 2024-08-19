@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
@@ -59,21 +60,21 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
 
   private final AuthorityRepository authorityRepository;
-
   private final DistributedLock distributedLock;
-
   private final RoleGateway roleGateway;
-
   private final AuthorityConvertor authorityConvertor;
+  private final AuthorityArchivedRepository authorityArchivedRepository;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
-      AuthorityConvertor authorityConvertor) {
+      AuthorityConvertor authorityConvertor,
+      AuthorityArchivedRepository authorityArchivedRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+    this.authorityArchivedRepository = authorityArchivedRepository;
   }
 
   @Override
@@ -147,5 +148,27 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public Optional<Authority> findById(Long id) {
     return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
         authorityConvertor::toEntity);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(Long id) {
+    Optional.ofNullable(id).flatMap(authorityRepository::findById)
+        .flatMap(authorityConvertor::toArchivedDo).ifPresent(authorityArchivedDo -> {
+          authorityArchivedDo.setArchived(true);
+          authorityArchivedRepository.persist(authorityArchivedDo);
+          authorityRepository.deleteById(authorityArchivedDo.getId());
+        });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(Long id) {
+    Optional.ofNullable(id).flatMap(authorityArchivedRepository::findById)
+        .flatMap(authorityConvertor::toDataObject).ifPresent(authorityDo -> {
+          authorityDo.setArchived(false);
+          authorityArchivedRepository.deleteById(authorityDo.getId());
+          authorityRepository.persist(authorityDo);
+        });
   }
 }

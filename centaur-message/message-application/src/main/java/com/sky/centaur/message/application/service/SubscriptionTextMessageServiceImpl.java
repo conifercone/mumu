@@ -83,26 +83,26 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageForwardCmdExe.execute(subscriptionTextMessageForwardCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
     subscriptionTextMessageReadByIdCmdExe.execute(subscriptionTextMessageReadByIdCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(
       SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
     subscriptionTextMessageUnreadByIdCmdExe.execute(subscriptionTextMessageUnreadByIdCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(
       SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
     subscriptionTextMessageDeleteByIdCmdExe.execute(subscriptionTextMessageDeleteByIdCmd);
@@ -116,14 +116,14 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
       SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
     subscriptionTextMessageArchiveByIdCmdExe.execute(subscriptionTextMessageArchiveByIdCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(
       SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
     subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(

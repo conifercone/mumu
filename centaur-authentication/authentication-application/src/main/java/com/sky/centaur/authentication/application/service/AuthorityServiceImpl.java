@@ -20,9 +20,11 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityRecoverFromArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -36,9 +38,11 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
@@ -68,26 +72,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorityServiceImpl extends AuthorityServiceImplBase implements AuthorityService {
 
   private final AuthorityAddCmdExe authorityAddCmdExe;
-
   private final AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe;
-
   private final AuthorityUpdateCmdExe authorityUpdateCmdExe;
-
   private final AuthorityFindAllCmdExe authorityFindAllCmdExe;
-
   private final AuthorityFindByIdCmdExe authorityFindByIdCmdExe;
+  private final AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe;
+  private final AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
       AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe,
       AuthorityUpdateCmdExe authorityUpdateCmdExe,
       AuthorityFindAllCmdExe authorityFindAllCmdExe,
-      AuthorityFindByIdCmdExe authorityFindByIdCmdExe) {
+      AuthorityFindByIdCmdExe authorityFindByIdCmdExe,
+      AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe,
+      AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
     this.authorityFindAllCmdExe = authorityFindAllCmdExe;
     this.authorityFindByIdCmdExe = authorityFindByIdCmdExe;
+    this.authorityArchiveByIdCmdExe = authorityArchiveByIdCmdExe;
+    this.authorityRecoverFromArchiveByIdCmdExe = authorityRecoverFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -234,5 +240,18 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     }
     responseObserver.onNext(builder.build());
     responseObserver.onCompleted();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd) {
+    authorityArchiveByIdCmdExe.execute(authorityArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(
+      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {
+    authorityRecoverFromArchiveByIdCmdExe.execute(authorityRecoverFromArchiveByIdCmd);
   }
 }

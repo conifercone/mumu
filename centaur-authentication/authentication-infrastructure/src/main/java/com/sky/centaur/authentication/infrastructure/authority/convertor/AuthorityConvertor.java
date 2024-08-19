@@ -22,6 +22,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -135,5 +136,17 @@ public class AuthorityConvertor {
               .ifPresent(authorityFindAllCo::setName);
           return authorityFindAllCo;
         });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AuthorityArchivedDo> toArchivedDo(AuthorityDo authorityDo) {
+    return Optional.ofNullable(authorityDo).map(AuthorityMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AuthorityDo> toDataObject(AuthorityArchivedDo authorityArchivedDo) {
+    return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toDataObject);
   }
 }

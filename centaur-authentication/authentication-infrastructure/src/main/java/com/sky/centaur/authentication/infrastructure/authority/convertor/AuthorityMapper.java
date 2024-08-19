@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
@@ -61,6 +62,12 @@ public interface AuthorityMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityDo toDataObject(Authority authority);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  AuthorityArchivedDo toArchivedDo(AuthorityDo authorityDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  AuthorityDo toDataObject(AuthorityArchivedDo authorityArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget AuthorityFindByIdCo authorityFindByIdCo) {

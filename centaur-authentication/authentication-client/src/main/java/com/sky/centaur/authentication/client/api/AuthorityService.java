@@ -16,9 +16,11 @@
 package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
@@ -68,4 +70,19 @@ public interface AuthorityService {
    * @return 查询结果
    */
   AuthorityFindByIdCo findById(AuthorityFindByIdCmd authorityFindByIdCmd);
+
+  /**
+   * 根据id归档权限
+   *
+   * @param authorityArchiveByIdCmd 根据id归档权限指令
+   */
+  void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd);
+
+  /**
+   * 通过id从存档中恢复
+   *
+   * @param authorityRecoverFromArchiveByIdCmd 通过id从存档中恢复指令
+   */
+  void recoverFromArchiveById(
+      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd);
 }

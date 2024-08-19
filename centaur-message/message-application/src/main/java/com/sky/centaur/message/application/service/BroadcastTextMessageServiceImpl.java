@@ -72,19 +72,19 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageForwardCmdExe.execute(broadcastTextMessageForwardCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
     broadcastTextMessageReadByIdCmdExe.execute(broadcastTextMessageReadByIdCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
     broadcastTextMessageDeleteByIdCmdExe.execute(broadcastTextMessageDeleteByIdCmd);
   }
@@ -96,7 +96,7 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
       BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
     broadcastTextMessageArchiveByIdCmdExe.execute(broadcastTextMessageArchiveByIdCmd);
