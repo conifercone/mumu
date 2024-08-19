@@ -77,19 +77,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
   private final AccountRegisterCmdExe accountRegisterCmdExe;
-
   private final AccountUpdateByIdCmdExe accountUpdateByIdCmdExe;
-
   private final AccountDisableCmdExe accountDisableCmdExe;
-
   private final AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe;
-
   private final AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe;
-
   private final AccountResetPasswordCmdExe accountResetPasswordCmdExe;
-
   private final AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe;
-
   private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
   private final AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe;
   private final AccountChangePasswordCmdExe accountChangePasswordCmdExe;

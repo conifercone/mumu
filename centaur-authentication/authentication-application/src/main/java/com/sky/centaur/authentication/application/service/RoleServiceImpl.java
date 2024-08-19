@@ -69,11 +69,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
 
   private final RoleAddCmdExe roleAddCmdExe;
-
   private final RoleDeleteByIdCmdExe roleDeleteByIdCmdExe;
-
   private final RoleUpdateCmdExe roleUpdateCmdExe;
-
   private final RoleFindAllCmdExe roleFindAllCmdExe;
   private final RoleArchiveByIdCmdExe roleArchiveByIdCmdExe;
   private final RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe;
