@@ -122,4 +122,18 @@ public interface AccountGateway {
    * @param newPassword      新密码
    */
   void changePassword(String originalPassword, String newPassword);
+
+  /**
+   * 根据id归档账户
+   *
+   * @param id 账户id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从归档中恢复
+   *
+   * @param id 账户id
+   */
+  void recoverFromArchiveById(Long id);
 }

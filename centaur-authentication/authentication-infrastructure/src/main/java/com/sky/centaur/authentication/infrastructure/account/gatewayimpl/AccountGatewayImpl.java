@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
@@ -73,6 +74,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final DistributedLock distributedLock;
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
+  private final AccountArchivedRepository accountArchivedRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -80,7 +82,8 @@ public class AccountGatewayImpl implements AccountGateway {
       PasswordEncoder passwordEncoder,
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      ExtensionProperties extensionProperties, AccountConvertor accountConvertor) {
+      ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
+      AccountArchivedRepository accountArchivedRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -89,6 +92,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
+    this.accountArchivedRepository = accountArchivedRepository;
   }
 
   @Override
@@ -106,6 +110,8 @@ public class AccountGatewayImpl implements AccountGateway {
     };
     accountConvertor.toDataObject(account).filter(
         accountDo -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
+            account.getUsername(), account.getEmail())
+            && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
             account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
       if (StringUtils.hasText(dataObject.getTimezone())) {
         try {
@@ -286,5 +292,27 @@ public class AccountGatewayImpl implements AccountGateway {
         .map(Optional::get)
         .toList();
     return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(Long id) {
+    Optional.ofNullable(id).flatMap(accountRepository::findById)
+        .flatMap(accountConvertor::toArchivedDo).ifPresent(accountArchivedDo -> {
+          accountArchivedDo.setArchived(true);
+          accountArchivedRepository.persist(accountArchivedDo);
+          accountRepository.deleteById(accountArchivedDo.getId());
+        });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(Long id) {
+    Optional.ofNullable(id).flatMap(accountArchivedRepository::findById)
+        .flatMap(accountConvertor::toDataObject).ifPresent(accountDo -> {
+          accountDo.setArchived(false);
+          accountArchivedRepository.deleteById(accountDo.getId());
+          accountRepository.persist(accountDo);
+        });
   }
 }

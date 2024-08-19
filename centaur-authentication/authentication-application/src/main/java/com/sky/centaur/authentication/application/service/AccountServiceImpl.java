@@ -16,12 +16,14 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Empty;
+import com.sky.centaur.authentication.application.account.executor.AccountArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountRecoverFromArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateByIdCmdExe;
@@ -36,10 +38,12 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
+import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
+import com.sky.centaur.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -89,6 +93,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
   private final AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe;
   private final AccountChangePasswordCmdExe accountChangePasswordCmdExe;
+  private final AccountArchiveByIdCmdExe accountArchiveByIdCmdExe;
+  private final AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -99,7 +105,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
       AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
       AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
-      AccountChangePasswordCmdExe accountChangePasswordCmdExe) {
+      AccountChangePasswordCmdExe accountChangePasswordCmdExe,
+      AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
+      AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -110,6 +118,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountUpdateRoleCmdExe = accountUpdateRoleCmdExe;
     this.accountPasswordVerifyCmdExe = accountPasswordVerifyCmdExe;
     this.accountChangePasswordCmdExe = accountChangePasswordCmdExe;
+    this.accountArchiveByIdCmdExe = accountArchiveByIdCmdExe;
+    this.accountRecoverFromArchiveByIdCmdExe = accountRecoverFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -317,5 +327,18 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void changePassword(AccountChangePasswordCmd accountChangePasswordCmd) {
     accountChangePasswordCmdExe.execute(accountChangePasswordCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd) {
+    accountArchiveByIdCmdExe.execute(accountArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(
+      AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
+    accountRecoverFromArchiveByIdCmdExe.execute(accountRecoverFromArchiveByIdCmd);
   }
 }

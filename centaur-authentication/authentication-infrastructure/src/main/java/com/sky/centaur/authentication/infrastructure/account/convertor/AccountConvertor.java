@@ -20,7 +20,9 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
@@ -48,14 +50,17 @@ public class AccountConvertor {
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final AccountArchivedRepository accountArchivedRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
-      RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService) {
+      RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+      AccountArchivedRepository accountArchivedRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.accountArchivedRepository = accountArchivedRepository;
   }
 
   @Contract("_ -> new")
@@ -116,12 +121,14 @@ public class AccountConvertor {
             String usernameAfterUpdated = account.getUsername();
             if (StringUtils.hasText(emailAfterUpdated) && !emailAfterUpdated.equals(
                 emailBeforeUpdated
-            ) && accountRepository.existsByEmail(emailAfterUpdated)) {
+            ) && (accountRepository.existsByEmail(emailAfterUpdated)
+                || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
               throw new CentaurException(ResultCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
             }
             if (StringUtils.hasText(usernameAfterUpdated) && !usernameAfterUpdated.equals(
                 usernameBeforeUpdated
-            ) && accountRepository.existsByUsername(usernameAfterUpdated)) {
+            ) && (accountRepository.existsByUsername(usernameAfterUpdated)
+                || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
               throw new CentaurException(ResultCode.ACCOUNT_NAME_ALREADY_EXISTS);
             }
             return account;
@@ -153,5 +160,27 @@ public class AccountConvertor {
   public Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
       Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
+  }
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AccountArchivedDo> toArchivedDo(
+      AccountDo accountDo) {
+    return Optional.ofNullable(accountDo).map(accountDataObject -> {
+      AccountArchivedDo archivedDo = AccountMapper.INSTANCE.toArchivedDo(accountDataObject);
+      Optional.ofNullable(accountDataObject.getRole())
+          .ifPresent(roleDo -> archivedDo.setRoleId(roleDo.getId()));
+      return archivedDo;
+    });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AccountDo> toDataObject(
+      AccountArchivedDo accountArchivedDo) {
+    return Optional.ofNullable(accountArchivedDo).map(accountArchivedDataObject -> {
+      AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountArchivedDataObject);
+      Optional.ofNullable(accountArchivedDataObject.getRoleId()).flatMap(roleRepository::findById)
+          .ifPresent(accountDo::setRole);
+      return accountDo;
+    });
   }
 }

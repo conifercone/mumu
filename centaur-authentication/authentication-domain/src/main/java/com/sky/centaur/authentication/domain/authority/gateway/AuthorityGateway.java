@@ -75,7 +75,7 @@ public interface AuthorityGateway {
   void archiveById(Long id);
 
   /**
-   * 通过id从存档中恢复
+   * 通过id从归档中恢复
    *
    * @param id 权限id
    */

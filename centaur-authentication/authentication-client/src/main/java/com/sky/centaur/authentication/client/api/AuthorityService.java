@@ -79,9 +79,9 @@ public interface AuthorityService {
   void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd);
 
   /**
-   * 通过id从存档中恢复
+   * 通过id从归档中恢复
    *
-   * @param authorityRecoverFromArchiveByIdCmd 通过id从存档中恢复指令
+   * @param authorityRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
    */
   void recoverFromArchiveById(
       AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd);

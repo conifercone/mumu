@@ -70,14 +70,14 @@ public interface RoleGateway {
   /**
    * 根据id归档
    *
-   * @param id 权限id
+   * @param id 角色id
    */
   void archiveById(Long id);
 
   /**
-   * 通过id从存档中恢复
+   * 通过id从归档中恢复
    *
-   * @param id 权限id
+   * @param id 角色id
    */
   void recoverFromArchiveById(Long id);
 }

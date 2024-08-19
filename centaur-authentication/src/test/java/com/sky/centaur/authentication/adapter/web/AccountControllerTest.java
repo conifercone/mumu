@@ -238,4 +238,38 @@ public class AccountControllerTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(print());
   }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+              "id": 1
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/archiveById").with(csrf())
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+              "id": 1
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/recoverFromArchiveById").with(csrf())
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
 }

@@ -70,9 +70,9 @@ public interface RoleService {
   void archiveById(RoleArchiveByIdCmd roleArchiveByIdCmd);
 
   /**
-   * 通过id从存档中恢复
+   * 通过id从归档中恢复
    *
-   * @param roleRecoverFromArchiveByIdCmd 通过id从存档中恢复指令
+   * @param roleRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
    */
   void recoverFromArchiveById(
       RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd);

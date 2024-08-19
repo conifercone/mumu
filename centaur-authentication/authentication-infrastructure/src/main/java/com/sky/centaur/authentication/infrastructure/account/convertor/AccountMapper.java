@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.Account4Desc;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo4Desc;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo4Desc;
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
@@ -73,6 +75,18 @@ public interface AccountMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  @Mappings(value = {
+      @Mapping(target = AccountArchivedDo4Desc.roleId, ignore = true)
+  })
+  AccountArchivedDo toArchivedDo(AccountDo accountDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  @Mappings(value = {
+      @Mapping(target = AccountDo4Desc.role, ignore = true)
+  })
+  AccountDo toDataObject(AccountArchivedDo accountArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(
