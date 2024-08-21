@@ -15,7 +15,7 @@
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/centaur)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/centaur/dependency-submission.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/centaur/badge)](https://www.codefactor.io/repository/github/conifercone/centaur)
-[![Gitter Room](https://badges.gitter.im/join_chat.svg)](https://gitter.im/conifercone/centaur?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/centaur-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## Content list
 
