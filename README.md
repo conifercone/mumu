@@ -101,7 +101,7 @@ centaur
 
 ## License
 
-[Apache License 2.0](LICENSE) © kaiyu.shan@outlook.com
+[Apache License 2.0](LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
 
 ## Contributors
 
