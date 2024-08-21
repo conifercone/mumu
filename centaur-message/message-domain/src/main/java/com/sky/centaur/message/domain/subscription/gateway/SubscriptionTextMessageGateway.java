@@ -23,7 +23,7 @@ import org.springframework.data.domain.Page;
 /**
  * 文本订阅消息领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public interface SubscriptionTextMessageGateway {

@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 /**
  * 数据源过滤器链条接口实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class DatasourceFilterChainImpl implements DatasourceFilterChain {

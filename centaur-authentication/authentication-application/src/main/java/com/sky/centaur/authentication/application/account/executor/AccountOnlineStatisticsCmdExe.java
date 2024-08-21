@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 /**
  * 账户在线统计指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

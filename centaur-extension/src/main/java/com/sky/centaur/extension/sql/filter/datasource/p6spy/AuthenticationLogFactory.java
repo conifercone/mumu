@@ -24,7 +24,7 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
 /**
  * P6Factory
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class AuthenticationLogFactory implements P6Factory {

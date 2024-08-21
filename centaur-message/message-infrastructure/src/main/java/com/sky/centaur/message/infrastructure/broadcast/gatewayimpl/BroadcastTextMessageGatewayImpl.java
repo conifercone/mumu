@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
 /**
  * 广播文本消息领域网关实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component

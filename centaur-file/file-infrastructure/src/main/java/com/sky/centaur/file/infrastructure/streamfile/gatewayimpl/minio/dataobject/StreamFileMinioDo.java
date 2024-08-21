@@ -22,7 +22,7 @@ import lombok.Data;
 /**
  * 流式文件minio数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data

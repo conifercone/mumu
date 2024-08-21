@@ -18,7 +18,7 @@ package com.sky.centaur.basis.enums;
 /**
  * 消息状态枚举
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public enum MessageStatusEnum {

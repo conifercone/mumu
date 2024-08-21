@@ -20,7 +20,7 @@ import lombok.Data;
 /**
  * deepl翻译属性
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Data

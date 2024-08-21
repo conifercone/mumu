@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 广播文本归档消息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 public interface BroadcastTextMessageArchivedRepository extends

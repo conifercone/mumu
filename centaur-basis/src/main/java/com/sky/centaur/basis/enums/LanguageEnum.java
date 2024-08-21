@@ -19,7 +19,7 @@ package com.sky.centaur.basis.enums;
 /**
  * 语言偏好枚举
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @see <a href="https://zh.wikipedia.org/wiki/ISO_639-1">ISO 639-1</a>
  * @since 1.0.1
  */

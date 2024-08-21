@@ -20,7 +20,7 @@ import lombok.Getter;
 /**
  * 图片格式枚举
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Getter

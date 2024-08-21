@@ -20,7 +20,7 @@ import com.sky.centaur.mail.client.dto.TemplateMailSendCmd;
 /**
  * 模板邮件service
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 public interface TemplateMailService {

@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
 /**
  * 简单文本翻译接口
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 public interface SimpleTextTranslation {

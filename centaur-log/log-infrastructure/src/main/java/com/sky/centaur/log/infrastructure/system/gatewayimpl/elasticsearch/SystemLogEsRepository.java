@@ -21,7 +21,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * 系统日志es存储操作对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface SystemLogEsRepository extends ElasticsearchRepository<SystemLogEsDo, String> {

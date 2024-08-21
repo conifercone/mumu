@@ -21,7 +21,7 @@ import com.sky.centaur.unique.infrastructure.captcha.gatewayimpl.redis.dataobjec
 /**
  * 简单验证码操作类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 public interface SimpleCaptchaRepository extends

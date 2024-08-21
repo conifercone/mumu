@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
 /**
  * 自定义JwtGrantedAuthoritiesConverter
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 public class CentaurJwtGrantedAuthoritiesConverter implements

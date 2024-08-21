@@ -27,7 +27,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 /**
  * 资源服务器认证失败处理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class ResourceServerAuthenticationEntryPoint implements AuthenticationEntryPoint {

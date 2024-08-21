@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress
 /**
  * 通用工具类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 object CommonUtil {

@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
 /**
  * 系统日志
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Service

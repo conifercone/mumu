@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 /**
  * token领域网关实现类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

@@ -27,7 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 操作日志数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

@@ -22,7 +22,7 @@ import lombok.Data;
 /**
  * 操作日志领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

@@ -20,7 +20,7 @@ import lombok.Data;
 /**
  * 根据id归档角色指令
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Data

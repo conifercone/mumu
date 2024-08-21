@@ -34,7 +34,7 @@ import org.hibernate.annotations.Type;
 /**
  * 角色基本信息归档数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Getter

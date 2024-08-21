@@ -20,7 +20,7 @@ import com.sky.centaur.unique.client.dto.BarCodeGenerateCmd;
 /**
  * 条形码service
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 public interface BarCodeService {

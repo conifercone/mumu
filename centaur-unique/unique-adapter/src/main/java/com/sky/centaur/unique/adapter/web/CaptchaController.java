@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 验证码相关接口
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @RestController

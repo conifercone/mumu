@@ -20,7 +20,7 @@ import com.sky.centaur.unique.domain.captcha.Captcha.SimpleCaptcha;
 /**
  * 验证码领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 public interface CaptchaGateway {

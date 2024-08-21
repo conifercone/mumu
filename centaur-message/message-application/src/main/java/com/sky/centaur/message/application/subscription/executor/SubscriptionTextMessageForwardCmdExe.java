@@ -26,7 +26,7 @@ import org.springframework.util.Assert;
 /**
  * 文本订阅消息转发指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component

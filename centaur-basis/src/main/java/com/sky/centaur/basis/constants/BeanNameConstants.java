@@ -18,7 +18,7 @@ package com.sky.centaur.basis.constants;
 /**
  * bean名称常量
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 public final class BeanNameConstants {

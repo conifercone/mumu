@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 /**
  * 描述信息生成注解
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Documented

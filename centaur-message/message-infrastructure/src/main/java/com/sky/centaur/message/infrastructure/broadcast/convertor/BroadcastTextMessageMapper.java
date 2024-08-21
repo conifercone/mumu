@@ -35,7 +35,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * BroadcastTextMessage mapstruct转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

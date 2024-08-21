@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 账户信息注册客户端对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

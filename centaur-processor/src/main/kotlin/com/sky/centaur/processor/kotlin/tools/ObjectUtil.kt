@@ -23,7 +23,7 @@ import javax.lang.model.util.Types
 /**
  * 对象工具类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 object ObjectUtil {

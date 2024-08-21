@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 注册PostGreSQL any函数
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class PostGreSQLAnyFunctionContributor implements FunctionContributor {

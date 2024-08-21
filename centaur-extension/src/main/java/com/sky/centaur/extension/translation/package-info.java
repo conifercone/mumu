@@ -16,7 +16,7 @@
 /**
  * 机器翻译相关拓展功能
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 package com.sky.centaur.extension.translation;

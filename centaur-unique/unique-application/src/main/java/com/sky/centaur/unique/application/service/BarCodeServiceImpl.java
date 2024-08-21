@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 /**
  * 条形码service实现类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Service

@@ -39,7 +39,7 @@ import org.slf4j.MDC;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {

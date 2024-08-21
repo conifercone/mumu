@@ -26,7 +26,7 @@ import org.springframework.util.Assert;
 /**
  * 二维码生成指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

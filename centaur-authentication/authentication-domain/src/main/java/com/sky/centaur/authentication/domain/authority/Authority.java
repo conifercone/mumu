@@ -33,7 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
 /**
  * 权限领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Getter

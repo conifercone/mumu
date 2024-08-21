@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 角色归档管理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo, Long>,

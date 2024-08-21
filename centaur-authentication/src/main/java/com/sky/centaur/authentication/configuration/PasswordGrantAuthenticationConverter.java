@@ -36,7 +36,7 @@ import org.springframework.util.StringUtils;
 /**
  * 密码模式转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationConverter implements AuthenticationConverter {

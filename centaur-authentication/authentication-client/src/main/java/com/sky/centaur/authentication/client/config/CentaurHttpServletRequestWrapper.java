@@ -22,7 +22,7 @@ import java.util.Locale;
 /**
  * HttpServletRequest包装类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public class CentaurHttpServletRequestWrapper extends HttpServletRequestWrapper {

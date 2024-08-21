@@ -21,7 +21,7 @@ import java.io.Serial;
 /**
  * 账户已存在
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class AccountAlreadyExistsException extends CentaurException {

@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 账户相关web接口单元测试
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest

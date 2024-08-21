@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
 /**
  * 根据id归档账户指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

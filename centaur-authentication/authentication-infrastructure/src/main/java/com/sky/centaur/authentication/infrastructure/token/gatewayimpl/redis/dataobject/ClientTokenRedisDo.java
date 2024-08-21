@@ -25,7 +25,7 @@ import org.springframework.data.redis.core.TimeToLive;
 /**
  * client token redis数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Data

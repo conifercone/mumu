@@ -31,7 +31,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 /**
  * 账户功能API
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface AccountService {

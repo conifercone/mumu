@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 /**
  * 文本订阅消息根据ID从归档恢复消息指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

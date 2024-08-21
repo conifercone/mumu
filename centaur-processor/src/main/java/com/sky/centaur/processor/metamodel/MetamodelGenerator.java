@@ -63,7 +63,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * 元模型生成器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @SuppressWarnings("unused")

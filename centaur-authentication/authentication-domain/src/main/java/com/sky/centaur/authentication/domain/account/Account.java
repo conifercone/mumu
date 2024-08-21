@@ -42,7 +42,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 账户领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @JsonDeserialize

@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 账户基本信息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 public interface AccountArchivedRepository extends BaseJpaRepository<AccountArchivedDo, Long>,

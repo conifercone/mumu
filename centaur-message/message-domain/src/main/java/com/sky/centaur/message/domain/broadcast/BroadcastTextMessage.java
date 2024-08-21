@@ -29,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 广播文本消息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Data

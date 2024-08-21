@@ -40,7 +40,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 流文件对外提供grpc调用实例
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 public class StreamFileGrpcService extends FileGrpcService implements

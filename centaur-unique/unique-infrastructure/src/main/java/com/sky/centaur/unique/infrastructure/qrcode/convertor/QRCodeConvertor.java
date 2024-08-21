@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 /**
  * 二维码对象转换类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

@@ -42,7 +42,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 /**
  * 自定义AuthenticationEntryPoint
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {

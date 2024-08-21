@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 /**
  * 验证码领域网关实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Component
