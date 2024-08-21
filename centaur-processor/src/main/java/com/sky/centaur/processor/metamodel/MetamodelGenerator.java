@@ -77,6 +77,8 @@ public class MetamodelGenerator extends AbstractProcessor {
   private Messager messager;
   private Elements elementUtils;
   private Types typeUtils;
+  private String authorName;
+  private String authorEmail;
   private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
 
   @Override
@@ -85,6 +87,8 @@ public class MetamodelGenerator extends AbstractProcessor {
     elementUtils = processingEnv.getElementUtils();
     typeUtils = processingEnv.getTypeUtils();
     messager = processingEnv.getMessager();
+    authorName = getGitUserName().orElse("");
+    authorEmail = getGitEmail().orElse("");
     messager.printMessage(Diagnostic.Kind.NOTE, "🎉 Centaur Entity Metamodel Generator");
   }
 
@@ -145,13 +149,13 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addMember("value", "$S", this.getClass().getName())
         .addMember("date", "$S", formattedDateTime)
         .build());
-    String author = getGitUserName().map(
-        gitUserName -> getGitEmail().map(gitEmail -> String.format("%s<%s>", gitUserName, gitEmail))
-            .orElse("")).orElse("");
     builder.addJavadoc(
         "The current class is automatically generated, please do not modify it.\n"
-            + (StringUtils.isNotBlank(author) ? String.format(
-            "@author %s\n", author) : "") + String.format("@see %s.%s", packageName, entityName));
+            + (StringUtils.isNotBlank(authorName) && StringUtils.isNotBlank(authorEmail)
+            ? String.format(
+            "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : "")
+            + String.format(
+            "@see %s.%s", packageName, entityName));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
