@@ -26,5 +26,11 @@ import com.sky.centaur.authentication.client.dto.co.TokenValidityCo;
  */
 public interface TokenService {
 
+  /**
+   * 验证token是否有效
+   *
+   * @param tokenValidityCmd token验证指令
+   * @return 验证结果
+   */
   TokenValidityCo validity(TokenValidityCmd tokenValidityCmd);
 }
