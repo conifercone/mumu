@@ -42,17 +42,25 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 public class AuthorityDo extends JpaBasisDataObject {
 
+  /**
+   * 权限id
+   */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
+  /**
+   * 权限编码
+   */
   @Size(max = 50, message = "{authority.code.validation.size}")
   @NotNull
   @Column(name = "code", nullable = false, length = 50)
   private String code;
 
+  /**
+   * 权限名称
+   */
   @Size(max = 200, message = "{authority.name.validation.size}")
   @Column(name = "name", nullable = false, length = 200)
   private String name;
-
 }

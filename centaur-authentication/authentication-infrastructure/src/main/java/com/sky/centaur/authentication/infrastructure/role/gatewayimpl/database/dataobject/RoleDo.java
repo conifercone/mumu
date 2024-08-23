@@ -49,22 +49,37 @@ import org.hibernate.annotations.Type;
 @GenerateDescription
 public class RoleDo extends JpaBasisDataObject {
 
+  /**
+   * 角色id
+   */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
+  /**
+   * 角色名
+   */
   @Size(max = 200)
   @Column(name = "name", nullable = false, length = 200)
   private String name;
 
+  /**
+   * 角色编码
+   */
   @Size(max = 100)
   @NotNull
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
+  /**
+   * 当前角色已赋予的用户集合
+   */
   @OneToMany(mappedBy = "role")
   private Set<AccountDo> users = new LinkedHashSet<>();
 
+  /**
+   * 角色包含的权限集合
+   */
   @Column(name = "authorities", nullable = false, columnDefinition = "bigint[]")
   @Type(ListArrayType.class)
   private List<Long> authorities;
