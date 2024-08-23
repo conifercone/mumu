@@ -34,6 +34,7 @@ public class BasisConfiguration {
 
   @Bean
   @Order(HIGHEST_PRECEDENCE)
+  @SuppressWarnings("ClassEscapesDefinedScope")
   public SpringContextUtil springContextUtil() {
     return new SpringContextUtil();
   }
