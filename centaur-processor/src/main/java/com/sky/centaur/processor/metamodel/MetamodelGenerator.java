@@ -188,24 +188,22 @@ public class MetamodelGenerator extends AbstractProcessor {
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer("$S", field.getSimpleName().toString())
             .addJavadoc(String.format(
-                "@see %s.%s#%s",
-                ObjectUtil.getEntityPackageName(field, elementUtils),
-                ObjectUtil.getEntityName(field), field.getSimpleName()))
+                "@see %s#%s",
+                ObjectUtil.getEntityQualifiedName(field), field.getSimpleName()))
             .build();
         builder.addField(fieldSpec);
-        ObjectUtil.getFieldClassName(field).ifPresent(fieldClassName -> {
+        ObjectUtil.getFieldClassName(field, elementUtils, typeUtils).ifPresent(fieldClassName -> {
           FieldSpec fieldSingularSpec = FieldSpec.builder(
                   ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
                           SingularAttribute.class.getSimpleName()),
-                      ClassName.get(ObjectUtil.getEntityPackageName(field, elementUtils),
-                          ObjectUtil.getEntityName(field)),
+                      ClassName.get("",
+                          ObjectUtil.getEntityQualifiedName(field)),
                       fieldClassName),
                   field.getSimpleName().toString().concat(SINGULAR_FIELD_SUFFIX))
               .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
               .addJavadoc(String.format(
-                  "@see %s.%s#%s",
-                  ObjectUtil.getEntityPackageName(field, elementUtils),
-                  ObjectUtil.getEntityName(field), field.getSimpleName()))
+                  "@see %s#%s",
+                  ObjectUtil.getEntityQualifiedName(field), field.getSimpleName()))
               .build();
           builder.addField(fieldSingularSpec);
         });

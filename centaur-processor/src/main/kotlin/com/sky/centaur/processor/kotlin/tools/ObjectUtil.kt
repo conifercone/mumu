@@ -16,12 +16,15 @@
 package com.sky.centaur.processor.kotlin.tools
 
 import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeName
 import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
+import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
@@ -52,7 +55,7 @@ object ObjectUtil {
         if (element is TypeElement) {
             val superclassMirror: TypeMirror = element.superclass
 
-            if (superclassMirror.kind != javax.lang.model.type.TypeKind.NONE) {
+            if (superclassMirror.kind != TypeKind.NONE) {
                 val superclassElement = types.asElement(superclassMirror)
                 if (superclassElement is TypeElement) {
                     return Optional.of(superclassElement)
@@ -63,19 +66,8 @@ object ObjectUtil {
     }
 
     @JvmStatic
-    fun getEntityName(fieldElement: VariableElement): String {
-        return getEntityType(fieldElement).simpleName.toString()
-    }
-
-    @JvmStatic
-    fun getEntityPackageName(fieldElement: VariableElement, elements: Elements): String {
-        // 获取字段所属的实体类型
-        val entityType = getEntityType(fieldElement)
-        // 获取包名
-        return entityType.let {
-            val packageElement = elements.getPackageOf(it)
-            packageElement.qualifiedName.toString()
-        }
+    fun getEntityQualifiedName(fieldElement: VariableElement): String {
+        return getEntityType(fieldElement).qualifiedName.toString()
     }
 
     @JvmStatic
@@ -93,19 +85,57 @@ object ObjectUtil {
 
 
     @JvmStatic
-    fun getFieldClassName(fieldElement: VariableElement): Optional<ClassName> {
+    fun getFieldClassName(
+        fieldElement: VariableElement,
+        elements: Elements,
+        types: Types
+    ): Optional<TypeName> {
         // 获取字段的类型
         val typeMirror: TypeMirror = fieldElement.asType()
 
         // 检查类型是否为 DeclaredType (即类或接口)
         if (typeMirror is DeclaredType) {
-            val typeElement = typeMirror.asElement() as? TypeElement
-            typeElement?.let {
-                // 获取类的 ClassName
-                return Optional.of(ClassName.get(it))
+            val typeElement = typeMirror.asElement()
+            // 处理泛型参数
+            val className = ClassName.get(typeElement as TypeElement)
+            val typeArguments = typeMirror.typeArguments.map { getTypeName(it, elements, types) }
+
+            return if (typeArguments.isNotEmpty()) {
+                Optional.of(ParameterizedTypeName.get(className, *typeArguments.toTypedArray()))
+            } else {
+                Optional.of(className)
             }
         }
-
         return Optional.empty()
+    }
+
+    @JvmStatic
+    fun getTypeName(typeMirror: TypeMirror, elements: Elements, types: Types): TypeName {
+        return when (typeMirror.kind) {
+            TypeKind.DECLARED -> {
+                val declaredType = typeMirror as DeclaredType
+                val typeElement = declaredType.asElement() as TypeElement
+                val className = ClassName.get(typeElement)
+
+                val typeArguments =
+                    declaredType.typeArguments.map { getTypeName(it, elements, types) }
+                if (typeArguments.isNotEmpty()) {
+                    ParameterizedTypeName.get(className, *typeArguments.toTypedArray())
+                } else {
+                    className
+                }
+            }
+
+            TypeKind.ARRAY -> {
+                getTypeName(
+                    (typeMirror as javax.lang.model.type.ArrayType).componentType,
+                    elements,
+                    types
+                )
+                TypeName.get(typeMirror) as TypeName
+            }
+
+            else -> TypeName.get(typeMirror)
+        }
     }
 }
