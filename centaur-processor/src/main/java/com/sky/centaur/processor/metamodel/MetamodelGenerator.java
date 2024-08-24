@@ -53,9 +53,6 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
@@ -176,31 +173,22 @@ public class MetamodelGenerator extends AbstractProcessor {
         .ifPresent(superClassElement -> {
           List<VariableElement> superClassFields = ObjectUtil.getFields(superClassElement);
           superClassFields.forEach(superClassField -> {
-            if (ObjectUtil.hasGetterSetter(superClassField, typeUtils) && !collect.contains(
-                superClassField.getSimpleName().toString())) {
+            if (!collect.contains(superClassField.getSimpleName().toString())) {
               fields.add(superClassField);
             }
           });
         });
     if (!CollectionUtils.isEmpty(fields)) {
-      fields.stream()
-          .filter(field -> field.getModifiers().contains(Modifier.PUBLIC) || (
-              ObjectUtil.hasGetterSetter(field, typeUtils) || (field.getAnnotation(
-                  Getter.class) != null && field.getAnnotation(
-                  Setter.class) != null) || annotatedElement.getAnnotation(Data.class) != null | (
-                  annotatedElement.getAnnotation(
-                      Getter.class) != null && annotatedElement.getAnnotation(
-                      Setter.class) != null)))
-          .forEach(field -> {
-            FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$S", field.getSimpleName().toString())
-                .addJavadoc(String.format(
-                    "@see %s.%s#%s",
-                    packageName, entityName, field.getSimpleName()))
-                .build();
-            builder.addField(fieldSpec);
-          });
+      fields.forEach(field -> {
+        FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+            .initializer("$S", field.getSimpleName().toString())
+            .addJavadoc(String.format(
+                "@see %s.%s#%s",
+                packageName, entityName, field.getSimpleName()))
+            .build();
+        builder.addField(fieldSpec);
+      });
     }
     if (annotatedElement.getAnnotation(GenerateDescription.class) != null) {
       GenerateDescription generateDescription = annotatedElement.getAnnotation(

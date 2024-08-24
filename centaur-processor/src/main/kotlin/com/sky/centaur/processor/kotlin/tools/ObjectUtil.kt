@@ -16,7 +16,10 @@
 package com.sky.centaur.processor.kotlin.tools
 
 import java.util.*
-import javax.lang.model.element.*
+import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Types
 
@@ -54,39 +57,5 @@ object ObjectUtil {
             }
         }
         return Optional.empty()
-    }
-
-    @JvmStatic
-    fun hasGetterSetter(element: Element, types: Types): Boolean {
-        if (element.kind != ElementKind.FIELD) {
-            return false
-        }
-        val field = element as VariableElement
-        val fieldName = field.simpleName.toString()
-        val typeElement = types.asElement(field.enclosingElement.asType()) as TypeElement
-        // Check for getter
-        val hasGetter = hasMethod(typeElement, "get${fieldName.capitalize()}")
-        // Check for setter
-        val hasSetter = hasMethod(typeElement, "set${fieldName.capitalize()}")
-        return hasGetter && hasSetter
-    }
-
-    private fun hasMethod(
-        typeElement: TypeElement,
-        methodName: String
-    ): Boolean {
-        val enclosedElements = typeElement.enclosedElements
-
-        return enclosedElements.any { element ->
-            element.kind == ElementKind.METHOD && element is ExecutableElement && element.simpleName.toString() == methodName
-        }
-    }
-
-    private fun String.capitalize(): String {
-        return if (isNotEmpty()) {
-            this[0].uppercaseChar() + substring(1)
-        } else {
-            this
-        }
     }
 }
