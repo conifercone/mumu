@@ -15,12 +15,15 @@
  */
 package com.sky.centaur.processor.kotlin.tools
 
+import com.squareup.javapoet.ClassName
 import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
+import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
+import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
 
 /**
@@ -56,6 +59,53 @@ object ObjectUtil {
                 }
             }
         }
+        return Optional.empty()
+    }
+
+    @JvmStatic
+    fun getEntityName(fieldElement: VariableElement): String {
+        return getEntityType(fieldElement).simpleName.toString()
+    }
+
+    @JvmStatic
+    fun getEntityPackageName(fieldElement: VariableElement, elements: Elements): String {
+        // 获取字段所属的实体类型
+        val entityType = getEntityType(fieldElement)
+        // 获取包名
+        return entityType.let {
+            val packageElement = elements.getPackageOf(it)
+            packageElement.qualifiedName.toString()
+        }
+    }
+
+    @JvmStatic
+    fun getEntityType(fieldElement: VariableElement): TypeElement {
+        // 获取字段的父元素
+        val enclosingElement: Element = fieldElement.enclosingElement
+
+        // 检查父元素是否为 TypeElement
+        return if (enclosingElement is TypeElement) {
+            enclosingElement
+        } else {
+            throw IllegalArgumentException("The provided element is not a field of a class.")
+        }
+    }
+
+
+    @JvmStatic
+    fun getFieldClassName(fieldElement: VariableElement): Optional<ClassName> {
+        // 获取字段的类型
+        val typeMirror: TypeMirror = fieldElement.asType()
+
+        // 检查类型是否为 DeclaredType (即类或接口)
+        if (typeMirror is DeclaredType) {
+            val typeElement = typeMirror.asElement() as? TypeElement
+            typeElement?.let {
+                // 获取类的 ClassName
+                return Optional.of(ClassName.get(it))
+            }
+        }
+
         return Optional.empty()
     }
 }

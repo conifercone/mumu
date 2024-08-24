@@ -20,11 +20,14 @@ import com.sky.centaur.basis.annotations.CustomDescription;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.processor.kotlin.tools.ObjectUtil;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 import jakarta.annotation.Generated;
+import jakarta.persistence.metamodel.SingularAttribute;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -77,6 +80,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   private String authorName;
   private String authorEmail;
   private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
+  private static final String SINGULAR_FIELD_SUFFIX = "Singular";
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -185,9 +189,26 @@ public class MetamodelGenerator extends AbstractProcessor {
             .initializer("$S", field.getSimpleName().toString())
             .addJavadoc(String.format(
                 "@see %s.%s#%s",
-                packageName, entityName, field.getSimpleName()))
+                ObjectUtil.getEntityPackageName(field, elementUtils),
+                ObjectUtil.getEntityName(field), field.getSimpleName()))
             .build();
         builder.addField(fieldSpec);
+        ObjectUtil.getFieldClassName(field).ifPresent(fieldClassName -> {
+          FieldSpec fieldSingularSpec = FieldSpec.builder(
+                  ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
+                          SingularAttribute.class.getSimpleName()),
+                      ClassName.get(ObjectUtil.getEntityPackageName(field, elementUtils),
+                          ObjectUtil.getEntityName(field)),
+                      fieldClassName),
+                  field.getSimpleName().toString().concat(SINGULAR_FIELD_SUFFIX))
+              .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
+              .addJavadoc(String.format(
+                  "@see %s.%s#%s",
+                  ObjectUtil.getEntityPackageName(field, elementUtils),
+                  ObjectUtil.getEntityName(field), field.getSimpleName()))
+              .build();
+          builder.addField(fieldSingularSpec);
+        });
       });
     }
     if (annotatedElement.getAnnotation(GenerateDescription.class) != null) {
