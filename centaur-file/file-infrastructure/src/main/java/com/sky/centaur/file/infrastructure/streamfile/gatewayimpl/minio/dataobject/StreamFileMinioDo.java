@@ -15,16 +15,18 @@
  */
 package com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.io.InputStream;
 import lombok.Data;
 
 /**
  * 流式文件minio数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data
+@GenerateDescription
 public class StreamFileMinioDo {
 
   /**

@@ -19,7 +19,7 @@ package com.sky.centaur.unique.domain.pk.gateway;
 /**
  * 唯一性主键领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface PrimaryKeyGateway {

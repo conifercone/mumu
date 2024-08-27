@@ -19,9 +19,12 @@ import com.google.common.base.Strings;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.kotlin.tools.SpringContextUtil;
 import de.vandermeer.asciitable.AsciiTable;
 import io.micrometer.tracing.Tracer;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +39,7 @@ import org.slf4j.MDC;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {
@@ -74,12 +77,17 @@ public class P6spyCustomLogger extends FormattedLogger {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(LF).append("====>");
       stringBuilder.append("trace-id:[");
-      String traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
-          .flatMap(applicationContext -> Optional.ofNullable(
-              applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
-              tracer -> Optional.ofNullable(tracer.currentSpan())
-                  .map(span -> span.context().traceId())
-          ).orElse(null);
+      String traceId = null;
+      try {
+        traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
+            .flatMap(applicationContext -> Optional.ofNullable(
+                applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
+                tracer -> Optional.ofNullable(tracer.currentSpan())
+                    .map(span -> span.context().traceId())
+            ).orElse(null);
+      } catch (Exception e) {
+        // ignore
+      }
       if (Strings.isNullOrEmpty(traceId)) {
         String uuid = String.valueOf(UUID.randomUUID());
         stringBuilder.append(uuid);
@@ -125,6 +133,8 @@ public class P6spyCustomLogger extends FormattedLogger {
   private void logTopSQLs() {
     AsciiTable at = new AsciiTable();
     at.addRule();
+    at.addRow("", "", "", "", "", "", "", "");
+    at.addRule();
     at.addRow("Execution time", null, null, null, null, null, null, "SQL");
     for (Map.Entry<Long, String> entry : slowQueries.entrySet()) {
       at.addRule();
@@ -132,9 +142,13 @@ public class P6spyCustomLogger extends FormattedLogger {
       at.addRow(entry.getKey().toString().concat("ms"), null, null, null, null, null, null, sql);
     }
     at.addRule();
-    at.addRow("", "", "", "", "", "", "", "");
-    at.addRule();
+    Collection<String> renderAsCollection = at.renderAsCollection();
+    LinkedList<String> strings = new LinkedList<>(renderAsCollection);
+    strings.removeFirst();
+    strings.addFirst(CommonConstants.SLOW_SQL_TABLE_HEADER);
+    strings.remove(1);
+    strings.remove(1);
     LOGGER.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
-        at.render(100));
+        String.join("\r\n", strings));
   }
 }

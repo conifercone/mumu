@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 系统日志相关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestController

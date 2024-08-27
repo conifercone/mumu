@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 /**
  * 数据对象接口
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface DataObject {
@@ -33,4 +33,6 @@ public interface DataObject {
   OffsetDateTime getCreationTime();
 
   OffsetDateTime getModificationTime();
+
+  Boolean isArchived();
 }

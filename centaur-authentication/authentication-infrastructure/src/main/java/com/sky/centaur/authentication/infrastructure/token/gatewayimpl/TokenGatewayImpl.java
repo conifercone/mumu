@@ -20,6 +20,7 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.Cli
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import com.sky.centaur.basis.enums.OAuth2Enum;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import com.sky.centaur.basis.response.ResultCode;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ import org.springframework.stereotype.Component;
 /**
  * token领域网关实现类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
@@ -70,7 +71,7 @@ public class TokenGatewayImpl implements TokenGateway {
             }
             return false;
           } catch (Exception e) {
-            LOGGER.error(token, e);
+            LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), e);
             return false;
           }
         })

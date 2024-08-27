@@ -21,7 +21,7 @@ import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
 import com.sky.centaur.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import com.sky.centaur.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 /**
  * 文本订阅消息查询所有和某人的消息记录指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Component
@@ -59,11 +59,8 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
         subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
     List<SubscriptionTextMessageFindAllWithSomeOneCo> subscriptionTextMessageFindAllWithSomeOneCos = allMessageRecordWithSomeone.getContent()
         .stream()
-        .map(subscriptionTextMessage -> subscriptionTextMessageConvertor.toFindAllWithSomeOne(
-                subscriptionTextMessage)
-            .orElse(null))
-        .filter(
-            Objects::nonNull).toList();
+        .map(subscriptionTextMessageConvertor::toFindAllWithSomeOne)
+        .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllWithSomeOneCos,
         allMessageRecordWithSomeone.getPageable(),
         allMessageRecordWithSomeone.getTotalElements());

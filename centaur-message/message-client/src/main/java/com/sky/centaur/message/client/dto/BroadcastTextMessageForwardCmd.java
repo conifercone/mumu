@@ -16,16 +16,18 @@
 package com.sky.centaur.message.client.dto;
 
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageForwardCo;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 /**
  * 文本广播消息转发指令
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Data
 public class BroadcastTextMessageForwardCmd {
 
+  @Valid
   private BroadcastTextMessageForwardCo broadcastTextMessageForwardCo;
 }

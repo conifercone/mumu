@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
@@ -42,7 +43,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 /**
  * 用户基本信息数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Entity
@@ -51,66 +52,111 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
+@GenerateDescription
 public class AccountDo extends JpaBasisDataObject {
 
+  /**
+   * 账户id
+   */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
+  /**
+   * 账户名
+   */
   @Size(max = 50)
   @NotNull
   @Column(name = "username", nullable = false, length = 50)
   private String username;
 
+  /**
+   * 账户密码
+   */
   @Size(max = 500)
   @NotNull
   @Column(name = "password", nullable = false, length = 500)
   private String password;
 
+  /**
+   * 已启用
+   */
   @NotNull
   @Column(name = "enabled", nullable = false)
   private Boolean enabled = true;
 
+  /**
+   * 凭证未过期
+   */
   @Column(name = "credentials_non_expired", nullable = false)
   private Boolean credentialsNonExpired;
 
+  /**
+   * 帐户未锁定
+   */
   @Column(name = "account_non_locked", nullable = false)
   private Boolean accountNonLocked;
 
+  /**
+   * 帐号未过期
+   */
   @Column(name = "account_non_expired", nullable = false)
   private Boolean accountNonExpired;
 
+  /**
+   * 当前账户角色
+   */
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "role_id", nullable = false)
   private RoleDo role;
 
+  /**
+   * 头像地址
+   */
   @Size(max = 200)
   @Column(name = "avatar_url", length = 200, nullable = false)
   private String avatarUrl;
 
+  /**
+   * 手机号
+   */
   @Size(max = 200)
   @Column(name = "phone", length = 200, nullable = false)
   private String phone;
 
-
+  /**
+   * 性别
+   */
   @Column(name = "sex", columnDefinition = "sex(0, 0)", nullable = false)
   @JdbcType(PostgreSQLEnumJdbcType.class)
   @Enumerated(EnumType.STRING)
   private SexEnum sex;
 
+  /**
+   * 电子邮箱
+   */
   @Size(max = 200)
   @Column(name = "email", length = 200, nullable = false)
   private String email;
 
+  /**
+   * 时区
+   */
   @Size(max = 200)
   @Column(name = "timezone", length = 200, nullable = false)
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   @Column(name = "language", columnDefinition = "language(0, 0)", nullable = false)
   @JdbcType(PostgreSQLEnumJdbcType.class)
   @Enumerated(EnumType.STRING)
   private LanguageEnum language;
 
+  /**
+   * 出生日期
+   */
   @NotNull
   @ColumnDefault("'1970-01-01'::date")
   @Column(name = "birthday", nullable = false)

@@ -21,6 +21,7 @@ import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithS
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Component;
 /**
  * 文本订阅消息转换器转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component
@@ -120,5 +121,21 @@ public class SubscriptionTextMessageConvertor {
               .ifPresent(subscriptionTextMessageFindAllWithSomeOneCo::setMessage);
           return subscriptionTextMessageFindAllWithSomeOneCo;
         });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<SubscriptionTextMessageArchivedDo> toArchiveDo(
+      SubscriptionTextMessageDo subscriptionTextMessageDo) {
+    return Optional.ofNullable(subscriptionTextMessageDo)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toArchiveDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<SubscriptionTextMessageDo> toDataObject(
+      SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo) {
+    return Optional.ofNullable(subscriptionTextMessageArchivedDo)
+        .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
   }
 }

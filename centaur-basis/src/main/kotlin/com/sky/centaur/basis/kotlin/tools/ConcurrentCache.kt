@@ -24,7 +24,7 @@ import java.util.function.Function
  *
  * 满载时淘汰最近最久未使用的数据
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 class ConcurrentCache<K, V>(private val size: Int) {

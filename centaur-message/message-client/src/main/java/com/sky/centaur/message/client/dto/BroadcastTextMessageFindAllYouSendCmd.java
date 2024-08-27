@@ -22,7 +22,7 @@ import lombok.Data;
 /**
  * 文本广播消息查询所有当前用户发送消息指令
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Data

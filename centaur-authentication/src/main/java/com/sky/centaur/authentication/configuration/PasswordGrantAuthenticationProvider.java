@@ -63,7 +63,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * 密码模式
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationProvider implements AuthenticationProvider {

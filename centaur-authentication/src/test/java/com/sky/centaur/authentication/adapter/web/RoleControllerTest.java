@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 角色相关web接口单元测试
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest
@@ -123,6 +123,40 @@ public class RoleControllerTest {
          }""";
     mockMvc.perform(MockMvcRequestBuilders
             .get("/role/findAll")
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById() throws Exception {
+    @Language("JSON") String role = """
+        {
+            "id": 0
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/role/archiveById").with(csrf())
+            .content(role.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById() throws Exception {
+    @Language("JSON") String role = """
+        {
+            "id": 0
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/role/recoverFromArchiveById").with(csrf())
             .content(role.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

@@ -15,10 +15,12 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
+import com.sky.centaur.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -29,7 +31,7 @@ import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
 /**
  * 账户功能API
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface AccountService {
@@ -105,5 +107,18 @@ public interface AccountService {
    */
   void changePassword(AccountChangePasswordCmd accountChangePasswordCmd);
 
+  /**
+   * 根据id归档账户
+   *
+   * @param accountArchiveByIdCmd 根据id归档账户指令
+   */
+  void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd);
 
+  /**
+   * 通过id从归档中恢复
+   *
+   * @param accountRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   */
+  void recoverFromArchiveById(
+      AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd);
 }

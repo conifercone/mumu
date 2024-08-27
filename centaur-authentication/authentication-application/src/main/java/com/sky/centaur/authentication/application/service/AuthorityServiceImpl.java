@@ -20,9 +20,11 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityRecoverFromArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.api.grpc.AuthorityAddGrpcCmd;
@@ -36,9 +38,11 @@ import com.sky.centaur.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
@@ -53,14 +57,13 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 权限管理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Service
@@ -69,26 +72,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorityServiceImpl extends AuthorityServiceImplBase implements AuthorityService {
 
   private final AuthorityAddCmdExe authorityAddCmdExe;
-
   private final AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe;
-
   private final AuthorityUpdateCmdExe authorityUpdateCmdExe;
-
   private final AuthorityFindAllCmdExe authorityFindAllCmdExe;
-
   private final AuthorityFindByIdCmdExe authorityFindByIdCmdExe;
+  private final AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe;
+  private final AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
       AuthorityDeleteByIdCmdExe authorityDeleteByIdCmdExe,
       AuthorityUpdateCmdExe authorityUpdateCmdExe,
       AuthorityFindAllCmdExe authorityFindAllCmdExe,
-      AuthorityFindByIdCmdExe authorityFindByIdCmdExe) {
+      AuthorityFindByIdCmdExe authorityFindByIdCmdExe,
+      AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe,
+      AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
     this.authorityFindAllCmdExe = authorityFindAllCmdExe;
     this.authorityFindByIdCmdExe = authorityFindByIdCmdExe;
+    this.authorityArchiveByIdCmdExe = authorityArchiveByIdCmdExe;
+    this.authorityRecoverFromArchiveByIdCmdExe = authorityRecoverFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -98,7 +103,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void add(AuthorityAddGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -181,7 +185,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -198,7 +201,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AuthorityUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -216,7 +218,6 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
@@ -239,5 +240,18 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     }
     responseObserver.onNext(builder.build());
     responseObserver.onCompleted();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd) {
+    authorityArchiveByIdCmdExe.execute(authorityArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(
+      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {
+    authorityRecoverFromArchiveByIdCmdExe.execute(authorityRecoverFromArchiveByIdCmd);
   }
 }

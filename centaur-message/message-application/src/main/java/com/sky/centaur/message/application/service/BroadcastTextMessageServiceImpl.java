@@ -20,12 +20,14 @@ import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessa
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageFindAllYouSendCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageForwardCmdExe;
 import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
+import com.sky.centaur.message.application.broadcast.executor.BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import com.sky.centaur.message.client.api.BroadcastTextMessageService;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -38,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 文本广播消息service实现类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Service
@@ -51,6 +53,7 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   private final BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe;
   private final BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe;
   private final BroadcastTextMessageArchiveByIdCmdExe broadcastTextMessageArchiveByIdCmdExe;
+  private final BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe;
 
   @Autowired
   public BroadcastTextMessageServiceImpl(
@@ -58,28 +61,30 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
       BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe,
       BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe,
       BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe,
-      BroadcastTextMessageArchiveByIdCmdExe broadcastTextMessageArchiveByIdCmdExe) {
+      BroadcastTextMessageArchiveByIdCmdExe broadcastTextMessageArchiveByIdCmdExe,
+      BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe) {
     this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
     this.broadcastTextMessageReadByIdCmdExe = broadcastTextMessageReadByIdCmdExe;
     this.broadcastTextMessageDeleteByIdCmdExe = broadcastTextMessageDeleteByIdCmdExe;
     this.broadcastTextMessageFindAllYouSendCmdExe = broadcastTextMessageFindAllYouSendCmdExe;
     this.broadcastTextMessageArchiveByIdCmdExe = broadcastTextMessageArchiveByIdCmdExe;
+    this.broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe = broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe;
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageForwardCmdExe.execute(broadcastTextMessageForwardCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
     broadcastTextMessageReadByIdCmdExe.execute(broadcastTextMessageReadByIdCmd);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
     broadcastTextMessageDeleteByIdCmdExe.execute(broadcastTextMessageDeleteByIdCmd);
   }
@@ -91,9 +96,16 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
       BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
     broadcastTextMessageArchiveByIdCmdExe.execute(broadcastTextMessageArchiveByIdCmd);
+  }
+
+  @Override
+  public void recoverMsgFromArchiveById(
+      BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {
+    broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(
+        broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
   }
 }

@@ -16,10 +16,14 @@
 package com.sky.centaur.log.infrastructure.operation.convertor;
 
 import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo;
+import com.sky.centaur.log.client.dto.co.OperationLogFindAllCo4Desc;
 import com.sky.centaur.log.client.dto.co.OperationLogQryCo;
+import com.sky.centaur.log.client.dto.co.OperationLogQryCo4Desc;
 import com.sky.centaur.log.client.dto.co.OperationLogSaveCo;
+import com.sky.centaur.log.client.dto.co.OperationLogSaveCo4Desc;
 import com.sky.centaur.log.client.dto.co.OperationLogSubmitCo;
 import com.sky.centaur.log.domain.operation.OperationLog;
+import com.sky.centaur.log.domain.operation.OperationLog4Desc;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import com.sky.centaur.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import org.apiguardian.api.API;
@@ -33,7 +37,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * OperationLog mapstruct转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -46,31 +50,31 @@ public interface OperationLogMapper {
   OperationLogEsDo toEsDataObject(OperationLog operationLog);
 
   @Mappings(value = {
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "operatingEndTime", ignore = true),
-      @Mapping(target = "operatingStartTime", ignore = true),
-      @Mapping(target = "operatingTime", ignore = true)
+      @Mapping(target = OperationLog4Desc.id, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingEndTime, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingStartTime, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSubmitCo operationLogSubmitCo);
 
   @Mappings(value = {
-      @Mapping(target = "operatingEndTime", ignore = true),
-      @Mapping(target = "operatingStartTime", ignore = true)
+      @Mapping(target = OperationLog4Desc.operatingEndTime, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSaveCo operationLogSaveCo);
 
   @Mappings(value = {
-      @Mapping(target = "operatingEndTime", ignore = true),
-      @Mapping(target = "operatingStartTime", ignore = true)
+      @Mapping(target = OperationLog4Desc.operatingEndTime, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogEsDo operationLogEsDo);
 
   @Mappings(value = {
-      @Mapping(target = "operatingEndTime", ignore = true),
-      @Mapping(target = "operatingStartTime", ignore = true)
+      @Mapping(target = OperationLog4Desc.operatingEndTime, ignore = true),
+      @Mapping(target = OperationLog4Desc.operatingStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogFindAllCo operationLogFindAllCo);
@@ -78,27 +82,30 @@ public interface OperationLogMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   @Mappings(value = {
 
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = OperationLogFindAllCo4Desc.creationTime, ignore = true),
+      @Mapping(target = OperationLogFindAllCo4Desc.founder, ignore = true),
+      @Mapping(target = OperationLogFindAllCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = OperationLogFindAllCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogFindAllCo4Desc.archived, ignore = true)
   })
   OperationLogFindAllCo toFindAllCo(OperationLog operationLog);
 
   @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = OperationLogQryCo4Desc.creationTime, ignore = true),
+      @Mapping(target = OperationLogQryCo4Desc.founder, ignore = true),
+      @Mapping(target = OperationLogQryCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = OperationLogQryCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogQryCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogQryCo toQryCo(OperationLog operationLog);
 
   @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = OperationLogSaveCo4Desc.creationTime, ignore = true),
+      @Mapping(target = OperationLogSaveCo4Desc.founder, ignore = true),
+      @Mapping(target = OperationLogSaveCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = OperationLogSaveCo4Desc.modifier, ignore = true),
+      @Mapping(target = OperationLogSaveCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCo toSaveCo(OperationLogKafkaDo operationLogKafkaDo);

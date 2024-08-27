@@ -9,12 +9,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- v1.0.4 Machine translation adds Microsoft Translate option.
-- v1.0.4 Extension module adds rule engine expansion implementation.
+- v1.0.5 Machine translation adds Microsoft Translate option.
+- v1.0.5 Extension module adds rule engine expansion implementation.
 
 ### Changed
 
 ### Removed
+
+## [1.0.4] - 2024-08-27
+
+### Added
+
+- Add pr badge.
+- Added internationalization information.
+- Add Contributors.
+- Add label action.
+- Add Greetings action.
+- Add detailed exception information printing.
+- grpc method permissions increase configuration file configuration method.
+- Added new interface to obtain current server time.
+- Added QR code related functions.
+- Added barcode related functions.
+- Added annotation processor to implement class description information generation function.
+- Added Application-Version to the jar task manifest.
+- springboot bootJar task adds signature.
+- Springboot bootJar task adds license file packaging.
+- Added archived basic attributes.
+- New trigger for archive table.
+- Text subscription messages have a new function of restoring messages from archives based on ID.
+- Added permissions for archiving and restoring from archives.
+- Permission addition, deletion and modification are compatible with archiving logic.
+- Added archiving and restoring functions to roles.
+- Added new archiving and recovery functions for accounts.
+- Added slack badge.
+
+### Fixed
+
+- Fix permission verification exception.
+
+### Changed
+
+- Modify slow sql table format.
+- Modify slow sql statistics threshold.
+- Optimize non-empty filtering logic.
+- Block sensitive information in logs.
+- Unified permission verification logic.
+- Change icon.
+- Gradle version upgraded to 8.10.
+- Update message service database trigger functions and triggers.
+- The springboot version is upgraded to 3.3.3.
+- Kotlin version upgraded to 2.0.20.
+- flyway version upgraded to 10.17.2.
+- redis-om-spring version upgraded to 0.9.5.
+- mapstruct version upgraded to 1.6.0.
+- The guava version is upgraded to 33.3.0-jre.
+- minio version upgraded to 8.5.12.
+
+### Removed
+
+- Exclude tomcat globally.
+- Message service message status delete archived attribute.
 
 ## [1.0.3] - 2024-08-07
 
@@ -171,7 +225,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.3...develop
+[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.4...develop
+[1.0.4]: https://github.com/conifercone/centaur/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/conifercone/centaur/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/conifercone/centaur/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/conifercone/centaur/compare/v1.0.0...v1.0.1

@@ -15,16 +15,18 @@
  */
 package com.sky.centaur.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.util.Map;
 import lombok.Data;
 
 /**
  * thymeleaf模板邮件数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data
+@GenerateDescription
 public class TemplateMailThymeleafDo {
 
   private String content;

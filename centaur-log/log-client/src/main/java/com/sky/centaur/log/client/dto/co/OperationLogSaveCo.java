@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.client.dto.co;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -23,11 +24,12 @@ import lombok.EqualsAndHashCode;
 /**
  * 操作日志保存客户端对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class OperationLogSaveCo extends BaseClientObject {
 
   /**

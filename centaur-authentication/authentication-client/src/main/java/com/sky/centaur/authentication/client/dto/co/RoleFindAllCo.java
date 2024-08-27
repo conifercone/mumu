@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.dto.co;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import java.util.List;
 import lombok.Data;
@@ -23,11 +24,12 @@ import lombok.EqualsAndHashCode;
 /**
  * 角色查询客户端对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class RoleFindAllCo extends BaseClientObject {
 
   private Long id;

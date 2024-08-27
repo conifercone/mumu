@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 /**
  * not blank or null
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Documented

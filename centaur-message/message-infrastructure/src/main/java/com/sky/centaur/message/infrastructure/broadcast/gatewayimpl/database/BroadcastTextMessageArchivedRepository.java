@@ -18,12 +18,13 @@ package com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database;
 import com.sky.centaur.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * 广播文本归档消息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 public interface BroadcastTextMessageArchivedRepository extends
@@ -32,4 +33,6 @@ public interface BroadcastTextMessageArchivedRepository extends
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 
+  Optional<BroadcastTextMessageArchivedDo> findByIdAndSenderId(@NotNull Long id,
+      @NotNull Long senderId);
 }

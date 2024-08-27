@@ -20,6 +20,8 @@ import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithS
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage;
+import com.sky.centaur.message.domain.subscription.SubscriptionTextMessage4Desc;
+import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -34,7 +36,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * SubscriptionTextMessage mapstruct转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -44,7 +46,7 @@ public interface SubscriptionTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   @Mappings(value = {
-      @Mapping(target = "senderId", ignore = true)
+      @Mapping(target = SubscriptionTextMessage4Desc.senderId, ignore = true)
   })
   SubscriptionTextMessage toEntity(
       SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo);
@@ -66,6 +68,14 @@ public interface SubscriptionTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllWithSomeOneCo toFindAllWithSomeOne(
       SubscriptionTextMessage subscriptionTextMessage);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  SubscriptionTextMessageArchivedDo toArchiveDo(
+      SubscriptionTextMessageDo subscriptionTextMessageDo);
+
+  @API(status = Status.STABLE, since = "1.0.4")
+  SubscriptionTextMessageDo toDataObject(
+      SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(

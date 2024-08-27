@@ -18,12 +18,13 @@ package com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database
 import com.sky.centaur.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * 订阅文本归档消息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 public interface SubscriptionTextMessageArchivedRepository extends
@@ -31,4 +32,7 @@ public interface SubscriptionTextMessageArchivedRepository extends
     JpaSpecificationExecutor<SubscriptionTextMessageArchivedDo> {
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
+
+  Optional<SubscriptionTextMessageArchivedDo> findByIdAndSenderId(@NotNull Long id,
+      @NotNull Long senderId);
 }

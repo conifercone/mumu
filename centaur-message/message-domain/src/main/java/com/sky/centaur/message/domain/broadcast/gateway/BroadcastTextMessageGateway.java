@@ -24,7 +24,7 @@ import org.springframework.data.domain.Page;
 /**
  * 广播文本消息领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public interface BroadcastTextMessageGateway {
@@ -77,4 +77,13 @@ public interface BroadcastTextMessageGateway {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(Long id);
+
+  /**
+   * 根据ID从归档中恢复消息
+   *
+   * @param id 消息ID
+   * @since 1.0.4
+   */
+  @API(status = Status.STABLE, since = "1.0.4")
+  void recoverMsgFromArchiveById(Long id);
 }

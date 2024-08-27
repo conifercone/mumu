@@ -62,7 +62,7 @@ import org.springframework.util.StringUtils;
 /**
  * centaur jwt generator
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {

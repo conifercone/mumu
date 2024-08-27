@@ -21,6 +21,7 @@ import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllWithSome
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import com.sky.centaur.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
@@ -31,7 +32,7 @@ import org.springframework.data.domain.Page;
 /**
  * 文本订阅消息service
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public interface SubscriptionTextMessageService {
@@ -85,6 +86,15 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd);
+
+  /**
+   * 根据ID从存档中恢复消息指令
+   *
+   * @param subscriptionTextMessageRecoverMsgFromArchiveByIdCmd 文本订阅消息根据ID从存档中恢复消息指令
+   */
+  @API(status = Status.STABLE, since = "1.0.4")
+  void recoverMsgFromArchiveById(
+      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
 
   /**
    * 查询所有和某人的消息记录

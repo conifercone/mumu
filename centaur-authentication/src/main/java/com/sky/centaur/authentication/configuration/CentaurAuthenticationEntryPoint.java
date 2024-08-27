@@ -31,6 +31,8 @@ import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
+import org.springdoc.core.utils.Constants;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,7 +42,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 /**
  * 自定义AuthenticationEntryPoint
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
@@ -52,12 +54,15 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
   private final OperationLogGrpcService operationLogGrpcService;
 
   private final SystemLogGrpcService systemLogGrpcService;
+  private final SwaggerUiConfigProperties swaggerUiConfigProperties;
 
   public CentaurAuthenticationEntryPoint(String loginFormUrl,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
+      SwaggerUiConfigProperties swaggerUiConfigProperties) {
     super(loginFormUrl);
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
+    this.swaggerUiConfigProperties = swaggerUiConfigProperties;
   }
 
   @Override
@@ -65,7 +70,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
       AuthenticationException authException) throws IOException, ServletException {
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
-        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg());
+        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg(), usernameNotFoundException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
@@ -83,7 +88,7 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
       case InvalidBearerTokenException invalidBearerTokenException -> {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), invalidBearerTokenException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()
@@ -101,7 +106,14 @@ public class CentaurAuthenticationEntryPoint extends LoginUrlAuthenticationEntry
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
-        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg());
+        if (swaggerUiConfigProperties.isDisableSwaggerDefaultUrl() && request.getRequestURI()
+            .equals(swaggerUiConfigProperties.getPath())) {
+          super.commence(request, response, authException);
+        } else if (Constants.DEFAULT_SWAGGER_UI_PATH.equals(request.getRequestURI())) {
+          super.commence(request, response, authException);
+        }
+        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg(),
+            insufficientAuthenticationException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
             .setSystemLogSubmitCo(
                 SystemLogSubmitGrpcCo.newBuilder()

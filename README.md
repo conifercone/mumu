@@ -1,4 +1,4 @@
-![centaur](./logo.png)
+![centaur](./logo.svg)
 
 # centaur
 
@@ -8,12 +8,14 @@
 [![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 ![GitHub Release](https://img.shields.io/github/v/release/conifercone/centaur)
 [![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
-[![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur)
+[![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/conifercone/centaur)](https://github.com/conifercone/centaur/pulls)
 [![GitHub language count](https://img.shields.io/github/languages/count/conifercone/centaur)](https://github.com/conifercone/centaur)
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/centaur/develop)](https://github.com/conifercone/centaur)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/centaur)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/centaur/dependency-submission.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/centaur/badge)](https://www.codefactor.io/repository/github/conifercone/centaur)
+[![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/centaur-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## Content list
 
@@ -22,6 +24,7 @@
 - [Build](#Build)
 - [Dependency Statement](#dependency-statement)
 - [License](#license)
+- [Contributors](#contributors)
 
 ## Projects
 
@@ -61,6 +64,7 @@ centaur
 │  │  │- 📂 message-client -- message service client
 │  │  │- 📂 message-domain -- message service domain layer
 │  │  │- 📂 message-infrastructure -- message service infrastructure layer
+│  │─ 📂 centaur-processor -- processor module
 │  │─ 📂 centaur-sms -- sms service
 │  │  │- 📂 sms-adapter -- sms service adaptation layer
 │  │  │- 📂 sms-application -- sms service application layer
@@ -97,4 +101,10 @@ centaur
 
 ## License
 
-[Apache License 2.0](LICENSE) © kaiyu.shan@outlook.com
+[Apache License 2.0](LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+
+## Contributors
+
+<a href="https://github.com/conifercone/centaur/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="https://github.com/conifercone/centaur/graphs/contributors"/>
+</a>

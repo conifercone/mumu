@@ -33,7 +33,6 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ import org.springframework.util.StringUtils;
 /**
  * 广播文本消息领域网关实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component
@@ -74,7 +73,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(BroadcastTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(broadcastTextMessage -> Optional.ofNullable(
             messageProperties.getWebSocket().getAccountBroadcastChannelMap())
@@ -89,12 +88,14 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                         receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
                             .ifPresent(accountChannel -> accountChannel.writeAndFlush(
                                 new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
+                  } else {
+                    broadcastTextMessageRepository.persist(broadcastTextMessageDo);
                   }
                 }))));
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
     Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId().ifPresent(
         accountId -> {
@@ -127,7 +128,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
         .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
@@ -165,24 +166,38 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
           broadcastTextMessageDoSpecification,
           pageRequest);
       List<BroadcastTextMessage> broadcastTextMessages = repositoryAll.getContent().stream()
-          .map(
-              broadcastTextMessageDo -> broadcastTextMessageConvertor.toEntity(
-                      broadcastTextMessageDo)
-                  .orElse(null))
-          .filter(Objects::nonNull)
+          .map(broadcastTextMessageConvertor::toEntity)
+          .filter(Optional::isPresent).map(Optional::get)
           .toList();
       return new PageImpl<>(broadcastTextMessages, pageRequest, repositoryAll.getTotalElements());
     }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-        .ifPresent(broadcastTextMessageDo -> {
-          broadcastTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
-          broadcastTextMessageRepository.merge(broadcastTextMessageDo);
-        });
+        .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchiveDo(
+            broadcastTextMessageDo).ifPresent(broadcastTextMessageArchivedDo -> {
+          broadcastTextMessageArchivedDo.setArchived(true);
+          broadcastTextMessageRepository.delete(broadcastTextMessageDo);
+          broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
+        }));
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverMsgFromArchiveById(Long id) {
+    //noinspection DuplicatedCode
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId, accountId)))
+        .ifPresent(broadcastTextMessageArchivedDo -> broadcastTextMessageConvertor.toDataObject(
+            broadcastTextMessageArchivedDo).ifPresent(broadcastTextMessageDo -> {
+          broadcastTextMessageDo.setArchived(false);
+          broadcastTextMessageArchivedRepository.delete(broadcastTextMessageArchivedDo);
+          broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+        }));
   }
 }

@@ -21,7 +21,9 @@ import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
@@ -41,7 +43,7 @@ import org.springframework.validation.annotation.Validated;
 /**
  * 权限信息转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
@@ -51,14 +53,17 @@ public class AuthorityConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AuthorityRepository authorityRepository;
   private final SimpleTextTranslation simpleTextTranslation;
+  private final AuthorityArchivedRepository authorityArchivedRepository;
 
   @Autowired
   public AuthorityConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
       AuthorityRepository authorityRepository,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
+      AuthorityArchivedRepository authorityArchivedRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.authorityRepository = authorityRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
+    this.authorityArchivedRepository = authorityArchivedRepository;
   }
 
   @Contract("_ -> new")
@@ -99,8 +104,9 @@ public class AuthorityConvertor {
             AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
             String codeAfterUpdate = authority.getCode();
             if (StringUtils.hasText(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
-                && authorityRepository.existsByCode(
-                codeAfterUpdate)) {
+                && (authorityRepository.existsByCode(
+                codeAfterUpdate) || authorityArchivedRepository.existsByCode(
+                codeAfterUpdate))) {
               throw new CentaurException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
             }
             return authority;
@@ -135,5 +141,17 @@ public class AuthorityConvertor {
               .ifPresent(authorityFindAllCo::setName);
           return authorityFindAllCo;
         });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AuthorityArchivedDo> toArchivedDo(AuthorityDo authorityDo) {
+    return Optional.ofNullable(authorityDo).map(AuthorityMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.4")
+  public Optional<AuthorityDo> toDataObject(AuthorityArchivedDo authorityArchivedDo) {
+    return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toDataObject);
   }
 }

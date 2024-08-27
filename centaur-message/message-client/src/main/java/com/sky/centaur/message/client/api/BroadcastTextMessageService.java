@@ -20,6 +20,7 @@ import com.sky.centaur.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageForwardCmd;
 import com.sky.centaur.message.client.dto.BroadcastTextMessageReadByIdCmd;
+import com.sky.centaur.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import com.sky.centaur.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -28,7 +29,7 @@ import org.springframework.data.domain.Page;
 /**
  * 文本广播消息service
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public interface BroadcastTextMessageService {
@@ -74,4 +75,13 @@ public interface BroadcastTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   void archiveMsgById(BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd);
+
+  /**
+   * 根据ID从存档中恢复消息指令
+   *
+   * @param broadcastTextMessageRecoverMsgFromArchiveByIdCmd 文本广播消息根据ID从存档中恢复消息指令
+   */
+  @API(status = Status.STABLE, since = "1.0.4")
+  void recoverMsgFromArchiveById(
+      BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
 }

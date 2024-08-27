@@ -15,7 +15,9 @@ dependencies {
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.spring.cloud.starter.consul.config)
     implementation(libs.caffeine)
-    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.test) {
+        exclude(group = "org.skyscreamer", module = "jsonassert")
+    }
     testImplementation(libs.protobuf.java)
     testImplementation(libs.grpc.client.spring.boot.starter)
     implementation(libs.redis.om.spring)

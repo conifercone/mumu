@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.config;
 
 import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
+import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,18 +28,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
  * jwt类型资源服务器配置类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Configuration
@@ -65,7 +66,10 @@ public class JWTSecurityConfig {
               if (StringUtils.hasText(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
               } else if (StringUtils.hasText(policy.getAuthority())) {
-                authorizedUrl.hasAuthority(policy.getAuthority());
+                Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                    "Permission configuration cannot be empty and cannot start with SCOPE_");
+                authorizedUrl.hasAuthority(
+                    CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();
               }
@@ -90,9 +94,8 @@ public class JWTSecurityConfig {
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
-    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    CentaurJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new CentaurJwtGrantedAuthoritiesConverter();
     grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.name());
-    grantedAuthoritiesConverter.setAuthorityPrefix("");
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;

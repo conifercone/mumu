@@ -39,7 +39,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 /**
  * OAuth2RefreshToken自定义生成器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public class CentaurOAuth2RefreshTokenGenerator implements

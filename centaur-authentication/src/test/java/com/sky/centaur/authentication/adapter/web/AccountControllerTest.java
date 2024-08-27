@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 账户相关web接口单元测试
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest
@@ -232,6 +232,40 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/account/deleteCurrent").with(csrf())
             .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+              "id": 1
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/archiveById").with(csrf())
+            .content(userInfo.getBytes())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(print());
+  }
+
+  @Test
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById() throws Exception {
+    @Language("JSON") String userInfo = """
+        {
+              "id": 1
+         }""";
+    mockMvc.perform(MockMvcRequestBuilders
+            .put("/account/recoverFromArchiveById").with(csrf())
+            .content(userInfo.getBytes())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

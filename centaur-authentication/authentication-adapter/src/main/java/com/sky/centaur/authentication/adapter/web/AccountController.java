@@ -16,10 +16,12 @@
 package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
+import com.sky.centaur.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -45,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 账户相关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestController
@@ -142,5 +144,23 @@ public class AccountController {
   public void changePassword(
       @RequestBody AccountChangePasswordCmd accountChangePasswordCmd) {
     accountService.changePassword(accountChangePasswordCmd);
+  }
+
+  @Operation(summary = "根据id归档账户")
+  @PutMapping("/archiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void archiveById(
+      @RequestBody AccountArchiveByIdCmd accountArchiveByIdCmd) {
+    accountService.archiveById(accountArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据id从归档中恢复账户")
+  @PutMapping("/recoverFromArchiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverFromArchiveById(
+      @RequestBody AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
+    accountService.recoverFromArchiveById(accountRecoverFromArchiveByIdCmd);
   }
 }

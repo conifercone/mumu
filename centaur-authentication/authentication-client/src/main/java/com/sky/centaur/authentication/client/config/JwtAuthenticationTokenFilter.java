@@ -48,7 +48,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * jwt token认证拦截器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {

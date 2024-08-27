@@ -33,7 +33,7 @@ import org.springframework.security.core.AuthenticationException;
 /**
  * grpc异常统一处理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @GRpcServiceAdvice

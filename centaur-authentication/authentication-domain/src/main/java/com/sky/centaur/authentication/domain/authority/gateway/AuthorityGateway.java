@@ -22,7 +22,7 @@ import org.springframework.data.domain.Page;
 /**
  * 权限领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface AuthorityGateway {
@@ -65,4 +65,19 @@ public interface AuthorityGateway {
    * @return 权限信息
    */
   Optional<Authority> findById(Long id);
+
+
+  /**
+   * 根据id归档权限
+   *
+   * @param id 权限id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从归档中恢复
+   *
+   * @param id 权限id
+   */
+  void recoverFromArchiveById(Long id);
 }

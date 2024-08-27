@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 基础co
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
@@ -51,6 +51,11 @@ public abstract class BaseClientObject implements ClientObject {
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private OffsetDateTime modificationTime;
+
+  /**
+   * 已归档
+   */
+  private Boolean archived;
 
   public OffsetDateTime getCreationTime() {
     return creationTime;
@@ -82,5 +87,13 @@ public abstract class BaseClientObject implements ClientObject {
 
   public void setModificationTime(OffsetDateTime modificationTime) {
     this.modificationTime = modificationTime;
+  }
+
+  public Boolean getArchived() {
+    return archived;
+  }
+
+  public void setArchived(Boolean archived) {
+    this.archived = archived;
   }
 }

@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
 import com.sky.centaur.authentication.domain.role.Role;
+import com.sky.centaur.basis.annotations.CustomDescription;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.LanguageEnum;
@@ -40,7 +42,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 账户领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @JsonDeserialize
@@ -48,58 +50,110 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@GenerateDescription(customs = {
+    @CustomDescription(name = "authorities", value = "authorities")
+})
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Serial
   private static final long serialVersionUID = 7134070079639713190L;
+
+  /**
+   * 账户id
+   */
   @Getter
   private Long id;
 
+  /**
+   * 账户名
+   */
   @Setter
   private String username;
 
+  /**
+   * 账户密码
+   */
   private String password;
 
+  /**
+   * 是否启用
+   */
   private Boolean enabled = true;
 
+  /**
+   * 凭证未过期
+   */
   private Boolean credentialsNonExpired = true;
 
+  /**
+   * 帐户未锁定
+   */
   private Boolean accountNonLocked = true;
 
+  /**
+   * 帐号未过期
+   */
   private Boolean accountNonExpired = true;
 
+  /**
+   * 账户角色
+   */
   @Getter
   @Setter
   private Role role;
 
+  /**
+   * 头像地址
+   */
   @Getter
   @Setter
   private String avatarUrl;
 
+  /**
+   * 电话
+   */
   @Getter
   @Setter
   private String phone;
 
+  /**
+   * 性别
+   */
   @Getter
   @Setter
   private SexEnum sex;
 
+  /**
+   * 电子邮件
+   */
   @Getter
   @Setter
   private String email;
 
+  /**
+   * 时区
+   */
   @Getter
   @Setter
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   @Getter
   @Setter
   private LanguageEnum language;
 
+  /**
+   * 生日
+   */
   @Getter
   @Setter
   private LocalDate birthday;
 
+  /**
+   * 年龄
+   */
   private final int age = 0;
 
   public Account(Long id, String username, String password, Role role) {

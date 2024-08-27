@@ -17,7 +17,9 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.bundles.micrometer)
     implementation(libs.grpc.spring.boot.starter)
-    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.test) {
+        exclude(group = "org.skyscreamer", module = "jsonassert")
+    }
     testImplementation(libs.jasypt)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.grpc.client.spring.boot.starter)

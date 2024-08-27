@@ -20,8 +20,10 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.role.executor.RoleAddCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleFindAllCmdExe;
+import com.sky.centaur.authentication.application.role.executor.RoleRecoverFromArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.role.executor.RoleUpdateCmdExe;
 import com.sky.centaur.authentication.client.api.RoleService;
 import com.sky.centaur.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
@@ -35,8 +37,10 @@ import com.sky.centaur.authentication.client.api.grpc.RoleServiceGrpc.RoleServic
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import com.sky.centaur.authentication.client.dto.RoleAddCmd;
+import com.sky.centaur.authentication.client.dto.RoleArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleFindAllCmd;
+import com.sky.centaur.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.RoleUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.RoleAddCo;
 import com.sky.centaur.authentication.client.dto.co.RoleFindAllCo;
@@ -50,14 +54,13 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 角色管理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Service
@@ -66,20 +69,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
 
   private final RoleAddCmdExe roleAddCmdExe;
-
   private final RoleDeleteByIdCmdExe roleDeleteByIdCmdExe;
-
   private final RoleUpdateCmdExe roleUpdateCmdExe;
-
   private final RoleFindAllCmdExe roleFindAllCmdExe;
+  private final RoleArchiveByIdCmdExe roleArchiveByIdCmdExe;
+  private final RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
-      RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe) {
+      RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe,
+      RoleArchiveByIdCmdExe roleArchiveByIdCmdExe,
+      RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
     this.roleFindAllCmdExe = roleFindAllCmdExe;
+    this.roleArchiveByIdCmdExe = roleArchiveByIdCmdExe;
+    this.roleRecoverFromArchiveByIdCmdExe = roleRecoverFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -107,7 +113,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
@@ -137,7 +142,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -167,7 +171,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(RoleUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -200,7 +203,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
@@ -226,5 +228,17 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     }
     responseObserver.onNext(builder.build());
     responseObserver.onCompleted();
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(RoleArchiveByIdCmd roleArchiveByIdCmd) {
+    roleArchiveByIdCmdExe.execute(roleArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {
+    roleRecoverFromArchiveByIdCmdExe.execute(roleRecoverFromArchiveByIdCmd);
   }
 }

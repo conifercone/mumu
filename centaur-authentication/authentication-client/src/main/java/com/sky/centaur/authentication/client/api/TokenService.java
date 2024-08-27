@@ -21,10 +21,16 @@ import com.sky.centaur.authentication.client.dto.co.TokenValidityCo;
 /**
  * token service
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface TokenService {
 
+  /**
+   * 验证token是否有效
+   *
+   * @param tokenValidityCmd token验证指令
+   * @return 验证结果
+   */
   TokenValidityCo validity(TokenValidityCmd tokenValidityCmd);
 }

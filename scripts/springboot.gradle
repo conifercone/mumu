@@ -3,6 +3,10 @@ import java.time.LocalDateTime
 apply plugin: libs.plugins.getSpringboot().get().getPluginId()
 
 bootJar {
+    into("META-INF/") {
+        from(rootProject.file("LICENSE"))
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Implementation-Title': archiveBaseName
         attributes 'Implementation-Version': archiveVersion
@@ -13,6 +17,10 @@ bootJar {
         attributes 'Build-Timestamp': LocalDateTime.now().format("yyyy-MM-dd HH:mm:ss")
         attributes 'Automatic-Module-Name': "${project.group}.${project.name.replaceAll("-", ".")}"
     }
+}
+
+signing {
+    sign(tasks.bootJar)
 }
 
 bootBuildImage {

@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 基础领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Getter
@@ -55,4 +55,9 @@ public abstract class BasisDomainModel implements DomainModel {
    * 修改时间
    */
   private OffsetDateTime modificationTime;
+
+  /**
+   * 已归档
+   */
+  private Boolean archived;
 }

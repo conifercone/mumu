@@ -23,7 +23,7 @@ import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,7 +33,7 @@ import org.springframework.util.Assert;
 /**
  * 查询权限指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
@@ -57,9 +57,8 @@ public class AuthorityFindAllCmdExe {
     Page<Authority> authorities = authorityGateway.findAll(authority,
         authorityFindAllCmd.getPageNo(), authorityFindAllCmd.getPageSize());
     List<AuthorityFindAllCo> authorityFindAllCoList = authorities.getContent().stream()
-        .map(authorityDomain -> authorityConvertor.toFindAllCo(authorityDomain).orElse(null))
-        .filter(
-            Objects::nonNull).toList();
+        .map(authorityConvertor::toFindAllCo)
+        .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(authorityFindAllCoList, authorities.getPageable(),
         authorities.getTotalElements());
   }

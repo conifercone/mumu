@@ -18,6 +18,7 @@ package com.sky.centaur.unique.adapter.web;
 import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Set;
 import org.apiguardian.api.API;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 时区相关接口
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @RestController
@@ -44,5 +45,13 @@ public class TimezoneController {
   @API(status = Status.STABLE, since = "1.0.1")
   public ResultResponse<Set<String>> available() {
     return ResultResponse.success(ZoneId.getAvailableZoneIds());
+  }
+
+  @Operation(summary = "获取当前服务器时间")
+  @GetMapping("/serverTime")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public ResultResponse<OffsetDateTime> serverTime() {
+    return ResultResponse.success(OffsetDateTime.now());
   }
 }

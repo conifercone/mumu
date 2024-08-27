@@ -21,7 +21,7 @@ import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.dat
 /**
  * refresh token redis repository
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 public interface RefreshTokenRepository extends

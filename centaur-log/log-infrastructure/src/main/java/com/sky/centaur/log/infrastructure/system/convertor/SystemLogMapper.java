@@ -16,9 +16,12 @@
 package com.sky.centaur.log.infrastructure.system.convertor;
 
 import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo;
+import com.sky.centaur.log.client.dto.co.SystemLogFindAllCo4Desc;
 import com.sky.centaur.log.client.dto.co.SystemLogSaveCo;
+import com.sky.centaur.log.client.dto.co.SystemLogSaveCo4Desc;
 import com.sky.centaur.log.client.dto.co.SystemLogSubmitCo;
 import com.sky.centaur.log.domain.system.SystemLog;
+import com.sky.centaur.log.domain.system.SystemLog4Desc;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import com.sky.centaur.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import org.apiguardian.api.API;
@@ -32,7 +35,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * SystemLog mapstruct转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -47,49 +50,51 @@ public interface SystemLogMapper {
   SystemLogEsDo toEsDataObject(SystemLog systemLog);
 
   @Mappings(value = {
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "recordEndTime", ignore = true),
-      @Mapping(target = "recordStartTime", ignore = true),
-      @Mapping(target = "recordTime", ignore = true)
+      @Mapping(target = SystemLog4Desc.id, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSubmitCo systemLogSubmitCo);
 
   @Mappings(value = {
-      @Mapping(target = "recordEndTime", ignore = true),
-      @Mapping(target = "recordStartTime", ignore = true)
+      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSaveCo systemLogSaveCo);
 
   @Mappings(value = {
-      @Mapping(target = "recordEndTime", ignore = true),
-      @Mapping(target = "recordStartTime", ignore = true)
+      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogEsDo systemLogEsDo);
 
   @Mappings(value = {
-      @Mapping(target = "recordEndTime", ignore = true),
-      @Mapping(target = "recordStartTime", ignore = true)
+      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
+      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogFindAllCo systemLogFindAllCo);
 
   @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = SystemLogFindAllCo4Desc.creationTime, ignore = true),
+      @Mapping(target = SystemLogFindAllCo4Desc.founder, ignore = true),
+      @Mapping(target = SystemLogFindAllCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = SystemLogFindAllCo4Desc.modifier, ignore = true),
+      @Mapping(target = SystemLogFindAllCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
 
   @Mappings(value = {
-      @Mapping(target = "creationTime", ignore = true),
-      @Mapping(target = "founder", ignore = true),
-      @Mapping(target = "modificationTime", ignore = true),
-      @Mapping(target = "modifier", ignore = true)
+      @Mapping(target = SystemLogSaveCo4Desc.creationTime, ignore = true),
+      @Mapping(target = SystemLogSaveCo4Desc.founder, ignore = true),
+      @Mapping(target = SystemLogSaveCo4Desc.modificationTime, ignore = true),
+      @Mapping(target = SystemLogSaveCo4Desc.modifier, ignore = true),
+      @Mapping(target = SystemLogSaveCo4Desc.archived, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);

@@ -29,11 +29,9 @@ allprojects {
             cacheChangingModulesFor(0, TimeUnit.SECONDS)
             cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
         }
-        resolutionStrategy.dependencySubstitution {
-            substitute(module("org.springframework.boot:spring-boot-starter-tomcat:${rootProject.libs.versions.springbootVersion}}"))
-                .using(module("org.springframework.boot:spring-boot-starter-undertow:${rootProject.libs.versions.springbootVersion}}"))
-        }
+
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         exclude(group = "ch.qos.logback", module = "logback-classic")
         exclude(group = "ch.qos.logback", module = "logback-core")
     }
@@ -71,7 +69,7 @@ subprojects {
                 file(System.getenv(centaurSigningKeyFile) as String).readText(),
                 System.getenv(centaurSigningPassword) as String
             )
-            sign(configurations.runtimeElements.get())
+            sign(tasks["jar"])
         }
     }
 
@@ -101,6 +99,7 @@ subprojects {
             attributes(
                 "Implementation-Title" to archiveBaseName.get(),
                 "Implementation-Version" to archiveVersion.get(),
+                "Application-Version" to archiveVersion.get(),
                 "Built-Gradle" to gradle.gradleVersion,
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
@@ -145,6 +144,7 @@ subprojects {
         implementation(rootProject.libs.apiguardian.api)
         implementation(rootProject.libs.guava)
         implementation(rootProject.libs.commons.lang3)
+        implementation(rootProject.libs.spring.boot.starter.undertow)
         implementation(rootProject.libs.commons.text)
         implementation(rootProject.libs.commons.io)
         implementation(rootProject.libs.jackson.module.kotlin)

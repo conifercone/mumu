@@ -18,7 +18,7 @@ package com.sky.centaur.basis.constants;
 /**
  * 常用常量类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public final class CommonConstants {
@@ -72,4 +72,19 @@ public final class CommonConstants {
    * 角色前缀
    */
   public static final String ROLE_PREFIX = "ROLE_";
+
+  /**
+   * 权限前缀
+   */
+  public static final String AUTHORITY_PREFIX = "SCOPE_";
+
+  /**
+   * data url模板
+   */
+  public static final String DATA_URL_TEMPLATE = "data:%s;base64,%s";
+
+  /**
+   * 慢sql表头
+   */
+  public static final String SLOW_SQL_TABLE_HEADER = "┌─────────┬────────────────────────────────────────────────────────────────────┐";
 }

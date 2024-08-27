@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.log.infrastructure.config.LogProperties;
 import java.time.LocalDateTime;
@@ -30,11 +31,12 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
 /**
  * 系统日志es数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Document(indexName = LogProperties.SYSTEM_LOG_ES_INDEX_NAME)
 @Data
+@GenerateDescription
 public class SystemLogEsDo {
 
   /**

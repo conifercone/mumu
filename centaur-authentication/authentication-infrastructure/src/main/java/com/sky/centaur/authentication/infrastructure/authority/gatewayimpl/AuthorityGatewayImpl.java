@@ -23,6 +23,7 @@ import com.sky.centaur.authentication.domain.authority.gateway.AuthorityGateway;
 import com.sky.centaur.authentication.domain.role.Role;
 import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
@@ -33,7 +34,6 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -51,7 +51,7 @@ import org.springframework.util.StringUtils;
 /**
  * 权限领域网关实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
@@ -60,21 +60,21 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
 
   private final AuthorityRepository authorityRepository;
-
   private final DistributedLock distributedLock;
-
   private final RoleGateway roleGateway;
-
   private final AuthorityConvertor authorityConvertor;
+  private final AuthorityArchivedRepository authorityArchivedRepository;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
-      AuthorityConvertor authorityConvertor) {
+      AuthorityConvertor authorityConvertor,
+      AuthorityArchivedRepository authorityArchivedRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
+    this.authorityArchivedRepository = authorityArchivedRepository;
   }
 
   @Override
@@ -83,6 +83,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void add(Authority authority) {
     Optional.ofNullable(authority).flatMap(authorityConvertor::toDataObject)
         .filter(authorityDo -> !authorityRepository.existsByIdOrCode(authorityDo.getId(),
+            authorityDo.getCode()) && !authorityArchivedRepository.existsByIdOrCode(
+            authorityDo.getId(),
             authorityDo.getCode()))
         .ifPresentOrElse(authorityRepository::persist, () -> {
           throw new CentaurException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
@@ -98,7 +100,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           authorities.getContent().stream().map(Role::getCode).toList());
     }
-    Optional.ofNullable(id).ifPresent(authorityRepository::deleteById);
+    Optional.ofNullable(id).ifPresent(authorityId -> {
+      authorityRepository.deleteById(authorityId);
+      authorityArchivedRepository.deleteById(authorityId);
+    });
   }
 
   @Override
@@ -138,8 +143,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
-        .map(authorityDo -> authorityConvertor.toEntity(authorityDo).orElse(null))
-        .filter(Objects::nonNull)
+        .map(authorityConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
@@ -148,5 +153,27 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public Optional<Authority> findById(Long id) {
     return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
         authorityConvertor::toEntity);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(Long id) {
+    Optional.ofNullable(id).flatMap(authorityRepository::findById)
+        .flatMap(authorityConvertor::toArchivedDo).ifPresent(authorityArchivedDo -> {
+          authorityArchivedDo.setArchived(true);
+          authorityArchivedRepository.persist(authorityArchivedDo);
+          authorityRepository.deleteById(authorityArchivedDo.getId());
+        });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(Long id) {
+    Optional.ofNullable(id).flatMap(authorityArchivedRepository::findById)
+        .flatMap(authorityConvertor::toDataObject).ifPresent(authorityDo -> {
+          authorityDo.setArchived(false);
+          authorityArchivedRepository.deleteById(authorityDo.getId());
+          authorityRepository.persist(authorityDo);
+        });
   }
 }

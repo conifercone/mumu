@@ -21,7 +21,7 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 /**
  * SQL打印策略
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomStrategy implements MessageFormattingStrategy {

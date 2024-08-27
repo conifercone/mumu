@@ -22,7 +22,7 @@ import org.springframework.data.domain.Page;
 /**
  * 用户领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface AccountGateway {
@@ -122,4 +122,18 @@ public interface AccountGateway {
    * @param newPassword      新密码
    */
   void changePassword(String originalPassword, String newPassword);
+
+  /**
+   * 根据id归档账户
+   *
+   * @param id 账户id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从归档中恢复
+   *
+   * @param id 账户id
+   */
+  void recoverFromArchiveById(Long id);
 }

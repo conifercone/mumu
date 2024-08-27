@@ -32,7 +32,6 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ import org.springframework.util.StringUtils;
 /**
  * 文本订阅消息领域网关实现类
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component
@@ -70,7 +69,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg)
         .flatMap(subscriptionTextMessageConvertor::toDataObject)
@@ -85,7 +84,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
@@ -97,7 +96,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
@@ -109,7 +108,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
         .ifPresent(
@@ -146,14 +145,35 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
             accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-        .ifPresent(subscriptionTextMessageDo -> {
-          subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.ARCHIVED);
-          subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
-        });
+        .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchiveDo(
+            subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedDo -> {
+          subscriptionTextMessageArchivedDo.setArchived(true);
+          subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
+          subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedDo);
+        }));
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverMsgFromArchiveById(Long id) {
+    //noinspection DuplicatedCode
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+            accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
+                accountId)))
+        .ifPresent(
+            subscriptionTextMessageArchivedDo -> subscriptionTextMessageConvertor.toDataObject(
+                    subscriptionTextMessageArchivedDo)
+                .ifPresent(subscriptionTextMessageDo -> {
+                  subscriptionTextMessageDo.setArchived(false);
+                  subscriptionTextMessageArchivedRepository.delete(
+                      subscriptionTextMessageArchivedDo);
+                  subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
+                }));
   }
 
   @Override
@@ -185,11 +205,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
         subscriptionTextMessageDoSpecification,
         pageRequest);
     List<SubscriptionTextMessage> subscriptionTextMessages = repositoryAll.getContent().stream()
-        .map(
-            subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toEntity(
-                    subscriptionTextMessageDo)
-                .orElse(null))
-        .filter(Objects::nonNull)
+        .map(subscriptionTextMessageConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(subscriptionTextMessages, pageRequest,
         repositoryAll.getTotalElements());

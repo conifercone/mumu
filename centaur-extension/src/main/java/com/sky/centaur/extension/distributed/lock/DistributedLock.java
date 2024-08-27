@@ -19,7 +19,7 @@ package com.sky.centaur.extension.distributed.lock;
 /**
  * 分布式锁顶级接口
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface DistributedLock {

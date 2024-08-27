@@ -22,16 +22,19 @@ import com.sky.centaur.basis.client.dto.co.ClientObject;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.basis.response.ResultResponse;
+import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.sky.centaur.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import java.util.Objects;
+import java.util.Optional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -48,7 +51,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /**
  * 响应处理器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestControllerAdvice(annotations = RestController.class)
@@ -59,10 +62,13 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
   private final SystemLogGrpcService systemLogGrpcService;
+  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
-  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService) {
+  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService,
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.systemLogGrpcService = systemLogGrpcService;
+    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @ExceptionHandler(CentaurException.class)
@@ -71,7 +77,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    LOGGER.error(centaurException.getMessage());
+    LOGGER.error(centaurException.getMessage(), centaurException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(centaurException.getMessage())
@@ -90,7 +96,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(validationException.getMessage());
+    LOGGER.error(validationException.getMessage(), validationException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(validationException.getMessage())
@@ -109,7 +115,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(methodArgumentNotValidException.getMessage());
+    LOGGER.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
@@ -129,7 +135,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    LOGGER.error(illegalArgumentException.getMessage());
+    LOGGER.error(illegalArgumentException.getMessage(), illegalArgumentException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
@@ -138,7 +144,11 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
                 .setFail(ExceptionUtils.getStackTrace(illegalArgumentException)).build())
         .build());
     return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
-        illegalArgumentException.getMessage());
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+                textTranslation -> textTranslation.translateToAccountLanguageIfPossible(
+                    illegalArgumentException.getMessage()))
+            .orElse(illegalArgumentException.getMessage())
+    );
   }
 
   @ExceptionHandler(Exception.class)
@@ -147,7 +157,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    LOGGER.error(exception.getMessage());
+    LOGGER.error(exception.getMessage(), exception);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(exception.getMessage())

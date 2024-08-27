@@ -31,7 +31,7 @@ import org.springframework.http.MediaType;
 /**
  * 响应信息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

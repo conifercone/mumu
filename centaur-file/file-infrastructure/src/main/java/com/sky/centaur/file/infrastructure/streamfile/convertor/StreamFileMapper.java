@@ -19,7 +19,9 @@ import com.sky.centaur.file.client.dto.co.StreamFileDownloadCo;
 import com.sky.centaur.file.client.dto.co.StreamFileRemoveCo;
 import com.sky.centaur.file.client.dto.co.StreamFileSyncUploadCo;
 import com.sky.centaur.file.domain.stream.StreamFile;
+import com.sky.centaur.file.domain.stream.StreamFile4Desc;
 import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo4Desc;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -31,7 +33,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * StreamFile mapstruct转换器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -40,27 +42,27 @@ public interface StreamFileMapper {
   StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
 
   @Mappings(value = {
-      @Mapping(target = "content", ignore = true)
+      @Mapping(target = StreamFile4Desc.content, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
 
   @Mappings(value = {
-      @Mapping(target = "content", ignore = true),
-      @Mapping(target = "size", ignore = true)
+      @Mapping(target = StreamFile4Desc.content, ignore = true),
+      @Mapping(target = StreamFile4Desc.size, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileRemoveCo streamFileRemoveCo);
 
   @Mappings(value = {
-      @Mapping(target = "content", ignore = true),
-      @Mapping(target = "size", ignore = true)
+      @Mapping(target = StreamFile4Desc.content, ignore = true),
+      @Mapping(target = StreamFile4Desc.size, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileDownloadCo streamFileDownloadCo);
 
   @Mappings(value = {
-      @Mapping(target = "content", ignore = true)
+      @Mapping(target = StreamFileMinioDo4Desc.content, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFileMinioDo toMinioDo(StreamFile streamFile);

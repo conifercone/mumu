@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.dataobject.jpa.JpaBasisDataObject;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
@@ -37,7 +38,7 @@ import org.hibernate.annotations.Type;
 /**
  * 角色基本信息数据对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Getter
@@ -45,24 +46,40 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "roles")
 @DynamicInsert
+@GenerateDescription
 public class RoleDo extends JpaBasisDataObject {
 
+  /**
+   * 角色id
+   */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
+  /**
+   * 角色名
+   */
   @Size(max = 200)
   @Column(name = "name", nullable = false, length = 200)
   private String name;
 
+  /**
+   * 角色编码
+   */
   @Size(max = 100)
   @NotNull
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
+  /**
+   * 当前角色已赋予的用户集合
+   */
   @OneToMany(mappedBy = "role")
   private Set<AccountDo> users = new LinkedHashSet<>();
 
+  /**
+   * 角色包含的权限集合
+   */
   @Column(name = "authorities", nullable = false, columnDefinition = "bigint[]")
   @Type(ListArrayType.class)
   private List<Long> authorities;

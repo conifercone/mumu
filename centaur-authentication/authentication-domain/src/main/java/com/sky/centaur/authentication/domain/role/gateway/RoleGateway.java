@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page;
 /**
  * 角色领域网关
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface RoleGateway {
@@ -66,4 +66,18 @@ public interface RoleGateway {
    * @return 查询结果
    */
   Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize);
+
+  /**
+   * 根据id归档
+   *
+   * @param id 角色id
+   */
+  void archiveById(Long id);
+
+  /**
+   * 通过id从归档中恢复
+   *
+   * @param id 角色id
+   */
+  void recoverFromArchiveById(Long id);
 }

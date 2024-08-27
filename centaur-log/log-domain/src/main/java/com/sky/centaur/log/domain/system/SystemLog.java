@@ -15,16 +15,18 @@
  */
 package com.sky.centaur.log.domain.system;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
  * 系统日志领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
+@GenerateDescription
 public class SystemLog {
 
   /**

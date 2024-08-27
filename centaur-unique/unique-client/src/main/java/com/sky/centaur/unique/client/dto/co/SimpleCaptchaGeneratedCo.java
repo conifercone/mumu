@@ -16,6 +16,7 @@
 
 package com.sky.centaur.unique.client.dto.co;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,11 +24,12 @@ import lombok.EqualsAndHashCode;
 /**
  * 简单验证码生成客户端对象
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@GenerateDescription
 public class SimpleCaptchaGeneratedCo extends BaseClientObject {
 
   /**

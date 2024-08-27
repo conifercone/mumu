@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.unique.domain.captcha;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 /**
  * 验证码领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data
@@ -42,6 +43,7 @@ public class Captcha extends BasisDomainModel {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
+  @GenerateDescription
   public static class SimpleCaptcha {
 
     /**

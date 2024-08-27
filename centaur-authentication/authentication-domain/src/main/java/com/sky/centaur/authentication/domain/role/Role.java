@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.domain.role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sky.centaur.authentication.domain.authority.Authority;
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 角色领域模型
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Getter
@@ -44,11 +45,27 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
+@GenerateDescription
 public class Role extends BasisDomainModel {
 
+  /**
+   * 角色id
+   */
   private Long id;
+
+  /**
+   * 角色编码
+   */
   private String code;
+
+  /**
+   * 角色名称
+   */
   private String name;
+
+  /**
+   * 角色权限
+   */
   private List<Authority> authorities;
 
 }

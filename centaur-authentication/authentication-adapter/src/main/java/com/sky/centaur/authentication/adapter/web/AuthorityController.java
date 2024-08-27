@@ -17,9 +17,11 @@ package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
@@ -42,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 权限管理
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestController
@@ -77,7 +79,7 @@ public class AuthorityController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody AuthorityUpdateCmd authorityUpdateCmd) {
+  public void updateById(@RequestBody @Valid AuthorityUpdateCmd authorityUpdateCmd) {
     authorityService.updateById(authorityUpdateCmd);
   }
 
@@ -96,5 +98,22 @@ public class AuthorityController {
   @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityFindByIdCo findById(@RequestBody AuthorityFindByIdCmd authorityFindByIdCmd) {
     return authorityService.findById(authorityFindByIdCmd);
+  }
+
+  @Operation(summary = "根据id归档权限")
+  @PutMapping("/archiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void archiveById(@RequestBody @Valid AuthorityArchiveByIdCmd authorityArchiveByIdCmd) {
+    authorityService.archiveById(authorityArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据id从归档恢复权限")
+  @PutMapping("/recoverFromArchiveById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverFromArchiveById(
+      @RequestBody @Valid AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {
+    authorityService.recoverFromArchiveById(authorityRecoverFromArchiveByIdCmd);
   }
 }

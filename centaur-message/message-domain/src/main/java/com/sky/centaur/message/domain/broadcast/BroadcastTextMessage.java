@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.message.domain.broadcast;
 
+import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
 import java.util.Collection;
@@ -28,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 广播文本消息
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Data
@@ -37,6 +38,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
+@GenerateDescription
 public class BroadcastTextMessage extends BasisDomainModel {
 
   private Long id;

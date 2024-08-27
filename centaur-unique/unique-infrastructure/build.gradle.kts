@@ -7,5 +7,7 @@ dependencies {
     }
     implementation(libs.zookeeper)
     implementation(libs.redis.om.spring)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.javase)
     annotationProcessor(libs.redis.om.spring)
 }

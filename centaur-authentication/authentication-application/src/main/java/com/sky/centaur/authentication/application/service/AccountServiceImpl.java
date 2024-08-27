@@ -16,12 +16,14 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Empty;
+import com.sky.centaur.authentication.application.account.executor.AccountArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountDisableCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
+import com.sky.centaur.authentication.application.account.executor.AccountRecoverFromArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountRegisterCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountUpdateByIdCmdExe;
@@ -36,10 +38,12 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
+import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountDisableCmd;
 import com.sky.centaur.authentication.client.dto.AccountPasswordVerifyCmd;
+import com.sky.centaur.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.AccountResetPasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
@@ -58,14 +62,13 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 账户功能实现
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Service
@@ -74,22 +77,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
   private final AccountRegisterCmdExe accountRegisterCmdExe;
-
   private final AccountUpdateByIdCmdExe accountUpdateByIdCmdExe;
-
   private final AccountDisableCmdExe accountDisableCmdExe;
-
   private final AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe;
-
   private final AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe;
-
   private final AccountResetPasswordCmdExe accountResetPasswordCmdExe;
-
   private final AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe;
-
   private final AccountUpdateRoleCmdExe accountUpdateRoleCmdExe;
   private final AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe;
   private final AccountChangePasswordCmdExe accountChangePasswordCmdExe;
+  private final AccountArchiveByIdCmdExe accountArchiveByIdCmdExe;
+  private final AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -100,7 +98,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
       AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
       AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
-      AccountChangePasswordCmdExe accountChangePasswordCmdExe) {
+      AccountChangePasswordCmdExe accountChangePasswordCmdExe,
+      AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
+      AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -111,6 +111,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountUpdateRoleCmdExe = accountUpdateRoleCmdExe;
     this.accountPasswordVerifyCmdExe = accountPasswordVerifyCmdExe;
     this.accountChangePasswordCmdExe = accountChangePasswordCmdExe;
+    this.accountArchiveByIdCmdExe = accountArchiveByIdCmdExe;
+    this.accountRecoverFromArchiveByIdCmdExe = accountRecoverFromArchiveByIdCmdExe;
   }
 
   @Override
@@ -201,7 +203,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasAuthority('message.write')")
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -238,7 +239,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void updateRoleById(AccountUpdateRoleGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -272,7 +272,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @PreAuthorize("hasRole('admin')")
   @Transactional(rollbackFor = Exception.class)
   public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
     AccountDisableCmd accountDisableCmd = new AccountDisableCmd();
@@ -321,5 +320,18 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void changePassword(AccountChangePasswordCmd accountChangePasswordCmd) {
     accountChangePasswordCmdExe.execute(accountChangePasswordCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd) {
+    accountArchiveByIdCmdExe.execute(accountArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void recoverFromArchiveById(
+      AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
+    accountRecoverFromArchiveByIdCmdExe.execute(accountRecoverFromArchiveByIdCmd);
   }
 }

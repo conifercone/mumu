@@ -27,7 +27,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 拓展属性
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

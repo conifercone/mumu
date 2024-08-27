@@ -21,7 +21,7 @@ import com.sky.centaur.message.domain.broadcast.BroadcastTextMessage;
 import com.sky.centaur.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import com.sky.centaur.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 /**
  * 文本广播消息查询所有当前用户发送消息指令执行器
  *
- * @author kaiyu.shan
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Component
@@ -61,11 +61,8 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
         broadcastTextMessageFindAllYouSendCmd.getPageSize());
     List<BroadcastTextMessageFindAllYouSendCo> broadcastTextMessageFindAllYouSendCos = allYouSend.getContent()
         .stream()
-        .map(broadcastTextMessage -> broadcastTextMessageConvertor.toFindAllYouSendCo(
-                broadcastTextMessage)
-            .orElse(null))
-        .filter(
-            Objects::nonNull).toList();
+        .map(broadcastTextMessageConvertor::toFindAllYouSendCo)
+        .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(broadcastTextMessageFindAllYouSendCos, allYouSend.getPageable(),
         allYouSend.getTotalElements());
   }
