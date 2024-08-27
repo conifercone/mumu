@@ -24,6 +24,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
 import jakarta.annotation.Generated;
@@ -196,8 +197,7 @@ public class MetamodelGenerator extends AbstractProcessor {
           FieldSpec fieldSingularSpec = FieldSpec.builder(
                   ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
                           SingularAttribute.class.getSimpleName()),
-                      ClassName.get("",
-                          ObjectUtil.getEntityQualifiedName(field)),
+                      TypeName.get(ObjectUtil.getEntityType(field).asType()),
                       fieldClassName),
                   field.getSimpleName().toString().concat(SINGULAR_FIELD_SUFFIX))
               .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
