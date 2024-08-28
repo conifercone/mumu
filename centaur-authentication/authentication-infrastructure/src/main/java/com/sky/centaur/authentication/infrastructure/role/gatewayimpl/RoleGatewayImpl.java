@@ -30,6 +30,7 @@ import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.d
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo_;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
+import com.sky.centaur.basis.annotations.DangerousOperation;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
@@ -94,6 +95,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
+  @DangerousOperation("删除角色")
   public void deleteById(Long id) {
     Optional.ofNullable(id).ifPresent(roleId -> {
       Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
@@ -207,6 +209,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @DangerousOperation("根据ID归档角色")
   public void archiveById(Long id) {
     Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id, 0, 10);
     if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {

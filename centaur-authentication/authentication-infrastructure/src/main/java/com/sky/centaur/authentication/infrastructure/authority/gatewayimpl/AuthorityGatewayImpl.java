@@ -29,6 +29,7 @@ import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.datab
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo_;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
+import com.sky.centaur.basis.annotations.DangerousOperation;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import com.sky.centaur.extension.distributed.lock.DistributedLock;
@@ -96,6 +97,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
+  @DangerousOperation("删除权限")
   public void deleteById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
     if (!CollectionUtils.isEmpty(authorities.getContent())) {
@@ -188,6 +190,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @DangerousOperation("根据ID归档权限")
   public void archiveById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
     if (!CollectionUtils.isEmpty(authorities.getContent())) {
