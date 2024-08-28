@@ -189,6 +189,11 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveById(Long id) {
+    Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
+    if (!CollectionUtils.isEmpty(authorities.getContent())) {
+      throw new CentaurException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+          authorities.getContent().stream().map(Role::getCode).toList());
+    }
     Optional.ofNullable(id).flatMap(authorityRepository::findById)
         .flatMap(authorityConvertor::toArchivedDo).ifPresent(authorityArchivedDo -> {
           authorityArchivedDo.setArchived(true);

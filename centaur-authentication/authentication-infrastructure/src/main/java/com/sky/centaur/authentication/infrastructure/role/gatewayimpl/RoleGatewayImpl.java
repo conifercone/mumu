@@ -36,6 +36,7 @@ import com.sky.centaur.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apiguardian.api.API;
@@ -150,43 +151,43 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize) {
-    Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authorityId)
-          .ifPresent(id -> predicateList.add(cb.equal(
-              cb.literal(id),
-              cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
-          )));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
-    Page<Role> rolePage = getRoles(pageNo, pageSize, roleDoSpecification);
-    if (CollectionUtils.isEmpty(rolePage.getContent())) {
-      Specification<RoleArchivedDo> roleArchivedDoSpecification = (root, query, cb) -> {
+    return Optional.ofNullable(authorityId).map(authorityIdNonNull -> {
+      Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
-        Optional.ofNullable(authorityId)
-            .ifPresent(id -> predicateList.add(cb.equal(
-                cb.literal(id),
-                cb.function(ANY_PG, Long.class, root.get(RoleArchivedDo_.authorities))
-            )));
+        predicateList.add(cb.equal(
+            cb.literal(authorityIdNonNull),
+            cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
+        ));
         assert query != null;
-        return query.orderBy(cb.desc(root.get(RoleArchivedDo_.creationTime)))
+        return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-      Page<RoleArchivedDo> repositoryAll = roleArchivedRepository.findAll(
-          roleArchivedDoSpecification,
-          pageRequest);
-      List<Role> roles = repositoryAll.getContent().stream()
-          .map(roleConvertor::toEntity)
-          .filter(Optional::isPresent).map(Optional::get)
-          .toList();
-      return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
-    }
-    return rolePage;
+      Page<Role> rolePage = getRoles(pageNo, pageSize, roleDoSpecification);
+      if (CollectionUtils.isEmpty(rolePage.getContent())) {
+        Specification<RoleArchivedDo> roleArchivedDoSpecification = (root, query, cb) -> {
+          List<Predicate> predicateList = new ArrayList<>();
+          predicateList.add(cb.equal(
+              cb.literal(authorityIdNonNull),
+              cb.function(ANY_PG, Long.class, root.get(RoleArchivedDo_.authorities))
+          ));
+          assert query != null;
+          return query.orderBy(cb.desc(root.get(RoleArchivedDo_.creationTime)))
+              .where(predicateList.toArray(new Predicate[0]))
+              .getRestriction();
+        };
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<RoleArchivedDo> repositoryAll = roleArchivedRepository.findAll(
+            roleArchivedDoSpecification,
+            pageRequest);
+        List<Role> roles = repositoryAll.getContent().stream()
+            .map(roleConvertor::toEntity)
+            .filter(Optional::isPresent).map(Optional::get)
+            .toList();
+        return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
+      }
+      return rolePage;
+    }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
   @NotNull
