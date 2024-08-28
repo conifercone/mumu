@@ -28,7 +28,6 @@ import com.sky.centaur.authentication.client.dto.AccountUpdateByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountUpdateRoleCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import com.sky.centaur.basis.annotations.DangerousOperation;
 import com.sky.centaur.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -125,7 +124,6 @@ public class AccountController {
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  @DangerousOperation("删除当前账户")
   public void deleteCurrent(@RequestBody AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
     accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
   }
@@ -152,7 +150,6 @@ public class AccountController {
   @PutMapping("/archiveById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
-  @DangerousOperation("根据id归档账户")
   public void archiveById(
       @RequestBody AccountArchiveByIdCmd accountArchiveByIdCmd) {
     accountService.archiveById(accountArchiveByIdCmd);

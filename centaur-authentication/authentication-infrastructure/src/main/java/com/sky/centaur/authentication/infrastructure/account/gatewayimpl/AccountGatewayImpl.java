@@ -25,6 +25,7 @@ import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.databas
 import com.sky.centaur.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import com.sky.centaur.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import com.sky.centaur.basis.annotations.DangerousOperation;
 import com.sky.centaur.basis.exception.AccountAlreadyExistsException;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
@@ -224,6 +225,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
+  @DangerousOperation("删除当前账户")
   public void deleteCurrentAccount() {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
       accountRepository.deleteById(accountId);
@@ -297,6 +299,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @DangerousOperation("根据id归档账户")
   public void archiveById(Long id) {
     Optional.ofNullable(id).flatMap(accountRepository::findById)
         .flatMap(accountConvertor::toArchivedDo).ifPresent(accountArchivedDo -> {
