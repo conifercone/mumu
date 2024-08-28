@@ -208,6 +208,11 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveById(Long id) {
+    Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id, 0, 10);
+    if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
+      throw new CentaurException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+          allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
+    }
     Optional.ofNullable(id).flatMap(roleRepository::findById)
         .flatMap(roleConvertor::toArchivedDo).ifPresent(roleArchivedDo -> {
           roleArchivedDo.setArchived(true);

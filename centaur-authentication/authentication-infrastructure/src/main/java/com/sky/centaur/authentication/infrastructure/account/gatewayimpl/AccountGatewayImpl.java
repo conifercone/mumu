@@ -38,6 +38,7 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -237,17 +238,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize) {
-    Specification<AccountDo> accountDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(roleId)
-          .ifPresent(
-              id -> predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
-    return getAccounts(pageNo, pageSize, accountDoSpecification);
+    return Optional.ofNullable(roleId).map(roleIdNonNull -> {
+      Specification<AccountDo> accountDoSpecification = (root, query, cb) -> {
+        List<Predicate> predicateList = new ArrayList<>();
+        predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), roleIdNonNull));
+        assert query != null;
+        return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
+            .where(predicateList.toArray(new Predicate[0]))
+            .getRestriction();
+      };
+      return getAccounts(pageNo, pageSize, accountDoSpecification);
+    }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
   @Override
