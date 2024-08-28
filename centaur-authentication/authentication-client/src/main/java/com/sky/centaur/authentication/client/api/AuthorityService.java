@@ -17,11 +17,13 @@ package com.sky.centaur.authentication.client.api;
 
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
+import com.sky.centaur.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import org.springframework.data.domain.Page;
@@ -62,6 +64,15 @@ public interface AuthorityService {
    * @return 查询结果
    */
   Page<AuthorityFindAllCo> findAll(AuthorityFindAllCmd authorityFindAllCmd);
+
+  /**
+   * 分页查询已归档权限
+   *
+   * @param authorityArchivedFindAllCmd 分页查询已归档权限指令
+   * @return 查询结果
+   */
+  Page<AuthorityArchivedFindAllCo> findArchivedAll(
+      AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
 
   /**
    * 根据id查询权限

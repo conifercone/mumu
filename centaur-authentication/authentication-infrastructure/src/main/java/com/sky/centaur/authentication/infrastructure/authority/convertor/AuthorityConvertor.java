@@ -17,6 +17,7 @@
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
@@ -119,6 +120,17 @@ public class AuthorityConvertor {
     return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<Authority> toEntity(@Valid AuthorityArchivedDo authorityArchivedDo) {
+    return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<Authority> toEntity(
+      @Valid AuthorityArchivedFindAllCo authorityArchivedFindAllCo) {
+    return Optional.ofNullable(authorityArchivedFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindByIdCo> toFindByIdCo(@Valid Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo)
@@ -140,6 +152,18 @@ public class AuthorityConvertor {
                       authorityFindAllCo.getName()))
               .ifPresent(authorityFindAllCo::setName);
           return authorityFindAllCo;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<AuthorityArchivedFindAllCo> toArchivedFindAllCo(@Valid Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllCo)
+        .map(authorityArchivedFindAllCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      authorityArchivedFindAllCo.getName()))
+              .ifPresent(authorityArchivedFindAllCo::setName);
+          return authorityArchivedFindAllCo;
         });
   }
 

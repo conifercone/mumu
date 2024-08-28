@@ -18,11 +18,13 @@ package com.sky.centaur.authentication.adapter.web;
 import com.sky.centaur.authentication.client.api.AuthorityService;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
+import com.sky.centaur.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,6 +92,15 @@ public class AuthorityController {
   public Page<AuthorityFindAllCo> findAll(
       @RequestBody @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
+  }
+
+  @Operation(summary = "查询已归档权限")
+  @GetMapping("/findArchivedAll")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Page<AuthorityArchivedFindAllCo> findArchivedAll(
+      @RequestBody @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
+    return authorityService.findArchivedAll(authorityArchivedFindAllCmd);
   }
 
   @Operation(summary = "根据id查询权限")

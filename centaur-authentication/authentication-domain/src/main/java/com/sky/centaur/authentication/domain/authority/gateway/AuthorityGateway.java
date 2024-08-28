@@ -59,6 +59,16 @@ public interface AuthorityGateway {
   Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
 
   /**
+   * 分页查询已归档的权限
+   *
+   * @param authority 查询条件
+   * @param pageNo    页码
+   * @param pageSize  每页数量
+   * @return 查询结果
+   */
+  Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize);
+
+  /**
    * 根据id查询权限详情
    *
    * @param id 权限id

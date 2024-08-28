@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.authority.convertor;
 
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
@@ -51,6 +52,12 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityFindAllCo authorityFindAllCo);
 
+  @API(status = Status.STABLE, since = "1.0.5")
+  Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  Authority toEntity(AuthorityArchivedFindAllCo authorityArchivedFindAllCo);
+
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AuthorityUpdateCo authorityUpdateCo, @MappingTarget Authority authority);
 
@@ -59,6 +66,9 @@ public interface AuthorityMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindAllCo toFindAllCo(Authority authority);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  AuthorityArchivedFindAllCo toArchivedFindAllCo(Authority authority);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityDo toDataObject(Authority authority);

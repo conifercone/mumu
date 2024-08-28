@@ -21,6 +21,7 @@ import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityAddCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityArchiveByIdCmdExe;
+import com.sky.centaur.authentication.application.authority.executor.AuthorityArchivedFindAllCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import com.sky.centaur.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
@@ -39,12 +40,14 @@ import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpc
 import com.sky.centaur.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
 import com.sky.centaur.authentication.client.dto.AuthorityAddCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityArchiveByIdCmd;
+import com.sky.centaur.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityDeleteByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindAllCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityFindByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AuthorityUpdateCmd;
 import com.sky.centaur.authentication.client.dto.co.AuthorityAddCo;
+import com.sky.centaur.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindAllCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityFindByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AuthorityUpdateCo;
@@ -78,6 +81,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityFindByIdCmdExe authorityFindByIdCmdExe;
   private final AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe;
   private final AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe;
+  private final AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -86,7 +90,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       AuthorityFindAllCmdExe authorityFindAllCmdExe,
       AuthorityFindByIdCmdExe authorityFindByIdCmdExe,
       AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe,
-      AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe) {
+      AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe,
+      AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -94,6 +99,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityFindByIdCmdExe = authorityFindByIdCmdExe;
     this.authorityArchiveByIdCmdExe = authorityArchiveByIdCmdExe;
     this.authorityRecoverFromArchiveByIdCmdExe = authorityRecoverFromArchiveByIdCmdExe;
+    this.authorityArchivedFindAllCmdExe = authorityArchivedFindAllCmdExe;
   }
 
   @Override
@@ -177,6 +183,12 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public Page<AuthorityFindAllCo> findAll(
       AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityFindAllCmdExe.execute(authorityFindAllCmd);
+  }
+
+  @Override
+  public Page<AuthorityArchivedFindAllCo> findArchivedAll(
+      AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
+    return authorityArchivedFindAllCmdExe.execute(authorityArchivedFindAllCmd);
   }
 
   @Override

@@ -25,6 +25,8 @@ import com.sky.centaur.authentication.domain.role.gateway.RoleGateway;
 import com.sky.centaur.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
+import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo_;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import com.sky.centaur.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
 import com.sky.centaur.basis.exception.CentaurException;
@@ -141,6 +143,35 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     };
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
+        pageRequest);
+    List<Authority> authorities = repositoryAll.getContent().stream()
+        .map(authorityConvertor::toEntity)
+        .filter(Optional::isPresent).map(Optional::get)
+        .toList();
+    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
+    Specification<AuthorityArchivedDo> authorityArchivedDoSpecification = (root, query, cb) -> {
+      List<Predicate> predicateList = new ArrayList<>();
+      Optional.ofNullable(authority.getCode()).filter(StringUtils::hasText)
+          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.code),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
+      Optional.ofNullable(authority.getName()).filter(StringUtils::hasText)
+          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.name),
+              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
+      Optional.ofNullable(authority.getId())
+          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityArchivedDo_.id), id)));
+      assert query != null;
+      return query.orderBy(cb.desc(root.get(AuthorityArchivedDo_.creationTime)))
+          .where(predicateList.toArray(new Predicate[0]))
+          .getRestriction();
+    };
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAll(
+        authorityArchivedDoSpecification,
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(authorityConvertor::toEntity)
