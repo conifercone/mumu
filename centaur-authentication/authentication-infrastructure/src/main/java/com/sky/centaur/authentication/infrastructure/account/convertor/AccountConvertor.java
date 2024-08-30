@@ -20,8 +20,11 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateRoleCo;
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.AccountAddress;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import com.sky.centaur.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -51,16 +54,19 @@ public class AccountConvertor {
   private final RoleRepository roleRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AccountArchivedRepository accountArchivedRepository;
+  private final AccountAddressRepository accountAddressRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
       RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
-      AccountArchivedRepository accountArchivedRepository) {
+      AccountArchivedRepository accountArchivedRepository,
+      AccountAddressRepository accountAddressRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.accountArchivedRepository = accountArchivedRepository;
+    this.accountAddressRepository = accountAddressRepository;
   }
 
   @Contract("_ -> new")
@@ -74,6 +80,10 @@ public class AccountConvertor {
           accountDataObject.getAccountNonLocked(),
           roleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
       AccountMapper.INSTANCE.toEntity(accountDataObject, account);
+      Optional.ofNullable(accountDataObject.getAddressId())
+          .flatMap(accountAddressRepository::findById).ifPresent(
+              accountAddressDo -> account.setAddress(
+                  AccountMapper.INSTANCE.toEntity(accountAddressDo)));
       return account;
     });
   }
@@ -83,6 +93,9 @@ public class AccountConvertor {
   public Optional<AccountDo> toDataObject(Account account) {
     return Optional.ofNullable(account).map(accountDomain -> {
       AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountDomain);
+      Optional.ofNullable(accountDomain.getAddress())
+          .flatMap(address -> Optional.ofNullable(address.getId()))
+          .ifPresent(accountDo::setAddressId);
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(
@@ -102,6 +115,14 @@ public class AccountConvertor {
           roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
               .flatMap(roleConvertor::toEntity).orElse(null));
       AccountMapper.INSTANCE.toEntity(accountRegisterClientObject, account);
+      Optional.ofNullable(account.getAddress())
+          .ifPresent(accountAddress -> {
+            accountAddress.setUserId(account.getId());
+            if (accountAddress.getId() == null) {
+              accountAddress.setId(primaryKeyGrpcService.snowflake());
+              accountRegisterClientObject.getAddress().setId(accountAddress.getId());
+            }
+          });
       accountRegisterClientObject.setId(account.getId());
       return account;
     });
@@ -117,6 +138,8 @@ public class AccountConvertor {
             String emailBeforeUpdated = account.getEmail();
             String usernameBeforeUpdated = account.getUsername();
             AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
+            Optional.ofNullable(account.getAddress())
+                .ifPresent(accountAddress -> accountAddress.setUserId(account.getId()));
             String emailAfterUpdated = account.getEmail();
             String usernameAfterUpdated = account.getUsername();
             if (StringUtils.hasText(emailAfterUpdated) && !emailAfterUpdated.equals(
@@ -182,5 +205,11 @@ public class AccountConvertor {
           .ifPresent(accountDo::setRole);
       return accountDo;
     });
+  }
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<AccountAddressDo> toDataObject(
+      AccountAddress accountAddress) {
+    return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toDataObject);
   }
 }

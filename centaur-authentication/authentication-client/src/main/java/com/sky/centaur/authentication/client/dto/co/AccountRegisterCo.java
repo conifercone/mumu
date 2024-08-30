@@ -20,6 +20,7 @@ import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,4 +60,45 @@ public class AccountRegisterCo extends BaseClientObject {
 
   @NotNull(message = "{account.birthday.validation.not.null}")
   private LocalDate birthday;
+
+  private AccountAddressRegisterCo address;
+
+  @Data
+  public static class AccountAddressRegisterCo {
+
+    /**
+     * 唯一主键
+     */
+    private Long id;
+
+    /**
+     * 街道地址，包含门牌号和街道信息
+     */
+    @Size(max = 255)
+    private String street;
+
+    /**
+     * 城市信息
+     */
+    @Size(max = 100)
+    private String city;
+
+    /**
+     * 州或省的信息
+     */
+    @Size(max = 100)
+    private String state;
+
+    /**
+     * 邮政编码
+     */
+    @Size(max = 20)
+    private String postalCode;
+
+    /**
+     * 国家信息
+     */
+    @Size(max = 100)
+    private String country;
+  }
 }

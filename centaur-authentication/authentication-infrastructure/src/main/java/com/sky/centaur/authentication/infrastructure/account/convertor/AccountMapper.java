@@ -20,6 +20,8 @@ import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.Account4Desc;
+import com.sky.centaur.authentication.domain.account.AccountAddress;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo4Desc;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
@@ -48,13 +50,21 @@ public interface AccountMapper {
 
   @Mappings(value = {
       @Mapping(target = Account4Desc.role, ignore = true),
-      @Mapping(target = Account4Desc.authorities, ignore = true)
+      @Mapping(target = Account4Desc.authorities, ignore = true),
+      @Mapping(target = Account4Desc.address, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
+  @API(status = Status.STABLE, since = "1.0.5")
+  AccountAddress toEntity(AccountAddressDo accountAddressDo);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  AccountAddressDo toDataObject(AccountAddress accountAddress);
+
   @Mappings(value = {
-      @Mapping(target = AccountDo4Desc.role, ignore = true)
+      @Mapping(target = AccountDo4Desc.role, ignore = true),
+      @Mapping(target = AccountDo4Desc.addressId, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);

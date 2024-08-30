@@ -24,11 +24,13 @@ import com.google.protobuf.Int64Value;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
 import com.sky.centaur.authentication.client.dto.AccountRegisterCmd;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
+import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.unique.client.api.CaptchaGrpcService;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import com.sky.centaur.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
+import java.time.LocalDate;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -57,12 +59,14 @@ public class AccountControllerTest {
 
   private final MockMvc mockMvc;
   private final CaptchaGrpcService captchaGrpcService;
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper;
 
   @Autowired
-  public AccountControllerTest(MockMvc mockMvc, CaptchaGrpcService captchaGrpcService) {
+  public AccountControllerTest(MockMvc mockMvc, CaptchaGrpcService captchaGrpcService,
+      ObjectMapper objectMapper) {
     this.mockMvc = mockMvc;
     this.captchaGrpcService = captchaGrpcService;
+    this.objectMapper = objectMapper;
   }
 
   @Test
@@ -101,6 +105,14 @@ public class AccountControllerTest {
     accountRegisterCo.setLanguage(LanguageEnum.ZH);
     accountRegisterCo.setTimezone("Asia/Shanghai");
     accountRegisterCo.setEmail("547913250@qq.com");
+    accountRegisterCo.setBirthday(LocalDate.of(1995, 8, 2));
+    AccountAddressRegisterCo accountAddressRegisterCo = new AccountAddressRegisterCo();
+    accountAddressRegisterCo.setStreet("历城区");
+    accountAddressRegisterCo.setCity("济南市");
+    accountAddressRegisterCo.setState("山东省");
+    accountAddressRegisterCo.setPostalCode("250101");
+    accountAddressRegisterCo.setCountry("中国");
+    accountRegisterCo.setAddress(accountAddressRegisterCo);
     return accountRegisterCo;
   }
 

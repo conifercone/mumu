@@ -152,6 +152,13 @@ public class Account extends BasisDomainModel implements UserDetails {
   private LocalDate birthday;
 
   /**
+   * 地址
+   */
+  @Setter
+  @Getter
+  private AccountAddress address;
+
+  /**
    * 年龄
    */
   private final int age = 0;

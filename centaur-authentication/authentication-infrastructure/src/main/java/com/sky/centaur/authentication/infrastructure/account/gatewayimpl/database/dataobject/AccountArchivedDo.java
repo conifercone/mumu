@@ -109,4 +109,11 @@ public class AccountArchivedDo extends JpaBasisDataObject {
   @Column(name = "role_id", nullable = false)
   private Long roleId;
 
+  /**
+   * 地址ID
+   */
+  @ColumnDefault("0")
+  @Column(name = "address_id", nullable = false)
+  private Long addressId;
+
 }

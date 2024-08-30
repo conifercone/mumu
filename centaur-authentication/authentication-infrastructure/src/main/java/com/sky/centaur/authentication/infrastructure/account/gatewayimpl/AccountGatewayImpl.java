@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
+import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
@@ -77,6 +78,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
+  private final AccountAddressRepository accountAddressRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -85,7 +87,8 @@ public class AccountGatewayImpl implements AccountGateway {
       OperationLogGrpcService operationLogGrpcService,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
-      AccountArchivedRepository accountArchivedRepository) {
+      AccountArchivedRepository accountArchivedRepository,
+      AccountAddressRepository accountAddressRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -95,6 +98,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
+    this.accountAddressRepository = accountAddressRepository;
   }
 
   @Override
@@ -125,6 +129,8 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
+      accountConvertor.toDataObject(account.getAddress())
+          .ifPresent(accountAddressRepository::persist);
       operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -158,7 +164,11 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtil.getLoginAccountId()
         .filter(res -> Objects.equals(res, account.getId()))
         .ifPresentOrElse((accountId) -> accountConvertor.toDataObject(account)
-            .ifPresent(accountRepository::merge), () -> {
+            .ifPresent(accountDo -> {
+              accountRepository.merge(accountDo);
+              Optional.ofNullable(account.getAddress()).flatMap(accountConvertor::toDataObject)
+                  .ifPresent(accountAddressRepository::merge);
+            }), () -> {
           throw new CentaurException(ResultCode.UNAUTHORIZED);
         });
   }
