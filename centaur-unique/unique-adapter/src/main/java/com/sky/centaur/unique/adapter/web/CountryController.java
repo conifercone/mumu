@@ -17,6 +17,7 @@ package com.sky.centaur.unique.adapter.web;
 
 import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.unique.client.api.CountryService;
+import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,5 +54,13 @@ public class CountryController {
   @API(status = Status.STABLE, since = "1.0.5")
   public ResultResponse<List<CountryStateCityGetAllCo>> getCountryStateCity() {
     return ResultResponse.success(countryService.getCountryStateCity());
+  }
+
+  @Operation(summary = "获取国家详细信息(不包含省或州、市信息)")
+  @GetMapping("/getCountries")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<List<CountryGetAllCo>> getCountries() {
+    return ResultResponse.success(countryService.getCountries());
   }
 }

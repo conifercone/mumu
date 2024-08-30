@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.unique.domain.country;
+package com.sky.centaur.unique.client.dto.co;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.Data;
 
 /**
- * 国家
+ * 获取所有国家(不包含省或州、市信息)客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.5
  */
 @Data
-public class Country {
+public class CountryGetAllCo {
 
   /**
    * 唯一标识
@@ -56,11 +54,5 @@ public class Country {
   /**
    * 本地化名称
    */
-  @JsonProperty("native")
   private String nativeName;
-
-  /**
-   * 省份或州信息
-   */
-  private List<State> states;
 }

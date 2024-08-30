@@ -27,4 +27,6 @@ import java.util.List;
 public interface CountryGateway {
 
   List<Country> getCountryStateCity();
+
+  List<Country> getCountries();
 }

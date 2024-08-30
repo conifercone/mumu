@@ -47,6 +47,11 @@ public class CountryGatewayImpl implements CountryGateway {
     return countries;
   }
 
+  @Override
+  public List<Country> getCountries() {
+    return countries.stream().peek(country -> country.setStates(null)).toList();
+  }
+
   @PostConstruct
   public void loadCountries() {
     try {

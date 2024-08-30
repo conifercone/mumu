@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.unique.infrastructure.country.convertor;
 
+import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import com.sky.centaur.unique.domain.country.Country;
 import java.util.Optional;
@@ -37,5 +38,12 @@ public class CountryConvertor {
   public Optional<CountryStateCityGetAllCo> toCountryStateCityGetAllCo(
       Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryStateCityGetAllCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<CountryGetAllCo> toCountryGetAllCo(
+      Country country) {
+    return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryGetAllCo);
   }
 }

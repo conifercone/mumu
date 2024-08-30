@@ -16,6 +16,7 @@
 
 package com.sky.centaur.unique.client.api;
 
+import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import java.util.List;
 
@@ -28,4 +29,6 @@ import java.util.List;
 public interface CountryService {
 
   List<CountryStateCityGetAllCo> getCountryStateCity();
+
+  List<CountryGetAllCo> getCountries();
 }

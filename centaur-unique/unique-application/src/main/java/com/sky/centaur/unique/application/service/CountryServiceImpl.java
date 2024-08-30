@@ -15,8 +15,10 @@
  */
 package com.sky.centaur.unique.application.service;
 
+import com.sky.centaur.unique.application.country.executor.CountryGetAllExe;
 import com.sky.centaur.unique.application.country.executor.CountryStateCityGetAllExe;
 import com.sky.centaur.unique.client.api.CountryService;
+import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -37,14 +39,22 @@ import org.springframework.stereotype.Service;
 public class CountryServiceImpl implements CountryService {
 
   private final CountryStateCityGetAllExe countryStateCityGetAllExe;
+  private final CountryGetAllExe countryGetAllExe;
 
   @Autowired
-  public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe) {
+  public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
+      CountryGetAllExe countryGetAllExe) {
     this.countryStateCityGetAllExe = countryStateCityGetAllExe;
+    this.countryGetAllExe = countryGetAllExe;
   }
 
   @Override
   public List<CountryStateCityGetAllCo> getCountryStateCity() {
     return countryStateCityGetAllExe.execute();
+  }
+
+  @Override
+  public List<CountryGetAllCo> getCountries() {
+    return countryGetAllExe.execute();
   }
 }

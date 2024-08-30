@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.unique.infrastructure.country.convertor;
 
+import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import com.sky.centaur.unique.domain.country.Country;
 import org.apiguardian.api.API;
@@ -36,4 +37,7 @@ public interface CountryMapper {
 
   @API(status = Status.STABLE, since = "1.0.5")
   CountryStateCityGetAllCo toCountryStateCityGetAllCo(Country country);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  CountryGetAllCo toCountryGetAllCo(Country country);
 }

@@ -53,6 +53,11 @@ public class CountryStateCityGetAllCo {
   private String emoji;
 
   /**
+   * 本地化名称
+   */
+  private String nativeName;
+
+  /**
    * 省份或州信息
    */
   private List<CountryStateCityGetAllStateCo> states;
