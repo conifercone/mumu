@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
+import com.sky.centaur.authentication.client.dto.co.AccountAddAddressCo;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -211,5 +212,18 @@ public class AccountConvertor {
   public Optional<AccountAddressDo> toDataObject(
       AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toDataObject);
+  }
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<AccountAddress> toEntity(
+      AccountAddAddressCo accountAddAddressCo) {
+    return Optional.ofNullable(accountAddAddressCo).map(accountAddAddressCoNonNull -> {
+      AccountAddress instanceEntity = AccountMapper.INSTANCE.toEntity(accountAddAddressCo);
+      if (instanceEntity.getId() == null) {
+        instanceEntity.setId(primaryKeyGrpcService.snowflake());
+        accountAddAddressCoNonNull.setId(instanceEntity.getId());
+      }
+      return instanceEntity;
+    });
   }
 }

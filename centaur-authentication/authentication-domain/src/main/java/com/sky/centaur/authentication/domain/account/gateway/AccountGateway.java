@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.domain.account.gateway;
 
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.AccountAddress;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 
@@ -136,4 +137,11 @@ public interface AccountGateway {
    * @param id 账户id
    */
   void recoverFromArchiveById(Long id);
+
+  /**
+   * 账户添加地址
+   *
+   * @param accountAddress 账户地址
+   */
+  void addAddress(AccountAddress accountAddress);
 }

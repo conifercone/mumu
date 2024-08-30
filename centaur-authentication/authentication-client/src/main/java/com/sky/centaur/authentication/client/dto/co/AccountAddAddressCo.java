@@ -13,40 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.authentication.domain.account;
+package com.sky.centaur.authentication.client.dto.co;
 
-import com.sky.centaur.basis.annotations.GenerateDescription;
-import com.sky.centaur.basis.domain.BasisDomainModel;
+import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 /**
- * 账户地址领域模型
+ * 账户添加地址客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.5
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@RequiredArgsConstructor
-@ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
-@GenerateDescription
-public class AccountAddress extends BasisDomainModel {
+public class AccountAddAddressCo extends BaseClientObject {
 
   /**
    * 唯一主键
    */
   private Long id;
-
-  /**
-   * 账户ID
-   */
-  private Long userId;
 
   /**
    * 街道地址，包含门牌号和街道信息

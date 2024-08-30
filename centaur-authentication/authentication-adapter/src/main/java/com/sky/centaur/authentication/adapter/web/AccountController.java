@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.adapter.web;
 
 import com.sky.centaur.authentication.client.api.AccountService;
+import com.sky.centaur.authentication.client.dto.AccountAddAddressCmd;
 import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
@@ -162,5 +163,14 @@ public class AccountController {
   public void recoverFromArchiveById(
       @RequestBody AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
     accountService.recoverFromArchiveById(accountRecoverFromArchiveByIdCmd);
+  }
+
+  @Operation(summary = "账户添加地址")
+  @PostMapping("/addAddress")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public void addAddress(
+      @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
+    accountService.addAddress(accountAddAddressCmd);
   }
 }

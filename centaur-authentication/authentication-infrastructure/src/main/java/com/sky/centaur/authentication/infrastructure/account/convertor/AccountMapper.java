@@ -15,12 +15,14 @@
  */
 package com.sky.centaur.authentication.infrastructure.account.convertor;
 
+import com.sky.centaur.authentication.client.dto.co.AccountAddAddressCo;
 import com.sky.centaur.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import com.sky.centaur.authentication.client.dto.co.AccountRegisterCo;
 import com.sky.centaur.authentication.client.dto.co.AccountUpdateByIdCo;
 import com.sky.centaur.authentication.domain.account.Account;
 import com.sky.centaur.authentication.domain.account.Account4Desc;
 import com.sky.centaur.authentication.domain.account.AccountAddress;
+import com.sky.centaur.authentication.domain.account.AccountAddress4Desc;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo4Desc;
@@ -61,6 +63,12 @@ public interface AccountMapper {
 
   @API(status = Status.STABLE, since = "1.0.5")
   AccountAddressDo toDataObject(AccountAddress accountAddress);
+
+  @Mappings(value = {
+      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
+  })
+  @API(status = Status.STABLE, since = "1.0.5")
+  AccountAddress toEntity(AccountAddAddressCo accountAddAddressCo);
 
   @Mappings(value = {
       @Mapping(target = AccountDo4Desc.role, ignore = true),

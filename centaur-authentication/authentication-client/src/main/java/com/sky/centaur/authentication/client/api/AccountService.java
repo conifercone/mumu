@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.authentication.client.api;
 
+import com.sky.centaur.authentication.client.dto.AccountAddAddressCmd;
 import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
@@ -121,4 +122,11 @@ public interface AccountService {
    */
   void recoverFromArchiveById(
       AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd);
+
+  /**
+   * 账户添加地址
+   *
+   * @param accountAddAddressCmd 账户添加地址指令
+   */
+  void addAddress(AccountAddAddressCmd accountAddAddressCmd);
 }

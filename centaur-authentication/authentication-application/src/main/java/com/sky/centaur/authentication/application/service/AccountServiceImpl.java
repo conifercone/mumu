@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.application.service;
 
 import com.google.protobuf.Empty;
+import com.sky.centaur.authentication.application.account.executor.AccountAddAddressCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountArchiveByIdCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import com.sky.centaur.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
@@ -38,6 +39,7 @@ import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import com.sky.centaur.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
+import com.sky.centaur.authentication.client.dto.AccountAddAddressCmd;
 import com.sky.centaur.authentication.client.dto.AccountArchiveByIdCmd;
 import com.sky.centaur.authentication.client.dto.AccountChangePasswordCmd;
 import com.sky.centaur.authentication.client.dto.AccountDeleteCurrentCmd;
@@ -88,6 +90,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountChangePasswordCmdExe accountChangePasswordCmdExe;
   private final AccountArchiveByIdCmdExe accountArchiveByIdCmdExe;
   private final AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe;
+  private final AccountAddAddressCmdExe accountAddAddressCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -100,7 +103,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
       AccountChangePasswordCmdExe accountChangePasswordCmdExe,
       AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
-      AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe) {
+      AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe,
+      AccountAddAddressCmdExe accountAddAddressCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -113,6 +117,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountChangePasswordCmdExe = accountChangePasswordCmdExe;
     this.accountArchiveByIdCmdExe = accountArchiveByIdCmdExe;
     this.accountRecoverFromArchiveByIdCmdExe = accountRecoverFromArchiveByIdCmdExe;
+    this.accountAddAddressCmdExe = accountAddAddressCmdExe;
   }
 
   @Override
@@ -333,5 +338,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   public void recoverFromArchiveById(
       AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
     accountRecoverFromArchiveByIdCmdExe.execute(accountRecoverFromArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAddress(AccountAddAddressCmd accountAddAddressCmd) {
+    accountAddAddressCmdExe.execute(accountAddAddressCmd);
   }
 }

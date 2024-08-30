@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.infrastructure.account.gatewayimpl;
 
 import com.sky.centaur.authentication.domain.account.Account;
+import com.sky.centaur.authentication.domain.account.AccountAddress;
 import com.sky.centaur.authentication.domain.account.gateway.AccountGateway;
 import com.sky.centaur.authentication.infrastructure.account.convertor.AccountConvertor;
 import com.sky.centaur.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
@@ -328,5 +329,24 @@ public class AccountGatewayImpl implements AccountGateway {
           accountArchivedRepository.deleteById(accountDo.getId());
           accountRepository.persist(accountDo);
         });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAddress(AccountAddress accountAddress) {
+    SecurityContextUtil.getLoginAccountId().ifPresent(
+        accountId -> Optional.ofNullable(accountAddress).flatMap(accountConvertor::toDataObject)
+            .ifPresent(
+                accountAddressDo -> accountRepository.findById(accountId).ifPresent(accountDo -> {
+                  accountAddressRepository.findById(accountDo.getAddressId())
+                      .filter(accountAddressDataObject -> accountAddressDataObject.getUserId()
+                          .equals(accountId)).ifPresent(res -> {
+                        throw new CentaurException(ResultCode.THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS);
+                      });
+                  accountAddressDo.setUserId(accountId);
+                  accountAddressRepository.persist(accountAddressDo);
+                  accountDo.setAddressId(accountAddressDo.getId());
+                  accountRepository.persist(accountDo);
+                })));
   }
 }
