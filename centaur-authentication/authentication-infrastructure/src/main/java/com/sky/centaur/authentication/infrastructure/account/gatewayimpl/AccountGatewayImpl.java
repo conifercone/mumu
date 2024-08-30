@@ -166,9 +166,13 @@ public class AccountGatewayImpl implements AccountGateway {
         .filter(res -> Objects.equals(res, account.getId()))
         .ifPresentOrElse((accountId) -> accountConvertor.toDataObject(account)
             .ifPresent(accountDo -> {
-              accountRepository.merge(accountDo);
               Optional.ofNullable(account.getAddress()).flatMap(accountConvertor::toDataObject)
-                  .ifPresent(accountAddressRepository::merge);
+                  .ifPresent(accountAddressDo -> {
+                    accountAddressRepository.merge(accountAddressDo);
+                    accountDo.setModifier(accountAddressDo.getModifier());
+                    accountDo.setModificationTime(accountAddressDo.getModificationTime());
+                  });
+              accountRepository.merge(accountDo);
             }), () -> {
           throw new CentaurException(ResultCode.UNAUTHORIZED);
         });
