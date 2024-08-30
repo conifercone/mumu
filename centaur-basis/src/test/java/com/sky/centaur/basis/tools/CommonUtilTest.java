@@ -17,6 +17,9 @@ package com.sky.centaur.basis.tools;
 
 import com.sky.centaur.basis.kotlin.tools.CommonUtil;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -39,5 +42,14 @@ public class CommonUtilTest {
   public void getAvailableZoneIds() {
     Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
     availableZoneIds.forEach(System.out::println);
+  }
+
+  @Test
+  public void getCountriesInEnglish() {
+    List<String> collect = Arrays.stream(Locale.getISOCountries())
+        .map(code -> Locale.of("", code))
+        .map(res -> res.getDisplayCountry(Locale.ENGLISH))
+        .toList();
+    System.out.println(collect);
   }
 }
