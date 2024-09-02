@@ -17,6 +17,7 @@ package com.sky.centaur.unique.domain.barcode;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.ImageFormatEnum;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BarCode extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = 8993866178601864656L;
 
   private String content;
 

@@ -17,6 +17,7 @@ package com.sky.centaur.unique.domain.captcha;
 
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Captcha extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = -3163576648222703667L;
 
   /**
    * 简单验证码

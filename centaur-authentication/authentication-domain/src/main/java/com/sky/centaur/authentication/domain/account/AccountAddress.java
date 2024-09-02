@@ -18,6 +18,7 @@ package com.sky.centaur.authentication.domain.account;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @GenerateDescription
 public class AccountAddress extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = 1106704309433693382L;
 
   /**
    * 唯一主键

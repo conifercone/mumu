@@ -18,6 +18,7 @@ package com.sky.centaur.message.domain.broadcast;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
+import java.io.Serial;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @GenerateDescription
 public class BroadcastTextMessage extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = -929828819608294704L;
 
   private Long id;
 

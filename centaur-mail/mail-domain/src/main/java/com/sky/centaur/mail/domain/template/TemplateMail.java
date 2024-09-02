@@ -16,6 +16,7 @@
 package com.sky.centaur.mail.domain.template;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
+import java.io.Serial;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TemplateMail extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = -952362684090305637L;
 
   /**
    * 模板地址

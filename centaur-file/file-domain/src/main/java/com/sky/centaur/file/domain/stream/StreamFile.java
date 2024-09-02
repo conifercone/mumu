@@ -18,6 +18,7 @@ package com.sky.centaur.file.domain.stream;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import java.io.InputStream;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,6 +32,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
 public class StreamFile extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = 7195498751838257468L;
 
   /**
    * 文件内容

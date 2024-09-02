@@ -16,12 +16,14 @@
 
 package com.sky.centaur.basis.domain;
 
+import java.io.Serializable;
+
 /**
  * 顶级领域模型接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface DomainModel {
+public interface DomainModel extends Serializable {
 
 }

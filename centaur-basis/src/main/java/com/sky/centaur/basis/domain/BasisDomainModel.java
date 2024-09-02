@@ -16,6 +16,7 @@
 
 package com.sky.centaur.basis.domain;
 
+import java.io.Serial;
 import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString
 public abstract class BasisDomainModel implements DomainModel {
+
+  @Serial
+  private static final long serialVersionUID = 4669900889494369438L;
 
   /**
    * 创建时间

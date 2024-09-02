@@ -18,6 +18,7 @@ package com.sky.centaur.message.domain.subscription;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +40,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @GenerateDescription
 public class SubscriptionTextMessage extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = -2520392639912631899L;
 
   private Long id;
 

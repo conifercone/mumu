@@ -17,6 +17,7 @@ package com.sky.centaur.unique.domain.qrcode;
 
 import com.sky.centaur.basis.domain.BasisDomainModel;
 import com.sky.centaur.basis.enums.ImageFormatEnum;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QRCode extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = 4677690130755874280L;
 
   private String content;
 
