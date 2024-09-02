@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.unique.domain.country;
 
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -24,7 +26,10 @@ import lombok.Data;
  * @since 1.0.5
  */
 @Data
-public class City {
+public class City implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 6979991535490964279L;
 
   /**
    * 唯一标识

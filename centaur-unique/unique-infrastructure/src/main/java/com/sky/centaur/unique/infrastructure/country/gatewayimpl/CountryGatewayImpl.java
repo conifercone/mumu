@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,15 +88,19 @@ public class CountryGatewayImpl implements CountryGateway {
       InputStream inputStream = getClass().getResourceAsStream("/countries-states-cities.json");
       this.countriesStatesCities = objectMapper.readValue(inputStream, new TypeReference<>() {
       });
-      this.countries = this.countriesStatesCities.stream().peek(country -> country.setStates(null))
+      this.countries = this.countriesStatesCities.stream().map(SerializationUtils::clone)
+          .peek(country -> country.setStates(null))
           .toList();
       this.countryStates = this.countriesStatesCities.stream().parallel()
           .collect(Collectors.toMap(Country::getId,
-              country -> country.getStates().stream().peek(state -> state.setCities(null))
+              country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>()).stream()
+                  .map(SerializationUtils::clone).peek(state -> state.setCities(null))
                   .collect(Collectors.toList())));
       this.stateCities = this.countriesStatesCities.stream().parallel()
-          .flatMap(country -> country.getStates().stream())
-          .collect(Collectors.toMap(State::getId, State::getCities));
+          .flatMap(country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>())
+              .stream())
+          .collect(Collectors.toMap(State::getId,
+              state -> Optional.ofNullable(state.getCities()).orElse(new ArrayList<>())));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

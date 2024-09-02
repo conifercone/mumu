@@ -16,6 +16,8 @@
 package com.sky.centaur.unique.domain.country;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 
@@ -26,7 +28,11 @@ import lombok.Data;
  * @since 1.0.5
  */
 @Data
-public class Country {
+public class Country implements Serializable {
+
+
+  @Serial
+  private static final long serialVersionUID = 6373193269469682834L;
 
   /**
    * 唯一标识
