@@ -17,6 +17,9 @@ package com.sky.centaur.unique.infrastructure.country.convertor;
 
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCityByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateCitiesByIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import com.sky.centaur.unique.domain.country.City;
@@ -51,12 +54,34 @@ public class CountryConvertor {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStatesByCountryIdCo);
   }
 
-
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.5")
   public Optional<CountryGetCitiesByStateIdCo> toCountryGetCitiesByStateIdCo(
       City city) {
     return Optional.ofNullable(city).map(CountryMapper.INSTANCE::toCountryGetCitiesByStateIdCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<CountryGetStateByIdCo> toCountryGetStateByIdCo(
+      State state) {
+    return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStateByIdCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<CountryGetStateCitiesByIdCo> toCountryGetStateCitiesByIdCo(
+      State state) {
+    return Optional.ofNullable(state)
+        .map(CountryMapper.INSTANCE::toCountryGetStateCitiesByIdCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.5")
+  public Optional<CountryGetCityByIdCo> toCountryGetCityByIdCo(
+      City city) {
+    return Optional.ofNullable(city)
+        .map(CountryMapper.INSTANCE::toCountryGetCityByIdCo);
   }
 
   @Contract("_ -> new")

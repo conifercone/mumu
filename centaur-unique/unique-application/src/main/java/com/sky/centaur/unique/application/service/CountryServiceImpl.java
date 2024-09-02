@@ -17,13 +17,22 @@ package com.sky.centaur.unique.application.service;
 
 import com.sky.centaur.unique.application.country.executor.CountryGetAllExe;
 import com.sky.centaur.unique.application.country.executor.CountryGetCitiesByStateIdCmdExe;
+import com.sky.centaur.unique.application.country.executor.CountryGetCityByIdCmdExe;
+import com.sky.centaur.unique.application.country.executor.CountryGetStateByIdCmdExe;
+import com.sky.centaur.unique.application.country.executor.CountryGetStateCitiesByIdCmdExe;
 import com.sky.centaur.unique.application.country.executor.CountryGetStatesByCountryIdCmdExe;
 import com.sky.centaur.unique.application.country.executor.CountryStateCityGetAllExe;
 import com.sky.centaur.unique.client.api.CountryService;
 import com.sky.centaur.unique.client.dto.CountryGetCitiesByStateIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetCityByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateCitiesByIdCmd;
 import com.sky.centaur.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCityByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateCitiesByIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -48,16 +57,25 @@ public class CountryServiceImpl implements CountryService {
   private final CountryGetAllExe countryGetAllExe;
   private final CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe;
   private final CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe;
+  private final CountryGetStateByIdCmdExe countryGetStateByIdCmdExe;
+  private final CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe;
+  private final CountryGetCityByIdCmdExe countryGetCityByIdCmdExe;
 
   @Autowired
   public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
       CountryGetAllExe countryGetAllExe,
       CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
-      CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe) {
+      CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe,
+      CountryGetStateByIdCmdExe countryGetStateByIdCmdExe,
+      CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe,
+      CountryGetCityByIdCmdExe countryGetCityByIdCmdExe) {
     this.countryStateCityGetAllExe = countryStateCityGetAllExe;
     this.countryGetAllExe = countryGetAllExe;
     this.countryGetStatesByCountryIdCmdExe = countryGetStatesByCountryIdCmdExe;
     this.countryGetCitiesByStateIdCmdExe = countryGetCitiesByStateIdCmdExe;
+    this.countryGetStateByIdCmdExe = countryGetStateByIdCmdExe;
+    this.countryGetStateCitiesByIdCmdExe = countryGetStateCitiesByIdCmdExe;
+    this.countryGetCityByIdCmdExe = countryGetCityByIdCmdExe;
   }
 
   @Override
@@ -80,5 +98,21 @@ public class CountryServiceImpl implements CountryService {
   public List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
       CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
     return countryGetCitiesByStateIdCmdExe.execute(countryGetCitiesByStateIdCmd);
+  }
+
+  @Override
+  public CountryGetStateByIdCo getStateById(CountryGetStateByIdCmd countryGetStateByIdCmd) {
+    return countryGetStateByIdCmdExe.execute(countryGetStateByIdCmd);
+  }
+
+  @Override
+  public CountryGetStateCitiesByIdCo getStateCitiesById(
+      CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
+    return countryGetStateCitiesByIdCmdExe.execute(countryGetStateCitiesByIdCmd);
+  }
+
+  @Override
+  public CountryGetCityByIdCo getCityById(CountryGetCityByIdCmd countryGetCityByIdCmd) {
+    return countryGetCityByIdCmdExe.execute(countryGetCityByIdCmd);
   }
 }

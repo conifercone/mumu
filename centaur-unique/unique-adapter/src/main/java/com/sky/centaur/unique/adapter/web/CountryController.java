@@ -18,9 +18,15 @@ package com.sky.centaur.unique.adapter.web;
 import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.unique.client.api.CountryService;
 import com.sky.centaur.unique.client.dto.CountryGetCitiesByStateIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetCityByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateCitiesByIdCmd;
 import com.sky.centaur.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCityByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateCitiesByIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,5 +93,35 @@ public class CountryController {
   CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
     return ResultResponse.success(
         countryService.getCitiesByStateId(countryGetCitiesByStateIdCmd));
+  }
+
+  @Operation(summary = "根据省或州ID获取省或州")
+  @GetMapping("/getStateById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<CountryGetStateByIdCo> getStateById(@RequestBody
+  CountryGetStateByIdCmd countryGetStateByIdCmd) {
+    return ResultResponse.success(
+        countryService.getStateById(countryGetStateByIdCmd));
+  }
+
+  @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
+  @GetMapping("/getStateCitiesById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@RequestBody
+  CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
+    return ResultResponse.success(
+        countryService.getStateCitiesById(countryGetStateCitiesByIdCmd));
+  }
+
+  @Operation(summary = "根据城市id获取城市指令")
+  @GetMapping("/getCityById")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<CountryGetCityByIdCo> getCityById(@RequestBody
+  CountryGetCityByIdCmd countryGetCityByIdCmd) {
+    return ResultResponse.success(
+        countryService.getCityById(countryGetCityByIdCmd));
   }
 }

@@ -17,9 +17,15 @@
 package com.sky.centaur.unique.client.api;
 
 import com.sky.centaur.unique.client.dto.CountryGetCitiesByStateIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetCityByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateByIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStateCitiesByIdCmd;
 import com.sky.centaur.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCityByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateByIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStateCitiesByIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import java.util.List;
@@ -41,4 +47,12 @@ public interface CountryService {
 
   List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
       CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd);
+
+  CountryGetStateByIdCo getStateById(CountryGetStateByIdCmd countryGetStateByIdCmd);
+
+  CountryGetStateCitiesByIdCo getStateCitiesById(
+      CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd);
+
+  CountryGetCityByIdCo getCityById(
+      CountryGetCityByIdCmd countryGetCityByIdCmd);
 }

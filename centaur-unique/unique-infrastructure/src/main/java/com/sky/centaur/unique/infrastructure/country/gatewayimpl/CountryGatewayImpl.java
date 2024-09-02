@@ -47,11 +47,23 @@ public class CountryGatewayImpl implements CountryGateway {
   /**
    * key: country id value: states
    */
-  private Map<Long, List<State>> countryStates;
+  private Map<Long, List<State>> countryIdMappingStates;
   /**
    * key: state id value: cities
    */
-  private Map<Long, List<City>> stateCities;
+  private Map<Long, List<City>> stateIdMappingCities;
+  /**
+   * key: state id value: state
+   */
+  private Map<Long, State> stateIdMappingState;
+  /**
+   * key: state id value: state with cities
+   */
+  private Map<Long, State> stateIdMappingStateCities;
+  /**
+   * key: city id value: city
+   */
+  private Map<Long, City> cityIdMappingCity;
 
   @Autowired
   public CountryGatewayImpl(ObjectMapper objectMapper) {
@@ -71,15 +83,30 @@ public class CountryGatewayImpl implements CountryGateway {
   @Override
   public List<State> getStatesByCountryId(Long countryId) {
     return Optional.ofNullable(countryId)
-        .map(countryIdNonNull -> countryStates.getOrDefault(countryId, new ArrayList<>()))
+        .map(countryIdNonNull -> countryIdMappingStates.getOrDefault(countryId, new ArrayList<>()))
         .orElse(new ArrayList<>());
   }
 
   @Override
   public List<City> getCitiesByStateId(Long stateId) {
     return Optional.ofNullable(stateId)
-        .map(stateIdNonNull -> stateCities.getOrDefault(stateIdNonNull, new ArrayList<>()))
+        .map(stateIdNonNull -> stateIdMappingCities.getOrDefault(stateIdNonNull, new ArrayList<>()))
         .orElse(new ArrayList<>());
+  }
+
+  @Override
+  public Optional<State> getStateById(Long stateId) {
+    return Optional.ofNullable(stateId).map(stateIdMappingState::get);
+  }
+
+  @Override
+  public Optional<State> getStateCitiesById(Long stateId) {
+    return Optional.ofNullable(stateId).map(stateIdMappingStateCities::get);
+  }
+
+  @Override
+  public Optional<City> getCityById(Long cityId) {
+    return Optional.ofNullable(cityId).map(cityIdMappingCity::get);
   }
 
   @PostConstruct
@@ -91,12 +118,25 @@ public class CountryGatewayImpl implements CountryGateway {
       this.countries = this.countriesStatesCities.stream().map(SerializationUtils::clone)
           .peek(country -> country.setStates(null))
           .toList();
-      this.countryStates = this.countriesStatesCities.stream().parallel()
+      this.stateIdMappingStateCities = this.countriesStatesCities.stream()
+          .flatMap(country -> country.getStates().stream())
+          .collect(Collectors.toMap(State::getId, state -> state));
+      this.stateIdMappingState = this.countriesStatesCities.stream().map(SerializationUtils::clone)
+          .flatMap(country -> country.getStates().stream())
+          .collect(Collectors.toMap(State::getId, state -> {
+            state.setCities(null);
+            return state;
+          }));
+      this.cityIdMappingCity = this.countriesStatesCities.stream()
+          .flatMap(country -> country.getStates().stream())
+          .flatMap(state -> state.getCities().stream())
+          .collect(Collectors.toMap(City::getId, city -> city));
+      this.countryIdMappingStates = this.countriesStatesCities.stream().parallel()
           .collect(Collectors.toMap(Country::getId,
               country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>()).stream()
                   .map(SerializationUtils::clone).peek(state -> state.setCities(null))
                   .collect(Collectors.toList())));
-      this.stateCities = this.countriesStatesCities.stream().parallel()
+      this.stateIdMappingCities = this.countriesStatesCities.stream().parallel()
           .flatMap(country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>())
               .stream())
           .collect(Collectors.toMap(State::getId,
