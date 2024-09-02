@@ -17,7 +17,11 @@ package com.sky.centaur.unique.adapter.web;
 
 import com.sky.centaur.basis.response.ResultResponse;
 import com.sky.centaur.unique.client.api.CountryService;
+import com.sky.centaur.unique.client.dto.CountryGetCitiesByStateIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +30,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,5 +67,25 @@ public class CountryController {
   @API(status = Status.STABLE, since = "1.0.5")
   public ResultResponse<List<CountryGetAllCo>> getCountries() {
     return ResultResponse.success(countryService.getCountries());
+  }
+
+  @Operation(summary = "根据国家ID获取省或州信息")
+  @GetMapping("/getStatesByCountryId")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(@RequestBody
+  CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
+    return ResultResponse.success(
+        countryService.getStatesByCountryId(countryGetStatesByCountryIdCmd));
+  }
+
+  @Operation(summary = "根据省或州ID获取城市")
+  @GetMapping("/getCitiesByStateId")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "1.0.5")
+  public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(@RequestBody
+  CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
+    return ResultResponse.success(
+        countryService.getCitiesByStateId(countryGetCitiesByStateIdCmd));
   }
 }

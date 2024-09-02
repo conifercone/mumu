@@ -13,26 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.unique.domain.country.gateway;
+package com.sky.centaur.unique.client.dto.co;
 
-import com.sky.centaur.unique.domain.country.City;
-import com.sky.centaur.unique.domain.country.Country;
-import com.sky.centaur.unique.domain.country.State;
-import java.util.List;
+import lombok.Data;
 
 /**
- * 国家领域网关
+ * 根据国家ID获取省或州客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.5
  */
-public interface CountryGateway {
+@Data
+public class CountryGetStatesByCountryIdCo {
 
-  List<Country> getCountryStateCity();
+  /**
+   * 唯一标识
+   */
+  private Long id;
 
-  List<Country> getCountries();
+  /**
+   * 名称
+   */
+  private String name;
 
-  List<State> getStatesByCountryId(Long countryId);
+  /**
+   * 纬度
+   */
+  private String latitude;
 
-  List<City> getCitiesByStateId(Long stateId);
+  /**
+   * 精度
+   */
+  private String longitude;
 }

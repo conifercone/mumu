@@ -16,8 +16,12 @@
 package com.sky.centaur.unique.infrastructure.country.convertor;
 
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
+import com.sky.centaur.unique.domain.country.City;
 import com.sky.centaur.unique.domain.country.Country;
+import com.sky.centaur.unique.domain.country.State;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -37,6 +41,12 @@ public interface CountryMapper {
 
   @API(status = Status.STABLE, since = "1.0.5")
   CountryStateCityGetAllCo toCountryStateCityGetAllCo(Country country);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  CountryGetStatesByCountryIdCo toCountryGetStatesByCountryIdCo(State state);
+
+  @API(status = Status.STABLE, since = "1.0.5")
+  CountryGetCitiesByStateIdCo toCountryGetCitiesByStateIdCo(City city);
 
   @API(status = Status.STABLE, since = "1.0.5")
   CountryGetAllCo toCountryGetAllCo(Country country);

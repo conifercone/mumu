@@ -16,9 +16,15 @@
 package com.sky.centaur.unique.application.service;
 
 import com.sky.centaur.unique.application.country.executor.CountryGetAllExe;
+import com.sky.centaur.unique.application.country.executor.CountryGetCitiesByStateIdCmdExe;
+import com.sky.centaur.unique.application.country.executor.CountryGetStatesByCountryIdCmdExe;
 import com.sky.centaur.unique.application.country.executor.CountryStateCityGetAllExe;
 import com.sky.centaur.unique.client.api.CountryService;
+import com.sky.centaur.unique.client.dto.CountryGetCitiesByStateIdCmd;
+import com.sky.centaur.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import com.sky.centaur.unique.client.dto.co.CountryGetAllCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetCitiesByStateIdCo;
+import com.sky.centaur.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import com.sky.centaur.unique.client.dto.co.CountryStateCityGetAllCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -40,12 +46,18 @@ public class CountryServiceImpl implements CountryService {
 
   private final CountryStateCityGetAllExe countryStateCityGetAllExe;
   private final CountryGetAllExe countryGetAllExe;
+  private final CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe;
+  private final CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe;
 
   @Autowired
   public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
-      CountryGetAllExe countryGetAllExe) {
+      CountryGetAllExe countryGetAllExe,
+      CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
+      CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe) {
     this.countryStateCityGetAllExe = countryStateCityGetAllExe;
     this.countryGetAllExe = countryGetAllExe;
+    this.countryGetStatesByCountryIdCmdExe = countryGetStatesByCountryIdCmdExe;
+    this.countryGetCitiesByStateIdCmdExe = countryGetCitiesByStateIdCmdExe;
   }
 
   @Override
@@ -56,5 +68,17 @@ public class CountryServiceImpl implements CountryService {
   @Override
   public List<CountryGetAllCo> getCountries() {
     return countryGetAllExe.execute();
+  }
+
+  @Override
+  public List<CountryGetStatesByCountryIdCo> getStatesByCountryId(
+      CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
+    return countryGetStatesByCountryIdCmdExe.execute(countryGetStatesByCountryIdCmd);
+  }
+
+  @Override
+  public List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
+      CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
+    return countryGetCitiesByStateIdCmdExe.execute(countryGetCitiesByStateIdCmd);
   }
 }
