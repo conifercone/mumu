@@ -19,6 +19,7 @@ import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.LanguageEnum;
 import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AccountCurrentLoginQueryCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -1195373340664104308L;
 
   private Long id;
 

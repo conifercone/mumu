@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +29,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AccountUpdateRoleCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 6110957444309849374L;
 
   private Long id;
 

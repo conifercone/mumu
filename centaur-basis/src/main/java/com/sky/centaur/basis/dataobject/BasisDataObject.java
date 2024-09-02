@@ -16,6 +16,8 @@
 
 package com.sky.centaur.basis.dataobject;
 
+import java.io.Serial;
+
 /**
  * 基础数据对象
  *
@@ -24,5 +26,7 @@ package com.sky.centaur.basis.dataobject;
  */
 public abstract class BasisDataObject implements DataObject {
 
+  @Serial
+  private static final long serialVersionUID = 2565656006870064007L;
 
 }

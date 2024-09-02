@@ -16,6 +16,7 @@
 package com.sky.centaur.basis.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serial;
 import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,6 +28,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
 public abstract class BaseClientObject implements ClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 4685385454388931324L;
 
   /**
    * 创建时间

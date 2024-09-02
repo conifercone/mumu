@@ -31,6 +31,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,9 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @DynamicInsert
 @GenerateDescription
 public class AccountDo extends JpaBasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 2503384819239906407L;
 
   /**
    * 账户id

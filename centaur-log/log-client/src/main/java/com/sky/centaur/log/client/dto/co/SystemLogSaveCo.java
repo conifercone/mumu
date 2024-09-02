@@ -17,6 +17,7 @@ package com.sky.centaur.log.client.dto.co;
 
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
 public class SystemLogSaveCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -6581750950238813593L;
 
   /**
    * 唯一标识

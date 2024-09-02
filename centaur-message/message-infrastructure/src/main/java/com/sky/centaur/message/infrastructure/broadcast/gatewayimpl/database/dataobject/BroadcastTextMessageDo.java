@@ -26,6 +26,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,9 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @RequiredArgsConstructor
 @DynamicInsert
 public class BroadcastTextMessageDo extends JpaBasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 8259321227756175071L;
 
   @Id
   @Column(name = "id", nullable = false)

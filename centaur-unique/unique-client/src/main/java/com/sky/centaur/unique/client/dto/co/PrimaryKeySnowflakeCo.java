@@ -17,6 +17,7 @@
 package com.sky.centaur.unique.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,6 +30,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PrimaryKeySnowflakeCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 3821034195582721197L;
 
   private Long id;
 }

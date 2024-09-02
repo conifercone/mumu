@@ -18,6 +18,7 @@ package com.sky.centaur.unique.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.ImageFormatEnum;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class QRCodeGenerateCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -489761850889145280L;
 
   private String content;
 

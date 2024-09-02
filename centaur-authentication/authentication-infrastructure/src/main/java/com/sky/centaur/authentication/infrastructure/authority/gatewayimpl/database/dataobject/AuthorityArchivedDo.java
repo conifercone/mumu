@@ -21,6 +21,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -38,6 +39,9 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(name = "authorities_archived")
 @DynamicInsert
 public class AuthorityArchivedDo extends JpaBasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 6469705198218020740L;
 
   @Id
   @Column(name = "id", nullable = false)

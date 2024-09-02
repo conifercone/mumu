@@ -16,6 +16,7 @@
 package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +29,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AuthorityFindByIdCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -3550924228550529768L;
 
   private Long id;
 

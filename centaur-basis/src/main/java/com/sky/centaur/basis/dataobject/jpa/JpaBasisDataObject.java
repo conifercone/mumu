@@ -20,6 +20,7 @@ import com.sky.centaur.basis.dataobject.BasisDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import java.io.Serial;
 import java.time.OffsetDateTime;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +39,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 public class JpaBasisDataObject extends BasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = -6208186991995932595L;
 
   @CreationTimestamp
   @Column(name = "creation_time", updatable = false, nullable = false)

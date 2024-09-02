@@ -18,6 +18,7 @@ package com.sky.centaur.message.client.dto.co;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
 import jakarta.validation.constraints.NotBlank;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SubscriptionTextMessageForwardCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -4033776463169499396L;
 
   private Long id;
 

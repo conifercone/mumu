@@ -17,6 +17,7 @@ package com.sky.centaur.authentication.client.dto.co;
 
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
 public class RoleFindAllCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 7516717955832644542L;
 
   private Long id;
 

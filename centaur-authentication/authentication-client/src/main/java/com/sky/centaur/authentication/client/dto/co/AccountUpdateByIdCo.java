@@ -21,6 +21,7 @@ import com.sky.centaur.basis.enums.SexEnum;
 import com.sky.centaur.extension.annotations.NotBlankOrNull;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AccountUpdateByIdCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 1539139215341758634L;
 
   @NotNull(message = "{account.id.validation.not.null}")
   private Long id;

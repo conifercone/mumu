@@ -27,6 +27,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,9 @@ import org.hibernate.annotations.Type;
 @DynamicInsert
 @GenerateDescription
 public class RoleDo extends JpaBasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 2601328894471265295L;
 
   /**
    * 角色id

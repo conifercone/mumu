@@ -17,6 +17,7 @@ package com.sky.centaur.file.client.dto.co;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StreamFileDownloadCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -1698760436420882398L;
 
   /**
    * 存储地址

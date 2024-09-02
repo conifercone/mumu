@@ -15,12 +15,14 @@
  */
 package com.sky.centaur.basis.client.dto.co;
 
+import java.io.Serializable;
+
 /**
  * 顶级co接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface ClientObject {
+public interface ClientObject extends Serializable {
 
 }

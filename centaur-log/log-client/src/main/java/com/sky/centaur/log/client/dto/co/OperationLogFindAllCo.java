@@ -18,6 +18,7 @@ package com.sky.centaur.log.client.dto.co;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
 public class OperationLogFindAllCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 2609860597257012459L;
 
   /**
    * 唯一标识

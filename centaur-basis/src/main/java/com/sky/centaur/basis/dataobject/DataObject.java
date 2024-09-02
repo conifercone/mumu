@@ -16,6 +16,7 @@
 
 package com.sky.centaur.basis.dataobject;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 /**
@@ -24,7 +25,7 @@ import java.time.OffsetDateTime;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface DataObject {
+public interface DataObject extends Serializable {
 
   Long getFounder();
 

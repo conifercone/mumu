@@ -16,6 +16,7 @@
 package com.sky.centaur.log.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +29,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OperationLogSubmitCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = -7803001623990566679L;
 
   /**
    * 日志内容

@@ -23,6 +23,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -41,6 +42,9 @@ import org.hibernate.annotations.DynamicInsert;
 @RequiredArgsConstructor
 @DynamicInsert
 public class AuthorityDo extends JpaBasisDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 6607076146645504629L;
 
   /**
    * 权限id

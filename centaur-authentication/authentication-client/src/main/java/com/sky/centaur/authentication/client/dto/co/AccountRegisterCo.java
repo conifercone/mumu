@@ -21,6 +21,7 @@ import com.sky.centaur.basis.enums.SexEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AccountRegisterCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 4447904589683822023L;
 
   private Long id;
 

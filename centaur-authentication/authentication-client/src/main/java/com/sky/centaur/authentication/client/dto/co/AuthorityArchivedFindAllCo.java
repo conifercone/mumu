@@ -19,6 +19,7 @@ package com.sky.centaur.authentication.client.dto.co;
 import com.sky.centaur.basis.annotations.GenerateDescription;
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +33,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
 public class AuthorityArchivedFindAllCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 8850768735487730429L;
 
   private Long id;
 

@@ -21,6 +21,7 @@ import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.exception.CentaurException;
 import com.sky.centaur.basis.response.ResultCode;
 import java.io.InputStream;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.ObjectUtils;
@@ -35,6 +36,9 @@ import org.springframework.util.ObjectUtils;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StreamFileSyncUploadCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 3767300087884023475L;
 
   /**
    * 文件内容

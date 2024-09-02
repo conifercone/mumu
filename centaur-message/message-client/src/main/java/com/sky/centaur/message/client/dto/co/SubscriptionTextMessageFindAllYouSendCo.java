@@ -17,6 +17,7 @@ package com.sky.centaur.message.client.dto.co;
 
 import com.sky.centaur.basis.client.dto.co.BaseClientObject;
 import com.sky.centaur.basis.enums.MessageStatusEnum;
+import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,6 +30,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SubscriptionTextMessageFindAllYouSendCo extends BaseClientObject {
+
+  @Serial
+  private static final long serialVersionUID = 9068673575744364871L;
 
   private Long id;
 
