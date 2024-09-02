@@ -24,6 +24,7 @@ import com.sky.centaur.authentication.client.config.ResourceServerProperties;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.log.client.api.OperationLogGrpcService;
 import com.sky.centaur.log.client.api.SystemLogGrpcService;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +43,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 默认安全配置
@@ -70,9 +70,9 @@ public class DefaultSecurityConfig {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
                       policy.getMatcher());
-              if (StringUtils.hasText(policy.getRole())) {
+          if (StringUtils.isNotBlank(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
-              } else if (StringUtils.hasText(policy.getAuthority())) {
+          } else if (StringUtils.isNotBlank(policy.getAuthority())) {
                 authorizedUrl.hasAuthority(policy.getAuthority());
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();

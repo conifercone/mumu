@@ -25,12 +25,12 @@ import com.sky.centaur.file.infrastructure.streamfile.gatewayimpl.minio.dataobje
 import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 流式文件领域网关实现类
@@ -57,10 +57,10 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   public void uploadFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
         .flatMap(streamFileConvertor::toMinioDo)
-        .filter(minioDo -> minioDo.getContent() != null && StringUtils.hasText(
+        .filter(minioDo -> minioDo.getContent() != null && StringUtils.isNotBlank(
             minioDo.getName()))
         .orElseThrow(() -> new CentaurException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY));
-    if (StringUtils.hasText(streamFileMinioDo.getStorageAddress())) {
+    if (StringUtils.isNotBlank(streamFileMinioDo.getStorageAddress())) {
       minioStreamFileRepository.createStorageAddress(streamFileMinioDo.getStorageAddress());
     } else {
       throw new CentaurException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);

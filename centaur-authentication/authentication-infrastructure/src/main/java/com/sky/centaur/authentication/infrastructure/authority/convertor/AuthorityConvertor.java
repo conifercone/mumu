@@ -32,13 +32,13 @@ import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -104,7 +104,7 @@ public class AuthorityConvertor {
             String codeBeforeUpdate = authority.getCode();
             AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
             String codeAfterUpdate = authority.getCode();
-            if (StringUtils.hasText(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
+            if (StringUtils.isNotBlank(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
                 && (authorityRepository.existsByCode(
                 codeAfterUpdate) || authorityArchivedRepository.existsByCode(
                 codeAfterUpdate))) {

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -51,5 +52,29 @@ public class CommonUtilTest {
         .map(res -> res.getDisplayCountry(Locale.ENGLISH))
         .toList();
     System.out.println(collect);
+  }
+
+  @Test
+  public void isNoneBlank() {
+    System.out.println((String) null);
+    System.out.println((String[]) null);
+    Assertions.assertFalse(StringUtils.isNoneBlank((String) null));
+    Assertions.assertTrue(StringUtils.isNoneBlank((String[]) null));
+    Assertions.assertFalse(StringUtils.isNoneBlank(null, "foo"));
+    Assertions.assertFalse(StringUtils.isNoneBlank(null, null));
+    Assertions.assertFalse(StringUtils.isNoneBlank("", "bar"));
+    Assertions.assertFalse(StringUtils.isNoneBlank("bob", ""));
+    Assertions.assertFalse(StringUtils.isNoneBlank("  bob  ", null));
+    Assertions.assertFalse(StringUtils.isNoneBlank(" ", "bar"));
+    Assertions.assertTrue(StringUtils.isNoneBlank(new String[]{}));
+    Assertions.assertFalse(StringUtils.isNoneBlank(new String[]{""}));
+    Assertions.assertTrue(StringUtils.isNoneBlank("foo", "bar"));
+  }
+
+  @Test
+  public void isNotBlank() {
+    System.out.println((String) null);
+    //noinspection RedundantCast
+    Assertions.assertFalse(StringUtils.isNotBlank((String) null));
   }
 }

@@ -18,11 +18,11 @@ package com.sky.centaur.mail.application.template.executor;
 import com.sky.centaur.mail.client.dto.TemplateMailSendCmd;
 import com.sky.centaur.mail.domain.template.gateway.TemplateMailGateway;
 import com.sky.centaur.mail.infrastructure.template.convertor.TemplateMailConvertor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * 模板邮件发送指令执行器
@@ -48,7 +48,7 @@ public class TemplateMailSendCmdExe {
 
   public void execute(TemplateMailSendCmd templateMailSendCmd) {
     Assert.notNull(templateMailSendCmd, "TemplateMailSendCmd cannot be null");
-    if (!StringUtils.hasText(templateMailSendCmd.getTemplateMailSendCo().getFrom())) {
+    if (StringUtils.isBlank(templateMailSendCmd.getTemplateMailSendCo().getFrom())) {
       templateMailSendCmd.getTemplateMailSendCo().setFrom(username);
     }
     templateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())

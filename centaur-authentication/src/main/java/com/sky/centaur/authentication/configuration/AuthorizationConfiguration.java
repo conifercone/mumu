@@ -58,6 +58,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,7 +109,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 授权配置
@@ -150,9 +150,9 @@ public class AuthorizationConfiguration {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
                       policy.getMatcher());
-              if (StringUtils.hasText(policy.getRole())) {
+          if (StringUtils.isNotBlank(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
-              } else if (StringUtils.hasText(policy.getAuthority())) {
+          } else if (StringUtils.isNotBlank(policy.getAuthority())) {
                 authorizedUrl.hasAuthority(policy.getAuthority());
               } else if (policy.isPermitAll()) {
                 authorizedUrl.permitAll();
@@ -407,7 +407,7 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
             context.getAuthorizationGrantType().getValue());
-        if (StringUtils.hasText(account.getTimezone())) {
+        if (StringUtils.isNotBlank(account.getTimezone())) {
           claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
         }
         Optional.ofNullable(account.getLanguage())

@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -43,7 +44,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 广播文本消息领域网关实现
@@ -147,7 +147,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
       Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         Optional.ofNullable(broadcastTextMessage).ifPresent(broadcastTextMessageEntity -> {
-          Optional.ofNullable(broadcastTextMessageEntity.getMessage()).filter(StringUtils::hasText)
+          Optional.ofNullable(broadcastTextMessageEntity.getMessage())
+              .filter(StringUtils::isNotBlank)
               .ifPresent(
                   message -> predicateList.add(cb.like(root.get(BroadcastTextMessageDo_.message),
                       String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, message))));

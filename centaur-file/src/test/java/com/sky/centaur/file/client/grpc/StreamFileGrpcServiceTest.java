@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
@@ -42,7 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.StringUtils;
 
 /**
  * StreamFileGrpcService单元测试
@@ -81,7 +81,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
         callCredentials);
     Assertions.assertNotNull(download);
     String fileContent = download.getFileContent().getValue().toStringUtf8();
-    Assertions.assertTrue(StringUtils.hasText(fileContent));
+    Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
     LOGGER.info("Download result: {}", fileContent);
   }
 
@@ -108,7 +108,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
         Assertions.assertNotNull(streamFileDownloadGrpcResult);
         String fileContent = streamFileDownloadGrpcResult.getFileContent().getValue()
             .toStringUtf8();
-        Assertions.assertTrue(StringUtils.hasText(fileContent));
+        Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
         LOGGER.info("SyncDownload result: {}", fileContent);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

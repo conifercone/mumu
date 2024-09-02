@@ -17,9 +17,9 @@ package com.sky.centaur.extension.translation;
 
 import com.sky.centaur.basis.kotlin.tools.SecurityContextUtil;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.springframework.util.StringUtils;
 
 /**
  * 简单文本翻译接口
@@ -34,7 +34,7 @@ public interface SimpleTextTranslation {
 
   @API(status = Status.STABLE, since = "1.0.3")
   default Optional<String> translateToAccountLanguageIfPossible(String text) {
-    return Optional.ofNullable(text).filter(StringUtils::hasText)
+    return Optional.ofNullable(text).filter(StringUtils::isNotBlank)
         .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
           try {
             return this.translate(text, languageEnum.name().toLowerCase());

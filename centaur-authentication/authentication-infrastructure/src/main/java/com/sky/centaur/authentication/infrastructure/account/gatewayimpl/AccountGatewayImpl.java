@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * 用户领域网关实现
@@ -120,7 +120,7 @@ public class AccountGatewayImpl implements AccountGateway {
             account.getUsername(), account.getEmail())
             && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
             account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
-      if (StringUtils.hasText(dataObject.getTimezone())) {
+      if (StringUtils.isNotBlank(dataObject.getTimezone())) {
         try {
           //noinspection ResultOfMethodCallIgnored
           ZoneId.of(dataObject.getTimezone());
@@ -228,7 +228,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void resetPassword(Long id) {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
-      Assert.isTrue(StringUtils.hasText(initialPassword),
+      Assert.isTrue(StringUtils.isNotBlank(initialPassword),
           ResultCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getResultMsg());
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);

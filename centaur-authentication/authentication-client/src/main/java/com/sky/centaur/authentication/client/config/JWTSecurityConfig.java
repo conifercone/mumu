@@ -19,6 +19,7 @@ import com.sky.centaur.authentication.client.api.TokenGrpcService;
 import com.sky.centaur.authentication.client.config.ResourceServerProperties.Policy;
 import com.sky.centaur.basis.constants.CommonConstants;
 import com.sky.centaur.basis.enums.TokenClaimsEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +35,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * jwt类型资源服务器配置类
@@ -63,9 +63,9 @@ public class JWTSecurityConfig {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
                       policy.getMatcher());
-              if (StringUtils.hasText(policy.getRole())) {
+          if (StringUtils.isNotBlank(policy.getRole())) {
                 authorizedUrl.hasRole(policy.getRole());
-              } else if (StringUtils.hasText(policy.getAuthority())) {
+          } else if (StringUtils.isNotBlank(policy.getAuthority())) {
                 Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                     "Permission configuration cannot be empty and cannot start with SCOPE_");
                 authorizedUrl.hasAuthority(

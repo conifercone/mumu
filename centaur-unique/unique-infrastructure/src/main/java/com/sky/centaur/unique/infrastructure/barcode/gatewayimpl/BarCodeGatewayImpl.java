@@ -36,11 +36,11 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * 条形码领域网关实现
@@ -74,7 +74,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   }
 
   private @Nullable BufferedImage insertWords(BufferedImage image, @NotNull BarCode barCode) {
-    if (StringUtils.hasLength(barCode.getFootContent())) {
+    if (StringUtils.isNotBlank(barCode.getFootContent())) {
       BufferedImage outImage = new BufferedImage(barCode.getWidth(), barCode.getHeight() + 20,
           BufferedImage.TYPE_INT_RGB);
       Graphics2D g2d = outImage.createGraphics();

@@ -25,9 +25,9 @@ import com.sky.centaur.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import com.sky.centaur.unique.infrastructure.captcha.gatewayimpl.redis.SimpleCaptchaRepository;
 import com.sky.centaur.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * 验证码领域网关实现
@@ -62,7 +62,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
           Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
               .orElseThrow(() -> new CentaurException(
                   ResultCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
-          if (!StringUtils.hasText(simpleCaptchaDomain.getTarget())) {
+          if (StringUtils.isBlank(simpleCaptchaDomain.getTarget())) {
             simpleCaptchaDomain.setTarget(
                 CommonUtil.generateRandomString(simpleCaptchaDomain.getLength()));
           }

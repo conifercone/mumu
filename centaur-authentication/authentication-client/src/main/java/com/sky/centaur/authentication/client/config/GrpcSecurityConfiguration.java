@@ -70,9 +70,9 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
                       StringUtils.capitalize(grpcPolicy.getMethod())));
                   AuthorizedMethod methods = authorizeRequests.methods(
                       (MethodDescriptor<?, ?>) method.invoke(null));
-                  if (org.springframework.util.StringUtils.hasText(grpcPolicy.getRole())) {
+                  if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
                     methods.hasAnyRole(grpcPolicy.getRole());
-                  } else if (org.springframework.util.StringUtils.hasText(
+                  } else if (StringUtils.isNotBlank(
                       grpcPolicy.getAuthority())) {
                     Assert.isTrue(
                         !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),

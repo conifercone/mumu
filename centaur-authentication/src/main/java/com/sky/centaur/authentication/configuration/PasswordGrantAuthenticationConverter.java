@@ -21,6 +21,7 @@ import com.sky.centaur.basis.response.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,6 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 
 /**
  * 密码模式转换器
@@ -54,7 +54,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     MultiValueMap<String, String> parameters = getParameters(request);
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
-    if (!StringUtils.hasText(username) ||
+    if (StringUtils.isBlank(username) ||
         parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
       ResultCode accountNameCannotBeEmpty = ResultCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
@@ -62,7 +62,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
               accountNameCannotBeEmpty.getResultMsg(), ""));
     }
     String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
-    if (!StringUtils.hasText(password) ||
+    if (StringUtils.isBlank(password) ||
         parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
       ResultCode accountPasswordCannotBeEmpty = ResultCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(

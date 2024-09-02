@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.session.SessionInformation;
@@ -57,7 +58,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
+
 
 /**
  * centaur jwt generator
@@ -173,7 +174,7 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
       String issuer, RegisteredClient registeredClient, Instant issuedAt, Instant expiresAt) {
     // @formatter:off
     Builder claimsBuilder = JwtClaimsSet.builder();
-    if (StringUtils.hasText(issuer)) {
+    if (StringUtils.isNotBlank(issuer)) {
       claimsBuilder.issuer(issuer);
     }
     claimsBuilder
@@ -194,7 +195,7 @@ public class CentaurJwtGenerator implements OAuth2TokenGenerator<Jwt> {
             OAuth2AuthorizationRequest.class.getName());
         assert authorizationRequest != null;
         String nonce = (String) authorizationRequest.getAdditionalParameters().get(OidcParameterNames.NONCE);
-        if (StringUtils.hasText(nonce)) {
+        if (StringUtils.isNotBlank(nonce)) {
           claimsBuilder.claim(IdTokenClaimNames.NONCE, nonce);
         }
         SessionInformation sessionInformation = context.get(SessionInformation.class);

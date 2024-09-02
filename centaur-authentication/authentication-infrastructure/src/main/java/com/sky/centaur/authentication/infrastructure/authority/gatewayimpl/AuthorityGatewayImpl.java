@@ -38,6 +38,7 @@ import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.ObjectProvider;
@@ -49,7 +50,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 权限领域网关实现
@@ -130,10 +130,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
       List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::hasText)
+      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
           .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityDo_.code),
               String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::hasText)
+      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
           .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityDo_.name),
               String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
       Optional.ofNullable(authority.getId())
@@ -158,10 +158,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityArchivedDo> authorityArchivedDoSpecification = (root, query, cb) -> {
       List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::hasText)
+      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
           .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.code),
               String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::hasText)
+      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
           .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.name),
               String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
       Optional.ofNullable(authority.getId())

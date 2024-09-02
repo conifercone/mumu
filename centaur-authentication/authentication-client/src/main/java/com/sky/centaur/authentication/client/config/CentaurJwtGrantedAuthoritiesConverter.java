@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * 自定义JwtGrantedAuthoritiesConverter
@@ -138,7 +138,7 @@ public class CentaurJwtGrantedAuthoritiesConverter implements
     }
     Object authorities = jwt.getClaim(claimName);
     if (authorities instanceof String) {
-      if (StringUtils.hasText((String) authorities)) {
+      if (StringUtils.isNotBlank((String) authorities)) {
         return Arrays.asList(((String) authorities).split(this.authoritiesClaimDelimiter));
       }
       return Collections.emptyList();

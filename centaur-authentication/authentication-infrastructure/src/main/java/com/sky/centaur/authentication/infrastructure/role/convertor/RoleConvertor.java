@@ -33,6 +33,7 @@ import com.sky.centaur.extension.translation.SimpleTextTranslation;
 import com.sky.centaur.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
@@ -40,7 +41,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * 角色信息转换器
@@ -144,7 +144,7 @@ public class RoleConvertor {
         String codeBeforeUpdated = roleDomain.getCode();
         RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
         String codeAfterUpdated = roleDomain.getCode();
-        if (StringUtils.hasText(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
+        if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
             && (roleRepository.existsByCode(codeAfterUpdated)
             || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new CentaurException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
