@@ -26,12 +26,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * CommonUtil单元测试
+ * 工具类单元测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-public class CommonUtilTest {
+public class ToolsTest {
 
   @Test
   public void generateRandomString() {
