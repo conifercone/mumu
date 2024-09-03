@@ -38,19 +38,19 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
     "centaur.extension.ocr.tess4j.enabled=true",
     "centaur.extension.ocr.tess4j.data-path=F:/Tesseract-OCR/tessdata"
 })
-public class OcrTest {
+public class Tess4jOcrTest {
 
   private final OcrProcessor ocrProcessor;
   private final ResourceLoader resourceLoader;
 
   @Autowired
-  public OcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
+  public Tess4jOcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
     this.ocrProcessor = ocrProcessor;
     this.resourceLoader = resourceLoader;
   }
 
   @Test
-  void ocrTest() throws IOException {
+  void ocrEngTest() throws IOException {
     File fileFromResource = getFileFromResource("ocr.png", ".png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
@@ -59,8 +59,18 @@ public class OcrTest {
     System.out.println(string);
   }
 
-  private @NotNull File getFileFromResource(@SuppressWarnings("SameParameterValue") String fileName,
-      @SuppressWarnings("SameParameterValue") String fileType)
+  @Test
+  void ocrNumberTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_number.jpg", ".jpg");
+    Ocr ocr = new Ocr();
+    ocr.setSourceFile(fileFromResource);
+    ocr.setTargetLanguage("eng");
+    String string = ocrProcessor.doOcr(ocr);
+    System.out.println(string);
+  }
+
+
+  private @NotNull File getFileFromResource(String fileName, String fileType)
       throws IOException {
     Resource resource = resourceLoader.getResource("classpath:" + fileName);
     File tempFile = File.createTempFile("temp", fileType);
