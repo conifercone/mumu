@@ -18,6 +18,7 @@ package com.sky.centaur.extension;
 
 import com.sky.centaur.extension.authentication.AuthenticationProperties;
 import com.sky.centaur.extension.distributed.DistributedProperties;
+import com.sky.centaur.extension.ocr.OcrProperties;
 import com.sky.centaur.extension.sql.SqlProperties;
 import com.sky.centaur.extension.translation.TranslationProperties;
 import lombok.Data;
@@ -57,4 +58,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private TranslationProperties translation = new TranslationProperties();
+
+  /**
+   * ocr
+   */
+  @NestedConfigurationProperty
+  private OcrProperties ocr = new OcrProperties();
 }

@@ -12,4 +12,7 @@ dependencies {
     implementation(libs.alimt)
     implementation(libs.asciitable)
     implementation(libs.deepl)
+    implementation(libs.tess4j)
+    testImplementation(libs.tess4j)
+    testImplementation(libs.spring.test)
 }
