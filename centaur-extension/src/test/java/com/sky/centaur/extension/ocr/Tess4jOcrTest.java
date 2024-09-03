@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.extension.ocr;
 
+import com.sky.centaur.extension.ocr.tess4j.Tess4jLanguageEnum;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,7 +55,7 @@ public class Tess4jOcrTest {
     File fileFromResource = getFileFromResource("ocr.png", ".png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage("eng");
+    ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
@@ -64,7 +65,7 @@ public class Tess4jOcrTest {
     File fileFromResource = getFileFromResource("ocr_number.jpg", ".jpg");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage("eng");
+    ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
@@ -74,7 +75,7 @@ public class Tess4jOcrTest {
     File fileFromResource = getFileFromResource("ocr_cn.png", ".png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage("chi_sim");
+    ocr.setTargetLanguage(Tess4jLanguageEnum.CHI_SIM.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
@@ -84,7 +85,7 @@ public class Tess4jOcrTest {
     File fileFromResource = getFileFromResource("ocr_jp.png", ".png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage("jpn");
+    ocr.setTargetLanguage(Tess4jLanguageEnum.JPN.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
