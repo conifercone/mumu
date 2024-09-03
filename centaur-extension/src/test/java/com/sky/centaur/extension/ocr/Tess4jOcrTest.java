@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class Tess4jOcrTest {
 
   @Test
   void ocrEngTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr.png", ".png");
+    File fileFromResource = getFileFromResource("ocr.png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
     ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
@@ -62,7 +63,7 @@ public class Tess4jOcrTest {
 
   @Test
   void ocrNumberTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_number.jpg", ".jpg");
+    File fileFromResource = getFileFromResource("ocr_number.jpg");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
     ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
@@ -72,7 +73,7 @@ public class Tess4jOcrTest {
 
   @Test
   void ocrCnTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_cn.png", ".png");
+    File fileFromResource = getFileFromResource("ocr_cn.png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
     ocr.setTargetLanguage(Tess4jLanguageEnum.CHI_SIM.getValue());
@@ -82,7 +83,7 @@ public class Tess4jOcrTest {
 
   @Test
   void ocrJpTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_jp.png", ".png");
+    File fileFromResource = getFileFromResource("ocr_jp.png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
     ocr.setTargetLanguage(Tess4jLanguageEnum.JPN.getValue());
@@ -90,10 +91,10 @@ public class Tess4jOcrTest {
     System.out.println(string);
   }
 
-  private @NotNull File getFileFromResource(String fileName, String fileType)
+  private @NotNull File getFileFromResource(String fileName)
       throws IOException {
     Resource resource = resourceLoader.getResource("classpath:" + fileName);
-    File tempFile = File.createTempFile("temp", fileType);
+    File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));
     try (var inputStream = resource.getInputStream()) {
       Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
