@@ -41,7 +41,7 @@ import org.springframework.context.annotation.Configuration;
 public class Tess4jConfiguration {
 
   @Bean
-  @ConditionalOnClass(Tesseract.class)
+  @ConditionalOnMissingBean(Tesseract.class)
   public Tesseract tesseract(ExtensionProperties extensionProperties) {
     Tesseract tesseract = new Tesseract();
     Optional.ofNullable(extensionProperties.getOcr().getTess4j().getDataPath())

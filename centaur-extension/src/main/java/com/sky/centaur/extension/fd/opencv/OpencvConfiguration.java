@@ -42,6 +42,7 @@ import org.springframework.core.io.ResourceLoader;
 public class OpencvConfiguration {
 
   @Bean
+  @ConditionalOnMissingBean(CascadeClassifier.class)
   public CascadeClassifier cascadeClassifier(ResourceLoader resourceLoader) throws IOException {
     Resource resource = resourceLoader.getResource("classpath:haarcascade_frontalface_alt.xml");
     return new CascadeClassifier(resource.getFile().getAbsolutePath());
