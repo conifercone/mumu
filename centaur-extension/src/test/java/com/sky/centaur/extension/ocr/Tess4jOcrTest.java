@@ -69,6 +69,16 @@ public class Tess4jOcrTest {
     System.out.println(string);
   }
 
+  @Test
+  void ocrCnTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_cn.png", ".png");
+    Ocr ocr = new Ocr();
+    ocr.setSourceFile(fileFromResource);
+    ocr.setTargetLanguage("chi_sim");
+    String string = ocrProcessor.doOcr(ocr);
+    System.out.println(string);
+  }
+
 
   private @NotNull File getFileFromResource(String fileName, String fileType)
       throws IOException {
