@@ -96,6 +96,7 @@ public class Tess4jOcrTest {
     try (var inputStream = resource.getInputStream()) {
       Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
+    tempFile.deleteOnExit();
     return tempFile;
   }
 }
