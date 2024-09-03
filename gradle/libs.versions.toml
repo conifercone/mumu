@@ -32,7 +32,7 @@ autoServiceVersion = '1.1.1'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.3.0-jre'
-protobufBomVersion = '3.25.3'
+protobufBomVersion = '4.28.0'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
