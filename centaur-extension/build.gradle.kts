@@ -9,6 +9,7 @@ dependencies {
     implementation(libs.p6spy)
     compileOnly(libs.spring.boot.starter.data.jpa)
     implementation(libs.micrometer.tracing)
+    @Suppress("VulnerableLibrariesLocal", "RedundantSuppression")
     implementation(libs.alimt)
     implementation(libs.asciitable)
     implementation(libs.deepl)
