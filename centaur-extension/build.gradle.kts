@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.asciitable)
     implementation(libs.deepl)
     implementation(libs.tess4j)
+    implementation(libs.javacv)
     testImplementation(libs.tess4j)
     testImplementation(libs.spring.test)
 }

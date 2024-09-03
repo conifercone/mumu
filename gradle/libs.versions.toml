@@ -30,6 +30,7 @@ zxingVersion = '3.5.3'
 javapoetVersion = '1.13.0'
 autoServiceVersion = '1.1.1'
 tess4jVersion = '5.13.0'
+javacvVersion = '1.5.10'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.3.0-jre'
@@ -218,6 +219,8 @@ jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-ap
 tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4jVersion" }
 # https://mvnrepository.com/artifact/org.springframework/spring-test
 spring-test = { module = "org.springframework:spring-test" }
+# https://mvnrepository.com/artifact/org.bytedeco/javacv-platform
+javacv = { module = "org.bytedeco:javacv-platform", version.ref = "javacvVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

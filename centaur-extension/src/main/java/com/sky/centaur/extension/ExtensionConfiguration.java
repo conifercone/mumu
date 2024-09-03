@@ -19,6 +19,7 @@ package com.sky.centaur.extension;
 import com.sky.centaur.extension.aspects.AspectConfiguration;
 import com.sky.centaur.extension.cors.CentaurCorsConfiguration;
 import com.sky.centaur.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
+import com.sky.centaur.extension.fd.FaceDetectionConfiguration;
 import com.sky.centaur.extension.ocr.OcrConfiguration;
 import com.sky.centaur.extension.processor.grpc.GrpcExceptionAdvice;
 import com.sky.centaur.extension.processor.response.ResponseBodyProcessor;
@@ -37,7 +38,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
     ZookeeperConfiguration.class, CentaurCorsConfiguration.class, DatasourceConfiguration.class,
-    TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class})
+    TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
+    FaceDetectionConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 

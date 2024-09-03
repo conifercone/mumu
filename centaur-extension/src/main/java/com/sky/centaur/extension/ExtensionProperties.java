@@ -18,6 +18,7 @@ package com.sky.centaur.extension;
 
 import com.sky.centaur.extension.authentication.AuthenticationProperties;
 import com.sky.centaur.extension.distributed.DistributedProperties;
+import com.sky.centaur.extension.fd.FaceDetectionProperties;
 import com.sky.centaur.extension.ocr.OcrProperties;
 import com.sky.centaur.extension.sql.SqlProperties;
 import com.sky.centaur.extension.translation.TranslationProperties;
@@ -64,4 +65,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private OcrProperties ocr = new OcrProperties();
+
+  /**
+   * 人脸检测
+   */
+  @NestedConfigurationProperty
+  private FaceDetectionProperties fd = new FaceDetectionProperties();
 }
