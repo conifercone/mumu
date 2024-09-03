@@ -79,6 +79,15 @@ public class Tess4jOcrTest {
     System.out.println(string);
   }
 
+  @Test
+  void ocrJpTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_jp.png", ".png");
+    Ocr ocr = new Ocr();
+    ocr.setSourceFile(fileFromResource);
+    ocr.setTargetLanguage("jpn");
+    String string = ocrProcessor.doOcr(ocr);
+    System.out.println(string);
+  }
 
   private @NotNull File getFileFromResource(String fileName, String fileType)
       throws IOException {
