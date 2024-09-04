@@ -18,7 +18,10 @@ package com.sky.centaur.extension.ocr;
 import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ocr领域模型
@@ -27,6 +30,9 @@ import lombok.Data;
  * @since 1.0.5
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ocr implements Serializable {
 
   @Serial

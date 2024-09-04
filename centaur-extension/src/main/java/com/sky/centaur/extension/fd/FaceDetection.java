@@ -15,7 +15,10 @@
  */
 package com.sky.centaur.extension.fd;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 人脸检测领域模型
@@ -24,6 +27,9 @@ import lombok.Data;
  * @since 1.0.5
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FaceDetection {
 
   private String imageAbsolutePath;
