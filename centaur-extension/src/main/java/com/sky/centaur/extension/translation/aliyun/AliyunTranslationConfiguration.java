@@ -19,6 +19,7 @@ import com.aliyun.alimt20181012.Client;
 import com.aliyun.teaopenapi.models.Config;
 import com.sky.centaur.extension.ExtensionProperties;
 import com.sky.centaur.extension.translation.SimpleTextTranslation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,8 +45,14 @@ public class AliyunTranslationConfiguration {
     AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
         .getAliyun();
     Config config = new Config()
-        .setAccessKeyId(aliyunTranslationProperties.getAccessKeyId())
-        .setAccessKeySecret(aliyunTranslationProperties.getAccessKeySecret());
+        .setAccessKeyId(
+            StringUtils.isBlank(aliyunTranslationProperties.getAccessKeyId()) ? System.getenv(
+                "ALIBABA_CLOUD_ACCESS_KEY_ID")
+                : aliyunTranslationProperties.getAccessKeyId())
+        .setAccessKeySecret(
+            StringUtils.isBlank(aliyunTranslationProperties.getAccessKeySecret()) ? System.getenv(
+                "ALIBABA_CLOUD_ACCESS_KEY_SECRET")
+                : aliyunTranslationProperties.getAccessKeySecret());
     config.endpoint = aliyunTranslationProperties.getEndpoint();
     return new Client(config);
   }
