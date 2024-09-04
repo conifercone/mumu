@@ -15,6 +15,8 @@
  */
 package com.sky.centaur.extension.fd;
 
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,9 +32,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceDetection {
+public class FaceDetection implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = -800432213501888089L;
+
+  /**
+   * 需要识别的图片绝对路径
+   */
   private String imageAbsolutePath;
 
+  /**
+   * 输出结果图片的绝对路径
+   */
   private String imageOutputAbsolutePath;
 }
