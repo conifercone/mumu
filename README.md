@@ -1,5 +1,8 @@
 ![centaur](./logo.svg)
 
+- [简体中文](README.zh_CN.md)
+- [English](README.md)
+
 # centaur
 
 ![GitHub Created At](https://img.shields.io/github/created-at/conifercone/centaur)
