@@ -28,5 +28,5 @@ public class Tess4jProperties {
 
   private String dataPath;
 
-  private Boolean enabled = false;
+  private boolean enabled;
 }
