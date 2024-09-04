@@ -71,6 +71,27 @@ public class Tess4jOcrTest {
   }
 
   @Test
+  void ocrBarCodeTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_bar_code.png");
+    Ocr ocr = new Ocr();
+    ocr.setSourceFile(fileFromResource);
+    ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
+    String string = ocrProcessor.doOcr(ocr);
+    System.out.println(string);
+  }
+
+
+  @Test
+  void ocrIdNumberTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_id_number.png");
+    Ocr ocr = new Ocr();
+    ocr.setSourceFile(fileFromResource);
+    ocr.setTargetLanguage(Tess4jLanguageEnum.CHI_SIM.getValue());
+    String string = ocrProcessor.doOcr(ocr);
+    System.out.println(string);
+  }
+
+  @Test
   void ocrCnTest() throws IOException {
     File fileFromResource = getFileFromResource("ocr_cn.png");
     Ocr ocr = new Ocr();
