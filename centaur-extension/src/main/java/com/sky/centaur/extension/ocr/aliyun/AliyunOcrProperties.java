@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sky.centaur.extension.ocr;
+package com.sky.centaur.extension.ocr.aliyun;
 
-import com.sky.centaur.extension.ocr.aliyun.AliyunOcrConfiguration;
-import com.sky.centaur.extension.ocr.tess4j.Tess4jConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import lombok.Data;
 
 /**
- * ocr配置类
+ * 阿里云ocr属性
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.5
  */
-@Configuration
-@Import({Tess4jConfiguration.class, AliyunOcrConfiguration.class})
-public class OcrConfiguration {
+@Data
+public class AliyunOcrProperties {
+
+  private String endpoint = "ocr-api.cn-hangzhou.aliyuncs.com";
+
+  private String accessKeyId;
+
+  private String accessKeySecret;
+
+  private boolean enabled;
 
 }

@@ -15,6 +15,7 @@
  */
 package com.sky.centaur.extension.ocr;
 
+import com.sky.centaur.extension.ocr.aliyun.AliyunOcrProperties;
 import com.sky.centaur.extension.ocr.tess4j.Tess4jProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -31,4 +32,6 @@ public class OcrProperties {
   @NestedConfigurationProperty
   private Tess4jProperties tess4j = new Tess4jProperties();
 
+  @NestedConfigurationProperty
+  private AliyunOcrProperties aliyun = new AliyunOcrProperties();
 }

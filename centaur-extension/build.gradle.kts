@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.micrometer.tracing)
     @Suppress("VulnerableLibrariesLocal", "RedundantSuppression")
     implementation(libs.alimt)
+    implementation(libs.aliyun.ocr)
     implementation(libs.asciitable)
     implementation(libs.deepl)
     implementation(libs.tess4j)

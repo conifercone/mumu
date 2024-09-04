@@ -15,7 +15,6 @@
  */
 package com.sky.centaur.extension.ocr;
 
-import com.sky.centaur.extension.ocr.tess4j.Tess4jLanguageEnum;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,43 +29,31 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 /**
- * ocr单元测试
+ * 阿里云ocr单元测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.5
  */
 @SpringJUnitConfig(OcrConfiguration.class)
 @TestPropertySource(properties = {
-    "centaur.extension.ocr.tess4j.enabled=true",
-    "centaur.extension.ocr.tess4j.data-path=F:/Tesseract-OCR/tessdata"
+    "centaur.extension.ocr.aliyun.enabled=true"
 })
-public class Tess4jOcrTest {
+public class AliyunOcrTest {
 
   private final OcrProcessor ocrProcessor;
   private final ResourceLoader resourceLoader;
 
   @Autowired
-  public Tess4jOcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
+  public AliyunOcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
     this.ocrProcessor = ocrProcessor;
     this.resourceLoader = resourceLoader;
   }
 
   @Test
-  void ocrEngTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr.png");
+  void ocrTest() throws IOException {
+    File fileFromResource = getFileFromResource("ocr_chat_interface.png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
-    String string = ocrProcessor.doOcr(ocr);
-    System.out.println(string);
-  }
-
-  @Test
-  void ocrNumberTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_number.jpg");
-    Ocr ocr = new Ocr();
-    ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage(Tess4jLanguageEnum.ENG.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
@@ -76,28 +63,6 @@ public class Tess4jOcrTest {
     File fileFromResource = getFileFromResource("ocr_cn.png");
     Ocr ocr = new Ocr();
     ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage(Tess4jLanguageEnum.CHI_SIM.getValue());
-    String string = ocrProcessor.doOcr(ocr);
-    System.out.println(string);
-  }
-
-  @Test
-  void ocrJpTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_jp.png");
-    Ocr ocr = new Ocr();
-    ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage(Tess4jLanguageEnum.JPN.getValue());
-    String string = ocrProcessor.doOcr(ocr);
-    System.out.println(string);
-  }
-
-
-  @Test
-  void ocrChatInterfaceTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_chat_interface.png");
-    Ocr ocr = new Ocr();
-    ocr.setSourceFile(fileFromResource);
-    ocr.setTargetLanguage(Tess4jLanguageEnum.CHI_SIM.getValue());
     String string = ocrProcessor.doOcr(ocr);
     System.out.println(string);
   }
