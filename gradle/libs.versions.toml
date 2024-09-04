@@ -199,7 +199,7 @@ jobrunr-spring-boot3-starter = { module = "org.jobrunr:jobrunr-spring-boot-3-sta
 # https://mvnrepository.com/artifact/io.netty/netty-all
 netty = { module = "io.netty:netty-all" }
 # https://mvnrepository.com/artifact/com.aliyun/alimt20181012
-alimt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
+aliyun-mt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
 # https://mvnrepository.com/artifact/com.deepl.api/deepl-java
 deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
 # https://mvnrepository.com/artifact/de.vandermeer/asciitable
