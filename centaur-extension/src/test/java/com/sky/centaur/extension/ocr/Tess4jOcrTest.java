@@ -37,8 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig(OcrConfiguration.class)
 @TestPropertySource(properties = {
-    "centaur.extension.ocr.tess4j.enabled=true",
-    "centaur.extension.ocr.tess4j.data-path=F:/Tesseract-OCR/tessdata"
+    "centaur.extension.ocr.tess4j.enabled=true"
 })
 public class Tess4jOcrTest {
 
