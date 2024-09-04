@@ -1,5 +1,8 @@
 # Contributing to Centaur
 
+- [简体中文](CONTRIBUTING.zh_CN.md)
+- [English](CONTRIBUTING.md)
+
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
