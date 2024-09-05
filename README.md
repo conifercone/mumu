@@ -1,24 +1,24 @@
-![centaur](./logo.svg)
+![mumu](./logo.svg)
 
 - [简体中文](README.zh_CN.md)
 - [English](README.md)
 
-# centaur
+# mumu
 
-![GitHub Created At](https://img.shields.io/github/created-at/conifercone/centaur)
-![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/centaur)
-![GitHub top language](https://img.shields.io/github/languages/top/conifercone/centaur)
+![GitHub Created At](https://img.shields.io/github/created-at/conifercone/mumu)
+![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/mumu)
+![GitHub top language](https://img.shields.io/github/languages/top/conifercone/mumu)
 [![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
-![GitHub Release](https://img.shields.io/github/v/release/conifercone/centaur)
-[![GitHub License](https://img.shields.io/github/license/conifercone/centaur)](https://github.com/conifercone/centaur)
-[![GitHub issues](https://img.shields.io/github/issues/conifercone/centaur)](https://github.com/conifercone/centaur/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/conifercone/centaur)](https://github.com/conifercone/centaur/pulls)
-[![GitHub language count](https://img.shields.io/github/languages/count/conifercone/centaur)](https://github.com/conifercone/centaur)
-[![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/centaur/develop)](https://github.com/conifercone/centaur)
-![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/centaur)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/centaur/dependency-submission.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/centaur/badge)](https://www.codefactor.io/repository/github/conifercone/centaur)
-[![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/centaur-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
+![GitHub Release](https://img.shields.io/github/v/release/conifercone/mumu)
+[![GitHub License](https://img.shields.io/github/license/conifercone/mumu)](https://github.com/conifercone/mumu)
+[![GitHub issues](https://img.shields.io/github/issues/conifercone/mumu)](https://github.com/conifercone/mumu/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/conifercone/mumu)](https://github.com/conifercone/mumu/pulls)
+[![GitHub language count](https://img.shields.io/github/languages/count/conifercone/mumu)](https://github.com/conifercone/mumu)
+[![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
+![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge)](https://www.codefactor.io/repository/github/conifercone/mumu)
+[![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## Content list
 
@@ -34,47 +34,47 @@
 ## Module Introduction
 
 ```text
-centaur
-│  ├─ 📂 centaur-authentication -- authentication service
+mumu
+│  ├─ 📂 mumu-authentication -- authentication service
 │  │  │- 📂 authentication-adapter -- authentication service adaptation layer
 │  │  │- 📂 authentication-application -- authentication service application layer
 │  │  │- 📂 authentication-client -- authentication service client
 │  │  │- 📂 authentication-domain -- authentication service domain layer
 │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
-│  │─ 📂 centaur-basis -- basic module
-│  │─ 📂 centaur-extension -- expansion module
-│  │─ 📂 centaur-file -- file service
+│  │─ 📂 mumu-basis -- basic module
+│  │─ 📂 mumu-extension -- expansion module
+│  │─ 📂 mumu-file -- file service
 │  │  │- 📂 file-adapter -- file service adaptation layer
 │  │  │- 📂 file-application -- file service application layer
 │  │  │- 📂 file-client -- file service client
 │  │  │- 📂 file-domain -- file service domain layer
 │  │  │- 📂 file-infrastructure -- file service infrastructure layer
-│  │─ 📂 centaur-log -- log service
+│  │─ 📂 mumu-log -- log service
 │  │  │- 📂 log-adapter -- log service adaptation layer
 │  │  │- 📂 log-application -- log service application layer
 │  │  │- 📂 log-client -- log service client
 │  │  │- 📂 log-domain -- log service domain layer
 │  │  │- 📂 log-infrastructure -- log service infrastructure layer
-│  │─ 📂 centaur-mail -- mail service
+│  │─ 📂 mumu-mail -- mail service
 │  │  │- 📂 mail-adapter -- mail service adaptation layer
 │  │  │- 📂 mail-application -- mail service application layer
 │  │  │- 📂 mail-client -- mail service client
 │  │  │- 📂 mail-domain -- mail service domain layer
 │  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
-│  │─ 📂 centaur-message -- message service
+│  │─ 📂 mumu-message -- message service
 │  │  │- 📂 message-adapter -- message service adaptation layer
 │  │  │- 📂 message-application -- message service application layer
 │  │  │- 📂 message-client -- message service client
 │  │  │- 📂 message-domain -- message service domain layer
 │  │  │- 📂 message-infrastructure -- message service infrastructure layer
-│  │─ 📂 centaur-processor -- processor module
-│  │─ 📂 centaur-sms -- sms service
+│  │─ 📂 mumu-processor -- processor module
+│  │─ 📂 mumu-sms -- sms service
 │  │  │- 📂 sms-adapter -- sms service adaptation layer
 │  │  │- 📂 sms-application -- sms service application layer
 │  │  │- 📂 sms-client -- sms service client
 │  │  │- 📂 sms-domain -- sms service domain layer
 │  │  │- 📂 sms-infrastructure -- sms service infrastructure layer
-│  │─ 📂 centaur-unique -- unique data generation service
+│  │─ 📂 mumu-unique -- unique data generation service
 │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
 │  │  │- 📂 unique-application -- unique data generation service application layer
 │  │  │- 📂 unique-client -- unique data generation service client
@@ -100,7 +100,7 @@ centaur
 
 ## Dependency Statement
 
-[**Dependency graph**](https://github.com/conifercone/centaur/network/dependencies)
+[**Dependency graph**](https://github.com/conifercone/mumu/network/dependencies)
 
 ## License
 
@@ -108,6 +108,6 @@ centaur
 
 ## Contributors
 
-<a href="https://github.com/conifercone/centaur/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=conifercone/centaur"  alt="https://github.com/conifercone/centaur/graphs/contributors"/>
+<a href="https://github.com/conifercone/mumu/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=conifercone/mumu"  alt="https://github.com/conifercone/mumu/graphs/contributors"/>
 </a>

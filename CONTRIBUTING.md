@@ -1,4 +1,4 @@
-# Contributing to Centaur
+# Contributing to MuMu
 
 - [简体中文](CONTRIBUTING.zh_CN.md)
 - [English](CONTRIBUTING.md)
@@ -9,7 +9,7 @@ This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDU
 By participating, you are expected to uphold this code. Please report unacceptable
 behavior to kaiyu.shan@outlook.com.
 
-The following is a set of guidelines for contributing to Centaur.
+The following is a set of guidelines for contributing to MuMu.
 These are just guidelines, not rules, use your best judgment and feel free to
 propose changes to this document in a pull request.
 

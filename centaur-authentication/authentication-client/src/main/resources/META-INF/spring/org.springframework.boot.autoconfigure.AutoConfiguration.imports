@@ -1,3 +1,0 @@
-com.sky.centaur.authentication.client.config.JWTSecurityConfig
-com.sky.centaur.authentication.client.config.GrpcSecurityConfiguration
-com.sky.centaur.authentication.client.config.AuthenticationClientConfiguration

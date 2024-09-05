@@ -225,10 +225,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.4...develop
-[1.0.4]: https://github.com/conifercone/centaur/compare/v1.0.3...v1.0.4
-[1.0.3]: https://github.com/conifercone/centaur/compare/v1.0.2...v1.0.3
-[1.0.2]: https://github.com/conifercone/centaur/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/conifercone/centaur/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/conifercone/centaur/releases/tag/v1.0.0
+[unreleased]: https://github.com/conifercone/mumu/compare/v1.0.4...develop
+[1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/conifercone/mumu/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/conifercone/mumu/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/conifercone/mumu/releases/tag/v1.0.0
 [//]: # (@formatter:on)

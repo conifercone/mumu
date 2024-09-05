@@ -1,0 +1,32 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "baby.mumu.unique.client.api.grpc";
+option java_outer_classname = "CaptchaServiceProto";
+
+service CaptchaService {
+  rpc generateSimpleCaptcha (SimpleCaptchaGeneratedGrpcCmd) returns (SimpleCaptchaGeneratedGrpcCo);
+  rpc verifySimpleCaptcha (SimpleCaptchaVerifyGrpcCmd) returns (SimpleCaptchaVerifyGrpcResult);
+}
+
+message SimpleCaptchaGeneratedGrpcCmd {
+  SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = 1;
+}
+message SimpleCaptchaGeneratedGrpcCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue target = 2;
+  google.protobuf.Int64Value ttl = 3;
+  google.protobuf.Int32Value length = 4;
+}
+message SimpleCaptchaVerifyGrpcCmd {
+  SimpleCaptchaVerifyGrpcCo simpleCaptchaVerifyGrpcCo = 1;
+}
+message SimpleCaptchaVerifyGrpcCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue source = 2;
+}
+message SimpleCaptchaVerifyGrpcResult {
+  bool result = 1;
+}

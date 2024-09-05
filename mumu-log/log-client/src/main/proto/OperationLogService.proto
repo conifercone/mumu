@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "baby.mumu.log.client.api.grpc";
+option java_outer_classname = "OperationLogServiceProto";
+
+service OperationLogService {
+  rpc submit (OperationLogSubmitGrpcCmd) returns (OperationLogServiceEmptyResult);
+}
+
+message OperationLogSubmitGrpcCmd {
+  OperationLogSubmitGrpcCo operationLogSubmitCo = 1;
+}
+
+message OperationLogSubmitGrpcCo {
+  string content = 1;
+  string operator = 2;
+  string bizNo = 3;
+  string category = 4;
+  string detail = 5;
+  string success = 6;
+  string fail = 7;
+}
+
+message OperationLogServiceEmptyResult {
+
+}
