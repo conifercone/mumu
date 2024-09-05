@@ -128,7 +128,7 @@ public class AuthorizationConfiguration {
    * @param tokenGenerator                      token生成器
    * @param operationLogGrpcService             操作日志
    * @param systemLogGrpcService                系统日志
-   * @param muMuAuthenticationFailureHandler 自定义认证失败处理器
+   * @param mumuAuthenticationFailureHandler 自定义认证失败处理器
    * @return 授权服务安全过滤链实例
    * @throws Exception 异常信息
    */
@@ -138,7 +138,7 @@ public class AuthorizationConfiguration {
       OAuth2AuthorizationService authorizationService,
       OAuth2TokenGenerator<?> tokenGenerator,
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
-      MuMuAuthenticationFailureHandler muMuAuthenticationFailureHandler,
+      MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
       PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port,
       SwaggerUiConfigProperties swaggerUiConfigProperties)
@@ -164,11 +164,11 @@ public class AuthorizationConfiguration {
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
             oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
-                muMuAuthenticationFailureHandler))
+                mumuAuthenticationFailureHandler))
         //设置自定义密码模式
         .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
-                .errorResponseHandler(muMuAuthenticationFailureHandler)
+                .errorResponseHandler(mumuAuthenticationFailureHandler)
                 .accessTokenRequestConverter(
                     new PasswordGrantAuthenticationConverter())
                 .authenticationProvider(

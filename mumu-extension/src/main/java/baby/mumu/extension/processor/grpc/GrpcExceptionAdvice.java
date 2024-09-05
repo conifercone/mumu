@@ -49,21 +49,23 @@ public class GrpcExceptionAdvice {
   private static final Logger LOGGER = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
 
 
+  @SuppressWarnings("unused")
   @GRpcExceptionHandler
-  public Status handle(MuMuException muMuException,
+  public Status handle(MuMuException mumuException,
       @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
-    if (muMuException != null) {
-      LOGGER.error(muMuException.getMessage());
+    if (mumuException != null) {
+      LOGGER.error(mumuException.getMessage());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent("MuMuException")
-                  .setCategory("muMuException")
-                  .setFail(ExceptionUtils.getStackTrace(muMuException)).build())
+                  .setCategory("mumuException")
+                  .setFail(ExceptionUtils.getStackTrace(mumuException)).build())
           .build());
     }
     return Status.INTERNAL;
   }
 
+  @SuppressWarnings("unused")
   @GRpcExceptionHandler
   public Status handle(AuthenticationException authenticationException,
       @SuppressWarnings("unused") GRpcExceptionScope scope) {

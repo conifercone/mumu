@@ -69,11 +69,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(@NotNull HttpServletRequest request,
       @NotNull HttpServletResponse response,
       @NotNull FilterChain filterChain) throws ServletException, IOException {
-    MuMuHttpServletRequestWrapper muMuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
+    MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
         request);
-    String authHeader = muMuHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
+    String authHeader = mumuHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
     SecurityContextUtil.getLoginAccountLanguage()
-        .ifPresent(languageEnum -> muMuHttpServletRequestWrapper.setLocale(
+        .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
             Locale.of(languageEnum.name())));
     // 存在token
     if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
@@ -104,14 +104,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 .orElse(null));
         // 重新设置回用户对象
         authenticationToken.setDetails(
-            new WebAuthenticationDetailsSource().buildDetails(muMuHttpServletRequestWrapper));
+            new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         SecurityContextUtil.getLoginAccountLanguage()
-            .ifPresent(languageEnum -> muMuHttpServletRequestWrapper.setLocale(
+            .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
                 Locale.of(languageEnum.name())));
       }
     }
     // 放行
-    filterChain.doFilter(muMuHttpServletRequestWrapper, response);
+    filterChain.doFilter(mumuHttpServletRequestWrapper, response);
   }
 }

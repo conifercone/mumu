@@ -72,22 +72,22 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(MuMuException.class)
-  public ResultResponse<?> handleMuMuException(@NotNull MuMuException muMuException,
+  public ResultResponse<?> handleMuMuException(@NotNull MuMuException mumuException,
       @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    LOGGER.error(muMuException.getMessage(), muMuException);
+    LOGGER.error(mumuException.getMessage(), mumuException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
-            SystemLogSubmitGrpcCo.newBuilder().setContent(muMuException.getMessage())
-                .setCategory("muMuException")
-                .setFail(ExceptionUtils.getStackTrace(muMuException)).build())
+            SystemLogSubmitGrpcCo.newBuilder().setContent(mumuException.getMessage())
+                .setCategory("mumuException")
+                .setFail(ExceptionUtils.getStackTrace(mumuException)).build())
         .build());
-    if (muMuException.getData() != null) {
-      return ResultResponse.failure(muMuException.getResultCode(), muMuException.getData());
+    if (mumuException.getData() != null) {
+      return ResultResponse.failure(mumuException.getResultCode(), mumuException.getData());
     }
-    return ResultResponse.failure(muMuException.getResultCode());
+    return ResultResponse.failure(mumuException.getResultCode());
   }
 
   @ExceptionHandler(ValidationException.class)
