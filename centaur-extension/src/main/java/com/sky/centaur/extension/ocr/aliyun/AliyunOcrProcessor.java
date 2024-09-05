@@ -22,6 +22,7 @@ import com.aliyun.teautil.models.RuntimeOptions;
 import com.sky.centaur.extension.ocr.Ocr;
 import com.sky.centaur.extension.ocr.OcrProcessor;
 import java.io.FileInputStream;
+import java.util.Optional;
 
 /**
  * 阿里云ocr处理器
@@ -39,15 +40,18 @@ public class AliyunOcrProcessor implements OcrProcessor {
 
   @Override
   public String doOcr(Ocr ocr) {
-    try {
-      RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
-          .setBody(new FileInputStream(ocr.getSourceFile()))
-          .setNeedRotate(false);
-      RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
-          recognizeBasicRequest, new RuntimeOptions());
-      return recognizeBasicResponse.getBody().getData();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    return Optional.ofNullable(ocr).filter(ocrNotNull -> ocrNotNull.getSourceFile() != null)
+        .map(ocrNotNull -> {
+          try {
+            RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
+                .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
+                .setNeedRotate(false);
+            RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
+                recognizeBasicRequest, new RuntimeOptions());
+            return recognizeBasicResponse.getBody().getData();
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+        }).orElse("");
   }
 }

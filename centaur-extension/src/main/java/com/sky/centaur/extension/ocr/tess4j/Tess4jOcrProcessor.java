@@ -21,7 +21,6 @@ import java.util.Optional;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * tess4j ocr处理器实现
@@ -38,8 +37,8 @@ public class Tess4jOcrProcessor implements OcrProcessor {
   }
 
   @Override
-  public String doOcr(@NotNull Ocr ocr) {
-    return Optional.of(ocr).filter(
+  public String doOcr(Ocr ocr) {
+    return Optional.ofNullable(ocr).filter(
         ocrNonNull -> ocrNonNull.getSourceFile() != null && StringUtils.isNotBlank(
             ocrNonNull.getTargetLanguage())).map(ocrNonNull -> {
       tess4j.setLanguage(ocrNonNull.getTargetLanguage());
