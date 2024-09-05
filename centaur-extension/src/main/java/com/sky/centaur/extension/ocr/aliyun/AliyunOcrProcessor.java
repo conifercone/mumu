@@ -23,6 +23,7 @@ import com.sky.centaur.extension.ocr.Ocr;
 import com.sky.centaur.extension.ocr.OcrProcessor;
 import java.io.FileInputStream;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 阿里云ocr处理器
@@ -52,6 +53,6 @@ public class AliyunOcrProcessor implements OcrProcessor {
           } catch (Exception e) {
             throw new RuntimeException(e);
           }
-        }).orElse("");
+        }).orElse(StringUtils.EMPTY);
   }
 }

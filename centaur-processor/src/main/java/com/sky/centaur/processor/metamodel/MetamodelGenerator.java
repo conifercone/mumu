@@ -89,8 +89,8 @@ public class MetamodelGenerator extends AbstractProcessor {
     elementUtils = processingEnv.getElementUtils();
     typeUtils = processingEnv.getTypeUtils();
     messager = processingEnv.getMessager();
-    authorName = getGitUserName().orElse("");
-    authorEmail = getGitEmail().orElse("");
+    authorName = getGitUserName().orElse(StringUtils.EMPTY);
+    authorEmail = getGitEmail().orElse(StringUtils.EMPTY);
     messager.printMessage(Diagnostic.Kind.NOTE, "🎉 Centaur Entity Metamodel Generator");
   }
 
@@ -127,7 +127,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     if (packageElement.isUnnamed()) {
       messager.printMessage(Diagnostic.Kind.WARNING,
           "Class " + annotatedElement.getSimpleName() + " has an unnamed package.");
-      packageName = "";
+      packageName = StringUtils.EMPTY;
       entityName = qualifiedName;
     } else {
       packageName = packageElement.getQualifiedName().toString();
@@ -137,7 +137,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     genEntityName = entityName + GENERATE_DESCRIPTION_CLASS_SUFFIX;
 
     String qualifiedGenEntityName =
-        (packageName.isEmpty() ? "" : packageName + ".") + genEntityName;
+        (packageName.isEmpty() ? StringUtils.EMPTY : packageName + ".") + genEntityName;
     messager.printMessage(Diagnostic.Kind.NOTE,
         "Generating Entity Metamodel: " + qualifiedGenEntityName);
     Builder builder = TypeSpec.classBuilder(genEntityName)
@@ -155,7 +155,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         "The current class is automatically generated, please do not modify it.\n"
             + (StringUtils.isNotBlank(authorName) && StringUtils.isNotBlank(authorEmail)
             ? String.format(
-            "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : "")
+            "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : StringUtils.EMPTY)
             + String.format(
             "@see %s.%s", packageName, entityName));
     JavaFile javaFile = JavaFile

@@ -47,6 +47,6 @@ public class Tess4jOcrProcessor implements OcrProcessor {
       } catch (TesseractException e) {
         throw new RuntimeException(e);
       }
-    }).orElse("");
+    }).orElse(StringUtils.EMPTY);
   }
 }

@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -225,31 +226,31 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       ResultCode accountDisabled = ResultCode.ACCOUNT_DISABLED;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountDisabled.getResultCode(),
-              accountDisabled.getResultMsg(), ""));
+              accountDisabled.getResultMsg(), StringUtils.EMPTY));
     }
     if (!userDetails.isAccountNonLocked()) {
       ResultCode accountLocked = ResultCode.ACCOUNT_LOCKED;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountLocked.getResultCode(),
-              accountLocked.getResultMsg(), ""));
+              accountLocked.getResultMsg(), StringUtils.EMPTY));
     }
     if (!userDetails.isAccountNonExpired()) {
       ResultCode accountHasExpired = ResultCode.ACCOUNT_HAS_EXPIRED;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountHasExpired.getResultCode(),
-              accountHasExpired.getResultMsg(), ""));
+              accountHasExpired.getResultMsg(), StringUtils.EMPTY));
     }
     if (!userDetails.isCredentialsNonExpired()) {
       ResultCode passwordExpired = ResultCode.PASSWORD_EXPIRED;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(passwordExpired.getResultCode(),
-              passwordExpired.getResultMsg(), ""));
+              passwordExpired.getResultMsg(), StringUtils.EMPTY));
     }
     if (!passwordEncoder.matches(password, userDetails.getPassword())) {
       ResultCode accountPasswordIsIncorrect = ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountPasswordIsIncorrect.getResultCode(),
-              accountPasswordIsIncorrect.getResultMsg(), ""));
+              accountPasswordIsIncorrect.getResultMsg(), StringUtils.EMPTY));
     }
   }
 

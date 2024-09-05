@@ -59,7 +59,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
       ResultCode accountNameCannotBeEmpty = ResultCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountNameCannotBeEmpty.getResultCode(),
-              accountNameCannotBeEmpty.getResultMsg(), ""));
+              accountNameCannotBeEmpty.getResultMsg(), StringUtils.EMPTY));
     }
     String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
     if (StringUtils.isBlank(password) ||
@@ -67,7 +67,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
       ResultCode accountPasswordCannotBeEmpty = ResultCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
           new OAuth2Error(accountPasswordCannotBeEmpty.getResultCode(),
-              accountPasswordCannotBeEmpty.getResultMsg(), ""));
+              accountPasswordCannotBeEmpty.getResultMsg(), StringUtils.EMPTY));
     }
     //收集要传入PasswordGrantAuthenticationToken构造方法的参数，
     //该参数接下来在PasswordGrantAuthenticationProvider中使用
