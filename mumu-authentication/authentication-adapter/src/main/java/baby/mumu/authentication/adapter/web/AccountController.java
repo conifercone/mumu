@@ -168,7 +168,7 @@ public class AccountController {
   @Operation(summary = "账户添加地址")
   @PostMapping("/addAddress")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public void addAddress(
       @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
     accountService.addAddress(accountAddAddressCmd);

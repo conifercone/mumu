@@ -120,12 +120,12 @@ public class AuthorityConvertor {
     return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(@Valid AuthorityArchivedDo authorityArchivedDo) {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(
       @Valid AuthorityArchivedFindAllCo authorityArchivedFindAllCo) {
     return Optional.ofNullable(authorityArchivedFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
@@ -155,7 +155,7 @@ public class AuthorityConvertor {
         });
   }
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AuthorityArchivedFindAllCo> toArchivedFindAllCo(@Valid Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllCo)
         .map(authorityArchivedFindAllCo -> {

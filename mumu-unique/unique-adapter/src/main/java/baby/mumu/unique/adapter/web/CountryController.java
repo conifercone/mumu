@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 国家相关接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @RestController
 @RequestMapping("/country")
@@ -62,7 +62,7 @@ public class CountryController {
   @Operation(summary = "获取国家详细信息")
   @GetMapping("/getCountryStateCity")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryStateCityGetAllCo>> getCountryStateCity() {
     return ResultResponse.success(countryService.getCountryStateCity());
   }
@@ -70,7 +70,7 @@ public class CountryController {
   @Operation(summary = "获取国家详细信息(不包含省或州、市信息)")
   @GetMapping("/getCountries")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetAllCo>> getCountries() {
     return ResultResponse.success(countryService.getCountries());
   }
@@ -78,7 +78,7 @@ public class CountryController {
   @Operation(summary = "根据国家ID获取省或州信息")
   @GetMapping("/getStatesByCountryId")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(@RequestBody
   CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
     return ResultResponse.success(
@@ -88,7 +88,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取城市")
   @GetMapping("/getCitiesByStateId")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(@RequestBody
   CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
     return ResultResponse.success(
@@ -98,7 +98,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取省或州")
   @GetMapping("/getStateById")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetStateByIdCo> getStateById(@RequestBody
   CountryGetStateByIdCmd countryGetStateByIdCmd) {
     return ResultResponse.success(
@@ -108,7 +108,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
   @GetMapping("/getStateCitiesById")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@RequestBody
   CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
     return ResultResponse.success(
@@ -118,7 +118,7 @@ public class CountryController {
   @Operation(summary = "根据城市id获取城市指令")
   @GetMapping("/getCityById")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetCityByIdCo> getCityById(@RequestBody
   CountryGetCityByIdCmd countryGetCityByIdCmd) {
     return ResultResponse.success(

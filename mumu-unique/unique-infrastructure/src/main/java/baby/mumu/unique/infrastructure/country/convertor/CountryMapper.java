@@ -35,31 +35,31 @@ import org.mapstruct.factory.Mappers;
  * Country mapstruct转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CountryMapper {
 
   CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryStateCityGetAllCo toCountryStateCityGetAllCo(Country country);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetStatesByCountryIdCo toCountryGetStatesByCountryIdCo(State state);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetCitiesByStateIdCo toCountryGetCitiesByStateIdCo(City city);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetStateByIdCo toCountryGetStateByIdCo(State state);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetStateCitiesByIdCo toCountryGetStateCitiesByIdCo(State state);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetCityByIdCo toCountryGetCityByIdCo(City city);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   CountryGetAllCo toCountryGetAllCo(Country country);
 }

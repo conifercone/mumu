@@ -154,7 +154,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
     Specification<AuthorityArchivedDo> authorityArchivedDoSpecification = (root, query, cb) -> {
       List<Predicate> predicateList = new ArrayList<>();

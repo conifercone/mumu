@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  * 根据国家ID获取省或州信息指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Component
 public class CountryGetStatesByCountryIdCmdExe {

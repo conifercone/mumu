@@ -97,7 +97,7 @@ public class AuthorityController {
   @Operation(summary = "查询已归档权限")
   @GetMapping("/findArchivedAll")
   @ResponseBody
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Page<AuthorityArchivedFindAllCo> findArchivedAll(
       @RequestBody @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
     return authorityService.findArchivedAll(authorityArchivedFindAllCmd);

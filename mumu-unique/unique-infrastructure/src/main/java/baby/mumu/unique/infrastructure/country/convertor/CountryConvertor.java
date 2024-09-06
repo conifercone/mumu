@@ -35,41 +35,41 @@ import org.springframework.stereotype.Component;
  * 国家对象转换类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Component
 public class CountryConvertor {
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryStateCityGetAllCo> toCountryStateCityGetAllCo(
       Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryStateCityGetAllCo);
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStatesByCountryIdCo> toCountryGetStatesByCountryIdCo(
       State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStatesByCountryIdCo);
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCitiesByStateIdCo> toCountryGetCitiesByStateIdCo(
       City city) {
     return Optional.ofNullable(city).map(CountryMapper.INSTANCE::toCountryGetCitiesByStateIdCo);
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateByIdCo> toCountryGetStateByIdCo(
       State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStateByIdCo);
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateCitiesByIdCo> toCountryGetStateCitiesByIdCo(
       State state) {
     return Optional.ofNullable(state)
@@ -77,7 +77,7 @@ public class CountryConvertor {
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCityByIdCo> toCountryGetCityByIdCo(
       City city) {
     return Optional.ofNullable(city)
@@ -85,7 +85,7 @@ public class CountryConvertor {
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetAllCo> toCountryGetAllCo(
       Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryGetAllCo);

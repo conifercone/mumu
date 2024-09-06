@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
  * 国家领域网关实现
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Component
 public class CountryGatewayImpl implements CountryGateway {

@@ -21,7 +21,7 @@ import lombok.Data;
  * opencv配置属性
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Data
 public class OpencvProperties {

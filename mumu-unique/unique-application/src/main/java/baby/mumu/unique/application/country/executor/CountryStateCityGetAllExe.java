@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
  * 获取所有国家详细信息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Component
 public class CountryStateCityGetAllExe {

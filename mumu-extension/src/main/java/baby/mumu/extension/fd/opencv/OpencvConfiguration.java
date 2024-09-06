@@ -33,7 +33,7 @@ import org.springframework.core.io.ResourceLoader;
  * opencv配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Configuration
 @EnableConfigurationProperties(ExtensionProperties.class)

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * 危险操作注解切面
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Aspect
 public class DangerousOperationAspect {

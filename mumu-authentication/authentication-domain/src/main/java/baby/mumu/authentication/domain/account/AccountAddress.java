@@ -29,7 +29,7 @@ import lombok.experimental.SuperBuilder;
  * 账户地址领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

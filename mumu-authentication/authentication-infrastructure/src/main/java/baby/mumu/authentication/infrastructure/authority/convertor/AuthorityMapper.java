@@ -52,10 +52,10 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityFindAllCo authorityFindAllCo);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedFindAllCo authorityArchivedFindAllCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
@@ -67,7 +67,7 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindAllCo toFindAllCo(Authority authority);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   AuthorityArchivedFindAllCo toArchivedFindAllCo(Authority authority);
 
   @API(status = Status.STABLE, since = "1.0.1")

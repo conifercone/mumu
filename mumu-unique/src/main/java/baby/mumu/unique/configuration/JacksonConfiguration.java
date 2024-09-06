@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * jackson配置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Configuration
 public class JacksonConfiguration {

@@ -58,16 +58,16 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toEntity(AccountAddressDo accountAddressDo);
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDo toDataObject(AccountAddress accountAddress);
 
   @Mappings(value = {
       @Mapping(target = AccountAddress4Desc.userId, ignore = true)
   })
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toEntity(AccountAddAddressCo accountAddAddressCo);
 
   @Mappings(value = {

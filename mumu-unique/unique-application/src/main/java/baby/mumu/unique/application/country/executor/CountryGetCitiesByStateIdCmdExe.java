@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  * 根据省或州ID获取城市指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Component
 public class CountryGetCitiesByStateIdCmdExe {

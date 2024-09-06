@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * opencv人脸检测处理器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
 

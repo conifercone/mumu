@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
  * 权限查询已归档客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

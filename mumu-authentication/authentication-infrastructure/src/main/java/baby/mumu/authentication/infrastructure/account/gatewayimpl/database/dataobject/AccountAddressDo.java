@@ -33,7 +33,7 @@ import org.hibernate.annotations.DynamicInsert;
  * 账户地址存储对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Getter
 @Setter

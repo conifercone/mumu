@@ -208,13 +208,13 @@ public class AccountConvertor {
     });
   }
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddressDo> toDataObject(
       AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toDataObject);
   }
 
-  @API(status = Status.STABLE, since = "1.0.5")
+  @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddress> toEntity(
       AccountAddAddressCo accountAddAddressCo) {
     return Optional.ofNullable(accountAddAddressCo).map(accountAddAddressCoNonNull -> {

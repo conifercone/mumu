@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  * 人脸检测领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Data
 @Builder

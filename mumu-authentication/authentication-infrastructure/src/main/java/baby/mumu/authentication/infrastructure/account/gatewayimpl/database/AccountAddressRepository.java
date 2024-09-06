@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * 账户地址
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressDo, Long>,
     JpaSpecificationExecutor<AccountAddressDo> {

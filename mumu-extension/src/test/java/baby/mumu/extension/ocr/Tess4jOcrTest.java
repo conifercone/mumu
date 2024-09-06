@@ -33,7 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  * ocr单元测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @SpringJUnitConfig(OcrConfiguration.class)
 @TestPropertySource(properties = {
