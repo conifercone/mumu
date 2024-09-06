@@ -1,5 +1,8 @@
 # Changelog
 
+- [简体中文](CHANGELOG.zh_CN.md)
+- [English](CHANGELOG.md)
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -9,10 +12,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- v1.0.5 Machine translation adds Microsoft Translate option.
-- v1.0.5 Extension module adds rule engine expansion implementation.
+- Added facial age detection expansion function.
+- Added new image item classification expansion function.
 
 ### Changed
+
+### Removed
+
+## [2.0.0] - 2024-09-06
+
+### Added
+
+- Added Chinese version of readme document.
+- Added Chinese version of contribution guide.
+- Added face detection function.
+- Added ocr expansion function.
+- Added the ability to obtain a province or state based on the province or state ID, obtain the
+  province or state (including lower-level cities) based on the province or state ID, and obtain the
+  province or state based on the city ID.
+- Added interfaces for obtaining province or state information based on country ID and obtaining
+  city information based on province or state ID.
+- Added an interface to obtain detailed information about the country (excluding province, state,
+  and city information).
+- Added interface for obtaining detailed country information.
+- Added global geographic data json file.
+- Add new account and add address interface.
+- Added address attribute to account.
+- Added data desensitization tool class.
+- Added notes and aspects of dangerous operations.
+- Add dangerous operation annotations for operations related to role permissions.
+- The character archive has been added to determine whether it is in use and cannot be archived.
+- The permissions for archiving have been increased to determine whether archiving is in use.
+- Added paging query archived permissions interface.
+
+### Fixed
+
+### Changed
+
+- Project rename.
+- Optimize unit test logic.
+- eliminate duplicate constants.
+- Alibaba Cloud machine translation bean initialization adds judgment.
+- Unify dependency names.
+- Change icon.
+- bump protobufBomVersion from 3.25.3 to 4.28.0.
+- commons-lang3 StringUtils replaces spring StringUtils.
+- Added serialization interface for related entities.
 
 ### Removed
 
@@ -225,10 +270,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/centaur/compare/v1.0.4...develop
-[1.0.4]: https://github.com/conifercone/centaur/compare/v1.0.3...v1.0.4
-[1.0.3]: https://github.com/conifercone/centaur/compare/v1.0.2...v1.0.3
-[1.0.2]: https://github.com/conifercone/centaur/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/conifercone/centaur/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/conifercone/centaur/releases/tag/v1.0.0
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.0.0...develop
+[2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
+[1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/conifercone/mumu/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/conifercone/mumu/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/conifercone/mumu/releases/tag/v1.0.0
 [//]: # (@formatter:on)

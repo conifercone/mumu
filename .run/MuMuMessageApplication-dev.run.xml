@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MuMuMessageApplication-dev"
+    type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev"/>
+    <module name="mumu.mumu-message.main"/>
+    <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.message.MuMuMessageApplication"/>
+    <option name="VM_PARAMETERS"
+      value="-Dcom.sun.management.jmxremote.port=31701 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dlog4j2.disableJmx=true"/>
+    <method v="2">
+      <option name="Make" enabled="true"/>
+    </method>
+  </configuration>
+</component>

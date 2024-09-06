@@ -1,3 +1,0 @@
-[submodule "centaur-admin"]
-	path = centaur-admin
-	url = git@github.com:conifercone/centaur-admin.git

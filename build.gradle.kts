@@ -57,17 +57,17 @@ subprojects {
     }
 
     signing {
-        val centaurSigningKeyId = "CENTAUR_SIGNING_KEY_ID"
-        val centaurSigningKeyFile = "CENTAUR_SIGNING_KEY_FILE"
-        val centaurSigningPassword = "CENTAUR_SIGNING_PASSWORD"
-        if (!System.getenv(centaurSigningKeyId).isNullOrBlank() &&
-            !System.getenv(centaurSigningKeyFile).isNullOrBlank() &&
-            !System.getenv(centaurSigningPassword).isNullOrBlank()
+        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
+        val mumuSigningKeyFile = "MUMU_SIGNING_KEY_FILE"
+        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
+        if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
+            !System.getenv(mumuSigningKeyFile).isNullOrBlank() &&
+            !System.getenv(mumuSigningPassword).isNullOrBlank()
         ) {
             useInMemoryPgpKeys(
-                System.getenv(centaurSigningKeyId) as String,
-                file(System.getenv(centaurSigningKeyFile) as String).readText(),
-                System.getenv(centaurSigningPassword) as String
+                System.getenv(mumuSigningKeyId) as String,
+                file(System.getenv(mumuSigningKeyFile) as String).readText(),
+                System.getenv(mumuSigningPassword) as String
             )
             sign(tasks["jar"])
         }
@@ -140,6 +140,7 @@ subprojects {
         implementation(rootProject.libs.spring.boot.starter.validation)
         implementation(rootProject.libs.disruptor)
         implementation(rootProject.libs.bundles.jackson)
+        testImplementation(rootProject.libs.bundles.jackson)
         implementation(rootProject.libs.jetbrains.annotations)
         implementation(rootProject.libs.apiguardian.api)
         implementation(rootProject.libs.guava)
