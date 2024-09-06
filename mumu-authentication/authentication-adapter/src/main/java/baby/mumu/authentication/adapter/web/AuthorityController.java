@@ -65,7 +65,7 @@ public class AuthorityController {
   @PostMapping("/add")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody AuthorityAddCmd authorityAddCmd) {
+  public void add(@RequestBody @Valid AuthorityAddCmd authorityAddCmd) {
     authorityService.add(authorityAddCmd);
   }
 
@@ -73,7 +73,7 @@ public class AuthorityController {
   @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@RequestBody AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
+  public void deleteById(@RequestBody @Valid AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
     authorityService.deleteById(authorityDeleteByIdCmd);
   }
 
@@ -107,7 +107,8 @@ public class AuthorityController {
   @GetMapping("/findById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public AuthorityFindByIdCo findById(@RequestBody AuthorityFindByIdCmd authorityFindByIdCmd) {
+  public AuthorityFindByIdCo findById(
+      @RequestBody @Valid AuthorityFindByIdCmd authorityFindByIdCmd) {
     return authorityService.findById(authorityFindByIdCmd);
   }
 
