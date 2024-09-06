@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -26,5 +27,6 @@ import lombok.Data;
 @Data
 public class RoleArchiveByIdCmd {
 
+  @NotNull
   private Long id;
 }

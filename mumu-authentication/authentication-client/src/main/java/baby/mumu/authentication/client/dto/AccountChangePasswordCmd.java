@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -26,6 +27,9 @@ import lombok.Data;
 @Data
 public class AccountChangePasswordCmd {
 
+  @NotBlank
   private String originalPassword;
+
+  @NotBlank
   private String newPassword;
 }

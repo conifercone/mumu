@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.util.List;
 import lombok.Data;
@@ -36,8 +37,10 @@ public class RoleAddCo extends BaseClientObject {
 
   private Long id;
 
+  @NotBlank
   private String name;
 
+  @NotBlank
   private String code;
 
   private List<Long> authorities;

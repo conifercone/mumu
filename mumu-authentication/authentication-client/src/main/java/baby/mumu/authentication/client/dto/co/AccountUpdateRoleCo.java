@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,6 +34,7 @@ public class AccountUpdateRoleCo extends BaseClientObject {
   @Serial
   private static final long serialVersionUID = 6110957444309849374L;
 
+  @NotNull
   private Long id;
 
   private String roleCode;

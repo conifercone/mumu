@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 /**
@@ -27,5 +28,6 @@ import lombok.Data;
 @Data
 public class AccountUpdateRoleCmd {
 
+  @Valid
   private AccountUpdateRoleCo accountUpdateRoleCo;
 }

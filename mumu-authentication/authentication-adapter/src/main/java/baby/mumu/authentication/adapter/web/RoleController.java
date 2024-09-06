@@ -61,7 +61,7 @@ public class RoleController {
   @PostMapping("/add")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody RoleAddCmd roleAddCmd) {
+  public void add(@RequestBody @Valid RoleAddCmd roleAddCmd) {
     roleService.add(roleAddCmd);
   }
 
@@ -69,7 +69,7 @@ public class RoleController {
   @DeleteMapping("/deleteById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@RequestBody RoleDeleteByIdCmd roleDeleteByIdCmd) {
+  public void deleteById(@RequestBody @Valid RoleDeleteByIdCmd roleDeleteByIdCmd) {
     roleService.deleteById(roleDeleteByIdCmd);
   }
 
@@ -77,7 +77,7 @@ public class RoleController {
   @PutMapping("/updateById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody RoleUpdateCmd roleUpdateCmd) {
+  public void updateById(@RequestBody @Valid RoleUpdateCmd roleUpdateCmd) {
     roleService.updateById(roleUpdateCmd);
   }
 
@@ -93,7 +93,7 @@ public class RoleController {
   @PutMapping("/archiveById")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
-  public void archiveById(@RequestBody RoleArchiveByIdCmd roleArchiveByIdCmd) {
+  public void archiveById(@RequestBody @Valid RoleArchiveByIdCmd roleArchiveByIdCmd) {
     roleService.archiveById(roleArchiveByIdCmd);
   }
 
@@ -102,7 +102,7 @@ public class RoleController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
-      @RequestBody RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {
+      @RequestBody @Valid RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {
     roleService.recoverFromArchiveById(roleRecoverFromArchiveByIdCmd);
   }
 }

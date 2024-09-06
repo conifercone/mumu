@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.client.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -26,7 +28,9 @@ import lombok.Data;
 @Data
 public class AccountDeleteCurrentCmd {
 
+  @NotNull
   private Long captchaId;
 
+  @NotBlank
   private String captcha;
 }

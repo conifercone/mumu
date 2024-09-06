@@ -84,7 +84,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
-      @RequestBody AccountUpdateRoleCmd accountUpdateRoleCmd) {
+      @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
     accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
@@ -92,7 +92,7 @@ public class AccountController {
   @PutMapping("/disable")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void disable(@RequestBody AccountDisableCmd accountDisableCmd) {
+  public void disable(@RequestBody @Valid AccountDisableCmd accountDisableCmd) {
     accountService.disable(accountDisableCmd);
   }
 
@@ -117,7 +117,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(
-      @RequestBody AccountResetPasswordCmd accountResetPasswordCmd) {
+      @RequestBody @Valid AccountResetPasswordCmd accountResetPasswordCmd) {
     accountService.resetPassword(accountResetPasswordCmd);
   }
 
@@ -125,7 +125,7 @@ public class AccountController {
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteCurrent(@RequestBody AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+  public void deleteCurrent(@RequestBody @Valid AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
     accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
   }
 
@@ -134,7 +134,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public ResultResponse<Boolean> verifyPassword(
-      @RequestBody AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+      @RequestBody @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return ResultResponse.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
@@ -143,7 +143,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(
-      @RequestBody AccountChangePasswordCmd accountChangePasswordCmd) {
+      @RequestBody @Valid AccountChangePasswordCmd accountChangePasswordCmd) {
     accountService.changePassword(accountChangePasswordCmd);
   }
 
@@ -152,7 +152,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(
-      @RequestBody AccountArchiveByIdCmd accountArchiveByIdCmd) {
+      @RequestBody @Valid AccountArchiveByIdCmd accountArchiveByIdCmd) {
     accountService.archiveById(accountArchiveByIdCmd);
   }
 
@@ -161,7 +161,7 @@ public class AccountController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
-      @RequestBody AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
+      @RequestBody @Valid AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
     accountService.recoverFromArchiveById(accountRecoverFromArchiveByIdCmd);
   }
 

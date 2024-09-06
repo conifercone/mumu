@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,5 +34,6 @@ public class AccountDisableCo extends BaseClientObject {
   @Serial
   private static final long serialVersionUID = -6208198026934800033L;
 
+  @NotNull
   private Long id;
 }
