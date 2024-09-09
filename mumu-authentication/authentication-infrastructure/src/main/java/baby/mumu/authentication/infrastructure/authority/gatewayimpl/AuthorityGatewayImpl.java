@@ -219,7 +219,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         });
   }
 
-  @Job
+  @Job(name = "删除ID为：%0 的权限归档数据")
   @DangerousOperation("根据ID删除权限归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)

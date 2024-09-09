@@ -335,7 +335,7 @@ public class AccountGatewayImpl implements AccountGateway {
         });
   }
 
-  @Job
+  @Job(name = "删除ID为：%0 的账户归档数据")
   @DangerousOperation("根据ID删除账户归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)

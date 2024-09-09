@@ -173,7 +173,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
         }));
   }
 
-  @Job
+  @Job(name = "删除ID为：%0 的订阅消息归档数据")
   @DangerousOperation("根据ID删除订阅消息归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
