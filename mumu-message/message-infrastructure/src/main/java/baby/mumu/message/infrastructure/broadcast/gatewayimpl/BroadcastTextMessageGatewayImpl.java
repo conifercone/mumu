@@ -18,8 +18,11 @@ package baby.mumu.message.infrastructure.broadcast.gatewayimpl;
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
 import static baby.mumu.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
+import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.GlobalProperties;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
@@ -30,12 +33,15 @@ import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobjec
 import baby.mumu.message.infrastructure.config.MessageProperties;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
+import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -59,17 +65,22 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   private final MessageProperties messageProperties;
   private final BroadcastTextMessageRepository broadcastTextMessageRepository;
   private final BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository;
+  private final JobScheduler jobScheduler;
+  private final ExtensionProperties extensionProperties;
 
   @Autowired
   public BroadcastTextMessageGatewayImpl(
       BroadcastTextMessageConvertor broadcastTextMessageConvertor,
       MessageProperties messageProperties,
       BroadcastTextMessageRepository broadcastTextMessageRepository,
-      BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository) {
+      BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository,
+      JobScheduler jobScheduler, ExtensionProperties extensionProperties) {
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
     this.messageProperties = messageProperties;
     this.broadcastTextMessageRepository = broadcastTextMessageRepository;
     this.broadcastTextMessageArchivedRepository = broadcastTextMessageArchivedRepository;
+    this.jobScheduler = jobScheduler;
+    this.extensionProperties = extensionProperties;
   }
 
   @Override
@@ -185,7 +196,18 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
           broadcastTextMessageArchivedDo.setArchived(true);
           broadcastTextMessageRepository.delete(broadcastTextMessageDo);
           broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+              () -> deleteArchivedDataJob(broadcastTextMessageArchivedDo.getId()));
         }));
+  }
+
+  @Job
+  @DangerousOperation("根据ID删除广播消息归档数据定时任务")
+  private void deleteArchivedDataJob(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(broadcastTextMessageArchivedRepository::deleteById);
   }
 
   @Override

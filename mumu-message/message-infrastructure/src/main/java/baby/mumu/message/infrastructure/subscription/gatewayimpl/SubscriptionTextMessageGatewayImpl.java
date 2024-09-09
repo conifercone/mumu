@@ -17,8 +17,11 @@ package baby.mumu.message.infrastructure.subscription.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
 
+import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.GlobalProperties;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import baby.mumu.message.infrastructure.config.MessageProperties;
@@ -29,12 +32,15 @@ import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataob
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo_;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -56,16 +62,21 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   private final SubscriptionTextMessageRepository subscriptionTextMessageRepository;
   private final SubscriptionTextMessageArchivedRepository subscriptionTextMessageArchivedRepository;
   private final SubscriptionTextMessageConvertor subscriptionTextMessageConvertor;
+  private final JobScheduler jobScheduler;
+  private final ExtensionProperties extensionProperties;
 
   @Autowired
   public SubscriptionTextMessageGatewayImpl(MessageProperties messageProperties,
       SubscriptionTextMessageRepository subscriptionTextMessageRepository,
       SubscriptionTextMessageConvertor subscriptionTextMessageConvertor,
-      SubscriptionTextMessageArchivedRepository subscriptionTextMessageArchivedRepository) {
+      SubscriptionTextMessageArchivedRepository subscriptionTextMessageArchivedRepository,
+      JobScheduler jobScheduler, ExtensionProperties extensionProperties) {
     this.messageProperties = messageProperties;
     this.subscriptionTextMessageRepository = subscriptionTextMessageRepository;
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
     this.subscriptionTextMessageArchivedRepository = subscriptionTextMessageArchivedRepository;
+    this.jobScheduler = jobScheduler;
+    this.extensionProperties = extensionProperties;
   }
 
   @Override
@@ -155,7 +166,18 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
           subscriptionTextMessageArchivedDo.setArchived(true);
           subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
           subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedDo);
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+              () -> deleteArchivedDataJob(subscriptionTextMessageArchivedDo.getId()));
         }));
+  }
+
+  @Job
+  @DangerousOperation("根据ID删除订阅消息归档数据定时任务")
+  private void deleteArchivedDataJob(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(subscriptionTextMessageArchivedRepository::deleteById);
   }
 
   @Override
