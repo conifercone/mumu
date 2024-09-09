@@ -37,6 +37,12 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class ExtensionProperties {
 
   /**
+   * 全局配置
+   */
+  @NestedConfigurationProperty
+  private GlobalProperties global = new GlobalProperties();
+
+  /**
    * 分布式相关配置
    */
   @NestedConfigurationProperty

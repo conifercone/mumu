@@ -32,15 +32,20 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
+import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,17 +72,22 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   private final RoleGateway roleGateway;
   private final AuthorityConvertor authorityConvertor;
   private final AuthorityArchivedRepository authorityArchivedRepository;
+  private final JobScheduler jobScheduler;
+  private final ExtensionProperties extensionProperties;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
       AuthorityConvertor authorityConvertor,
-      AuthorityArchivedRepository authorityArchivedRepository) {
+      AuthorityArchivedRepository authorityArchivedRepository, JobScheduler jobScheduler,
+      ExtensionProperties extensionProperties) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.authorityArchivedRepository = authorityArchivedRepository;
+    this.jobScheduler = jobScheduler;
+    this.extensionProperties = extensionProperties;
   }
 
   @Override
@@ -202,7 +212,17 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityArchivedDo.setArchived(true);
           authorityArchivedRepository.persist(authorityArchivedDo);
           authorityRepository.deleteById(authorityArchivedDo.getId());
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+              () -> deleteArchivedDataJob(authorityArchivedDo.getId()));
         });
+  }
+
+  @Job
+  @DangerousOperation("根据ID删除权限归档数据定时任务")
+  private void deleteArchivedDataJob(Long id) {
+    Optional.ofNullable(id).ifPresent(authorityArchivedRepository::deleteById);
   }
 
   @Override

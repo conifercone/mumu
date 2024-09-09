@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.redis.om.spring)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(libs.hibernate.jpamodelgen)
+    implementation(libs.jobrunr.spring.boot3.starter)
 }
