@@ -240,7 +240,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Job
   @DangerousOperation("根据ID删除角色归档数据定时任务")
-  private void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId, 0, 10).isEmpty())
         .ifPresent(roleArchivedRepository::deleteById);

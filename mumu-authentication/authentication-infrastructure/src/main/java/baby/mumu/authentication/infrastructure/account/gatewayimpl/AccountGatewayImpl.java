@@ -337,7 +337,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Job
   @DangerousOperation("根据ID删除账户归档数据定时任务")
-  private void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .ifPresent(accountArchivedRepository::deleteById);
   }

@@ -175,7 +175,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   @Job
   @DangerousOperation("根据ID删除订阅消息归档数据定时任务")
-  private void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .ifPresent(subscriptionTextMessageArchivedRepository::deleteById);
   }

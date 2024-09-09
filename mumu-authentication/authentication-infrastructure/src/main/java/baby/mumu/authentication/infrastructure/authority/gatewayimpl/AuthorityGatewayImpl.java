@@ -221,7 +221,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Job
   @DangerousOperation("根据ID删除权限归档数据定时任务")
-  private void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId, 0, 10).isEmpty())
         .ifPresent(authorityArchivedRepository::deleteById);
