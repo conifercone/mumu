@@ -33,9 +33,12 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
+import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +47,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,16 +72,21 @@ public class RoleGatewayImpl implements RoleGateway {
   private final AccountGateway accountGateway;
   private final RoleConvertor roleConvertor;
   private final RoleArchivedRepository roleArchivedRepository;
+  private final JobScheduler jobScheduler;
+  private final ExtensionProperties extensionProperties;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       AccountGateway accountGateway, RoleConvertor roleConvertor,
-      RoleArchivedRepository roleArchivedRepository) {
+      RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
+      ExtensionProperties extensionProperties) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.roleConvertor = roleConvertor;
     this.roleArchivedRepository = roleArchivedRepository;
+    this.jobScheduler = jobScheduler;
+    this.extensionProperties = extensionProperties;
   }
 
   @Override
@@ -215,12 +225,25 @@ public class RoleGatewayImpl implements RoleGateway {
       throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
     }
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(roleRepository::findById)
         .flatMap(roleConvertor::toArchivedDo).ifPresent(roleArchivedDo -> {
           roleArchivedDo.setArchived(true);
           roleArchivedRepository.persist(roleArchivedDo);
           roleRepository.deleteById(roleArchivedDo.getId());
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+              () -> deleteArchivedDataJob(roleArchivedDo.getId()));
         });
+  }
+
+  @Job
+  @DangerousOperation("根据ID删除角色归档数据定时任务")
+  private void deleteArchivedDataJob(Long id) {
+    Optional.ofNullable(id)
+        .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId, 0, 10).isEmpty())
+        .ifPresent(roleArchivedRepository::deleteById);
   }
 
   @Override

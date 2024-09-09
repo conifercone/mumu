@@ -206,6 +206,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           authorities.getContent().stream().map(Role::getCode).toList());
     }
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(authorityRepository::findById)
         .flatMap(authorityConvertor::toArchivedDo).ifPresent(authorityArchivedDo -> {
           authorityArchivedDo.setArchived(true);

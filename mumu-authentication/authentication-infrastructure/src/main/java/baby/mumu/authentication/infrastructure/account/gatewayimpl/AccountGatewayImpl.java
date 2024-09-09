@@ -33,12 +33,14 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
+import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,6 +84,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
   private final AccountAddressRepository accountAddressRepository;
+  private final JobScheduler jobScheduler;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -89,7 +94,7 @@ public class AccountGatewayImpl implements AccountGateway {
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
       AccountArchivedRepository accountArchivedRepository,
-      AccountAddressRepository accountAddressRepository) {
+      AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -100,6 +105,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
     this.accountAddressRepository = accountAddressRepository;
+    this.jobScheduler = jobScheduler;
   }
 
   @Override
@@ -316,12 +322,24 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据id归档账户")
   public void archiveById(Long id) {
+    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(accountRepository::findById)
         .flatMap(accountConvertor::toArchivedDo).ifPresent(accountArchivedDo -> {
           accountArchivedDo.setArchived(true);
           accountArchivedRepository.persist(accountArchivedDo);
           accountRepository.deleteById(accountArchivedDo.getId());
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+              () -> deleteArchivedDataJob(accountArchivedDo.getId()));
         });
+  }
+
+  @Job
+  @DangerousOperation("根据ID删除账户归档数据定时任务")
+  private void deleteArchivedDataJob(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(accountArchivedRepository::deleteById);
   }
 
   @Override
