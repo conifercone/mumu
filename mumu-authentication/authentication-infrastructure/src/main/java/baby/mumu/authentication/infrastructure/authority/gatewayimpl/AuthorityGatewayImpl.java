@@ -54,7 +54,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 权限领域网关实现
@@ -110,7 +109,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @DangerousOperation("删除权限")
   public void deleteById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-    if (!CollectionUtils.isEmpty(authorities.getContent())) {
+    if (!authorities.isEmpty()) {
       throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           authorities.getContent().stream().map(Role::getCode).toList());
     }
@@ -203,7 +202,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @DangerousOperation("根据ID归档权限")
   public void archiveById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-    if (!CollectionUtils.isEmpty(authorities.getContent())) {
+    if (!authorities.isEmpty()) {
       throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           authorities.getContent().stream().map(Role::getCode).toList());
     }
@@ -222,7 +221,9 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Job
   @DangerousOperation("根据ID删除权限归档数据定时任务")
   private void deleteArchivedDataJob(Long id) {
-    Optional.ofNullable(id).ifPresent(authorityArchivedRepository::deleteById);
+    Optional.ofNullable(id)
+        .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId, 0, 10).isEmpty())
+        .ifPresent(authorityArchivedRepository::deleteById);
   }
 
   @Override

@@ -51,7 +51,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 角色领域网关实现
@@ -99,7 +98,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public void deleteById(Long id) {
     Optional.ofNullable(id).ifPresent(roleId -> {
       Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
-      if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
+      if (!allAccountByRoleId.isEmpty()) {
         throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
             allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
       }
@@ -166,7 +165,7 @@ public class RoleGatewayImpl implements RoleGateway {
             .getRestriction();
       };
       Page<Role> rolePage = getRoles(pageNo, pageSize, roleDoSpecification);
-      if (CollectionUtils.isEmpty(rolePage.getContent())) {
+      if (rolePage.isEmpty()) {
         Specification<RoleArchivedDo> roleArchivedDoSpecification = (root, query, cb) -> {
           List<Predicate> predicateList = new ArrayList<>();
           predicateList.add(cb.equal(
@@ -212,7 +211,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @DangerousOperation("根据ID归档角色")
   public void archiveById(Long id) {
     Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id, 0, 10);
-    if (!CollectionUtils.isEmpty(allAccountByRoleId.getContent())) {
+    if (!allAccountByRoleId.isEmpty()) {
       throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
     }
