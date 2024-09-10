@@ -49,31 +49,27 @@ public class DangerousOperationAspect {
   }
 
   @Before("@within(baby.mumu.basis.annotations.DangerousOperation) || @annotation(baby.mumu.basis.annotations.DangerousOperation)")
-  public void checkDangerousOperation(JoinPoint joinPoint) throws NoSuchMethodException {
-    Method method = getCurrentMethod(joinPoint);
-    DangerousOperation annotation = method.getAnnotation(DangerousOperation.class);
-
-    if (annotation == null) {
-      annotation = joinPoint.getTarget().getClass().getAnnotation(DangerousOperation.class);
-    }
-    Optional.ofNullable(annotation).ifPresent(
-        annotationNonNull -> SecurityContextUtil.getLoginAccountId()
-            .ifPresent(accountId -> {
-              String content = String.format(
-                  "The user with user ID %s performed a dangerous operation:%s", accountId,
-                  resolveParameters(annotationNonNull.value(), joinPoint));
-              systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-                  .setSystemLogSubmitCo(
-                      SystemLogSubmitGrpcCo.newBuilder()
-                          .setContent(content)
-                          .setCategory("dangerousOperation")
-                          .build())
-                  .build());
-              LOGGER.info(content);
-            }));
+  public void checkDangerousOperation(JoinPoint joinPoint) {
+    getCurrentMethod(joinPoint).map(method -> method.getAnnotation(DangerousOperation.class))
+        .or(() -> Optional.ofNullable(
+            joinPoint.getTarget().getClass().getAnnotation(DangerousOperation.class))).ifPresent(
+            annotationNonNull -> SecurityContextUtil.getLoginAccountId()
+                .ifPresent(accountId -> {
+                  String content = String.format(
+                      "The user with user ID %s performed a dangerous operation:%s", accountId,
+                      resolveParameters(annotationNonNull.value(), joinPoint));
+                  systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+                      .setSystemLogSubmitCo(
+                          SystemLogSubmitGrpcCo.newBuilder()
+                              .setContent(content)
+                              .setCategory("dangerousOperation")
+                              .build())
+                      .build());
+                  LOGGER.info(content);
+                }));
   }
 
-  private String resolveParameters(String value, JoinPoint joinPoint) {
+  private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
     String finalValue = value;
     if (value.contains(PERCENT_SIGN)) {
       finalValue = replaceParameters(finalValue, joinPoint.getArgs());
@@ -81,7 +77,7 @@ public class DangerousOperationAspect {
     return finalValue;
   }
 
-  private String replaceParameters(String value, Object[] args) {
+  private String replaceParameters(@NotNull String value, Object[] args) {
     String finalValue = value;
 
     if (finalValue.contains(PERCENT_SIGN) && ArrayUtils.isNotEmpty(args)) {
@@ -94,10 +90,13 @@ public class DangerousOperationAspect {
     return finalValue;
   }
 
-  private @NotNull Method getCurrentMethod(@NotNull JoinPoint joinPoint)
-      throws NoSuchMethodException {
+  private Optional<Method> getCurrentMethod(@NotNull JoinPoint joinPoint) {
     String methodName = joinPoint.getSignature().getName();
     Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
-    return joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes);
+    try {
+      return Optional.of(joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes));
+    } catch (NoSuchMethodException e) {
+      return Optional.empty();
+    }
   }
 }
