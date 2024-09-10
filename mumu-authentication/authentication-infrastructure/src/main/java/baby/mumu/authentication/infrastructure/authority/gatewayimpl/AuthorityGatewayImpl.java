@@ -106,7 +106,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  @DangerousOperation("删除权限")
+  @DangerousOperation("根据ID删除ID为%0的权限数据")
   public void deleteById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
     if (!authorities.isEmpty()) {
@@ -199,7 +199,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("根据ID归档权限")
+  @DangerousOperation("根据ID归档ID为%0的权限")
   public void archiveById(Long id) {
     Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
     if (!authorities.isEmpty()) {
@@ -220,7 +220,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Job(name = "删除ID为：%0 的权限归档数据")
-  @DangerousOperation("根据ID删除权限归档数据定时任务")
+  @DangerousOperation("根据ID删除ID为%0的权限归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId, 0, 10).isEmpty())

@@ -320,7 +320,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("根据id归档账户")
+  @DangerousOperation("根据ID归档账户ID为%0的账户")
   public void archiveById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(accountRepository::findById)
@@ -336,7 +336,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Job(name = "删除ID为：%0 的账户归档数据")
-  @DangerousOperation("根据ID删除账户归档数据定时任务")
+  @DangerousOperation("根据ID删除ID为%0的账户归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .ifPresent(accountArchivedRepository::deleteById);

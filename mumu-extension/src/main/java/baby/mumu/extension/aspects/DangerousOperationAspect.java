@@ -15,6 +15,8 @@
  */
 package baby.mumu.extension.aspects;
 
+import static baby.mumu.basis.constants.CommonConstants.PERCENT_SIGN;
+
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
@@ -22,6 +24,7 @@ import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -58,7 +61,7 @@ public class DangerousOperationAspect {
             .ifPresent(accountId -> {
               String content = String.format(
                   "The user with user ID %s performed a dangerous operation:%s", accountId,
-                  annotationNonNull.value());
+                  resolveParameters(annotationNonNull.value(), joinPoint));
               systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
                   .setSystemLogSubmitCo(
                       SystemLogSubmitGrpcCo.newBuilder()
@@ -68,6 +71,27 @@ public class DangerousOperationAspect {
                   .build());
               LOGGER.info(content);
             }));
+  }
+
+  private String resolveParameters(String value, JoinPoint joinPoint) {
+    String finalValue = value;
+    if (value.contains(PERCENT_SIGN)) {
+      finalValue = replaceParameters(finalValue, joinPoint.getArgs());
+    }
+    return finalValue;
+  }
+
+  private String replaceParameters(String value, Object[] args) {
+    String finalValue = value;
+
+    if (finalValue.contains(PERCENT_SIGN) && ArrayUtils.isNotEmpty(args)) {
+      for (int i = 0; i < args.length; i++) {
+        if (args[i] != null) {
+          finalValue = finalValue.replace(PERCENT_SIGN + i, args[i].toString());
+        }
+      }
+    }
+    return finalValue;
   }
 
   private @NotNull Method getCurrentMethod(@NotNull JoinPoint joinPoint)

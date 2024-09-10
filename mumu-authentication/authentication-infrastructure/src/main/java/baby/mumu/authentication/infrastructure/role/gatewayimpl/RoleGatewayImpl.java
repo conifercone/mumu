@@ -104,7 +104,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  @DangerousOperation("删除角色")
+  @DangerousOperation("删除ID为%0的角色")
   public void deleteById(Long id) {
     Optional.ofNullable(id).ifPresent(roleId -> {
       Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
@@ -218,7 +218,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("根据ID归档角色")
+  @DangerousOperation("根据ID归档ID为%0的角色")
   public void archiveById(Long id) {
     Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id, 0, 10);
     if (!allAccountByRoleId.isEmpty()) {
@@ -239,7 +239,7 @@ public class RoleGatewayImpl implements RoleGateway {
   }
 
   @Job(name = "删除ID为：%0 的角色归档数据")
-  @DangerousOperation("根据ID删除角色归档数据定时任务")
+  @DangerousOperation("根据ID删除ID为%0的角色归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId, 0, 10).isEmpty())
