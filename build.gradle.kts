@@ -125,7 +125,7 @@ subprojects {
         mapping("xml", "XML_STYLE")
         mapping("yml", "SCRIPT_STYLE")
         ext["year"] = Calendar.getInstance().get(Calendar.YEAR)
-        ext["organization"] = "kaiyu.shan@outlook.com"
+        ext["organization"] = "the original author or authors"
     }
 
     dependencies {
