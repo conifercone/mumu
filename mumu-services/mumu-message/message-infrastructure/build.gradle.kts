@@ -1,0 +1,17 @@
+dependencies {
+    implementation(project(":mumu-services:mumu-message:message-domain"))
+    implementation(project(":mumu-services:mumu-message:message-client"))
+    implementation(project(":mumu-services:mumu-unique:unique-client"))
+    implementation(project(":mumu-extension"))
+    implementation(libs.netty)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.protobuf.java)
+    implementation(libs.spring.security.core)
+    implementation(libs.jakarta.validation.api)
+    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.postgresql)
+    implementation(libs.redis.om.spring)
+    annotationProcessor(libs.redis.om.spring)
+    annotationProcessor(libs.hibernate.jpamodelgen)
+    implementation(libs.jobrunr.spring.boot3.starter)
+}

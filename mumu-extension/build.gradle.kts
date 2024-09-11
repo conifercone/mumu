@@ -1,6 +1,6 @@
 dependencies {
     api(project(":mumu-basis"))
-    implementation(project(":mumu-log:log-client"))
+    implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.grpc.spring.boot.starter)
     implementation(libs.curator.recipes)

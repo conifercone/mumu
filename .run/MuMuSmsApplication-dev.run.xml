@@ -2,7 +2,7 @@
   <configuration default="false" name="MuMuSmsApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
-    <module name="mumu.mumu-sms.main"/>
+    <module name="mumu.mumu-services.mumu-sms.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.sms.MuMuSmsApplication"/>
     <option name="VM_PARAMETERS" value="-Dcom.sun.management.jmxremote.port=31601 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dlog4j2.disableJmx=true" />
