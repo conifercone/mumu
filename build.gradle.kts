@@ -26,8 +26,8 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(0, TimeUnit.SECONDS)
-            cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
+            cacheChangingModulesFor(1, TimeUnit.HOURS)
+            cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
 
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
