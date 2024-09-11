@@ -104,8 +104,7 @@ subprojects {
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
                 "Build-Timestamp" to LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                "Automatic-Module-Name" to "${project.group}.${project.name.replace("-", ".")}"
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             )
         }
     }
