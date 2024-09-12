@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.unique.client.api.PrimaryKeyService;
 import baby.mumu.unique.client.dto.co.PrimaryKeySnowflakeCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +49,7 @@ public class PrimaryKeyController {
   @Operation(summary = "获取主键(雪花算法)")
   @GetMapping("/snowflake")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public PrimaryKeySnowflakeCo snowflake() {
     return primaryKeyService.snowflake();

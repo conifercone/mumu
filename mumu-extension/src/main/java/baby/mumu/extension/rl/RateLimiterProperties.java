@@ -16,16 +16,19 @@
 package baby.mumu.extension.rl;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 限流Redis配置
+ * 限流配置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 @Data
-public class RateLimitingRedisProperties {
+public class RateLimiterProperties {
 
-  private String uri = "redis://localhost:6379";
+  private boolean enabled;
 
+  @NestedConfigurationProperty
+  private RateLimiterRedisProperties redis = new RateLimiterRedisProperties();
 }

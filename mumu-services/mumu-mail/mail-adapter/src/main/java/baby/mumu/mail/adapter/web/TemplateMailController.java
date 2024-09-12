@@ -15,7 +15,7 @@
  */
 package baby.mumu.mail.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.mail.client.api.TemplateMailService;
 import baby.mumu.mail.client.dto.TemplateMailSendCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class TemplateMailController {
   @Operation(summary = "发送模板邮件")
   @PostMapping("/send")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public void sendMail(@RequestBody TemplateMailSendCmd templateMailSendCmd) {
     templateMailService.sendMail(templateMailSendCmd);

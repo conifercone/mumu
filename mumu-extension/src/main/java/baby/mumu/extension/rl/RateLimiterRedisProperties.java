@@ -13,25 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.exception;
+package baby.mumu.extension.rl;
 
-import baby.mumu.basis.response.ResultCode;
-import java.io.Serial;
-import lombok.Getter;
+import lombok.Data;
 
 /**
- * 限流异常
+ * 限流Redis配置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-@Getter
-public class RateLimitingException extends MuMuException {
+@Data
+public class RateLimiterRedisProperties {
 
-  @Serial
-  private static final long serialVersionUID = 6238973755219029059L;
+  private String uri = "redis://localhost:6379";
 
-  public RateLimitingException(long remainingWaitingTime) {
-    super(ResultCode.TOO_MANY_REQUESTS, remainingWaitingTime);
-  }
 }

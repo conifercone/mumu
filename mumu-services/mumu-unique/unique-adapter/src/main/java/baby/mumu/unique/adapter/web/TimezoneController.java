@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,7 @@ public class TimezoneController {
   @Operation(summary = "获取可用时区列表")
   @GetMapping("/available")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public ResultResponse<Set<String>> available() {
     return ResultResponse.success(ZoneId.getAvailableZoneIds());
@@ -52,7 +52,7 @@ public class TimezoneController {
   @Operation(summary = "获取当前服务器时间")
   @GetMapping("/serverTime")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResultResponse<OffsetDateTime> serverTime() {
     return ResultResponse.success(OffsetDateTime.now());

@@ -20,12 +20,12 @@ import static java.time.Duration.ofHours;
 import static java.time.Duration.ofMinutes;
 import static java.time.Duration.ofSeconds;
 
-import baby.mumu.basis.annotations.RateLimiting;
-import baby.mumu.basis.annotations.RateLimitings;
-import baby.mumu.basis.exception.RateLimitingException;
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.annotations.RateLimiters;
+import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.extension.ExtensionProperties;
-import baby.mumu.extension.rl.RateLimitingStringByteArrayCodec;
+import baby.mumu.extension.rl.RateLimiterStringByteArrayCodec;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.ConfigurationBuilder;
@@ -73,7 +73,7 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
       @NotNull ExtensionProperties extensionProperties) {
     this.applicationContext = applicationContext;
     this.redisClient = RedisClient.create(extensionProperties.getRl().getRedis().getUri());
-    this.connection = redisClient.connect(new RateLimitingStringByteArrayCodec());
+    this.connection = redisClient.connect(new RateLimiterStringByteArrayCodec());
     this.proxyManager = Bucket4jLettuce.casBasedBuilder(
             connection.async())
         .expirationAfterWrite(
@@ -84,28 +84,28 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   /**
    * 基于方法上的注解
    */
-  @Pointcut("@annotation(baby.mumu.basis.annotations.RateLimiting) || @annotation(baby.mumu.basis.annotations.RateLimitings)")
+  @Pointcut("@annotation(baby.mumu.basis.annotations.RateLimiter) || @annotation(baby.mumu.basis.annotations.RateLimiters)")
   public void methodAnnotation() {
   }
 
   /**
    * 基于类上的注解
    */
-  @Pointcut("@within(baby.mumu.basis.annotations.RateLimiting) || @within(baby.mumu.basis.annotations.RateLimitings)")
+  @Pointcut("@within(baby.mumu.basis.annotations.RateLimiter) || @within(baby.mumu.basis.annotations.RateLimiters)")
   public void classAnnotation() {
   }
 
   @Around("methodAnnotation() || classAnnotation()")
   public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
-    List<RateLimiting> annotations = new ArrayList<>();
-    Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiting.class))
+    List<RateLimiter> annotations = new ArrayList<>();
+    Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiter.class))
         .ifPresent(annotations::add);
     annotations.addAll(
-        getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimiting.class));
-    Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimitings.class))
-        .map(rateLimitings -> Arrays.asList(rateLimitings.value())).ifPresent(annotations::addAll);
+        getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimiter.class));
+    Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiters.class))
+        .map(rateLimiters -> Arrays.asList(rateLimiters.value())).ifPresent(annotations::addAll);
 
-    getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimitings.class).forEach(
+    getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimiters.class).forEach(
         x -> annotations.addAll(Arrays.asList(x.value())));
     if (!annotations.isEmpty()) {
       String defaultSignature = DigestUtils.md5Hex(joinPoint.getSignature().toString());
@@ -125,18 +125,18 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   }
 
   private void rateLimiting(@NotNull RateLimitingKey rateLimitingKey,
-      @NotNull List<RateLimiting> list) {
+      @NotNull List<RateLimiter> list) {
     Bucket bucket = getBucket(rateLimitingKey, list);
     ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
     if (!probe.isConsumed()) {
       long waitForRefillNanos = probe.getNanosToWaitForRefill();
       long waitForRefillMillis = Duration.ofNanos(waitForRefillNanos).toSeconds();
-      throw new RateLimitingException(waitForRefillMillis);
+      throw new RateLimiterException(waitForRefillMillis);
     }
   }
 
   private Bucket getBucket(@NotNull RateLimitingKey rateLimitingKey,
-      @NotNull List<RateLimiting> list) {
+      @NotNull List<RateLimiter> list) {
     RateLimitingKeyProvider rateLimitingKeyProvider = applicationContext.getBean(
         rateLimitingKey.getKeyProvider());
     String uniqKey = rateLimitingKey.getPrefix() + ":" + rateLimitingKeyProvider.generateUniqKey();

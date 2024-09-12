@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.unique.client.api.CountryService;
 import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdCmd;
@@ -63,7 +63,7 @@ public class CountryController {
   @Operation(summary = "获取国家详细信息")
   @GetMapping("/getCountryStateCity")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryStateCityGetAllCo>> getCountryStateCity() {
     return ResultResponse.success(countryService.getCountryStateCity());
@@ -72,7 +72,7 @@ public class CountryController {
   @Operation(summary = "获取国家详细信息(不包含省或州、市信息)")
   @GetMapping("/getCountries")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetAllCo>> getCountries() {
     return ResultResponse.success(countryService.getCountries());
@@ -81,7 +81,7 @@ public class CountryController {
   @Operation(summary = "根据国家ID获取省或州信息")
   @GetMapping("/getStatesByCountryId")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(@RequestBody
   CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
@@ -92,7 +92,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取城市")
   @GetMapping("/getCitiesByStateId")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(@RequestBody
   CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
@@ -103,7 +103,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取省或州")
   @GetMapping("/getStateById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetStateByIdCo> getStateById(@RequestBody
   CountryGetStateByIdCmd countryGetStateByIdCmd) {
@@ -114,7 +114,7 @@ public class CountryController {
   @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
   @GetMapping("/getStateCitiesById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@RequestBody
   CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
@@ -125,7 +125,7 @@ public class CountryController {
   @Operation(summary = "根据城市id获取城市指令")
   @GetMapping("/getCityById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResultResponse<CountryGetCityByIdCo> getCityById(@RequestBody
   CountryGetCityByIdCmd countryGetCityByIdCmd) {

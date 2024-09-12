@@ -27,7 +27,7 @@ import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -65,7 +65,7 @@ public class AuthorityController {
   @Operation(summary = "添加权限")
   @PostMapping("/add")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(@RequestBody @Valid AuthorityAddCmd authorityAddCmd) {
     authorityService.add(authorityAddCmd);
@@ -74,7 +74,7 @@ public class AuthorityController {
   @Operation(summary = "根据主键删除权限")
   @DeleteMapping("/deleteById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(@RequestBody @Valid AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
     authorityService.deleteById(authorityDeleteByIdCmd);
@@ -83,7 +83,7 @@ public class AuthorityController {
   @Operation(summary = "修改权限")
   @PutMapping("/updateById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@RequestBody @Valid AuthorityUpdateCmd authorityUpdateCmd) {
     authorityService.updateById(authorityUpdateCmd);
@@ -93,7 +93,7 @@ public class AuthorityController {
   @GetMapping("/findAll")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
-  @RateLimiting
+  @RateLimiter
   public Page<AuthorityFindAllCo> findAll(
       @RequestBody @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
@@ -102,7 +102,7 @@ public class AuthorityController {
   @Operation(summary = "查询已归档权限")
   @GetMapping("/findArchivedAll")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public Page<AuthorityArchivedFindAllCo> findArchivedAll(
       @RequestBody @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
@@ -112,7 +112,7 @@ public class AuthorityController {
   @Operation(summary = "根据id查询权限")
   @GetMapping("/findById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public AuthorityFindByIdCo findById(
       @RequestBody @Valid AuthorityFindByIdCmd authorityFindByIdCmd) {
@@ -122,7 +122,7 @@ public class AuthorityController {
   @Operation(summary = "根据id归档权限")
   @PutMapping("/archiveById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(@RequestBody @Valid AuthorityArchiveByIdCmd authorityArchiveByIdCmd) {
     authorityService.archiveById(authorityArchiveByIdCmd);
@@ -131,7 +131,7 @@ public class AuthorityController {
   @Operation(summary = "根据id从归档恢复权限")
   @PutMapping("/recoverFromArchiveById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
       @RequestBody @Valid AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {

@@ -17,7 +17,7 @@ package baby.mumu.extension.processor.response;
 
 import baby.mumu.basis.client.dto.co.ClientObject;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.exception.RateLimitingException;
+import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -91,23 +91,23 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     return ResultResponse.failure(mumuException.getResultCode());
   }
 
-  @ExceptionHandler(RateLimitingException.class)
+  @ExceptionHandler(RateLimiterException.class)
   public ResultResponse<?> handleRateLimitingException(
-      @NotNull RateLimitingException rateLimitingException,
+      @NotNull RateLimiterException rateLimiterException,
       @NotNull HttpServletResponse response) {
-    ResultCode resultCode = rateLimitingException.getResultCode();
+    ResultCode resultCode = rateLimiterException.getResultCode();
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(Integer.parseInt(resultCode.getResultCode()));
-    LOGGER.error(rateLimitingException.getMessage(), rateLimitingException);
+    LOGGER.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
-            SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimitingException.getMessage())
-                .setCategory("rateLimitingException")
-                .setFail(ExceptionUtils.getStackTrace(rateLimitingException)).build())
+            SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimiterException.getMessage())
+                .setCategory("rateLimiterException")
+                .setFail(ExceptionUtils.getStackTrace(rateLimiterException)).build())
         .build());
-    return ResultResponse.failure(rateLimitingException.getResultCode(),
-        rateLimitingException.getData());
+    return ResultResponse.failure(rateLimiterException.getResultCode(),
+        rateLimiterException.getData());
   }
 
   @ExceptionHandler(ValidationException.class)

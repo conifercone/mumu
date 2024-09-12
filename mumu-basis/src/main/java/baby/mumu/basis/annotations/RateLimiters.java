@@ -21,7 +21,7 @@ package baby.mumu.basis.annotations;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-public @interface RateLimitings {
+public @interface RateLimiters {
 
-  RateLimiting[] value();
+  RateLimiter[] value();
 }

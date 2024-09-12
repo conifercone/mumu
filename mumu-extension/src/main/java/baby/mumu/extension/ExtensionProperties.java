@@ -19,7 +19,7 @@ import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.distributed.DistributedProperties;
 import baby.mumu.extension.fd.FaceDetectionProperties;
 import baby.mumu.extension.ocr.OcrProperties;
-import baby.mumu.extension.rl.RateLimitingProperties;
+import baby.mumu.extension.rl.RateLimiterProperties;
 import baby.mumu.extension.sql.SqlProperties;
 import baby.mumu.extension.translation.TranslationProperties;
 import lombok.Data;
@@ -82,5 +82,5 @@ public class ExtensionProperties {
    * 限流配置
    */
   @NestedConfigurationProperty
-  private RateLimitingProperties rl = new RateLimitingProperties();
+  private RateLimiterProperties rl = new RateLimiterProperties();
 }

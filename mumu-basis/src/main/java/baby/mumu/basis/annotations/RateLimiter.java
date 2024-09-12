@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @Inherited
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RateLimiting {
+public @interface RateLimiter {
 
   /**
    * 生成的令牌数量

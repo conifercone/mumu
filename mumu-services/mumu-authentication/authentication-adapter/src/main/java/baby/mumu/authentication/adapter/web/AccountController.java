@@ -29,7 +29,7 @@ import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,7 +67,7 @@ public class AccountController {
   @Operation(summary = "账户注册")
   @PostMapping("/register")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(@RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
@@ -76,7 +76,7 @@ public class AccountController {
   @Operation(summary = "账户基本信息更新")
   @PutMapping("/updateById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
@@ -85,7 +85,7 @@ public class AccountController {
   @Operation(summary = "账户角色更新")
   @PutMapping("/updateRoleById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
       @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
@@ -95,7 +95,7 @@ public class AccountController {
   @Operation(summary = "禁用账户")
   @PutMapping("/disable")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(@RequestBody @Valid AccountDisableCmd accountDisableCmd) {
     accountService.disable(accountDisableCmd);
@@ -104,7 +104,7 @@ public class AccountController {
   @Operation(summary = "获取当前登录账户信息")
   @GetMapping("/currentLoginAccount")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
     return accountService.queryCurrentLoginAccount();
@@ -113,7 +113,7 @@ public class AccountController {
   @Operation(summary = "获取在线账户数量等信息")
   @GetMapping("/onlineAccounts")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public AccountOnlineStatisticsCo onlineAccounts() {
     return accountService.onlineAccounts();
@@ -122,7 +122,7 @@ public class AccountController {
   @Operation(summary = "重置密码")
   @PutMapping("/resetPassword")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(
       @RequestBody @Valid AccountResetPasswordCmd accountResetPasswordCmd) {
@@ -132,7 +132,7 @@ public class AccountController {
   @Operation(summary = "删除当前账户")
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteCurrent(@RequestBody @Valid AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
     accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
@@ -141,7 +141,7 @@ public class AccountController {
   @Operation(summary = "校验账户密码")
   @GetMapping("/verifyPassword")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public ResultResponse<Boolean> verifyPassword(
       @RequestBody @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
@@ -151,7 +151,7 @@ public class AccountController {
   @Operation(summary = "修改账户密码")
   @PutMapping("/changePassword")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(
       @RequestBody @Valid AccountChangePasswordCmd accountChangePasswordCmd) {
@@ -161,7 +161,7 @@ public class AccountController {
   @Operation(summary = "根据id归档账户")
   @PutMapping("/archiveById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(
       @RequestBody @Valid AccountArchiveByIdCmd accountArchiveByIdCmd) {
@@ -171,7 +171,7 @@ public class AccountController {
   @Operation(summary = "根据id从归档中恢复账户")
   @PutMapping("/recoverFromArchiveById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
       @RequestBody @Valid AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
@@ -181,7 +181,7 @@ public class AccountController {
   @Operation(summary = "账户添加地址")
   @PostMapping("/addAddress")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public void addAddress(
       @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * 限流（Rate Limiting）
+ * 限流（Rate Limiter）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0

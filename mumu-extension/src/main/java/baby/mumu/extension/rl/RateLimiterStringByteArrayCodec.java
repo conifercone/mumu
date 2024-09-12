@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-public class RateLimitingStringByteArrayCodec implements RedisCodec<String, byte[]> {
+public class RateLimiterStringByteArrayCodec implements RedisCodec<String, byte[]> {
 
   @Override
   public String decodeKey(ByteBuffer bytes) {

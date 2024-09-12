@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.unique.client.api.BarCodeService;
@@ -54,7 +54,7 @@ public class BarCodeController {
   @Operation(summary = "生成条形码（返回Base64格式的图片数据链接）")
   @GetMapping("/dataUrl")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResultResponse<String> dataUrlGenerate(
       @RequestBody @Valid BarCodeGenerateCmd barCodeGenerateCmd) {

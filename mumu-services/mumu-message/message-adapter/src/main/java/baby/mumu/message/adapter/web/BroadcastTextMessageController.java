@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.adapter.web;
 
-import baby.mumu.basis.annotations.RateLimiting;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.message.client.api.BroadcastTextMessageService;
 import baby.mumu.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
@@ -62,7 +62,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "转发文本广播消息")
   @PostMapping("/forward")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
       @RequestBody @Valid BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
@@ -72,7 +72,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "根据ID已读文本广播消息")
   @PutMapping("/readMsgById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public void readMsgById(
       @RequestBody BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
@@ -82,7 +82,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "根据ID删除文本广播消息")
   @DeleteMapping("/deleteMsgById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public void deleteMsgById(
       @RequestBody BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
@@ -92,7 +92,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "查询所有当前用户发送消息")
   @GetMapping("/findAllYouSend")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
       @RequestBody @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
@@ -102,7 +102,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "根据ID归档文本广播消息")
   @PutMapping("/archiveMsgById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public void archiveMsgById(
       @RequestBody BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
@@ -112,7 +112,7 @@ public class BroadcastTextMessageController {
   @Operation(summary = "根据ID从存档中恢复消息指令")
   @PutMapping("/recoverMsgFromArchiveById")
   @ResponseBody
-  @RateLimiting
+  @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverMsgFromArchiveById(
       @RequestBody BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {

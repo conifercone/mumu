@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.extension.rl;
+package baby.mumu.basis.exception;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import baby.mumu.basis.response.ResultCode;
+import java.io.Serial;
+import lombok.Getter;
 
 /**
- * 限流配置
+ * 限流异常
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-@Data
-public class RateLimitingProperties {
+@Getter
+public class RateLimiterException extends MuMuException {
 
-  private boolean enabled;
+  @Serial
+  private static final long serialVersionUID = 6238973755219029059L;
 
-  @NestedConfigurationProperty
-  private RateLimitingRedisProperties redis = new RateLimitingRedisProperties();
+  public RateLimiterException(long remainingWaitingTime) {
+    super(ResultCode.TOO_MANY_REQUESTS, remainingWaitingTime);
+  }
 }
