@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
+import baby.mumu.basis.annotations.RateLimiting;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.unique.client.api.QRCodeService;
@@ -53,6 +54,7 @@ public class QRCodeController {
   @Operation(summary = "生成二维码（返回Base64格式的图片数据链接）")
   @GetMapping("/dataUrl")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.4")
   public ResultResponse<String> dataUrlGenerate(
       @RequestBody @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {

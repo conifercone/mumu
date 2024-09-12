@@ -23,6 +23,7 @@ import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.basis.annotations.RateLimiting;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -60,6 +61,7 @@ public class RoleController {
   @Operation(summary = "添加角色")
   @PostMapping("/add")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(@RequestBody @Valid RoleAddCmd roleAddCmd) {
     roleService.add(roleAddCmd);
@@ -68,6 +70,7 @@ public class RoleController {
   @Operation(summary = "根据id删除角色")
   @DeleteMapping("/deleteById")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public void deleteById(@RequestBody @Valid RoleDeleteByIdCmd roleDeleteByIdCmd) {
     roleService.deleteById(roleDeleteByIdCmd);
@@ -76,6 +79,7 @@ public class RoleController {
   @Operation(summary = "更新角色")
   @PutMapping("/updateById")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(@RequestBody @Valid RoleUpdateCmd roleUpdateCmd) {
     roleService.updateById(roleUpdateCmd);
@@ -84,6 +88,7 @@ public class RoleController {
   @Operation(summary = "查询角色")
   @GetMapping("/findAll")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<RoleFindAllCo> findAll(@RequestBody @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
@@ -92,6 +97,7 @@ public class RoleController {
   @Operation(summary = "根据id归档角色")
   @PutMapping("/archiveById")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(@RequestBody @Valid RoleArchiveByIdCmd roleArchiveByIdCmd) {
     roleService.archiveById(roleArchiveByIdCmd);
@@ -100,6 +106,7 @@ public class RoleController {
   @Operation(summary = "根据id从归档中恢复角色")
   @PutMapping("/recoverFromArchiveById")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
       @RequestBody @Valid RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {

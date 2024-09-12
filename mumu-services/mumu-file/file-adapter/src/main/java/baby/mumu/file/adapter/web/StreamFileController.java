@@ -15,6 +15,7 @@
  */
 package baby.mumu.file.adapter.web;
 
+import baby.mumu.basis.annotations.RateLimiting;
 import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
@@ -65,6 +66,7 @@ public class StreamFileController {
   @Operation(summary = "异步文件上传")
   @PostMapping("/sync/upload")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public void syncUpload(@RequestParam("streamFileSyncUploadCmd") String streamFileSyncUploadCmd,
       @RequestParam("file") MultipartFile file) throws IOException {
@@ -79,6 +81,7 @@ public class StreamFileController {
   @Operation(summary = "文件下载")
   @GetMapping("/download")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public void download(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd,
       HttpServletResponse response)
@@ -100,6 +103,7 @@ public class StreamFileController {
   @Operation(summary = "获取字符串格式的文件内容")
   @GetMapping("/stringContent")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public String getStringContent(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd)
       throws IOException {
@@ -110,6 +114,7 @@ public class StreamFileController {
   @Operation(summary = "删除文件")
   @DeleteMapping("/remove")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(@RequestBody StreamFileRemoveCmd streamFileRemoveCmd) {
     streamFileService.removeFile(streamFileRemoveCmd);

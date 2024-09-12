@@ -15,6 +15,7 @@
  */
 package baby.mumu.log.adapter.web;
 
+import baby.mumu.basis.annotations.RateLimiting;
 import baby.mumu.log.client.api.OperationLogService;
 import baby.mumu.log.client.dto.OperationLogFindAllCmd;
 import baby.mumu.log.client.dto.OperationLogSubmitCmd;
@@ -56,6 +57,7 @@ public class OperationLogController {
   @Operation(summary = "提交日志")
   @PostMapping("/submit")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
     operationLogService.submit(operationLogSubmitCmd);
@@ -64,6 +66,7 @@ public class OperationLogController {
   @Operation(summary = "根据日志ID获取操作日志")
   @GetMapping("/findById")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public OperationLogQryCo findOperationLogById(@RequestParam(value = "id") String id) {
     return operationLogService.findOperationLogById(id);
@@ -72,6 +75,7 @@ public class OperationLogController {
   @Operation(summary = "分页查询所有操作日志")
   @GetMapping("/findAll")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<OperationLogFindAllCo> findAll(
       @RequestBody @Valid OperationLogFindAllCmd operationLogFindAllCmd) {

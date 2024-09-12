@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.adapter.web;
 
+import baby.mumu.basis.annotations.RateLimiting;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.unique.client.api.CaptchaService;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
@@ -53,6 +54,7 @@ public class CaptchaController {
   @Operation(summary = "获取简单验证码")
   @GetMapping("/simple")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public SimpleCaptchaGeneratedCo simple(
       @RequestBody SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
@@ -62,6 +64,7 @@ public class CaptchaController {
   @Operation(summary = "验证简单验证码")
   @PostMapping("/simple/verify")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.1")
   public ResultResponse<Boolean> verifySimple(
       @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {

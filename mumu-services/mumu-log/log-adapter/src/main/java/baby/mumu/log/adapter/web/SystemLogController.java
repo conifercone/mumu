@@ -15,6 +15,7 @@
  */
 package baby.mumu.log.adapter.web;
 
+import baby.mumu.basis.annotations.RateLimiting;
 import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.client.dto.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.SystemLogSubmitCmd;
@@ -54,6 +55,7 @@ public class SystemLogController {
   @Operation(summary = "提交日志")
   @PostMapping("/submit")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public void submit(@RequestBody SystemLogSubmitCmd systemLogSubmitCmd) {
     systemLogService.submit(systemLogSubmitCmd);
@@ -62,6 +64,7 @@ public class SystemLogController {
   @Operation(summary = "分页查询所有系统日志")
   @GetMapping("/findAll")
   @ResponseBody
+  @RateLimiting
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<SystemLogFindAllCo> findAll(
       @RequestBody @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
