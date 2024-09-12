@@ -15,7 +15,14 @@
  */
 package baby.mumu.extension.aspects;
 
+import baby.mumu.basis.provider.RateLimitingIpKeyProviderImpl;
+import baby.mumu.basis.provider.RateLimitingKeyProvider;
+import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.log.client.api.SystemLogGrpcService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -34,5 +41,19 @@ public class AspectConfiguration {
   public DangerousOperationAspect dangerousOperationAspect(
       SystemLogGrpcService systemLogGrpcService) {
     return new DangerousOperationAspect(systemLogGrpcService);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+  public RateLimitingAspect rateLimitingAspect(ApplicationContext applicationContext,
+      ExtensionProperties extensionProperties) {
+    return new RateLimitingAspect(applicationContext, extensionProperties);
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+  @ConditionalOnMissingBean(RateLimitingKeyProvider.class)
+  public RateLimitingKeyProvider rateLimitingKeyProvider(HttpServletRequest httpServletRequest) {
+    return new RateLimitingIpKeyProviderImpl(httpServletRequest);
   }
 }

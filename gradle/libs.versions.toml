@@ -32,6 +32,7 @@ autoServiceVersion = '1.1.1'
 tess4jVersion = '5.13.0'
 javacvVersion = '1.5.10'
 aliyunOcrVersion = '3.1.1'
+bucket4jVersion = '8.14.0'
 # bom version
 grpcBomVersion = '1.58.0'
 guavaBomVersion = '33.3.0-jre'
@@ -224,6 +225,10 @@ spring-test = { module = "org.springframework:spring-test" }
 javacv = { module = "org.bytedeco:javacv-platform", version.ref = "javacvVersion" }
 # https://mvnrepository.com/artifact/com.aliyun/ocr_api20210707
 aliyun-ocr = { module = "com.aliyun:ocr_api20210707", version.ref = "aliyunOcrVersion" }
+# https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-lettuce
+bucket4j-lettuce = { module = "com.bucket4j:bucket4j_jdk17-lettuce", version.ref = "bucket4jVersion" }
+# https://mvnrepository.com/artifact/io.lettuce/lettuce-core
+lettuce-core = { module = "io.lettuce:lettuce-core" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

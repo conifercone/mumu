@@ -22,7 +22,6 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
@@ -39,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @since 2.0.0
  */
 @Aspect
-public class DangerousOperationAspect {
+public class DangerousOperationAspect extends AbstractAspect {
 
   private final SystemLogGrpcService systemLogGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(DangerousOperationAspect.class);
@@ -88,15 +87,5 @@ public class DangerousOperationAspect {
       }
     }
     return finalValue;
-  }
-
-  private Optional<Method> getCurrentMethod(@NotNull JoinPoint joinPoint) {
-    String methodName = joinPoint.getSignature().getName();
-    Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
-    try {
-      return Optional.of(joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes));
-    } catch (NoSuchMethodException e) {
-      return Optional.empty();
-    }
   }
 }

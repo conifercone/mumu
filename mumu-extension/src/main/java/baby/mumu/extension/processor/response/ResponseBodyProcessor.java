@@ -17,6 +17,7 @@ package baby.mumu.extension.processor.response;
 
 import baby.mumu.basis.client.dto.co.ClientObject;
 import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.RateLimitingException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -88,6 +89,25 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       return ResultResponse.failure(mumuException.getResultCode(), mumuException.getData());
     }
     return ResultResponse.failure(mumuException.getResultCode());
+  }
+
+  @ExceptionHandler(RateLimitingException.class)
+  public ResultResponse<?> handleRateLimitingException(
+      @NotNull RateLimitingException rateLimitingException,
+      @NotNull HttpServletResponse response) {
+    ResultCode resultCode = rateLimitingException.getResultCode();
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setStatus(Integer.parseInt(resultCode.getResultCode()));
+    LOGGER.error(rateLimitingException.getMessage(), rateLimitingException);
+    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimitingException.getMessage())
+                .setCategory("rateLimitingException")
+                .setFail(ExceptionUtils.getStackTrace(rateLimitingException)).build())
+        .build());
+    return ResultResponse.failure(rateLimitingException.getResultCode(),
+        rateLimitingException.getData());
   }
 
   @ExceptionHandler(ValidationException.class)

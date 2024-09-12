@@ -27,6 +27,7 @@ import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.basis.annotations.RateLimiting;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -89,6 +90,7 @@ public class AuthorityController {
   @GetMapping("/findAll")
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
+  @RateLimiting
   public Page<AuthorityFindAllCo> findAll(
       @RequestBody @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);

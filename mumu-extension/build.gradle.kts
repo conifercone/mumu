@@ -16,6 +16,8 @@ dependencies {
     implementation(libs.deepl)
     implementation(libs.tess4j)
     implementation(libs.javacv)
+    implementation(libs.bucket4j.lettuce)
+    implementation(libs.lettuce.core)
     testImplementation(libs.tess4j)
     testImplementation(libs.spring.test)
 }
