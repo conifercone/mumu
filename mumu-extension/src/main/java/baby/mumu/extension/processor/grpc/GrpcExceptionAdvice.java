@@ -16,6 +16,7 @@
 package baby.mumu.extension.processor.grpc;
 
 import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
@@ -53,31 +54,55 @@ public class GrpcExceptionAdvice {
   @GRpcExceptionHandler
   public Status handle(MuMuException mumuException,
       @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
+    Status internal = Status.INTERNAL;
     if (mumuException != null) {
       LOGGER.error(mumuException.getMessage());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder().setContent("MuMuException")
+              SystemLogSubmitGrpcCo.newBuilder().setContent(mumuException.getMessage())
                   .setCategory("mumuException")
                   .setFail(ExceptionUtils.getStackTrace(mumuException)).build())
           .build());
+      internal = internal.withDescription(mumuException.getMessage()).withCause(mumuException);
     }
-    return Status.INTERNAL;
+    return internal;
+  }
+
+  @SuppressWarnings("unused")
+  @GRpcExceptionHandler
+  public Status handle(RateLimiterException rateLimiterException,
+      @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
+    Status resourceExhausted = Status.RESOURCE_EXHAUSTED;
+    if (rateLimiterException != null) {
+      LOGGER.error(rateLimiterException.getMessage());
+      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+          .setSystemLogSubmitCo(
+              SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimiterException.getMessage())
+                  .setCategory("rateLimiterException")
+                  .setFail(ExceptionUtils.getStackTrace(rateLimiterException)).build())
+          .build());
+      resourceExhausted = resourceExhausted.withDescription(rateLimiterException.getMessage())
+          .withCause(rateLimiterException);
+    }
+    return resourceExhausted;
   }
 
   @SuppressWarnings("unused")
   @GRpcExceptionHandler
   public Status handle(AuthenticationException authenticationException,
       @SuppressWarnings("unused") GRpcExceptionScope scope) {
+    Status unauthenticated = Status.UNAUTHENTICATED;
     if (authenticationException != null) {
       LOGGER.error(ResultCode.UNAUTHORIZED.getResultMsg());
       systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultCode())
+              SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultMsg())
                   .setCategory("exception")
                   .setFail(ResultCode.UNAUTHORIZED.getResultMsg()).build())
           .build());
+      unauthenticated = unauthenticated.withDescription(authenticationException.getMessage())
+          .withCause(authenticationException);
     }
-    return Status.UNAUTHENTICATED;
+    return unauthenticated;
   }
 }

@@ -50,7 +50,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
@@ -81,32 +80,14 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
         .build();
   }
 
-  /**
-   * 基于方法上的注解
-   */
-  @Pointcut("@annotation(baby.mumu.basis.annotations.RateLimiter) || @annotation(baby.mumu.basis.annotations.RateLimiters)")
-  public void methodAnnotation() {
-  }
-
-  /**
-   * 基于类上的注解
-   */
-  @Pointcut("@within(baby.mumu.basis.annotations.RateLimiter) || @within(baby.mumu.basis.annotations.RateLimiters)")
-  public void classAnnotation() {
-  }
-
-  @Around("methodAnnotation() || classAnnotation()")
+  @Around("@annotation(baby.mumu.basis.annotations.RateLimiter) || @annotation(baby.mumu.basis.annotations.RateLimiters)")
   public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
     List<RateLimiter> annotations = new ArrayList<>();
     Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiter.class))
         .ifPresent(annotations::add);
-    annotations.addAll(
-        getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimiter.class));
     Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiters.class))
         .map(rateLimiters -> Arrays.asList(rateLimiters.value())).ifPresent(annotations::addAll);
 
-    getInheritClassAnnotation(joinPoint.getTarget().getClass(), RateLimiters.class).forEach(
-        x -> annotations.addAll(Arrays.asList(x.value())));
     if (!annotations.isEmpty()) {
       String defaultSignature = DigestUtils.md5Hex(joinPoint.getSignature().toString());
       annotations.stream().distinct().collect(

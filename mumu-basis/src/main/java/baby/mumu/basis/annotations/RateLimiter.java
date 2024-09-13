@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2.1.0
  */
 @Inherited
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimiter {
 

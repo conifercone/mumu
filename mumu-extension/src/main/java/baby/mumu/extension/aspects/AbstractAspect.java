@@ -17,8 +17,6 @@ package baby.mumu.extension.aspects;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -31,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.1.0
  */
 public abstract class AbstractAspect {
-
 
   protected <T extends Annotation> T getMethodAnnotation(@NotNull JoinPoint joinPoint,
       Class<T> clazz) {
@@ -50,32 +47,6 @@ public abstract class AbstractAspect {
       annotation = transferMoney.getAnnotation(clazz);
     }
     return annotation;
-  }
-
-
-  protected <T extends Annotation> List<T> getInheritClassAnnotation(Class<?> clazz,
-      Class<T> annotation) {
-    List<T> list = new ArrayList<>();
-    // 获取当前类及其父类包含的指定的T类型注解
-    do {
-      T annot = getClassAnnotation(clazz, annotation);
-      if (annot != null) {
-        list.add(annot);
-      }
-      clazz = clazz.getSuperclass();
-    } while (clazz != null);
-    return list;
-  }
-
-
-  protected <T extends Annotation> T getClassAnnotation(@NotNull Class<?> clazz,
-      Class<T> annotation) {
-    T res = null;
-    boolean annotationPresent = clazz.isAnnotationPresent(annotation);
-    if (annotationPresent) {
-      res = clazz.getAnnotation(annotation);
-    }
-    return res;
   }
 
   protected Optional<Method> getCurrentMethod(@NotNull JoinPoint joinPoint) {

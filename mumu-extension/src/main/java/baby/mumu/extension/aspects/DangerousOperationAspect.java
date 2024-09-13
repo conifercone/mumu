@@ -22,7 +22,6 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,11 +46,10 @@ public class DangerousOperationAspect extends AbstractAspect {
     this.systemLogGrpcService = systemLogGrpcService;
   }
 
-  @Before("@within(baby.mumu.basis.annotations.DangerousOperation) || @annotation(baby.mumu.basis.annotations.DangerousOperation)")
+  @Before("@annotation(baby.mumu.basis.annotations.DangerousOperation)")
   public void checkDangerousOperation(JoinPoint joinPoint) {
     getCurrentMethod(joinPoint).map(method -> method.getAnnotation(DangerousOperation.class))
-        .or(() -> Optional.ofNullable(
-            joinPoint.getTarget().getClass().getAnnotation(DangerousOperation.class))).ifPresent(
+        .ifPresent(
             annotationNonNull -> SecurityContextUtil.getLoginAccountId()
                 .ifPresent(accountId -> {
                   String content = String.format(
