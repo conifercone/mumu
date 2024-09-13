@@ -238,6 +238,8 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         authorityFindAllGrpcCmd,
         callCredentials);
     LOGGER.info("PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
+    pageOfAuthorityFindAllGrpcCo.getContentList().stream().map(AuthorityFindAllGrpcCo::getName)
+        .map(StringValue::getValue).forEach(LOGGER::info);
     Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
     Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
   }

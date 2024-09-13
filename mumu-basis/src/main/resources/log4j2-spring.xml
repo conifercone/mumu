@@ -29,10 +29,10 @@
   <Appenders>
     <!-- @formatter:off -->
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%clr{%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}}{faint} %clr{${LOG_LEVEL_PATTERN:-%5p}} %clr{${sys:PID:- }}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40logger{39}}{cyan} %clr{:}{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <PatternLayout charset="UTF-8" pattern="%clr{%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}}{faint} %clr{${LOG_LEVEL_PATTERN:-%5p}} %clr{${sys:PID:- }}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40logger{39}}{cyan} %clr{:}{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     </Console>
     <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
-      <PatternLayout pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" />
         <SizeBasedTriggeringPolicy size="250MB" />
