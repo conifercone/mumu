@@ -15,6 +15,9 @@
  */
 package baby.mumu.log.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.application.operation.executor.OperationLogFindAllCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogQryCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogSaveCmdExe;
@@ -48,7 +51,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
     OperationLogService {
@@ -82,6 +85,7 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void submit(@NotNull OperationLogSubmitGrpcCmd request,
       @NotNull StreamObserver<OperationLogServiceEmptyResult> responseObserver) {
     OperationLogSubmitCmd operationLogSubmitCmd = new OperationLogSubmitCmd();

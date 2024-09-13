@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.application.service;
 
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.unique.application.barcode.executor.BarCodeGenerateCmdExe;
 import baby.mumu.unique.client.api.BarCodeService;
 import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.4
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "BarCodeServiceImpl")
 public class BarCodeServiceImpl implements BarCodeService {
 

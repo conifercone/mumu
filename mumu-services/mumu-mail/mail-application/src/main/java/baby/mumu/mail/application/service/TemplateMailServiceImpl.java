@@ -15,8 +15,11 @@
  */
 package baby.mumu.mail.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.mail.application.template.executor.TemplateMailSendCmdExe;
 import baby.mumu.mail.client.api.TemplateMailService;
 import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
@@ -45,7 +48,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "TemplateMailServiceImpl")
 public class TemplateMailServiceImpl extends TemplateMailServiceImplBase implements
     TemplateMailService {
@@ -94,6 +97,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void sendMail(TemplateMailSendGrpcCmd request, StreamObserver<Empty> responseObserver) {
     TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
     TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(

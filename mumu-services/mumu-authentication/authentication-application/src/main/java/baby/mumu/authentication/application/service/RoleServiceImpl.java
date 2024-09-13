@@ -41,6 +41,9 @@ import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -63,7 +66,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "RoleServiceImpl")
 public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
 
@@ -113,6 +116,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
     RoleAddCo roleAddCo = getRoleAddCo(request);
@@ -142,6 +146,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     RoleDeleteByIdCmd roleDeleteByIdCmd = new RoleDeleteByIdCmd();
@@ -171,6 +176,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateById(RoleUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
@@ -203,6 +209,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();

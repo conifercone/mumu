@@ -55,7 +55,10 @@ import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
+import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -74,7 +77,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "AccountServiceImpl")
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
@@ -128,6 +131,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void register(@NotNull AccountRegisterGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
@@ -209,6 +213,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateById(AccountUpdateByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
@@ -245,6 +250,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateRoleById(AccountUpdateRoleGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
@@ -278,6 +284,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
     AccountDisableCmd accountDisableCmd = new AccountDisableCmd();
     AccountDisableCo accountDisableCo = getAccountDisableCo(

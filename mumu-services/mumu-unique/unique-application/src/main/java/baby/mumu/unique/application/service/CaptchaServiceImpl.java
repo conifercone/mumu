@@ -15,6 +15,9 @@
  */
 package baby.mumu.unique.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.unique.application.captcha.executor.SimpleCaptchaGeneratedCmdExe;
 import baby.mumu.unique.application.captcha.executor.SimpleCaptchaVerifyCmdExe;
 import baby.mumu.unique.client.api.CaptchaService;
@@ -48,7 +51,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "CaptchaServiceImpl")
 public class CaptchaServiceImpl extends CaptchaServiceImplBase implements CaptchaService {
 
@@ -108,6 +111,7 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void generateSimpleCaptcha(SimpleCaptchaGeneratedGrpcCmd request,
       StreamObserver<SimpleCaptchaGeneratedGrpcCo> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
@@ -132,6 +136,7 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void verifySimpleCaptcha(SimpleCaptchaVerifyGrpcCmd request,
       StreamObserver<SimpleCaptchaVerifyGrpcResult> responseObserver) {
     SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd = new SimpleCaptchaVerifyCmd();

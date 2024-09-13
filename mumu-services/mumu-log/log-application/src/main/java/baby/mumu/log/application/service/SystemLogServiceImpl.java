@@ -15,6 +15,9 @@
  */
 package baby.mumu.log.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.application.system.executor.SystemLogFindAllCmdExe;
 import baby.mumu.log.application.system.executor.SystemLogSaveCmdExe;
 import baby.mumu.log.application.system.executor.SystemLogSubmitCmdExe;
@@ -44,7 +47,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
   private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
@@ -76,6 +79,7 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void submit(SystemLogSubmitGrpcCmd request,
       StreamObserver<SystemLogServiceEmptyResult> responseObserver) {
     SystemLogSubmitCmd systemLogSubmitCmd = new SystemLogSubmitCmd();

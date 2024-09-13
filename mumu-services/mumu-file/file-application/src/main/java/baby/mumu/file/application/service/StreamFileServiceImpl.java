@@ -15,6 +15,9 @@
  */
 package baby.mumu.file.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.file.application.streamfile.executor.StreamFileDownloadCmdExe;
 import baby.mumu.file.application.streamfile.executor.StreamFileRemoveCmdExe;
 import baby.mumu.file.application.streamfile.executor.StreamFileSyncUploadCmdExe;
@@ -50,7 +53,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "StreamFileServiceImpl")
 public class StreamFileServiceImpl extends StreamFileServiceImplBase implements StreamFileService {
 
@@ -99,6 +102,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void download(StreamFileDownloadGrpcCmd request,
       @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
     StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
@@ -130,6 +134,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void removeFile(StreamFileRemoveGrpcCmd request,
       @NotNull StreamObserver<Empty> responseObserver) {
     StreamFileRemoveCmd streamFileRemoveCmd = new StreamFileRemoveCmd();

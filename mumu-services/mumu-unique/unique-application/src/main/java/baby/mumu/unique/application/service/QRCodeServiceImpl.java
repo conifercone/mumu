@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.application.service;
 
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.unique.application.qrcode.executor.QRCodeGenerateCmdExe;
 import baby.mumu.unique.client.api.QRCodeService;
 import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.4
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "QRCodeServiceImpl")
 public class QRCodeServiceImpl implements QRCodeService {
 

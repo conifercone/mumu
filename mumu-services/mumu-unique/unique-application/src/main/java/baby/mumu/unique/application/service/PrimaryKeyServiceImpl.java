@@ -15,6 +15,9 @@
  */
 package baby.mumu.unique.application.service;
 
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.unique.application.pk.executor.PrimaryKeySnowflakeGenerateExe;
 import baby.mumu.unique.client.api.PrimaryKeyService;
 import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceImplBase;
@@ -36,7 +39,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "PrimaryKeyServiceImpl")
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 
@@ -55,6 +58,7 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void snowflake(Empty request, @NotNull StreamObserver<SnowflakeResult> responseObserver) {
     SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
         .setId(primaryKeySnowflakeGenerateExe.execute())

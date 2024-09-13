@@ -112,6 +112,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void add(AuthorityAddGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AuthorityAddCmd authorityAddCmd = new AuthorityAddCmd();
@@ -200,6 +201,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
@@ -216,6 +218,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateById(AuthorityUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
     AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
