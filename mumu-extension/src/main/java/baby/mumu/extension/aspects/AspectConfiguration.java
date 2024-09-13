@@ -16,9 +16,10 @@
 package baby.mumu.extension.aspects;
 
 import baby.mumu.basis.provider.RateLimitingAccountIdKeyProviderImpl;
-import baby.mumu.basis.provider.RateLimitingIpKeyProviderImpl;
+import baby.mumu.basis.provider.RateLimitingHttpIpKeyProviderImpl;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.extension.ExtensionProperties;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -52,14 +53,20 @@ public class AspectConfiguration {
 
   @Bean
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  public RateLimitingKeyProvider rateLimitingIpKeyProviderImpl(
+  public RateLimitingKeyProvider rateLimitingHttpIpKeyProviderImpl(
       HttpServletRequest httpServletRequest) {
-    return new RateLimitingIpKeyProviderImpl(httpServletRequest);
+    return new RateLimitingHttpIpKeyProviderImpl(httpServletRequest);
   }
 
   @Bean
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
   public RateLimitingKeyProvider rateLimitingAccountIdKeyProviderImpl() {
     return new RateLimitingAccountIdKeyProviderImpl();
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+  public RateLimitingKeyProvider rateLimitingGrpcIpKeyProviderImpl() {
+    return new RateLimitingGrpcIpKeyProviderImpl();
   }
 }

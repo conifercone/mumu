@@ -19,7 +19,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.MediaType;
@@ -41,13 +43,17 @@ public class AuthenticationRequired {
     ObjectMapper objectMapper = new ObjectMapper();
     MvcResult mvcResult;
     try {
+      byte[] encodedBytes = Base64.encodeBase64(
+          String.format("%s:%s", "mumu-client", "mumu").getBytes(
+              StandardCharsets.UTF_8));
       mvcResult = mockMvc.perform(MockMvcRequestBuilders
               .post("/oauth2/token")
               .param("username", "admin")
               .param("password", "admin")
               .param("scope", "message.read message.write openid")
               .param("grant_type", "authorization_password")
-              .header("Authorization", "Basic Y2VudGF1ci1jbGllbnQ6Y2VudGF1cg==")
+              .header("Authorization",
+                  "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
               .accept(MediaType.APPLICATION_JSON)
               .contentType(MediaType.APPLICATION_JSON_VALUE)
           )

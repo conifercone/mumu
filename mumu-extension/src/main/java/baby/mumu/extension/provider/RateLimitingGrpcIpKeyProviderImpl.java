@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis;
+package baby.mumu.extension.provider;
 
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
-
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.provider.RateLimitingKeyProvider;
+import baby.mumu.basis.response.ResultCode;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * 基础模块配置类
+ * grpc ip实现
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.1.0
  */
-@Configuration
-public class BasisConfiguration {
+public class RateLimitingGrpcIpKeyProviderImpl implements RateLimitingKeyProvider {
 
-  @Bean
-  @Order(HIGHEST_PRECEDENCE)
-  public SpringContextUtil springContextUtil() {
-    return new SpringContextUtil();
+  @Override
+  public String generateUniqKey() {
+    return Optional.ofNullable(ClientIpInterceptor.getClientIp())
+        .filter(StringUtils::isNotBlank)
+        .orElseThrow(() -> new MuMuException(ResultCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
   }
 }

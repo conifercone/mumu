@@ -47,6 +47,9 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -69,7 +72,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class})
+@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "AuthorityServiceImpl")
 public class AuthorityServiceImpl extends AuthorityServiceImplBase implements AuthorityService {
 
@@ -229,6 +232,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();

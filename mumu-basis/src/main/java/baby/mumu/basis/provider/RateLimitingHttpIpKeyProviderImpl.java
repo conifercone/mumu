@@ -22,16 +22,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * ip实现
+ * http ip实现
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-public class RateLimitingIpKeyProviderImpl implements RateLimitingKeyProvider {
+public class RateLimitingHttpIpKeyProviderImpl implements RateLimitingKeyProvider {
 
   private final HttpServletRequest httpServletRequest;
 
-  public RateLimitingIpKeyProviderImpl(HttpServletRequest httpServletRequest) {
+  public RateLimitingHttpIpKeyProviderImpl(HttpServletRequest httpServletRequest) {
     this.httpServletRequest = httpServletRequest;
   }
 
