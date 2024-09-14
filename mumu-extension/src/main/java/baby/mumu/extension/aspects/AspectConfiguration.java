@@ -16,6 +16,8 @@
 package baby.mumu.extension.aspects;
 
 import baby.mumu.basis.provider.RateLimitingAccountIdKeyProviderImpl;
+import baby.mumu.basis.provider.RateLimitingCustomGenerateDefaultProviderImpl;
+import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider;
 import baby.mumu.basis.provider.RateLimitingHttpIpKeyProviderImpl;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.extension.ExtensionProperties;
@@ -68,5 +70,11 @@ public class AspectConfiguration {
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
   public RateLimitingKeyProvider rateLimitingGrpcIpKeyProviderImpl() {
     return new RateLimitingGrpcIpKeyProviderImpl();
+  }
+
+  @Bean
+  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+  public RateLimitingCustomGenerateProvider rateLimitingCustomGenerateDefaultProviderImpl() {
+    return new RateLimitingCustomGenerateDefaultProviderImpl();
   }
 }

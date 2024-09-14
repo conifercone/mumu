@@ -15,6 +15,8 @@
  */
 package baby.mumu.basis.annotations;
 
+import baby.mumu.basis.provider.RateLimitingCustomGenerateDefaultProviderImpl;
+import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider;
 import baby.mumu.basis.provider.RateLimitingHttpIpKeyProviderImpl;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import java.lang.annotation.ElementType;
@@ -54,6 +56,16 @@ public @interface RateLimiter {
    * 唯一标识，需要实现 RateLimitingKeyProvider 接口
    */
   Class<? extends RateLimitingKeyProvider> keyProvider() default RateLimitingHttpIpKeyProviderImpl.class;
+
+  /**
+   * 是否自定义令牌生成逻辑
+   */
+  boolean customGeneration() default false;
+
+  /**
+   * 自定义令牌生成接口
+   */
+  Class<? extends RateLimitingCustomGenerateProvider> customGenerationProvider() default RateLimitingCustomGenerateDefaultProviderImpl.class;
 
   /**
    * 缓存 key 的前缀 （1）默认使用方法的签名的 MD5，作为缓存 key 的前缀，用于区分是为了给哪个方法设置限流；

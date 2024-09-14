@@ -23,6 +23,7 @@ import static java.time.Duration.ofSeconds;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.annotations.RateLimiters;
 import baby.mumu.basis.exception.RateLimiterException;
+import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.rl.RateLimiterStringByteArrayCodec;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
@@ -124,33 +127,55 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     ConfigurationBuilder configurationBuilder = BucketConfiguration.builder();
 
     list.forEach(x -> {
+      BasicInformation basicInformation = getBasicInformation(x);
+      int capacity = basicInformation.capacity();
+      long period = basicInformation.period();
+      TimeUnit timeUnit = basicInformation.timeUnit();
       // 每 period 单位时间内最高调用 capacity 次数
-      switch (x.timeUnit()) {
+      switch (timeUnit) {
         case SECONDS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(x.capacity())
-                  .refillIntervally(x.capacity(), ofSeconds(x.period())));
+              .addLimit(limit -> limit.capacity(capacity)
+                  .refillIntervally(capacity, ofSeconds(period)));
           break;
         case MINUTES:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(x.capacity())
-                  .refillIntervally(x.capacity(), ofMinutes(x.period())));
+              .addLimit(limit -> limit.capacity(capacity)
+                  .refillIntervally(capacity, ofMinutes(period)));
           break;
         case HOURS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(x.capacity())
-                  .refillIntervally(x.capacity(), ofHours(x.period())));
+              .addLimit(limit -> limit.capacity(capacity)
+                  .refillIntervally(capacity, ofHours(period)));
           break;
         case DAYS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(x.capacity())
-                  .refillIntervally(x.capacity(), ofDays(x.period())));
+              .addLimit(limit -> limit.capacity(capacity)
+                  .refillIntervally(capacity, ofDays(period)));
           break;
         default:
           throw new IllegalStateException("Unexpected value: " + x.timeUnit());
       }
     });
     return proxyManager.getProxy(uniqKey, configurationBuilder::build);
+  }
+
+  @Contract("_ -> new")
+  private @NotNull BasicInformation getBasicInformation(@NotNull RateLimiter rateLimiter) {
+    if (rateLimiter.customGeneration()) {
+      RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(
+          rateLimiter.customGenerationProvider());
+      return new BasicInformation(rateLimitingCustomGenerateProvider.generateCapacity(),
+          rateLimitingCustomGenerateProvider.generatePeriod(),
+          rateLimitingCustomGenerateProvider.generateTimeUnit());
+    } else {
+      return new BasicInformation(rateLimiter.capacity(), rateLimiter.period(),
+          rateLimiter.timeUnit());
+    }
+  }
+
+  private record BasicInformation(int capacity, long period, TimeUnit timeUnit) {
+
   }
 
   @Data
