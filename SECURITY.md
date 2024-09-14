@@ -7,8 +7,8 @@
 
 | Version | Supported |
 |---------|-----------|
-| 1.x.x   | ✅         |
-| 2.x.x   | ✅         |
+| 1.0.x   | ✅         |
+| 2.0.x   | ✅         |
 
 ## Reporting a Vulnerability
 
