@@ -42,6 +42,7 @@ protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
 kotlinPluginVersion = '2.0.20'
 licensePluginVersion = '0.16.1'
+mavenPublishPluginVersion = '0.29.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -247,3 +248,4 @@ license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVe
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublishPluginVersion" }
