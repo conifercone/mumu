@@ -56,6 +56,6 @@ public class AuthenticationProperties {
     /**
      * 密钥对
      */
-    private String jksKeyPair = "jwt";
+    private String jksKeyPair = "mumu";
   }
 }
