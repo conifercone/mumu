@@ -25,6 +25,7 @@ import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -47,7 +48,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * RoleGrpcService单元测试
@@ -63,20 +63,23 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   private final RoleGrpcService roleGrpcService;
   private final MockMvc mockMvc;
   private static final Logger LOGGER = LoggerFactory.getLogger(RoleGrpcServiceTest.class);
+  private final RoleRepository roleRepository;
 
   @Autowired
-  public RoleGrpcServiceTest(RoleGrpcService roleGrpcService, MockMvc mockMvc) {
+  public RoleGrpcServiceTest(RoleGrpcService roleGrpcService, MockMvc mockMvc,
+      RoleRepository roleRepository) {
     this.roleGrpcService = roleGrpcService;
     this.mockMvc = mockMvc;
+    this.roleRepository = roleRepository;
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void add() {
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setCode(StringValue.of("test")).setName(
-                    StringValue.of("test"))
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(342504981))
+                .setCode(StringValue.of("handling")).setName(
+                    StringValue.of("handling"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -87,16 +90,17 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     Empty empty = roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
     Assertions.assertNotNull(empty);
+    roleRepository.deleteById(342504981L);
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncAdd() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
         .setRoleAddCo(
-            RoleAddGrpcCo.newBuilder().setCode(StringValue.of("test")).setName(
-                    StringValue.of("test"))
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(834315577))
+                .setCode(StringValue.of("make")).setName(
+                    StringValue.of("make"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -112,6 +116,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         Empty empty = roleAddGrpcCoListenableFuture.get();
         Assertions.assertNotNull(empty);
         countDownLatch.countDown();
+        roleRepository.deleteById(834315577L);
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
       }
@@ -121,16 +126,24 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void deleteById() {
-    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(2L))
+    RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
+        .setRoleAddCo(
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(1563908921))
+                .setCode(StringValue.of("scsi")).setName(
+                    StringValue.of("scsi"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    roleGrpcService.add(roleAddGrpcCmd,
+        callCredentials);
+    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1563908921))
+        .build();
     Empty empty = roleGrpcService.deleteById(
         roleDeleteByIdGrpcCmd,
         callCredentials);
@@ -138,17 +151,25 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncDeleteById() throws InterruptedException {
-    CountDownLatch latch = new CountDownLatch(1);
-    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(2L))
+    RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
+        .setRoleAddCo(
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(1669344979))
+                .setCode(StringValue.of("phrases")).setName(
+                    StringValue.of("phrases"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    roleGrpcService.add(roleAddGrpcCmd,
+        callCredentials);
+    CountDownLatch latch = new CountDownLatch(1);
+    RoleDeleteByIdGrpcCmd roleDeleteByIdGrpcCmd = RoleDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1669344979))
+        .build();
     ListenableFuture<Empty> emptyListenableFuture = roleGrpcService.syncDeleteById(
         roleDeleteByIdGrpcCmd,
         callCredentials);
@@ -166,11 +187,12 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void updateById() {
-    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
-        .setRoleUpdateCo(
-            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(StringValue.of("test"))
+    RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
+        .setRoleAddCo(
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(982837132))
+                .setCode(StringValue.of("spent")).setName(
+                    StringValue.of("spent"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -178,19 +200,28 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    roleGrpcService.add(roleAddGrpcCmd,
+        callCredentials);
+    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
+        .setRoleUpdateCo(
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(982837132))
+                .setName(StringValue.of("balanced"))
+                .build())
+        .build();
     Empty empty = roleGrpcService.updateById(
         roleUpdateGrpcCmd,
         callCredentials);
     Assertions.assertNotNull(empty);
+    roleRepository.deleteById(982837132L);
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncUpdateById() throws InterruptedException {
-    CountDownLatch latch = new CountDownLatch(1);
-    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
-        .setRoleUpdateCo(
-            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(1)).setName(StringValue.of("test"))
+    RoleAddGrpcCmd roleAddGrpcCmd = RoleAddGrpcCmd.newBuilder()
+        .setRoleAddCo(
+            RoleAddGrpcCo.newBuilder().setId(Int64Value.of(243376658))
+                .setCode(StringValue.of("blowing")).setName(
+                    StringValue.of("blowing"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -198,6 +229,15 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    roleGrpcService.add(roleAddGrpcCmd,
+        callCredentials);
+    CountDownLatch latch = new CountDownLatch(1);
+    RoleUpdateGrpcCmd roleUpdateGrpcCmd = RoleUpdateGrpcCmd.newBuilder()
+        .setRoleUpdateCo(
+            RoleUpdateGrpcCo.newBuilder().setId(Int64Value.of(243376658))
+                .setName(StringValue.of("skills"))
+                .build())
+        .build();
     ListenableFuture<Empty> roleUpdateGrpcCoListenableFuture = roleGrpcService.syncUpdateById(
         roleUpdateGrpcCmd,
         callCredentials);
@@ -206,6 +246,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         Empty empty = roleUpdateGrpcCoListenableFuture.get();
         Assertions.assertNotNull(empty);
         latch.countDown();
+        roleRepository.deleteById(243376658L);
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
       }

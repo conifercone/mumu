@@ -247,7 +247,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateById(AccountUpdateByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -284,7 +283,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateRoleById(AccountUpdateRoleGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -318,7 +316,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
     AccountDisableCmd accountDisableCmd = new AccountDisableCmd();

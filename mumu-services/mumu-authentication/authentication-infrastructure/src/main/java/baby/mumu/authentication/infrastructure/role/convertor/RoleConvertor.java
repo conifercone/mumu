@@ -30,6 +30,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -82,6 +83,9 @@ public class RoleConvertor {
                   .map(authorityConvertor::toEntity)
                   .filter(Optional::isPresent).map(Optional::get)
                   .collect(Collectors.toList())));
+      if (role.getAuthorities() == null) {
+        role.setAuthorities(new ArrayList<>());
+      }
       return role;
     });
   }
@@ -98,6 +102,9 @@ public class RoleConvertor {
                   .map(authorityConvertor::toEntity)
                   .filter(Optional::isPresent).map(Optional::get)
                   .collect(Collectors.toList())));
+      if (role.getAuthorities() == null) {
+        role.setAuthorities(new ArrayList<>());
+      }
       return role;
     });
   }
@@ -110,6 +117,8 @@ public class RoleConvertor {
         roleDo.setAuthorities(
             roleDomain.getAuthorities().stream().map(Authority::getId)
                 .collect(Collectors.toList()));
+      } else {
+        roleDo.setAuthorities(new ArrayList<>());
       }
       return roleDo;
     });

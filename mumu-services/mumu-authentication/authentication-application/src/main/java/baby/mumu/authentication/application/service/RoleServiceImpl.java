@@ -115,7 +115,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
@@ -145,7 +144,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -175,7 +173,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void updateById(RoleUpdateGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
@@ -208,7 +205,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {

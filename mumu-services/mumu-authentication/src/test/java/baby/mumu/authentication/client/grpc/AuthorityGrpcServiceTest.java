@@ -25,6 +25,7 @@ import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -47,7 +48,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * AuthorityGrpcService单元测试
@@ -63,22 +63,23 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   private final AuthorityGrpcService authorityGrpcService;
   private final MockMvc mockMvc;
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcServiceTest.class);
+  private final AuthorityRepository authorityRepository;
 
   @Autowired
-  public AuthorityGrpcServiceTest(AuthorityGrpcService authorityGrpcService, MockMvc mockMvc) {
+  public AuthorityGrpcServiceTest(AuthorityGrpcService authorityGrpcService, MockMvc mockMvc,
+      AuthorityRepository authorityRepository) {
     this.authorityGrpcService = authorityGrpcService;
     this.mockMvc = mockMvc;
+    this.authorityRepository = authorityRepository;
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void add() {
-    deleteById();
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
             AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(778223))
-                .setCode(StringValue.of("test_code"))
-                .setName(StringValue.of("test_name"))
+                .setCode(StringValue.of("theft"))
+                .setName(StringValue.of("theft"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -89,18 +90,17 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     Empty empty = authorityGrpcService.add(authorityAddGrpcCmd,
         callCredentials);
     Assertions.assertNotNull(empty);
+    authorityRepository.deleteById(778223L);
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncAdd() throws InterruptedException {
-    deleteById();
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
         .setAuthorityAddCo(
-            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(778223))
-                .setCode(StringValue.of("test_code"))
-                .setName(StringValue.of("test_name"))
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(465175550))
+                .setCode(StringValue.of("rally"))
+                .setName(StringValue.of("rally"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -116,6 +116,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         Empty empty = authorityAddGrpcCoFuture.get();
         Assertions.assertNotNull(empty);
         latch.countDown();
+        authorityRepository.deleteById(465175550L);
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
       }
@@ -125,16 +126,23 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void deleteById() {
-    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(778223))
+    AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
+        .setAuthorityAddCo(
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(796816315))
+                .setCode(StringValue.of("madness"))
+                .setName(StringValue.of("madness"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
+    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(796816315))
+        .build();
     Empty empty = authorityGrpcService.deleteById(
         authorityDeleteByIdGrpcCmd,
         callCredentials);
@@ -142,17 +150,24 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncDeleteById() throws InterruptedException {
-    CountDownLatch latch = new CountDownLatch(1);
-    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
-        .setId(Int64Value.of(778223))
+    AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
+        .setAuthorityAddCo(
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(1800851703))
+                .setCode(StringValue.of("somewhat"))
+                .setName(StringValue.of("somewhat"))
+                .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
+        .setId(Int64Value.of(1800851703))
+        .build();
     ListenableFuture<Empty> emptyListenableFuture = authorityGrpcService.syncDeleteById(
         authorityDeleteByIdGrpcCmd,
         callCredentials);
@@ -170,13 +185,12 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void updateById() {
-    add();
-    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
-        .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(778223)).setName(
-                    StringValue.of("test_updated"))
+    AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
+        .setAuthorityAddCo(
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(1801517971))
+                .setCode(StringValue.of("focuses"))
+                .setName(StringValue.of("focuses"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -184,21 +198,27 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
+    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
+        .setAuthorityUpdateCo(
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1801517971)).setName(
+                    StringValue.of("conclusions"))
+                .build())
+        .build();
     Empty empty = authorityGrpcService.updateById(
         authorityUpdateGrpcCmd,
         callCredentials);
     Assertions.assertNotNull(empty);
+    authorityRepository.deleteById(1801517971L);
   }
 
   @Test
-  @Transactional(rollbackFor = Exception.class)
   public void syncUpdateById() throws InterruptedException {
-    add();
-    CountDownLatch latch = new CountDownLatch(1);
-    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
-        .setAuthorityUpdateCo(
-            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(778223)).setName(
-                    StringValue.of("test_updated"))
+    AuthorityAddGrpcCmd authorityAddGrpcCmd = AuthorityAddGrpcCmd.newBuilder()
+        .setAuthorityAddCo(
+            AuthorityAddGrpcCo.newBuilder().setId(Int64Value.of(1562763044))
+                .setCode(StringValue.of("pieces"))
+                .setName(StringValue.of("pieces"))
                 .build())
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -206,6 +226,14 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
                 () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
+    authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
+        .setAuthorityUpdateCo(
+            AuthorityUpdateGrpcCo.newBuilder().setId(Int64Value.of(1562763044)).setName(
+                    StringValue.of("cents"))
+                .build())
+        .build();
     ListenableFuture<Empty> authorityUpdateGrpcCoListenableFuture = authorityGrpcService.syncUpdateById(
         authorityUpdateGrpcCmd,
         callCredentials);
@@ -214,6 +242,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         Empty empty = authorityUpdateGrpcCoListenableFuture.get();
         Assertions.assertNotNull(empty);
         latch.countDown();
+        authorityRepository.deleteById(1562763044L);
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
       }
