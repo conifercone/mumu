@@ -29,6 +29,7 @@ import baby.mumu.authentication.application.account.executor.AccountResetPasswor
 import baby.mumu.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import baby.mumu.authentication.client.api.AccountService;
+import baby.mumu.authentication.client.api.grpc.AccountAddressRegisterGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCmd;
@@ -53,9 +54,11 @@ import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountDisableCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
+import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
@@ -63,6 +66,7 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import java.time.LocalDate;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
@@ -180,7 +184,39 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setSex(
         accountRegisterGrpcCo.hasSex() ? SexEnum.valueOf(accountRegisterGrpcCo.getSex().name())
             : null);
+    accountRegisterCo.setLanguage(accountRegisterGrpcCo.hasLanguage() ? LanguageEnum.valueOf(
+        accountRegisterGrpcCo.getLanguage().name()) : null);
+    accountRegisterCo.setBirthday(accountRegisterGrpcCo.hasBirthday() ? LocalDate.of(
+        accountRegisterGrpcCo.getBirthday().getYear().getValue(),
+        accountRegisterGrpcCo.getBirthday().getMonth().getValue(),
+        accountRegisterGrpcCo.getBirthday().getDay().getValue()) : null);
+    accountRegisterCo.setAddress(accountRegisterGrpcCo.hasAddress() ? getAccountAddressRegisterCo(
+        accountRegisterGrpcCo.getAddress()) : null);
     return accountRegisterCo;
+  }
+
+  private static @NotNull AccountAddressRegisterCo getAccountAddressRegisterCo(
+      @NotNull AccountAddressRegisterGrpcCo accountAddressRegisterGrpcCo) {
+    AccountAddressRegisterCo accountAddressRegisterCo = new AccountAddressRegisterCo();
+    accountAddressRegisterCo.setId(
+        accountAddressRegisterGrpcCo.hasId() ? accountAddressRegisterGrpcCo.getId().getValue()
+            : null);
+    accountAddressRegisterCo.setStreet(
+        accountAddressRegisterGrpcCo.hasStreet() ? accountAddressRegisterGrpcCo.getStreet()
+            .getValue() : null);
+    accountAddressRegisterCo.setCity(
+        accountAddressRegisterGrpcCo.hasCity() ? accountAddressRegisterGrpcCo.getCity().getValue()
+            : null);
+    accountAddressRegisterCo.setState(
+        accountAddressRegisterGrpcCo.hasState() ? accountAddressRegisterGrpcCo.getState().getValue()
+            : null);
+    accountAddressRegisterCo.setPostalCode(
+        accountAddressRegisterGrpcCo.hasPostalCode() ? accountAddressRegisterGrpcCo.getPostalCode()
+            .getValue() : null);
+    accountAddressRegisterCo.setCountry(
+        accountAddressRegisterGrpcCo.hasCountry() ? accountAddressRegisterGrpcCo.getCountry()
+            .getValue() : null);
+    return accountAddressRegisterCo;
   }
 
   @Override

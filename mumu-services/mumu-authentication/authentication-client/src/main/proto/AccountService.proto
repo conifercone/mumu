@@ -31,6 +31,15 @@ message AccountRegisterGrpcCo {
   }
   google.protobuf.StringValue timezone = 8;
   google.protobuf.StringValue email = 9;
+  oneof language_wrapper {
+    LanguageEnum language = 10;
+  }
+  oneof birthday_wrapper {
+    LocalDate birthday = 11;
+  }
+  oneof address_wrapper{
+    AccountAddressRegisterGrpcCo address = 12;
+  }
 }
 
 message AccountUpdateByIdGrpcCmd{
@@ -63,6 +72,27 @@ enum SexEnum
   FEMALE = 1;
   GREY = 2;
   SEXLESS = 3;
+}
+
+enum LanguageEnum
+{
+  ZH = 0;
+  EN = 1;
+}
+
+message LocalDate {
+  google.protobuf.Int32Value year = 1;
+  google.protobuf.Int32Value month = 2;
+  google.protobuf.Int32Value day = 3;
+}
+
+message AccountAddressRegisterGrpcCo{
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue street = 2;
+  google.protobuf.StringValue city = 3;
+  google.protobuf.StringValue state = 4;
+  google.protobuf.StringValue postalCode = 5;
+  google.protobuf.StringValue country = 6;
 }
 
 message AccountDisableGrpcCmd{

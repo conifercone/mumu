@@ -25,6 +25,7 @@ import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
+import baby.mumu.authentication.client.api.grpc.LocalDate;
 import baby.mumu.authentication.client.api.grpc.SexEnum;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
@@ -97,6 +98,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
                           StringValue.of("test1"))
                       .setPassword(StringValue.of("test1")).setRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
+                      .setEmail(StringValue.of("547913250@qq.com"))
+                      .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
+                          .setMonth(Int32Value.of(8)).setDay(Int32Value.of(2)).build())
                       .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCoNonNull.getId())
               .setCaptcha(simpleCaptchaGeneratedGrpcCoNonNull.getTarget())
               .build();
@@ -127,7 +131,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(926369451)).setUsername(
                           StringValue.of("test1"))
                       .setPassword(StringValue.of("test1")).setRoleCode(StringValue.of("admin"))
-                      .setSex(SexEnum.SEXLESS)
+                      .setSex(SexEnum.SEXLESS).setEmail(StringValue.of("547913250@qq.com"))
+                      .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
+                          .setMonth(Int32Value.of(8)).setDay(Int32Value.of(2)).build())
                       .build()).setCaptchaId(simpleCaptchaGeneratedGrpcCoNonNull.getId())
               .setCaptcha(simpleCaptchaGeneratedGrpcCoNonNull.getTarget())
               .build();
