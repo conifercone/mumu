@@ -1,4 +1,5 @@
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -16,8 +17,17 @@ plugins {
 }
 
 allprojects {
+
+    fun getTimestamp(): String {
+        val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.format(Date())
+    }
+
     group = findProperty("group")!! as String
-    version = findProperty("version")!! as String
+    val versionString = findProperty("version")!! as String
+    version =
+        if (versionString.contains("-")) versionString + "-" + getTimestamp() else versionString
 
     repositories {
         mavenCentral()
@@ -58,15 +68,15 @@ subprojects {
 
     signing {
         val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
-        val mumuSigningKeyFile = "MUMU_SIGNING_KEY_FILE"
+        val mumuSigningKey = "MUMU_SIGNING_KEY"
         val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
         if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
-            !System.getenv(mumuSigningKeyFile).isNullOrBlank() &&
+            !System.getenv(mumuSigningKey).isNullOrBlank() &&
             !System.getenv(mumuSigningPassword).isNullOrBlank()
         ) {
             useInMemoryPgpKeys(
                 System.getenv(mumuSigningKeyId) as String,
-                file(System.getenv(mumuSigningKeyFile) as String).readText(),
+                file(System.getenv(mumuSigningKey) as String).readText(),
                 System.getenv(mumuSigningPassword) as String
             )
             sign(tasks["jar"])
