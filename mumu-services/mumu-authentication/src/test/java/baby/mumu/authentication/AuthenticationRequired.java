@@ -40,6 +40,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class AuthenticationRequired {
 
   public Optional<String> getToken(@NotNull MockMvc mockMvc) {
+    return getToken(mockMvc, "admin", "admin");
+  }
+
+  public Optional<String> getToken(@NotNull MockMvc mockMvc, String username, String password) {
     ObjectMapper objectMapper = new ObjectMapper();
     MvcResult mvcResult;
     try {
@@ -48,8 +52,8 @@ public class AuthenticationRequired {
               StandardCharsets.UTF_8));
       mvcResult = mockMvc.perform(MockMvcRequestBuilders
               .post("/oauth2/token")
-              .param("username", "admin")
-              .param("password", "admin")
+              .param("username", username)
+              .param("password", password)
               .param("scope", "message.read message.write openid")
               .param("grant_type", "authorization_password")
               .header("Authorization",

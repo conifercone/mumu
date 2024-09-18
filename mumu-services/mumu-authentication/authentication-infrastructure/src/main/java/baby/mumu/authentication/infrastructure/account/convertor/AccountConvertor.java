@@ -96,7 +96,7 @@ public class AccountConvertor {
       AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountDomain);
       Optional.ofNullable(accountDomain.getAddress())
           .flatMap(address -> Optional.ofNullable(address.getId()))
-          .ifPresent(accountDo::setAddressId);
+          .ifPresentOrElse(accountDo::setAddressId, () -> accountDo.setAddressId(0L));
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(

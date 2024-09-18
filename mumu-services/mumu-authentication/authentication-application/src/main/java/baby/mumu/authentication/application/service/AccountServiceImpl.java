@@ -134,7 +134,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @Transactional(rollbackFor = Exception.class)
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void register(@NotNull AccountRegisterGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
