@@ -1,5 +1,5 @@
+import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -16,18 +16,27 @@ plugins {
     id(libs.plugins.projectReport.get().pluginId)
 }
 
+val gitHash: String by extra {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine = listOf("git", "rev-parse", "--short", "HEAD")
+        standardOutput = stdout
+    }
+    stdout.toString().trim()
+}
+
 allprojects {
 
-    fun getTimestamp(): String {
-        val sdf = SimpleDateFormat("yyyyMMddHHmmss")
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        return sdf.format(Date())
+    tasks.register("printGitHash") {
+        doLast {
+            println("Git Hash: $gitHash")
+        }
     }
 
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
     version =
-        if (versionString.contains("-")) versionString + "-" + getTimestamp() else versionString
+        if (versionString.contains("-")) "$versionString-$gitHash" else versionString
 
     repositories {
         mavenCentral()
