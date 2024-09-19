@@ -8,16 +8,3 @@ dependencies {
     compileOnly(libs.spring.boot.starter.data.jpa)
     annotationProcessor(libs.hibernate.jpamodelgen)
 }
-
-tasks.register<Jar>("sourceJar") {
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
-}
-
-signing {
-    sign(tasks.getByName("sourceJar"))
-}
-
-artifacts {
-    add("archives", tasks.named("sourceJar"))
-}
