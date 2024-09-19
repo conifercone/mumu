@@ -41,7 +41,6 @@ protobufBomVersion = '4.28.1'
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
 kotlinPluginVersion = '2.0.20'
-licensePluginVersion = '0.16.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -243,7 +242,6 @@ projectReport = { id = "project-report" }
 signing = { id = "signing" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
-license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }

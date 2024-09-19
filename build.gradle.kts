@@ -1,14 +1,11 @@
-import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 plugins {
     id(libs.plugins.springboot.get().pluginId) version libs.versions.springbootVersion apply false
     id(libs.plugins.lombok.get().pluginId) version libs.versions.lombokPluginVersion
     id(libs.plugins.protobuf.get().pluginId) version libs.versions.protobufPluginVersion apply false
-    id(libs.plugins.license.get().pluginId) version libs.versions.licensePluginVersion
     id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
@@ -16,14 +13,10 @@ plugins {
     id(libs.plugins.projectReport.get().pluginId)
 }
 
-val gitHash: String by extra {
-    val stdout = ByteArrayOutputStream()
-    exec {
-        commandLine = listOf("git", "rev-parse", "--short", "HEAD")
-        standardOutput = stdout
-    }
-    stdout.toString().trim()
-}
+@Suppress("UnstableApiUsage")
+val gitHash = providers.exec {
+    commandLine("git", "rev-parse", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
 
 allprojects {
 
@@ -64,7 +57,6 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
-    apply(plugin = rootProject.libs.plugins.license.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinJvm.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginSpring.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginJpa.get().pluginId)
@@ -139,24 +131,6 @@ subprojects {
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             )
         }
-    }
-
-    license {
-        encoding = StandardCharsets.UTF_8.name()
-        ignoreFailures = true
-        header = rootProject.file("SOURCE_CODE_HEAD.txt")
-        val includes: MutableList<String> =
-            mutableListOf("**/*.java", "**/*.kt", "**/*.xml", "**/*.yml")
-        includes(includes)
-        val excludes: MutableList<String> =
-            mutableListOf("**/client/api/grpc/*.java", "**/*_.java", "**/*run.xml")
-        excludes(excludes)
-        mapping("java", "SLASHSTAR_STYLE")
-        mapping("kt", "SLASHSTAR_STYLE")
-        mapping("xml", "XML_STYLE")
-        mapping("yml", "SCRIPT_STYLE")
-        ext["year"] = Calendar.getInstance().get(Calendar.YEAR)
-        ext["organization"] = "the original author or authors"
     }
 
     dependencies {
