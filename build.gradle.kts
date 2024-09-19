@@ -20,12 +20,6 @@ val gitHash = providers.exec {
 
 allprojects {
 
-    tasks.register("printGitHash") {
-        doLast {
-            println("Git Hash: $gitHash")
-        }
-    }
-
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
     version =
