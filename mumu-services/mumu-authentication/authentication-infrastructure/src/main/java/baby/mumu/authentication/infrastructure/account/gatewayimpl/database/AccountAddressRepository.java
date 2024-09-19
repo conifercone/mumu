@@ -28,4 +28,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressDo, Long>,
     JpaSpecificationExecutor<AccountAddressDo> {
 
+  void deleteByUserId(Long userId);
 }

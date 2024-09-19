@@ -250,6 +250,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteCurrentAccount() {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
       accountRepository.deleteById(accountId);
+      accountAddressRepository.deleteByUserId(accountId);
       tokenRepository.deleteById(accountId);
       refreshTokenRepository.deleteById(accountId);
     }, () -> {
@@ -338,8 +339,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Job(name = "删除ID为：%0 的账户归档数据")
   @DangerousOperation("根据ID删除ID为%0的账户归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
-    Optional.ofNullable(id)
-        .ifPresent(accountArchivedRepository::deleteById);
+    Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
+      accountArchivedRepository.deleteById(accountIdNonNull);
+      accountAddressRepository.deleteByUserId(accountIdNonNull);
+    });
   }
 
   @Override
