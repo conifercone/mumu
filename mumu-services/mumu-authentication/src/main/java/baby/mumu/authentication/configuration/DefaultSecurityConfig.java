@@ -98,7 +98,13 @@ public class DefaultSecurityConfig {
                 systemLogGrpcService, swaggerUiConfigProperties),
             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
         )
-    );
+    ).oauth2ResourceServer((resourceServer) -> resourceServer
+        .jwt(withDefaults())
+        .authenticationEntryPoint(
+            new MuMuAuthenticationEntryPoint(
+                String.format("http://localhost:%s/login", port),
+                operationLogGrpcService,
+                systemLogGrpcService, swaggerUiConfigProperties)));
     return http.build();
   }
 }
