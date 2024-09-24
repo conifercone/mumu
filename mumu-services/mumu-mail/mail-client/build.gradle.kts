@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":mumu-basis"))
     implementation(libs.spring.web)
     implementation(libs.spring.cloud.starter.consul.discovery)
-    implementation(libs.protobuf.java)
+    api(libs.protobuf.java)
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)
     implementation(libs.javax.annotation.api)

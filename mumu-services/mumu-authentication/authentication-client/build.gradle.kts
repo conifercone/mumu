@@ -8,7 +8,6 @@ dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-domain"))
     implementation(project(":mumu-extension"))
     annotationProcessor(project(":mumu-processor"))
-    implementation(libs.protobuf.java)
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)
     implementation(libs.javax.annotation.api)
@@ -20,6 +19,7 @@ dependencies {
     implementation(libs.grpc.spring.boot.starter)
     implementation(libs.grpc.client.spring.boot.starter)
     api(libs.spring.boot.starter.oauth2.resource.server)
+    api(libs.protobuf.java)
 }
 
 protobuf {

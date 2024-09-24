@@ -9,12 +9,12 @@ dependencies {
     implementation(project(":mumu-basis"))
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.cloud.starter.consul.discovery)
-    implementation(libs.protobuf.java)
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)
     implementation(libs.javax.annotation.api)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
+    api(libs.protobuf.java)
 }
 
 protobuf {
