@@ -19,6 +19,7 @@ package baby.mumu.authentication.configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import baby.mumu.authentication.application.service.AccountUserDetailService;
+import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
@@ -60,7 +61,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -140,8 +140,7 @@ public class AuthorizationConfiguration {
       OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder, @Value("${server.port}") Integer port,
-      SwaggerUiConfigProperties swaggerUiConfigProperties)
+      PasswordEncoder passwordEncoder)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -191,23 +190,23 @@ public class AuthorizationConfiguration {
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
                 new MuMuAuthenticationEntryPoint(
-                    String.format("http://localhost:%s/login", port),
+                    resourceServerProperties,
                     operationLogGrpcService,
-                    systemLogGrpcService, swaggerUiConfigProperties),
+                    systemLogGrpcService),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
-                new MuMuAuthenticationEntryPoint(String.format("http://localhost:%s/login", port),
+                new MuMuAuthenticationEntryPoint(resourceServerProperties,
                     operationLogGrpcService,
-                    systemLogGrpcService, swaggerUiConfigProperties))
+                    systemLogGrpcService))
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
             .jwt(withDefaults())
             .authenticationEntryPoint(
                 new MuMuAuthenticationEntryPoint(
-                    String.format("http://localhost:%s/login", port),
+                    resourceServerProperties,
                     operationLogGrpcService,
-                    systemLogGrpcService, swaggerUiConfigProperties)));
+                    systemLogGrpcService)));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 

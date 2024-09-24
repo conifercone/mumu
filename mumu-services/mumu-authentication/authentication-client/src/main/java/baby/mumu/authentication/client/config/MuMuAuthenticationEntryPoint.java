@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.configuration;
+package baby.mumu.authentication.client.config;
 
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.basis.response.ResultResponse;
@@ -28,10 +28,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springdoc.core.properties.SwaggerUiConfigProperties;
-import org.springdoc.core.utils.Constants;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,15 +52,12 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
   private final OperationLogGrpcService operationLogGrpcService;
 
   private final SystemLogGrpcService systemLogGrpcService;
-  private final SwaggerUiConfigProperties swaggerUiConfigProperties;
 
-  public MuMuAuthenticationEntryPoint(String loginFormUrl,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
-      SwaggerUiConfigProperties swaggerUiConfigProperties) {
-    super(loginFormUrl);
+  public MuMuAuthenticationEntryPoint(@NotNull ResourceServerProperties resourceServerProperties,
+      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+    super(resourceServerProperties.getLoginAddress());
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
-    this.swaggerUiConfigProperties = swaggerUiConfigProperties;
   }
 
   @Override
@@ -105,12 +101,6 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
-        if (swaggerUiConfigProperties.isDisableSwaggerDefaultUrl() && request.getRequestURI()
-            .equals(swaggerUiConfigProperties.getPath())) {
-          super.commence(request, response, authException);
-        } else if (Constants.DEFAULT_SWAGGER_UI_PATH.equals(request.getRequestURI())) {
-          super.commence(request, response, authException);
-        }
         LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg(),
             insufficientAuthenticationException);
         systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()

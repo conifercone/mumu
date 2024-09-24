@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.grpc.client.spring.boot.starter)
     api(libs.spring.boot.starter.oauth2.resource.server)
     api(libs.protobuf.java)
+    implementation(project(":mumu-services:mumu-log:log-client"))
 }
 
 protobuf {

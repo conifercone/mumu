@@ -30,6 +30,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.resource")
 public class ResourceServerProperties {
 
+  private String loginAddress = "http://localhost:31100/login";
+
   @NestedConfigurationProperty
   private List<Policy> policies;
 
