@@ -245,3 +245,4 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }

@@ -1,3 +1,7 @@
+plugins {
+    id(libs.plugins.flyway.get().pluginId) version libs.versions.flywayVersion
+}
+
 dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-adapter"))
     implementation(project(":mumu-services:mumu-authentication:authentication-client"))
@@ -29,4 +33,14 @@ dependencies {
     implementation(libs.jobrunr.spring.boot3.starter)
     annotationProcessor(libs.redis.om.spring)
     implementation(libs.caffeine)
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.flyway.database.postgresql)
+    }
+}
+
+flyway {
+    locations = arrayOf("classpath:db/migration/postgresql")
 }
