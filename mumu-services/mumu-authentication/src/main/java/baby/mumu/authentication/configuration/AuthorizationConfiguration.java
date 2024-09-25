@@ -36,8 +36,6 @@ import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties.Rsa;
-import baby.mumu.log.client.api.OperationLogGrpcService;
-import baby.mumu.log.client.api.SystemLogGrpcService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -126,8 +124,6 @@ public class AuthorizationConfiguration {
    * @param http                             请求
    * @param authorizationService             认证服务
    * @param tokenGenerator                   token生成器
-   * @param operationLogGrpcService          操作日志
-   * @param systemLogGrpcService             系统日志
    * @param mumuAuthenticationFailureHandler 自定义认证失败处理器
    * @return 授权服务安全过滤链实例
    * @throws Exception 异常信息
@@ -137,7 +133,6 @@ public class AuthorizationConfiguration {
   public SecurityFilterChain authorizationServerSecurityFilterChain(@NotNull HttpSecurity http,
       OAuth2AuthorizationService authorizationService,
       OAuth2TokenGenerator<?> tokenGenerator,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService,
       MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
       ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
       PasswordEncoder passwordEncoder)
@@ -190,23 +185,20 @@ public class AuthorizationConfiguration {
     http.exceptionHandling((exceptions) -> exceptions
             .defaultAuthenticationEntryPointFor(
                 new MuMuAuthenticationEntryPoint(
-                    resourceServerProperties,
-                    operationLogGrpcService,
-                    systemLogGrpcService),
+                    resourceServerProperties
+                ),
                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
             ).authenticationEntryPoint(
-                new MuMuAuthenticationEntryPoint(resourceServerProperties,
-                    operationLogGrpcService,
-                    systemLogGrpcService))
+                new MuMuAuthenticationEntryPoint(resourceServerProperties
+                ))
         )
         // Accept access tokens for User Info and/or Client Registration
         .oauth2ResourceServer((resourceServer) -> resourceServer
             .jwt(withDefaults())
             .authenticationEntryPoint(
                 new MuMuAuthenticationEntryPoint(
-                    resourceServerProperties,
-                    operationLogGrpcService,
-                    systemLogGrpcService)));
+                    resourceServerProperties
+                )));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 

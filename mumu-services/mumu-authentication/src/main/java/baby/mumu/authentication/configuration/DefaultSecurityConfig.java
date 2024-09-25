@@ -22,8 +22,6 @@ import baby.mumu.authentication.client.config.JwtAuthenticationTokenFilter;
 import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
-import baby.mumu.log.client.api.OperationLogGrpcService;
-import baby.mumu.log.client.api.SystemLogGrpcService;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -56,9 +54,7 @@ public class DefaultSecurityConfig {
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
       JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
-      ResourceServerProperties resourceServerProperties,
-      OperationLogGrpcService operationLogGrpcService,
-      SystemLogGrpcService systemLogGrpcService)
+      ResourceServerProperties resourceServerProperties)
       throws Exception {
     //noinspection DuplicatedCode
     if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
@@ -91,18 +87,16 @@ public class DefaultSecurityConfig {
         UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exceptions) -> exceptions
         .defaultAuthenticationEntryPointFor(
-            new MuMuAuthenticationEntryPoint(resourceServerProperties,
-                operationLogGrpcService,
-                systemLogGrpcService),
+            new MuMuAuthenticationEntryPoint(resourceServerProperties
+            ),
             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
         )
     ).oauth2ResourceServer((resourceServer) -> resourceServer
         .jwt(withDefaults())
         .authenticationEntryPoint(
             new MuMuAuthenticationEntryPoint(
-                resourceServerProperties,
-                operationLogGrpcService,
-                systemLogGrpcService)));
+                resourceServerProperties
+            )));
     return http.build();
   }
 }

@@ -17,17 +17,10 @@ package baby.mumu.authentication.client.config;
 
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.basis.response.ResultResponse;
-import baby.mumu.log.client.api.OperationLogGrpcService;
-import baby.mumu.log.client.api.SystemLogGrpcService;
-import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
-import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +42,8 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
       MuMuAuthenticationEntryPoint.class);
 
 
-  private final OperationLogGrpcService operationLogGrpcService;
-
-  private final SystemLogGrpcService systemLogGrpcService;
-
-  public MuMuAuthenticationEntryPoint(@NotNull ResourceServerProperties resourceServerProperties,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+  public MuMuAuthenticationEntryPoint(@NotNull ResourceServerProperties resourceServerProperties) {
     super(resourceServerProperties.getLoginAddress());
-    this.operationLogGrpcService = operationLogGrpcService;
-    this.systemLogGrpcService = systemLogGrpcService;
   }
 
   @Override
@@ -66,57 +52,17 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
         LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg(), usernameNotFoundException);
-        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-            .setSystemLogSubmitCo(
-                SystemLogSubmitGrpcCo.newBuilder()
-                    .setContent(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
-                    .setCategory("exception")
-                    .setFail(ExceptionUtils.getStackTrace(usernameNotFoundException)).build())
-            .build());
-        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-            .setOperationLogSubmitCo(
-                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                    .setBizNo(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultCode())
-                    .setFail(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg()).build())
-            .build());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
       }
       case InvalidBearerTokenException invalidBearerTokenException -> {
         LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), invalidBearerTokenException);
-        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-            .setSystemLogSubmitCo(
-                SystemLogSubmitGrpcCo.newBuilder()
-                    .setContent(ResultCode.INVALID_TOKEN.getResultCode())
-                    .setCategory("exception")
-                    .setFail(ExceptionUtils.getStackTrace(invalidBearerTokenException)).build())
-            .build());
-        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-            .setOperationLogSubmitCo(
-                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                    .setBizNo(ResultCode.INVALID_TOKEN.getResultCode())
-                    .setFail(ResultCode.INVALID_TOKEN.getResultMsg()).build())
-            .build());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
         LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg(),
             insufficientAuthenticationException);
-        systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-            .setSystemLogSubmitCo(
-                SystemLogSubmitGrpcCo.newBuilder()
-                    .setContent(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultCode())
-                    .setCategory("exception")
-                    .setFail(ExceptionUtils.getStackTrace(insufficientAuthenticationException))
-                    .build())
-            .build());
-        operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
-            .setOperationLogSubmitCo(
-                OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationEntryPoint")
-                    .setBizNo(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultCode())
-                    .setFail(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg()).build())
-            .build());
         response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
         ResultResponse.exceptionResponse(response, ResultCode.INSUFFICIENT_AUTHENTICATION);
       }

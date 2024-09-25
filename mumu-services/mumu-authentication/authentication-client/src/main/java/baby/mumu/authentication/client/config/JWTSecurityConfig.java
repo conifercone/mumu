@@ -19,8 +19,6 @@ import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
-import baby.mumu.log.client.api.OperationLogGrpcService;
-import baby.mumu.log.client.api.SystemLogGrpcService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -49,15 +47,10 @@ import org.springframework.util.CollectionUtils;
 public class JWTSecurityConfig {
 
   private final ResourceServerProperties resourceServerProperties;
-  private final OperationLogGrpcService operationLogGrpcService;
-  private final SystemLogGrpcService systemLogGrpcService;
 
   @Autowired
-  public JWTSecurityConfig(ResourceServerProperties resourceServerProperties,
-      OperationLogGrpcService operationLogGrpcService, SystemLogGrpcService systemLogGrpcService) {
+  public JWTSecurityConfig(ResourceServerProperties resourceServerProperties) {
     this.resourceServerProperties = resourceServerProperties;
-    this.operationLogGrpcService = operationLogGrpcService;
-    this.systemLogGrpcService = systemLogGrpcService;
   }
 
   @Bean
@@ -91,9 +84,8 @@ public class JWTSecurityConfig {
             resourceServerConfigurer -> resourceServerConfigurer.jwt(
                     jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 .authenticationEntryPoint(
-                    new MuMuAuthenticationEntryPoint(resourceServerProperties,
-                        operationLogGrpcService,
-                        systemLogGrpcService)))
+                    new MuMuAuthenticationEntryPoint(resourceServerProperties
+                    )))
         .csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
             .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
