@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +147,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC)
         .addModifiers(Modifier.ABSTRACT);
     generateFields(annotatedElement, packageName, entityName, builder);
-    OffsetDateTime dateTime = OffsetDateTime.now();
+    OffsetDateTime dateTime = OffsetDateTime.now(ZoneOffset.UTC);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
     String formattedDateTime = dateTime.format(formatter);
     builder.addAnnotation(AnnotationSpec.builder(Generated.class)
