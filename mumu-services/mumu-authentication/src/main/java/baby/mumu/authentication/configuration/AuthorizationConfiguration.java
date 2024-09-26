@@ -57,6 +57,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,7 +107,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 授权配置
@@ -138,7 +138,7 @@ public class AuthorizationConfiguration {
       PasswordEncoder passwordEncoder)
       throws Exception {
     //noinspection DuplicatedCode
-    if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
+    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize

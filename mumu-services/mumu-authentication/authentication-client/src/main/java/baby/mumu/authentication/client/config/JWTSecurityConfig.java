@@ -19,6 +19,7 @@ import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -34,7 +35,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 /**
  * jwt类型资源服务器配置类
@@ -57,7 +57,7 @@ public class JWTSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
       TokenGrpcService tokenGrpcService) throws Exception {
     //noinspection DuplicatedCode
-    if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
+    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize

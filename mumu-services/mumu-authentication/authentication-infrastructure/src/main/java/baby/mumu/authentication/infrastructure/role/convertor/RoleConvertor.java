@@ -33,6 +33,7 @@ import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -40,7 +41,6 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 角色信息转换器
@@ -77,8 +77,7 @@ public class RoleConvertor {
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       Optional.ofNullable(roleDataObject.getAuthorities())
-          .filter(authorityList -> !CollectionUtils.isEmpty(
-              authorityList)).ifPresent(authorities -> role.setAuthorities(
+          .filter(CollectionUtils::isNotEmpty).ifPresent(authorities -> role.setAuthorities(
               authorityRepository.findAuthorityDoByIdIn(authorities).stream()
                   .map(authorityConvertor::toEntity)
                   .filter(Optional::isPresent).map(Optional::get)
@@ -96,8 +95,7 @@ public class RoleConvertor {
     return Optional.ofNullable(roleArchivedDo).map(roleArchivedDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
       Optional.ofNullable(roleArchivedDataObject.getAuthorities())
-          .filter(authorityList -> !CollectionUtils.isEmpty(
-              authorityList)).ifPresent(authorities -> role.setAuthorities(
+          .filter(CollectionUtils::isNotEmpty).ifPresent(authorities -> role.setAuthorities(
               authorityRepository.findAuthorityDoByIdIn(authorities).stream()
                   .map(authorityConvertor::toEntity)
                   .filter(Optional::isPresent).map(Optional::get)
@@ -113,7 +111,7 @@ public class RoleConvertor {
   public Optional<RoleDo> toDataObject(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
       RoleDo roleDo = RoleMapper.INSTANCE.toDataObject(roleDomain);
-      if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
+      if (CollectionUtils.isNotEmpty(roleDomain.getAuthorities())) {
         roleDo.setAuthorities(
             roleDomain.getAuthorities().stream().map(Authority::getId)
                 .collect(Collectors.toList()));
@@ -173,7 +171,7 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleFindAllCo roleFindAllCo) {
     return Optional.ofNullable(roleFindAllCo).map(roleFindAllClientObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleFindAllClientObject);
-      if (!CollectionUtils.isEmpty(roleFindAllClientObject.getAuthorities())) {
+      if (CollectionUtils.isNotEmpty(roleFindAllClientObject.getAuthorities())) {
         role.setAuthorities(
             authorityRepository.findAuthorityDoByIdIn(roleFindAllClientObject.getAuthorities())
                 .stream()
@@ -189,7 +187,7 @@ public class RoleConvertor {
   public Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
       RoleFindAllCo roleFindAllCo = RoleMapper.INSTANCE.toFindAllCo(roleDomain);
-      if (!CollectionUtils.isEmpty(roleDomain.getAuthorities())) {
+      if (CollectionUtils.isNotEmpty(roleDomain.getAuthorities())) {
         roleFindAllCo.setAuthorities(
             roleDomain.getAuthorities().stream().map(Authority::getId).collect(
                 Collectors.toList()));

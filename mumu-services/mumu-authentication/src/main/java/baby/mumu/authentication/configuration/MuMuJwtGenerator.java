@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
@@ -57,7 +58,6 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 
 /**
@@ -185,7 +185,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         .id(UUID.randomUUID().toString());
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       claimsBuilder.notBefore(issuedAt);
-      if (!CollectionUtils.isEmpty(context.getAuthorizedScopes())) {
+      if (CollectionUtils.isNotEmpty(context.getAuthorizedScopes())) {
         claimsBuilder.claim(OAuth2ParameterNames.SCOPE, context.getAuthorizedScopes());
       }
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {

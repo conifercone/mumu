@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
@@ -49,7 +50,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 广播文本消息领域网关实现
@@ -93,7 +93,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             .ifPresent(broadcastTextMessageDo -> Optional.ofNullable(
                     broadcastTextMessageDo.getReceiverIds())
                 .ifPresent(receiverIds -> {
-                  if (!CollectionUtils.isEmpty(receiverIds)) {
+                  if (CollectionUtils.isNotEmpty(receiverIds)) {
                     broadcastTextMessageRepository.persist(broadcastTextMessageDo);
                     receiverIds.forEach(
                         receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))

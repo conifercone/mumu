@@ -19,6 +19,7 @@ import baby.mumu.basis.constants.CommonConstants;
 import io.grpc.MethodDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.security.GrpcSecurity;
@@ -31,7 +32,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 /**
  * grpc server端权限配置类
@@ -59,10 +59,10 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
   @Override
   public void configure(@NotNull GrpcSecurity builder) throws Exception {
     Registry authorizeRequests = builder.authorizeRequests();
-    if (!CollectionUtils.isEmpty(resourceServerProperties.getGrpcs())) {
+    if (CollectionUtils.isNotEmpty(resourceServerProperties.getGrpcs())) {
       resourceServerProperties.getGrpcs()
           .forEach(grpc -> {
-            if (!CollectionUtils.isEmpty(grpc.getGrpcPolicies())) {
+            if (CollectionUtils.isNotEmpty(grpc.getGrpcPolicies())) {
               grpc.getGrpcPolicies().forEach(grpcPolicy -> {
                 try {
                   Class<?> clazz = Class.forName(grpc.getServiceFullPath());

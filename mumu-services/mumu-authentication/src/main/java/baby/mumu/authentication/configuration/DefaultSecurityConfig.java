@@ -22,6 +22,7 @@ import baby.mumu.authentication.client.config.JwtAuthenticationTokenFilter;
 import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 默认安全配置
@@ -57,7 +57,7 @@ public class DefaultSecurityConfig {
       ResourceServerProperties resourceServerProperties)
       throws Exception {
     //noinspection DuplicatedCode
-    if (!CollectionUtils.isEmpty(resourceServerProperties.getPolicies())) {
+    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize

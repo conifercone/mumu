@@ -57,9 +57,9 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 元模型生成器
@@ -183,7 +183,7 @@ public class MetamodelGenerator extends AbstractProcessor {
             }
           });
         });
-    if (!CollectionUtils.isEmpty(fields)) {
+    if (CollectionUtils.isNotEmpty(fields)) {
       fields.forEach(field -> {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
