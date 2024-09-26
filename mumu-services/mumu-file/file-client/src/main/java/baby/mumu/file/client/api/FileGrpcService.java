@@ -20,6 +20,7 @@ import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
@@ -36,6 +37,7 @@ class FileGrpcService {
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
+  private final AtomicInteger currentIndex = new AtomicInteger(0);
 
   public FileGrpcService(DiscoveryClient discoveryClient,
       @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
@@ -58,7 +60,9 @@ class FileGrpcService {
 
   protected Optional<ServiceInstance> getServiceInstance() {
     List<ServiceInstance> instances = discoveryClient.getInstances("grpc-file");
-    return Optional.ofNullable(instances).flatMap(is -> is.stream().findFirst());
+    return Optional.ofNullable(instances)
+        .filter(list -> !list.isEmpty())
+        .map(list -> list.get(currentIndex.getAndUpdate(i -> (i + 1) % list.size())));
   }
 
 }
