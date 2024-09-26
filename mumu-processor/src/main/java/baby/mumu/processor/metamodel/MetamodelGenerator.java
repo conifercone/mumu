@@ -85,6 +85,10 @@ public class MetamodelGenerator extends AbstractProcessor {
   private String authorEmail;
   private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
   private static final String SINGULAR_FIELD_SUFFIX = "Singular";
+  private String gradleVersion;
+  private String javaVersion;
+  private String osName;
+  private String projectVersion;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -94,6 +98,10 @@ public class MetamodelGenerator extends AbstractProcessor {
     messager = processingEnv.getMessager();
     authorName = getGitUserName().orElse(StringUtils.EMPTY);
     authorEmail = getGitEmail().orElse(StringUtils.EMPTY);
+    gradleVersion = processingEnv.getOptions().get("gradleVersion");
+    javaVersion = processingEnv.getOptions().get("javaVersion");
+    osName = processingEnv.getOptions().get("osName");
+    projectVersion = processingEnv.getOptions().get("projectVersion");
     messager.printMessage(Diagnostic.Kind.NOTE, "🫛 MuMu Entity Metamodel Generator");
   }
 
@@ -136,7 +144,6 @@ public class MetamodelGenerator extends AbstractProcessor {
       packageName = packageElement.getQualifiedName().toString();
       entityName = annotatedElement.getSimpleName().toString();
     }
-
     genEntityName = entityName + GENERATE_DESCRIPTION_CLASS_SUFFIX;
 
     String qualifiedGenEntityName =
@@ -155,9 +162,9 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addMember("date", "$S", formattedDateTime)
         .addMember("comments", "$S",
             String.format("compiler from gradle %s, environment: Java %s OS %s",
-                processingEnv.getOptions().get("gradleVersion"),
-                processingEnv.getOptions().get("javaVersion"),
-                processingEnv.getOptions().get("osName")))
+                gradleVersion,
+                javaVersion,
+                osName))
         .build());
     builder.addJavadoc(
         "The current class is automatically generated, please do not modify it.\n\n"
@@ -166,7 +173,7 @@ public class MetamodelGenerator extends AbstractProcessor {
             "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : StringUtils.EMPTY)
             + String.format(
             "@see %s.%s\n", packageName, entityName) + String.format(
-            "@since %s", processingEnv.getOptions().get("projectVersion")));
+            "@since %s", projectVersion));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
