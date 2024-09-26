@@ -98,6 +98,10 @@ subprojects {
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
         options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
+        options.compilerArgs.add("-AgradleVersion=${gradle.gradleVersion}")
+        options.compilerArgs.add("-AosName=${System.getProperty("os.name")}")
+        options.compilerArgs.add("-AjavaVersion=${System.getProperty("java.version")}")
+        options.compilerArgs.add("-AprojectVersion=${project.version}")
     }
 
     tasks.named(

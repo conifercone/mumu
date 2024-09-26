@@ -45,6 +45,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -73,6 +74,7 @@ import org.jetbrains.annotations.NotNull;
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
+@SupportedOptions({"gradleVersion", "osName", "javaVersion", "projectVersion"})
 public class MetamodelGenerator extends AbstractProcessor {
 
   private Messager messager;
@@ -91,7 +93,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     messager = processingEnv.getMessager();
     authorName = getGitUserName().orElse(StringUtils.EMPTY);
     authorEmail = getGitEmail().orElse(StringUtils.EMPTY);
-    messager.printMessage(Diagnostic.Kind.NOTE, "🎉 MuMu Entity Metamodel Generator");
+    messager.printMessage(Diagnostic.Kind.NOTE, "🫛 MuMu Entity Metamodel Generator");
   }
 
   @Override
@@ -150,14 +152,20 @@ public class MetamodelGenerator extends AbstractProcessor {
     builder.addAnnotation(AnnotationSpec.builder(Generated.class)
         .addMember("value", "$S", this.getClass().getName())
         .addMember("date", "$S", formattedDateTime)
+        .addMember("comments", "$S",
+            String.format("compiler from gradle %s, environment: Java %s OS %s",
+                processingEnv.getOptions().get("gradleVersion"),
+                processingEnv.getOptions().get("javaVersion"),
+                processingEnv.getOptions().get("osName")))
         .build());
     builder.addJavadoc(
-        "The current class is automatically generated, please do not modify it.\n"
+        "The current class is automatically generated, please do not modify it.\n\n"
             + (StringUtils.isNotBlank(authorName) && StringUtils.isNotBlank(authorEmail)
             ? String.format(
             "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : StringUtils.EMPTY)
             + String.format(
-            "@see %s.%s", packageName, entityName));
+            "@see %s.%s\n", packageName, entityName) + String.format(
+            "@since %s", processingEnv.getOptions().get("projectVersion")));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
