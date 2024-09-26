@@ -15,10 +15,13 @@
  */
 package baby.mumu.authentication.client.api;
 
+import static baby.mumu.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
+import baby.mumu.basis.exception.MuMuException;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
@@ -52,14 +55,13 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
 
   @API(status = Status.STABLE, since = "1.0.0")
   public TokenValidityGrpcCo validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
-    if (channel == null) {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return validityFromGrpc(tokenValidityGrpcCmd);
-      }).orElse(null);
-    } else {
-      return validityFromGrpc(tokenValidityGrpcCmd);
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return validityFromGrpc(tokenValidityGrpcCmd);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private @Nullable TokenValidityGrpcCo validityFromGrpc(

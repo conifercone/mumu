@@ -73,7 +73,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
     if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
       OAuth2Error error = oAuth2AuthenticationException.getError();
       String errorCode = error.getErrorCode();
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent(errorCode)
                   .setCategory("exception")
@@ -120,7 +120,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
    * @param ip       ip地址
    */
   private void operationFailLog(String category, String fail, String ip) {
-    operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+    operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
         .setOperationLogSubmitCo(
             OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationFailureHandler")
                 .setBizNo(ip)

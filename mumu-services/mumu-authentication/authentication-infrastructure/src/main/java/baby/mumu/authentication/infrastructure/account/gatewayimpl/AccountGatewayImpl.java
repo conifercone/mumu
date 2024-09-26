@@ -113,7 +113,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
     Runnable accountAlreadyExistsRunnable = () -> {
-      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+      operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
                   .setBizNo(account.getUsername())
@@ -138,7 +138,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRepository.persist(dataObject);
       accountConvertor.toDataObject(account.getAddress())
           .ifPresent(accountAddressRepository::persist);
-      operationLogGrpcService.submit(OperationLogSubmitGrpcCmd.newBuilder()
+      operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
                   .setBizNo(account.getUsername())

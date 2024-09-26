@@ -17,11 +17,8 @@ package baby.mumu.unique.client.api;
 
 import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc;
 import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceBlockingStub;
-import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceFutureStub;
-import baby.mumu.unique.client.api.grpc.SnowflakeResult;
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -63,25 +60,13 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
   }
 
   public Long snowflake() {
-    if (channel == null) {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return snowflakeFromGrpc();
-      }).orElseGet(YitIdHelper::nextId);
-    } else {
-      return snowflakeFromGrpc();
-    }
-  }
-
-  public Optional<ListenableFuture<SnowflakeResult>> syncSnowflake() {
-    if (channel == null) {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncSnowflakeFromGrpc();
-      });
-    } else {
-      return Optional.of(syncSnowflakeFromGrpc());
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return snowflakeFromGrpc();
+        })
+        .orElseGet(YitIdHelper::nextId);
   }
 
   private @NotNull Long snowflakeFromGrpc() {
@@ -89,12 +74,5 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
         channel);
     return primaryKeyServiceBlockingStub.snowflake(
         Empty.newBuilder().build()).getId();
-  }
-
-  private @NotNull ListenableFuture<SnowflakeResult> syncSnowflakeFromGrpc() {
-    PrimaryKeyServiceFutureStub primaryKeyServiceFutureStub = PrimaryKeyServiceGrpc.newFutureStub(
-        channel);
-    return primaryKeyServiceFutureStub.snowflake(
-        Empty.newBuilder().build());
   }
 }

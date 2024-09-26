@@ -15,15 +15,15 @@
  */
 package baby.mumu.authentication.client.api;
 
+import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -37,7 +37,6 @@ class AuthenticationGrpcService {
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
-  private final AtomicInteger currentIndex = new AtomicInteger(0);
 
   public AuthenticationGrpcService(DiscoveryClient discoveryClient,
       @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
@@ -46,22 +45,20 @@ class AuthenticationGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    //noinspection DuplicatedCode
-    return getServiceInstance().map(
+    return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
         serviceInstance -> {
-          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
-                  serviceInstance.getHost(),
-                  serviceInstance.getPort())
+          NameResolverRegistry.getDefaultRegistry()
+              .register(new DiscoveryClientNameResolverProvider(discoveryClient));
+          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
+                  "discovery-client://grpc-authentication")
+              .defaultLoadBalancingPolicy("round_robin")
               .usePlaintext();
           Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
           return builder.build();
         });
   }
 
-  protected Optional<ServiceInstance> getServiceInstance() {
-    List<ServiceInstance> instances = discoveryClient.getInstances("grpc-authentication");
-    return Optional.ofNullable(instances)
-        .filter(list -> !list.isEmpty())
-        .map(list -> list.get(currentIndex.getAndUpdate(i -> (i + 1) % list.size())));
+  protected boolean serviceAvailable() {
+    return CollectionUtils.isNotEmpty(discoveryClient.getInstances("grpc-authentication"));
   }
 }

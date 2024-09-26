@@ -57,7 +57,7 @@ public class GrpcExceptionAdvice {
     Status internal = Status.INTERNAL;
     if (mumuException != null) {
       LOGGER.error(mumuException.getMessage());
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent(mumuException.getMessage())
                   .setCategory("mumuException")
@@ -75,7 +75,7 @@ public class GrpcExceptionAdvice {
     Status resourceExhausted = Status.RESOURCE_EXHAUSTED;
     if (rateLimiterException != null) {
       LOGGER.error(rateLimiterException.getMessage());
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimiterException.getMessage())
                   .setCategory("rateLimiterException")
@@ -94,7 +94,7 @@ public class GrpcExceptionAdvice {
     Status unauthenticated = Status.UNAUTHENTICATED;
     if (authenticationException != null) {
       LOGGER.error(ResultCode.UNAUTHORIZED.getResultMsg());
-      systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
               SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultMsg())
                   .setCategory("exception")

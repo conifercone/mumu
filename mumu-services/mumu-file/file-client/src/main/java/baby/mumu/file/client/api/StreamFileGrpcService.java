@@ -62,61 +62,51 @@ public class StreamFileGrpcService extends FileGrpcService implements
   @API(status = Status.STABLE, since = "1.0.1")
   public StreamFileDownloadGrpcResult download(StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return downloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
-    } else {
-      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
-      if (managedChannelUsePlaintext.isPresent()) {
-        channel = managedChannelUsePlaintext.get();
-        return downloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
-      } else {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
-      }
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return downloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<StreamFileDownloadGrpcResult> syncDownload(
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return syncDownloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
-    } else {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncDownloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
-      }).orElse(null);
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return syncDownloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty removeFile(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
-    } else {
-      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
-      if (managedChannelUsePlaintext.isPresent()) {
-        channel = managedChannelUsePlaintext.get();
-        return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
-      } else {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
-      }
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<Empty> syncRemoveFile(
       StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
-    } else {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
-      }).orElse(null);
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
 

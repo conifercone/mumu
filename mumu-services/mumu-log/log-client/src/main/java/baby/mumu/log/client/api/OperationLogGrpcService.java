@@ -48,16 +48,13 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
     Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
-  public void submit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
-    if (channel == null) {
-      getManagedChannelUsePlaintext().ifPresent(managedChannel -> {
-        channel = managedChannel;
-        syncSubmitFromGrpc(operationLogSubmitGrpcCmd);
-      });
-    } else {
-      syncSubmitFromGrpc(operationLogSubmitGrpcCmd);
-    }
-
+  public void syncSubmit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+    Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .ifPresent(ch -> {
+          channel = ch;
+          syncSubmitFromGrpc(operationLogSubmitGrpcCmd);
+        });
   }
 
   private void syncSubmitFromGrpc(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {

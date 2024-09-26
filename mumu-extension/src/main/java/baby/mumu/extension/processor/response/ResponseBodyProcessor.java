@@ -79,7 +79,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(mumuException.getMessage(), mumuException);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(mumuException.getMessage())
                 .setCategory("mumuException")
@@ -100,7 +100,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(Integer.parseInt(resultCode.getResultCode()));
     LOGGER.error(rateLimiterException.getMessage(), rateLimiterException);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(rateLimiterException.getMessage())
                 .setCategory("rateLimiterException")
@@ -117,7 +117,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     LOGGER.error(validationException.getMessage(), validationException);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(validationException.getMessage())
                 .setCategory("validationException")
@@ -136,7 +136,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     LOGGER.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
                 .setContent(methodArgumentNotValidException.getMessage())
@@ -156,7 +156,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     LOGGER.error(illegalArgumentException.getMessage(), illegalArgumentException);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder()
                 .setContent(illegalArgumentException.getMessage())
@@ -178,7 +178,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     LOGGER.error(exception.getMessage(), exception);
-    systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setSystemLogSubmitCo(
             SystemLogSubmitGrpcCo.newBuilder().setContent(exception.getMessage())
                 .setCategory("exception")

@@ -60,31 +60,26 @@ public class TemplateMailGrpcService extends MailGrpcService implements
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty sendMail(TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-    } else {
-      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
-      if (managedChannelUsePlaintext.isPresent()) {
-        channel = managedChannelUsePlaintext.get();
-        return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-      } else {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
-      }
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<Empty> syncSendMail(
       TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
       AuthCallCredentials callCredentials) {
-    if (channel != null) {
-      return syncSendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-    } else {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncSendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-      }).orElse(null);
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return syncSendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
 

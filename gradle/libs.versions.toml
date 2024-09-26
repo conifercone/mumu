@@ -33,6 +33,7 @@ tess4jVersion = '5.13.0'
 javacvVersion = '1.5.10'
 aliyunOcrVersion = '3.1.1'
 bucket4jVersion = '8.14.0'
+commonsCollections4Version = '4.5.0-M2'
 # bom version
 grpcBomVersion = '1.68.0'
 guavaBomVersion = '33.3.0-jre'
@@ -228,6 +229,12 @@ aliyun-ocr = { module = "com.aliyun:ocr_api20210707", version.ref = "aliyunOcrVe
 bucket4j-lettuce = { module = "com.bucket4j:bucket4j_jdk17-lettuce", version.ref = "bucket4jVersion" }
 # https://mvnrepository.com/artifact/io.lettuce/lettuce-core
 lettuce-core = { module = "io.lettuce:lettuce-core" }
+# https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4Version" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-commons
+spring-cloud-commons = { module = "org.springframework.cloud:spring-cloud-commons" }
+# https://mvnrepository.com/artifact/io.grpc/grpc-api
+grpc-api = { module = "io.grpc:grpc-api" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

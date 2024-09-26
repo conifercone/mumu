@@ -60,56 +60,46 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
 
   public SimpleCaptchaGeneratedGrpcCo generateSimpleCaptcha(
       SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
-    if (channel != null) {
-      return generateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
-    } else {
-      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
-      if (managedChannelUsePlaintext.isPresent()) {
-        channel = managedChannelUsePlaintext.get();
-        return generateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
-      } else {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
-      }
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return generateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public ListenableFuture<SimpleCaptchaGeneratedGrpcCo> syncGenerateSimpleCaptcha(
       SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
-    if (channel != null) {
-      return syncGenerateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
-    } else {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncGenerateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
-      }).orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return syncGenerateSimpleCaptchaFromGrpc(simpleCaptchaGeneratedGrpcCmd);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public SimpleCaptchaVerifyGrpcResult verifySimpleCaptcha(
       SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd) {
-    if (channel != null) {
-      return verifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
-    } else {
-      Optional<ManagedChannel> managedChannelUsePlaintext = getManagedChannelUsePlaintext();
-      if (managedChannelUsePlaintext.isPresent()) {
-        channel = managedChannelUsePlaintext.get();
-        return verifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
-      } else {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
-      }
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return verifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public ListenableFuture<SimpleCaptchaVerifyGrpcResult> syncVerifySimpleCaptcha(
       SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd) {
-    if (channel != null) {
-      return syncVerifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
-    } else {
-      return getManagedChannelUsePlaintext().map(managedChannel -> {
-        channel = managedChannel;
-        return syncVerifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
-      }).orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-    }
+    return Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .map(ch -> {
+          channel = ch;
+          return syncVerifySimpleCaptchaFromGrpc(simpleCaptchaVerifyGrpcCmd);
+        })
+        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private @Nullable SimpleCaptchaGeneratedGrpcCo generateSimpleCaptchaFromGrpc(

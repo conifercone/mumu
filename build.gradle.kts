@@ -147,6 +147,7 @@ subprojects {
         implementation(rootProject.libs.spring.boot.starter.undertow)
         implementation(rootProject.libs.commons.text)
         implementation(rootProject.libs.commons.io)
+        implementation(rootProject.libs.commons.collections4)
         implementation(rootProject.libs.jackson.module.kotlin)
         implementation(rootProject.libs.kotlin.reflect)
         testImplementation(rootProject.libs.junit.jupiter)

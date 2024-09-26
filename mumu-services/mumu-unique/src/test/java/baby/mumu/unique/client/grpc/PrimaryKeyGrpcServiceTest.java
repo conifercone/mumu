@@ -16,13 +16,6 @@
 package baby.mumu.unique.client.grpc;
 
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
-import baby.mumu.unique.client.api.grpc.SnowflakeResult;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.MoreExecutors;
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -56,24 +49,5 @@ public class PrimaryKeyGrpcServiceTest {
     Long snowflake = primaryKeyGrpcService.snowflake();
     LOGGER.info("snowflake : {}", snowflake);
     Assertions.assertNotNull(snowflake);
-  }
-
-  @Test
-  public void syncSnowflake() throws InterruptedException {
-    CountDownLatch countDownLatch = new CountDownLatch(1);
-    Optional<ListenableFuture<SnowflakeResult>> optionalSnowflakeResultListenableFuture = primaryKeyGrpcService.syncSnowflake();
-    optionalSnowflakeResultListenableFuture.ifPresent(
-        snowflakeResultListenableFuture -> snowflakeResultListenableFuture.addListener(() -> {
-          try {
-            SnowflakeResult snowflakeResult = snowflakeResultListenableFuture.get();
-            LOGGER.info("Sync SnowflakeResult : {}", snowflakeResult);
-            Assertions.assertNotNull(snowflakeResult);
-            countDownLatch.countDown();
-          } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-          }
-        }, MoreExecutors.directExecutor()));
-    boolean complete = countDownLatch.await(3, TimeUnit.SECONDS);
-    Assertions.assertTrue(complete);
   }
 }

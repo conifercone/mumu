@@ -47,15 +47,13 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
     Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
-  public void submit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
-    if (channel == null) {
-      getManagedChannelUsePlaintext().ifPresent(managedChannel -> {
-        channel = managedChannel;
-        syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
-      });
-    } else {
-      syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
-    }
+  public void syncSubmit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
+    Optional.ofNullable(channel)
+        .or(this::getManagedChannelUsePlaintext)
+        .ifPresent(ch -> {
+          channel = ch;
+          syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
+        });
   }
 
   private void syncSubmitFromGrpc(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {

@@ -55,7 +55,7 @@ public class DangerousOperationAspect extends AbstractAspect {
                   String content = String.format(
                       "The user with user ID %s performed a dangerous operation:%s", accountId,
                       resolveParameters(annotationNonNull.value(), joinPoint));
-                  systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
+                  systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
                       .setSystemLogSubmitCo(
                           SystemLogSubmitGrpcCo.newBuilder()
                               .setContent(content)
