@@ -1,4 +1,5 @@
 -- @formatter:off
+-- noinspection SqlResolveForFile @ column/"authorities"
 -- noinspection SqlConstantExpressionForFile
 -- roles name字段设置为NOT NULL,添加空字符串为默认值
 insert into roles(id, name, code, authorities, creation_time, founder, modifier, modification_time)

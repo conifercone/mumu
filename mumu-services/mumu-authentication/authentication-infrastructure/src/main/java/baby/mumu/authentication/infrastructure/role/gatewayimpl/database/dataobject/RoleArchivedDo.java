@@ -16,8 +16,7 @@
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
 import baby.mumu.basis.annotations.GenerateDescription;
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,11 +24,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.Type;
 
 /**
  * 角色基本信息归档数据对象
@@ -43,7 +40,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "roles_archived")
 @DynamicInsert
 @GenerateDescription
-public class RoleArchivedDo extends JpaBasisDataObject {
+public class RoleArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = 8174728781452519483L;
@@ -60,9 +57,4 @@ public class RoleArchivedDo extends JpaBasisDataObject {
   @NotNull
   @Column(name = "code", nullable = false, length = 100)
   private String code;
-
-  @Column(name = "authorities", nullable = false, columnDefinition = "bigint[]")
-  @Type(ListArrayType.class)
-  private List<Long> authorities;
-
 }

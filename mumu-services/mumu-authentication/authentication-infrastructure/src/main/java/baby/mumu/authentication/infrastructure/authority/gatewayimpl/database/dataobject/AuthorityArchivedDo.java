@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -38,7 +38,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "authorities_archived")
 @DynamicInsert
-public class AuthorityArchivedDo extends JpaBasisDataObject {
+public class AuthorityArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = 6469705198218020740L;

@@ -190,15 +190,20 @@ public class MetamodelGenerator extends AbstractProcessor {
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(
             Collectors.toSet());
-    ObjectUtil.getSuperclassElement(annotatedElement, typeUtils)
-        .ifPresent(superClassElement -> {
-          List<VariableElement> superClassFields = ObjectUtil.getFields(superClassElement);
-          superClassFields.forEach(superClassField -> {
-            if (!collect.contains(superClassField.getSimpleName().toString())) {
-              fields.add(superClassField);
-            }
-          });
-        });
+    List<VariableElement> superClassFields = ObjectUtil.getAllSuperclasses(annotatedElement,
+            typeUtils)
+        .stream()
+        .flatMap(typeElement -> ObjectUtil.getFields(typeElement).stream())
+        .collect(
+            Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
+                (existing, replacement) -> existing)).values()
+        .stream()
+        .toList();
+    superClassFields.forEach(superClassField -> {
+      if (!collect.contains(superClassField.getSimpleName().toString())) {
+        fields.add(superClassField);
+      }
+    });
     if (CollectionUtils.isNotEmpty(fields)) {
       fields.forEach(field -> {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())

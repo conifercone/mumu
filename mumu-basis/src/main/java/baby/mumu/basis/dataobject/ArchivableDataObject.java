@@ -15,22 +15,13 @@
  */
 package baby.mumu.basis.dataobject;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-
 /**
- * 数据对象接口
+ * 可以归档数据对象接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.1.0
  */
-public interface DataObject extends Serializable {
+public interface ArchivableDataObject extends DataObject {
 
-  Long getFounder();
-
-  Long getModifier();
-
-  OffsetDateTime getCreationTime();
-
-  OffsetDateTime getModificationTime();
+  Boolean isArchived();
 }

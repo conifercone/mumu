@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
@@ -49,7 +49,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Table(name = "broadcast_text_message_archived")
 @RequiredArgsConstructor
 @DynamicInsert
-public class BroadcastTextMessageArchivedDo extends JpaBasisDataObject {
+public class BroadcastTextMessageArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = 494657360586478620L;

@@ -38,7 +38,6 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * 权限信息转换器
@@ -47,7 +46,6 @@ import org.springframework.validation.annotation.Validated;
  * @since 1.0.0
  */
 @Component
-@Validated
 public class AuthorityConvertor {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
@@ -68,19 +66,19 @@ public class AuthorityConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(@Valid AuthorityDo authorityDo) {
+  public Optional<Authority> toEntity(AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(
         AuthorityMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityDo> toDataObject(@Valid Authority authority) {
+  public Optional<AuthorityDo> toDataObject(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(@Valid AuthorityAddCo authorityAddCo) {
+  public Optional<Authority> toEntity(AuthorityAddCo authorityAddCo) {
     return Optional.ofNullable(authorityAddCo).map(authorityAddClientObject -> {
       Authority authority = AuthorityMapper.INSTANCE.toEntity(authorityAddClientObject);
       if (authority.getId() == null) {
@@ -92,7 +90,7 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(@Valid AuthorityUpdateCo authorityUpdateCo) {
+  public Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
     return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
       if (authorityUpdateClientObject.getId() == null) {
         throw new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
@@ -115,12 +113,12 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(@Valid AuthorityFindAllCo authorityFindAllCo) {
+  public Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
     return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<Authority> toEntity(@Valid AuthorityArchivedDo authorityArchivedDo) {
+  public Optional<Authority> toEntity(AuthorityArchivedDo authorityArchivedDo) {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
@@ -131,7 +129,7 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityFindByIdCo> toFindByIdCo(@Valid Authority authority) {
+  public Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo)
         .map(authorityFindByIdCo -> {
           Optional.ofNullable(simpleTextTranslation).flatMap(
@@ -143,7 +141,7 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AuthorityFindAllCo> toFindAllCo(@Valid Authority authority) {
+  public Optional<AuthorityFindAllCo> toFindAllCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo)
         .map(authorityFindAllCo -> {
           Optional.ofNullable(simpleTextTranslation).flatMap(
@@ -155,7 +153,7 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AuthorityArchivedFindAllCo> toArchivedFindAllCo(@Valid Authority authority) {
+  public Optional<AuthorityArchivedFindAllCo> toArchivedFindAllCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllCo)
         .map(authorityArchivedFindAllCo -> {
           Optional.ofNullable(simpleTextTranslation).flatMap(

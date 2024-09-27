@@ -77,7 +77,6 @@ public interface RoleMapper {
   RoleFindAllCo toFindAllCo(Role role);
 
   @Mappings(value = {
-      @Mapping(target = RoleDo4Desc.authorities, ignore = true),
       @Mapping(target = RoleDo4Desc.users, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")

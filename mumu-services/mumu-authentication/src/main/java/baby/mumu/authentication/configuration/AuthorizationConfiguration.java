@@ -24,8 +24,9 @@ import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
+import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
@@ -375,7 +376,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-      AuthorityRepository authorityRepository) {
+      RoleAuthorityRepository roleAuthorityRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -419,12 +420,17 @@ public class AuthorizationConfiguration {
                   .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
                   .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
                   .collect(Collectors.toSet());
-              List<Long> authoritiesIds = roleRepository.findByCodeIn(new ArrayList<>(roles))
+              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(
+                      new ArrayList<>(roles))
                   .stream()
-                  .flatMap(opt -> opt.stream().flatMap(obj -> obj.getAuthorities().stream()))
-                  .distinct().toList();
-              List<AuthorityDo> authorityDos = authorityRepository.findAllById(authoritiesIds);
-              Set<String> authorityCodesFromRoles = authorityDos.stream().map(AuthorityDo::getCode)
+                  .flatMap(
+                      opt -> opt.stream().flatMap(obj -> roleAuthorityRepository.findByRoleId(
+                              obj.getId()).stream()
+                          .map(RoleAuthorityDo::getAuthority)))
+                  .collect(Collectors.toMap(AuthorityDo::getId, authorityDo -> authorityDo,
+                      (existing, replacement) -> existing))
+                  .values()
+                  .stream().map(AuthorityDo::getCode)
                   .collect(Collectors.toSet());
               authorityCodesFromRoles.addAll(scopes);
               return authorityCodesFromRoles;

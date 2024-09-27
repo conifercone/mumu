@@ -17,8 +17,7 @@ package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataob
 
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import baby.mumu.basis.annotations.GenerateDescription;
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,12 +27,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.Type;
 
 /**
  * 角色基本信息数据对象
@@ -47,7 +44,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "roles")
 @DynamicInsert
 @GenerateDescription
-public class RoleDo extends JpaBasisDataObject {
+public class RoleDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = 2601328894471265295L;
@@ -79,12 +76,5 @@ public class RoleDo extends JpaBasisDataObject {
    */
   @OneToMany(mappedBy = "role")
   private Set<AccountDo> users = new LinkedHashSet<>();
-
-  /**
-   * 角色包含的权限集合
-   */
-  @Column(name = "authorities", nullable = false, columnDefinition = "bigint[]")
-  @Type(ListArrayType.class)
-  private List<Long> authorities;
 
 }

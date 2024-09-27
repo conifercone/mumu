@@ -16,17 +16,16 @@
 package baby.mumu.authentication.infrastructure.role.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
-import static baby.mumu.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
+import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
+import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo_;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import baby.mumu.basis.annotations.DangerousOperation;
@@ -39,13 +38,12 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
@@ -73,12 +71,14 @@ public class RoleGatewayImpl implements RoleGateway {
   private final RoleArchivedRepository roleArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
+  private final RoleAuthorityRepository roleAuthorityRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       AccountGateway accountGateway, RoleConvertor roleConvertor,
       RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties,
+      RoleAuthorityRepository roleAuthorityRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -86,18 +86,33 @@ public class RoleGatewayImpl implements RoleGateway {
     this.roleArchivedRepository = roleArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
+    this.roleAuthorityRepository = roleAuthorityRepository;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
+    //保存角色数据
     Optional.ofNullable(role).flatMap(roleConvertor::toDataObject)
         .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode())
             && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
         .ifPresentOrElse(roleRepository::persist, () -> {
           throw new MuMuException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
         });
+    saveRoleAuthorityRelationsData(role);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.1.0")
+  protected void saveRoleAuthorityRelationsData(Role role) {
+    //保存角色权限关系数据（如果存在关系）
+    Optional.ofNullable(role).ifPresent(roleNonNull -> {
+      List<RoleAuthorityDo> roleAuthorityDos = roleConvertor.toRoleAuthorityDos(role);
+      if (CollectionUtils.isNotEmpty(roleAuthorityDos)) {
+        roleAuthorityRepository.persistAll(roleAuthorityDos);
+      }
+    });
   }
 
   @Override
@@ -111,6 +126,7 @@ public class RoleGatewayImpl implements RoleGateway {
         throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
             allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
       }
+      roleAuthorityRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
       roleArchivedRepository.deleteById(roleId);
     });
@@ -124,6 +140,9 @@ public class RoleGatewayImpl implements RoleGateway {
       Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
         roleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
+        //删除权限关系数据重新添加
+        roleAuthorityRepository.deleteByRoleId(roleDomain.getId());
+        saveRoleAuthorityRelationsData(roleDomain);
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -137,82 +156,36 @@ public class RoleGatewayImpl implements RoleGateway {
     Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
       List<Predicate> predicateList = new ArrayList<>();
       Optional.ofNullable(role.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(code -> predicateList.add(cb.like(root.get(RoleDo_.code),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
+          .ifPresent(
+              code -> predicateList.add(cb.like(root.get(RoleDo_.code),
+                  String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
       Optional.ofNullable(role.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(name -> predicateList.add(cb.like(root.get(RoleDo_.name),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
+          .ifPresent(
+              name -> predicateList.add(cb.like(root.get(RoleDo_.name),
+                  String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
       Optional.ofNullable(role.getId())
-          .ifPresent(id -> predicateList.add(cb.equal(root.get(RoleDo_.id), id)));
-      Optional.ofNullable(role.getAuthorities()).filter(authorities -> !authorities.isEmpty())
-          .ifPresent(authorities -> authorities.forEach(authority -> predicateList.add(cb.equal(
-              cb.literal(authority.getId()),
-              cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
-          ))));
+          .ifPresent(id -> predicateList.add(
+              cb.equal(root.get(RoleDo_.id), id)));
       assert query != null;
       return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
     };
-    return getRoles(pageNo, pageSize, roleDoSpecification);
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<RoleDo> roleDoPage = roleRepository.findAll(
+        roleDoSpecification, pageRequest);
+    return new PageImpl<>(roleDoPage.getContent().stream()
+        .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+        .toList(), pageRequest, roleDoPage.getTotalElements());
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
-  public Page<Role> findAllContainAuthority(Long authorityId, int pageNo, int pageSize) {
-    return Optional.ofNullable(authorityId).map(authorityIdNonNull -> {
-      Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
-        List<Predicate> predicateList = new ArrayList<>();
-        predicateList.add(cb.equal(
-            cb.literal(authorityIdNonNull),
-            cb.function(ANY_PG, Long.class, root.get(RoleDo_.authorities))
-        ));
-        assert query != null;
-        return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
-            .where(predicateList.toArray(new Predicate[0]))
-            .getRestriction();
-      };
-      Page<Role> rolePage = getRoles(pageNo, pageSize, roleDoSpecification);
-      if (rolePage.isEmpty()) {
-        Specification<RoleArchivedDo> roleArchivedDoSpecification = (root, query, cb) -> {
-          List<Predicate> predicateList = new ArrayList<>();
-          predicateList.add(cb.equal(
-              cb.literal(authorityIdNonNull),
-              cb.function(ANY_PG, Long.class, root.get(RoleArchivedDo_.authorities))
-          ));
-          assert query != null;
-          return query.orderBy(cb.desc(root.get(RoleArchivedDo_.creationTime)))
-              .where(predicateList.toArray(new Predicate[0]))
-              .getRestriction();
-        };
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-        Page<RoleArchivedDo> repositoryAll = roleArchivedRepository.findAll(
-            roleArchivedDoSpecification,
-            pageRequest);
-        List<Role> roles = repositoryAll.getContent().stream()
-            .map(roleConvertor::toEntity)
-            .filter(Optional::isPresent).map(Optional::get)
-            .toList();
-        return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
-      }
-      return rolePage;
-    }).orElse(new PageImpl<>(Collections.emptyList()));
-  }
-
-  @NotNull
-  @Transactional(rollbackFor = Exception.class)
-  @API(status = Status.STABLE, since = "1.0.0")
-  protected Page<Role> getRoles(int pageNo, int pageSize,
-      Specification<RoleDo> roleDoSpecification) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<RoleDo> repositoryAll = roleRepository.findAll(roleDoSpecification,
-        pageRequest);
-    List<Role> roles = repositoryAll.getContent().stream()
-        .map(roleConvertor::toEntity)
-        .filter(Optional::isPresent).map(Optional::get)
+  public List<Role> findAllContainAuthority(Long authorityId) {
+    return roleAuthorityRepository.findByAuthorityId(authorityId).stream()
+        .flatMap(roleAuthorityDo -> roleConvertor.toEntity(roleAuthorityDo.getRole()).stream())
         .toList();
-    return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
@@ -242,7 +215,10 @@ public class RoleGatewayImpl implements RoleGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId, 0, 10).isEmpty())
-        .ifPresent(roleArchivedRepository::deleteById);
+        .ifPresent(roleIdNotNull -> {
+          roleArchivedRepository.deleteById(roleIdNotNull);
+          roleAuthorityRepository.deleteByRoleId(roleIdNotNull);
+        });
   }
 
   @Override

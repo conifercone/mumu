@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
 import baby.mumu.basis.annotations.GenerateDescription;
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import jakarta.persistence.Column;
@@ -49,7 +49,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @RequiredArgsConstructor
 @DynamicInsert
 @GenerateDescription
-public class AccountArchivedDo extends JpaBasisDataObject {
+public class AccountArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = -7785479212845125722L;

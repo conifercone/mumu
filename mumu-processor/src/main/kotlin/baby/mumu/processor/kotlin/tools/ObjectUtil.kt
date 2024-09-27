@@ -51,19 +51,22 @@ object ObjectUtil {
     }
 
     @JvmStatic
-    fun getSuperclassElement(element: Element, types: Types): Optional<TypeElement> {
-        if (element is TypeElement) {
-            val superclassMirror: TypeMirror = element.superclass
+    fun getAllSuperclasses(element: Element, types: Types): List<TypeElement> {
+        val superclasses = mutableListOf<TypeElement>()
+        var currentElement: TypeElement? = if (element is TypeElement) element else null
+        while (currentElement != null) {
+            superclasses.add(currentElement)
+            val superclassMirror: TypeMirror = currentElement.superclass
 
-            if (superclassMirror.kind != TypeKind.NONE) {
-                val superclassElement = types.asElement(superclassMirror)
-                if (superclassElement is TypeElement) {
-                    return Optional.of(superclassElement)
-                }
+            if (superclassMirror.kind == TypeKind.NONE) {
+                break
             }
+            val superclassElement = types.asElement(superclassMirror)
+            currentElement = if (superclassElement is TypeElement) superclassElement else null
         }
-        return Optional.empty()
+        return superclasses
     }
+
 
     @JvmStatic
     fun getEntityQualifiedName(fieldElement: VariableElement): String {

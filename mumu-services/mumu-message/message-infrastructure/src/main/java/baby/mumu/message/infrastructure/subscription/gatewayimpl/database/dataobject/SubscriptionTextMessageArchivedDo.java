@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.dataobject.jpa.JpaBasisDataObject;
+import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,7 +46,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Table(name = "subscription_text_message_archived")
 @RequiredArgsConstructor
 @DynamicInsert
-public class SubscriptionTextMessageArchivedDo extends JpaBasisDataObject {
+public class SubscriptionTextMessageArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = 3607564772412326961L;

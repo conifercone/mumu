@@ -40,6 +40,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -107,10 +108,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("根据ID删除ID为%0的权限数据")
   public void deleteById(Long id) {
-    Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-    if (!authorities.isEmpty()) {
+    List<Role> authorities = roleGateway.findAllContainAuthority(id);
+    if (CollectionUtils.isNotEmpty(authorities)) {
       throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-          authorities.getContent().stream().map(Role::getCode).toList());
+          authorities.stream().map(Role::getCode).toList());
     }
     Optional.ofNullable(id).ifPresent(authorityId -> {
       authorityRepository.deleteById(authorityId);
@@ -200,10 +201,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档ID为%0的权限")
   public void archiveById(Long id) {
-    Page<Role> authorities = roleGateway.findAllContainAuthority(id, 0, 10);
-    if (!authorities.isEmpty()) {
+    List<Role> authorities = roleGateway.findAllContainAuthority(id);
+    if (CollectionUtils.isNotEmpty(authorities)) {
       throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
-          authorities.getContent().stream().map(Role::getCode).toList());
+          authorities.stream().map(Role::getCode).toList());
     }
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(authorityRepository::findById)
@@ -222,7 +223,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @DangerousOperation("根据ID删除ID为%0的权限归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
-        .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId, 0, 10).isEmpty())
+        .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
         .ifPresent(authorityArchivedRepository::deleteById);
   }
 
