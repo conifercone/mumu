@@ -67,6 +67,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
@@ -189,8 +190,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountRegisterGrpcCo.getBirthday().getYear().getValue(),
         accountRegisterGrpcCo.getBirthday().getMonth().getValue(),
         accountRegisterGrpcCo.getBirthday().getDay().getValue()) : null);
-    accountRegisterCo.setAddress(accountRegisterGrpcCo.hasAddress() ? getAccountAddressRegisterCo(
-        accountRegisterGrpcCo.getAddress()) : null);
+    accountRegisterCo.setAddresses(accountRegisterGrpcCo.getAddressesList().stream().map(
+            AccountServiceImpl::getAccountAddressRegisterCo)
+        .collect(
+            Collectors.toList()));
     return accountRegisterCo;
   }
 

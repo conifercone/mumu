@@ -23,6 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -65,7 +66,7 @@ public class AccountRegisterCo extends BaseClientObject {
   @NotNull(message = "{account.birthday.validation.not.null}")
   private LocalDate birthday;
 
-  private AccountAddressRegisterCo address;
+  private List<AccountAddressRegisterCo> addresses;
 
   @Data
   public static class AccountAddressRegisterCo {

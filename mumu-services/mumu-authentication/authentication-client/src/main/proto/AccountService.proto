@@ -37,9 +37,7 @@ message AccountRegisterGrpcCo {
   oneof birthday_wrapper {
     LocalDate birthday = 11;
   }
-  oneof address_wrapper{
-    AccountAddressRegisterGrpcCo address = 12;
-  }
+  repeated AccountAddressRegisterGrpcCo addresses = 12;
 }
 
 message AccountUpdateByIdGrpcCmd{

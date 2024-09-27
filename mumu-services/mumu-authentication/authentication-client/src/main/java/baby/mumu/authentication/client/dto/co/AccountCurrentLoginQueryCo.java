@@ -21,6 +21,7 @@ import baby.mumu.basis.enums.SexEnum;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -57,7 +58,7 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
 
   private int age;
 
-  private AccountAddressCurrentLoginQueryCo address;
+  private List<AccountAddressCurrentLoginQueryCo> addresses;
 
   @Data
   public static class AccountAddressCurrentLoginQueryCo {

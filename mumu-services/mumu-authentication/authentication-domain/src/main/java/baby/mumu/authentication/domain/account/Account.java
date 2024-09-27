@@ -31,6 +31,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -156,7 +157,7 @@ public class Account extends BasisDomainModel implements UserDetails {
    */
   @Setter
   @Getter
-  private AccountAddress address;
+  private List<AccountAddress> addresses;
 
   /**
    * 年龄

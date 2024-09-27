@@ -34,6 +34,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -81,10 +83,9 @@ public class AccountConvertor {
           accountDataObject.getAccountNonLocked(),
           roleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
       AccountMapper.INSTANCE.toEntity(accountDataObject, account);
-      Optional.ofNullable(accountDataObject.getAddressId())
-          .flatMap(accountAddressRepository::findById).ifPresent(
-              accountAddressDo -> account.setAddress(
-                  AccountMapper.INSTANCE.toEntity(accountAddressDo)));
+      account.setAddresses(
+          accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+              AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       return account;
     });
   }
@@ -94,9 +95,6 @@ public class AccountConvertor {
   public Optional<AccountDo> toDataObject(Account account) {
     return Optional.ofNullable(account).map(accountDomain -> {
       AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountDomain);
-      Optional.ofNullable(accountDomain.getAddress())
-          .flatMap(address -> Optional.ofNullable(address.getId()))
-          .ifPresentOrElse(accountDo::setAddressId, () -> accountDo.setAddressId(0L));
       Optional.ofNullable(accountDomain.getRole())
           .ifPresent(
               role -> accountDo.setRole(
@@ -116,14 +114,14 @@ public class AccountConvertor {
           roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
               .flatMap(roleConvertor::toEntity).orElse(null));
       AccountMapper.INSTANCE.toEntity(accountRegisterClientObject, account);
-      Optional.ofNullable(account.getAddress())
-          .ifPresent(accountAddress -> {
+      Optional.ofNullable(account.getAddresses())
+          .filter(CollectionUtils::isNotEmpty)
+          .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {
             accountAddress.setUserId(account.getId());
             if (accountAddress.getId() == null) {
               accountAddress.setId(primaryKeyGrpcService.snowflake());
-              accountRegisterClientObject.getAddress().setId(accountAddress.getId());
             }
-          });
+          }));
       accountRegisterClientObject.setId(account.getId());
       return account;
     });
@@ -139,8 +137,9 @@ public class AccountConvertor {
             String emailBeforeUpdated = account.getEmail();
             String usernameBeforeUpdated = account.getUsername();
             AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
-            Optional.ofNullable(account.getAddress())
-                .ifPresent(accountAddress -> accountAddress.setUserId(account.getId()));
+            Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
+                .ifPresent(accountAddresses -> accountAddresses.forEach(
+                    accountAddress -> accountAddress.setUserId(account.getId())));
             String emailAfterUpdated = account.getEmail();
             String usernameAfterUpdated = account.getUsername();
             if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
@@ -218,7 +217,7 @@ public class AccountConvertor {
   public Optional<AccountAddress> toEntity(
       AccountAddAddressCo accountAddAddressCo) {
     return Optional.ofNullable(accountAddAddressCo).map(accountAddAddressCoNonNull -> {
-      AccountAddress instanceEntity = AccountMapper.INSTANCE.toEntity(accountAddAddressCo);
+      AccountAddress instanceEntity = AccountMapper.INSTANCE.toAccountAddress(accountAddAddressCo);
       if (instanceEntity.getId() == null) {
         instanceEntity.setId(primaryKeyGrpcService.snowflake());
         accountAddAddressCoNonNull.setId(instanceEntity.getId());

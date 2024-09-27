@@ -23,6 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -60,7 +61,7 @@ public class AccountUpdateByIdCo extends BaseClientObject {
 
   private LocalDate birthday;
 
-  private AccountAddressUpdateByIdCo address;
+  private List<AccountAddressUpdateByIdCo> addresses;
 
   @Data
   public static class AccountAddressUpdateByIdCo {

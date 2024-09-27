@@ -22,6 +22,7 @@ import baby.mumu.authentication.infrastructure.account.convertor.AccountConverto
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
@@ -47,6 +48,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -136,8 +139,12 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
-      accountConvertor.toDataObject(account.getAddress())
-          .ifPresent(accountAddressRepository::persist);
+      Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
+              accountAddresses -> accountAddresses.stream()
+                  .flatMap(accountAddress -> accountConvertor.toDataObject(accountAddress).stream())
+                  .collect(
+                      Collectors.toList())).filter(CollectionUtils::isNotEmpty)
+          .ifPresent(accountAddressRepository::persistAll);
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -172,11 +179,12 @@ public class AccountGatewayImpl implements AccountGateway {
         .filter(res -> Objects.equals(res, account.getId()))
         .ifPresentOrElse((accountId) -> accountConvertor.toDataObject(account)
             .ifPresent(accountDo -> {
-              Optional.ofNullable(account.getAddress()).flatMap(accountConvertor::toDataObject)
-                  .ifPresent(accountAddressDo -> {
-                    accountAddressRepository.merge(accountAddressDo);
-                    accountDo.setModifier(accountAddressDo.getModifier());
-                    accountDo.setModificationTime(accountAddressDo.getModificationTime());
+              Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
+                  .ifPresent(accountAddresses -> {
+                    List<AccountAddressDo> accountAddressDos = accountAddresses.stream().flatMap(
+                            accountAddress -> accountConvertor.toDataObject(accountAddress).stream())
+                        .collect(Collectors.toList());
+                    accountAddressRepository.mergeAll(accountAddressDos);
                   });
               accountRepository.merge(accountDo);
             }), () -> {
@@ -363,15 +371,8 @@ public class AccountGatewayImpl implements AccountGateway {
         accountId -> Optional.ofNullable(accountAddress).flatMap(accountConvertor::toDataObject)
             .ifPresent(
                 accountAddressDo -> accountRepository.findById(accountId).ifPresent(accountDo -> {
-                  accountAddressRepository.findById(accountDo.getAddressId())
-                      .filter(accountAddressDataObject -> accountAddressDataObject.getUserId()
-                          .equals(accountId)).ifPresent(res -> {
-                        throw new MuMuException(ResultCode.THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS);
-                      });
                   accountAddressDo.setUserId(accountId);
                   accountAddressRepository.persist(accountAddressDo);
-                  accountDo.setAddressId(accountAddressDo.getId());
-                  accountRepository.persist(accountDo);
                 })));
   }
 }

@@ -22,6 +22,7 @@ import baby.mumu.authentication.client.config.JwtAuthenticationTokenFilter;
 import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
+import baby.mumu.basis.constants.CommonConstants;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.util.Assert;
 
 /**
  * 默认安全配置
@@ -63,13 +65,16 @@ public class DefaultSecurityConfig {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
                       policy.getMatcher());
-              if (StringUtils.isNotBlank(policy.getRole())) {
-                authorizedUrl.hasRole(policy.getRole());
-              } else if (StringUtils.isNotBlank(policy.getAuthority())) {
-                authorizedUrl.hasAuthority(policy.getAuthority());
-              } else if (policy.isPermitAll()) {
-                authorizedUrl.permitAll();
-              }
+          if (StringUtils.isNotBlank(policy.getRole())) {
+            authorizedUrl.hasRole(policy.getRole());
+          } else if (StringUtils.isNotBlank(policy.getAuthority())) {
+            Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                "Permission configuration cannot be empty and cannot start with SCOPE_");
+            authorizedUrl.hasAuthority(
+                CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
+          } else if (policy.isPermitAll()) {
+            authorizedUrl.permitAll();
+          }
             }
         );
       }

@@ -18,7 +18,9 @@ package baby.mumu.authentication.infrastructure.account.convertor;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
+import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
+import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo.AccountAddressUpdateByIdCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.Account4Desc;
 import baby.mumu.authentication.domain.account.AccountAddress;
@@ -53,13 +55,13 @@ public interface AccountMapper {
   @Mappings(value = {
       @Mapping(target = Account4Desc.role, ignore = true),
       @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.address, ignore = true)
+      @Mapping(target = Account4Desc.addresses, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toEntity(AccountAddressDo accountAddressDo);
+  AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDo toDataObject(AccountAddress accountAddress);
@@ -68,25 +70,36 @@ public interface AccountMapper {
       @Mapping(target = AccountAddress4Desc.userId, ignore = true)
   })
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toEntity(AccountAddAddressCo accountAddAddressCo);
+  AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
 
   @Mappings(value = {
       @Mapping(target = AccountDo4Desc.role, ignore = true),
-      @Mapping(target = AccountDo4Desc.addressId, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
   @Mappings(value = {
       @Mapping(target = Account4Desc.role, ignore = true),
-      @Mapping(target = Account4Desc.authorities, ignore = true)
+      @Mapping(target = Account4Desc.authorities, ignore = true),
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
 
   @Mappings(value = {
+      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
+  })
+  @API(status = Status.STABLE, since = "2.1.0")
+  AccountAddress toAccountAddress(AccountAddressRegisterCo accountAddressRegisterCo);
+
+  @Mappings(value = {
+      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
+  })
+  @API(status = Status.STABLE, since = "2.1.0")
+  AccountAddress toAccountAddress(AccountAddressUpdateByIdCo accountAddressUpdateByIdCo);
+
+  @Mappings(value = {
       @Mapping(target = Account4Desc.role, ignore = true),
-      @Mapping(target = Account4Desc.authorities, ignore = true)
+      @Mapping(target = Account4Desc.authorities, ignore = true),
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);

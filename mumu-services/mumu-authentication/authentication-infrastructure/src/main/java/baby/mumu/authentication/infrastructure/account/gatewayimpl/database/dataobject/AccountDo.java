@@ -165,12 +165,4 @@ public class AccountDo extends JpaBasisArchivableDataObject {
   @ColumnDefault("'1970-01-01'::date")
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
-
-  /**
-   * 账户地址ID
-   */
-  @ColumnDefault("0")
-  @Column(name = "address_id", nullable = false)
-  private Long addressId;
-
 }
