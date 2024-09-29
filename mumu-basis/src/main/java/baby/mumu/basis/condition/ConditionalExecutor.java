@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 条件工具类
+ * 条件执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
@@ -62,8 +62,8 @@ public class ConditionalExecutor {
   /**
    * 根据条件判断是否执行给定的代码块（无返回值）。 如果条件成立，使用 supplier 的返回值作为参数执行 action。
    *
-   * @param action    要执行的代码块
-   * @param supplier  供应者，用于生成参数
+   * @param action   要执行的代码块
+   * @param supplier 供应者，用于生成参数
    */
   public <T> ConditionalExecutor ifTrue(Consumer<T> action, Supplier<T> supplier) {
     if (condition) {
@@ -75,7 +75,7 @@ public class ConditionalExecutor {
   /**
    * 根据条件判断是否执行给定的代码块（无返回值, 条件成立）.
    *
-   * @param action    要执行的代码块
+   * @param action 要执行的代码块
    */
   public ConditionalExecutor ifTrue(Runnable action) {
     if (condition) {
