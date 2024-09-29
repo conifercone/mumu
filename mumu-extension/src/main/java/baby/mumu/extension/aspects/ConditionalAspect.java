@@ -16,6 +16,7 @@
 package baby.mumu.extension.aspects;
 
 import baby.mumu.basis.annotations.Conditional;
+import baby.mumu.basis.condition.ConditionalExecutor;
 import java.util.Optional;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -43,18 +44,18 @@ public class ConditionalAspect extends AbstractAspect {
   @Around("@annotation(baby.mumu.basis.annotations.Conditional)")
   public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
     return Optional.ofNullable(getMethodAnnotation(joinPoint, Conditional.class))
-        .map(conditional -> {
-          if (applicationContext.getBean(conditional.value()).matches()) {
-            try {
-              return joinPoint.proceed();
-            } catch (Throwable e) {
-              throw new RuntimeException(e);
-            }
-          } else {
-            LOGGER.info("{} method execution conditions are not met",
-                joinPoint.getSignature().getName());
-            return null;
-          }
-        }).orElse(joinPoint.proceed());
+        .map(conditional -> ConditionalExecutor.of(
+                applicationContext.getBean(conditional.value()).matches())
+            .execute(() -> {
+              try {
+                return joinPoint.proceed();
+              } catch (Throwable e) {
+                throw new RuntimeException(e);
+              }
+            }, () -> {
+              LOGGER.info("{} method execution conditions are not met",
+                  joinPoint.getSignature().getName());
+              return null;
+            })).orElse(joinPoint.proceed());
   }
 }
