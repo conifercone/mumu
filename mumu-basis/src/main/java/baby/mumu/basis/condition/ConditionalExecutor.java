@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.condition;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.Contract;
@@ -34,13 +35,27 @@ public class ConditionalExecutor {
     this.condition = condition;
   }
 
+  private ConditionalExecutor(@NotNull BooleanSupplier booleanSupplier) {
+    this.condition = booleanSupplier.getAsBoolean();
+  }
+
   @Contract(value = "_ -> new", pure = true)
   public static @NotNull ConditionalExecutor of(boolean condition) {
     return new ConditionalExecutor(condition);
   }
 
+  @Contract(value = "_ -> new", pure = true)
+  public static @NotNull ConditionalExecutor of(BooleanSupplier booleanSupplier) {
+    return new ConditionalExecutor(booleanSupplier);
+  }
+
   public ConditionalExecutor condition(boolean condition) {
     this.condition = condition;
+    return this;
+  }
+
+  public ConditionalExecutor condition(@NotNull BooleanSupplier booleanSupplier) {
+    this.condition = booleanSupplier.getAsBoolean();
     return this;
   }
 
