@@ -77,4 +77,9 @@ public class AspectConfiguration {
   public RateLimitingCustomGenerateProvider rateLimitingCustomGenerateDefaultProviderImpl() {
     return new RateLimitingCustomGenerateDefaultProviderImpl();
   }
+
+  @Bean
+  public ConditionalAspect conditionalAspect(ApplicationContext context) {
+    return new ConditionalAspect(context);
+  }
 }
