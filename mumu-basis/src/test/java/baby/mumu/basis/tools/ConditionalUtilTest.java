@@ -27,17 +27,17 @@ public class ConditionalUtilTest {
 
   @Test
   public void test() {
-    ConditionalUtil.execute(true, (res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalUtil.of(true).execute((res) -> System.out.println(res), () -> "生成的消息");
   }
 
   @Test
   public void test2() {
-    ConditionalUtil.execute(false, (res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalUtil.of(false).execute((res) -> System.out.println(res), () -> "生成的消息");
   }
 
   @Test
   public void test3() {
-    System.out.println(ConditionalUtil.execute(true, () -> {
+    System.out.println(ConditionalUtil.of(true).execute(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -46,7 +46,7 @@ public class ConditionalUtilTest {
 
   @Test
   public void test4() {
-    System.out.println(ConditionalUtil.execute(false, () -> {
+    System.out.println(ConditionalUtil.of(false).execute(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -56,13 +56,13 @@ public class ConditionalUtilTest {
   @Test
   public void test5() {
     String test = "测试消息";
-    ConditionalUtil.execute(true, () -> System.out.println(test));
+    ConditionalUtil.of(true).execute(() -> System.out.println(test));
   }
 
   @Test
   public void test6() {
     String test = "测试消息";
-    ConditionalUtil.execute(false, () -> System.out.println(test));
+    ConditionalUtil.of(false).execute(() -> System.out.println(test));
   }
 
   @Test
@@ -71,7 +71,7 @@ public class ConditionalUtilTest {
     String failTest = "条件不成立测试消息";
     Runnable successAction = () -> System.out.println(successTest);
     Runnable failAction = () -> System.out.println(failTest);
-    ConditionalUtil.execute(false, successAction, failAction);
-    ConditionalUtil.execute(true, successAction, failAction);
+    ConditionalUtil.of(true).execute(successAction, failAction);
+    ConditionalUtil.of(false).execute(successAction, failAction);
   }
 }
