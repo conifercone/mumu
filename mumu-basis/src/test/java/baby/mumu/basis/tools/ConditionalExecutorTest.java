@@ -16,6 +16,7 @@
 package baby.mumu.basis.tools;
 
 import baby.mumu.basis.condition.ConditionalExecutor;
+import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -83,6 +84,14 @@ public class ConditionalExecutorTest {
   public void test8() {
     String test = "测试消息";
     ConditionalExecutor.of(this::booleanSupplier).ifTrue(() -> System.out.println(test));
+  }
+
+  @Test
+  public void test9() {
+    String test = "测试消息";
+    Predicate<String> predicate1 = (res) -> res.contains("测试");
+    Predicate<String> predicate2 = (res) -> res.contains("11");
+    ConditionalExecutor.of(predicate1.or(predicate2), test).ifTrue(() -> System.out.println(test));
   }
 
   public boolean booleanSupplier() {
