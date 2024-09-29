@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.tools;
+package baby.mumu.basis.condition;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -26,20 +26,20 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-public class ConditionalUtil {
+public class ConditionalExecutor {
 
   private boolean condition;
 
-  private ConditionalUtil(boolean condition) {
+  private ConditionalExecutor(boolean condition) {
     this.condition = condition;
   }
 
   @Contract(value = "_ -> new", pure = true)
-  public static @NotNull ConditionalUtil of(boolean condition) {
-    return new ConditionalUtil(condition);
+  public static @NotNull ConditionalExecutor of(boolean condition) {
+    return new ConditionalExecutor(condition);
   }
 
-  public ConditionalUtil condition(boolean condition) {
+  public ConditionalExecutor condition(boolean condition) {
     this.condition = condition;
     return this;
   }
@@ -50,7 +50,7 @@ public class ConditionalUtil {
    * @param action    要执行的代码块
    * @param supplier  供应者，用于生成参数
    */
-  public <T> ConditionalUtil execute(Consumer<T> action, Supplier<T> supplier) {
+  public <T> ConditionalExecutor execute(Consumer<T> action, Supplier<T> supplier) {
     if (condition) {
       action.accept(supplier.get());
     }
@@ -62,7 +62,7 @@ public class ConditionalUtil {
    *
    * @param action    要执行的代码块
    */
-  public ConditionalUtil execute(Runnable action) {
+  public ConditionalExecutor execute(Runnable action) {
     if (condition) {
       action.run();
     }
@@ -87,7 +87,7 @@ public class ConditionalUtil {
    * @param successAction 条件成立要执行的代码块
    * @param failAction    条件不成立要执行的代码块
    */
-  public ConditionalUtil execute(Runnable successAction, Runnable failAction) {
+  public ConditionalExecutor execute(Runnable successAction, Runnable failAction) {
     if (condition) {
       successAction.run();
     } else {

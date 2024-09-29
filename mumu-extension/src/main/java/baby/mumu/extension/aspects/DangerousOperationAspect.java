@@ -18,8 +18,8 @@ package baby.mumu.extension.aspects;
 import static baby.mumu.basis.constants.CommonConstants.PERCENT_SIGN;
 
 import baby.mumu.basis.annotations.DangerousOperation;
+import baby.mumu.basis.condition.ConditionalExecutor;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.tools.ConditionalUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
@@ -68,7 +68,7 @@ public class DangerousOperationAspect extends AbstractAspect {
   }
 
   private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
-    return ConditionalUtil.of(value.contains(PERCENT_SIGN))
+    return ConditionalExecutor.of(value.contains(PERCENT_SIGN))
         .execute(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
   }
 

@@ -15,29 +15,30 @@
  */
 package baby.mumu.basis.tools;
 
+import baby.mumu.basis.condition.ConditionalExecutor;
 import org.junit.jupiter.api.Test;
 
 /**
- * ConditionalUtil单元测试
+ * ConditionalExecutor单元测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
-public class ConditionalUtilTest {
+public class ConditionalExecutorTest {
 
   @Test
   public void test() {
-    ConditionalUtil.of(true).execute((res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalExecutor.of(true).execute((res) -> System.out.println(res), () -> "生成的消息");
   }
 
   @Test
   public void test2() {
-    ConditionalUtil.of(false).execute((res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalExecutor.of(false).execute((res) -> System.out.println(res), () -> "生成的消息");
   }
 
   @Test
   public void test3() {
-    System.out.println(ConditionalUtil.of(true).execute(() -> {
+    System.out.println(ConditionalExecutor.of(true).execute(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -46,7 +47,7 @@ public class ConditionalUtilTest {
 
   @Test
   public void test4() {
-    System.out.println(ConditionalUtil.of(false).execute(() -> {
+    System.out.println(ConditionalExecutor.of(false).execute(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -56,13 +57,13 @@ public class ConditionalUtilTest {
   @Test
   public void test5() {
     String test = "测试消息";
-    ConditionalUtil.of(true).execute(() -> System.out.println(test));
+    ConditionalExecutor.of(true).execute(() -> System.out.println(test));
   }
 
   @Test
   public void test6() {
     String test = "测试消息";
-    ConditionalUtil.of(false).execute(() -> System.out.println(test));
+    ConditionalExecutor.of(false).execute(() -> System.out.println(test));
   }
 
   @Test
@@ -71,7 +72,7 @@ public class ConditionalUtilTest {
     String failTest = "条件不成立测试消息";
     Runnable successAction = () -> System.out.println(successTest);
     Runnable failAction = () -> System.out.println(failTest);
-    ConditionalUtil.of(true).execute(successAction, failAction);
-    ConditionalUtil.of(false).execute(successAction, failAction);
+    ConditionalExecutor.of(true).execute(successAction, failAction);
+    ConditionalExecutor.of(false).execute(successAction, failAction);
   }
 }
