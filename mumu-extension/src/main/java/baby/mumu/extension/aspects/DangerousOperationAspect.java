@@ -69,7 +69,7 @@ public class DangerousOperationAspect extends AbstractAspect {
 
   private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
     return ConditionalExecutor.of(value.contains(PERCENT_SIGN))
-        .execute(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
+        .orElse(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
   }
 
   private String replaceParameters(@NotNull String value, Object[] args) {

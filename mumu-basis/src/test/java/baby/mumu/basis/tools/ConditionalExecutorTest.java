@@ -28,17 +28,19 @@ public class ConditionalExecutorTest {
 
   @Test
   public void test() {
-    ConditionalExecutor.of(true).execute((res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalExecutor.of(true).ifTrue(System.out::println, () -> "生成的消息").condition(true)
+        .ifTrue(() -> System.out.println("测试消息")).condition(false)
+        .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
   }
 
   @Test
   public void test2() {
-    ConditionalExecutor.of(false).execute((res) -> System.out.println(res), () -> "生成的消息");
+    ConditionalExecutor.of(false).ifTrue(System.out::println, () -> "生成的消息");
   }
 
   @Test
   public void test3() {
-    System.out.println(ConditionalExecutor.of(true).execute(() -> {
+    System.out.println(ConditionalExecutor.of(true).orElse(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -47,7 +49,7 @@ public class ConditionalExecutorTest {
 
   @Test
   public void test4() {
-    System.out.println(ConditionalExecutor.of(false).execute(() -> {
+    System.out.println(ConditionalExecutor.of(false).orElse(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -57,13 +59,13 @@ public class ConditionalExecutorTest {
   @Test
   public void test5() {
     String test = "测试消息";
-    ConditionalExecutor.of(true).execute(() -> System.out.println(test));
+    ConditionalExecutor.of(true).ifTrue(() -> System.out.println(test));
   }
 
   @Test
   public void test6() {
     String test = "测试消息";
-    ConditionalExecutor.of(false).execute(() -> System.out.println(test));
+    ConditionalExecutor.of(false).ifTrue(() -> System.out.println(test));
   }
 
   @Test
@@ -72,14 +74,14 @@ public class ConditionalExecutorTest {
     String failTest = "条件不成立测试消息";
     Runnable successAction = () -> System.out.println(successTest);
     Runnable failAction = () -> System.out.println(failTest);
-    ConditionalExecutor.of(true).execute(successAction, failAction);
-    ConditionalExecutor.of(false).execute(successAction, failAction);
+    ConditionalExecutor.of(true).ifTrueElse(successAction, failAction).condition(false)
+        .ifTrueElse(successAction, failAction);
   }
 
   @Test
   public void test8() {
     String test = "测试消息";
-    ConditionalExecutor.of(this::booleanSupplier).execute(() -> System.out.println(test));
+    ConditionalExecutor.of(this::booleanSupplier).ifTrue(() -> System.out.println(test));
   }
 
   public boolean booleanSupplier() {

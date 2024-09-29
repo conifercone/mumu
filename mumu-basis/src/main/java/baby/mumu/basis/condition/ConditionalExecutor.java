@@ -65,7 +65,7 @@ public class ConditionalExecutor {
    * @param action    要执行的代码块
    * @param supplier  供应者，用于生成参数
    */
-  public <T> ConditionalExecutor execute(Consumer<T> action, Supplier<T> supplier) {
+  public <T> ConditionalExecutor ifTrue(Consumer<T> action, Supplier<T> supplier) {
     if (condition) {
       action.accept(supplier.get());
     }
@@ -77,7 +77,7 @@ public class ConditionalExecutor {
    *
    * @param action    要执行的代码块
    */
-  public ConditionalExecutor execute(Runnable action) {
+  public ConditionalExecutor ifTrue(Runnable action) {
     if (condition) {
       action.run();
     }
@@ -92,7 +92,7 @@ public class ConditionalExecutor {
    * @param <T>          返回值的类型
    * @return 执行结果
    */
-  public <T> T execute(Supplier<T> action, Supplier<T> defaultValue) {
+  public <T> T orElse(Supplier<T> action, Supplier<T> defaultValue) {
     return condition ? action.get() : defaultValue.get();
   }
 
@@ -102,7 +102,7 @@ public class ConditionalExecutor {
    * @param successAction 条件成立要执行的代码块
    * @param failAction    条件不成立要执行的代码块
    */
-  public ConditionalExecutor execute(Runnable successAction, Runnable failAction) {
+  public ConditionalExecutor ifTrueElse(Runnable successAction, Runnable failAction) {
     if (condition) {
       successAction.run();
     } else {
