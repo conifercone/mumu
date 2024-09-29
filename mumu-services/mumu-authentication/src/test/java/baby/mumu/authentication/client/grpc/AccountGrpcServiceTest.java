@@ -97,7 +97,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(926369451)).setUsername(
                           StringValue.of("test1"))
-                      .setPassword(StringValue.of("test1")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("test1")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("547913250@qq.com"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -131,7 +131,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(998125644)).setUsername(
                           StringValue.of("Summer"))
-                      .setPassword(StringValue.of("Summer")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Summer")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("nadja_oharebsho@actress.gp"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -179,7 +179,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(1998071806)).setUsername(
                           StringValue.of("Tavares"))
-                      .setPassword(StringValue.of("Tavares")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Tavares")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("marylouise_mcgahancxi@memories.kn"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -225,7 +225,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(1202398040)).setUsername(
                           StringValue.of("Thierry"))
-                      .setPassword(StringValue.of("Thierry")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Thierry")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("ronna_huggardcx4t@exactly.ird"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -288,7 +288,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(1172156340)).setUsername(
                           StringValue.of("Safia"))
-                      .setPassword(StringValue.of("Safia")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Safia")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("kei_millnerwflt@ext.nfh"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -301,7 +301,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
           AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd = AccountUpdateRoleGrpcCmd.newBuilder()
               .setAccountUpdateRoleGrpcCo(
                   AccountUpdateRoleGrpcCo.newBuilder().setId(Int64Value.of(1172156340))
-                      .setRoleCode(StringValue.of("test"))
+                      .addRoleCode(StringValue.of("test"))
                       .build())
               .build();
           AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -334,7 +334,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(2129661173)).setUsername(
                           StringValue.of("Megen"))
-                      .setPassword(StringValue.of("Megen")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Megen")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("cathi_beaversse@supposed.ad"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -348,7 +348,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
           AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd = AccountUpdateRoleGrpcCmd.newBuilder()
               .setAccountUpdateRoleGrpcCo(
                   AccountUpdateRoleGrpcCo.newBuilder().setId(Int64Value.of(2129661173))
-                      .setRoleCode(StringValue.of("test"))
+                      .addRoleCode(StringValue.of("test"))
                       .build())
               .build();
           AuthCallCredentials callCredentials = new AuthCallCredentials(
@@ -396,7 +396,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(480432403)).setUsername(
                           StringValue.of("Sang"))
-                      .setPassword(StringValue.of("Sang")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("Sang")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("bertha_sizemoreo@affairs.lcj"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))
@@ -441,7 +441,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
               .setAccountRegisterCo(
                   AccountRegisterGrpcCo.newBuilder().setId(Int64Value.of(1740311010)).setUsername(
                           StringValue.of("ignore"))
-                      .setPassword(StringValue.of("ignore")).setRoleCode(StringValue.of("admin"))
+                      .setPassword(StringValue.of("ignore")).addRoleCode(StringValue.of("admin"))
                       .setSex(SexEnum.SEXLESS)
                       .setEmail(StringValue.of("estefany_simkinstbuz@hollow.rz"))
                       .setBirthday(LocalDate.newBuilder().setYear(Int32Value.of(1995))

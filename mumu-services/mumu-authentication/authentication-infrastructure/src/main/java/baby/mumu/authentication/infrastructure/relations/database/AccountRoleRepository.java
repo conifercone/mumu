@@ -13,30 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.dto.co;
+package baby.mumu.authentication.infrastructure.relations.database;
 
-import baby.mumu.basis.client.dto.co.BaseClientObject;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.List;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 账户更新角色客户端对象
+ * 账户角色关系管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AccountUpdateRoleCo extends BaseClientObject {
+public interface AccountRoleRepository extends
+    BaseJpaRepository<AccountRoleDo, AccountRoleDoId>,
+    JpaSpecificationExecutor<AccountRoleDo> {
 
-  @Serial
-  private static final long serialVersionUID = 6110957444309849374L;
+  List<AccountRoleDo> findByAccountId(Long accountId);
 
-  @NotNull
-  private Long id;
+  List<AccountRoleDo> findByRoleId(Long roleId);
 
-  private List<String> roleCodes;
+  void deleteByAccountId(Long accountId);
 }

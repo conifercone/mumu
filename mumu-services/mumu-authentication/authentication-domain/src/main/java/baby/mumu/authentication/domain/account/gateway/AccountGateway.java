@@ -17,8 +17,8 @@ package baby.mumu.authentication.domain.account.gateway;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 
 /**
  * 用户领域网关
@@ -101,12 +101,10 @@ public interface AccountGateway {
   /**
    * 查询所有正在使用指定角色的账户
    *
-   * @param roleId   角色id
-   * @param pageNo   当前页
-   * @param pageSize 每页数量
+   * @param roleId 角色id
    * @return 正在使用指定角色的账户
    */
-  Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize);
+  List<Account> findAllAccountByRoleId(Long roleId);
 
   /**
    * 当前登录账户密码是否正确

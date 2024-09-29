@@ -48,7 +48,7 @@ public class AccountRegisterCo extends BaseClientObject {
   @NotBlank(message = "{account.password.validation.not.blank}")
   private String password;
 
-  private String roleCode;
+  private List<String> roleCodes;
 
   private String avatarUrl;
 

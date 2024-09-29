@@ -24,8 +24,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo_;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
+import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
@@ -40,11 +39,9 @@ import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,10 +55,6 @@ import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +81,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountArchivedRepository accountArchivedRepository;
   private final AccountAddressRepository accountAddressRepository;
   private final JobScheduler jobScheduler;
+  private final AccountRoleRepository accountRoleRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -97,7 +91,8 @@ public class AccountGatewayImpl implements AccountGateway {
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
       AccountArchivedRepository accountArchivedRepository,
-      AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler) {
+      AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
+      AccountRoleRepository accountRoleRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -109,6 +104,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountArchivedRepository = accountArchivedRepository;
     this.accountAddressRepository = accountAddressRepository;
     this.jobScheduler = jobScheduler;
+    this.accountRoleRepository = accountRoleRepository;
   }
 
   @Override
@@ -145,6 +141,7 @@ public class AccountGatewayImpl implements AccountGateway {
                   .collect(
                       Collectors.toList())).filter(CollectionUtils::isNotEmpty)
           .ifPresent(accountAddressRepository::persistAll);
+      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -199,7 +196,8 @@ public class AccountGatewayImpl implements AccountGateway {
     accountConvertor.toDataObject(account).ifPresent(accountDo -> {
       Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
       try {
-        accountRepository.merge(accountDo);
+        accountRoleRepository.deleteByAccountId(account.getId());
+        accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -261,6 +259,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountAddressRepository.deleteByUserId(accountId);
       tokenRepository.deleteById(accountId);
       refreshTokenRepository.deleteById(accountId);
+      accountRoleRepository.deleteByAccountId(accountId);
     }, () -> {
       throw new MuMuException(ResultCode.UNAUTHORIZED);
     });
@@ -269,18 +268,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<Account> findAllAccountByRoleId(Long roleId, int pageNo, int pageSize) {
-    return Optional.ofNullable(roleId).map(roleIdNonNull -> {
-      Specification<AccountDo> accountDoSpecification = (root, query, cb) -> {
-        List<Predicate> predicateList = new ArrayList<>();
-        predicateList.add(cb.equal(root.get(AccountDo_.role).get(RoleDo_.id), roleIdNonNull));
-        assert query != null;
-        return query.orderBy(cb.desc(root.get(AccountDo_.creationTime)))
-            .where(predicateList.toArray(new Predicate[0]))
-            .getRestriction();
-      };
-      return getAccounts(pageNo, pageSize, accountDoSpecification);
-    }).orElse(new PageImpl<>(Collections.emptyList()));
+  public List<Account> findAllAccountByRoleId(Long roleId) {
+    return Optional.ofNullable(roleId)
+        .map(roleIdNonNull -> accountRoleRepository.findByRoleId(roleIdNonNull).stream()
+            .flatMap(
+                accountRoleDo -> accountConvertor.toEntity(accountRoleDo.getAccount()).stream())
+            .collect(Collectors.toList())).orElse(new ArrayList<>());
   }
 
   @Override
@@ -311,22 +304,6 @@ public class AccountGatewayImpl implements AccountGateway {
     }
   }
 
-  @NotNull
-  @Transactional(rollbackFor = Exception.class)
-  @API(status = Status.STABLE, since = "1.0.0")
-  protected Page<Account> getAccounts(int pageNo, int pageSize,
-      Specification<AccountDo> accountDoSpecification) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<AccountDo> repositoryAll = accountRepository.findAll(accountDoSpecification,
-        pageRequest);
-    List<Account> accounts = repositoryAll.getContent().stream()
-        .map(accountConvertor::toEntity)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .toList();
-    return new PageImpl<>(accounts, pageRequest, repositoryAll.getTotalElements());
-  }
-
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账户ID为%0的账户")
@@ -350,6 +327,7 @@ public class AccountGatewayImpl implements AccountGateway {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);
       accountAddressRepository.deleteByUserId(accountIdNonNull);
+      accountRoleRepository.deleteByAccountId(accountIdNonNull);
     });
   }
 

@@ -63,11 +63,13 @@ import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import com.google.protobuf.Empty;
+import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
@@ -168,9 +170,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountRegisterCo.setPassword(
         accountRegisterGrpcCo.hasPassword() ? accountRegisterGrpcCo.getPassword().getValue()
             : null);
-    accountRegisterCo.setRoleCode(
-        accountRegisterGrpcCo.hasRoleCode() ? accountRegisterGrpcCo.getRoleCode().getValue()
-            : null);
+    accountRegisterCo.setRoleCodes(accountRegisterGrpcCo.getRoleCodeList().stream().map(
+        StringValue::getValue).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
     accountRegisterCo.setAvatarUrl(
         accountRegisterGrpcCo.hasAvatarUrl() ? accountRegisterGrpcCo.getAvatarUrl().getValue()
             : null);
@@ -279,9 +280,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = request.getAccountUpdateRoleGrpcCo();
     accountUpdateRoleCo.setId(
         accountUpdateRoleGrpcCo.hasId() ? accountUpdateRoleGrpcCo.getId().getValue() : null);
-    accountUpdateRoleCo.setRoleCode(
-        accountUpdateRoleGrpcCo.hasRoleCode() ? accountUpdateRoleGrpcCo.getRoleCode().getValue()
-            : null);
+    accountUpdateRoleCo.setRoleCodes(accountUpdateRoleGrpcCo.getRoleCodeList().stream().map(
+        StringValue::getValue).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
     return accountUpdateRoleCo;
   }
 

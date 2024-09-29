@@ -15,19 +15,15 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import baby.mumu.basis.annotations.GenerateDescription;
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -70,11 +66,5 @@ public class RoleDo extends JpaBasisArchivableDataObject {
   @NotNull
   @Column(name = "code", nullable = false, length = 100)
   private String code;
-
-  /**
-   * 当前角色已赋予的用户集合
-   */
-  @OneToMany(mappedBy = "role")
-  private Set<AccountDo> users = new LinkedHashSet<>();
 
 }

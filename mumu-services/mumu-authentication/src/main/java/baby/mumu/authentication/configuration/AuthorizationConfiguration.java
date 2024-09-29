@@ -428,9 +428,9 @@ public class AuthorizationConfiguration {
                       new ArrayList<>(roles))
                   .stream()
                   .flatMap(
-                      opt -> opt.stream().flatMap(obj -> roleAuthorityRepository.findByRoleId(
-                              obj.getId()).stream()
-                          .map(RoleAuthorityDo::getAuthority)))
+                      opt -> roleAuthorityRepository.findByRoleId(
+                              opt.getId()).stream()
+                          .map(RoleAuthorityDo::getAuthority))
                   .collect(Collectors.toMap(AuthorityDo::getId, authorityDo -> authorityDo,
                       (existing, replacement) -> existing))
                   .values()

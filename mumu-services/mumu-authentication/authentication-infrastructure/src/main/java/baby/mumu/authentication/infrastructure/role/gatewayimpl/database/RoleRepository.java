@@ -20,7 +20,6 @@ import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
@@ -32,13 +31,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
     JpaSpecificationExecutor<RoleDo> {
 
-  /**
-   * 根据编码查询角色
-   *
-   * @param code 角色编码
-   * @return 角色数据对象
-   */
-  Optional<RoleDo> findByCode(String code);
 
   /**
    * 根据id或code判断角色是否已存在
@@ -63,5 +55,5 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param codes code集合
    * @return 角色集合
    */
-  Optional<List<RoleDo>> findByCodeIn(List<String> codes);
+  List<RoleDo> findByCodeIn(List<String> codes);
 }

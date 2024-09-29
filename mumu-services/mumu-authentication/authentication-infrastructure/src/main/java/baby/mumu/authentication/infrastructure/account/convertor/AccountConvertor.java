@@ -28,11 +28,16 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
+import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
+import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
@@ -58,18 +63,21 @@ public class AccountConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AccountArchivedRepository accountArchivedRepository;
   private final AccountAddressRepository accountAddressRepository;
+  private final AccountRoleRepository accountRoleRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
       RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
       AccountArchivedRepository accountArchivedRepository,
-      AccountAddressRepository accountAddressRepository) {
+      AccountAddressRepository accountAddressRepository,
+      AccountRoleRepository accountRoleRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.accountArchivedRepository = accountArchivedRepository;
     this.accountAddressRepository = accountAddressRepository;
+    this.accountRoleRepository = accountRoleRepository;
   }
 
   @Contract("_ -> new")
@@ -81,7 +89,9 @@ public class AccountConvertor {
           accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
           accountDataObject.getCredentialsNonExpired(),
           accountDataObject.getAccountNonLocked(),
-          roleConvertor.toEntity(accountDataObject.getRole()).orElse(null));
+          accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
+              .flatMap(accountRoleDo -> roleConvertor.toEntity(accountRoleDo.getRole()).stream())
+              .collect(Collectors.toList()));
       AccountMapper.INSTANCE.toEntity(accountDataObject, account);
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
@@ -93,14 +103,7 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AccountDo> toDataObject(Account account) {
-    return Optional.ofNullable(account).map(accountDomain -> {
-      AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountDomain);
-      Optional.ofNullable(accountDomain.getRole())
-          .ifPresent(
-              role -> accountDo.setRole(
-                  roleConvertor.toDataObject(accountDomain.getRole()).orElse(null)));
-      return accountDo;
-    });
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -111,8 +114,9 @@ public class AccountConvertor {
               primaryKeyGrpcService.snowflake()
               : accountRegisterClientObject.getId(), accountRegisterClientObject.getUsername(),
           accountRegisterClientObject.getPassword(),
-          roleRepository.findByCode(accountRegisterClientObject.getRoleCode())
-              .flatMap(roleConvertor::toEntity).orElse(null));
+          roleRepository.findByCodeIn(accountRegisterClientObject.getRoleCodes()).stream()
+              .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+              .collect(Collectors.toList()));
       AccountMapper.INSTANCE.toEntity(accountRegisterClientObject, account);
       Optional.ofNullable(account.getAddresses())
           .filter(CollectionUtils::isNotEmpty)
@@ -169,11 +173,10 @@ public class AccountConvertor {
       AccountDo accountDo = accountDoOptional.orElseThrow(
           () -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountDo).map(account -> {
-        roleRepository.findByCode(accountUpdateRoleClientObject.getRoleCode())
-            .ifPresentOrElse(roleDo -> account.setRole(roleConvertor.toEntity(roleDo).orElse(null)),
-                () -> {
-                  throw new MuMuException(ResultCode.ROLE_DOES_NOT_EXIST);
-                });
+        account.setRoles(
+            roleRepository.findByCodeIn(accountUpdateRoleClientObject.getRoleCodes()).stream()
+                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+                .collect(Collectors.toList()));
         return account;
       }).orElse(null);
     });
@@ -188,23 +191,13 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AccountArchivedDo> toArchivedDo(
       AccountDo accountDo) {
-    return Optional.ofNullable(accountDo).map(accountDataObject -> {
-      AccountArchivedDo archivedDo = AccountMapper.INSTANCE.toArchivedDo(accountDataObject);
-      Optional.ofNullable(accountDataObject.getRole())
-          .ifPresent(roleDo -> archivedDo.setRoleId(roleDo.getId()));
-      return archivedDo;
-    });
+    return Optional.ofNullable(accountDo).map(AccountMapper.INSTANCE::toArchivedDo);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AccountDo> toDataObject(
       AccountArchivedDo accountArchivedDo) {
-    return Optional.ofNullable(accountArchivedDo).map(accountArchivedDataObject -> {
-      AccountDo accountDo = AccountMapper.INSTANCE.toDataObject(accountArchivedDataObject);
-      Optional.ofNullable(accountArchivedDataObject.getRoleId()).flatMap(roleRepository::findById)
-          .ifPresent(accountDo::setRole);
-      return accountDo;
-    });
+    return Optional.ofNullable(accountArchivedDo).map(AccountMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
@@ -224,5 +217,19 @@ public class AccountConvertor {
       }
       return instanceEntity;
     });
+  }
+
+  @API(status = Status.STABLE, since = "2.1.0")
+  public List<AccountRoleDo> toAccountRoleDos(Account account) {
+    return Optional.ofNullable(account).flatMap(accountNotNull -> Optional.ofNullable(
+            accountNotNull.getRoles())).filter(CollectionUtils::isNotEmpty)
+        .map(roles -> roles.stream().map(role -> {
+          AccountRoleDo accountRoleDo = new AccountRoleDo();
+          accountRoleDo.setId(
+              AccountRoleDoId.builder().roleId(role.getId()).userId(account.getId()).build());
+          accountRoleDo.setAccount(accountRepository.findById(account.getId()).orElse(null));
+          accountRoleDo.setRole(roleRepository.findById(role.getId()).orElse(null));
+          return accountRoleDo;
+        }).collect(Collectors.toList())).orElse(new ArrayList<>());
   }
 }

@@ -23,7 +23,6 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.Role4Desc;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo4Desc;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -76,9 +75,6 @@ public interface RoleMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
 
-  @Mappings(value = {
-      @Mapping(target = RoleDo4Desc.users, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
 
@@ -86,9 +82,6 @@ public interface RoleMapper {
   RoleArchivedDo toArchivedDo(RoleDo roleDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  @Mappings(value = {
-      @Mapping(target = RoleDo4Desc.users, ignore = true)
-  })
   RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.4")

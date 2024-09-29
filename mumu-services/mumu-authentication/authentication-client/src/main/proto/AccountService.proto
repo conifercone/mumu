@@ -23,7 +23,7 @@ message AccountRegisterGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue username = 2;
   google.protobuf.StringValue password = 3;
-  google.protobuf.StringValue roleCode = 4;
+  repeated google.protobuf.StringValue roleCode = 4;
   google.protobuf.StringValue avatarUrl = 5;
   google.protobuf.StringValue phone = 6;
   oneof sex_wrapper {
@@ -61,7 +61,7 @@ message AccountUpdateRoleGrpcCmd{
 
 message AccountUpdateRoleGrpcCo{
   google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue roleCode = 2;
+  repeated google.protobuf.StringValue roleCode = 2;
 }
 
 enum SexEnum

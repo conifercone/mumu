@@ -121,10 +121,10 @@ public class RoleGatewayImpl implements RoleGateway {
   @DangerousOperation("删除ID为%0的角色")
   public void deleteById(Long id) {
     Optional.ofNullable(id).ifPresent(roleId -> {
-      Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId, 0, 10);
-      if (!allAccountByRoleId.isEmpty()) {
+      List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId);
+      if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
         throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-            allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
+            allAccountByRoleId.stream().map(Account::getUsername).toList());
       }
       roleAuthorityRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
@@ -192,10 +192,10 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档ID为%0的角色")
   public void archiveById(Long id) {
-    Page<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id, 0, 10);
-    if (!allAccountByRoleId.isEmpty()) {
+    List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id);
+    if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
       throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
-          allAccountByRoleId.getContent().stream().map(Account::getUsername).toList());
+          allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(roleRepository::findById)
@@ -214,7 +214,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @DangerousOperation("根据ID删除ID为%0的角色归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
-        .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId, 0, 10).isEmpty())
+        .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())
         .ifPresent(roleIdNotNull -> {
           roleArchivedRepository.deleteById(roleIdNotNull);
           roleAuthorityRepository.deleteByRoleId(roleIdNotNull);

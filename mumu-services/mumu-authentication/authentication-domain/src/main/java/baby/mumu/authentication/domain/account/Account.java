@@ -17,7 +17,6 @@ package baby.mumu.authentication.domain.account;
 
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.basis.annotations.CustomDescription;
 import baby.mumu.basis.annotations.GenerateDescription;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
@@ -28,16 +27,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -51,9 +54,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@GenerateDescription(customs = {
-    @CustomDescription(name = "authorities", value = "authorities")
-})
+@GenerateDescription
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Serial
@@ -101,7 +102,7 @@ public class Account extends BasisDomainModel implements UserDetails {
    */
   @Getter
   @Setter
-  private Role role;
+  private List<Role> roles;
 
   /**
    * 头像地址
@@ -159,43 +160,57 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Getter
   private List<AccountAddress> addresses;
 
+  @Setter
+  private Collection<Authority> authorities;
+
   /**
    * 年龄
    */
   private final int age = 0;
 
-  public Account(Long id, String username, String password, Role role) {
+  public Account(Long id, String username, String password, List<Role> roles) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.role = role;
+    this.roles = roles;
   }
 
   public Account(Long id, String username, String password, Boolean enabled,
       Boolean accountNonExpired,
-      Boolean credentialsNonExpired, Boolean accountNonLocked, Role role) {
+      Boolean credentialsNonExpired, Boolean accountNonLocked, List<Role> roles) {
     this.id = id;
     this.username = username;
     this.password = password;
     this.enabled = enabled;
     this.accountNonExpired = accountNonExpired;
     this.credentialsNonExpired = credentialsNonExpired;
-    this.role = role;
+    this.roles = roles;
     this.accountNonLocked = accountNonLocked;
   }
 
   @Override
   public Collection<Authority> getAuthorities() {
-    return Optional.ofNullable(this.role)
-        .flatMap((accountRole) -> Optional.ofNullable(accountRole.getAuthorities()))
-        .stream().peek(authorities -> authorities.add(
-            Authority.builder().code(CommonConstants.ROLE_PREFIX.concat(this.role.getCode()))
-                .build())).findAny()
-        .orElse(Collections.emptyList());
-  }
-
-  public void setAuthorities(Collection<Authority> authorities) {
-    this.role.setAuthorities(new ArrayList<>(authorities));
+    return Optional.ofNullable(this.roles)
+        .orElse(Collections.emptyList())
+        .stream()
+        .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
+        .values()
+        .stream()
+        .flatMap(role -> {
+          if (CollectionUtils.isEmpty(role.getAuthorities())) {
+            return Stream.empty();
+          }
+          // 将角色权限去重
+          Set<Authority> authorities = new HashSet<>(role.getAuthorities().stream()
+              .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
+              .values());
+          // 添加角色本身的权限
+          authorities.add(Authority.builder()
+              .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
+              .build());
+          return authorities.stream();
+        })
+        .collect(Collectors.toSet());
   }
 
   @Override

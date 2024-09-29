@@ -27,9 +27,7 @@ import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountAddress4Desc;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo4Desc;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo4Desc;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -53,9 +51,9 @@ public interface AccountMapper {
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
   @Mappings(value = {
-      @Mapping(target = Account4Desc.role, ignore = true),
       @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.addresses, ignore = true)
+      @Mapping(target = Account4Desc.addresses, ignore = true),
+      @Mapping(target = Account4Desc.roles, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
@@ -72,15 +70,12 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
 
-  @Mappings(value = {
-      @Mapping(target = AccountDo4Desc.role, ignore = true),
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
   @Mappings(value = {
-      @Mapping(target = Account4Desc.role, ignore = true),
       @Mapping(target = Account4Desc.authorities, ignore = true),
+      @Mapping(target = Account4Desc.roles, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
@@ -98,8 +93,8 @@ public interface AccountMapper {
   AccountAddress toAccountAddress(AccountAddressUpdateByIdCo accountAddressUpdateByIdCo);
 
   @Mappings(value = {
-      @Mapping(target = Account4Desc.role, ignore = true),
       @Mapping(target = Account4Desc.authorities, ignore = true),
+      @Mapping(target = Account4Desc.roles, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
@@ -108,15 +103,9 @@ public interface AccountMapper {
   AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  @Mappings(value = {
-      @Mapping(target = AccountArchivedDo4Desc.roleId, ignore = true)
-  })
   AccountArchivedDo toArchivedDo(AccountDo accountDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  @Mappings(value = {
-      @Mapping(target = AccountDo4Desc.role, ignore = true)
-  })
   AccountDo toDataObject(AccountArchivedDo accountArchivedDo);
 
   @AfterMapping
