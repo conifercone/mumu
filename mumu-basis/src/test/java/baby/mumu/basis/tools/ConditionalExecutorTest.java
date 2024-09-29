@@ -29,7 +29,8 @@ public class ConditionalExecutorTest {
   @Test
   public void test() {
     ConditionalExecutor.of(true).ifTrue(System.out::println, () -> "生成的消息").condition(true)
-        .ifTrue(() -> System.out.println("测试消息")).condition(false)
+        .ifTrue(() -> System.out.println("测试消息"))
+        .condition(false).ifFalse(() -> System.out.println("测试消息（条件不成立）"))
         .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
   }
 

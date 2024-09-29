@@ -73,12 +73,24 @@ public class ConditionalExecutor {
   }
 
   /**
-   * 根据条件判断是否执行给定的代码块（无返回值）.
+   * 根据条件判断是否执行给定的代码块（无返回值, 条件成立）.
    *
    * @param action    要执行的代码块
    */
   public ConditionalExecutor ifTrue(Runnable action) {
     if (condition) {
+      action.run();
+    }
+    return this;
+  }
+
+  /**
+   * 根据条件判断是否执行给定的代码块（无返回值, 条件不成立）.
+   *
+   * @param action 要执行的代码块
+   */
+  public ConditionalExecutor ifFalse(Runnable action) {
+    if (!condition) {
       action.run();
     }
     return this;
