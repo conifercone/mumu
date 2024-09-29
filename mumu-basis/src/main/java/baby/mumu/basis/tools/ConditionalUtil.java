@@ -35,8 +35,52 @@ public class ConditionalUtil {
    */
   public static <T> void execute(boolean condition, Consumer<T> action,
       Supplier<T> supplier) {
+    execute(condition, action, supplier, (res) -> {
+    }, () -> null);
+  }
+
+  /**
+   * 根据条件判断是否执行给定的代码块（无返回值）。 如果条件成立，使用 successSupplier 的返回值作为参数执行 successAction。如果条件不成立，使用
+   * failSupplier 的返回值作为参数执行 failAction。
+   *
+   * @param condition       布尔值，决定是否执行代码块
+   * @param successAction   条件成立要执行的代码块
+   * @param successSupplier 条件成立供应者，用于生成参数
+   * @param failSupplier    条件不成立供应者，用于生成参数
+   * @param failAction      条件不成立要执行的代码块
+   */
+  public static <T> void execute(boolean condition, Consumer<T> successAction,
+      Supplier<T> successSupplier, Consumer<T> failAction,
+      Supplier<T> failSupplier) {
     if (condition) {
-      action.accept(supplier.get());
+      successAction.accept(successSupplier.get());
+    } else {
+      failAction.accept(failSupplier.get());
+    }
+  }
+
+  /**
+   * 根据条件判断是否执行给定的代码块（无返回值）
+   *
+   * @param condition 布尔值，决定是否执行代码块
+   * @param action    要执行的代码块
+   */
+  public static void execute(boolean condition, Runnable action) {
+    execute(condition, action, () -> {
+    });
+  }
+
+  /**
+   * 根据条件判断是否执行给定的代码块（无返回值）
+   *
+   * @param condition     布尔值，决定是否执行代码块
+   * @param successAction 条件成立要执行的代码块
+   */
+  public static void execute(boolean condition, Runnable successAction, Runnable failAction) {
+    if (condition) {
+      successAction.run();
+    } else {
+      failAction.run();
     }
   }
 

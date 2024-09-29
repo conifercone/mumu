@@ -52,4 +52,26 @@ public class ConditionalUtilTest {
         },
         () -> "这是备用消息。"));
   }
+
+  @Test
+  public void test5() {
+    String test = "测试消息";
+    ConditionalUtil.execute(true, () -> System.out.println(test));
+  }
+
+  @Test
+  public void test6() {
+    String test = "测试消息";
+    ConditionalUtil.execute(false, () -> System.out.println(test));
+  }
+
+  @Test
+  public void test7() {
+    String successTest = "条件成立测试消息";
+    String failTest = "条件不成立测试消息";
+    Runnable successAction = () -> System.out.println(successTest);
+    Runnable failAction = () -> System.out.println(failTest);
+    ConditionalUtil.execute(false, successAction, failAction);
+    ConditionalUtil.execute(true, successAction, failAction);
+  }
 }
