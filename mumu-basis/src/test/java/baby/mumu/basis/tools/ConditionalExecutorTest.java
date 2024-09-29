@@ -75,4 +75,14 @@ public class ConditionalExecutorTest {
     ConditionalExecutor.of(true).execute(successAction, failAction);
     ConditionalExecutor.of(false).execute(successAction, failAction);
   }
+
+  @Test
+  public void test8() {
+    String test = "测试消息";
+    ConditionalExecutor.of(this::booleanSupplier).execute(() -> System.out.println(test));
+  }
+
+  public boolean booleanSupplier() {
+    return true;
+  }
 }
