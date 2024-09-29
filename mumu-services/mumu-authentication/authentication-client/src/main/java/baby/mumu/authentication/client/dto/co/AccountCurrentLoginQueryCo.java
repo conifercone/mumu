@@ -58,6 +58,8 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
 
   private int age;
 
+  private List<AccountRoleCurrentLoginQueryCo> roles;
+
   private List<AccountAddressCurrentLoginQueryCo> addresses;
 
   @Data
@@ -97,5 +99,48 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
      */
     @Size(max = 100)
     private String country;
+  }
+
+  @Data
+  public static class AccountRoleCurrentLoginQueryCo {
+
+    /**
+     * 角色id
+     */
+    private Long id;
+
+    /**
+     * 角色编码
+     */
+    private String code;
+
+    /**
+     * 角色名称
+     */
+    private String name;
+
+    /**
+     * 角色权限
+     */
+    private List<AccountRoleAuthorityCurrentLoginQueryCo> authorities;
+  }
+
+  @Data
+  public static class AccountRoleAuthorityCurrentLoginQueryCo {
+
+    /**
+     * 权限id
+     */
+    private Long id;
+
+    /**
+     * 权限编码
+     */
+    private String code;
+
+    /**
+     * 权限名称
+     */
+    private String name;
   }
 }
