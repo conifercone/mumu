@@ -17,7 +17,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge)](https://www.codefactor.io/repository/github/conifercone/mumu)
+[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## 内容列表
