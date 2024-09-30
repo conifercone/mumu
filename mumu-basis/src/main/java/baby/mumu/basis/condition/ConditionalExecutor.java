@@ -36,26 +36,20 @@ public class ConditionalExecutor {
     this.condition = condition;
   }
 
-  private <T> ConditionalExecutor(@NotNull Predicate<T> predicate, T t) {
-    this.condition = predicate.test(t);
-  }
-
-  private ConditionalExecutor(@NotNull BooleanSupplier booleanSupplier) {
-    this.condition = booleanSupplier.getAsBoolean();
-  }
-
   @Contract(value = "_ -> new", pure = true)
   public static @NotNull ConditionalExecutor of(boolean condition) {
     return new ConditionalExecutor(condition);
   }
 
-  public static <T> @NotNull ConditionalExecutor of(Predicate<T> predicate, T t) {
-    return new ConditionalExecutor(predicate, t);
+  @Contract("_, _ -> new")
+  public static <T> @NotNull ConditionalExecutor of(@NotNull Predicate<T> predicate,
+      @NotNull Supplier<T> supplier) {
+    return new ConditionalExecutor(predicate.test(supplier.get()));
   }
 
   @Contract(value = "_ -> new", pure = true)
-  public static @NotNull ConditionalExecutor of(BooleanSupplier booleanSupplier) {
-    return new ConditionalExecutor(booleanSupplier);
+  public static @NotNull ConditionalExecutor of(@NotNull BooleanSupplier booleanSupplier) {
+    return new ConditionalExecutor(booleanSupplier.getAsBoolean());
   }
 
   public ConditionalExecutor condition(boolean condition) {
@@ -65,6 +59,12 @@ public class ConditionalExecutor {
 
   public ConditionalExecutor condition(@NotNull BooleanSupplier booleanSupplier) {
     this.condition = booleanSupplier.getAsBoolean();
+    return this;
+  }
+
+  public <T> ConditionalExecutor condition(@NotNull Predicate<T> predicate,
+      @NotNull Supplier<T> supplier) {
+    this.condition = predicate.test(supplier.get());
     return this;
   }
 

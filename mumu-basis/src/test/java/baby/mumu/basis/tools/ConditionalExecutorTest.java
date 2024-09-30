@@ -91,7 +91,8 @@ public class ConditionalExecutorTest {
     String test = "测试消息";
     Predicate<String> predicate1 = (res) -> res.contains("测试");
     Predicate<String> predicate2 = (res) -> res.contains("11");
-    ConditionalExecutor.of(predicate1.or(predicate2), test).ifTrue(() -> System.out.println(test));
+    ConditionalExecutor.of(predicate1.or(predicate2), () -> "11")
+        .ifTrue(() -> System.out.println(test));
   }
 
   public boolean booleanSupplier() {
