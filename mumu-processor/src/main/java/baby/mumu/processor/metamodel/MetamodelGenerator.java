@@ -75,7 +75,7 @@ import org.jetbrains.annotations.NotNull;
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
-@SupportedOptions({"gradleVersion", "osName", "javaVersion", "projectVersion"})
+@SupportedOptions({"gradle.version", "os.name", "java.version", "project.version"})
 public class MetamodelGenerator extends AbstractProcessor {
 
   private Messager messager;
@@ -98,10 +98,10 @@ public class MetamodelGenerator extends AbstractProcessor {
     messager = processingEnv.getMessager();
     authorName = getGitUserName().orElse(StringUtils.EMPTY);
     authorEmail = getGitEmail().orElse(StringUtils.EMPTY);
-    gradleVersion = processingEnv.getOptions().get("gradleVersion");
-    javaVersion = processingEnv.getOptions().get("javaVersion");
-    osName = processingEnv.getOptions().get("osName");
-    projectVersion = processingEnv.getOptions().get("projectVersion");
+    gradleVersion = processingEnv.getOptions().get("gradle.version");
+    javaVersion = processingEnv.getOptions().get("java.version");
+    osName = processingEnv.getOptions().get("os.name");
+    projectVersion = processingEnv.getOptions().get("project.version");
     messager.printMessage(Diagnostic.Kind.NOTE, "🫛 MuMu Entity Metamodel Generator");
   }
 

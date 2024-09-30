@@ -97,11 +97,24 @@ subprojects {
 
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
-        options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
-        options.compilerArgs.add("-AgradleVersion=${gradle.gradleVersion}")
-        options.compilerArgs.add("-AosName=${System.getProperty("os.name")}")
-        options.compilerArgs.add("-AjavaVersion=${System.getProperty("java.version")}")
-        options.compilerArgs.add("-AprojectVersion=${project.version}")
+        doFirst {
+            val hasProcessor = configurations["annotationProcessor"]
+                .dependencies
+                .any { it.name.contains("mumu-processor") }
+            if (hasProcessor) {
+                options.compilerArgs.addAll(
+                    listOf(
+                        "-Amapstruct.unmappedTargetPolicy=IGNORE",
+                        "-Agradle.version=${gradle.gradleVersion}",
+                        "-Aos.name=${System.getProperty("os.name")}",
+                        "-Ajava.version=${System.getProperty("java.version")}",
+                        "-Aproject.version=${project.version}",
+                    )
+                )
+            } else {
+                options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
+            }
+        }
     }
 
     tasks.named(
