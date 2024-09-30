@@ -12,12 +12,70 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added facial age detection expansion function.
-- Added new image item classification expansion function.
+### Changed
+
+- Optimize the message service database structure according to the database paradigm.
+
+### Removed
+
+## [2.1.0] - 2024-09-30
+
+### Added
+
+- Added conditional executor.
+- Added conditional annotation.
+- Get current login account information interface to add account role permission information return.
+- The annotation processor adds version information generation.
+- grpc adds service discovery client name resolver.
+- Added flyway plug-in.
+- Added script to check and set environment variables.
+- Added license script.
+- When deleting an account & deleting the account archive data, the account address data will also
+  be deleted.
+- Added git hash value identification to project versions (development, testing, pre-release).
+- Added current limit expansion function.
+- Added scheduled tasks for deleting subscription messages and broadcast message archiving data
+  based on ID.
+- Added scheduled tasks to delete roles and account archive data based on ID.
+- Added a new scheduled task for archiving data based on ID deletion permission.
+- The value attribute of the dangerous operation annotation adds parameter substitution function.
+
+### Fixed
+
+- Fixed the problem that the user address is empty when updating the user role interface based on
+  ID.
 
 ### Changed
 
+- Reconstruct the account and role mapping relationship according to the database paradigm, allowing
+  accounts to have multiple roles at the same time.
+- Account supports adding multiple addresses.
+- Reconstruct role and permission mapping relationships according to database paradigm.
+- collections4 CollectionUtils replaces spring CollectionUtils.
+- Update flyway script location.
+- Gradle version upgraded to 8.10.2.
+- Unified authentication endpoint processor.
+- grpc version upgraded to 1.68.0.
+- deepl-java upgraded to 1.6.0.
+- commons-io upgraded to 2.17.0.
+- The built-in environment variable names are changed to lowercase.
+- Modify jpa scanning range.
+- springboot upgraded to 3.3.4.
+- protobuf upgraded to 4.28.2.
+- Modify the default value of Rsa#jksKeyPair.
+- Improve account registration grpc interface parameter attributes.
+- flyway upgraded to 10.18.0.
+- mapstruct upgraded to 1.6.2.
+- Update SECURITY document content.
+- log4j2 sets UTF-8 as the default encoding.
+- Optimize project structure.
+- Optimize the execution logic of permission archiving scheduled tasks.
+
 ### Removed
+
+- The unified authentication endpoint processor removes the automatic log upload function to reduce
+  architectural complexity.
+- Delete plug-ins that are temporarily unused.
 
 ## [2.0.0] - 2024-09-06
 
@@ -270,7 +328,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.0.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.1.0...develop
+[2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3
