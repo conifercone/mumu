@@ -102,7 +102,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     javaVersion = processingEnv.getOptions().get("java.version");
     osName = processingEnv.getOptions().get("os.name");
     projectVersion = processingEnv.getOptions().get("project.version");
-    messager.printMessage(Diagnostic.Kind.NOTE, "🫛 MuMu Entity Metamodel Generator");
+    messager.printMessage(Diagnostic.Kind.NOTE, "🐏 MuMu Entity Metamodel Generator");
   }
 
   @Override
