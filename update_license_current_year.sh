@@ -18,7 +18,7 @@ $(echo "$license_text" | sed 's/^/ * /')
  */"
 
 # 更新今年整年的提交中添加或修改文件的license
-for file in $(git --no-pager diff --name-only --diff-filter=AM @{$current_year-01-01}..@{$current_year-12-31} | egrep "^.+\.(java|kt)$" | uniq); do
+for file in $(git --no-pager diff --name-only --diff-filter=AM @{$current_year-01-01}..@{$current_year-12-31} | grep -E "^.+\.(java|kt)$" | uniq); do
   # 检查文件是否包含 License 注释
   if grep -q "Copyright (c) 2024" "$file"; then
       sed -i "s/Copyright (c) 2024-[0-9]\{4\}/Copyright (c) 2024-$current_year/" "$file"
