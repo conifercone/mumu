@@ -1,10 +1,14 @@
 # Security Policy
 
+- [简体中文](SECURITY.zh_CN.md)
+- [English](SECURITY.md)
+
 ## Supported Versions
 
-| Version | Supported          |
-|---------|--------------------|
-| 1.0.x   | :white_check_mark: |
+| Version | Supported |
+|---------|-----------|
+| 1.0.x   | ✅         |
+| 2.0.x   | ✅         |
 
 ## Reporting a Vulnerability
 
@@ -19,6 +23,4 @@ The mumu team will send a response indicating the next steps in handling your re
 initial reply to your report, the security team will keep you informed of the progress towards a fix
 and full announcement, and may ask for additional information or guidance.
 
-Report security bugs in third-party modules to the person or team maintaining the module. You can
-also report a vulnerability through the [npm contact form](https://www.npmjs.com/support) by
-selecting "I'm reporting a security vulnerability".
+Report security bugs in third-party modules to the person or team maintaining the module.

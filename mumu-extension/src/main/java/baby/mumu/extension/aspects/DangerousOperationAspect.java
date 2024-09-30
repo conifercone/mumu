@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,15 @@
  */
 package baby.mumu.extension.aspects;
 
+import static baby.mumu.basis.constants.CommonConstants.PERCENT_SIGN;
+
 import baby.mumu.basis.annotations.DangerousOperation;
+import baby.mumu.basis.condition.ConditionalExecutor;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
-import java.lang.reflect.Method;
-import java.util.Optional;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -33,10 +35,10 @@ import org.slf4j.LoggerFactory;
  * 危险操作注解切面
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Aspect
-public class DangerousOperationAspect {
+public class DangerousOperationAspect extends AbstractAspect {
 
   private final SystemLogGrpcService systemLogGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(DangerousOperationAspect.class);
@@ -45,35 +47,41 @@ public class DangerousOperationAspect {
     this.systemLogGrpcService = systemLogGrpcService;
   }
 
-  @Before("@within(baby.mumu.basis.annotations.DangerousOperation) || @annotation(baby.mumu.basis.annotations.DangerousOperation)")
-  public void checkDangerousOperation(JoinPoint joinPoint) throws NoSuchMethodException {
-    Method method = getCurrentMethod(joinPoint);
-    DangerousOperation annotation = method.getAnnotation(DangerousOperation.class);
-
-    if (annotation == null) {
-      annotation = joinPoint.getTarget().getClass().getAnnotation(DangerousOperation.class);
-    }
-    Optional.ofNullable(annotation).ifPresent(
-        annotationNonNull -> SecurityContextUtil.getLoginAccountId()
-            .ifPresent(accountId -> {
-              String content = String.format(
-                  "The user with user ID %s performed a dangerous operation:%s", accountId,
-                  annotationNonNull.value());
-              systemLogGrpcService.submit(SystemLogSubmitGrpcCmd.newBuilder()
-                  .setSystemLogSubmitCo(
-                      SystemLogSubmitGrpcCo.newBuilder()
-                          .setContent(content)
-                          .setCategory("dangerousOperation")
-                          .build())
-                  .build());
-              LOGGER.info(content);
-            }));
+  @Before("@annotation(baby.mumu.basis.annotations.DangerousOperation)")
+  public void checkDangerousOperation(JoinPoint joinPoint) {
+    getCurrentMethod(joinPoint).map(method -> method.getAnnotation(DangerousOperation.class))
+        .ifPresent(
+            annotationNonNull -> SecurityContextUtil.getLoginAccountId()
+                .ifPresent(accountId -> {
+                  String content = String.format(
+                      "The user with user ID %s performed a dangerous operation:%s", accountId,
+                      resolveParameters(annotationNonNull.value(), joinPoint));
+                  systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+                      .setSystemLogSubmitCo(
+                          SystemLogSubmitGrpcCo.newBuilder()
+                              .setContent(content)
+                              .setCategory("dangerousOperation")
+                              .build())
+                      .build());
+                  LOGGER.info(content);
+                }));
   }
 
-  private @NotNull Method getCurrentMethod(@NotNull JoinPoint joinPoint)
-      throws NoSuchMethodException {
-    String methodName = joinPoint.getSignature().getName();
-    Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
-    return joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes);
+  private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
+    return ConditionalExecutor.of(value.contains(PERCENT_SIGN))
+        .orElse(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
+  }
+
+  private String replaceParameters(@NotNull String value, Object[] args) {
+    String finalValue = value;
+
+    if (finalValue.contains(PERCENT_SIGN) && ArrayUtils.isNotEmpty(args)) {
+      for (int i = 0; i < args.length; i++) {
+        if (args[i] != null) {
+          finalValue = finalValue.replace(PERCENT_SIGN + i, args[i].toString());
+        }
+      }
+    }
+    return finalValue;
   }
 }

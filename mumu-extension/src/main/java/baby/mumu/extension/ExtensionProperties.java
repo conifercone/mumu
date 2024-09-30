@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package baby.mumu.extension;
 
 import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.distributed.DistributedProperties;
 import baby.mumu.extension.fd.FaceDetectionProperties;
 import baby.mumu.extension.ocr.OcrProperties;
+import baby.mumu.extension.rl.RateLimiterProperties;
 import baby.mumu.extension.sql.SqlProperties;
 import baby.mumu.extension.translation.TranslationProperties;
 import lombok.Data;
@@ -35,6 +35,12 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 @ConfigurationProperties("mumu.extension")
 public class ExtensionProperties {
+
+  /**
+   * 全局配置
+   */
+  @NestedConfigurationProperty
+  private GlobalProperties global = new GlobalProperties();
 
   /**
    * 分布式相关配置
@@ -71,4 +77,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private FaceDetectionProperties fd = new FaceDetectionProperties();
+
+  /**
+   * 限流配置
+   */
+  @NestedConfigurationProperty
+  private RateLimiterProperties rl = new RateLimiterProperties();
 }

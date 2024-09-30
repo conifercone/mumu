@@ -12,12 +12,65 @@
 
 ### 新增
 
-- 添加了面部年龄检测扩展功能。
-- 添加了新的图像项目分类扩展功能。
+### 变更
+
+- 按照数据库范式优化消息服务数据库结构。
+
+### 移除
+
+## [2.1.0] - 2024-09-30
+
+### 新增
+
+- 新增条件执行器。
+- 新增条件注解。
+- 获取当前登录账户信息接口增加账户角色权限信息返回。
+- 注解处理器增加版本信息生成。
+- grpc增加服务发现客户端名称解析器。
+- 增加flyway插件。
+- 新增检查并设置环境变量脚本。
+- 新增license脚本。
+- 删除账户&删除账户归档数据时同时删除账户地址数据。
+- 项目版本（开发、测试、预发布）增加git hash值标识。
+- 新增限流拓展功能。
+- 新增根据ID删除订阅消息、广播消息归档数据定时任务。
+- 新增根据ID删除角色、账户归档数据定时任务。
+- 新增根据ID删除权限归档数据定时任务。
+- 危险操作注解value属性增加参数替换功能。
+
+### 修复
+
+- 修复根据ID更新用户角色接口时用户地址为空问题。
 
 ### 变更
 
+- 按照数据库范式重构账户和角色映射关系，允许账户同时拥有多个角色。
+- 账户支持添加多个地址。
+- 按照数据库范式重构角色和权限映射关系。
+- collections4 CollectionUtils替换spring CollectionUtils。
+- 更新flyway脚本位置。
+- gradle版本升级至8.10.2。
+- 统一认证端点处理器。
+- grpc版本升级至1.68.0。
+- deepl-java升级至1.6.0。
+- commons-io升级至2.17.0。
+- 内置环境变量名修改为小写。
+- 修改jpa扫描范围。
+- springboot升级至3.3.4。
+- protobuf升级至4.28.2。
+- 修改Rsa#jksKeyPair默认值。
+- 完善账户注册grpc接口参数属性。
+- flyway升级至10.18.0。
+- mapstruct升级至1.6.2。
+- 更新SECURITY文档内容。
+- log4j2设置UTF-8为默认编码。
+- 优化项目结构。
+- 优化权限归档定时任务执行逻辑。
+
 ### 移除
+
+- 统一认证端点处理器去除日志自动上传功能降低架构复杂度。
+- 删除暂时不用的插件。
 
 ## [2.0.0] - 2024-09-06
 
@@ -262,7 +315,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.0.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.1.0...develop
+[2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3

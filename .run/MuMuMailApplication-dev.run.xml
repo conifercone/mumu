@@ -2,7 +2,7 @@
   <configuration default="false" name="MuMuMailApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
-    <module name="mumu.mumu-mail.main"/>
+    <module name="mumu.mumu-services.mumu-mail.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.mail.MuMuMailApplication"/>
     <option name="VM_PARAMETERS" value="-Dcom.sun.management.jmxremote.port=31401 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dlog4j2.disableJmx=true" />

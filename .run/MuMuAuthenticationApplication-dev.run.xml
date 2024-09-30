@@ -2,7 +2,7 @@
   <configuration default="false" name="MuMuAuthenticationApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
-    <module name="mumu.mumu-authentication.main"/>
+    <module name="mumu.mumu-services.mumu-authentication.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
     <option name="SPRING_BOOT_MAIN_CLASS"
       value="baby.mumu.authentication.MuMuAuthenticationApplication"/>

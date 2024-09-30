@@ -1,6 +1,6 @@
 dependencies {
     api(project(":mumu-basis"))
-    implementation(project(":mumu-log:log-client"))
+    implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.grpc.spring.boot.starter)
     implementation(libs.curator.recipes)
@@ -16,6 +16,8 @@ dependencies {
     implementation(libs.deepl)
     implementation(libs.tess4j)
     implementation(libs.javacv)
+    implementation(libs.bucket4j.lettuce)
+    implementation(libs.lettuce.core)
     testImplementation(libs.tess4j)
     testImplementation(libs.spring.test)
 }

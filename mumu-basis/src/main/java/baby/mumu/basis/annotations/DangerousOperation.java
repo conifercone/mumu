@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import java.lang.annotation.Target;
  * 危险操作
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 public @interface DangerousOperation {
 
   String value() default "";

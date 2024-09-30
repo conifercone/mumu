@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "3.3.3"
+springbootVersion = "3.3.4"
 springCloudVersion = "2023.0.3"
 # dependence version
 apiguardianVersion = '1.1.2'
@@ -15,16 +15,16 @@ zookeeperVersion = "3.9.2"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.8.2"
 curatorRecipesVersion = "5.7.0"
-flywayVersion = "10.17.2"
+flywayVersion = "10.18.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.12'
-mapstructVersion = '1.6.0'
-commonsIoVersion = '2.16.1'
+mapstructVersion = '1.6.2'
+commonsIoVersion = '2.17.0'
 commonsTextVersion = '1.12.0'
 jobrunrSpringBoot3StarterVersion = '7.2.2'
 alimtVersion = '1.3.1'
-deeplVersion = '1.5.0'
+deeplVersion = '1.6.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
 javapoetVersion = '1.13.0'
@@ -32,15 +32,16 @@ autoServiceVersion = '1.1.1'
 tess4jVersion = '5.13.0'
 javacvVersion = '1.5.10'
 aliyunOcrVersion = '3.1.1'
+bucket4jVersion = '8.14.0'
+commonsCollections4Version = '4.5.0-M2'
 # bom version
-grpcBomVersion = '1.58.0'
+grpcBomVersion = '1.68.0'
 guavaBomVersion = '33.3.0-jre'
-protobufBomVersion = '4.28.0'
+protobufBomVersion = '4.28.2'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
 kotlinPluginVersion = '2.0.20'
-licensePluginVersion = '0.16.1'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -224,6 +225,16 @@ spring-test = { module = "org.springframework:spring-test" }
 javacv = { module = "org.bytedeco:javacv-platform", version.ref = "javacvVersion" }
 # https://mvnrepository.com/artifact/com.aliyun/ocr_api20210707
 aliyun-ocr = { module = "com.aliyun:ocr_api20210707", version.ref = "aliyunOcrVersion" }
+# https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-lettuce
+bucket4j-lettuce = { module = "com.bucket4j:bucket4j_jdk17-lettuce", version.ref = "bucket4jVersion" }
+# https://mvnrepository.com/artifact/io.lettuce/lettuce-core
+lettuce-core = { module = "io.lettuce:lettuce-core" }
+# https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4Version" }
+# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-commons
+spring-cloud-commons = { module = "org.springframework.cloud:spring-cloud-commons" }
+# https://mvnrepository.com/artifact/io.grpc/grpc-api
+grpc-api = { module = "io.grpc:grpc-api" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
@@ -238,7 +249,7 @@ projectReport = { id = "project-report" }
 signing = { id = "signing" }
 lombok = { id = "io.freefair.lombok", version.ref = "lombokPluginVersion" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
-license = { id = "com.github.hierynomus.license", version.ref = "licensePluginVersion" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }

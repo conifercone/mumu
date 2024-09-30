@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * ocr配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Data
 public class OcrProperties {

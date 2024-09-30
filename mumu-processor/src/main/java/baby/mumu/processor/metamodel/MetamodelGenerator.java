@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +46,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -57,9 +59,9 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 元模型生成器
@@ -73,6 +75,7 @@ import org.springframework.util.CollectionUtils;
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
+@SupportedOptions({"gradle.version", "os.name", "java.version", "project.version"})
 public class MetamodelGenerator extends AbstractProcessor {
 
   private Messager messager;
@@ -82,6 +85,10 @@ public class MetamodelGenerator extends AbstractProcessor {
   private String authorEmail;
   private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
   private static final String SINGULAR_FIELD_SUFFIX = "Singular";
+  private String gradleVersion;
+  private String javaVersion;
+  private String osName;
+  private String projectVersion;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -91,7 +98,11 @@ public class MetamodelGenerator extends AbstractProcessor {
     messager = processingEnv.getMessager();
     authorName = getGitUserName().orElse(StringUtils.EMPTY);
     authorEmail = getGitEmail().orElse(StringUtils.EMPTY);
-    messager.printMessage(Diagnostic.Kind.NOTE, "🎉 MuMu Entity Metamodel Generator");
+    gradleVersion = processingEnv.getOptions().get("gradle.version");
+    javaVersion = processingEnv.getOptions().get("java.version");
+    osName = processingEnv.getOptions().get("os.name");
+    projectVersion = processingEnv.getOptions().get("project.version");
+    messager.printMessage(Diagnostic.Kind.NOTE, "🫛 MuMu Entity Metamodel Generator");
   }
 
   @Override
@@ -133,7 +144,6 @@ public class MetamodelGenerator extends AbstractProcessor {
       packageName = packageElement.getQualifiedName().toString();
       entityName = annotatedElement.getSimpleName().toString();
     }
-
     genEntityName = entityName + GENERATE_DESCRIPTION_CLASS_SUFFIX;
 
     String qualifiedGenEntityName =
@@ -144,20 +154,26 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC)
         .addModifiers(Modifier.ABSTRACT);
     generateFields(annotatedElement, packageName, entityName, builder);
-    OffsetDateTime dateTime = OffsetDateTime.now();
+    OffsetDateTime dateTime = OffsetDateTime.now(ZoneOffset.UTC);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
     String formattedDateTime = dateTime.format(formatter);
     builder.addAnnotation(AnnotationSpec.builder(Generated.class)
         .addMember("value", "$S", this.getClass().getName())
         .addMember("date", "$S", formattedDateTime)
+        .addMember("comments", "$S",
+            String.format("compiler from gradle %s, environment: Java %s OS %s",
+                gradleVersion,
+                javaVersion,
+                osName))
         .build());
     builder.addJavadoc(
-        "The current class is automatically generated, please do not modify it.\n"
+        "The current class is automatically generated, please do not modify it.\n\n"
             + (StringUtils.isNotBlank(authorName) && StringUtils.isNotBlank(authorEmail)
             ? String.format(
             "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : StringUtils.EMPTY)
             + String.format(
-            "@see %s.%s", packageName, entityName));
+            "@see %s.%s\n", packageName, entityName) + String.format(
+            "@since %s", projectVersion));
     JavaFile javaFile = JavaFile
         .builder(packageName, builder.build())
         .build();
@@ -174,16 +190,21 @@ public class MetamodelGenerator extends AbstractProcessor {
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(
             Collectors.toSet());
-    ObjectUtil.getSuperclassElement(annotatedElement, typeUtils)
-        .ifPresent(superClassElement -> {
-          List<VariableElement> superClassFields = ObjectUtil.getFields(superClassElement);
-          superClassFields.forEach(superClassField -> {
-            if (!collect.contains(superClassField.getSimpleName().toString())) {
-              fields.add(superClassField);
-            }
-          });
-        });
-    if (!CollectionUtils.isEmpty(fields)) {
+    List<VariableElement> superClassFields = ObjectUtil.getAllSuperclasses(annotatedElement,
+            typeUtils)
+        .stream()
+        .flatMap(typeElement -> ObjectUtil.getFields(typeElement).stream())
+        .collect(
+            Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
+                (existing, replacement) -> existing)).values()
+        .stream()
+        .toList();
+    superClassFields.forEach(superClassField -> {
+      if (!collect.contains(superClassField.getSimpleName().toString())) {
+        fields.add(superClassField);
+      }
+    });
+    if (CollectionUtils.isNotEmpty(fields)) {
       fields.forEach(field -> {
         FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2024-2024, the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package baby.mumu.authentication.client.config;
+
+import baby.mumu.authentication.client.api.TokenGrpcService;
+import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
+import baby.mumu.basis.enums.TokenClaimsEnum;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResultResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+/**
+ * jwt token认证拦截器
+ *
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @since 1.0.0
+ */
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+
+  private static final String TOKEN_HEADER = "Authorization";
+  private static final String TOKEN_START = "Bearer ";
+  JwtDecoder jwtDecoder;
+  TokenGrpcService tokenGrpcService;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      JwtAuthenticationTokenFilter.class);
+
+  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
+    this.jwtDecoder = jwtDecoder;
+    this.tokenGrpcService = tokenGrpcService;
+  }
+
+  @Override
+  protected void doFilterInternal(@NotNull HttpServletRequest request,
+      @NotNull HttpServletResponse response,
+      @NotNull FilterChain filterChain) throws ServletException, IOException {
+    MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
+        request);
+    String authHeader = mumuHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
+    SecurityContextUtil.getLoginAccountLanguage()
+        .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+            Locale.of(languageEnum.name())));
+    // 存在token
+    if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
+      String authToken = authHeader.substring(TOKEN_START.length());
+      // 判断redis中是否存在token
+      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
+          TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        return;
+      }
+      // 判断token是否合法
+      Jwt jwt;
+      try {
+        jwt = jwtDecoder.decode(authToken);
+      } catch (JwtException e) {
+        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
+        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        return;
+      }
+      List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());
+      if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        JwtAuthenticationToken authenticationToken =
+            new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
+                    authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+                .orElse(null));
+        // 重新设置回用户对象
+        authenticationToken.setDetails(
+            new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextUtil.getLoginAccountLanguage()
+            .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+                Locale.of(languageEnum.name())));
+      }
+    }
+    // 放行
+    filterChain.doFilter(mumuHttpServletRequestWrapper, response);
+  }
+}

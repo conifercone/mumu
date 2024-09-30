@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public enum ResultCode implements BaseResultInterface {
   BAD_REQUEST(400),
   UNAUTHORIZED(401),
   NOT_FOUND(404),
+  TOO_MANY_REQUESTS(429),
   INTERNAL_SERVER_ERROR(500),
   METHOD_NOT_ALLOWED(405),
   /*参数错误:1001-1999*/
@@ -100,7 +101,8 @@ public enum ResultCode implements BaseResultInterface {
   THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY(6032),
   AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE(6033),
   ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE(6034),
-  THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS(6035);
+  THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS(6035),
+  UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP(6036);
   private final Integer code;
   private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 

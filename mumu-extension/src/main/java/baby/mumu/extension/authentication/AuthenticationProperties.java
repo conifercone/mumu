@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, kaiyu.shan@outlook.com.
+ * Copyright (c) 2024-2024, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,6 @@ public class AuthenticationProperties {
     /**
      * 密钥对
      */
-    private String jksKeyPair = "jwt";
+    private String jksKeyPair = "mumu";
   }
 }

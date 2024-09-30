@@ -1,13 +1,11 @@
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 plugins {
     id(libs.plugins.springboot.get().pluginId) version libs.versions.springbootVersion apply false
     id(libs.plugins.lombok.get().pluginId) version libs.versions.lombokPluginVersion
     id(libs.plugins.protobuf.get().pluginId) version libs.versions.protobufPluginVersion apply false
-    id(libs.plugins.license.get().pluginId) version libs.versions.licensePluginVersion
     id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
@@ -15,9 +13,17 @@ plugins {
     id(libs.plugins.projectReport.get().pluginId)
 }
 
+@Suppress("UnstableApiUsage")
+val gitHash = providers.exec {
+    commandLine("git", "rev-parse", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+
 allprojects {
+
     group = findProperty("group")!! as String
-    version = findProperty("version")!! as String
+    val versionString = findProperty("version")!! as String
+    version =
+        if (versionString.contains("-")) "$versionString-$gitHash" else versionString
 
     repositories {
         mavenCentral()
@@ -26,8 +32,8 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(0, TimeUnit.SECONDS)
-            cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
+            cacheChangingModulesFor(1, TimeUnit.HOURS)
+            cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
 
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
@@ -45,7 +51,6 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
-    apply(plugin = rootProject.libs.plugins.license.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinJvm.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginSpring.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginJpa.get().pluginId)
@@ -57,20 +62,33 @@ subprojects {
     }
 
     signing {
-        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
-        val mumuSigningKeyFile = "MUMU_SIGNING_KEY_FILE"
-        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
+        val mumuSigningKeyId = "mumu_signing_key_id"
+        val mumuSigningKey = "mumu_signing_key"
+        val mumuSigningPassword = "mumu_signing_password"
         if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
-            !System.getenv(mumuSigningKeyFile).isNullOrBlank() &&
+            !System.getenv(mumuSigningKey).isNullOrBlank() &&
             !System.getenv(mumuSigningPassword).isNullOrBlank()
         ) {
             useInMemoryPgpKeys(
                 System.getenv(mumuSigningKeyId) as String,
-                file(System.getenv(mumuSigningKeyFile) as String).readText(),
+                file(System.getenv(mumuSigningKey) as String).readText(),
                 System.getenv(mumuSigningPassword) as String
             )
             sign(tasks["jar"])
         }
+    }
+
+    tasks.register<Jar>("sourceJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets.main.get().allSource)
+    }
+
+    signing {
+        sign(tasks.getByName("sourceJar"))
+    }
+
+    artifacts {
+        add("archives", tasks.named("sourceJar"))
     }
 
     tasks.withType<JavaCompile> {
@@ -79,7 +97,24 @@ subprojects {
 
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
-        options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
+        doFirst {
+            val hasProcessor = configurations["annotationProcessor"]
+                .dependencies
+                .any { it.name.contains("mumu-processor") }
+            if (hasProcessor) {
+                options.compilerArgs.addAll(
+                    listOf(
+                        "-Amapstruct.unmappedTargetPolicy=IGNORE",
+                        "-Agradle.version=${gradle.gradleVersion}",
+                        "-Aos.name=${System.getProperty("os.name")}",
+                        "-Ajava.version=${System.getProperty("java.version")}",
+                        "-Aproject.version=${project.version}",
+                    )
+                )
+            } else {
+                options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
+            }
+        }
     }
 
     tasks.named(
@@ -104,28 +139,9 @@ subprojects {
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
                 "Build-Timestamp" to LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                "Automatic-Module-Name" to "${project.group}.${project.name.replace("-", ".")}"
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             )
         }
-    }
-
-    license {
-        encoding = StandardCharsets.UTF_8.name()
-        ignoreFailures = true
-        header = rootProject.file("SOURCE_CODE_HEAD.txt")
-        val includes: MutableList<String> =
-            mutableListOf("**/*.java", "**/*.kt", "**/*.xml", "**/*.yml")
-        includes(includes)
-        val excludes: MutableList<String> =
-            mutableListOf("**/client/api/grpc/*.java", "**/*_.java", "**/*run.xml")
-        excludes(excludes)
-        mapping("java", "SLASHSTAR_STYLE")
-        mapping("kt", "SLASHSTAR_STYLE")
-        mapping("xml", "XML_STYLE")
-        mapping("yml", "SCRIPT_STYLE")
-        ext["year"] = Calendar.getInstance().get(Calendar.YEAR)
-        ext["organization"] = "kaiyu.shan@outlook.com"
     }
 
     dependencies {
@@ -148,6 +164,7 @@ subprojects {
         implementation(rootProject.libs.spring.boot.starter.undertow)
         implementation(rootProject.libs.commons.text)
         implementation(rootProject.libs.commons.io)
+        implementation(rootProject.libs.commons.collections4)
         implementation(rootProject.libs.jackson.module.kotlin)
         implementation(rootProject.libs.kotlin.reflect)
         testImplementation(rootProject.libs.junit.jupiter)

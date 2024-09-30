@@ -1,0 +1,146 @@
+/*
+ * Copyright (c) 2024-2024, the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package baby.mumu.message.adapter.web;
+
+import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.message.client.api.SubscriptionTextMessageService;
+import baby.mumu.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageReadByIdCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
+import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
+import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * 文本订阅消息管理
+ *
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @since 1.0.2
+ */
+@RestController
+@RequestMapping("/subscriptionTextMsg")
+@Tag(name = "文本订阅消息管理")
+public class SubscriptionTextMessageController {
+
+  private final SubscriptionTextMessageService subscriptionTextMessageService;
+
+  @Autowired
+  public SubscriptionTextMessageController(
+      SubscriptionTextMessageService subscriptionTextMessageService) {
+    this.subscriptionTextMessageService = subscriptionTextMessageService;
+  }
+
+  @Operation(summary = "转发文本订阅消息")
+  @PostMapping("/forward")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.2")
+  public void forward(
+      @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
+  }
+
+  @Operation(summary = "根据ID已读文本订阅消息")
+  @PutMapping("/readMsgById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void readMsgById(
+      @RequestBody @Valid SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
+    subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID未读文本订阅消息")
+  @PutMapping("/unreadMsgById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void unreadMsgById(
+      @RequestBody @Valid SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
+    subscriptionTextMessageService.unreadMsgById(subscriptionTextMessageUnreadByIdCmd);
+  }
+
+  @Operation(summary = "根据ID删除文本订阅消息")
+  @DeleteMapping("/deleteMsgById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void deleteMsgById(
+      @RequestBody @Valid SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
+    subscriptionTextMessageService.deleteMsgById(subscriptionTextMessageDeleteByIdCmd);
+  }
+
+  @Operation(summary = "查询所有当前用户发送消息")
+  @GetMapping("/findAllYouSend")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+      @RequestBody @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
+  }
+
+  @Operation(summary = "根据ID归档文本订阅消息")
+  @PutMapping("/archiveMsgById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public void archiveMsgById(
+      @RequestBody @Valid SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
+    subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
+  }
+
+  @Operation(summary = "根据ID从存档中恢复消息指令")
+  @PutMapping("/recoverMsgFromArchiveById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.4")
+  public void recoverMsgFromArchiveById(
+      @RequestBody @Valid SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
+    subscriptionTextMessageService.recoverMsgFromArchiveById(
+        subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
+  }
+
+  @Operation(summary = "查询所有和某人的消息记录")
+  @GetMapping("/findAllWithSomeOne")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
+      @RequestBody @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
+        subscriptionTextMessageFindAllWithSomeOneCmd);
+  }
+}
