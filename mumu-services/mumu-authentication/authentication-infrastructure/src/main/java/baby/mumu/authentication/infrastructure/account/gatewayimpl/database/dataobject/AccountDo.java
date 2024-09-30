@@ -34,8 +34,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 /**
  * 用户基本信息数据对象
@@ -120,8 +118,7 @@ public class AccountDo extends JpaBasisArchivableDataObject {
   /**
    * 性别
    */
-  @Column(name = "sex", columnDefinition = "sex(0, 0)", nullable = false)
-  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Column(name = "sex", nullable = false)
   @Enumerated(EnumType.STRING)
   private SexEnum sex;
 
@@ -142,8 +139,7 @@ public class AccountDo extends JpaBasisArchivableDataObject {
   /**
    * 语言偏好
    */
-  @Column(name = "language", columnDefinition = "language(0, 0)", nullable = false)
-  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Column(name = "language", nullable = false)
   @Enumerated(EnumType.STRING)
   private LanguageEnum language;
 
