@@ -36,7 +36,7 @@ bucket4jVersion = '8.14.0'
 commonsCollections4Version = '4.5.0-M2'
 # bom version
 grpcBomVersion = '1.68.0'
-guavaBomVersion = '33.3.0-jre'
+guavaBomVersion = '33.3.1-jre'
 protobufBomVersion = '4.28.2'
 # plugin version
 protobufPluginVersion = '0.9.4'
