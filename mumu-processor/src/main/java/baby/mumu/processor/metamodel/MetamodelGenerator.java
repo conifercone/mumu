@@ -119,7 +119,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         generateMetaModelClass(ae);
       } catch (IOException e) {
         messager.printMessage(Diagnostic.Kind.ERROR,
-            "Cannot generate metamodel class for " + ae.getClass().getName() + " because "
+            "🤔 Cannot generate metamodel class for " + ae.getClass().getName() + " because "
                 + e.getMessage());
       }
     });
@@ -137,7 +137,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     PackageElement packageElement = elementUtils.getPackageOf(annotatedElement);
     if (packageElement.isUnnamed()) {
       messager.printMessage(Diagnostic.Kind.WARNING,
-          "Class " + annotatedElement.getSimpleName() + " has an unnamed package.");
+          "🤔 Class " + annotatedElement.getSimpleName() + " has an unnamed package.");
       packageName = StringUtils.EMPTY;
       entityName = qualifiedName;
     } else {
@@ -149,7 +149,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     String qualifiedGenEntityName =
         (packageName.isEmpty() ? StringUtils.EMPTY : packageName + ".") + genEntityName;
     messager.printMessage(Diagnostic.Kind.NOTE,
-        "Generating Entity Metamodel: " + qualifiedGenEntityName);
+        "🥐 Generating Entity Metamodel: " + qualifiedGenEntityName);
     Builder builder = TypeSpec.classBuilder(genEntityName)
         .addModifiers(Modifier.PUBLIC)
         .addModifiers(Modifier.ABSTRACT);
