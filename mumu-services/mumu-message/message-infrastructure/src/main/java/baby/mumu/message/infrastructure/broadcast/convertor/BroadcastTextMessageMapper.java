@@ -58,6 +58,13 @@ public interface BroadcastTextMessageMapper {
   BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
+  @Mappings(value = {
+      @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.receiverIds, ignore = true),
+      @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
+  })
   BroadcastTextMessage toEntity(BroadcastTextMessageDo broadcastTextMessageDo);
 
   @Mappings(value = {
@@ -65,7 +72,6 @@ public interface BroadcastTextMessageMapper {
       @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
       @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
       @Mapping(target = BroadcastTextMessage4Desc.receiverIds, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.senderId, ignore = true),
       @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
       @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
   })

@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.constants;
+package baby.mumu.message.infrastructure.relations.database;
+
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * pg数据库函数名常量
+ * 文本广播消息接收者关系管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
-public final class PgSqlFunctionNameConstants {
+public interface BroadcastTextMessageReceiverRepository extends
+    BaseJpaRepository<BroadcastTextMessageReceiverDo, BroadcastTextMessageReceiverDoId>,
+    JpaSpecificationExecutor<BroadcastTextMessageReceiverDo> {
 
-  private PgSqlFunctionNameConstants() {
-  }
+  List<BroadcastTextMessageReceiverDo> findByBroadcastTextMessageId(Long messageId);
 
-  public static final String ANY_PG = "any_pg";
+  void deleteByBroadcastTextMessageId(Long messageId);
 }
