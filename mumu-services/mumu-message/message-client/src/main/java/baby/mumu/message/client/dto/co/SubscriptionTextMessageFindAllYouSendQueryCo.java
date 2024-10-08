@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.message.client.dto;
+package baby.mumu.message.client.dto.co;
 
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendQueryCo;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Min;
+import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.enums.MessageStatusEnum;
+import java.io.Serial;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 文本订阅消息查询所有当前用户发送消息指令
+ * 文本订阅消息查询所有当前用户发送消息查询参数客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.3
+ * @since 2.2.0
  */
 @Data
-public class SubscriptionTextMessageFindAllYouSendCmd {
+@EqualsAndHashCode(callSuper = true)
+public class SubscriptionTextMessageFindAllYouSendQueryCo extends BaseClientObject {
 
-  @Nullable
-  private SubscriptionTextMessageFindAllYouSendQueryCo subscriptionTextMessageFindAllYouSendQueryCo;
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  @Serial
+  private static final long serialVersionUID = 9068673575744364871L;
+
+  private String message;
+
+  private MessageStatusEnum messageStatus;
 }
