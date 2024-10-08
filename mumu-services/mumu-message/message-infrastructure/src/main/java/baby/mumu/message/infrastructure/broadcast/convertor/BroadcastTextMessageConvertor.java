@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
@@ -139,34 +138,21 @@ public class BroadcastTextMessageConvertor {
       BroadcastTextMessageDo broadcastTextMessageDo) {
     return Optional.ofNullable(broadcastTextMessageDo)
         .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
-          List<BroadcastTextMessageReceiverDo> senderReceiverDos = broadcastTextMessageReceiverRepository.findByBroadcastTextMessageId(
-              broadcastTextMessage.getId());
-          if (CollectionUtils.isNotEmpty(senderReceiverDos)) {
-            broadcastTextMessage.setReceiverIds(
-                senderReceiverDos.stream().map(BroadcastTextMessageReceiverDo::getId)
-                    .map(BroadcastTextMessageReceiverDoId::getReceiverId).collect(
-                        Collectors.toList()));
-            broadcastTextMessage.setReadQuantity(senderReceiverDos.stream().filter(
-                broadcastTextMessageReceiverDo -> MessageStatusEnum.READ.equals(
-                    broadcastTextMessageReceiverDo.getMessageStatus())
-            ).count());
-            broadcastTextMessage.setUnreadQuantity(senderReceiverDos.stream().filter(
-                broadcastTextMessageReceiverDo -> MessageStatusEnum.UNREAD.equals(
-                    broadcastTextMessageReceiverDo.getMessageStatus())
-            ).count());
-            broadcastTextMessage.setReadReceiverIds(senderReceiverDos.stream().filter(
-                    broadcastTextMessageReceiverDo -> MessageStatusEnum.READ.equals(
-                        broadcastTextMessageReceiverDo.getMessageStatus())
-                ).map(BroadcastTextMessageReceiverDo::getId)
-                .map(BroadcastTextMessageReceiverDoId::getReceiverId)
-                .collect(Collectors.toList()));
-            broadcastTextMessage.setUnreadReceiverIds(senderReceiverDos.stream().filter(
-                    broadcastTextMessageReceiverDo -> MessageStatusEnum.UNREAD.equals(
-                        broadcastTextMessageReceiverDo.getMessageStatus())
-                ).map(BroadcastTextMessageReceiverDo::getId)
-                .map(BroadcastTextMessageReceiverDoId::getReceiverId)
-                .collect(Collectors.toList()));
-          }
+          broadcastTextMessage.setReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageId(
+                  broadcastTextMessage.getId()));
+          broadcastTextMessage.setReadQuantity(
+              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
+          broadcastTextMessage.setUnreadQuantity(
+              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
+          broadcastTextMessage.setReadReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
+          broadcastTextMessage.setUnreadReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
           return broadcastTextMessage;
         });
   }

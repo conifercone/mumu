@@ -15,9 +15,12 @@
  */
 package baby.mumu.message.infrastructure.relations.database;
 
+import baby.mumu.basis.enums.MessageStatusEnum;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 文本广播消息接收者关系管理
@@ -30,6 +33,18 @@ public interface BroadcastTextMessageReceiverRepository extends
     JpaSpecificationExecutor<BroadcastTextMessageReceiverDo> {
 
   List<BroadcastTextMessageReceiverDo> findByBroadcastTextMessageId(Long messageId);
+
+  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDo b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
+  List<Long> findReceiverIdsByMessageIdAndMessageStatus(
+      @Param("messageId") Long messageId, @Param("messageStatus") MessageStatusEnum messageStatus);
+
+  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDo b where b.id.messageId=:messageId")
+  List<Long> findReceiverIdsByMessageId(
+      @Param("messageId") Long messageId);
+
+  @Query("select count(distinct b.id.receiverId) from BroadcastTextMessageReceiverDo b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
+  Long countByMessageIdAndMessageStatus(@Param("messageId") Long messageId,
+      @Param("messageStatus") MessageStatusEnum messageStatus);
 
   void deleteByBroadcastTextMessageId(Long messageId);
 }
