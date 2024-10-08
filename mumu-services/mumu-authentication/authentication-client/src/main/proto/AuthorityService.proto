@@ -38,9 +38,15 @@ message AuthorityUpdateGrpcCo {
 }
 
 message AuthorityFindAllGrpcCmd {
-  AuthorityFindAllGrpcCo authorityFindAllCo = 1;
+  AuthorityFindAllGrpcQueryCo authorityFindAllGrpcQueryCo = 1;
   google.protobuf.Int32Value page_no = 2;
   google.protobuf.Int32Value page_size = 3;
+}
+
+message AuthorityFindAllGrpcQueryCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
 }
 
 message AuthorityFindAllGrpcCo {

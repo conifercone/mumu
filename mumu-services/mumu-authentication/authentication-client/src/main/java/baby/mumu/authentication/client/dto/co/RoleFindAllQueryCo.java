@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.client.dto;
+package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.log.client.dto.co.OperationLogFindAllQueryCo;
-import jakarta.validation.constraints.Min;
+import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 操作日志查询所有指令
+ * 角色查询参数客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Data
-public class OperationLogFindAllCmd {
+@EqualsAndHashCode(callSuper = true)
+@GenerateDescription
+public class RoleFindAllQueryCo extends BaseClientObject {
 
-  private OperationLogFindAllQueryCo operationLogFindAllQueryCo;
+  @Serial
+  private static final long serialVersionUID = -930051068163569454L;
 
-  /**
-   * 当前页码
-   */
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
-  /**
-   * 每页数量
-   */
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  private Long id;
+
+  private String name;
+
+  private String code;
 }

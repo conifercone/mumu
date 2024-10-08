@@ -18,7 +18,17 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import org.intellij.lang.annotations.Language;
+import baby.mumu.authentication.client.dto.RoleAddCmd;
+import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,29 +54,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleControllerTest {
 
   private final MockMvc mockMvc;
+  private final ObjectMapper objectMapper;
 
   @Autowired
-  public RoleControllerTest(MockMvc mockMvc) {
+  public RoleControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
     this.mockMvc = mockMvc;
+    this.objectMapper = objectMapper;
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
-    @Language("JSON") String role = """
-        {
-             "roleAddCo": {
-                 "id": 451235432,
-                 "code": "test_code",
-                 "name": "测试角色",
-                 "authorities": [
-                     1,2
-                 ]
-             }
-         }""";
+    RoleAddCmd roleAddCmd = new RoleAddCmd();
+    RoleAddCo roleAddCo = new RoleAddCo();
+    roleAddCo.setId(451235432L);
+    roleAddCo.setName("测试角色");
+    roleAddCo.setCode("test_code");
+    roleAddCo.setAuthorities(Arrays.asList(1L, 2L));
+    roleAddCmd.setRoleAddCo(roleAddCo);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/role/add").with(csrf())
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleAddCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -77,13 +86,12 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws Exception {
-    @Language("JSON") String role = """
-        {
-            "id": 0
-         }""";
+    RoleDeleteByIdCmd roleDeleteByIdCmd = new RoleDeleteByIdCmd();
+    roleDeleteByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/role/deleteById").with(csrf())
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleDeleteByIdCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -94,16 +102,15 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
-    @Language("JSON") String role = """
-        {
-             "roleUpdateCo": {
-                 "id": 0,
-                 "code": "test_updated"
-             }
-         }""";
+    RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
+    RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
+    roleUpdateCo.setId(0L);
+    roleUpdateCo.setCode("test_updated");
+    roleUpdateCmd.setRoleUpdateCo(roleUpdateCo);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/role/updateById").with(csrf())
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleUpdateCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -113,17 +120,16 @@ public class RoleControllerTest {
 
   @Test
   public void findAll() throws Exception {
-    @Language("JSON") String role = """
-        {
-             "roleFindAllCo": {
-                 "authorities": [1]
-             },
-             "pageNo": 0,
-             "pageSize": 10
-         }""";
+    RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
+    roleFindAllCmd.setPageNo(0);
+    roleFindAllCmd.setPageSize(10);
+    RoleFindAllQueryCo roleFindAllQueryCo = new RoleFindAllQueryCo();
+    roleFindAllQueryCo.setName("管理员");
+    roleFindAllCmd.setRoleFindAllQueryCo(roleFindAllQueryCo);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/role/findAll")
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleFindAllCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -134,13 +140,12 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    @Language("JSON") String role = """
-        {
-            "id": 0
-         }""";
+    RoleArchiveByIdCmd roleArchiveByIdCmd = new RoleArchiveByIdCmd();
+    roleArchiveByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/role/archiveById").with(csrf())
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleArchiveByIdCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -151,13 +156,12 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    @Language("JSON") String role = """
-        {
-            "id": 0
-         }""";
+    RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd = new RoleRecoverFromArchiveByIdCmd();
+    roleRecoverFromArchiveByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/role/recoverFromArchiveById").with(csrf())
-            .content(role.getBytes())
+            .content(objectMapper.writeValueAsBytes(roleRecoverFromArchiveByIdCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

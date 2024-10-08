@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcQueryCo;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
@@ -40,6 +41,7 @@ import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -190,18 +192,18 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @NotNull
-  private static RoleFindAllCo getRoleFindAllCo(
+  private static RoleFindAllQueryCo getRoleFindAllQueryCo(
       @NotNull RoleFindAllGrpcCmd request) {
-    RoleFindAllCo roleFindAllCo = new RoleFindAllCo();
-    RoleFindAllGrpcCo roleFindAllGrpcCo = request.getRoleFindAllCo();
+    RoleFindAllQueryCo roleFindAllQueryCo = new RoleFindAllQueryCo();
+    RoleFindAllGrpcQueryCo roleFindAllGrpcQueryCo = request.getRoleFindAllQueryCo();
     //noinspection DuplicatedCode
-    roleFindAllCo.setId(roleFindAllGrpcCo.hasId() ? roleFindAllGrpcCo.getId().getValue() : null);
-    roleFindAllCo.setCode(
-        roleFindAllGrpcCo.hasCode() ? roleFindAllGrpcCo.getCode().getValue() : null);
-    roleFindAllCo.setName(
-        roleFindAllGrpcCo.hasName() ? roleFindAllGrpcCo.getName().getValue() : null);
-    roleFindAllCo.setAuthorities(roleFindAllGrpcCo.getAuthoritiesList());
-    return roleFindAllCo;
+    roleFindAllQueryCo.setId(
+        roleFindAllGrpcQueryCo.hasId() ? roleFindAllGrpcQueryCo.getId().getValue() : null);
+    roleFindAllQueryCo.setCode(
+        roleFindAllGrpcQueryCo.hasCode() ? roleFindAllGrpcQueryCo.getCode().getValue() : null);
+    roleFindAllQueryCo.setName(
+        roleFindAllGrpcQueryCo.hasName() ? roleFindAllGrpcQueryCo.getName().getValue() : null);
+    return roleFindAllQueryCo;
   }
 
   @Override
@@ -209,7 +211,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   public void findAll(RoleFindAllGrpcCmd request,
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
-    roleFindAllCmd.setRoleFindAllCo(getRoleFindAllCo(request));
+    roleFindAllCmd.setRoleFindAllQueryCo(getRoleFindAllQueryCo(request));
     roleFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
     roleFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();

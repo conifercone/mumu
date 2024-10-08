@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
@@ -152,8 +153,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Role> toEntity(RoleFindAllCo roleFindAllCo) {
-    return Optional.ofNullable(roleFindAllCo).map(RoleMapper.INSTANCE::toEntity);
+  public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
+    return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

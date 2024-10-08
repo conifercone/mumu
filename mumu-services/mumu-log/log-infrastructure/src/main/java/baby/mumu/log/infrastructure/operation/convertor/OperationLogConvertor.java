@@ -16,6 +16,7 @@
 package baby.mumu.log.infrastructure.operation.convertor;
 
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
+import baby.mumu.log.client.dto.co.OperationLogFindAllQueryCo;
 import baby.mumu.log.client.dto.co.OperationLogSaveCo;
 import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
 import baby.mumu.log.domain.operation.OperationLog;
@@ -95,8 +96,15 @@ public class OperationLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(
-      OperationLogFindAllCo operationLogFindAllCo) {
-    return Optional.ofNullable(operationLogFindAllCo).map(OperationLogMapper.INSTANCE::toEntity);
+      OperationLogFindAllQueryCo operationLogFindAllQueryCo) {
+    return Optional.ofNullable(operationLogFindAllQueryCo)
+        .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
+          Optional.ofNullable(operationLogFindAllQueryCo.getOperatingStartTime())
+              .ifPresent(operationLog::setOperatingStartTime);
+          Optional.ofNullable(operationLogFindAllQueryCo.getOperatingEndTime())
+              .ifPresent(operationLog::setOperatingEndTime);
+          return operationLog;
+        });
   }
 
   @Contract("_ -> new")

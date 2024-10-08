@@ -52,12 +52,8 @@ public class SystemLogFindAllCmdExe {
       @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
     SystemLog systemLog = systemLogConvertor.toEntity(
-            systemLogFindAllCmd.getSystemLogFindAllCo())
+            systemLogFindAllCmd.getSystemLogFindAllQueryCo())
         .orElseGet(SystemLog::new);
-    Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
-        .ifPresent(systemLog::setRecordStartTime);
-    Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
-        .ifPresent(systemLog::setRecordEndTime);
     Page<SystemLog> systemLogs = systemLogGateway.findAll(
         systemLog,
         systemLogFindAllCmd.getPageNo(),

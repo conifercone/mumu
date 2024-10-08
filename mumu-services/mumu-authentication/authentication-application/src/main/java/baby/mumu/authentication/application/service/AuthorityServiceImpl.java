@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcQueryCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
@@ -45,6 +46,7 @@ import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.basis.annotations.RateLimiter;
@@ -155,17 +157,20 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @NotNull
-  private static AuthorityFindAllCo getAuthorityFindAllCo(
+  private static AuthorityFindAllQueryCo getAuthorityFindAllQueryCo(
       @NotNull AuthorityFindAllGrpcCmd request) {
-    AuthorityFindAllCo authorityFindAllCo = new AuthorityFindAllCo();
-    AuthorityFindAllGrpcCo authorityFindAllGrpcCo = request.getAuthorityFindAllCo();
-    authorityFindAllCo.setId(
-        authorityFindAllGrpcCo.hasId() ? authorityFindAllGrpcCo.getId().getValue() : null);
-    authorityFindAllCo.setCode(
-        authorityFindAllGrpcCo.hasCode() ? authorityFindAllGrpcCo.getCode().getValue() : null);
-    authorityFindAllCo.setName(
-        authorityFindAllGrpcCo.hasName() ? authorityFindAllGrpcCo.getName().getValue() : null);
-    return authorityFindAllCo;
+    AuthorityFindAllQueryCo authorityFindAllQueryCo = new AuthorityFindAllQueryCo();
+    AuthorityFindAllGrpcQueryCo authorityFindAllGrpcQueryCo = request.getAuthorityFindAllGrpcQueryCo();
+    authorityFindAllQueryCo.setId(
+        authorityFindAllGrpcQueryCo.hasId() ? authorityFindAllGrpcQueryCo.getId().getValue()
+            : null);
+    authorityFindAllQueryCo.setCode(
+        authorityFindAllGrpcQueryCo.hasCode() ? authorityFindAllGrpcQueryCo.getCode().getValue()
+            : null);
+    authorityFindAllQueryCo.setName(
+        authorityFindAllGrpcQueryCo.hasName() ? authorityFindAllGrpcQueryCo.getName().getValue()
+            : null);
+    return authorityFindAllQueryCo;
   }
 
   @Override
@@ -235,7 +240,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
-    authorityFindAllCmd.setAuthorityFindAllCo(getAuthorityFindAllCo(request));
+    authorityFindAllCmd.setAuthorityFindAllQueryCo(getAuthorityFindAllQueryCo(request));
     authorityFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
     authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();

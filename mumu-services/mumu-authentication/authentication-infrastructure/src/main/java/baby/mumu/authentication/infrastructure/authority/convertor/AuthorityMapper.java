@@ -17,7 +17,9 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -50,13 +52,13 @@ public interface AuthorityMapper {
   Authority toEntity(AuthorityAddCo authorityAddCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Authority toEntity(AuthorityFindAllCo authorityFindAllCo);
+  Authority toEntity(AuthorityFindAllQueryCo authorityFindAllQueryCo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  Authority toEntity(AuthorityArchivedFindAllCo authorityArchivedFindAllCo);
+  Authority toEntity(AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AuthorityUpdateCo authorityUpdateCo, @MappingTarget Authority authority);

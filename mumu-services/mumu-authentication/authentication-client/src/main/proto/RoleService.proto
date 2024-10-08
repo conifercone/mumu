@@ -40,9 +40,15 @@ message RoleUpdateGrpcCo {
 }
 
 message RoleFindAllGrpcCmd {
-  RoleFindAllGrpcCo roleFindAllCo = 1;
+  RoleFindAllGrpcQueryCo roleFindAllQueryCo = 1;
   google.protobuf.Int32Value page_no = 2;
   google.protobuf.Int32Value page_size = 3;
+}
+
+message RoleFindAllGrpcQueryCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
 }
 
 message RoleFindAllGrpcCo {

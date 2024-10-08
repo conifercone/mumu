@@ -17,7 +17,9 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -113,8 +115,8 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
-    return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
+  public Optional<Authority> toEntity(AuthorityFindAllQueryCo authorityFindAllQueryCo) {
+    return Optional.ofNullable(authorityFindAllQueryCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
@@ -124,8 +126,9 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(
-      @Valid AuthorityArchivedFindAllCo authorityArchivedFindAllCo) {
-    return Optional.ofNullable(authorityArchivedFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
+      @Valid AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo) {
+    return Optional.ofNullable(authorityArchivedFindAllQueryCo)
+        .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

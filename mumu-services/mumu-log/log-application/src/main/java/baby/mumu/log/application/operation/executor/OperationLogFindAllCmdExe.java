@@ -52,12 +52,8 @@ public class OperationLogFindAllCmdExe {
       @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
     OperationLog operationLog = operationLogConvertor.toEntity(
-            operationLogFindAllCmd.getOperationLogFindAllCo())
+            operationLogFindAllCmd.getOperationLogFindAllQueryCo())
         .orElseGet(OperationLog::new);
-    Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
-        .ifPresent(operationLog::setOperatingStartTime);
-    Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
-        .ifPresent(operationLog::setOperatingEndTime);
     Page<OperationLog> operationLogs = operationLogGateway.findAll(
         operationLog,
         operationLogFindAllCmd.getPageNo(),

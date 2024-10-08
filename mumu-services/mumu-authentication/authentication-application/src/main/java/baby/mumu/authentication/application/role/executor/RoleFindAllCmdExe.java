@@ -49,7 +49,7 @@ public class RoleFindAllCmdExe {
   }
 
   public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo())
+    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllQueryCo())
         .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
         roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());

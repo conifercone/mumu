@@ -17,6 +17,7 @@ package baby.mumu.log.infrastructure.operation.convertor;
 
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo4Desc;
+import baby.mumu.log.client.dto.co.OperationLogFindAllQueryCo;
 import baby.mumu.log.client.dto.co.OperationLogQryCo;
 import baby.mumu.log.client.dto.co.OperationLogQryCo4Desc;
 import baby.mumu.log.client.dto.co.OperationLogSaveCo;
@@ -77,7 +78,7 @@ public interface OperationLogMapper {
       @Mapping(target = OperationLog4Desc.operatingStartTime, ignore = true)
   })
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLog toEntity(OperationLogFindAllCo operationLogFindAllCo);
+  OperationLog toEntity(OperationLogFindAllQueryCo operationLogFindAllQueryCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
   @Mappings(value = {

@@ -51,7 +51,8 @@ public class AuthorityFindAllCmdExe {
 
   public Page<AuthorityFindAllCo> execute(AuthorityFindAllCmd authorityFindAllCmd) {
     Assert.notNull(authorityFindAllCmd, "AuthorityFindAllCmd cannot be null");
-    Authority authority = authorityConvertor.toEntity(authorityFindAllCmd.getAuthorityFindAllCo())
+    Authority authority = authorityConvertor.toEntity(
+            authorityFindAllCmd.getAuthorityFindAllQueryCo())
         .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findAll(authority,
         authorityFindAllCmd.getPageNo(), authorityFindAllCmd.getPageSize());

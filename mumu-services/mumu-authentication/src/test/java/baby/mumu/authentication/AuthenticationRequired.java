@@ -58,6 +58,7 @@ public class AuthenticationRequired {
               .param("grant_type", "authorization_password")
               .header("Authorization",
                   "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
+              .header("X-Forwarded-For", "123.123.123.123")
               .accept(MediaType.APPLICATION_JSON)
               .contentType(MediaType.APPLICATION_JSON_VALUE)
           )

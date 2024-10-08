@@ -13,31 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.client.dto;
+package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.log.client.dto.co.OperationLogFindAllQueryCo;
-import jakarta.validation.constraints.Min;
+import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 操作日志查询所有指令
+ * 权限查询已归档参数客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Data
-public class OperationLogFindAllCmd {
+@EqualsAndHashCode(callSuper = true)
+@GenerateDescription
+public class AuthorityArchivedFindAllQueryCo extends BaseClientObject {
 
-  private OperationLogFindAllQueryCo operationLogFindAllQueryCo;
 
-  /**
-   * 当前页码
-   */
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
-  /**
-   * 每页数量
-   */
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  @Serial
+  private static final long serialVersionUID = -7483671073035355804L;
+
+  private Long id;
+
+  @Size(max = 50, message = "{authority.code.validation.size}")
+  private String code;
+
+  @Size(max = 200, message = "{authority.name.validation.size}")
+  private String name;
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -30,7 +30,7 @@ import lombok.Data;
 public class AuthorityArchivedFindAllCmd {
 
   @Valid
-  private AuthorityArchivedFindAllCo authorityArchivedFindAllCo;
+  private AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo;
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
   @Min(value = 1, message = "{page.size.validation.min.size}")

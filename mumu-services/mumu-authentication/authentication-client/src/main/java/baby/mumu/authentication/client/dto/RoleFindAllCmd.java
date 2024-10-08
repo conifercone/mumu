@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -30,7 +30,7 @@ import lombok.Data;
 public class RoleFindAllCmd {
 
   @Valid
-  private RoleFindAllCo roleFindAllCo;
+  private RoleFindAllQueryCo roleFindAllQueryCo;
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int pageNo = 0;
   @Min(value = 1, message = "{page.size.validation.min.size}")
