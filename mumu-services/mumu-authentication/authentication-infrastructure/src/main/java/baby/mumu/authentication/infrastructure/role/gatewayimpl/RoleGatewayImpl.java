@@ -15,10 +15,9 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl;
 
-import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
-
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
+import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
@@ -27,7 +26,6 @@ import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo_;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
@@ -35,13 +33,11 @@ import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
@@ -52,7 +48,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -155,27 +150,13 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Page<Role> findAll(Role role, int pageNo, int pageSize) {
-    Specification<RoleDo> roleDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(role.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(
-              code -> predicateList.add(cb.like(root.get(RoleDo_.code),
-                  String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(role.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(
-              name -> predicateList.add(cb.like(root.get(RoleDo_.name),
-                  String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
-      Optional.ofNullable(role.getId())
-          .ifPresent(id -> predicateList.add(
-              cb.equal(root.get(RoleDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(RoleDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<RoleDo> roleDoPage = roleRepository.findAll(
-        roleDoSpecification, pageRequest);
+    Page<RoleDo> roleDoPage = roleRepository.findAllPage(
+        roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
+        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+                roleEntity.getAuthorities()))
+            .map(authorities -> authorities.stream().map(Authority::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
     return new PageImpl<>(roleDoPage.getContent().stream()
         .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
         .toList(), pageRequest, roleDoPage.getTotalElements());
@@ -185,13 +166,12 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
   public Slice<Role> findAllSlice(Role role, int pageNo, int pageSize) {
-    return roleConvertor.toDataObject(role).map(roleDo -> {
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-      Slice<RoleDo> roleDoSlice = roleRepository.findAll(roleDo, pageRequest);
-      return new SliceImpl<>(roleDoSlice.getContent().stream()
-          .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
-          .toList(), pageRequest, roleDoSlice.hasNext());
-    }).orElse(new SliceImpl<>(new ArrayList<>()));
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Slice<RoleDo> roleDoSlice = roleRepository.findAll(
+        roleConvertor.toDataObject(role).orElseGet(RoleDo::new), pageRequest);
+    return new SliceImpl<>(roleDoSlice.getContent().stream()
+        .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
+        .toList(), pageRequest, roleDoSlice.hasNext());
   }
 
   @Override

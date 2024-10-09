@@ -18,6 +18,7 @@ package baby.mumu.authentication.client.dto.co;
 import baby.mumu.basis.annotations.GenerateDescription;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import java.io.Serial;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,4 +41,6 @@ public class RoleFindAllQueryCo extends BaseClientObject {
   private String name;
 
   private String code;
+
+  private List<Long> authorities;
 }

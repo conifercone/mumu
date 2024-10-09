@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -155,7 +156,15 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
-    return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity);
+    return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity).map(role -> {
+      if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorities())) {
+        role.setAuthorities(
+            authorityRepository.findAllById(roleFindAllQueryCo.getAuthorities()).stream()
+                .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream()).collect(
+                    Collectors.toList()));
+      }
+      return role;
+    });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
@@ -178,12 +187,12 @@ public class RoleConvertor {
   public Optional<RoleFindAllSliceCo> toFindAllSliceCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllSliceCo)
         .map(roleFindAllSliceCo -> {
-      Optional.ofNullable(simpleTextTranslation).flatMap(
-              simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                  roleFindAllSliceCo.getName()))
-          .ifPresent(roleFindAllSliceCo::setName);
-      return roleFindAllSliceCo;
-    });
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      roleFindAllSliceCo.getName()))
+              .ifPresent(roleFindAllSliceCo::setName);
+          return roleFindAllSliceCo;
+        });
   }
 
   @Contract("_ -> new")

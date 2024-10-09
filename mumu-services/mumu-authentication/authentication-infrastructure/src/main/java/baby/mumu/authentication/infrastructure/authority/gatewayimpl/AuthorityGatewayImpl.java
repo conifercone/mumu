@@ -27,7 +27,6 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.Au
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo_;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
@@ -139,23 +138,9 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
-    Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityDo_.code),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityDo_.name),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
-      Optional.ofNullable(authority.getId())
-          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(AuthorityDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
+    Page<AuthorityDo> repositoryAll = authorityRepository.findAllPage(
+        authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new),
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(authorityConvertor::toEntity)
@@ -167,13 +152,12 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize) {
-    return authorityConvertor.toDataObject(authority).map(authorityDo -> {
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-      Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAll(authorityDo, pageRequest);
-      return new SliceImpl<>(authorityDoSlice.getContent().stream()
-          .flatMap(roleDataObject -> authorityConvertor.toEntity(roleDataObject).stream())
-          .toList(), pageRequest, authorityDoSlice.hasNext());
-    }).orElse(new SliceImpl<>(new ArrayList<>()));
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAll(
+        authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
+    return new SliceImpl<>(authorityDoSlice.getContent().stream()
+        .flatMap(roleDataObject -> authorityConvertor.toEntity(roleDataObject).stream())
+        .toList(), pageRequest, authorityDoSlice.hasNext());
   }
 
   @Override
