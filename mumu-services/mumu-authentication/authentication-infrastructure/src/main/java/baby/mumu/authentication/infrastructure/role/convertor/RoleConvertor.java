@@ -18,6 +18,8 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
@@ -157,6 +159,11 @@ public class RoleConvertor {
     return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Role> toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo) {
+    return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity);
+  }
+
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(roleDomain -> {
@@ -171,6 +178,23 @@ public class RoleConvertor {
                   roleFindAllCo.getName()))
           .ifPresent(roleFindAllCo::setName);
       return roleFindAllCo;
+    });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleFindAllSliceCo> toFindAllSliceCo(Role role) {
+    return Optional.ofNullable(role).map(roleDomain -> {
+      RoleFindAllSliceCo roleFindAllSliceCo = RoleMapper.INSTANCE.toFindAllSliceCo(roleDomain);
+      roleFindAllSliceCo.setAuthorities(Optional.ofNullable(roleDomain.getAuthorities())
+          .map(authorities -> authorities.stream().map(Authority::getId).collect(
+              Collectors.toList())).orElse(new ArrayList<>()));
+      return roleFindAllSliceCo;
+    }).map(roleFindAllSliceCo -> {
+      Optional.ofNullable(simpleTextTranslation).flatMap(
+              simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                  roleFindAllSliceCo.getName()))
+          .ifPresent(roleFindAllSliceCo::setName);
+      return roleFindAllSliceCo;
     });
   }
 

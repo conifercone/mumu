@@ -19,6 +19,8 @@ import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo4Desc;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.Role4Desc;
@@ -67,6 +69,12 @@ public interface RoleMapper {
   @Mappings(value = {
       @Mapping(target = Role4Desc.authorities, ignore = true)
   })
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo);
+
+  @Mappings(value = {
+      @Mapping(target = Role4Desc.authorities, ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
@@ -75,6 +83,12 @@ public interface RoleMapper {
   })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
+
+  @Mappings(value = {
+      @Mapping(target = RoleFindAllCo4Desc.authorities, ignore = true)
+  })
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllSliceCo toFindAllSliceCo(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);

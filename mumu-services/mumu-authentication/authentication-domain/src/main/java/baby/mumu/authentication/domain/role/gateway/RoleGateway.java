@@ -18,6 +18,7 @@ package baby.mumu.authentication.domain.role.gateway;
 import baby.mumu.authentication.domain.role.Role;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 角色领域网关
@@ -57,6 +58,16 @@ public interface RoleGateway {
    * @return 查询结果
    */
   Page<Role> findAll(Role role, int pageNo, int pageSize);
+
+  /**
+   * 切片分页查询角色（不查询总数）
+   *
+   * @param role     查询条件
+   * @param pageNo   页码
+   * @param pageSize 当前页数量
+   * @return 查询结果
+   */
+  Slice<Role> findAllSlice(Role role, int pageNo, int pageSize);
 
   /**
    * 查询角色(包含指定权限)

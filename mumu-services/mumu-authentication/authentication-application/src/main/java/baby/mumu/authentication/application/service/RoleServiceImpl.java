@@ -19,6 +19,7 @@ import baby.mumu.authentication.application.role.executor.RoleAddCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleFindAllSliceCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleUpdateCmdExe;
 import baby.mumu.authentication.client.api.RoleService;
@@ -37,11 +38,13 @@ import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -58,6 +61,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,18 +82,21 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleFindAllCmdExe roleFindAllCmdExe;
   private final RoleArchiveByIdCmdExe roleArchiveByIdCmdExe;
   private final RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe;
+  private final RoleFindAllSliceCmdExe roleFindAllSliceCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
       RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe,
       RoleArchiveByIdCmdExe roleArchiveByIdCmdExe,
-      RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe) {
+      RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
+      RoleFindAllSliceCmdExe roleFindAllSliceCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
     this.roleFindAllCmdExe = roleFindAllCmdExe;
     this.roleArchiveByIdCmdExe = roleArchiveByIdCmdExe;
     this.roleRecoverFromArchiveByIdCmdExe = roleRecoverFromArchiveByIdCmdExe;
+    this.roleFindAllSliceCmdExe = roleFindAllSliceCmdExe;
   }
 
   @Override
@@ -114,6 +121,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Transactional(rollbackFor = Exception.class)
   public Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd) {
     return roleFindAllCmdExe.execute(roleFindAllCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd) {
+    return roleFindAllSliceCmdExe.execute(roleFindAllSliceCmd);
   }
 
   @Override

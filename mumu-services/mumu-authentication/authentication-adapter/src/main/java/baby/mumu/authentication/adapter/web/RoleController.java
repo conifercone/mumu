@@ -20,9 +20,11 @@ import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,6 +95,16 @@ public class RoleController {
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<RoleFindAllCo> findAll(@RequestBody @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
+  }
+
+  @Operation(summary = "查询角色(不查询总数)")
+  @GetMapping("/findAllSlice")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<RoleFindAllSliceCo> findAllSlice(
+      @RequestBody @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
+    return roleService.findAllSlice(roleFindAllSliceCmd);
   }
 
   @Operation(summary = "根据id归档角色")

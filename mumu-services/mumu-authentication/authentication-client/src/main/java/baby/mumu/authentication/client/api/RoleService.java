@@ -19,10 +19,13 @@ import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 角色功能API
@@ -61,6 +64,13 @@ public interface RoleService {
    */
   Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
 
+  /**
+   * 分页查询角色（不查询总数）
+   *
+   * @param roleFindAllSliceCmd 分页查询角色指令
+   * @return 查询结果
+   */
+  Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd);
 
   /**
    * 根据id归档角色

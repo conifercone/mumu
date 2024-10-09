@@ -50,6 +50,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -177,6 +179,19 @@ public class RoleGatewayImpl implements RoleGateway {
     return new PageImpl<>(roleDoPage.getContent().stream()
         .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
         .toList(), pageRequest, roleDoPage.getTotalElements());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  @Transactional(rollbackFor = Exception.class)
+  public Slice<Role> findAllSlice(Role role, int pageNo, int pageSize) {
+    return roleConvertor.toDataObject(role).map(roleDo -> {
+      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      Slice<RoleDo> roleDoSlice = roleRepository.findAll(roleDo, pageRequest);
+      return new SliceImpl<>(roleDoSlice.getContent().stream()
+          .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
+          .toList(), pageRequest, roleDoSlice.hasNext());
+    }).orElse(new SliceImpl<>(new ArrayList<>()));
   }
 
   @Override

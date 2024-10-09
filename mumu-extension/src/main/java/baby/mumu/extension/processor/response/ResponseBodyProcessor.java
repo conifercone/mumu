@@ -39,6 +39,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -212,6 +213,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       }
       case ClientObject clientObject -> ResultResponse.success(clientObject);
       case Page<?> page -> ResultResponse.success(page);
+      case Slice<?> slice -> ResultResponse.success(slice);
       case null -> ResultResponse.success();
       default -> body;
     };
