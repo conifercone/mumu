@@ -18,6 +18,8 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
@@ -139,6 +141,13 @@ public class AuthorityConvertor {
         .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(
+      @Valid AuthorityArchivedFindAllSliceQueryCo authorityArchivedFindAllSliceQueryCo) {
+    return Optional.ofNullable(authorityArchivedFindAllSliceQueryCo)
+        .map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo)
@@ -187,10 +196,28 @@ public class AuthorityConvertor {
         });
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityArchivedFindAllSliceCo> toArchivedFindAllSliceCo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllSliceCo)
+        .map(authorityArchivedFindAllSliceCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      authorityArchivedFindAllSliceCo.getName()))
+              .ifPresent(authorityArchivedFindAllSliceCo::setName);
+          return authorityArchivedFindAllSliceCo;
+        });
+  }
+
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AuthorityArchivedDo> toArchivedDo(AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(AuthorityMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityArchivedDo> toArchivedDo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedDo);
   }
 
   @Contract("_ -> new")

@@ -18,6 +18,7 @@ package baby.mumu.authentication.client.api;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
@@ -25,6 +26,7 @@ import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
@@ -84,6 +86,15 @@ public interface AuthorityService {
    */
   Page<AuthorityArchivedFindAllCo> findArchivedAll(
       AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
+
+  /**
+   * 分页查询已归档权限（不查询总数）
+   *
+   * @param authorityArchivedFindAllSliceCmd 分页查询权限指令
+   * @return 查询结果
+   */
+  Slice<AuthorityArchivedFindAllSliceCo> findArchivedAllSlice(
+      AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
 
   /**
    * 根据id查询权限

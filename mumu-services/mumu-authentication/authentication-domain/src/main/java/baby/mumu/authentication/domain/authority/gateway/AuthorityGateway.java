@@ -70,6 +70,16 @@ public interface AuthorityGateway {
   Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize);
 
   /**
+   * 切片分页查询已归档的权限（不查询总数）
+   *
+   * @param authority 查询条件
+   * @param pageNo    页码
+   * @param pageSize  当前页数量
+   * @return 查询结果
+   */
+  Slice<Authority> findArchivedAllSlice(Authority authority, int pageNo, int pageSize);
+
+  /**
    * 分页查询已归档的权限
    *
    * @param authority 查询条件

@@ -15,8 +15,6 @@
  */
 package baby.mumu.authentication.infrastructure.authority.gatewayimpl;
 
-import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
-
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import baby.mumu.authentication.domain.role.Role;
@@ -25,7 +23,6 @@ import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConv
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo_;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
@@ -34,13 +31,10 @@ import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
@@ -52,7 +46,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -156,31 +149,28 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAll(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
     return new SliceImpl<>(authorityDoSlice.getContent().stream()
-        .flatMap(roleDataObject -> authorityConvertor.toEntity(roleDataObject).stream())
+        .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
         .toList(), pageRequest, authorityDoSlice.hasNext());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<Authority> findArchivedAllSlice(Authority authority, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAll(
+        authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
+        pageRequest);
+    return new SliceImpl<>(authorityArchivedDos.getContent().stream()
+        .flatMap(authorityArchivedDo -> authorityConvertor.toEntity(authorityArchivedDo).stream())
+        .toList(), pageRequest, authorityArchivedDos.hasNext());
   }
 
   @Override
   @API(status = Status.STABLE, since = "2.0.0")
   public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
-    Specification<AuthorityArchivedDo> authorityArchivedDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.code),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.name),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
-      Optional.ofNullable(authority.getId())
-          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityArchivedDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(AuthorityArchivedDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAll(
-        authorityArchivedDoSpecification,
+    Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAllPage(
+        authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(authorityConvertor::toEntity)

@@ -18,6 +18,7 @@ package baby.mumu.authentication.application.service;
 import baby.mumu.authentication.application.authority.executor.AuthorityAddCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityArchiveByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllCmdExe;
+import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllSliceCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllSliceCmdExe;
@@ -39,6 +40,7 @@ import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Bui
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
@@ -47,6 +49,7 @@ import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
@@ -91,6 +94,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe;
   private final AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe;
   private final AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe;
+  private final AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -101,7 +105,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe,
       AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe,
       AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe,
-      AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe) {
+      AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe,
+      AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -111,6 +116,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityRecoverFromArchiveByIdCmdExe = authorityRecoverFromArchiveByIdCmdExe;
     this.authorityArchivedFindAllCmdExe = authorityArchivedFindAllCmdExe;
     this.authorityFindAllSliceCmdExe = authorityFindAllSliceCmdExe;
+    this.authorityArchivedFindAllSliceCmdExe = authorityArchivedFindAllSliceCmdExe;
   }
 
   @Override
@@ -208,6 +214,12 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public Page<AuthorityArchivedFindAllCo> findArchivedAll(
       AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
     return authorityArchivedFindAllCmdExe.execute(authorityArchivedFindAllCmd);
+  }
+
+  @Override
+  public Slice<AuthorityArchivedFindAllSliceCo> findArchivedAllSlice(
+      AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
+    return authorityArchivedFindAllSliceCmdExe.execute(authorityArchivedFindAllSliceCmd);
   }
 
   @Override
