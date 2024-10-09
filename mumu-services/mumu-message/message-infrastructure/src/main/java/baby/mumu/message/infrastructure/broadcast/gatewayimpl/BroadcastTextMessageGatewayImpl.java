@@ -204,7 +204,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
 
   @Job(name = "删除ID为：%0 的广播消息归档数据")
   @DangerousOperation("根据ID删除ID为%0的广播消息归档数据定时任务")
-  protected void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .ifPresent(messageId -> {
           broadcastTextMessageArchivedRepository.deleteById(messageId);
