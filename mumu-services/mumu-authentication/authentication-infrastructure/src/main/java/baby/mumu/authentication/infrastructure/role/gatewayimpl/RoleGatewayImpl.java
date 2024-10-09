@@ -168,7 +168,11 @@ public class RoleGatewayImpl implements RoleGateway {
   public Slice<Role> findAllSlice(Role role, int pageNo, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
     Slice<RoleDo> roleDoSlice = roleRepository.findAll(
-        roleConvertor.toDataObject(role).orElseGet(RoleDo::new), pageRequest);
+        roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
+        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+                roleEntity.getAuthorities()))
+            .map(authorities -> authorities.stream().map(Authority::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
     return new SliceImpl<>(roleDoSlice.getContent().stream()
         .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
         .toList(), pageRequest, roleDoSlice.hasNext());

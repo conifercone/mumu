@@ -156,6 +156,7 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
+    //noinspection DuplicatedCode
     return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity).map(role -> {
       if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorities())) {
         role.setAuthorities(
@@ -169,7 +170,18 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo) {
-    return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity);
+    //noinspection DuplicatedCode
+    return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
+        .map(role -> {
+          if (CollectionUtils.isNotEmpty(roleFindAllSliceQueryCo.getAuthorities())) {
+            role.setAuthorities(
+                authorityRepository.findAllById(roleFindAllSliceQueryCo.getAuthorities()).stream()
+                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+                    .collect(
+                        Collectors.toList()));
+          }
+          return role;
+        });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
