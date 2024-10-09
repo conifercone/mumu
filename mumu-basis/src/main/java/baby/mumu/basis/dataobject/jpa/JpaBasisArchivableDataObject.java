@@ -36,7 +36,7 @@ public class JpaBasisArchivableDataObject extends JpaBasisDefaultDataObject impl
     ArchivableDataObject {
 
   @Serial
-  private static final long serialVersionUID = -6208186991995932595L;
+  private static final long serialVersionUID = -382042388255526616L;
 
   @Column(name = "archived", nullable = false)
   private Boolean archived;

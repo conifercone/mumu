@@ -43,7 +43,8 @@ import org.hibernate.Hibernate;
 public class AccountRoleDoId implements Serializable {
 
   @Serial
-  private static final long serialVersionUID = -5205915827488500348L;
+  private static final long serialVersionUID = -8007238455622220368L;
+
   @NotNull
   @Column(name = "user_id", nullable = false)
   private Long userId;

@@ -36,7 +36,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class OperationLogFindAllCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 2609860597257012459L;
+  private static final long serialVersionUID = 8882524074818907244L;
 
   /**
    * 唯一标识

@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 public class BroadcastTextMessageFindAllYouSendCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 2003211486094796833L;
+  private static final long serialVersionUID = -7258144172471088949L;
 
   private Long id;
 
