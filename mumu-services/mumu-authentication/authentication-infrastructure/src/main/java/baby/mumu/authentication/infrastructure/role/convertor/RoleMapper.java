@@ -109,4 +109,9 @@ public interface RoleMapper {
   default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
     CommonUtil.convertToAccountZone(roleFindAllCo);
   }
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget RoleFindAllSliceCo roleFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(roleFindAllSliceCo);
+  }
 }
