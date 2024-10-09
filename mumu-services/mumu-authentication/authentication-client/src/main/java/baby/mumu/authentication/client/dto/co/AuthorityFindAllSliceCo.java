@@ -17,12 +17,13 @@ package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.annotations.GenerateDescription;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 角色查询参数客户端对象（不查询总数）
+ * 权限查询客户端对象（不查询总数）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -30,14 +31,16 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @GenerateDescription
-public class RoleFindAllSliceQueryCo extends BaseClientObject {
+public class AuthorityFindAllSliceCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = -2227571313068045547L;
+  private static final long serialVersionUID = 2553928271064966162L;
 
   private Long id;
 
-  private String name;
-
+  @Size(max = 50, message = "{authority.code.validation.size}")
   private String code;
+
+  @Size(max = 200, message = "{authority.name.validation.size}")
+  private String name;
 }

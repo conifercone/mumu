@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 public class RoleFindAllSliceCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 7516717955832644542L;
+  private static final long serialVersionUID = 354147586039980402L;
+
 
   private Long id;
 

@@ -20,6 +20,8 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -119,6 +121,12 @@ public class AuthorityConvertor {
     return Optional.ofNullable(authorityFindAllQueryCo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(AuthorityFindAllSliceQueryCo authorityFindAllSliceQueryCo) {
+    return Optional.ofNullable(authorityFindAllSliceQueryCo)
+        .map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(AuthorityArchivedDo authorityArchivedDo) {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
@@ -152,6 +160,18 @@ public class AuthorityConvertor {
                       authorityFindAllCo.getName()))
               .ifPresent(authorityFindAllCo::setName);
           return authorityFindAllCo;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityFindAllSliceCo> toFindAllSliceCo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllSliceCo)
+        .map(authorityFindAllSliceCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      authorityFindAllSliceCo.getName()))
+              .ifPresent(authorityFindAllSliceCo::setName);
+          return authorityFindAllSliceCo;
         });
   }
 

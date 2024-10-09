@@ -20,13 +20,16 @@ import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 权限功能API
@@ -64,6 +67,14 @@ public interface AuthorityService {
    * @return 查询结果
    */
   Page<AuthorityFindAllCo> findAll(AuthorityFindAllCmd authorityFindAllCmd);
+
+  /**
+   * 分页查询权限（不查询总数）
+   *
+   * @param authorityFindAllSliceCmd 分页查询权限指令
+   * @return 查询结果
+   */
+  Slice<AuthorityFindAllSliceCo> findAllSlice(AuthorityFindAllSliceCmd authorityFindAllSliceCmd);
 
   /**
    * 分页查询已归档权限

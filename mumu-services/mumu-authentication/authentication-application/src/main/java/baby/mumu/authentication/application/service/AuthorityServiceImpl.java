@@ -20,6 +20,7 @@ import baby.mumu.authentication.application.authority.executor.AuthorityArchiveB
 import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllCmdExe;
+import baby.mumu.authentication.application.authority.executor.AuthorityFindAllSliceCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityUpdateCmdExe;
@@ -40,6 +41,7 @@ import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
@@ -47,6 +49,7 @@ import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.basis.annotations.RateLimiter;
@@ -64,6 +67,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,6 +90,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe;
   private final AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe;
   private final AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe;
+  private final AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -95,7 +100,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       AuthorityFindByIdCmdExe authorityFindByIdCmdExe,
       AuthorityArchiveByIdCmdExe authorityArchiveByIdCmdExe,
       AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe,
-      AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe) {
+      AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe,
+      AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -104,6 +110,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityArchiveByIdCmdExe = authorityArchiveByIdCmdExe;
     this.authorityRecoverFromArchiveByIdCmdExe = authorityRecoverFromArchiveByIdCmdExe;
     this.authorityArchivedFindAllCmdExe = authorityArchivedFindAllCmdExe;
+    this.authorityFindAllSliceCmdExe = authorityFindAllSliceCmdExe;
   }
 
   @Override
@@ -189,6 +196,12 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public Page<AuthorityFindAllCo> findAll(
       AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityFindAllCmdExe.execute(authorityFindAllCmd);
+  }
+
+  @Override
+  public Slice<AuthorityFindAllSliceCo> findAllSlice(
+      AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
+    return authorityFindAllSliceCmdExe.execute(authorityFindAllSliceCmd);
   }
 
   @Override

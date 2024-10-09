@@ -21,11 +21,13 @@ import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +37,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,6 +100,16 @@ public class AuthorityController {
   public Page<AuthorityFindAllCo> findAll(
       @RequestBody @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
+  }
+
+  @Operation(summary = "查询权限（不查询总数）")
+  @GetMapping("/findAllSlice")
+  @ResponseBody
+  @API(status = Status.STABLE, since = "2.2.0")
+  @RateLimiter
+  public Slice<AuthorityFindAllSliceCo> findAllSlice(
+      @RequestBody @Valid AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
+    return authorityService.findAllSlice(authorityFindAllSliceCmd);
   }
 
   @Operation(summary = "查询已归档权限")

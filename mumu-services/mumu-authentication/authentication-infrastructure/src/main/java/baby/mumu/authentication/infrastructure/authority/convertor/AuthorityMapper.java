@@ -20,6 +20,8 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -54,6 +56,9 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityFindAllQueryCo authorityFindAllQueryCo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  Authority toEntity(AuthorityFindAllSliceQueryCo authorityFindAllSliceQueryCo);
+
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
 
@@ -68,6 +73,9 @@ public interface AuthorityMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindAllCo toFindAllCo(Authority authority);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AuthorityFindAllSliceCo toFindAllSliceCo(Authority authority);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AuthorityArchivedFindAllCo toArchivedFindAllCo(Authority authority);
@@ -89,5 +97,11 @@ public interface AuthorityMapper {
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget AuthorityFindAllCo authorityFindAllCo) {
     CommonUtil.convertToAccountZone(authorityFindAllCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget AuthorityFindAllSliceCo authorityFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(authorityFindAllSliceCo);
   }
 }

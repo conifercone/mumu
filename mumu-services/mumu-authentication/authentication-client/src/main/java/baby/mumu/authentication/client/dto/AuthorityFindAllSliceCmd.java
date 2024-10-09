@@ -13,31 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.dto.co;
+package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.annotations.GenerateDescription;
-import baby.mumu.basis.client.dto.co.BaseClientObject;
-import java.io.Serial;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceQueryCo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 角色查询参数客户端对象（不查询总数）
+ * 权限查询指令（不查询总数）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@GenerateDescription
-public class RoleFindAllSliceQueryCo extends BaseClientObject {
+public class AuthorityFindAllSliceCmd {
 
-  @Serial
-  private static final long serialVersionUID = -2227571313068045547L;
-
-  private Long id;
-
-  private String name;
-
-  private String code;
+  @Valid
+  private AuthorityFindAllSliceQueryCo authorityFindAllSliceQueryCo;
+  @Min(value = 0, message = "{page.no.validation.min.size}")
+  private int pageNo = 0;
+  @Min(value = 1, message = "{page.size.validation.min.size}")
+  private int pageSize = 10;
 }

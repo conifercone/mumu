@@ -18,6 +18,7 @@ package baby.mumu.authentication.domain.authority.gateway;
 import baby.mumu.authentication.domain.authority.Authority;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 权限领域网关
@@ -57,6 +58,16 @@ public interface AuthorityGateway {
    * @return 查询结果
    */
   Page<Authority> findAll(Authority authority, int pageNo, int pageSize);
+
+  /**
+   * 切片分页查询权限（不查询总数）
+   *
+   * @param authority 查询条件
+   * @param pageNo    页码
+   * @param pageSize  当前页数量
+   * @return 查询结果
+   */
+  Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize);
 
   /**
    * 分页查询已归档的权限

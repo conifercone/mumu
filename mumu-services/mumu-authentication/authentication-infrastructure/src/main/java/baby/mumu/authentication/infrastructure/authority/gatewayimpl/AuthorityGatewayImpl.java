@@ -51,6 +51,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,6 +162,18 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         .filter(Optional::isPresent).map(Optional::get)
         .toList();
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize) {
+    return authorityConvertor.toDataObject(authority).map(authorityDo -> {
+      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAll(authorityDo, pageRequest);
+      return new SliceImpl<>(authorityDoSlice.getContent().stream()
+          .flatMap(roleDataObject -> authorityConvertor.toEntity(roleDataObject).stream())
+          .toList(), pageRequest, authorityDoSlice.hasNext());
+    }).orElse(new SliceImpl<>(new ArrayList<>()));
   }
 
   @Override
