@@ -55,7 +55,13 @@ message RoleFindAllGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  repeated int64 authorities = 4;
+  repeated RoleFindAllAuthorityGrpcCo authorities = 4;
+}
+
+message RoleFindAllAuthorityGrpcCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
 }
 
 message PageOfRoleFindAllGrpcCo {

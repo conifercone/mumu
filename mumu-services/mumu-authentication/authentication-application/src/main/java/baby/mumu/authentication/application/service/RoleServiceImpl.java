@@ -28,6 +28,7 @@ import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllAuthorityGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcQueryCo;
@@ -56,6 +57,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
@@ -236,7 +238,9 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
               .setId(Int64Value.of(roleFindAllCo.getId()))
               .setCode(StringValue.of(roleFindAllCo.getCode())).setName(
                   StringValue.of(roleFindAllCo.getName()))
-              .addAllAuthorities(roleFindAllCo.getAuthorities())
+              .addAllAuthorities(roleFindAllCo.getAuthorities().stream()
+                  .map(RoleServiceImpl::getRoleFindAllAuthorityGrpcCo).collect(
+                      Collectors.toList()))
               .build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());
@@ -245,6 +249,16 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     }
     responseObserver.onNext(builder.build());
     responseObserver.onCompleted();
+  }
+
+  @NotNull
+  private static RoleFindAllAuthorityGrpcCo getRoleFindAllAuthorityGrpcCo(
+      @NotNull RoleFindAllCo.RoleFindAllAuthorityCo roleFindAllAuthorityCo) {
+    return RoleFindAllAuthorityGrpcCo.newBuilder().setId(
+            Int64Value.of(roleFindAllAuthorityCo.getId()))
+        .setCode(StringValue.of(roleFindAllAuthorityCo.getCode())).setName(
+            StringValue.of(roleFindAllAuthorityCo.getName()))
+        .build();
   }
 
   @Override

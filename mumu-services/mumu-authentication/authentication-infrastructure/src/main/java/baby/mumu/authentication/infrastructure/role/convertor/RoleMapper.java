@@ -17,7 +17,6 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo4Desc;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
@@ -78,15 +77,9 @@ public interface RoleMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
-  @Mappings(value = {
-      @Mapping(target = RoleFindAllCo4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
 
-  @Mappings(value = {
-      @Mapping(target = RoleFindAllCo4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllSliceCo toFindAllSliceCo(Role role);
 
