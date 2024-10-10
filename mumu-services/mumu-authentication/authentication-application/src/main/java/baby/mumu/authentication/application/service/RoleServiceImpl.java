@@ -17,6 +17,8 @@ package baby.mumu.authentication.application.service;
 
 import baby.mumu.authentication.application.role.executor.RoleAddCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchiveByIdCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllSliceCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllSliceCmdExe;
@@ -37,12 +39,16 @@ import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
@@ -85,13 +91,17 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleArchiveByIdCmdExe roleArchiveByIdCmdExe;
   private final RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe;
   private final RoleFindAllSliceCmdExe roleFindAllSliceCmdExe;
+  private final RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe;
+  private final RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
       RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe,
       RoleArchiveByIdCmdExe roleArchiveByIdCmdExe,
       RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
-      RoleFindAllSliceCmdExe roleFindAllSliceCmdExe) {
+      RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
+      RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
+      RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
@@ -99,6 +109,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     this.roleArchiveByIdCmdExe = roleArchiveByIdCmdExe;
     this.roleRecoverFromArchiveByIdCmdExe = roleRecoverFromArchiveByIdCmdExe;
     this.roleFindAllSliceCmdExe = roleFindAllSliceCmdExe;
+    this.roleArchivedFindAllCmdExe = roleArchivedFindAllCmdExe;
+    this.roleArchivedFindAllSliceCmdExe = roleArchivedFindAllSliceCmdExe;
   }
 
   @Override
@@ -129,6 +141,18 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Transactional(rollbackFor = Exception.class)
   public Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleFindAllSliceCmdExe.execute(roleFindAllSliceCmd);
+  }
+
+  @Override
+  public Page<RoleArchivedFindAllCo> findArchivedAll(
+      RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    return roleArchivedFindAllCmdExe.execute(roleArchivedFindAllCmd);
+  }
+
+  @Override
+  public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+      RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    return roleArchivedFindAllSliceCmdExe.execute(roleArchivedFindAllSliceCmd);
   }
 
   @Override

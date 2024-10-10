@@ -16,6 +16,10 @@
 package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
@@ -207,10 +211,76 @@ public class RoleConvertor {
         });
   }
 
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Role> toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo) {
+    //noinspection DuplicatedCode
+    return Optional.ofNullable(roleArchivedFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity)
+        .map(role -> {
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllQueryCo.getAuthorities())) {
+            role.setAuthorities(
+                authorityRepository.findAllById(roleArchivedFindAllQueryCo.getAuthorities())
+                    .stream()
+                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+                    .collect(
+                        Collectors.toList()));
+          }
+          return role;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Role> toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo) {
+    //noinspection DuplicatedCode
+    return Optional.ofNullable(roleArchivedFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
+        .map(role -> {
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceQueryCo.getAuthorities())) {
+            role.setAuthorities(
+                authorityRepository.findAllById(roleArchivedFindAllSliceQueryCo.getAuthorities())
+                    .stream()
+                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+                    .collect(
+                        Collectors.toList()));
+          }
+          return role;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleArchivedFindAllCo> toArchivedFindAllCo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllCo)
+        .map(roleArchivedFindAllCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      roleArchivedFindAllCo.getName()))
+              .ifPresent(roleArchivedFindAllCo::setName);
+          return roleArchivedFindAllCo;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleArchivedFindAllSliceCo> toArchivedFindAllSliceCo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllSliceCo)
+        .map(roleArchivedFindAllSliceCo -> {
+          Optional.ofNullable(simpleTextTranslation).flatMap(
+                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+                      roleArchivedFindAllSliceCo.getName()))
+              .ifPresent(roleArchivedFindAllSliceCo::setName);
+          return roleArchivedFindAllSliceCo;
+        });
+  }
+
+
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<RoleArchivedDo> toArchivedDo(RoleDo roleDo) {
     return Optional.ofNullable(roleDo).map(RoleMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleArchivedDo> toArchivedDo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedDo);
   }
 
   @Contract("_ -> new")

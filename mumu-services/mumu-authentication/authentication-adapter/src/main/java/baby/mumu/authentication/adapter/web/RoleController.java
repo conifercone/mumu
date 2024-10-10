@@ -18,11 +18,15 @@ package baby.mumu.authentication.adapter.web;
 import baby.mumu.authentication.client.api.RoleService;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.basis.annotations.RateLimiter;
@@ -105,6 +109,26 @@ public class RoleController {
   public Slice<RoleFindAllSliceCo> findAllSlice(
       @RequestBody @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleService.findAllSlice(roleFindAllSliceCmd);
+  }
+
+  @Operation(summary = "查询已归档角色")
+  @GetMapping("/findArchivedAll")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Page<RoleArchivedFindAllCo> findArchivedAll(
+      @RequestBody @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    return roleService.findArchivedAll(roleArchivedFindAllCmd);
+  }
+
+  @Operation(summary = "查询已归档角色(不查询总数)")
+  @GetMapping("/findArchivedAllSlice")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+      @RequestBody @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
   }
 
   @Operation(summary = "根据id归档角色")

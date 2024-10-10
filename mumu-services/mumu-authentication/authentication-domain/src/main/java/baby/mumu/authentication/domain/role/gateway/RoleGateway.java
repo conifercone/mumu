@@ -70,6 +70,26 @@ public interface RoleGateway {
   Slice<Role> findAllSlice(Role role, int pageNo, int pageSize);
 
   /**
+   * 切片分页查询已归档的角色（不查询总数）
+   *
+   * @param role     查询条件
+   * @param pageNo   页码
+   * @param pageSize 当前页数量
+   * @return 查询结果
+   */
+  Slice<Role> findArchivedAllSlice(Role role, int pageNo, int pageSize);
+
+  /**
+   * 分页查询已归档的角色
+   *
+   * @param role     查询条件
+   * @param pageNo   页码
+   * @param pageSize 每页数量
+   * @return 查询结果
+   */
+  Page<Role> findArchivedAll(Role role, int pageNo, int pageSize);
+
+  /**
    * 查询角色(包含指定权限)
    *
    * @param authorityId 权限id

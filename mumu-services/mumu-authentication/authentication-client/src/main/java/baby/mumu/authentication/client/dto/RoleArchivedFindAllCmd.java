@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.provider;
+package baby.mumu.authentication.client.dto;
 
-import jakarta.validation.constraints.NotNull;
-import java.util.concurrent.TimeUnit;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllQueryCo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import lombok.Data;
 
 /**
- * 限流基本信息自动生成提供者接口
+ * 查询已归档角色指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.1.0
+ * @since 2.2.0
  */
-public interface RateLimitingCustomGenerateProvider {
+@Data
+public class RoleArchivedFindAllCmd {
 
-  /**
-   * 生成令牌
-   *
-   * @return 生成结果
-   */
-  @NotNull
-  RateLimitingCustomGenerate generate();
-
-  record RateLimitingCustomGenerate(int capacity, long period, TimeUnit timeUnit) {
-
-  }
+  @Valid
+  private RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo;
+  @Min(value = 0, message = "{page.no.validation.min.size}")
+  private int pageNo = 0;
+  @Min(value = 1, message = "{page.size.validation.min.size}")
+  private int pageSize = 10;
 }

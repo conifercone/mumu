@@ -16,6 +16,10 @@
 package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
@@ -74,6 +78,18 @@ public interface RoleMapper {
   @Mappings(value = {
       @Mapping(target = Role4Desc.authorities, ignore = true)
   })
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo);
+
+  @Mappings(value = {
+      @Mapping(target = Role4Desc.authorities, ignore = true)
+  })
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo);
+
+  @Mappings(value = {
+      @Mapping(target = Role4Desc.authorities, ignore = true)
+  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
@@ -83,11 +99,20 @@ public interface RoleMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllSliceCo toFindAllSliceCo(Role role);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedFindAllCo toArchivedFindAllCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedFindAllSliceCo toArchivedFindAllSliceCo(Role role);
+
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
   RoleArchivedDo toArchivedDo(RoleDo roleDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedDo toArchivedDo(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
   RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
@@ -106,5 +131,17 @@ public interface RoleMapper {
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget RoleFindAllSliceCo roleFindAllSliceCo) {
     CommonUtil.convertToAccountZone(roleFindAllSliceCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(roleArchivedFindAllSliceCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
+    CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
   }
 }

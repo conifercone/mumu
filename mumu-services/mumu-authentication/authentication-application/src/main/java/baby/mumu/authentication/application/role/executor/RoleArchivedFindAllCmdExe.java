@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -30,33 +30,34 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色查询指令执行器
+ * 已归档角色查询指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Component
-@Observed(name = "RoleFindAllCmdExe")
-public class RoleFindAllCmdExe {
+@Observed(name = "RoleArchivedFindAllCmdExe")
+public class RoleArchivedFindAllCmdExe {
 
   private final RoleGateway roleGateway;
   private final RoleConvertor roleConvertor;
 
   @Autowired
-  public RoleFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+  public RoleArchivedFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
     this.roleGateway = roleGateway;
     this.roleConvertor = roleConvertor;
   }
 
-  public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllQueryCo())
+  public Page<RoleArchivedFindAllCo> execute(
+      @NotNull RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    Role role = roleConvertor.toEntity(roleArchivedFindAllCmd.getRoleArchivedFindAllQueryCo())
         .orElseGet(Role::new);
-    Page<Role> roles = roleGateway.findAll(role,
-        roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
-    List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
-        .map(roleConvertor::toFindAllCo)
+    Page<Role> roles = roleGateway.findArchivedAll(role,
+        roleArchivedFindAllCmd.getPageNo(), roleArchivedFindAllCmd.getPageSize());
+    List<RoleArchivedFindAllCo> roleArchivedFindAllCos = roles.getContent().stream()
+        .map(roleConvertor::toArchivedFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(roleFindAllCoList, roles.getPageable(),
+    return new PageImpl<>(roleArchivedFindAllCos, roles.getPageable(),
         roles.getTotalElements());
   }
 }

@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -25,38 +25,40 @@ import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色查询指令执行器
+ * 已归档角色查询指令执行器（不查询总数）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Component
-@Observed(name = "RoleFindAllCmdExe")
-public class RoleFindAllCmdExe {
+@Observed(name = "RoleArchivedFindAllSliceCmdExe")
+public class RoleArchivedFindAllSliceCmdExe {
 
   private final RoleGateway roleGateway;
   private final RoleConvertor roleConvertor;
 
   @Autowired
-  public RoleFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+  public RoleArchivedFindAllSliceCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
     this.roleGateway = roleGateway;
     this.roleConvertor = roleConvertor;
   }
 
-  public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllQueryCo())
+  public Slice<RoleArchivedFindAllSliceCo> execute(
+      @NotNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    Role role = roleConvertor.toEntity(
+            roleArchivedFindAllSliceCmd.getRoleArchivedFindAllSliceQueryCo())
         .orElseGet(Role::new);
-    Page<Role> roles = roleGateway.findAll(role,
-        roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
-    List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
-        .map(roleConvertor::toFindAllCo)
+    Slice<Role> roles = roleGateway.findArchivedAllSlice(role,
+        roleArchivedFindAllSliceCmd.getPageNo(), roleArchivedFindAllSliceCmd.getPageSize());
+    List<RoleArchivedFindAllSliceCo> roleArchivedFindAllSliceCos = roles.getContent().stream()
+        .map(roleConvertor::toArchivedFindAllSliceCo)
         .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(roleFindAllCoList, roles.getPageable(),
-        roles.getTotalElements());
+    return new SliceImpl<>(roleArchivedFindAllSliceCos, roles.getPageable(),
+        roles.hasNext());
   }
 }

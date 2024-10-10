@@ -30,7 +30,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色权限指令执行器（不查询总数）
+ * 角色查询指令执行器（不查询总数）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

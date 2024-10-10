@@ -25,6 +25,7 @@ import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityR
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
@@ -176,6 +177,38 @@ public class RoleGatewayImpl implements RoleGateway {
     return new SliceImpl<>(roleDoSlice.getContent().stream()
         .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
         .toList(), pageRequest, roleDoSlice.hasNext());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  @Transactional(rollbackFor = Exception.class)
+  public Slice<Role> findArchivedAllSlice(Role role, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Slice<RoleArchivedDo> roleArchivedDos = roleArchivedRepository.findAllSlice(
+        roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
+        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+                roleEntity.getAuthorities()))
+            .map(authorities -> authorities.stream().map(Authority::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
+    return new SliceImpl<>(roleArchivedDos.getContent().stream()
+        .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
+        .toList(), pageRequest, roleArchivedDos.hasNext());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  @Transactional(rollbackFor = Exception.class)
+  public Page<Role> findArchivedAll(Role role, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<RoleArchivedDo> roleArchivedDoPage = roleArchivedRepository.findAllPage(
+        roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
+        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+                roleEntity.getAuthorities()))
+            .map(authorities -> authorities.stream().map(Authority::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
+    return new PageImpl<>(roleArchivedDoPage.getContent().stream()
+        .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
+        .toList(), pageRequest, roleArchivedDoPage.getTotalElements());
   }
 
   @Override

@@ -17,11 +17,15 @@ package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import org.springframework.data.domain.Page;
@@ -71,6 +75,23 @@ public interface RoleService {
    * @return 查询结果
    */
   Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd);
+
+  /**
+   * 分页查询已归档角色
+   *
+   * @param roleArchivedFindAllCmd 分页查询已归档角色指令
+   * @return 查询结果
+   */
+  Page<RoleArchivedFindAllCo> findArchivedAll(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
+
+  /**
+   * 分页查询已归档角色（不查询总数）
+   *
+   * @param roleArchivedFindAllSliceCmd 分页查询已归档角色指令
+   * @return 查询结果
+   */
+  Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+      RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   /**
    * 根据id归档角色

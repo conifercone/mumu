@@ -13,28 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.provider;
+package baby.mumu.authentication.client.dto.co;
 
-import jakarta.validation.constraints.NotNull;
-import java.util.concurrent.TimeUnit;
+import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.client.dto.co.BaseClientObject;
+import java.io.Serial;
+import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 限流基本信息自动生成提供者接口
+ * 已归档角色查询参数客户端对象（不查询总数）
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.1.0
+ * @since 2.2.0
  */
-public interface RateLimitingCustomGenerateProvider {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@GenerateDescription
+public class RoleArchivedFindAllSliceQueryCo extends BaseClientObject {
 
-  /**
-   * 生成令牌
-   *
-   * @return 生成结果
-   */
-  @NotNull
-  RateLimitingCustomGenerate generate();
+  @Serial
+  private static final long serialVersionUID = 7776109015628647538L;
 
-  record RateLimitingCustomGenerate(int capacity, long period, TimeUnit timeUnit) {
+  private Long id;
 
-  }
+  private String name;
+
+  private String code;
+
+  private List<Long> authorities;
 }
