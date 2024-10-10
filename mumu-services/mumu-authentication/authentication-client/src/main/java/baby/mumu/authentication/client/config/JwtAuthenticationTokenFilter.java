@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -52,7 +53,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-  private static final String TOKEN_HEADER = "Authorization";
   private static final String TOKEN_START = "Bearer ";
   JwtDecoder jwtDecoder;
   TokenGrpcService tokenGrpcService;
@@ -70,7 +70,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       @NotNull FilterChain filterChain) throws ServletException, IOException {
     MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
         request);
-    String authHeader = mumuHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
+    String authHeader = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
     SecurityContextUtil.getLoginAccountLanguage()
         .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
             Locale.of(languageEnum.name())));
