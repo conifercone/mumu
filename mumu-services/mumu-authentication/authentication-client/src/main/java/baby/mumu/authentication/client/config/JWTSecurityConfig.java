@@ -19,6 +19,7 @@ import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
+import java.util.ArrayList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,12 @@ public class JWTSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
       TokenGrpcService tokenGrpcService) throws Exception {
     //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
@@ -88,7 +93,8 @@ public class JWTSecurityConfig {
                     )))
         .csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
     http.addFilterBefore(new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
         UsernamePasswordAuthenticationFilter.class);
     return http.build();

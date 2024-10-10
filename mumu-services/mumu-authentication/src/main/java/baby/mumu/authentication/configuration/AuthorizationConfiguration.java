@@ -140,8 +140,12 @@ public class AuthorizationConfiguration {
       PasswordEncoder passwordEncoder)
       throws Exception {
     //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
@@ -205,7 +209,8 @@ public class AuthorizationConfiguration {
                     resourceServerProperties
                 )));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
 
     return http.build();
   }

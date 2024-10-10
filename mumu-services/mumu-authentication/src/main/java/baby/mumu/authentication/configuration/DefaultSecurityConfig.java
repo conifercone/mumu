@@ -23,6 +23,7 @@ import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
+import java.util.ArrayList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,12 @@ public class DefaultSecurityConfig {
       ResourceServerProperties resourceServerProperties)
       throws Exception {
     //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
@@ -80,7 +85,8 @@ public class DefaultSecurityConfig {
       }
     }
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])))
         .authorizeHttpRequests((authorize) -> authorize
             .anyRequest().authenticated()
         )
