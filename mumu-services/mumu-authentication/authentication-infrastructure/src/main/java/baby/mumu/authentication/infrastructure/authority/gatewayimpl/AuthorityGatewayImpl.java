@@ -146,7 +146,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAll(
+    Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAllSlice(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
     return new SliceImpl<>(authorityDoSlice.getContent().stream()
         .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
@@ -157,7 +157,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Authority> findArchivedAllSlice(Authority authority, int pageNo, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAll(
+    Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAllSlice(
         authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);
     return new SliceImpl<>(authorityArchivedDos.getContent().stream()

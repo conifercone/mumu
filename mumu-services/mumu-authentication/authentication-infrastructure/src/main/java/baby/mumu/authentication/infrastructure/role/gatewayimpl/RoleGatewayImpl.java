@@ -167,7 +167,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   public Slice<Role> findAllSlice(Role role, int pageNo, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Slice<RoleDo> roleDoSlice = roleRepository.findAll(
+    Slice<RoleDo> roleDoSlice = roleRepository.findAllSlice(
         roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
                 roleEntity.getAuthorities()))

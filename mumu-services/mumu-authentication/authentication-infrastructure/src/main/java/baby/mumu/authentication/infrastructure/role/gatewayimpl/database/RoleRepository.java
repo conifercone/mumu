@@ -75,7 +75,7 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
       + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
       + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
       + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
-  Slice<RoleDo> findAll(@Param("roleDo") RoleDo roleDo,
+  Slice<RoleDo> findAllSlice(@Param("roleDo") RoleDo roleDo,
       @Param("authoritiesIds") List<Long> authoritiesIds, Pageable pageable);
 
   /**

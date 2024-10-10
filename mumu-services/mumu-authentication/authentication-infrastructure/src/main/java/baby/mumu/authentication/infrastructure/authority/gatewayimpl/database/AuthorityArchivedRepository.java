@@ -68,7 +68,7 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
       "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
           + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
           + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
-  Slice<AuthorityArchivedDo> findAll(
+  Slice<AuthorityArchivedDo> findAllSlice(
       @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
 
   /**

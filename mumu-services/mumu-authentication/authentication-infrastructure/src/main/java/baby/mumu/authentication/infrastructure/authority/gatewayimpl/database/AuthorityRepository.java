@@ -78,7 +78,7 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
       "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
           + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
           + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
-  Slice<AuthorityDo> findAll(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
+  Slice<AuthorityDo> findAllSlice(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
 
   /**
    * 分页查询权限（查询总数）
