@@ -46,7 +46,7 @@ public class ConditionalAspect extends AbstractAspect {
     return Optional.ofNullable(getMethodAnnotation(joinPoint, Conditional.class))
         .map(conditional -> ConditionalExecutor.of(
                 applicationContext.getBean(conditional.value()).matches())
-            .orElse(() -> {
+            .orElseGet(() -> {
               try {
                 return joinPoint.proceed();
               } catch (Throwable e) {
