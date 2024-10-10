@@ -35,8 +35,8 @@ public abstract class BaseClientObject implements ClientObject {
   /**
    * 创建时间
    */
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
   private OffsetDateTime creationTime;
 
   /**
@@ -52,8 +52,8 @@ public abstract class BaseClientObject implements ClientObject {
   /**
    * 修改时间
    */
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
   private OffsetDateTime modificationTime;
 
   /**
