@@ -112,7 +112,9 @@ public class AccountConvertor {
       Account account = new Account(
           accountRegisterClientObject.getId() == null ?
               primaryKeyGrpcService.snowflake()
-              : accountRegisterClientObject.getId(), accountRegisterClientObject.getUsername(),
+              : Optional.of(accountRegisterClientObject.getId()).filter(id -> id != 0).orElseThrow(
+                  () -> new MuMuException(ResultCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0)),
+          accountRegisterClientObject.getUsername(),
           accountRegisterClientObject.getPassword(),
           roleRepository.findByCodeIn(accountRegisterClientObject.getRoleCodes()).stream()
               .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
