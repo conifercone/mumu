@@ -16,21 +16,17 @@
 package baby.mumu.log.infrastructure.system.convertor;
 
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo4Desc;
 import baby.mumu.log.client.dto.co.SystemLogFindAllQueryCo;
 import baby.mumu.log.client.dto.co.SystemLogSaveCo;
-import baby.mumu.log.client.dto.co.SystemLogSaveCo4Desc;
 import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
 import baby.mumu.log.domain.system.SystemLog;
-import baby.mumu.log.domain.system.SystemLog4Desc;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -39,7 +35,7 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SystemLogMapper {
 
   SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
@@ -50,53 +46,21 @@ public interface SystemLogMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogEsDo toEsDataObject(SystemLog systemLog);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLog4Desc.id, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordTime, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSubmitCo systemLogSubmitCo);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSaveCo systemLogSaveCo);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogEsDo systemLogEsDo);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLog4Desc.recordEndTime, ignore = true),
-      @Mapping(target = SystemLog4Desc.recordStartTime, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogFindAllQueryCo systemLogFindAllQueryCo);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLogFindAllCo4Desc.creationTime, ignore = true),
-      @Mapping(target = SystemLogFindAllCo4Desc.founder, ignore = true),
-      @Mapping(target = SystemLogFindAllCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SystemLogFindAllCo4Desc.modifier, ignore = true),
-      @Mapping(target = SystemLogFindAllCo4Desc.archived, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
 
-  @Mappings(value = {
-      @Mapping(target = SystemLogSaveCo4Desc.creationTime, ignore = true),
-      @Mapping(target = SystemLogSaveCo4Desc.founder, ignore = true),
-      @Mapping(target = SystemLogSaveCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SystemLogSaveCo4Desc.modifier, ignore = true),
-      @Mapping(target = SystemLogSaveCo4Desc.archived, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);
 }

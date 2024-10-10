@@ -16,17 +16,14 @@
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo4Desc;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
-import baby.mumu.unique.domain.captcha.SimpleCaptcha4Desc;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -35,7 +32,7 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CaptchaMapper {
 
   CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
@@ -43,27 +40,12 @@ public interface CaptchaMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaDo toDataObject(SimpleCaptcha simpleCaptcha);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptcha4Desc.source, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptcha4Desc.length, ignore = true),
-      @Mapping(target = SimpleCaptcha4Desc.target, ignore = true),
-      @Mapping(target = SimpleCaptcha4Desc.ttl, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaVerifyCo simpleCaptchaVerifyCo);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.creationTime, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.founder, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modifier, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.archived, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);
 }

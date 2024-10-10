@@ -42,5 +42,5 @@ public class RoleArchivedFindAllSliceQueryCo extends BaseClientObject {
 
   private String code;
 
-  private List<Long> authorities;
+  private List<Long> authorityIds;
 }

@@ -70,7 +70,7 @@ public class RoleControllerTest {
     roleAddCo.setId(451235432L);
     roleAddCo.setName("测试角色");
     roleAddCo.setCode("test_code");
-    roleAddCo.setAuthorities(Arrays.asList(1L, 2L));
+    roleAddCo.setAuthorityIds(Arrays.asList(1L, 2L));
     roleAddCmd.setRoleAddCo(roleAddCo);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/role/add").with(csrf())

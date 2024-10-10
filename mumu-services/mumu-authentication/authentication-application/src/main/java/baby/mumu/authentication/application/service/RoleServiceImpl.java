@@ -179,7 +179,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleAddCo.setId(roleAddGrpcCo.hasId() ? roleAddGrpcCo.getId().getValue() : null);
     roleAddCo.setCode(roleAddGrpcCo.hasCode() ? roleAddGrpcCo.getCode().getValue() : null);
     roleAddCo.setName(roleAddGrpcCo.hasName() ? roleAddGrpcCo.getName().getValue() : null);
-    roleAddCo.setAuthorities(roleAddGrpcCo.getAuthoritiesList());
+    roleAddCo.setAuthorityIds(roleAddGrpcCo.getAuthoritiesList());
     return roleAddCo;
   }
 
@@ -209,7 +209,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     roleUpdateCo.setId(roleUpdateGrpcCo.hasId() ? roleUpdateGrpcCo.getId().getValue() : null);
     roleUpdateCo.setCode(roleUpdateGrpcCo.hasCode() ? roleUpdateGrpcCo.getCode().getValue() : null);
     roleUpdateCo.setName(roleUpdateGrpcCo.hasName() ? roleUpdateGrpcCo.getName().getValue() : null);
-    roleUpdateCo.setAuthorities(roleUpdateGrpcCo.getAuthoritiesList());
+    roleUpdateCo.setAuthorityIds(roleUpdateGrpcCo.getAuthoritiesList());
     return roleUpdateCo;
   }
 

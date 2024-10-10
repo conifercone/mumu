@@ -22,9 +22,7 @@ import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRe
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo.AccountAddressUpdateByIdCo;
 import baby.mumu.authentication.domain.account.Account;
-import baby.mumu.authentication.domain.account.Account4Desc;
 import baby.mumu.authentication.domain.account.AccountAddress;
-import baby.mumu.authentication.domain.account.AccountAddress4Desc;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
@@ -33,10 +31,9 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -45,16 +42,11 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AccountMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.addresses, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
@@ -64,38 +56,21 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDo toDataObject(AccountAddress accountAddress);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressRegisterCo accountAddressRegisterCo);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressUpdateByIdCo accountAddressUpdateByIdCo);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
 

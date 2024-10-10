@@ -123,7 +123,7 @@ public class RoleConvertor {
         roleAddClientObject.setId(role.getId());
       }
       role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-              roleAddClientObject.getAuthorities()).stream()
+              roleAddClientObject.getAuthorityIds()).stream()
           .map(authorityConvertor::toEntity)
           .filter(Optional::isPresent).map(Optional::get)
           .collect(Collectors.toList()));
@@ -146,7 +146,7 @@ public class RoleConvertor {
             || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new MuMuException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
         }
-        Optional.ofNullable(roleUpdateClientObject.getAuthorities())
+        Optional.ofNullable(roleUpdateClientObject.getAuthorityIds())
             .ifPresent(authorities -> roleDomain.setAuthorities(
                 authorityRepository.findAuthorityDoByIdIn(
                         authorities).stream()
@@ -162,9 +162,9 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity).map(role -> {
-      if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorities())) {
+      if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorityIds())) {
         role.setAuthorities(
-            authorityRepository.findAllById(roleFindAllQueryCo.getAuthorities()).stream()
+            authorityRepository.findAllById(roleFindAllQueryCo.getAuthorityIds()).stream()
                 .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream()).collect(
                     Collectors.toList()));
       }
@@ -177,9 +177,9 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleFindAllSliceQueryCo.getAuthorities())) {
+          if (CollectionUtils.isNotEmpty(roleFindAllSliceQueryCo.getAuthorityIds())) {
             role.setAuthorities(
-                authorityRepository.findAllById(roleFindAllSliceQueryCo.getAuthorities()).stream()
+                authorityRepository.findAllById(roleFindAllSliceQueryCo.getAuthorityIds()).stream()
                     .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
                     .collect(
                         Collectors.toList()));
@@ -217,9 +217,9 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllQueryCo.getAuthorities())) {
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllQueryCo.getAuthorityIds())) {
             role.setAuthorities(
-                authorityRepository.findAllById(roleArchivedFindAllQueryCo.getAuthorities())
+                authorityRepository.findAllById(roleArchivedFindAllQueryCo.getAuthorityIds())
                     .stream()
                     .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
                     .collect(
@@ -234,9 +234,9 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceQueryCo.getAuthorities())) {
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceQueryCo.getAuthorityIds())) {
             role.setAuthorities(
-                authorityRepository.findAllById(roleArchivedFindAllSliceQueryCo.getAuthorities())
+                authorityRepository.findAllById(roleArchivedFindAllSliceQueryCo.getAuthorityIds())
                     .stream()
                     .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
                     .collect(

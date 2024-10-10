@@ -26,7 +26,6 @@ import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.domain.role.Role4Desc;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
@@ -34,10 +33,9 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -46,50 +44,29 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleDo roleDo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCo roleAddCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleFindAllQueryCo roleFindAllQueryCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.2.0")
   Role toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.2.0")
   Role toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.2.0")
   Role toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
@@ -118,9 +95,6 @@ public interface RoleMapper {
   RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   Role toEntity(RoleArchivedDo roleArchivedDo);
 
   @AfterMapping
