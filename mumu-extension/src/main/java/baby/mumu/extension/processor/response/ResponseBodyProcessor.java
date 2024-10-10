@@ -42,6 +42,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -127,6 +128,24 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     return ResultResponse.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
         validationException.getMessage()
             .substring(validationException.getMessage().indexOf(": ") + 2));
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResultResponse<?> handleException(
+      @NotNull HttpMessageNotReadableException httpMessageNotReadableException,
+      @NotNull HttpServletResponse response) {
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    LOGGER.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setSystemLogSubmitCo(
+            SystemLogSubmitGrpcCo.newBuilder()
+                .setContent(httpMessageNotReadableException.getMessage())
+                .setCategory("httpMessageNotReadableException")
+                .setFail(ExceptionUtils.getStackTrace(httpMessageNotReadableException)).build())
+        .build());
+    return ResultResponse.failure(ResultCode.PARAMS_IS_INVALID);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
