@@ -15,6 +15,8 @@
  */
 package baby.mumu.basis.response;
 
+import jakarta.annotation.Nullable;
+
 /**
  * 基础响应顶级接口
  *
@@ -36,4 +38,12 @@ public interface BaseResultInterface {
    * @return 错误描述
    */
   String getResultMsg();
+
+  /**
+   * 错误描述
+   *
+   * @param args 参数
+   * @return 错误描述
+   */
+  String getResultMsg(@Nullable Object[] args);
 }

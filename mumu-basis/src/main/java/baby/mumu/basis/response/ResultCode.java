@@ -20,6 +20,7 @@ import baby.mumu.basis.kotlin.tools.SpringContextUtil;
 import java.util.Locale;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -117,8 +118,17 @@ public enum ResultCode implements BaseResultInterface {
 
   @Override
   public @NotNull String getResultMsg() {
+    return getMessage(null);
+  }
+
+  @Override
+  public @NotNull String getResultMsg(@Nullable Object[] args) {
+    return getMessage(args);
+  }
+
+  private @NotNull String getMessage(@Nullable Object[] args) {
     return SpringContextUtil.getBean(MessageSource.class)
-        .map(messageSource -> messageSource.getMessage(getResultCode(), null,
+        .map(messageSource -> messageSource.getMessage(getResultCode(), args,
             SecurityContextUtil.getLoginAccountLanguage()
                 .map(languageEnum -> Locale.of(languageEnum.name()))
                 .orElse(LocaleContextHolder.getLocale()))).orElse(getResultCode());
