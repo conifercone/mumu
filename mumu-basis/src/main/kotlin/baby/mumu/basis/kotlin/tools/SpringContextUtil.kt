@@ -16,8 +16,10 @@
 package baby.mumu.basis.kotlin.tools
 
 import org.springframework.beans.BeansException
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
+import java.util.*
 
 /**
  * spring上下文工具类
@@ -57,14 +59,24 @@ class SpringContextUtil : ApplicationContextAware {
          *
          * @param <T>   泛型
          * @param clazz class
-         * @return 当前bean
+         * @return 当前bean，包装为 Optional
          */
         @JvmStatic
-        @Suppress("UNCHECKED_CAST")
-        fun <T : Any> getBean(clazz: Class<T>): T {
-            return BEAN_CLASS_CACHE.computeIfAbsent(
-                clazz
-            ) { getApplicationContext()!!.getBean(clazz) } as T
+        fun <T : Any> getBean(clazz: Class<T>): Optional<T> {
+            return try {
+                // 使用 computeIfAbsent，获取不到的情况通过异常处理
+                val bean = BEAN_CLASS_CACHE.computeIfAbsent(clazz) {
+                    getApplicationContext()?.getBean(clazz) ?: throw NoSuchBeanDefinitionException(
+                        clazz
+                    )
+                }
+                @Suppress("UNCHECKED_CAST")
+                Optional.of(bean as T)
+            } catch (e: NoSuchBeanDefinitionException) {
+                Optional.empty()
+            } catch (e: Exception) {
+                Optional.empty()
+            }
         }
     }
 }

@@ -104,7 +104,6 @@ public enum ResultCode implements BaseResultInterface {
   THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS(6035),
   UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP(6036);
   private final Integer code;
-  private final MessageSource messageSource = SpringContextUtil.getBean(MessageSource.class);
 
   ResultCode(int code) {
     this.code = code;
@@ -118,9 +117,10 @@ public enum ResultCode implements BaseResultInterface {
 
   @Override
   public @NotNull String getResultMsg() {
-    return messageSource.getMessage(getResultCode(), null,
-        SecurityContextUtil.getLoginAccountLanguage()
-            .map(languageEnum -> Locale.of(languageEnum.name()))
-            .orElse(LocaleContextHolder.getLocale()));
+    return SpringContextUtil.getBean(MessageSource.class)
+        .map(messageSource -> messageSource.getMessage(getResultCode(), null,
+            SecurityContextUtil.getLoginAccountLanguage()
+                .map(languageEnum -> Locale.of(languageEnum.name()))
+                .orElse(LocaleContextHolder.getLocale()))).orElse(getResultCode());
   }
 }
