@@ -50,10 +50,10 @@ public interface AccountMapper {
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AccountDo accountDo, @MappingTarget Account account);
+  Account toEntity(AccountDo accountDo);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  void toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo, @MappingTarget Account account);
+  Account toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
@@ -71,7 +71,7 @@ public interface AccountMapper {
   AccountDo toDataObject(Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
+  Account toEntity(AccountRegisterCo accountRegisterCo);
 
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressRegisterCo accountAddressRegisterCo);

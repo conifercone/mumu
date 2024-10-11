@@ -86,15 +86,10 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountDo accountDo) {
     return Optional.ofNullable(accountDo).map(accountDataObject -> {
-      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
-          accountDataObject.getPassword(),
-          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
-          accountDataObject.getCredentialsNonExpired(),
-          accountDataObject.getAccountNonLocked(),
-          accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
-              .flatMap(accountRoleDo -> roleConvertor.toEntity(accountRoleDo.getRole()).stream())
-              .collect(Collectors.toList()));
-      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
+      Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
+      account.setRoles(accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
+          .flatMap(accountRoleDo -> roleConvertor.toEntity(accountRoleDo.getRole()).stream())
+          .collect(Collectors.toList()));
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
@@ -106,13 +101,7 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toBasicInfoEntity(AccountDo accountDo) {
     return Optional.ofNullable(accountDo).map(accountDataObject -> {
-      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
-          accountDataObject.getPassword(),
-          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
-          accountDataObject.getCredentialsNonExpired(),
-          accountDataObject.getAccountNonLocked(),
-          null);
-      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
+      Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
@@ -123,16 +112,7 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo) {
-    return Optional.ofNullable(accountBasicInfoRedisDo).map(accountDataObject -> {
-      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
-          accountDataObject.getPassword(),
-          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
-          accountDataObject.getCredentialsNonExpired(),
-          accountDataObject.getAccountNonLocked(),
-          null);
-      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
-      return account;
-    });
+    return Optional.ofNullable(accountBasicInfoRedisDo).map(AccountMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -150,17 +130,16 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountRegisterCo accountRegisterCo) {
     return Optional.ofNullable(accountRegisterCo).map(accountRegisterClientObject -> {
-      Account account = new Account(
-          accountRegisterClientObject.getId() == null ?
-              primaryKeyGrpcService.snowflake()
-              : Optional.of(accountRegisterClientObject.getId()).filter(id -> id != 0).orElseThrow(
-                  () -> new MuMuException(ResultCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0)),
-          accountRegisterClientObject.getUsername(),
-          accountRegisterClientObject.getPassword(),
+      Account account = AccountMapper.INSTANCE.toEntity(accountRegisterClientObject);
+      Optional.ofNullable(account.getId()).ifPresentOrElse(id -> {
+        if (id == 0) {
+          throw new MuMuException(ResultCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
+        }
+      }, () -> account.setId(primaryKeyGrpcService.snowflake()));
+      account.setRoles(
           roleRepository.findByCodeIn(accountRegisterClientObject.getRoleCodes()).stream()
               .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
               .collect(Collectors.toList()));
-      AccountMapper.INSTANCE.toEntity(accountRegisterClientObject, account);
       Optional.ofNullable(account.getAddresses())
           .filter(CollectionUtils::isNotEmpty)
           .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {

@@ -35,11 +35,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -55,6 +55,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @GenerateDescription
+@Data
+@SuperBuilder(toBuilder = true)
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Serial
@@ -63,13 +65,11 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 账户id
    */
-  @Getter
   private Long id;
 
   /**
    * 账户名
    */
-  @Setter
   private String username;
 
   /**
@@ -100,73 +100,49 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 账户角色
    */
-  @Getter
-  @Setter
   private List<Role> roles;
 
   /**
    * 头像地址
    */
-  @Getter
-  @Setter
   private String avatarUrl;
 
   /**
    * 电话
    */
-  @Getter
-  @Setter
   private String phone;
 
   /**
    * 性别
    */
-  @Getter
-  @Setter
   private SexEnum sex;
 
   /**
    * 电子邮件
    */
-  @Getter
-  @Setter
   private String email;
 
   /**
    * 时区
    */
-  @Getter
-  @Setter
   private String timezone;
 
   /**
    * 语言偏好
    */
-  @Getter
-  @Setter
   private LanguageEnum language;
 
   /**
    * 生日
    */
-  @Getter
-  @Setter
   private LocalDate birthday;
 
   /**
    * 地址
    */
-  @Setter
-  @Getter
   private List<AccountAddress> addresses;
 
-  @Setter
   private Collection<Authority> authorities;
-
-  /**
-   * 年龄
-   */
-  private final int age = 0;
 
   public Account(Long id, String username, String password, List<Role> roles) {
     this.id = id;
