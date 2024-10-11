@@ -75,7 +75,7 @@ import org.jetbrains.annotations.NotNull;
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
-@SupportedOptions({"gradle.version", "os.name", "java.version", "project.version"})
+@SupportedOptions({"gradle.version", "os.name", "java.version", "project.version", "project.name"})
 public class MetamodelGenerator extends AbstractProcessor {
 
   private Messager messager;
@@ -89,6 +89,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   private String javaVersion;
   private String osName;
   private String projectVersion;
+  private String projectName;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -102,6 +103,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     javaVersion = processingEnv.getOptions().get("java.version");
     osName = processingEnv.getOptions().get("os.name");
     projectVersion = processingEnv.getOptions().get("project.version");
+    projectName = processingEnv.getOptions().get("project.name");
     messager.printMessage(Diagnostic.Kind.NOTE, "🐏 MuMu Entity Metamodel Generator");
   }
 
@@ -186,6 +188,27 @@ public class MetamodelGenerator extends AbstractProcessor {
   private void generateFields(@NotNull Element annotatedElement, String packageName,
       String entityName,
       Builder builder) {
+    GenerateDescription annotation = annotatedElement.getAnnotation(GenerateDescription.class);
+    if (annotation.projectVersion()) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
+          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+          .initializer("$S", projectVersion)
+          .addJavadoc(String.format(
+              "@see %s.%s {@link %s}",
+              packageName, entityName, GenerateDescription.class.getName()))
+          .build();
+      builder.addField(fieldSpec);
+    }
+    if (annotation.projectName()) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectNameFiledName())
+          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+          .initializer("$S", projectName)
+          .addJavadoc(String.format(
+              "@see %s.%s {@link %s}",
+              packageName, entityName, GenerateDescription.class.getName()))
+          .build();
+      builder.addField(fieldSpec);
+    }
     List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(

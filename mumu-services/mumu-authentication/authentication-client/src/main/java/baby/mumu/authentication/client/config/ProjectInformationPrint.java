@@ -13,35 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.annotations;
+package baby.mumu.authentication.client.config;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import baby.mumu.basis.annotations.GenerateDescription;
+import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 描述信息生成注解
+ * 项目信息打印
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.4
+ * @since 2.2.0
  */
-@Documented
-@Inherited
-@Target({ElementType.TYPE})
-@Retention(RUNTIME)
-public @interface GenerateDescription {
+@GenerateDescription(projectVersion = true, projectName = true)
+public class ProjectInformationPrint {
 
-  CustomDescription[] customs() default {};
+  private final Logger LOGGER = LoggerFactory.getLogger(ProjectInformationPrint.class);
 
-  boolean projectVersion() default false;
-
-  String projectVersionFiledName() default "projectVersion";
-
-  boolean projectName() default false;
-
-  String projectNameFiledName() default "projectName";
+  @PostConstruct
+  public void run() {
+    LOGGER.info(":: {} :: {}", ProjectInformationPrint4Desc.projectName,
+        ProjectInformationPrint4Desc.projectVersion);
+  }
 }

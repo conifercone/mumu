@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     implementation(project(":mumu-basis"))
+    annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.web)
     implementation(libs.spring.cloud.starter.consul.discovery)
     api(libs.protobuf.java)

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.unique.client;
+package baby.mumu.log.client.config;
 
-import baby.mumu.unique.client.api.CaptchaGrpcService;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
+import baby.mumu.log.client.api.OperationLogGrpcService;
+import baby.mumu.log.client.api.SystemLogGrpcService;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -24,23 +24,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 唯一数据服务客户端配置
+ * 日志客户端配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Configuration
-public class UniqueClientConfiguration {
+public class LogClientConfiguration {
 
   @Bean
-  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
+  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new OperationLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public CaptchaGrpcService captchaGrpcService(DiscoveryClient discoveryClient,
+  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new CaptchaGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new SystemLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+  }
+
+  @Bean
+  public ProjectInformationPrint logClientProjectInformationPrint() {
+    return new ProjectInformationPrint();
   }
 }

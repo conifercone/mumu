@@ -109,6 +109,7 @@ subprojects {
                         "-Aos.name=${System.getProperty("os.name")}",
                         "-Ajava.version=${System.getProperty("java.version")}",
                         "-Aproject.version=${project.version}",
+                        "-Aproject.name=${project.name}",
                     )
                 )
             } else {

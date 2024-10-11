@@ -13,33 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.file.client.config;
+package baby.mumu.message.client.config;
 
-import baby.mumu.file.client.api.StreamFileGrpcService;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * api配置类
+ * 消息客户端配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.1
+ * @since 2.2.0
  */
 @Configuration
-public class FileClientConfiguration {
+public class MessageClientConfiguration {
 
   @Bean
-  public StreamFileGrpcService streamFileGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new StreamFileGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
-  }
-
-  @Bean
-  public ProjectInformationPrint fileClientProjectInformationPrint() {
+  public ProjectInformationPrint messageClientProjectInformationPrint() {
     return new ProjectInformationPrint();
   }
-
 }

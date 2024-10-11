@@ -37,4 +37,8 @@ public class MailClientConfiguration {
     return new TemplateMailGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
+  @Bean
+  public ProjectInformationPrint mailClientProjectInformationPrint() {
+    return new ProjectInformationPrint();
+  }
 }

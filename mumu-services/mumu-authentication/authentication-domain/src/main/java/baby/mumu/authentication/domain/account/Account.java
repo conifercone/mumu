@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -78,21 +79,25 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 是否启用
    */
+  @Builder.Default
   private Boolean enabled = true;
 
   /**
    * 凭证未过期
    */
+  @Builder.Default
   private Boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
+  @Builder.Default
   private Boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
+  @Builder.Default
   private Boolean accountNonExpired = true;
 
   /**

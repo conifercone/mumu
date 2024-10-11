@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.client;
+package baby.mumu.unique.client.config;
 
-import baby.mumu.log.client.api.OperationLogGrpcService;
-import baby.mumu.log.client.api.SystemLogGrpcService;
+import baby.mumu.unique.client.api.CaptchaGrpcService;
+import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -24,23 +24,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 日志客户端配置类
+ * 唯一数据服务客户端配置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Configuration
-public class LogClientConfiguration {
+public class UniqueClientConfiguration {
 
   @Bean
-  public OperationLogGrpcService operationLogGrpcService(DiscoveryClient discoveryClient,
+  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new OperationLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public SystemLogGrpcService systemLogGrpcService(DiscoveryClient discoveryClient,
+  public CaptchaGrpcService captchaGrpcService(DiscoveryClient discoveryClient,
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new SystemLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new CaptchaGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+  }
+
+  @Bean
+  public ProjectInformationPrint uniqueClientProjectInformationPrint() {
+    return new ProjectInformationPrint();
   }
 }
