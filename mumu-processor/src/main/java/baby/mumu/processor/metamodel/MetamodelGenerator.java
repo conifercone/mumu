@@ -234,26 +234,24 @@ public class MetamodelGenerator extends AbstractProcessor {
         });
       });
     }
-    if (annotation != null) {
-      GenerateDescription generateDescription = annotatedElement.getAnnotation(
-          GenerateDescription.class);
-      CustomDescription[] customs = generateDescription.customs();
-      for (CustomDescription custom : customs) {
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer("$S", custom.value())
-            .addJavadoc(String.format(
-                "@see %s.%s {@link %s}",
-                packageName, entityName, GenerateDescription.class.getName()))
-            .build();
-        builder.addField(fieldSpec);
-      }
+    GenerateDescription generateDescription = annotatedElement.getAnnotation(
+        GenerateDescription.class);
+    CustomDescription[] customs = generateDescription.customs();
+    for (CustomDescription custom : customs) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
+          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+          .initializer("$S", custom.value())
+          .addJavadoc(String.format(
+              "@see %s.%s {@link %s}",
+              packageName, entityName, GenerateDescription.class.getName()))
+          .build();
+      builder.addField(fieldSpec);
     }
   }
 
   private void generateBasicProjectInformation(String packageName, String entityName,
       Builder builder,
-      GenerateDescription annotation) {
+      @NotNull GenerateDescription annotation) {
     if (annotation.projectVersion()) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
           .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
