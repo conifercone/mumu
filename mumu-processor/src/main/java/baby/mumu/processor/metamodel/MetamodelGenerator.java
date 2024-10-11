@@ -189,26 +189,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       String entityName,
       Builder builder) {
     GenerateDescription annotation = annotatedElement.getAnnotation(GenerateDescription.class);
-    if (annotation.projectVersion()) {
-      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
-          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-          .initializer("$S", projectVersion)
-          .addJavadoc(String.format(
-              "@see %s.%s {@link %s}",
-              packageName, entityName, GenerateDescription.class.getName()))
-          .build();
-      builder.addField(fieldSpec);
-    }
-    if (annotation.projectName()) {
-      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectNameFiledName())
-          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-          .initializer("$S", projectName)
-          .addJavadoc(String.format(
-              "@see %s.%s {@link %s}",
-              packageName, entityName, GenerateDescription.class.getName()))
-          .build();
-      builder.addField(fieldSpec);
-    }
+    generateBasicProjectInformation(packageName, entityName, builder, annotation);
     List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
     Set<String> collect = fields.stream()
         .map(variableElement -> variableElement.getSimpleName().toString()).collect(
@@ -253,7 +234,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         });
       });
     }
-    if (annotatedElement.getAnnotation(GenerateDescription.class) != null) {
+    if (annotation != null) {
       GenerateDescription generateDescription = annotatedElement.getAnnotation(
           GenerateDescription.class);
       CustomDescription[] customs = generateDescription.customs();
@@ -267,6 +248,31 @@ public class MetamodelGenerator extends AbstractProcessor {
             .build();
         builder.addField(fieldSpec);
       }
+    }
+  }
+
+  private void generateBasicProjectInformation(String packageName, String entityName,
+      Builder builder,
+      GenerateDescription annotation) {
+    if (annotation.projectVersion()) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
+          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+          .initializer("$S", projectVersion)
+          .addJavadoc(String.format(
+              "@see %s.%s {@link %s}",
+              packageName, entityName, GenerateDescription.class.getName()))
+          .build();
+      builder.addField(fieldSpec);
+    }
+    if (annotation.projectName()) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectNameFiledName())
+          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+          .initializer("$S", projectName)
+          .addJavadoc(String.format(
+              "@see %s.%s {@link %s}",
+              packageName, entityName, GenerateDescription.class.getName()))
+          .build();
+      builder.addField(fieldSpec);
     }
   }
 
