@@ -37,11 +37,31 @@ public @interface GenerateDescription {
 
   CustomDescription[] customs() default {};
 
+  /**
+   * 是否生成项目版本号
+   *
+   * @since 2.2.0
+   */
   boolean projectVersion() default false;
 
+  /**
+   * 项目版本号字段名
+   *
+   * @since 2.2.0
+   */
   String projectVersionFiledName() default "projectVersion";
 
+  /**
+   * 是否生成项目名
+   *
+   * @since 2.2.0
+   */
   boolean projectName() default false;
 
+  /**
+   * 项目名字段名
+   *
+   * @since 2.2.0
+   */
   String projectNameFiledName() default "projectName";
 }
