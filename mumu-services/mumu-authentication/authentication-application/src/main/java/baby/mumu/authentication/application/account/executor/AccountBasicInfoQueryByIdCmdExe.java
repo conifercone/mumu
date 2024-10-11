@@ -15,38 +15,41 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 查询当前登录账户信息指令执行器
+ * 根据ID查询账户基本信息指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Component
-@Observed(name = "AccountCurrentLoginQueryCmdExe")
-public class AccountCurrentLoginQueryCmdExe {
+@Observed(name = "AccountBasicInfoQueryByIdCmdExe")
+public class AccountBasicInfoQueryByIdCmdExe {
 
   private final AccountGateway accountGateway;
   private final AccountConvertor accountConvertor;
 
   @Autowired
-  public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway,
+  public AccountBasicInfoQueryByIdCmdExe(AccountGateway accountGateway,
       AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
-  public AccountCurrentLoginCo execute() {
-    return accountGateway.queryCurrentLoginAccount()
-        .flatMap(accountConvertor::toCurrentLoginQueryCo)
+  public AccountBasicInfoCo execute(AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
+    return Optional.ofNullable(accountBasicInfoByIdCmd).map(AccountBasicInfoByIdCmd::getId)
+        .flatMap(accountGateway::getAccountBasicInfoById)
+        .flatMap(accountConvertor::toBasicInfoCo)
         .orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

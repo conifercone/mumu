@@ -16,7 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -26,6 +27,7 @@ import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountBasicInfoRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -50,11 +52,17 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountDo accountDo, @MappingTarget Account account);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  void toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo, @MappingTarget Account account);
+
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDo toDataObject(AccountAddress accountAddress);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountBasicInfoRedisDo toAccountBasicInfoRedisDo(Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
@@ -75,7 +83,10 @@ public interface AccountMapper {
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
+  AccountCurrentLoginCo toCurrentLoginQueryCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountBasicInfoCo toBasicInfoCo(Account account);
 
   @API(status = Status.STABLE, since = "1.0.4")
   AccountArchivedDo toArchivedDo(AccountDo accountDo);
@@ -85,7 +96,13 @@ public interface AccountMapper {
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountCurrentLoginQueryCo accountCurrentLoginQueryCo) {
-    CommonUtil.convertToAccountZone(accountCurrentLoginQueryCo);
+      @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
+    CommonUtil.convertToAccountZone(accountCurrentLoginCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
+    CommonUtil.convertToAccountZone(accountBasicInfoCo);
   }
 }

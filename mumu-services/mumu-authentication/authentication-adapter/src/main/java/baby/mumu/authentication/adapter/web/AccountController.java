@@ -18,6 +18,7 @@ package baby.mumu.authentication.adapter.web;
 import baby.mumu.authentication.client.api.AccountService;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
@@ -27,7 +28,8 @@ import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
@@ -106,7 +108,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
+  public AccountCurrentLoginCo queryCurrentLoginAccount() {
     return accountService.queryCurrentLoginAccount();
   }
 
@@ -186,5 +188,15 @@ public class AccountController {
   public void addAddress(
       @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
     accountService.addAddress(accountAddAddressCmd);
+  }
+
+  @Operation(summary = "根据id查询账户基本信息")
+  @GetMapping("/getAccountBasicInfoById")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public AccountBasicInfoCo getAccountBasicInfoById(
+      @RequestBody @Valid AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
+    return accountService.getAccountBasicInfoById(accountBasicInfoByIdCmd);
   }
 }

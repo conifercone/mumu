@@ -24,6 +24,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountBasicInfoRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
@@ -82,6 +83,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountAddressRepository accountAddressRepository;
   private final JobScheduler jobScheduler;
   private final AccountRoleRepository accountRoleRepository;
+  private final AccountBasicInfoRedisRepository accountBasicInfoRedisRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -92,7 +94,8 @@ public class AccountGatewayImpl implements AccountGateway {
       ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
       AccountArchivedRepository accountArchivedRepository,
       AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
-      AccountRoleRepository accountRoleRepository) {
+      AccountRoleRepository accountRoleRepository,
+      AccountBasicInfoRedisRepository accountBasicInfoRedisRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -105,6 +108,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountAddressRepository = accountAddressRepository;
     this.jobScheduler = jobScheduler;
     this.accountRoleRepository = accountRoleRepository;
+    this.accountBasicInfoRedisRepository = accountBasicInfoRedisRepository;
   }
 
   @Override
@@ -135,6 +139,7 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
+      accountBasicInfoRedisRepository.deleteById(account.getId());
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
               accountAddresses -> accountAddresses.stream()
                   .flatMap(accountAddress -> accountConvertor.toDataObject(accountAddress).stream())
@@ -184,6 +189,7 @@ public class AccountGatewayImpl implements AccountGateway {
                     accountAddressRepository.mergeAll(accountAddressDos);
                   });
               accountRepository.merge(accountDo);
+              accountBasicInfoRedisRepository.deleteById(accountId);
             }), () -> {
           throw new MuMuException(ResultCode.UNAUTHORIZED);
         });
@@ -213,6 +219,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRepository.merge(accountDo);
       tokenRepository.deleteById(id);
       refreshTokenRepository.deleteById(id);
+      accountBasicInfoRedisRepository.deleteById(id);
     }, () -> {
       throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -244,6 +251,7 @@ public class AccountGatewayImpl implements AccountGateway {
           ResultCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getResultMsg());
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
+      accountBasicInfoRedisRepository.deleteById(accountDo.getId());
     }, () -> {
       throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -260,6 +268,7 @@ public class AccountGatewayImpl implements AccountGateway {
       tokenRepository.deleteById(accountId);
       refreshTokenRepository.deleteById(accountId);
       accountRoleRepository.deleteByAccountId(accountId);
+      accountBasicInfoRedisRepository.deleteById(accountId);
     }, () -> {
       throw new MuMuException(ResultCode.UNAUTHORIZED);
     });
@@ -299,6 +308,7 @@ public class AccountGatewayImpl implements AccountGateway {
               .findAny().orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST)))
           .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED));
       accountRepository.merge(newAccountDo);
+      accountBasicInfoRedisRepository.deleteById(newAccountDo.getId());
     } else {
       throw new MuMuException(ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
@@ -314,6 +324,7 @@ public class AccountGatewayImpl implements AccountGateway {
           accountArchivedDo.setArchived(true);
           accountArchivedRepository.persist(accountArchivedDo);
           accountRepository.deleteById(accountArchivedDo.getId());
+          accountBasicInfoRedisRepository.deleteById(accountArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -351,6 +362,20 @@ public class AccountGatewayImpl implements AccountGateway {
                 accountAddressDo -> accountRepository.findById(accountId).ifPresent(accountDo -> {
                   accountAddressDo.setUserId(accountId);
                   accountAddressRepository.persist(accountAddressDo);
+                  accountBasicInfoRedisRepository.deleteById(accountId);
                 })));
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Optional<Account> getAccountBasicInfoById(Long id) {
+    return Optional.ofNullable(id).flatMap(accountBasicInfoRedisRepository::findById)
+        .flatMap(accountConvertor::toEntity).or(() -> {
+          Optional<Account> account = accountRepository.findById(id)
+              .flatMap(accountConvertor::toBasicInfoEntity);
+          account.flatMap(accountConvertor::toAccountBasicInfoRedisDo)
+              .ifPresent(accountBasicInfoRedisRepository::save);
+          return account;
+        });
   }
 }

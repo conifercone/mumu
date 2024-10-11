@@ -17,6 +17,7 @@ package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
@@ -26,7 +27,8 @@ import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 
 /**
@@ -70,7 +72,7 @@ public interface AccountService {
    *
    * @return 当前登录账户信息
    */
-  AccountCurrentLoginQueryCo queryCurrentLoginAccount();
+  AccountCurrentLoginCo queryCurrentLoginAccount();
 
   /**
    * 查询当前在线账户数量
@@ -114,6 +116,13 @@ public interface AccountService {
    * @param accountArchiveByIdCmd 根据id归档账户指令
    */
   void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd);
+
+  /**
+   * 根据id查询账户基本信息
+   *
+   * @param accountBasicInfoByIdCmd 根据id查询账户基本信息指令
+   */
+  AccountBasicInfoCo getAccountBasicInfoById(AccountBasicInfoByIdCmd accountBasicInfoByIdCmd);
 
   /**
    * 通过id从归档中恢复

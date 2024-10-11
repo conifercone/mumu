@@ -142,4 +142,12 @@ public interface AccountGateway {
    * @param accountAddress 账户地址
    */
   void addAddress(AccountAddress accountAddress);
+
+  /**
+   * 获取账户基本信息（不包含账户角色及角色权限信息）
+   *
+   * @param id 账户ID
+   * @return 账户基本信息
+   */
+  Optional<Account> getAccountBasicInfoById(Long id);
 }

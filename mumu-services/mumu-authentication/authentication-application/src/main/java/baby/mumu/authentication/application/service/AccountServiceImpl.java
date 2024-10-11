@@ -17,6 +17,7 @@ package baby.mumu.authentication.application.service;
 
 import baby.mumu.authentication.application.account.executor.AccountAddAddressCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountArchiveByIdCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountBasicInfoQueryByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
@@ -41,6 +42,7 @@ import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
@@ -50,7 +52,8 @@ import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountDisableCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
@@ -101,6 +104,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountArchiveByIdCmdExe accountArchiveByIdCmdExe;
   private final AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe;
   private final AccountAddAddressCmdExe accountAddAddressCmdExe;
+  private final AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -114,7 +118,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountChangePasswordCmdExe accountChangePasswordCmdExe,
       AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
       AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe,
-      AccountAddAddressCmdExe accountAddAddressCmdExe) {
+      AccountAddAddressCmdExe accountAddAddressCmdExe,
+      AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -128,6 +133,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountArchiveByIdCmdExe = accountArchiveByIdCmdExe;
     this.accountRecoverFromArchiveByIdCmdExe = accountRecoverFromArchiveByIdCmdExe;
     this.accountAddAddressCmdExe = accountAddAddressCmdExe;
+    this.accountBasicInfoQueryByIdCmdExe = accountBasicInfoQueryByIdCmdExe;
   }
 
   @Override
@@ -336,7 +342,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountCurrentLoginQueryCo queryCurrentLoginAccount() {
+  public AccountCurrentLoginCo queryCurrentLoginAccount() {
     return accountCurrentLoginQueryCmdExe.execute();
   }
 
@@ -373,6 +379,13 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd) {
     accountArchiveByIdCmdExe.execute(accountArchiveByIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public AccountBasicInfoCo getAccountBasicInfoById(
+      AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
+    return accountBasicInfoQueryByIdCmdExe.execute(accountBasicInfoByIdCmd);
   }
 
   @Override

@@ -16,7 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
@@ -28,6 +29,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountBasicInfoRedisDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
@@ -101,9 +103,48 @@ public class AccountConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Account> toBasicInfoEntity(AccountDo accountDo) {
+    return Optional.ofNullable(accountDo).map(accountDataObject -> {
+      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
+          accountDataObject.getPassword(),
+          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
+          accountDataObject.getCredentialsNonExpired(),
+          accountDataObject.getAccountNonLocked(),
+          null);
+      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
+      account.setAddresses(
+          accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+              AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+      return account;
+    });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Account> toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo) {
+    return Optional.ofNullable(accountBasicInfoRedisDo).map(accountDataObject -> {
+      Account account = new Account(accountDataObject.getId(), accountDataObject.getUsername(),
+          accountDataObject.getPassword(),
+          accountDataObject.getEnabled(), accountDataObject.getAccountNonExpired(),
+          accountDataObject.getCredentialsNonExpired(),
+          accountDataObject.getAccountNonLocked(),
+          null);
+      AccountMapper.INSTANCE.toEntity(accountDataObject, account);
+      return account;
+    });
+  }
+
+  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AccountDo> toDataObject(Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toDataObject);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountBasicInfoRedisDo> toAccountBasicInfoRedisDo(Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountBasicInfoRedisDo);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -185,9 +226,15 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AccountCurrentLoginQueryCo> toCurrentLoginQueryCo(
+  public Optional<AccountCurrentLoginCo> toCurrentLoginQueryCo(
       Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountBasicInfoCo> toBasicInfoCo(
+      Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toBasicInfoCo);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")

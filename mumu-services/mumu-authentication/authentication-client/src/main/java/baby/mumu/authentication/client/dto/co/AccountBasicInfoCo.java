@@ -18,7 +18,6 @@ package baby.mumu.authentication.client.dto.co;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
-import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,44 +25,91 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 查询当前登录账户信息客户端对象
+ * 账户基本信息客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AccountCurrentLoginQueryCo extends BaseClientObject {
+public class AccountBasicInfoCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = -1195373340664104308L;
+  private static final long serialVersionUID = -6255187696908573035L;
 
+  /**
+   * 账户id
+   */
   private Long id;
 
+  /**
+   * 账户名
+   */
   private String username;
 
+  /**
+   * 已启用
+   */
+  private Boolean enabled;
+
+  /**
+   * 凭证未过期
+   */
+  private Boolean credentialsNonExpired;
+
+  /**
+   * 帐户未锁定
+   */
+  private Boolean accountNonLocked;
+
+  /**
+   * 帐号未过期
+   */
+  private Boolean accountNonExpired;
+
+  /**
+   * 头像地址
+   */
   private String avatarUrl;
 
+  /**
+   * 手机号
+   */
   private String phone;
 
+  /**
+   * 性别
+   */
   private SexEnum sex;
 
+  /**
+   * 电子邮箱
+   */
   private String email;
 
+  /**
+   * 时区
+   */
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   private LanguageEnum language;
 
+  /**
+   * 出生日期
+   */
   private LocalDate birthday;
 
-  private int age;
+  /**
+   * 地址
+   */
+  private List<AccountAddressBasicInfoDo> addresses;
 
-  private List<AccountRoleCurrentLoginQueryCo> roles;
-
-  private List<AccountAddressCurrentLoginQueryCo> addresses;
 
   @Data
-  public static class AccountAddressCurrentLoginQueryCo {
+  public static class AccountAddressBasicInfoDo {
 
     /**
      * 唯一主键
@@ -71,76 +117,33 @@ public class AccountCurrentLoginQueryCo extends BaseClientObject {
     private Long id;
 
     /**
+     * 账户ID
+     */
+    private Long userId;
+
+    /**
      * 街道地址，包含门牌号和街道信息
      */
-    @Size(max = 255)
     private String street;
 
     /**
      * 城市信息
      */
-    @Size(max = 100)
     private String city;
 
     /**
      * 州或省的信息
      */
-    @Size(max = 100)
     private String state;
 
     /**
      * 邮政编码
      */
-    @Size(max = 20)
     private String postalCode;
 
     /**
      * 国家信息
      */
-    @Size(max = 100)
     private String country;
-  }
-
-  @Data
-  public static class AccountRoleCurrentLoginQueryCo {
-
-    /**
-     * 角色id
-     */
-    private Long id;
-
-    /**
-     * 角色编码
-     */
-    private String code;
-
-    /**
-     * 角色名称
-     */
-    private String name;
-
-    /**
-     * 角色权限
-     */
-    private List<AccountRoleAuthorityCurrentLoginQueryCo> authorities;
-  }
-
-  @Data
-  public static class AccountRoleAuthorityCurrentLoginQueryCo {
-
-    /**
-     * 权限id
-     */
-    private Long id;
-
-    /**
-     * 权限编码
-     */
-    private String code;
-
-    /**
-     * 权限名称
-     */
-    private String name;
   }
 }
