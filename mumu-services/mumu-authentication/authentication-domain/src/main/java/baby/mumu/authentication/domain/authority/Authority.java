@@ -17,7 +17,6 @@ package baby.mumu.authentication.domain.authority;
 
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
@@ -38,7 +37,6 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@JsonDeserialize
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor

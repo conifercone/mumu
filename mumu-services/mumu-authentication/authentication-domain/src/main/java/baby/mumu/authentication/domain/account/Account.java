@@ -23,7 +23,6 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.Period;
@@ -49,7 +48,6 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@JsonDeserialize
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -141,28 +139,6 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 地址
    */
   private List<AccountAddress> addresses;
-
-  private Collection<Authority> authorities;
-
-  public Account(Long id, String username, String password, List<Role> roles) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.roles = roles;
-  }
-
-  public Account(Long id, String username, String password, Boolean enabled,
-      Boolean accountNonExpired,
-      Boolean credentialsNonExpired, Boolean accountNonLocked, List<Role> roles) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.enabled = enabled;
-    this.accountNonExpired = accountNonExpired;
-    this.credentialsNonExpired = credentialsNonExpired;
-    this.roles = roles;
-    this.accountNonLocked = accountNonLocked;
-  }
 
   @Override
   public Collection<Authority> getAuthorities() {

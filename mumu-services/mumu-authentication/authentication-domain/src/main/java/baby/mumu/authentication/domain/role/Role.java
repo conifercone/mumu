@@ -19,7 +19,6 @@ import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.basis.annotations.GenerateDescription;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serial;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -40,7 +39,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@JsonDeserialize
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
