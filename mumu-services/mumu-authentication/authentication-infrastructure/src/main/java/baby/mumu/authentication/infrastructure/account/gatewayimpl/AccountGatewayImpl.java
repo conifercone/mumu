@@ -142,7 +142,8 @@ public class AccountGatewayImpl implements AccountGateway {
       accountBasicInfoRedisRepository.deleteById(account.getId());
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
               accountAddresses -> accountAddresses.stream()
-                  .flatMap(accountAddress -> accountConvertor.toDataObject(accountAddress).stream())
+                  .flatMap(accountAddress -> accountConvertor.toAccountAddressDo(accountAddress)
+                      .stream())
                   .collect(
                       Collectors.toList())).filter(CollectionUtils::isNotEmpty)
           .ifPresent(accountAddressRepository::persistAll);
@@ -184,7 +185,8 @@ public class AccountGatewayImpl implements AccountGateway {
               Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
                   .ifPresent(accountAddresses -> {
                     List<AccountAddressDo> accountAddressDos = accountAddresses.stream().flatMap(
-                            accountAddress -> accountConvertor.toDataObject(accountAddress).stream())
+                            accountAddress -> accountConvertor.toAccountAddressDo(accountAddress)
+                                .stream())
                         .collect(Collectors.toList());
                     accountAddressRepository.mergeAll(accountAddressDos);
                   });
@@ -357,7 +359,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void addAddress(AccountAddress accountAddress) {
     SecurityContextUtil.getLoginAccountId().ifPresent(
-        accountId -> Optional.ofNullable(accountAddress).flatMap(accountConvertor::toDataObject)
+        accountId -> Optional.ofNullable(accountAddress)
+            .flatMap(accountConvertor::toAccountAddressDo)
             .ifPresent(
                 accountAddressDo -> accountRepository.findById(accountId).ifPresent(accountDo -> {
                   accountAddressDo.setUserId(accountId);

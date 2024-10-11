@@ -250,9 +250,9 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AccountAddressDo> toDataObject(
+  public Optional<AccountAddressDo> toAccountAddressDo(
       AccountAddress accountAddress) {
-    return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toDataObject);
+    return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressDo);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")

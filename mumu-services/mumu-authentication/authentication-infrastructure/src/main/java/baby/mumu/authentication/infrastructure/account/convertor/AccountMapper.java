@@ -59,7 +59,7 @@ public interface AccountMapper {
   AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressDo toDataObject(AccountAddress accountAddress);
+  AccountAddressDo toAccountAddressDo(AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountBasicInfoRedisDo toAccountBasicInfoRedisDo(Account account);
