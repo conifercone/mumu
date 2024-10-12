@@ -72,6 +72,9 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   AuthorityRedisDo toAuthorityRedisDo(Authority authority);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  AuthorityDo toDataObject(AuthorityRedisDo authorityRedisDo);
+
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo);
 

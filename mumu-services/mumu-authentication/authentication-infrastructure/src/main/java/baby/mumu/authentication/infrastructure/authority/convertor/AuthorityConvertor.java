@@ -145,6 +145,11 @@ public class AuthorityConvertor {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toAuthorityRedisDo);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityDo> toDataObject(AuthorityRedisDo authorityRedisDo) {
+    return Optional.ofNullable(authorityRedisDo).map(AuthorityMapper.INSTANCE::toDataObject);
+  }
+
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(
       @Valid AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo) {

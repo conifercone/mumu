@@ -25,9 +25,12 @@ import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
+import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDoId;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
@@ -68,13 +71,15 @@ public class RoleConvertor {
   private final SimpleTextTranslation simpleTextTranslation;
   private final RoleArchivedRepository roleArchivedRepository;
   private final RoleAuthorityRepository roleAuthorityRepository;
+  private final AuthorityRedisRepository authorityRedisRepository;
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
       AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
       ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
       RoleArchivedRepository roleArchivedRepository,
-      RoleAuthorityRepository roleAuthorityRepository) {
+      RoleAuthorityRepository roleAuthorityRepository,
+      AuthorityRedisRepository authorityRedisRepository) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
@@ -82,6 +87,7 @@ public class RoleConvertor {
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.roleArchivedRepository = roleArchivedRepository;
     this.roleAuthorityRepository = roleAuthorityRepository;
+    this.authorityRedisRepository = authorityRedisRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -89,11 +95,47 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
-      role.setAuthorities(roleAuthorityRepository.findByRoleId(role.getId()).stream().flatMap(
-              roleAuthorityDo -> authorityConvertor.toEntity(roleAuthorityDo.getAuthority()).stream())
-          .collect(Collectors.toList()));
+      List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
+          .map(RoleAuthorityDo::getId)
+          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
+      setAuthorities(role, authorityIds);
       return role;
     });
+  }
+
+  private void setAuthorities(Role role, List<Long> authorityIds) {
+    // 查询缓存中存在的数据
+    List<AuthorityRedisDo> authorityRedisDos = authorityRedisRepository.findAllById(
+        authorityIds);
+    // 缓存中存在的权限ID
+    List<Long> cachedCollectionOfAuthorityIDs = authorityRedisDos.stream()
+        .map(AuthorityRedisDo::getId)
+        .collect(Collectors.toList());
+    // 已缓存的权限
+    List<Authority> cachedCollectionOfAuthority = authorityRedisDos.stream()
+        .flatMap(authorityRedisDo -> authorityConvertor.toEntity(authorityRedisDo).stream())
+        .collect(
+            Collectors.toList());
+    // 未缓存的权限
+    List<Authority> uncachedCollectionOfAuthority = Optional.of(
+            CollectionUtils.subtract(authorityIds, cachedCollectionOfAuthorityIDs))
+        .filter(CollectionUtils::isNotEmpty).map(
+            uncachedCollectionOfAuthorityId -> authorityRepository.findAllById(
+                    uncachedCollectionOfAuthorityId)
+                .stream()
+                .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+                .collect(
+                    Collectors.toList())).orElse(new ArrayList<>());
+    // 未缓存的权限放入缓存
+    if (CollectionUtils.isNotEmpty(uncachedCollectionOfAuthority)) {
+      authorityRedisRepository.saveAll(uncachedCollectionOfAuthority.stream()
+          .flatMap(authority -> authorityConvertor.toAuthorityRedisDo(authority).stream())
+          .collect(
+              Collectors.toList()));
+    }
+    // 合并已缓存和未缓存的权限
+    role.setAuthorities(new ArrayList<>(
+        CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority)));
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
@@ -101,9 +143,10 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedDo).map(roleArchivedDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
-      role.setAuthorities(roleAuthorityRepository.findByRoleId(role.getId()).stream().flatMap(
-              roleAuthorityDo -> authorityConvertor.toEntity(roleAuthorityDo.getAuthority()).stream())
-          .collect(Collectors.toList()));
+      List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
+          .map(RoleAuthorityDo::getId)
+          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
+      setAuthorities(role, authorityIds);
       return role;
     });
   }
@@ -122,18 +165,16 @@ public class RoleConvertor {
         role.setId(primaryKeyGrpcService.snowflake());
         roleAddClientObject.setId(role.getId());
       }
-      role.setAuthorities(authorityRepository.findAuthorityDoByIdIn(
-              roleAddClientObject.getAuthorityIds()).stream()
-          .map(authorityConvertor::toEntity)
-          .filter(Optional::isPresent).map(Optional::get)
-          .collect(Collectors.toList()));
+      Optional.ofNullable(roleAddClientObject.getAuthorityIds())
+          .filter(CollectionUtils::isNotEmpty)
+          .ifPresent(authorityIds -> setAuthorities(role, authorityIds));
       return role;
     });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
-    return Optional.ofNullable(roleUpdateCo).map(roleUpdateClientObject -> {
+    return Optional.ofNullable(roleUpdateCo).flatMap(roleUpdateClientObject -> {
       Optional.ofNullable(roleUpdateClientObject.getId())
           .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
@@ -147,26 +188,17 @@ public class RoleConvertor {
           throw new MuMuException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
         }
         Optional.ofNullable(roleUpdateClientObject.getAuthorityIds())
-            .ifPresent(authorities -> roleDomain.setAuthorities(
-                authorityRepository.findAuthorityDoByIdIn(
-                        authorities).stream()
-                    .map(authorityConvertor::toEntity)
-                    .filter(Optional::isPresent).map(Optional::get)
-                    .collect(Collectors.toList())));
+            .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
         return roleDomain;
-      })).orElse(null);
+      }));
     });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
-    //noinspection DuplicatedCode
     return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity).map(role -> {
       if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorityIds())) {
-        role.setAuthorities(
-            authorityRepository.findAllById(roleFindAllQueryCo.getAuthorityIds()).stream()
-                .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream()).collect(
-                    Collectors.toList()));
+        setAuthorities(role, roleFindAllQueryCo.getAuthorityIds());
       }
       return role;
     });
@@ -174,15 +206,10 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo) {
-    //noinspection DuplicatedCode
     return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
           if (CollectionUtils.isNotEmpty(roleFindAllSliceQueryCo.getAuthorityIds())) {
-            role.setAuthorities(
-                authorityRepository.findAllById(roleFindAllSliceQueryCo.getAuthorityIds()).stream()
-                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
-                    .collect(
-                        Collectors.toList()));
+            setAuthorities(role, roleFindAllSliceQueryCo.getAuthorityIds());
           }
           return role;
         });
@@ -214,16 +241,10 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo) {
-    //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
           if (CollectionUtils.isNotEmpty(roleArchivedFindAllQueryCo.getAuthorityIds())) {
-            role.setAuthorities(
-                authorityRepository.findAllById(roleArchivedFindAllQueryCo.getAuthorityIds())
-                    .stream()
-                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
-                    .collect(
-                        Collectors.toList()));
+            setAuthorities(role, roleArchivedFindAllQueryCo.getAuthorityIds());
           }
           return role;
         });
@@ -231,16 +252,10 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo) {
-    //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
           if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceQueryCo.getAuthorityIds())) {
-            role.setAuthorities(
-                authorityRepository.findAllById(roleArchivedFindAllSliceQueryCo.getAuthorityIds())
-                    .stream()
-                    .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
-                    .collect(
-                        Collectors.toList()));
+            setAuthorities(role, roleArchivedFindAllSliceQueryCo.getAuthorityIds());
           }
           return role;
         });

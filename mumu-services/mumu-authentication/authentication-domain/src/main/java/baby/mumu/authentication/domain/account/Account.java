@@ -22,6 +22,7 @@ import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -146,6 +147,7 @@ public class Account extends BasisDomainModel implements UserDetails {
   private List<AccountAddress> addresses;
 
   @Override
+  @JsonIgnore
   public Collection<Authority> getAuthorities() {
     return Optional.ofNullable(this.roles)
         .orElse(Collections.emptyList())
