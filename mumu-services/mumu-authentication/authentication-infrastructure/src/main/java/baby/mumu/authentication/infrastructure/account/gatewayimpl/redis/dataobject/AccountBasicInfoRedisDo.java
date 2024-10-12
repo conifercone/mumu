@@ -23,6 +23,7 @@ import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
@@ -123,9 +124,10 @@ public class AccountBasicInfoRedisDo extends JpaRedisBasisArchivableDataObject {
 
   /**
    * 存活时间
+   * <p>中等级别变化数据：默认缓存时长为1小时</p>
    */
-  @TimeToLive
-  private Long ttl = 10L;
+  @TimeToLive(unit = TimeUnit.HOURS)
+  private Long ttl = 1L;
 
   @Data
   public static class AccountAddressRedisDo {
