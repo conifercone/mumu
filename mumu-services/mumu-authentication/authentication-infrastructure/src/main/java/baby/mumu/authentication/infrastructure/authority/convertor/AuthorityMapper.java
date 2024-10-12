@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -64,6 +65,12 @@ public interface AuthorityMapper {
 
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Authority toEntity(AuthorityRedisDo authorityRedisDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AuthorityRedisDo toAuthorityRedisDo(Authority authority);
 
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo);

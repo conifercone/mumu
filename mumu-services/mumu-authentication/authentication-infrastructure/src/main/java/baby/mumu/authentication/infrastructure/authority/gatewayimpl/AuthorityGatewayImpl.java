@@ -24,6 +24,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.Au
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
@@ -67,13 +68,14 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   private final AuthorityArchivedRepository authorityArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
+  private final AuthorityRedisRepository authorityRedisRepository;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
       AuthorityConvertor authorityConvertor,
       AuthorityArchivedRepository authorityArchivedRepository, JobScheduler jobScheduler,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties, AuthorityRedisRepository authorityRedisRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
@@ -81,6 +83,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     this.authorityArchivedRepository = authorityArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
+    this.authorityRedisRepository = authorityRedisRepository;
   }
 
   @Override
@@ -92,7 +95,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
             authorityDo.getCode()) && !authorityArchivedRepository.existsByIdOrCode(
             authorityDo.getId(),
             authorityDo.getCode()))
-        .ifPresentOrElse(authorityRepository::persist, () -> {
+        .ifPresentOrElse(authorityDo -> {
+          authorityRepository.persist(authorityDo);
+          authorityRedisRepository.deleteById(authorityDo.getId());
+        }, () -> {
           throw new MuMuException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
         });
   }
@@ -110,6 +116,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Optional.ofNullable(id).ifPresent(authorityId -> {
       authorityRepository.deleteById(authorityId);
       authorityArchivedRepository.deleteById(authorityId);
+      authorityRedisRepository.deleteById(authorityId);
     });
   }
 
@@ -122,6 +129,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
             authorityRepository.merge(dataObject);
+            authorityRedisRepository.deleteById(dataObject.getId());
           } finally {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
@@ -181,8 +189,14 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   public Optional<Authority> findById(Long id) {
-    return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
-        authorityConvertor::toEntity);
+    return Optional.ofNullable(id).flatMap(authorityRedisRepository::findById).flatMap(
+        authorityConvertor::toEntity).or(() -> {
+      Optional<Authority> authority = authorityRepository.findById(id)
+          .flatMap(authorityConvertor::toEntity);
+      authority.flatMap(authorityConvertor::toAuthorityRedisDo)
+          .ifPresent(authorityRedisRepository::save);
+      return authority;
+    });
   }
 
   @Override
@@ -200,6 +214,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityArchivedDo.setArchived(true);
           authorityArchivedRepository.persist(authorityArchivedDo);
           authorityRepository.deleteById(authorityArchivedDo.getId());
+          authorityRedisRepository.deleteById(authorityArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -212,7 +227,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
-        .ifPresent(authorityArchivedRepository::deleteById);
+        .ifPresent(authorityId -> {
+          authorityArchivedRepository.deleteById(authorityId);
+          authorityRedisRepository.deleteById(authorityId);
+        });
   }
 
   @Override
@@ -223,6 +241,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityDo.setArchived(false);
           authorityArchivedRepository.deleteById(authorityDo.getId());
           authorityRepository.persist(authorityDo);
+          authorityRedisRepository.deleteById(authorityDo.getId());
         });
   }
 }

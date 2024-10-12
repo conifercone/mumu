@@ -31,6 +31,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.Au
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -132,6 +133,16 @@ public class AuthorityConvertor {
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(AuthorityArchivedDo authorityArchivedDo) {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(AuthorityRedisDo authorityRedisDo) {
+    return Optional.ofNullable(authorityRedisDo).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityRedisDo> toAuthorityRedisDo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toAuthorityRedisDo);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
