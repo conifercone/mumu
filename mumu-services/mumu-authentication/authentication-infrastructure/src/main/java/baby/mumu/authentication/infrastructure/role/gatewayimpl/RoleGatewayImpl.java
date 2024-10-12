@@ -27,6 +27,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArc
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
@@ -70,13 +71,15 @@ public class RoleGatewayImpl implements RoleGateway {
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
   private final RoleAuthorityRepository roleAuthorityRepository;
+  private final RoleRedisRepository roleRedisRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
       AccountGateway accountGateway, RoleConvertor roleConvertor,
       RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
       ExtensionProperties extensionProperties,
-      RoleAuthorityRepository roleAuthorityRepository) {
+      RoleAuthorityRepository roleAuthorityRepository,
+      RoleRedisRepository roleRedisRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -85,6 +88,7 @@ public class RoleGatewayImpl implements RoleGateway {
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
     this.roleAuthorityRepository = roleAuthorityRepository;
+    this.roleRedisRepository = roleRedisRepository;
   }
 
   @Override
@@ -95,7 +99,10 @@ public class RoleGatewayImpl implements RoleGateway {
     Optional.ofNullable(role).flatMap(roleConvertor::toDataObject)
         .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode())
             && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
-        .ifPresentOrElse(roleRepository::persist, () -> {
+        .ifPresentOrElse(roleDo -> {
+          roleRepository.persist(roleDo);
+          roleRedisRepository.deleteById(roleDo.getId());
+        }, () -> {
           throw new MuMuException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
         });
     saveRoleAuthorityRelationsData(role);
@@ -127,6 +134,7 @@ public class RoleGatewayImpl implements RoleGateway {
       roleAuthorityRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
       roleArchivedRepository.deleteById(roleId);
+      roleRedisRepository.deleteById(roleId);
     });
   }
 
@@ -141,6 +149,7 @@ public class RoleGatewayImpl implements RoleGateway {
         //删除权限关系数据重新添加
         roleAuthorityRepository.deleteByRoleId(roleDomain.getId());
         saveRoleAuthorityRelationsData(roleDomain);
+        roleRedisRepository.deleteById(roleDomain.getId());
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -235,6 +244,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleArchivedDo.setArchived(true);
           roleArchivedRepository.persist(roleArchivedDo);
           roleRepository.deleteById(roleArchivedDo.getId());
+          roleRedisRepository.deleteById(roleArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -250,6 +260,7 @@ public class RoleGatewayImpl implements RoleGateway {
         .ifPresent(roleIdNotNull -> {
           roleArchivedRepository.deleteById(roleIdNotNull);
           roleAuthorityRepository.deleteByRoleId(roleIdNotNull);
+          roleRedisRepository.deleteById(roleIdNotNull);
         });
   }
 
@@ -261,6 +272,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleDo.setArchived(false);
           roleArchivedRepository.deleteById(roleDo.getId());
           roleRepository.persist(roleDo);
+          roleRedisRepository.deleteById(roleDo.getId());
         });
   }
 }

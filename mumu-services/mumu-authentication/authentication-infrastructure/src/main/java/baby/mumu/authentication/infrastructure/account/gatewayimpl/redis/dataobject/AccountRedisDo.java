@@ -38,7 +38,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Document(value = "account")
-public class AccountBasicInfoRedisDo extends JpaRedisBasisArchivableDataObject {
+public class AccountRedisDo extends JpaRedisBasisArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = -2322179892503865278L;

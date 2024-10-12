@@ -38,6 +38,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArc
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -262,6 +263,18 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Role> toEntity(RoleRedisDo roleRedisDo) {
+    return Optional.ofNullable(roleRedisDo).map(RoleMapper.INSTANCE::toEntity)
+        .map(role -> {
+          List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
+              .map(RoleAuthorityDo::getId)
+              .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
+          setAuthorities(role, authorityIds);
+          return role;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleArchivedFindAllCo> toArchivedFindAllCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllCo)
         .map(roleArchivedFindAllCo -> {
@@ -290,6 +303,12 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<RoleArchivedDo> toArchivedDo(RoleDo roleDo) {
     return Optional.ofNullable(roleDo).map(RoleMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleRedisDo> toRoleRedisDo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleRedisDo);
   }
 
   @Contract("_ -> new")

@@ -28,6 +28,7 @@ import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -66,6 +67,12 @@ public interface RoleMapper {
 
   @API(status = Status.STABLE, since = "2.2.0")
   Role toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleRedisDo roleRedisDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleRedisDo toRoleRedisDo(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);

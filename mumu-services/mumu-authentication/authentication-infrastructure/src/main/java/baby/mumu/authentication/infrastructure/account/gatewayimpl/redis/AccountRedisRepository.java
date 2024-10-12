@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountBasicInfoRedisDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -24,7 +24,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-public interface AccountBasicInfoRedisRepository extends
-    RedisDocumentRepository<AccountBasicInfoRedisDo, Long> {
+public interface AccountRedisRepository extends
+    RedisDocumentRepository<AccountRedisDo, Long> {
 
 }

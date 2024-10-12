@@ -27,7 +27,7 @@ import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountBasicInfoRedisDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -53,7 +53,7 @@ public interface AccountMapper {
   Account toEntity(AccountDo accountDo);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Account toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo);
+  Account toEntity(AccountRedisDo accountRedisDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
@@ -62,7 +62,7 @@ public interface AccountMapper {
   AccountAddressDo toAccountAddressDo(AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountBasicInfoRedisDo toAccountBasicInfoRedisDo(Account account);
+  AccountRedisDo toAccountRedisDo(Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);

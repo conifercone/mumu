@@ -23,18 +23,21 @@ import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountBasicInfoRedisDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
@@ -66,13 +69,15 @@ public class AccountConvertor {
   private final AccountArchivedRepository accountArchivedRepository;
   private final AccountAddressRepository accountAddressRepository;
   private final AccountRoleRepository accountRoleRepository;
+  private final RoleRedisRepository roleRedisRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
       RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
       AccountArchivedRepository accountArchivedRepository,
       AccountAddressRepository accountAddressRepository,
-      AccountRoleRepository accountRoleRepository) {
+      AccountRoleRepository accountRoleRepository,
+      RoleRedisRepository roleRedisRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -80,6 +85,7 @@ public class AccountConvertor {
     this.accountArchivedRepository = accountArchivedRepository;
     this.accountAddressRepository = accountAddressRepository;
     this.accountRoleRepository = accountRoleRepository;
+    this.roleRedisRepository = roleRedisRepository;
   }
 
   @Contract("_ -> new")
@@ -87,14 +93,84 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountDo accountDo) {
     return Optional.ofNullable(accountDo).map(accountDataObject -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
-      account.setRoles(accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
-          .flatMap(accountRoleDo -> roleConvertor.toEntity(accountRoleDo.getRole()).stream())
-          .collect(Collectors.toList()));
+      List<Long> roleIds = accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
+          .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId).collect(Collectors.toList());
+      setRolesWithIds(account, roleIds);
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       return account;
     });
+  }
+
+  private void setRolesWithIds(Account account, List<Long> roleIds) {
+    // 查询缓存中存在的数据
+    List<RoleRedisDo> roleRedisDos = roleRedisRepository.findAllById(
+        roleIds);
+    // 缓存中存在的角色ID
+    List<Long> cachedCollectionOfRoleIDs = roleRedisDos.stream()
+        .map(RoleRedisDo::getId)
+        .collect(Collectors.toList());
+    // 已缓存的角色
+    List<Role> cachedCollectionOfRole = roleRedisDos.stream()
+        .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+        .collect(
+            Collectors.toList());
+    // 未缓存的角色
+    List<Role> uncachedCollectionOfRole = Optional.of(
+            CollectionUtils.subtract(roleIds, cachedCollectionOfRoleIDs))
+        .filter(CollectionUtils::isNotEmpty).map(
+            uncachedCollectionOfRoleId -> roleRepository.findAllById(
+                    uncachedCollectionOfRoleId)
+                .stream()
+                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+                .collect(
+                    Collectors.toList())).orElse(new ArrayList<>());
+    // 未缓存的角色放入缓存
+    if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
+      roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
+          .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
+          .collect(
+              Collectors.toList()));
+    }
+    // 合并已缓存和未缓存的角色
+    account.setRoles(new ArrayList<>(
+        CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
+  }
+
+  private void setRolesWithCodes(Account account, List<String> codes) {
+    // 查询缓存中存在的数据
+    List<RoleRedisDo> roleRedisDos = roleRedisRepository.findByCodeIn(
+        codes);
+    // 缓存中存在的角色编码
+    List<String> cachedCollectionOfRoleCodes = roleRedisDos.stream()
+        .map(RoleRedisDo::getCode)
+        .collect(Collectors.toList());
+    // 已缓存的角色
+    List<Role> cachedCollectionOfRole = roleRedisDos.stream()
+        .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+        .collect(
+            Collectors.toList());
+    // 未缓存的角色
+    List<Role> uncachedCollectionOfRole = Optional.of(
+            CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
+        .filter(CollectionUtils::isNotEmpty).map(
+            uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(
+                    new ArrayList<>(uncachedCollectionOfRoleId))
+                .stream()
+                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+                .collect(
+                    Collectors.toList())).orElse(new ArrayList<>());
+    // 未缓存的角色放入缓存
+    if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
+      roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
+          .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
+          .collect(
+              Collectors.toList()));
+    }
+    // 合并已缓存和未缓存的角色
+    account.setRoles(new ArrayList<>(
+        CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
   }
 
   @Contract("_ -> new")
@@ -111,8 +187,8 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Account> toEntity(AccountBasicInfoRedisDo accountBasicInfoRedisDo) {
-    return Optional.ofNullable(accountBasicInfoRedisDo).map(AccountMapper.INSTANCE::toEntity);
+  public Optional<Account> toEntity(AccountRedisDo accountRedisDo) {
+    return Optional.ofNullable(accountRedisDo).map(AccountMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -123,8 +199,8 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountBasicInfoRedisDo> toAccountBasicInfoRedisDo(Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountBasicInfoRedisDo);
+  public Optional<AccountRedisDo> toAccountRedisDo(Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountRedisDo);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -136,10 +212,8 @@ public class AccountConvertor {
           throw new MuMuException(ResultCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
         }
       }, () -> account.setId(primaryKeyGrpcService.snowflake()));
-      account.setRoles(
-          roleRepository.findByCodeIn(accountRegisterClientObject.getRoleCodes()).stream()
-              .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
-              .collect(Collectors.toList()));
+      setRolesWithCodes(account, Optional.ofNullable(accountRegisterClientObject.getRoleCodes())
+          .orElse(new ArrayList<>()));
       Optional.ofNullable(account.getAddresses())
           .filter(CollectionUtils::isNotEmpty)
           .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {
@@ -187,7 +261,7 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountUpdateRoleCo accountUpdateRoleCo) {
-    return Optional.ofNullable(accountUpdateRoleCo).map(accountUpdateRoleClientObject -> {
+    return Optional.ofNullable(accountUpdateRoleCo).flatMap(accountUpdateRoleClientObject -> {
       Optional.ofNullable(accountUpdateRoleClientObject.getId())
           .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<AccountDo> accountDoOptional = accountRepository.findById(
@@ -195,12 +269,10 @@ public class AccountConvertor {
       AccountDo accountDo = accountDoOptional.orElseThrow(
           () -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountDo).map(account -> {
-        account.setRoles(
-            roleRepository.findByCodeIn(accountUpdateRoleClientObject.getRoleCodes()).stream()
-                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
-                .collect(Collectors.toList()));
+        Optional.ofNullable(accountUpdateRoleClientObject.getRoleCodes())
+            .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
         return account;
-      }).orElse(null);
+      });
     });
   }
 
