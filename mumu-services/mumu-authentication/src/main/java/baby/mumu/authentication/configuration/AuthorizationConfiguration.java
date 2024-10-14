@@ -429,8 +429,7 @@ public class AuthorizationConfiguration {
                   .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
                   .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
                   .collect(Collectors.toSet());
-              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(
-                      new ArrayList<>(roles))
+              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
                   .stream()
                   .flatMap(
                       opt -> roleAuthorityRepository.findByRoleId(

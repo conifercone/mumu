@@ -155,8 +155,7 @@ public class AccountConvertor {
     List<Role> uncachedCollectionOfRole = Optional.of(
             CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
         .filter(CollectionUtils::isNotEmpty).map(
-            uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(
-                    new ArrayList<>(uncachedCollectionOfRoleId))
+            uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
                 .stream()
                 .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
                 .collect(

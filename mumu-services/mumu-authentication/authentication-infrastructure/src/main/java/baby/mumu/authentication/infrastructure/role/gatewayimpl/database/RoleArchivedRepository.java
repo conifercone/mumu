@@ -19,7 +19,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.List;
+import java.util.Collection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -68,7 +68,7 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
           + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
           + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
   Slice<RoleArchivedDo> findAllSlice(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
-      @Param("authoritiesIds") List<Long> authoritiesIds, Pageable pageable);
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 
   /**
    * 分页查询已归档的角色（查询总数）
@@ -85,5 +85,5 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
           + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
           + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
   Page<RoleArchivedDo> findAllPage(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
-      @Param("authoritiesIds") List<Long> authoritiesIds, Pageable pageable);
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 }
