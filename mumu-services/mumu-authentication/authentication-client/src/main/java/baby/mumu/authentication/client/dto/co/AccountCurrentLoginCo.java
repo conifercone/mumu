@@ -180,5 +180,7 @@ public class AccountCurrentLoginCo extends BaseClientObject {
      * 已启用
      */
     private Boolean enabled;
+
+    private Long version;
   }
 }

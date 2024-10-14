@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.constants;
+package baby.mumu.basis.dataobject.jpa;
+
+import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.AuditorAware;
 
 /**
- * bean名称常量
+ * 创建人&修改人自动填充
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.3
+ * @since 2.2.0
  */
-public final class BeanNameConstants {
+public class MuMuJpaMongodbAuditorAware implements AuditorAware<Long> {
 
-  private BeanNameConstants() {
+  @Override
+  public @NotNull Optional<Long> getCurrentAuditor() {
+    return SecurityContextUtil.getLoginAccountId();
   }
-
-  public static final String MUMU_JPA_AUDITOR_AWARE = "mumuJpaAuditorAware";
-
-  public static final String MUMU_JPA_MONGODB_AUDITOR_AWARE = "mumuJpaMongodbAuditorAware";
 }

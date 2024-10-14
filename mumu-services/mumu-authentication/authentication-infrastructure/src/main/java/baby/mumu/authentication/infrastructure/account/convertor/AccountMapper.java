@@ -33,6 +33,9 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
@@ -130,5 +133,10 @@ public interface AccountMapper {
   default void convertToAccountTimezone(
       @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
     CommonUtil.convertToAccountZone(accountBasicInfoCo);
+  }
+
+  default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
+    return Optional.ofNullable(offsetDateTime)
+        .map(OffsetDateTime::toLocalDateTime).orElse(null);
   }
 }

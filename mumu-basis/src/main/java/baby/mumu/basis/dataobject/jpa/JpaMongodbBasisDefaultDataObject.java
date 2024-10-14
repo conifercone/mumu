@@ -16,15 +16,16 @@
 package baby.mumu.basis.dataobject.jpa;
 
 import baby.mumu.basis.dataobject.DataObject;
-import jakarta.persistence.EntityListeners;
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.LastModifiedDate;
 
 /**
  * jpa mongodb 基础默认数据对象
@@ -32,15 +33,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-@EntityListeners(AuditingEntityListener.class)
 @Setter
 public class JpaMongodbBasisDefaultDataObject implements DataObject {
 
   @Serial
   private static final long serialVersionUID = -2846827195409026681L;
 
-  @CreationTimestamp
-  private OffsetDateTime creationTime;
+  @CreatedDate
+  private LocalDateTime creationTime;
 
   @CreatedBy
   private Long founder;
@@ -48,8 +48,8 @@ public class JpaMongodbBasisDefaultDataObject implements DataObject {
   @LastModifiedBy
   private Long modifier;
 
-  @UpdateTimestamp
-  private OffsetDateTime modificationTime;
+  @LastModifiedDate
+  private LocalDateTime modificationTime;
 
   @Override
   public Long getFounder() {
@@ -63,11 +63,15 @@ public class JpaMongodbBasisDefaultDataObject implements DataObject {
 
   @Override
   public OffsetDateTime getCreationTime() {
-    return creationTime;
+    return Optional.ofNullable(creationTime)
+        .map(creationTimeNotNull -> OffsetDateTime.of(creationTimeNotNull, ZoneOffset.UTC))
+        .orElse(null);
   }
 
   @Override
   public OffsetDateTime getModificationTime() {
-    return modificationTime;
+    return Optional.ofNullable(modificationTime)
+        .map(modificationTimeNotNull -> OffsetDateTime.of(modificationTimeNotNull, ZoneOffset.UTC))
+        .orElse(null);
   }
 }

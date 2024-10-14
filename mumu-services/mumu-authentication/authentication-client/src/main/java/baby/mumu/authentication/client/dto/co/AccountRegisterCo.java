@@ -155,5 +155,7 @@ public class AccountRegisterCo extends BaseClientObject {
      */
     @Builder.Default
     private Boolean enabled = true;
+
+    private Long version;
   }
 }

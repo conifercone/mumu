@@ -82,4 +82,6 @@ public class AccountSystemSettings extends BasisDomainModel {
    * 已启用
    */
   private Boolean enabled;
+
+  private Long version;
 }

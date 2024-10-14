@@ -49,4 +49,6 @@ public class AccountModifySystemSettingsBySettingsIdCo extends BaseClientObject 
    * 已启用
    */
   private Boolean enabled;
+
+  private Long version;
 }

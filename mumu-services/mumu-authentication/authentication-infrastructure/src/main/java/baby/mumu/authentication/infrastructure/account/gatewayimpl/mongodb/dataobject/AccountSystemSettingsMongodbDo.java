@@ -18,7 +18,6 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.data
 import baby.mumu.basis.dataobject.jpa.JpaMongodbBasisDefaultDataObject;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
@@ -26,6 +25,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -45,12 +47,13 @@ public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataOb
   private static final long serialVersionUID = 6286174255794150761L;
 
   public AccountSystemSettingsMongodbDo(String id, Long userId, String profile, String name,
-      boolean enabled) {
+      boolean enabled, Long version) {
     this.id = id;
     this.userId = userId;
     this.profile = profile;
     this.name = name;
     this.enabled = enabled;
+    this.version = version;
   }
 
   @Id
@@ -61,12 +64,14 @@ public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataOb
    * 账户ID
    */
   @NotNull
+  @Indexed(background = true)
   private Long userId;
 
   /**
    * 系统设置标识
    */
   @NotBlank
+  @Indexed(background = true)
   private String profile;
 
   /**
@@ -88,5 +93,9 @@ public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataOb
   /**
    * 已启用
    */
+  @Indexed(background = true)
   private Boolean enabled;
+
+  @Version
+  private Long version;
 }

@@ -23,6 +23,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,6 +38,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableJpaAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
+@EnableMongoAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_MONGODB_AUDITOR_AWARE)
 @EnableRedisDocumentRepositories(basePackages = "baby.mumu.authentication.infrastructure.**.redis.**")
 @EnableMongoRepositories(basePackages = "baby.mumu.authentication.infrastructure.**.mongodb.**")
 @EnableMethodSecurity

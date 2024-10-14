@@ -395,13 +395,14 @@ public class AccountConvertor {
       AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
     return Optional.ofNullable(accountSystemSettingsMongodbDo)
         .map(accountSystemSettingsMongodbDoTarget -> {
-          // id，userId,profile,name,enabled属性不重置
+          // id，userId,profile,name,enabled,version属性不重置
           AccountMapper.INSTANCE.toAccountSystemSettingMongodbDo(
               new AccountSystemSettingsMongodbDo(accountSystemSettingsMongodbDoTarget.getId(),
                   accountSystemSettingsMongodbDoTarget.getUserId(),
                   accountSystemSettingsMongodbDoTarget.getProfile(),
                   accountSystemSettingsMongodbDoTarget.getName(),
-                  accountSystemSettingsMongodbDoTarget.isEnabled()),
+                  accountSystemSettingsMongodbDoTarget.getEnabled(),
+                  accountSystemSettingsMongodbDoTarget.getVersion()),
               accountSystemSettingsMongodbDoTarget);
           return accountSystemSettingsMongodbDoTarget;
         });

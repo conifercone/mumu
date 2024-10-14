@@ -49,4 +49,6 @@ public class AccountAddSystemSettingsCo extends BaseClientObject {
    * 已启用
    */
   private Boolean enabled = false;
+
+  private Long version;
 }
