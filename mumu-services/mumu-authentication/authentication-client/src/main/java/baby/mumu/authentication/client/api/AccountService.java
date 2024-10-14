@@ -16,15 +16,18 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
+import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
+import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
@@ -87,6 +90,24 @@ public interface AccountService {
    * @param accountResetPasswordCmd 重置密码指令
    */
   void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
+
+  /**
+   * 重置系统设置
+   */
+  void resetSystemSettingsBySettingsId(
+      AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd);
+
+  /**
+   * 修改系统设置
+   */
+  void modifySystemSettingsBySettingsId(
+      AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd);
+
+  /**
+   * 添加系统设置
+   */
+  void addSystemSettings(
+      AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   /**
    * 删除当前账户

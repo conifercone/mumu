@@ -18,6 +18,8 @@ package baby.mumu.authentication.client.dto.co;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.basis.enums.SystemThemeEnum;
+import baby.mumu.basis.enums.SystemThemeModeEnum;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -61,6 +63,8 @@ public class AccountCurrentLoginCo extends BaseClientObject {
   private List<AccountRoleCurrentLoginQueryCo> roles;
 
   private List<AccountAddressCurrentLoginQueryCo> addresses;
+
+  private List<AccountSystemSettingsCurrentLoginQueryCo> systemSettings;
 
   @Data
   public static class AccountAddressCurrentLoginQueryCo {
@@ -142,5 +146,39 @@ public class AccountCurrentLoginCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+  }
+
+  @Data
+  public static class AccountSystemSettingsCurrentLoginQueryCo {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 系统设置标识
+     */
+    private String profile;
+
+    /**
+     * 系统设置名称
+     */
+    private String name;
+
+    /**
+     * 系统主题
+     */
+    private SystemThemeEnum systemTheme;
+
+    /**
+     * 系统主题模式
+     */
+    private SystemThemeModeEnum systemThemeMode;
+
+    /**
+     * 已启用
+     */
+    private Boolean enabled;
   }
 }

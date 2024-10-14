@@ -17,15 +17,18 @@ package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.AccountService;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
+import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
+import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
@@ -129,6 +132,36 @@ public class AccountController {
   public void resetPassword(
       @RequestBody @Valid AccountResetPasswordCmd accountResetPasswordCmd) {
     accountService.resetPassword(accountResetPasswordCmd);
+  }
+
+  @Operation(summary = "重置系统设置")
+  @PutMapping("/resetSystemSettingsBySettingsId")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public void resetSystemSettingsBySettingsId(
+      @RequestBody @Valid AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd) {
+    accountService.resetSystemSettingsBySettingsId(accountResetSystemSettingsBySettingsIdCmd);
+  }
+
+  @Operation(summary = "通过设置id修改系统设置")
+  @PutMapping("/modifySystemSettingsBySettingsId")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public void modifySystemSettingsBySettingsId(
+      @RequestBody @Valid AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
+  }
+
+  @Operation(summary = "添加系统设置")
+  @PostMapping("/addSystemSettings")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public void addSystemSettings(
+      @RequestBody @Valid AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    accountService.addSystemSettings(accountAddSystemSettingsCmd);
   }
 
   @Operation(summary = "删除当前账户")

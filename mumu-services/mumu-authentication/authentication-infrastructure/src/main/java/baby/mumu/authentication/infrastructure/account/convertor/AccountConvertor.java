@@ -16,13 +16,16 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
+import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
@@ -30,6 +33,8 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
@@ -38,10 +43,12 @@ import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
+import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,6 +77,7 @@ public class AccountConvertor {
   private final AccountAddressRepository accountAddressRepository;
   private final AccountRoleRepository accountRoleRepository;
   private final RoleRedisRepository roleRedisRepository;
+  private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
@@ -77,7 +85,8 @@ public class AccountConvertor {
       AccountArchivedRepository accountArchivedRepository,
       AccountAddressRepository accountAddressRepository,
       AccountRoleRepository accountRoleRepository,
-      RoleRedisRepository roleRedisRepository) {
+      RoleRedisRepository roleRedisRepository,
+      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -86,6 +95,7 @@ public class AccountConvertor {
     this.accountAddressRepository = accountAddressRepository;
     this.accountRoleRepository = accountRoleRepository;
     this.roleRedisRepository = roleRedisRepository;
+    this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
   }
 
   @Contract("_ -> new")
@@ -99,6 +109,11 @@ public class AccountConvertor {
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+      account.setSystemSettings(
+          accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
+              .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+                  accountSystemSettingsMongodbDo).stream())
+              .collect(Collectors.toList()));
       return account;
     });
   }
@@ -180,6 +195,11 @@ public class AccountConvertor {
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+      account.setSystemSettings(
+          accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
+              .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+                  accountSystemSettingsMongodbDo).stream())
+              .collect(Collectors.toList()));
       return account;
     });
   }
@@ -221,6 +241,25 @@ public class AccountConvertor {
               accountAddress.setId(primaryKeyGrpcService.snowflake());
             }
           }));
+      Optional.ofNullable(account.getSystemSettings())
+          .ifPresentOrElse(
+              accountSystemSettings -> accountSystemSettings.forEach(accountSystemSettingsItem -> {
+                accountSystemSettingsItem.setUserId(account.getId());
+                if (accountSystemSettingsItem.getId() == null) {
+                  accountSystemSettingsItem.setId(
+                      String.valueOf(primaryKeyGrpcService.snowflake()));
+                }
+              }), () -> account.setSystemSettings(Collections.singletonList(
+                  AccountSystemSettings.builder()
+                      .id(String.valueOf(primaryKeyGrpcService.snowflake()))
+                      .userId(
+                          account.getId()).enabled(true).profile(
+                          AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
+                      .name(
+                          AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
+                      .enabled(true)
+                      .build()))
+          );
       accountRegisterClientObject.setId(account.getId());
       return account;
     });
@@ -228,11 +267,11 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountUpdateByIdCo accountUpdateByIdCo) {
-    return Optional.ofNullable(accountUpdateByIdCo).map(accountUpdateByIdClientObject -> {
+    return Optional.ofNullable(accountUpdateByIdCo).flatMap(accountUpdateByIdClientObject -> {
       Optional.ofNullable(accountUpdateByIdClientObject.getId())
           .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
-          .flatMap(this::toEntity).map(account -> {
+          .flatMap(this::toEntity).flatMap(account -> {
             String emailBeforeUpdated = account.getEmail();
             String usernameBeforeUpdated = account.getUsername();
             AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
@@ -253,8 +292,8 @@ public class AccountConvertor {
                 || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
               throw new MuMuException(ResultCode.ACCOUNT_NAME_ALREADY_EXISTS);
             }
-            return account;
-          }).orElse(null);
+            return Optional.of(account);
+          });
     });
   }
 
@@ -304,6 +343,70 @@ public class AccountConvertor {
       AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressDo);
   }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountSystemSettingsMongodbDo> toAccountSystemSettingMongodbDo(
+      AccountSystemSettings accountSystemSettings) {
+    return Optional.ofNullable(accountSystemSettings)
+        .map(AccountMapper.INSTANCE::toAccountSystemSettingMongodbDo);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountSystemSettings> toAccountSystemSettings(
+      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
+    return Optional.ofNullable(accountSystemSettingsMongodbDo)
+        .map(AccountMapper.INSTANCE::toAccountSystemSettings);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountSystemSettings> toAccountSystemSettings(
+      AccountAddSystemSettingsCo accountAddSystemSettingsCo) {
+    return Optional.ofNullable(accountAddSystemSettingsCo)
+        .map(accountAddSystemSettingsCoNotNull -> {
+          AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
+              accountAddSystemSettingsCoNotNull);
+          if (accountSystemSettings.getId() == null) {
+            accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
+          }
+          return accountSystemSettings;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountSystemSettings> toAccountSystemSettings(
+      AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo) {
+    return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCo)
+        .flatMap(accountModifySystemSettingsBySettingsIdCoNotNull -> {
+          Optional.ofNullable(accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+              .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+          return accountSystemSettingsMongodbRepository.findById(
+                  accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+              .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
+                AccountMapper.INSTANCE.toAccountSystemSettings(
+                    accountModifySystemSettingsBySettingsIdCoNotNull,
+                    accountSystemSettings);
+                return Optional.of(accountSystemSettings);
+              });
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountSystemSettingsMongodbDo> resetAccountSystemSettingMongodbDo(
+      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
+    return Optional.ofNullable(accountSystemSettingsMongodbDo)
+        .map(accountSystemSettingsMongodbDoTarget -> {
+          // id，userId,profile,name,enabled属性不重置
+          AccountMapper.INSTANCE.toAccountSystemSettingMongodbDo(
+              new AccountSystemSettingsMongodbDo(accountSystemSettingsMongodbDoTarget.getId(),
+                  accountSystemSettingsMongodbDoTarget.getUserId(),
+                  accountSystemSettingsMongodbDoTarget.getProfile(),
+                  accountSystemSettingsMongodbDoTarget.getName(),
+                  accountSystemSettingsMongodbDoTarget.isEnabled()),
+              accountSystemSettingsMongodbDoTarget);
+          return accountSystemSettingsMongodbDoTarget;
+        });
+  }
+
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddress> toEntity(

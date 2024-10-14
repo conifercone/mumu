@@ -17,6 +17,7 @@ package baby.mumu.authentication.domain.account.gateway;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import java.util.List;
 import java.util.Optional;
 
@@ -150,4 +151,21 @@ public interface AccountGateway {
    * @return 账户基本信息
    */
   Optional<Account> getAccountBasicInfoById(Long id);
+
+  /**
+   * 根据系统设置ID重置系统设置
+   */
+  void resetSystemSettingsById(String systemSettingsId);
+
+  /**
+   * 修改系统设置
+   */
+  void modifySystemSettings(AccountSystemSettings accountSystemSettings);
+
+  /**
+   * 账户添加系统设置
+   *
+   * @param accountSystemSettings 账户系统设置
+   */
+  void addSystemSettings(AccountSystemSettings accountSystemSettings);
 }

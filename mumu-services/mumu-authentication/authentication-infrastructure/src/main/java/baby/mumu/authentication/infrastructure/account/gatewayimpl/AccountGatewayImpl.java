@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
@@ -24,6 +25,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
@@ -84,6 +86,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final JobScheduler jobScheduler;
   private final AccountRoleRepository accountRoleRepository;
   private final AccountRedisRepository accountRedisRepository;
+  private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -95,7 +98,8 @@ public class AccountGatewayImpl implements AccountGateway {
       AccountArchivedRepository accountArchivedRepository,
       AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
       AccountRoleRepository accountRoleRepository,
-      AccountRedisRepository accountRedisRepository) {
+      AccountRedisRepository accountRedisRepository,
+      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -109,6 +113,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.jobScheduler = jobScheduler;
     this.accountRoleRepository = accountRoleRepository;
     this.accountRedisRepository = accountRedisRepository;
+    this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
   }
 
   @Override
@@ -139,6 +144,11 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
+      if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
+        accountSystemSettingsMongodbRepository.saveAll(account.getSystemSettings().stream().flatMap(
+            accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbDo(
+                accountSystemSettings).stream()).collect(Collectors.toList()));
+      }
       accountRedisRepository.deleteById(account.getId());
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
               accountAddresses -> accountAddresses.stream()
@@ -380,5 +390,45 @@ public class AccountGatewayImpl implements AccountGateway {
               .ifPresent(accountRedisRepository::save);
           return account;
         });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void resetSystemSettingsById(String systemSettingsId) {
+    SecurityContextUtil.getLoginAccountId()
+        .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId))
+        .filter(accountSystemSettingsMongodbDo -> SecurityContextUtil.getLoginAccountId().get()
+            .equals(accountSystemSettingsMongodbDo.getUserId()))
+        .flatMap(
+            accountConvertor::resetAccountSystemSettingMongodbDo)
+        .ifPresent(accountSystemSettingsMongodbRepository::save);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
+    SecurityContextUtil.getLoginAccountId()
+        .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(
+            accountSystemSettings.getId()))
+        .filter(accountSystemSettingsMongodbDo -> SecurityContextUtil.getLoginAccountId().get()
+            .equals(accountSystemSettingsMongodbDo.getUserId()))
+        .flatMap(accountSystemSettingsMongodbDo -> accountConvertor.toAccountSystemSettingMongodbDo(
+            accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
+    SecurityContextUtil.getLoginAccountId().ifPresent(
+        accountId -> Optional.ofNullable(accountSystemSettings)
+            .flatMap(accountConvertor::toAccountSystemSettingMongodbDo)
+            .filter(
+                accountSystemSettingsMongodbDo -> !accountSystemSettingsMongodbRepository.existsByUserIdAndProfile(
+                    accountId, accountSystemSettingsMongodbDo.getProfile()))
+            .ifPresent(
+                accountSystemSettingsMongodbDo -> {
+                  accountSystemSettingsMongodbDo.setUserId(accountId);
+                  accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbDo);
+                }));
   }
 }

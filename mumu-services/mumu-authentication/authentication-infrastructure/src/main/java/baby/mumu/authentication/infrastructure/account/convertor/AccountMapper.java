@@ -16,17 +16,21 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
+import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo.AccountAddressUpdateByIdCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.apiguardian.api.API;
@@ -60,6 +64,28 @@ public interface AccountMapper {
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDo toAccountAddressDo(AccountAddress accountAddress);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettingsMongodbDo toAccountSystemSettingMongodbDo(
+      AccountSystemSettings accountSystemSettings);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettings toAccountSystemSettings(
+      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettings toAccountSystemSettings(
+      AccountAddSystemSettingsCo accountAddSystemSettingsCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  void toAccountSystemSettingMongodbDo(
+      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoSource,
+      @MappingTarget AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoTarget);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  void toAccountSystemSettings(
+      AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo,
+      @MappingTarget AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountRedisDo toAccountRedisDo(Account account);

@@ -16,17 +16,20 @@
 package baby.mumu.authentication.application.service;
 
 import baby.mumu.authentication.application.account.executor.AccountAddAddressCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountAddSystemSettingsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountArchiveByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountBasicInfoQueryByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountChangePasswordCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDisableCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountRegisterCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountResetPasswordCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountResetSystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import baby.mumu.authentication.client.api.AccountService;
@@ -41,15 +44,18 @@ import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
+import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
+import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
@@ -105,6 +111,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe;
   private final AccountAddAddressCmdExe accountAddAddressCmdExe;
   private final AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe;
+  private final AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe;
+  private final AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe;
+  private final AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -119,7 +128,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
       AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe,
       AccountAddAddressCmdExe accountAddAddressCmdExe,
-      AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe) {
+      AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe,
+      AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
+      AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
+      AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -134,6 +146,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountRecoverFromArchiveByIdCmdExe = accountRecoverFromArchiveByIdCmdExe;
     this.accountAddAddressCmdExe = accountAddAddressCmdExe;
     this.accountBasicInfoQueryByIdCmdExe = accountBasicInfoQueryByIdCmdExe;
+    this.accountResetSystemSettingsBySettingsIdCmdExe = accountResetSystemSettingsBySettingsIdCmdExe;
+    this.accountModifySystemSettingsBySettingsIdCmdExe = accountModifySystemSettingsBySettingsIdCmdExe;
+    this.accountAddSystemSettingsCmdExe = accountAddSystemSettingsCmdExe;
   }
 
   @Override
@@ -355,6 +370,29 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
     accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void resetSystemSettingsBySettingsId(
+      AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd) {
+    accountResetSystemSettingsBySettingsIdCmdExe.execute(accountResetSystemSettingsBySettingsIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void modifySystemSettingsBySettingsId(
+      AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    accountModifySystemSettingsBySettingsIdCmdExe.execute(
+        accountModifySystemSettingsBySettingsIdCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addSystemSettings(
+      AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    accountAddSystemSettingsCmdExe.execute(
+        accountAddSystemSettingsCmd);
   }
 
   @Override

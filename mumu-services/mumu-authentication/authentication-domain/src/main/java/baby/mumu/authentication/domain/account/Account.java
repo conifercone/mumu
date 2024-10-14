@@ -146,6 +146,11 @@ public class Account extends BasisDomainModel implements UserDetails {
    */
   private List<AccountAddress> addresses;
 
+  /**
+   * 系统设置
+   */
+  private List<AccountSystemSettings> systemSettings;
+
   @Override
   @JsonIgnore
   public Collection<Authority> getAuthorities() {

@@ -90,6 +90,8 @@ spring-cloud-starter-consul-config = { module = "org.springframework.cloud:sprin
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 spring-boot-starter-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation

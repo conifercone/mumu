@@ -16,14 +16,19 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.basis.enums.SystemThemeEnum;
+import baby.mumu.basis.enums.SystemThemeModeEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -68,6 +73,13 @@ public class AccountRegisterCo extends BaseClientObject {
 
   private List<AccountAddressRegisterCo> addresses;
 
+  private List<AccountSystemSettingsRegisterCo> systemSettings = Collections.singletonList(
+      AccountSystemSettingsRegisterCo.builder().profile(
+              AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
+          .name(
+              AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
+          .enabled(true).build());
+
   @Data
   public static class AccountAddressRegisterCo {
 
@@ -105,5 +117,43 @@ public class AccountRegisterCo extends BaseClientObject {
      */
     @Size(max = 100)
     private String country;
+  }
+
+  @Data
+  @Builder
+  public static class AccountSystemSettingsRegisterCo {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 系统设置标识
+     */
+    private String profile;
+
+    /**
+     * 系统设置名称
+     */
+    private String name;
+
+    /**
+     * 系统主题
+     */
+    @Builder.Default
+    private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
+
+    /**
+     * 系统主题模式
+     */
+    @Builder.Default
+    private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
+
+    /**
+     * 已启用
+     */
+    @Builder.Default
+    private Boolean enabled = true;
   }
 }
