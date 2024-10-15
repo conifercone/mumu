@@ -15,8 +15,8 @@
  */
 package baby.mumu.processor.metamodel;
 
-import baby.mumu.basis.annotations.CustomDescription;
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Meta;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.processor.kotlin.tools.ObjectUtil;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.AnnotationSpec;
@@ -71,7 +71,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 @SupportedAnnotationTypes(
-    value = {"baby.mumu.basis.annotations.GenerateDescription"}
+    value = {"baby.mumu.basis.annotations.Metamodel"}
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
@@ -83,7 +83,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   private Types typeUtils;
   private String authorName;
   private String authorEmail;
-  private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "4Desc";
+  private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "Metamodel";
   private static final String SINGULAR_FIELD_SUFFIX = "Singular";
   private String gradleVersion;
   private String javaVersion;
@@ -115,7 +115,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       return false;
     }
     Set<? extends Element> metamodelCandidates = roundEnv.getElementsAnnotatedWith(
-        GenerateDescription.class);
+        Metamodel.class);
     metamodelCandidates.stream().filter(ae -> ae.getKind() == ElementKind.CLASS).forEach(ae -> {
       try {
         generateMetaModelClass(ae);
@@ -188,7 +188,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   private void generateFields(@NotNull Element annotatedElement, String packageName,
       String entityName,
       Builder builder) {
-    GenerateDescription annotation = annotatedElement.getAnnotation(GenerateDescription.class);
+    Metamodel annotation = annotatedElement.getAnnotation(Metamodel.class);
     generateBasicProjectInformation(packageName, entityName, builder, annotation);
     List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
     Set<String> collect = fields.stream()
@@ -234,16 +234,16 @@ public class MetamodelGenerator extends AbstractProcessor {
         });
       });
     }
-    GenerateDescription generateDescription = annotatedElement.getAnnotation(
-        GenerateDescription.class);
-    CustomDescription[] customs = generateDescription.customs();
-    for (CustomDescription custom : customs) {
+    Metamodel metamodel = annotatedElement.getAnnotation(
+        Metamodel.class);
+    Meta[] customs = metamodel.customs();
+    for (Meta custom : customs) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
           .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
           .initializer("$S", custom.value())
           .addJavadoc(String.format(
               "@see %s.%s {@link %s}",
-              packageName, entityName, GenerateDescription.class.getName()))
+              packageName, entityName, Metamodel.class.getName()))
           .build();
       builder.addField(fieldSpec);
     }
@@ -251,14 +251,14 @@ public class MetamodelGenerator extends AbstractProcessor {
 
   private void generateBasicProjectInformation(String packageName, String entityName,
       Builder builder,
-      @NotNull GenerateDescription annotation) {
+      @NotNull Metamodel annotation) {
     if (annotation.projectVersion()) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
           .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
           .initializer("$S", projectVersion)
           .addJavadoc(String.format(
               "@see %s.%s {@link %s}",
-              packageName, entityName, GenerateDescription.class.getName()))
+              packageName, entityName, Metamodel.class.getName()))
           .build();
       builder.addField(fieldSpec);
     }
@@ -268,7 +268,7 @@ public class MetamodelGenerator extends AbstractProcessor {
           .initializer("$S", projectName)
           .addJavadoc(String.format(
               "@see %s.%s {@link %s}",
-              packageName, entityName, GenerateDescription.class.getName()))
+              packageName, entityName, Metamodel.class.getName()))
           .build();
       builder.addField(fieldSpec);
     }

@@ -16,7 +16,7 @@
 package baby.mumu.authentication.domain.role;
 
 import baby.mumu.authentication.domain.authority.Authority;
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
@@ -43,7 +43,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@GenerateDescription
+@Metamodel
 public class Role extends BasisDomainModel {
 
   @Serial

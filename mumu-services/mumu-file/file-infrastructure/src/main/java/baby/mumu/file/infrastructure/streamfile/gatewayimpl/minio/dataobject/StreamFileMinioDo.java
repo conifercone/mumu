@@ -15,7 +15,7 @@
  */
 package baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import java.io.InputStream;
 import lombok.Data;
 
@@ -26,7 +26,7 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
-@GenerateDescription
+@Metamodel
 public class StreamFileMinioDo {
 
   /**

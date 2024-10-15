@@ -17,7 +17,7 @@ package baby.mumu.authentication.domain.account;
 
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.LanguageEnum;
@@ -54,7 +54,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@GenerateDescription
+@Metamodel
 @Data
 @SuperBuilder(toBuilder = true)
 public class Account extends BasisDomainModel implements UserDetails {

@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
@@ -46,7 +46,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
-@GenerateDescription
+@Metamodel
 public class AccountArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial

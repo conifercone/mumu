@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject;
 
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaMongodbBasisDefaultDataObject;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
@@ -41,6 +42,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("account_system_settings")
+@Metamodel
 public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataObject {
 
   @Serial

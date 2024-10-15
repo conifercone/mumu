@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@GenerateDescription
+@Metamodel
 public class AuthorityFindAllQueryCo extends BaseClientObject {
 
 

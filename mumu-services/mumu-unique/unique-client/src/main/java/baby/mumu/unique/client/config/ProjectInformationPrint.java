@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.config;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +26,14 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-@GenerateDescription(projectVersion = true, projectName = true)
+@Metamodel(projectVersion = true, projectName = true)
 public class ProjectInformationPrint {
 
   private final Logger LOGGER = LoggerFactory.getLogger(ProjectInformationPrint.class);
 
   @PostConstruct
   public void run() {
-    LOGGER.info(":: {} :: {}", ProjectInformationPrint4Desc.projectName,
-        ProjectInformationPrint4Desc.projectVersion);
+    LOGGER.info(":: {} :: {}", ProjectInformationPrintMetamodel.projectName,
+        ProjectInformationPrintMetamodel.projectVersion);
   }
 }

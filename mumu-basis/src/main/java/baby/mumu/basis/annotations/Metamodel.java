@@ -24,18 +24,44 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 自定义描述
+ * 元模型注解
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Documented
 @Inherited
-@Target({ElementType.ANNOTATION_TYPE})
+@Target({ElementType.TYPE})
 @Retention(RUNTIME)
-public @interface CustomDescription {
+public @interface Metamodel {
 
-  String name() default "";
+  Meta[] customs() default {};
 
-  String value() default "";
+  /**
+   * 是否生成项目版本号
+   *
+   * @since 2.2.0
+   */
+  boolean projectVersion() default false;
+
+  /**
+   * 项目版本号字段名
+   *
+   * @since 2.2.0
+   */
+  String projectVersionFiledName() default "projectVersion";
+
+  /**
+   * 是否生成项目名
+   *
+   * @since 2.2.0
+   */
+  boolean projectName() default false;
+
+  /**
+   * 项目名字段名
+   *
+   * @since 2.2.0
+   */
+  String projectNameFiledName() default "projectName";
 }

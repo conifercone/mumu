@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisDefaultDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "user_addresses")
 @DynamicInsert
-@GenerateDescription
+@Metamodel
 @RequiredArgsConstructor
 public class AccountAddressDo extends JpaBasisDefaultDataObject {
 

@@ -26,7 +26,7 @@ import baby.mumu.log.infrastructure.config.LogProperties;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.OperationLogEsRepository;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo4Desc;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDoMetamodel;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -118,10 +118,10 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     Optional.ofNullable(operationLog).ifPresent(optLog -> {
       Optional.ofNullable(optLog.getId())
           .ifPresent(id -> criteria.and(
-              new Criteria(OperationLogEsDo4Desc.id).matches(id)));
+              new Criteria(OperationLogEsDoMetamodel.id).matches(id)));
       Optional.ofNullable(optLog.getContent())
           .ifPresent(content -> {
-            String propertyName = OperationLogEsDo4Desc.content;
+            String propertyName = OperationLogEsDoMetamodel.content;
             criteria.and(
                 new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
                     .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -129,7 +129,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getOperator())
           .ifPresent(operator -> {
-            String propertyName = OperationLogEsDo4Desc.operator;
+            String propertyName = OperationLogEsDoMetamodel.operator;
             criteria.and(
                 new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
                     .matches(operator).or(propertyName.concat(ES_QUERY_SP))
@@ -137,14 +137,14 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getBizNo())
           .ifPresent(bizNo -> criteria.and(
-              new Criteria(OperationLogEsDo4Desc.bizNo).matches(bizNo)));
+              new Criteria(OperationLogEsDoMetamodel.bizNo).matches(bizNo)));
       Optional.ofNullable(optLog.getCategory())
           .ifPresent(category -> criteria.and(
-              new Criteria(OperationLogEsDo4Desc.category).matches(
+              new Criteria(OperationLogEsDoMetamodel.category).matches(
                   category)));
       Optional.ofNullable(optLog.getDetail())
           .ifPresent(detail -> {
-            String propertyName = OperationLogEsDo4Desc.detail;
+            String propertyName = OperationLogEsDoMetamodel.detail;
             criteria.and(
                 new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
                     .matches(detail).or(propertyName.concat(ES_QUERY_SP))
@@ -152,7 +152,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getSuccess())
           .ifPresent(success -> {
-            String propertyName = OperationLogEsDo4Desc.success;
+            String propertyName = OperationLogEsDoMetamodel.success;
             criteria.and(
                 new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
                     .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -160,7 +160,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
           });
       Optional.ofNullable(optLog.getFail())
           .ifPresent(fail -> {
-            String propertyName = OperationLogEsDo4Desc.fail;
+            String propertyName = OperationLogEsDoMetamodel.fail;
             criteria.and(
                 new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
                     .matches(fail).or(propertyName.concat(ES_QUERY_SP))
@@ -170,24 +170,24 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
       Optional.ofNullable(optLog.getOperatingTime())
           .ifPresent(
               operatingTime -> criteria.and(new Criteria(
-                  OperationLogEsDo4Desc.operatingTime).matches(
+                  OperationLogEsDoMetamodel.operatingTime).matches(
                   CommonUtil.convertAccountZoneToUTC(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
           .ifPresent(
               operatingStartTime -> criteria.and(
                   new Criteria(
-                      OperationLogEsDo4Desc.operatingTime).greaterThan(
+                      OperationLogEsDoMetamodel.operatingTime).greaterThan(
                       CommonUtil.convertAccountZoneToUTC(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
           .ifPresent(
               operatingEndTime -> criteria.and(
                   new Criteria(
-                      OperationLogEsDo4Desc.operatingTime).lessThan(
+                      OperationLogEsDoMetamodel.operatingTime).lessThan(
                       CommonUtil.convertAccountZoneToUTC(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
-            Sort.by(OperationLogEsDo4Desc.operatingTime).descending());
+            Sort.by(OperationLogEsDoMetamodel.operatingTime).descending());
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
         OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
