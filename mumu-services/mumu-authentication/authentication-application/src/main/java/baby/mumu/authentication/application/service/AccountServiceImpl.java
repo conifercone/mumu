@@ -23,6 +23,7 @@ import baby.mumu.authentication.application.account.executor.AccountChangePasswo
 import baby.mumu.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDisableCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
@@ -114,6 +115,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe;
   private final AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe;
   private final AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe;
+  private final AccountLogoutCmdExe accountLogoutCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -131,7 +133,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe,
       AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
       AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
-      AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe) {
+      AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
+      AccountLogoutCmdExe accountLogoutCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -149,6 +152,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountResetSystemSettingsBySettingsIdCmdExe = accountResetSystemSettingsBySettingsIdCmdExe;
     this.accountModifySystemSettingsBySettingsIdCmdExe = accountModifySystemSettingsBySettingsIdCmdExe;
     this.accountAddSystemSettingsCmdExe = accountAddSystemSettingsCmdExe;
+    this.accountLogoutCmdExe = accountLogoutCmdExe;
   }
 
   @Override
@@ -327,6 +331,12 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void disable(AccountDisableCmd accountDisableCmd) {
     accountDisableCmdExe.execute(accountDisableCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void logout() {
+    accountLogoutCmdExe.execute();
   }
 
   @NotNull

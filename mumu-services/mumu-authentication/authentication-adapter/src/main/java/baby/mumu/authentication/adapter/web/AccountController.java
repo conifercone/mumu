@@ -106,6 +106,15 @@ public class AccountController {
     accountService.disable(accountDisableCmd);
   }
 
+  @Operation(summary = "退出登录")
+  @PostMapping("/logout")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public void logout() {
+    accountService.logout();
+  }
+
   @Operation(summary = "获取当前登录账户信息")
   @GetMapping("/currentLoginAccount")
   @ResponseBody

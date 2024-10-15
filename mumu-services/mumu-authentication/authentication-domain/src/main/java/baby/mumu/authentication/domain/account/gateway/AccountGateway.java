@@ -168,4 +168,9 @@ public interface AccountGateway {
    * @param accountSystemSettings 账户系统设置
    */
   void addSystemSettings(AccountSystemSettings accountSystemSettings);
+
+  /**
+   * 退出登录
+   */
+  void logout();
 }

@@ -71,6 +71,11 @@ public interface AccountService {
   void disable(AccountDisableCmd accountDisableCmd);
 
   /**
+   * 退出登录
+   */
+  void logout();
+
+  /**
    * 查询当前登录账户信息
    *
    * @return 当前登录账户信息

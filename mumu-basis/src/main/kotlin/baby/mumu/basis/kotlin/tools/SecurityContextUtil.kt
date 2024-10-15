@@ -37,6 +37,7 @@ object SecurityContextUtil {
      * Account领域模型id属性名
      */
     private const val ID = "id"
+    private const val USERNAME = "username"
     private const val TIMEZONE = "timezone"
     private const val LANGUAGE = "language"
 
@@ -61,6 +62,33 @@ object SecurityContextUtil {
                         val claims: Map<String, Any> = principal.claims
                         if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.name)) {
                             return@map claims[TokenClaimsEnum.ACCOUNT_ID.name].toString().toLong()
+                        }
+                    }
+                }
+                null
+            }
+
+    @get:API(status = API.Status.STABLE, since = "2.2.0")
+    @JvmStatic
+    val loginAccountName: Optional<String?>
+        /**
+         * 获取当前登录账户名
+         *
+         * @return 登录账户名
+         */
+        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+            .map { authentication: Authentication ->
+                if (authentication.isAuthenticated) {
+                    val principal = authentication.principal
+                    if (principal is UserDetails) {
+                        val beanMap = BeanMap.create(principal)
+                        if (beanMap.containsKey(USERNAME)) {
+                            return@map beanMap[USERNAME].toString()
+                        }
+                    } else if (principal is ClaimAccessor) {
+                        val claims: Map<String, Any> = principal.claims
+                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.name)) {
+                            return@map claims[TokenClaimsEnum.ACCOUNT_NAME.name].toString()
                         }
                     }
                 }

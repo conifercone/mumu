@@ -28,6 +28,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
@@ -58,6 +59,9 @@ import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.authentication.event.LogoutSuccessEvent;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,6 +91,8 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountRoleRepository accountRoleRepository;
   private final AccountRedisRepository accountRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
+  private final OidcIdTokenRepository oidcIdTokenRepository;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -99,7 +105,9 @@ public class AccountGatewayImpl implements AccountGateway {
       AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
       AccountRoleRepository accountRoleRepository,
       AccountRedisRepository accountRedisRepository,
-      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository) {
+      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
+      OidcIdTokenRepository oidcIdTokenRepository,
+      ApplicationEventPublisher applicationEventPublisher) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -114,6 +122,8 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountRoleRepository = accountRoleRepository;
     this.accountRedisRepository = accountRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
+    this.oidcIdTokenRepository = oidcIdTokenRepository;
+    this.applicationEventPublisher = applicationEventPublisher;
   }
 
   @Override
@@ -430,5 +440,26 @@ public class AccountGatewayImpl implements AccountGateway {
                   accountSystemSettingsMongodbDo.setUserId(accountId);
                   accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbDo);
                 }));
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void logout() {
+    SecurityContextUtil.getLoginAccountId().ifPresent(accountId -> {
+      tokenRepository.deleteById(accountId);
+      refreshTokenRepository.deleteById(accountId);
+      oidcIdTokenRepository.deleteById(accountId);
+      accountRedisRepository.deleteById(accountId);
+      applicationEventPublisher.publishEvent(new LogoutSuccessEvent(
+          SecurityContextHolder.getContext().getAuthentication()));
+      SecurityContextUtil.getLoginAccountName().ifPresent(
+          accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
+              .setOperationLogSubmitCo(
+                  OperationLogSubmitGrpcCo.newBuilder().setContent("用户退出登录")
+                      .setBizNo(accountName)
+                      .setSuccess(String.format("用户%s成功退出登录", accountName))
+                      .build())
+              .build()));
+    });
   }
 }

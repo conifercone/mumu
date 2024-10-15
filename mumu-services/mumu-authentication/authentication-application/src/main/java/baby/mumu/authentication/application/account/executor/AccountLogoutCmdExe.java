@@ -13,21 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.dto;
+package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
-import jakarta.validation.Valid;
-import lombok.Data;
+import baby.mumu.authentication.domain.account.gateway.AccountGateway;
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * 添加账户系统设置指令
+ * 退出登录指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-@Data
-public class AccountAddSystemSettingsCmd {
+@Component
+@Observed(name = "AccountLogoutCmdExe")
+public class AccountLogoutCmdExe {
 
-  @Valid
-  private AccountAddSystemSettingsCo accountAddSystemSettingsCo;
+  private final AccountGateway accountGateway;
+
+  @Autowired
+  public AccountLogoutCmdExe(AccountGateway accountGateway) {
+    this.accountGateway = accountGateway;
+  }
+
+  public void execute() {
+    accountGateway.logout();
+  }
 }
