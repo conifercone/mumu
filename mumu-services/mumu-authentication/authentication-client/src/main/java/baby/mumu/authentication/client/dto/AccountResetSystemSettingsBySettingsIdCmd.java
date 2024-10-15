@@ -1,5 +1,6 @@
 package baby.mumu.authentication.client.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -11,5 +12,6 @@ import lombok.Data;
 @Data
 public class AccountResetSystemSettingsBySettingsIdCmd {
 
+  @NotBlank
   private String systemSettingsId;
 }

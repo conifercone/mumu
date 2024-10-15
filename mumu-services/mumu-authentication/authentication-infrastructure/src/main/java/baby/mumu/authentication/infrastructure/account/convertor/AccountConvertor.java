@@ -365,7 +365,7 @@ public class AccountConvertor {
         .map(accountAddSystemSettingsCoNotNull -> {
           AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
               accountAddSystemSettingsCoNotNull);
-          if (accountSystemSettings.getId() == null) {
+          if (StringUtils.isBlank(accountSystemSettings.getId())) {
             accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
           }
           return accountSystemSettings;

@@ -1,6 +1,7 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 /**
@@ -12,5 +13,6 @@ import lombok.Data;
 @Data
 public class AccountAddSystemSettingsCmd {
 
+  @Valid
   private AccountAddSystemSettingsCo accountAddSystemSettingsCo;
 }
