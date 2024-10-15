@@ -260,7 +260,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
-    return tokenRepository.count();
+    return refreshTokenRepository.count();
   }
 
   @Override
