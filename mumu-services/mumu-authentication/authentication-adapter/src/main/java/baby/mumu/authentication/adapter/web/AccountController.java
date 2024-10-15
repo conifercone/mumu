@@ -24,6 +24,7 @@ import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
@@ -240,5 +241,15 @@ public class AccountController {
   public AccountBasicInfoCo getAccountBasicInfoById(
       @RequestBody @Valid AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
     return accountService.getAccountBasicInfoById(accountBasicInfoByIdCmd);
+  }
+
+  @Operation(summary = "根据id下线账户")
+  @PostMapping("/offline")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public void offline(
+      @RequestBody @Valid AccountOfflineCmd accountOfflineCmd) {
+    accountService.offline(accountOfflineCmd);
   }
 }

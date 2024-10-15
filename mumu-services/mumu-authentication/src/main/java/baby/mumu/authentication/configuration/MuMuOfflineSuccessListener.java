@@ -15,42 +15,39 @@
  */
 package baby.mumu.authentication.configuration;
 
+import baby.mumu.basis.event.OfflineSuccessEvent;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.authentication.event.LogoutSuccessEvent;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 /**
- * 登出事件
+ * 用户下线成功监听
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Component
-public class MuMuLogoutSuccessListener {
+public class MuMuOfflineSuccessListener {
 
   private final OAuth2AuthorizationService oAuth2AuthorizationService;
 
   @Autowired
-  public MuMuLogoutSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
+  public MuMuOfflineSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
     this.oAuth2AuthorizationService = oAuth2AuthorizationService;
   }
 
   @EventListener
-  public void onLogoutSuccess(@NotNull LogoutSuccessEvent event) {
-    Authentication authentication = event.getAuthentication();
-    if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-          jwtAuthenticationToken.getToken().getTokenValue(),
+  public void onOfflineSuccess(@NotNull OfflineSuccessEvent event) {
+    String tokenValue = event.getTokenValue();
+    if (StringUtils.isNotBlank(tokenValue)) {
+      Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
           OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-          jwtAuthenticationToken.getToken().getTokenValue(),
+      Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
           OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
     }
   }

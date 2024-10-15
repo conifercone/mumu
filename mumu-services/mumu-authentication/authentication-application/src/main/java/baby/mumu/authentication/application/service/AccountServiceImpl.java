@@ -25,6 +25,7 @@ import baby.mumu.authentication.application.account.executor.AccountDeleteCurren
 import baby.mumu.authentication.application.account.executor.AccountDisableCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountOfflineCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountRecoverFromArchiveByIdCmdExe;
@@ -52,6 +53,7 @@ import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
@@ -116,6 +118,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe;
   private final AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe;
   private final AccountLogoutCmdExe accountLogoutCmdExe;
+  private final AccountOfflineCmdExe accountOfflineCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -134,7 +137,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
       AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
       AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
-      AccountLogoutCmdExe accountLogoutCmdExe) {
+      AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -153,6 +156,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountModifySystemSettingsBySettingsIdCmdExe = accountModifySystemSettingsBySettingsIdCmdExe;
     this.accountAddSystemSettingsCmdExe = accountAddSystemSettingsCmdExe;
     this.accountLogoutCmdExe = accountLogoutCmdExe;
+    this.accountOfflineCmdExe = accountOfflineCmdExe;
   }
 
   @Override
@@ -447,5 +451,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void addAddress(AccountAddAddressCmd accountAddAddressCmd) {
     accountAddAddressCmdExe.execute(accountAddAddressCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void offline(AccountOfflineCmd accountOfflineCmd) {
+    accountOfflineCmdExe.execute(accountOfflineCmd);
   }
 }

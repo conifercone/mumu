@@ -173,4 +173,11 @@ public interface AccountGateway {
    * 退出登录
    */
   void logout();
+
+  /**
+   * 根据账户id下线账户
+   *
+   * @param id 账户ID
+   */
+  void offline(Long id);
 }

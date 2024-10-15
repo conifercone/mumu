@@ -32,6 +32,7 @@ import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTok
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
+import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
@@ -458,6 +459,34 @@ public class AccountGatewayImpl implements AccountGateway {
                   OperationLogSubmitGrpcCo.newBuilder().setContent("用户退出登录")
                       .setBizNo(accountName)
                       .setSuccess(String.format("用户%s成功退出登录", accountName))
+                      .build())
+              .build()));
+    });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @DangerousOperation("强制ID为%0的用户下线")
+  public void offline(Long id) {
+    Optional.ofNullable(id).ifPresent(accountId -> {
+      tokenRepository.findById(accountId)
+          .ifPresentOrElse(
+              tokenRedisDo -> applicationEventPublisher.publishEvent(new OfflineSuccessEvent(
+                  this, tokenRedisDo.getTokenValue())),
+              () -> refreshTokenRepository.findById(accountId).ifPresent(
+                  refreshTokenRedisDo -> applicationEventPublisher.publishEvent(
+                      new OfflineSuccessEvent(
+                          this, refreshTokenRedisDo.getRefreshTokenValue()))));
+      tokenRepository.deleteById(accountId);
+      refreshTokenRepository.deleteById(accountId);
+      oidcIdTokenRepository.deleteById(accountId);
+      accountRedisRepository.deleteById(accountId);
+      SecurityContextUtil.getLoginAccountName().ifPresent(
+          accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
+              .setOperationLogSubmitCo(
+                  OperationLogSubmitGrpcCo.newBuilder().setContent("用户下线")
+                      .setBizNo(accountName)
+                      .setSuccess(String.format("用户%s成功下线", accountName))
                       .build())
               .build()));
     });

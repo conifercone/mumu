@@ -23,6 +23,7 @@ import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
@@ -164,4 +165,11 @@ public interface AccountService {
    * @param accountAddAddressCmd 账户添加地址指令
    */
   void addAddress(AccountAddAddressCmd accountAddAddressCmd);
+
+  /**
+   * 下线账户
+   *
+   * @param accountOfflineCmd 下线账户指令
+   */
+  void offline(AccountOfflineCmd accountOfflineCmd);
 }
