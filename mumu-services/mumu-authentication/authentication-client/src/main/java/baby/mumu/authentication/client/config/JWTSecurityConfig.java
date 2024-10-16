@@ -27,6 +27,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -97,7 +98,7 @@ public class JWTSecurityConfig {
             .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
     http.addFilterBefore(new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
         UsernamePasswordAuthenticationFilter.class);
-    return http.build();
+    return http.cors(Customizer.withDefaults()).build();
   }
 
   @Bean

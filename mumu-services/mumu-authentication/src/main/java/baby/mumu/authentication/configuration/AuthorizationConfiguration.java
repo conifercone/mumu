@@ -72,6 +72,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.GrantedAuthority;
@@ -212,7 +213,7 @@ public class AuthorizationConfiguration {
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
         .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
 
-    return http.build();
+    return http.cors(Customizer.withDefaults()).build();
   }
 
   /**
