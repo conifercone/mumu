@@ -211,7 +211,19 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(AccountRedisDo accountRedisDo) {
-    return Optional.ofNullable(accountRedisDo).map(AccountMapper.INSTANCE::toEntity);
+    return Optional.ofNullable(accountRedisDo).map(AccountMapper.INSTANCE::toEntity)
+        .map(account -> {
+          List<Long> roleIds = accountRoleRepository.findByAccountId(account.getId()).stream()
+              .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId)
+              .collect(Collectors.toList());
+          setRolesWithIds(account, roleIds);
+          account.setSystemSettings(
+              accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
+                  .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+                      accountSystemSettingsMongodbDo).stream())
+                  .collect(Collectors.toList()));
+          return account;
+        });
   }
 
   @Contract("_ -> new")

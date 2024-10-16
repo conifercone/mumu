@@ -258,10 +258,15 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> queryCurrentLoginAccount() {
-    return SecurityContextUtil.getLoginAccountId().map(
-            loginAccountId -> accountRepository.findById(loginAccountId)
-                .flatMap(accountConvertor::toEntity))
-        .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED));
+    return SecurityContextUtil.getLoginAccountId().flatMap(accountRedisRepository::findById)
+        .flatMap(accountConvertor::toEntity).or(() -> {
+          Optional<Account> account = accountRepository.findById(
+                  SecurityContextUtil.getLoginAccountId().get())
+              .flatMap(accountConvertor::toEntity);
+          account.flatMap(accountConvertor::toAccountRedisDo)
+              .ifPresent(accountRedisRepository::save);
+          return account;
+        });
   }
 
   @Override
