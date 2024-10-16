@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis;
 
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import com.redis.om.spring.repository.RedisDocumentRepository;
+import java.util.Optional;
 
 /**
  * 账户基本信息缓存
@@ -27,4 +28,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 public interface AccountRedisRepository extends
     RedisDocumentRepository<AccountRedisDo, Long> {
 
+  Optional<AccountRedisDo> findByUsername(String username);
+
+  Optional<AccountRedisDo> findByEmail(String email);
 }

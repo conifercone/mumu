@@ -194,16 +194,26 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
-    return accountRepository.findAccountDoByUsername(username)
-        .flatMap(accountConvertor::toEntity);
+    return accountRedisRepository.findByUsername(username).flatMap(accountConvertor::toEntity)
+        .or(() -> {
+          Optional<Account> account = accountRepository.findAccountDoByUsername(username)
+              .flatMap(accountConvertor::toEntity);
+          account.flatMap(accountConvertor::toAccountRedisDo)
+              .ifPresent(accountRedisRepository::save);
+          return account;
+        });
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
-    return accountRepository.findAccountDoByEmail(email)
-        .flatMap(accountConvertor::toEntity);
+    return accountRedisRepository.findByEmail(email).flatMap(accountConvertor::toEntity).or(() -> {
+      Optional<Account> account = accountRepository.findAccountDoByEmail(email)
+          .flatMap(accountConvertor::toEntity);
+      account.flatMap(accountConvertor::toAccountRedisDo).ifPresent(accountRedisRepository::save);
+      return account;
+    });
   }
 
   @Override
