@@ -19,6 +19,10 @@ import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
 import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
@@ -123,6 +127,18 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   AccountDo toDataObject(AccountArchivedDo accountArchivedDo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountFindAllCo toFindAllCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountFindAllSliceCo toFindAllSliceCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Account toEntity(AccountFindAllQueryCo accountFindAllQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Account toEntity(AccountFindAllSliceQueryCo accountFindAllSliceQueryCo);
+
   @AfterMapping
   default void convertToAccountTimezone(
       @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
@@ -133,6 +149,18 @@ public interface AccountMapper {
   default void convertToAccountTimezone(
       @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
     CommonUtil.convertToAccountZone(accountBasicInfoCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget AccountFindAllCo accountFindAllCo) {
+    CommonUtil.convertToAccountZone(accountFindAllCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+      @MappingTarget AccountFindAllSliceCo accountFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(accountFindAllSliceCo);
   }
 
   default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {

@@ -23,6 +23,8 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
@@ -34,6 +36,8 @@ import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
@@ -43,6 +47,8 @@ import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -251,5 +257,25 @@ public class AccountController {
   public void offline(
       @RequestBody @Valid AccountOfflineCmd accountOfflineCmd) {
     accountService.offline(accountOfflineCmd);
+  }
+
+  @Operation(summary = "分页查询账户")
+  @GetMapping("/findAll")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Page<AccountFindAllCo> findAll(
+      @RequestBody @Valid AccountFindAllCmd accountFindAllCmd) {
+    return accountService.findAll(accountFindAllCmd);
+  }
+
+  @Operation(summary = "分页查询账户（不查询总数）")
+  @GetMapping("/findAllSlice")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<AccountFindAllSliceCo> findAllSlice(
+      @RequestBody @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 }

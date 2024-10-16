@@ -23,6 +23,8 @@ import baby.mumu.authentication.application.account.executor.AccountChangePasswo
 import baby.mumu.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDisableCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountFindAllCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountFindAllSliceCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOfflineCmdExe;
@@ -52,6 +54,8 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
@@ -64,6 +68,8 @@ import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountDisableCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
@@ -86,6 +92,8 @@ import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,6 +127,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe;
   private final AccountLogoutCmdExe accountLogoutCmdExe;
   private final AccountOfflineCmdExe accountOfflineCmdExe;
+  private final AccountFindAllCmdExe accountFindAllCmdExe;
+  private final AccountFindAllSliceCmdExe accountFindAllSliceCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -137,7 +147,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
       AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
       AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
       AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
-      AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe) {
+      AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
+      AccountFindAllCmdExe accountFindAllCmdExe,
+      AccountFindAllSliceCmdExe accountFindAllSliceCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -157,6 +169,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountAddSystemSettingsCmdExe = accountAddSystemSettingsCmdExe;
     this.accountLogoutCmdExe = accountLogoutCmdExe;
     this.accountOfflineCmdExe = accountOfflineCmdExe;
+    this.accountFindAllCmdExe = accountFindAllCmdExe;
+    this.accountFindAllSliceCmdExe = accountFindAllSliceCmdExe;
   }
 
   @Override
@@ -457,5 +471,17 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void offline(AccountOfflineCmd accountOfflineCmd) {
     accountOfflineCmdExe.execute(accountOfflineCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Page<AccountFindAllCo> findAll(AccountFindAllCmd accountFindAllCmd) {
+    return accountFindAllCmdExe.execute(accountFindAllCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Slice<AccountFindAllSliceCo> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    return accountFindAllSliceCmdExe.execute(accountFindAllSliceCmd);
   }
 }

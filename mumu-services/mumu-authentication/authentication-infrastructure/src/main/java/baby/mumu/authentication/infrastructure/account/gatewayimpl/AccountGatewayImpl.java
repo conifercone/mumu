@@ -19,6 +19,7 @@ import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
+import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
@@ -61,6 +62,11 @@ import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -490,5 +496,35 @@ public class AccountGatewayImpl implements AccountGateway {
                       .build())
               .build()));
     });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Page<Account> findAll(Account account, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Page<AccountDo> accountDos = accountRepository.findAllPage(
+        accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
+        Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
+                accountEntity.getRoles()))
+            .map(roles -> roles.stream().map(Role::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
+    return new PageImpl<>(accountDos.getContent().stream()
+        .flatMap(accountDo -> accountConvertor.toEntity(accountDo).stream())
+        .toList(), pageRequest, accountDos.getTotalElements());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Slice<Account> findAllSlice(Account account, int pageNo, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    Slice<AccountDo> accountDos = accountRepository.findAllSlice(
+        accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
+        Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
+                accountEntity.getRoles()))
+            .map(roles -> roles.stream().map(Role::getId).collect(
+                Collectors.toList())).orElse(null), pageRequest);
+    return new SliceImpl<>(accountDos.getContent().stream()
+        .flatMap(accountDo -> accountConvertor.toEntity(accountDo).stream())
+        .toList(), pageRequest, accountDos.hasNext());
   }
 }

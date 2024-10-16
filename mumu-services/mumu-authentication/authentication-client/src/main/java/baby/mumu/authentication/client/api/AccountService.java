@@ -22,6 +22,8 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountDisableCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
@@ -33,7 +35,11 @@ import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 账户功能API
@@ -172,4 +178,20 @@ public interface AccountService {
    * @param accountOfflineCmd 下线账户指令
    */
   void offline(AccountOfflineCmd accountOfflineCmd);
+
+  /**
+   * 分页查询账户
+   *
+   * @param accountFindAllCmd 分页查询账户指令
+   * @return 查询结果
+   */
+  Page<AccountFindAllCo> findAll(AccountFindAllCmd accountFindAllCmd);
+
+  /**
+   * 分页查询账户（不查询总数）
+   *
+   * @param accountFindAllSliceCmd 分页查询账户指令
+   * @return 查询结果
+   */
+  Slice<AccountFindAllSliceCo> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd);
 }

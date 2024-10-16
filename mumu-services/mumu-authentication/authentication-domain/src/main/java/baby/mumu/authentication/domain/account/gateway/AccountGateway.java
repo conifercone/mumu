@@ -20,6 +20,8 @@ import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 用户领域网关
@@ -180,4 +182,24 @@ public interface AccountGateway {
    * @param id 账户ID
    */
   void offline(Long id);
+
+  /**
+   * 分页获取账户
+   *
+   * @param account  查询条件
+   * @param pageNo   页码
+   * @param pageSize 每页数量
+   * @return 查询结果
+   */
+  Page<Account> findAll(Account account, int pageNo, int pageSize);
+
+  /**
+   * 分页获取账户(不查询总数)
+   *
+   * @param account  查询条件
+   * @param pageNo   页码
+   * @param pageSize 每页数量
+   * @return 查询结果
+   */
+  Slice<Account> findAllSlice(Account account, int pageNo, int pageSize);
 }

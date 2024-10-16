@@ -19,6 +19,10 @@ import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
 import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -434,5 +438,37 @@ public class AccountConvertor {
           accountRoleDo.setRole(roleRepository.findById(role.getId()).orElse(null));
           return accountRoleDo;
         }).collect(Collectors.toList())).orElse(new ArrayList<>());
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountFindAllCo> toFindAllCo(
+      Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllCo);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountFindAllSliceCo> toFindAllSliceCo(
+      Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllSliceCo);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Account> toEntity(
+      AccountFindAllQueryCo accountFindAllQueryCo) {
+    return Optional.ofNullable(accountFindAllQueryCo).map(AccountMapper.INSTANCE::toEntity)
+        .map(account -> {
+          setRolesWithIds(account, accountFindAllQueryCo.getRoleIds());
+          return account;
+        });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Account> toEntity(
+      AccountFindAllSliceQueryCo accountFindAllSliceQueryCo) {
+    return Optional.ofNullable(accountFindAllSliceQueryCo).map(AccountMapper.INSTANCE::toEntity)
+        .map(account -> {
+          setRolesWithIds(account, accountFindAllSliceQueryCo.getRoleIds());
+          return account;
+        });
   }
 }
