@@ -29,7 +29,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.0
  */
 @Data
-@Document(value = "oidcIdToken")
+@Document(value = "oidc-id-token")
 public class OidcIdTokenRedisDo {
 
   @Id

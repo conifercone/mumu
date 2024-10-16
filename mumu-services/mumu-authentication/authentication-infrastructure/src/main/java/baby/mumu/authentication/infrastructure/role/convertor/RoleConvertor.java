@@ -34,6 +34,8 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.datao
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDoId;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisDo;
+import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
@@ -52,6 +54,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,6 +76,7 @@ public class RoleConvertor {
   private final RoleArchivedRepository roleArchivedRepository;
   private final RoleAuthorityRepository roleAuthorityRepository;
   private final AuthorityRedisRepository authorityRedisRepository;
+  private final RoleAuthorityRedisRepository roleAuthorityRedisRepository;
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
@@ -80,7 +84,8 @@ public class RoleConvertor {
       ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
       RoleArchivedRepository roleArchivedRepository,
       RoleAuthorityRepository roleAuthorityRepository,
-      AuthorityRedisRepository authorityRedisRepository) {
+      AuthorityRedisRepository authorityRedisRepository,
+      RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
@@ -89,6 +94,7 @@ public class RoleConvertor {
     this.roleArchivedRepository = roleArchivedRepository;
     this.roleAuthorityRepository = roleAuthorityRepository;
     this.authorityRedisRepository = authorityRedisRepository;
+    this.roleAuthorityRedisRepository = roleAuthorityRedisRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -96,12 +102,20 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
-      List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
-          .map(RoleAuthorityDo::getId)
-          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
-      setAuthorities(role, authorityIds);
+      setAuthorities(role, getAuthorityIds(role));
       return role;
     });
+  }
+
+  private @NotNull List<Long> getAuthorityIds(Role role) {
+    return roleAuthorityRedisRepository.findById(role.getId())
+        .map(RoleAuthorityRedisDo::getAuthorityIds).orElseGet(() -> {
+          List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
+              .map(RoleAuthorityDo::getId)
+              .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
+          roleAuthorityRedisRepository.save(new RoleAuthorityRedisDo(role.getId(), authorityIds));
+          return authorityIds;
+        });
   }
 
   private void setAuthorities(Role role, List<Long> authorityIds) {
@@ -144,10 +158,7 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedDo).map(roleArchivedDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
-      List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
-          .map(RoleAuthorityDo::getId)
-          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
-      setAuthorities(role, authorityIds);
+      setAuthorities(role, getAuthorityIds(role));
       return role;
     });
   }
@@ -266,10 +277,7 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleRedisDo roleRedisDo) {
     return Optional.ofNullable(roleRedisDo).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
-              .map(RoleAuthorityDo::getId)
-              .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
-          setAuthorities(role, authorityIds);
+          setAuthorities(role, getAuthorityIds(role));
           return role;
         });
   }

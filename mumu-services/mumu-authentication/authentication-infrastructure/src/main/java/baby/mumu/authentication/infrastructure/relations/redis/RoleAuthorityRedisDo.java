@@ -13,38 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject;
+package baby.mumu.authentication.infrastructure.relations.redis;
 
+import baby.mumu.basis.dataobject.jpa.JpaRedisBasisDefaultDataObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.TextIndexed;
+import java.io.Serial;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * refresh token redis数据对象
+ * 角色权限关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.2
+ * @since 2.2.0
  */
 @Data
-@Document(value = "refresh-token")
-public class RefreshTokenRedisDo {
+@EqualsAndHashCode(callSuper = true)
+@Document(value = "role-authority")
+@AllArgsConstructor
+@NoArgsConstructor
+public class RoleAuthorityRedisDo extends JpaRedisBasisDefaultDataObject {
+
+  @Serial
+  private static final long serialVersionUID = 4744706662530961684L;
+
+  public RoleAuthorityRedisDo(Long roleId, List<Long> authorityIds) {
+    this.roleId = roleId;
+    this.authorityIds = authorityIds;
+  }
 
   @Id
   @Indexed
-  private Long id;
+  private Long roleId;
 
-  /**
-   * refreshToken值
-   */
-  @TextIndexed
-  private String refreshTokenValue;
+  @Indexed
+  private List<Long> authorityIds;
 
   /**
    * 存活时间
+   * <p>低等级别变化数据：默认缓存时间为6小时</p>
    */
-  @TimeToLive
-  private Long ttl = 5L;
+  @TimeToLive(unit = TimeUnit.HOURS)
+  private Long ttl = 6L;
 }

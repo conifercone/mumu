@@ -29,6 +29,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
@@ -100,6 +101,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
   private final OidcIdTokenRepository oidcIdTokenRepository;
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final AccountRoleRedisRepository accountRoleRedisRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
@@ -114,7 +116,8 @@ public class AccountGatewayImpl implements AccountGateway {
       AccountRedisRepository accountRedisRepository,
       AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
       OidcIdTokenRepository oidcIdTokenRepository,
-      ApplicationEventPublisher applicationEventPublisher) {
+      ApplicationEventPublisher applicationEventPublisher,
+      AccountRoleRedisRepository accountRoleRedisRepository) {
     this.accountRepository = accountRepository;
     this.tokenRepository = tokenRepository;
     this.refreshTokenRepository = refreshTokenRepository;
@@ -131,6 +134,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
     this.oidcIdTokenRepository = oidcIdTokenRepository;
     this.applicationEventPublisher = applicationEventPublisher;
+    this.accountRoleRedisRepository = accountRoleRedisRepository;
   }
 
   @Override
@@ -166,7 +170,6 @@ public class AccountGatewayImpl implements AccountGateway {
             accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbDo(
                 accountSystemSettings).stream()).collect(Collectors.toList()));
       }
-      accountRedisRepository.deleteById(account.getId());
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
               accountAddresses -> accountAddresses.stream()
                   .flatMap(accountAddress -> accountConvertor.toAccountAddressDo(accountAddress)
@@ -175,6 +178,8 @@ public class AccountGatewayImpl implements AccountGateway {
                       Collectors.toList())).filter(CollectionUtils::isNotEmpty)
           .ifPresent(accountAddressRepository::persistAll);
       accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
+      accountRedisRepository.deleteById(account.getId());
+      accountRoleRedisRepository.deleteById(account.getId());
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
@@ -219,6 +224,7 @@ public class AccountGatewayImpl implements AccountGateway {
                   });
               accountRepository.merge(accountDo);
               accountRedisRepository.deleteById(accountId);
+              accountRoleRedisRepository.deleteById(accountId);
             }), () -> {
           throw new MuMuException(ResultCode.UNAUTHORIZED);
         });
@@ -233,6 +239,7 @@ public class AccountGatewayImpl implements AccountGateway {
       try {
         accountRoleRepository.deleteByAccountId(account.getId());
         accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
+        accountRoleRedisRepository.deleteById(account.getId());
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -249,6 +256,7 @@ public class AccountGatewayImpl implements AccountGateway {
       tokenRepository.deleteById(id);
       refreshTokenRepository.deleteById(id);
       accountRedisRepository.deleteById(id);
+      accountRoleRedisRepository.deleteById(id);
     }, () -> {
       throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -286,6 +294,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
       accountRedisRepository.deleteById(accountDo.getId());
+      accountRoleRedisRepository.deleteById(accountDo.getId());
     }, () -> {
       throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -303,6 +312,7 @@ public class AccountGatewayImpl implements AccountGateway {
       refreshTokenRepository.deleteById(accountId);
       accountRoleRepository.deleteByAccountId(accountId);
       accountRedisRepository.deleteById(accountId);
+      accountRoleRedisRepository.deleteById(accountId);
     }, () -> {
       throw new MuMuException(ResultCode.UNAUTHORIZED);
     });
@@ -343,6 +353,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED));
       accountRepository.merge(newAccountDo);
       accountRedisRepository.deleteById(newAccountDo.getId());
+      accountRoleRedisRepository.deleteById(newAccountDo.getId());
     } else {
       throw new MuMuException(ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
@@ -359,6 +370,7 @@ public class AccountGatewayImpl implements AccountGateway {
           accountArchivedRepository.persist(accountArchivedDo);
           accountRepository.deleteById(accountArchivedDo.getId());
           accountRedisRepository.deleteById(accountArchivedDo.getId());
+          accountRoleRedisRepository.deleteById(accountArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -373,6 +385,8 @@ public class AccountGatewayImpl implements AccountGateway {
       accountArchivedRepository.deleteById(accountIdNonNull);
       accountAddressRepository.deleteByUserId(accountIdNonNull);
       accountRoleRepository.deleteByAccountId(accountIdNonNull);
+      accountRedisRepository.deleteById(accountIdNonNull);
+      accountRoleRedisRepository.deleteById(accountIdNonNull);
     });
   }
 
@@ -398,6 +412,7 @@ public class AccountGatewayImpl implements AccountGateway {
                   accountAddressDo.setUserId(accountId);
                   accountAddressRepository.persist(accountAddressDo);
                   accountRedisRepository.deleteById(accountId);
+                  accountRoleRedisRepository.deleteById(accountId);
                 })));
   }
 
@@ -462,6 +477,7 @@ public class AccountGatewayImpl implements AccountGateway {
       refreshTokenRepository.deleteById(accountId);
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
+      accountRoleRedisRepository.deleteById(accountId);
       applicationEventPublisher.publishEvent(new LogoutSuccessEvent(
           SecurityContextHolder.getContext().getAuthentication()));
       SecurityContextUtil.getLoginAccountName().ifPresent(
@@ -492,6 +508,7 @@ public class AccountGatewayImpl implements AccountGateway {
       refreshTokenRepository.deleteById(accountId);
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
+      accountRoleRedisRepository.deleteById(accountId);
       SecurityContextUtil.getLoginAccountName().ifPresent(
           accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
               .setOperationLogSubmitCo(

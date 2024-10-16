@@ -13,38 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject;
+package baby.mumu.authentication.infrastructure.relations.redis;
 
-import com.redis.om.spring.annotations.Document;
-import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.TextIndexed;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.TimeToLive;
+import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * refresh token redis数据对象
+ * 角色权限关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.2
+ * @since 2.2.0
  */
-@Data
-@Document(value = "refresh-token")
-public class RefreshTokenRedisDo {
+public interface RoleAuthorityRedisRepository extends
+    RedisDocumentRepository<RoleAuthorityRedisDo, Long> {
 
-  @Id
-  @Indexed
-  private Long id;
-
-  /**
-   * refreshToken值
-   */
-  @TextIndexed
-  private String refreshTokenValue;
-
-  /**
-   * 存活时间
-   */
-  @TimeToLive
-  private Long ttl = 5L;
 }

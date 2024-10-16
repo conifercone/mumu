@@ -29,7 +29,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.1
  */
 @Data
-@Document(value = "simple_captcha")
+@Document(value = "simple-captcha")
 public class SimpleCaptchaDo {
 
   @Id

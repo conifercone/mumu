@@ -22,6 +22,7 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
@@ -72,6 +73,7 @@ public class RoleGatewayImpl implements RoleGateway {
   private final ExtensionProperties extensionProperties;
   private final RoleAuthorityRepository roleAuthorityRepository;
   private final RoleRedisRepository roleRedisRepository;
+  private final RoleAuthorityRedisRepository roleAuthorityRedisRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider,
@@ -79,7 +81,8 @@ public class RoleGatewayImpl implements RoleGateway {
       RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
       ExtensionProperties extensionProperties,
       RoleAuthorityRepository roleAuthorityRepository,
-      RoleRedisRepository roleRedisRepository) {
+      RoleRedisRepository roleRedisRepository,
+      RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -89,6 +92,7 @@ public class RoleGatewayImpl implements RoleGateway {
     this.extensionProperties = extensionProperties;
     this.roleAuthorityRepository = roleAuthorityRepository;
     this.roleRedisRepository = roleRedisRepository;
+    this.roleAuthorityRedisRepository = roleAuthorityRedisRepository;
   }
 
   @Override
@@ -116,6 +120,7 @@ public class RoleGatewayImpl implements RoleGateway {
       List<RoleAuthorityDo> roleAuthorityDos = roleConvertor.toRoleAuthorityDos(role);
       if (CollectionUtils.isNotEmpty(roleAuthorityDos)) {
         roleAuthorityRepository.persistAll(roleAuthorityDos);
+        roleAuthorityRedisRepository.deleteById(roleNonNull.getId());
       }
     });
   }
@@ -135,6 +140,7 @@ public class RoleGatewayImpl implements RoleGateway {
       roleRepository.deleteById(roleId);
       roleArchivedRepository.deleteById(roleId);
       roleRedisRepository.deleteById(roleId);
+      roleAuthorityRedisRepository.deleteById(roleId);
     });
   }
 
@@ -150,6 +156,7 @@ public class RoleGatewayImpl implements RoleGateway {
         roleAuthorityRepository.deleteByRoleId(roleDomain.getId());
         saveRoleAuthorityRelationsData(roleDomain);
         roleRedisRepository.deleteById(roleDomain.getId());
+        roleAuthorityRedisRepository.deleteById(roleDomain.getId());
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -245,6 +252,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleArchivedRepository.persist(roleArchivedDo);
           roleRepository.deleteById(roleArchivedDo.getId());
           roleRedisRepository.deleteById(roleArchivedDo.getId());
+          roleAuthorityRedisRepository.deleteById(roleArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -261,6 +269,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleArchivedRepository.deleteById(roleIdNotNull);
           roleAuthorityRepository.deleteByRoleId(roleIdNotNull);
           roleRedisRepository.deleteById(roleIdNotNull);
+          roleAuthorityRedisRepository.deleteById(roleIdNotNull);
         });
   }
 
@@ -273,6 +282,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleArchivedRepository.deleteById(roleDo.getId());
           roleRepository.persist(roleDo);
           roleRedisRepository.deleteById(roleDo.getId());
+          roleAuthorityRedisRepository.deleteById(roleDo.getId());
         });
   }
 }

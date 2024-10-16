@@ -41,7 +41,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("account_system_settings")
+@Document("account-system-settings")
 @Metamodel
 public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataObject {
 

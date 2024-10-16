@@ -43,6 +43,8 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobj
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisDo;
+import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
@@ -61,6 +63,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +85,7 @@ public class AccountConvertor {
   private final AccountRoleRepository accountRoleRepository;
   private final RoleRedisRepository roleRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
+  private final AccountRoleRedisRepository accountRoleRedisRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
@@ -90,7 +94,8 @@ public class AccountConvertor {
       AccountAddressRepository accountAddressRepository,
       AccountRoleRepository accountRoleRepository,
       RoleRedisRepository roleRedisRepository,
-      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository) {
+      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
+      AccountRoleRedisRepository accountRoleRedisRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -100,6 +105,7 @@ public class AccountConvertor {
     this.accountRoleRepository = accountRoleRepository;
     this.roleRedisRepository = roleRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
+    this.accountRoleRedisRepository = accountRoleRedisRepository;
   }
 
   @Contract("_ -> new")
@@ -107,9 +113,7 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountDo accountDo) {
     return Optional.ofNullable(accountDo).map(accountDataObject -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
-      List<Long> roleIds = accountRoleRepository.findByAccountId(accountDataObject.getId()).stream()
-          .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId).collect(Collectors.toList());
-      setRolesWithIds(account, roleIds);
+      setRolesWithIds(account, getRoleIds(accountDataObject.getId()));
       account.setAddresses(
           accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
               AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
@@ -213,16 +217,26 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountRedisDo accountRedisDo) {
     return Optional.ofNullable(accountRedisDo).map(AccountMapper.INSTANCE::toEntity)
         .map(account -> {
-          List<Long> roleIds = accountRoleRepository.findByAccountId(account.getId()).stream()
-              .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId)
-              .collect(Collectors.toList());
-          setRolesWithIds(account, roleIds);
+          setRolesWithIds(account, getRoleIds(account.getId()));
           account.setSystemSettings(
               accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
                   .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
                       accountSystemSettingsMongodbDo).stream())
                   .collect(Collectors.toList()));
           return account;
+        });
+  }
+
+  private @NotNull List<Long> getRoleIds(Long account) {
+    return accountRoleRedisRepository.findById(account)
+        .map(AccountRoleRedisDo::getRoleIds).orElseGet(() -> {
+          List<Long> roleIds = accountRoleRepository.findByAccountId(account)
+              .stream()
+              .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId)
+              .collect(Collectors.toList());
+          accountRoleRedisRepository.save(
+              new AccountRoleRedisDo(account, roleIds));
+          return roleIds;
         });
   }
 
