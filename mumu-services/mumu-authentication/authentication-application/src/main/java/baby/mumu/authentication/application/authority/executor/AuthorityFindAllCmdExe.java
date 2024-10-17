@@ -55,7 +55,7 @@ public class AuthorityFindAllCmdExe {
             authorityFindAllCmd.getAuthorityFindAllQueryCo())
         .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findAll(authority,
-        authorityFindAllCmd.getPageNo(), authorityFindAllCmd.getPageSize());
+        authorityFindAllCmd.getCurrent(), authorityFindAllCmd.getPageSize());
     List<AuthorityFindAllCo> authorityFindAllCoList = authorities.getContent().stream()
         .map(authorityConvertor::toFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

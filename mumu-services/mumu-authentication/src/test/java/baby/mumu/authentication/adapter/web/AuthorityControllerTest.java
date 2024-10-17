@@ -119,7 +119,7 @@ public class AuthorityControllerTest {
   @Test
   public void findAll() throws Exception {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
-    authorityFindAllCmd.setPageNo(0);
+    authorityFindAllCmd.setCurrent(0);
     authorityFindAllCmd.setPageSize(10);
     AuthorityFindAllQueryCo authorityFindAllQueryCo = new AuthorityFindAllQueryCo();
     authorityFindAllQueryCo.setId(1L);

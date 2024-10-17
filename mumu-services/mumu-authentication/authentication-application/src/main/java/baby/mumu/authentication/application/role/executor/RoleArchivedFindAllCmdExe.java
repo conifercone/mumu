@@ -53,7 +53,7 @@ public class RoleArchivedFindAllCmdExe {
     Role role = roleConvertor.toEntity(roleArchivedFindAllCmd.getRoleArchivedFindAllQueryCo())
         .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findArchivedAll(role,
-        roleArchivedFindAllCmd.getPageNo(), roleArchivedFindAllCmd.getPageSize());
+        roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
     List<RoleArchivedFindAllCo> roleArchivedFindAllCos = roles.getContent().stream()
         .map(roleConvertor::toArchivedFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

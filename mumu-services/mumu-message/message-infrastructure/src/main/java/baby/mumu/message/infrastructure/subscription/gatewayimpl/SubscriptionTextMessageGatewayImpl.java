@@ -131,7 +131,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   @Override
   public Page<SubscriptionTextMessage> findAllYouSend(
-      SubscriptionTextMessage subscriptionTextMessage, int pageNo, int pageSize) {
+      SubscriptionTextMessage subscriptionTextMessage, int current, int pageSize) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
       Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
@@ -151,7 +151,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      return getSubscriptionTextMessages(pageNo, pageSize, subscriptionTextMessageDoSpecification);
+      return getSubscriptionTextMessages(current, pageSize, subscriptionTextMessageDoSpecification);
     }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
@@ -200,7 +200,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   @Override
   public Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(
-      int pageNo, int pageSize, Long receiverId) {
+      int current, int pageSize, Long receiverId) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
       Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
@@ -215,14 +215,14 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      return getSubscriptionTextMessages(pageNo, pageSize, subscriptionTextMessageDoSpecification);
+      return getSubscriptionTextMessages(current, pageSize, subscriptionTextMessageDoSpecification);
     }).orElse(new PageImpl<>(Collections.emptyList()));
   }
 
   @NotNull
-  private PageImpl<SubscriptionTextMessage> getSubscriptionTextMessages(int pageNo, int pageSize,
+  private PageImpl<SubscriptionTextMessage> getSubscriptionTextMessages(int current, int pageSize,
       Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
         subscriptionTextMessageDoSpecification,
         pageRequest);

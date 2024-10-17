@@ -166,8 +166,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
-  public Page<Role> findAll(Role role, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Page<Role> findAll(Role role, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Page<RoleDo> roleDoPage = roleRepository.findAllPage(
         roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -182,8 +182,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
-  public Slice<Role> findAllSlice(Role role, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Slice<Role> findAllSlice(Role role, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Slice<RoleDo> roleDoSlice = roleRepository.findAllSlice(
         roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -198,8 +198,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
-  public Slice<Role> findArchivedAllSlice(Role role, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Slice<Role> findArchivedAllSlice(Role role, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Slice<RoleArchivedDo> roleArchivedDos = roleArchivedRepository.findAllSlice(
         roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -214,8 +214,8 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
-  public Page<Role> findArchivedAll(Role role, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Page<Role> findArchivedAll(Role role, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Page<RoleArchivedDo> roleArchivedDoPage = roleArchivedRepository.findAllPage(
         roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(

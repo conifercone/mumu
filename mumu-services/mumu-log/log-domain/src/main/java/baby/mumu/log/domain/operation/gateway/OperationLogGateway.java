@@ -53,9 +53,9 @@ public interface OperationLogGateway {
    * 分页查询操作日志
    *
    * @param operationLog 查询条件
-   * @param pageNo       当前页
+   * @param current       当前页
    * @param pageSize     每页数量
    * @return 查询结果
    */
-  Page<OperationLog> findAll(OperationLog operationLog, int pageNo, int pageSize);
+  Page<OperationLog> findAll(OperationLog operationLog, int current, int pageSize);
 }

@@ -56,7 +56,7 @@ public class OperationLogFindAllCmdExe {
         .orElseGet(OperationLog::new);
     Page<OperationLog> operationLogs = operationLogGateway.findAll(
         operationLog,
-        operationLogFindAllCmd.getPageNo(),
+        operationLogFindAllCmd.getCurrent(),
         operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
         .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)

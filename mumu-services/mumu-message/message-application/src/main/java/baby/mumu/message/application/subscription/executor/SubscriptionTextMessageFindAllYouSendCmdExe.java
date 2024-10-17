@@ -57,7 +57,7 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
         subscriptionTextMessageConvertor.toEntity(
                 subscriptionTextMessageFindAllYouSendCmd.getSubscriptionTextMessageFindAllYouSendQueryCo())
             .orElse(null),
-        subscriptionTextMessageFindAllYouSendCmd.getPageNo(),
+        subscriptionTextMessageFindAllYouSendCmd.getCurrent(),
         subscriptionTextMessageFindAllYouSendCmd.getPageSize());
     List<SubscriptionTextMessageFindAllYouSendCo> subscriptionTextMessageFindAllYouSendCos = allYouSend.getContent()
         .stream()

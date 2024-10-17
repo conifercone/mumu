@@ -56,7 +56,7 @@ public class SystemLogFindAllCmdExe {
         .orElseGet(SystemLog::new);
     Page<SystemLog> systemLogs = systemLogGateway.findAll(
         systemLog,
-        systemLogFindAllCmd.getPageNo(),
+        systemLogFindAllCmd.getCurrent(),
         systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
         .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)

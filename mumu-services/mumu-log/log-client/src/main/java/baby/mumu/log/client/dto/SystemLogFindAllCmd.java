@@ -34,7 +34,7 @@ public class SystemLogFindAllCmd {
    * 当前页码
    */
   @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
+  private int current = 0;
   /**
    * 每页数量
    */

@@ -50,10 +50,10 @@ public class AccountFindAllCmdExe {
   }
 
   public Page<AccountFindAllCo> execute(@NotNull AccountFindAllCmd accountFindAllCmd) {
-    Account account = accountConvertor.toEntity(accountFindAllCmd.getAccountFindAllQueryCo())
+    Account account = accountConvertor.toEntity(accountFindAllCmd)
         .orElseGet(Account::new);
     Page<Account> accounts = accountGateway.findAll(account,
-        accountFindAllCmd.getPageNo(), accountFindAllCmd.getPageSize());
+        accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
     List<AccountFindAllCo> accountFindAllCos = accounts.getContent().stream()
         .map(accountConvertor::toFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

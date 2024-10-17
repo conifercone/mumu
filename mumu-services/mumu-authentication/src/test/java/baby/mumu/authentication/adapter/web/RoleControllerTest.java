@@ -121,7 +121,7 @@ public class RoleControllerTest {
   @Test
   public void findAll() throws Exception {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
-    roleFindAllCmd.setPageNo(0);
+    roleFindAllCmd.setCurrent(0);
     roleFindAllCmd.setPageSize(10);
     RoleFindAllQueryCo roleFindAllQueryCo = new RoleFindAllQueryCo();
     roleFindAllQueryCo.setName("管理员");

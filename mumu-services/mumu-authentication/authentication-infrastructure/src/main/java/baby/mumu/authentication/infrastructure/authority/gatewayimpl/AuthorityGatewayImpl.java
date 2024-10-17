@@ -138,8 +138,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Page<Authority> findAll(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Page<AuthorityDo> repositoryAll = authorityRepository.findAllPage(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new),
         pageRequest);
@@ -152,8 +152,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<Authority> findAllSlice(Authority authority, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Slice<Authority> findAllSlice(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAllSlice(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
     return new SliceImpl<>(authorityDoSlice.getContent().stream()
@@ -163,8 +163,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<Authority> findArchivedAllSlice(Authority authority, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Slice<Authority> findArchivedAllSlice(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAllSlice(
         authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);
@@ -175,8 +175,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @API(status = Status.STABLE, since = "2.0.0")
-  public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Page<Authority> findArchivedAll(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current, pageSize);
     Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAllPage(
         authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);

@@ -187,19 +187,19 @@ public interface AccountGateway {
    * 分页获取账户
    *
    * @param account  查询条件
-   * @param pageNo   页码
+   * @param current   页码
    * @param pageSize 每页数量
    * @return 查询结果
    */
-  Page<Account> findAll(Account account, int pageNo, int pageSize);
+  Page<Account> findAll(Account account, int current, int pageSize);
 
   /**
    * 分页获取账户(不查询总数)
    *
    * @param account  查询条件
-   * @param pageNo   页码
+   * @param current   页码
    * @param pageSize 每页数量
    * @return 查询结果
    */
-  Slice<Account> findAllSlice(Account account, int pageNo, int pageSize);
+  Slice<Account> findAllSlice(Account account, int current, int pageSize);
 }

@@ -52,7 +52,7 @@ public class RoleFindAllCmdExe {
     Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllQueryCo())
         .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
-        roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
+        roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
     List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
         .map(roleConvertor::toFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

@@ -54,7 +54,7 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
     Assert.notNull(subscriptionTextMessageFindAllWithSomeOneCmd,
         "SubscriptionTextMessageFindAllWithSomeOneCmd cannot null");
     Page<SubscriptionTextMessage> allMessageRecordWithSomeone = subscriptionTextMessageGateway.findAllMessageRecordWithSomeone(
-        subscriptionTextMessageFindAllWithSomeOneCmd.getPageNo(),
+        subscriptionTextMessageFindAllWithSomeOneCmd.getCurrent(),
         subscriptionTextMessageFindAllWithSomeOneCmd.getPageSize(),
         subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
     List<SubscriptionTextMessageFindAllWithSomeOneCo> subscriptionTextMessageFindAllWithSomeOneCos = allMessageRecordWithSomeone.getContent()

@@ -32,7 +32,7 @@ public class AuthorityArchivedFindAllSliceCmd {
   @Valid
   private AuthorityArchivedFindAllSliceQueryCo authorityArchivedFindAllSliceQueryCo;
   @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
+  private int current = 0;
   @Min(value = 1, message = "{page.size.validation.min.size}")
   private int pageSize = 10;
 }

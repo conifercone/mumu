@@ -15,9 +15,8 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.AccountFindAllQueryCo;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -29,10 +28,34 @@ import lombok.Data;
 @Data
 public class AccountFindAllCmd {
 
-  @Valid
-  private AccountFindAllQueryCo accountFindAllQueryCo;
+  /**
+   * 账户id
+   */
+  private Long id;
+
+  /**
+   * 账户名
+   */
+  private String username;
+
+  /**
+   * 账户角色ID集合
+   */
+  private List<Long> roleIds;
+
+  /**
+   * 电话
+   */
+  private String phone;
+
+  /**
+   * 电子邮件
+   */
+  private String email;
+
   @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
+  private int current = 0;
+
   @Min(value = 1, message = "{page.size.validation.min.size}")
   private int pageSize = 10;
 }

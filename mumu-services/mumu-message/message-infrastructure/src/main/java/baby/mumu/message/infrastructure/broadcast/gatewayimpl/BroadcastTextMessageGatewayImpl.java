@@ -150,7 +150,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
 
   @Override
   public Page<BroadcastTextMessage> findAllYouSend(BroadcastTextMessage broadcastTextMessage,
-      int pageNo,
+      int current,
       int pageSize) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
       Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
@@ -171,7 +171,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      PageRequest pageRequest = PageRequest.of(current, pageSize);
       Page<BroadcastTextMessageDo> repositoryAll = broadcastTextMessageRepository.findAll(
           broadcastTextMessageDoSpecification,
           pageRequest);

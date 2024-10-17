@@ -55,7 +55,7 @@ public class AuthorityFindAllSliceCmdExe {
             authorityFindAllSliceCmd.getAuthorityFindAllSliceQueryCo())
         .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findAllSlice(authority,
-        authorityFindAllSliceCmd.getPageNo(), authorityFindAllSliceCmd.getPageSize());
+        authorityFindAllSliceCmd.getCurrent(), authorityFindAllSliceCmd.getPageSize());
     List<AuthorityFindAllSliceCo> authorityFindAllSliceCoList = authorities.getContent().stream()
         .map(authorityConvertor::toFindAllSliceCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

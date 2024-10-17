@@ -56,7 +56,7 @@ public class AuthorityArchivedFindAllCmdExe {
             authorityArchivedFindAllCmd.getAuthorityArchivedFindAllQueryCo())
         .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findArchivedAll(authority,
-        authorityArchivedFindAllCmd.getPageNo(), authorityArchivedFindAllCmd.getPageSize());
+        authorityArchivedFindAllCmd.getCurrent(), authorityArchivedFindAllCmd.getPageSize());
     List<AuthorityArchivedFindAllCo> authorityArchivedFindAllCoList = authorities.getContent()
         .stream()
         .map(authorityConvertor::toArchivedFindAllCo)

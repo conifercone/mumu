@@ -57,7 +57,7 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
         broadcastTextMessageConvertor.toEntity(
                 broadcastTextMessageFindAllYouSendCmd.getBroadcastTextMessageFindAllYouSendQueryCo())
             .orElse(null),
-        broadcastTextMessageFindAllYouSendCmd.getPageNo(),
+        broadcastTextMessageFindAllYouSendCmd.getCurrent(),
         broadcastTextMessageFindAllYouSendCmd.getPageSize());
     List<BroadcastTextMessageFindAllYouSendCo> broadcastTextMessageFindAllYouSendCos = allYouSend.getContent()
         .stream()

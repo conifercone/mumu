@@ -55,7 +55,7 @@ public class AccountFindAllSliceCmdExe {
             accountFindAllSliceCmd.getAccountFindAllSliceQueryCo())
         .orElseGet(Account::new);
     Slice<Account> accounts = accountGateway.findAllSlice(account,
-        accountFindAllSliceCmd.getPageNo(), accountFindAllSliceCmd.getPageSize());
+        accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
     List<AccountFindAllSliceCo> accountFindAllSliceCos = accounts.getContent().stream()
         .map(accountConvertor::toFindAllSliceCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

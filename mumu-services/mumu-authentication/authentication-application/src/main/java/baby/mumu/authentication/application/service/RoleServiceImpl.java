@@ -251,7 +251,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
     roleFindAllCmd.setRoleFindAllQueryCo(getRoleFindAllQueryCo(request));
-    roleFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    roleFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
     roleFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
     try {

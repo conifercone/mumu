@@ -266,7 +266,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
     authorityFindAllCmd.setAuthorityFindAllQueryCo(getAuthorityFindAllQueryCo(request));
-    authorityFindAllCmd.setPageNo(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    authorityFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
     authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();
     try {

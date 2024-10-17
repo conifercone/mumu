@@ -52,7 +52,7 @@ public class RoleFindAllSliceCmdExe {
     Role role = roleConvertor.toEntity(roleFindAllSliceCmd.getRoleFindAllSliceQueryCo())
         .orElseGet(Role::new);
     Slice<Role> roles = roleGateway.findAllSlice(role,
-        roleFindAllSliceCmd.getPageNo(), roleFindAllSliceCmd.getPageSize());
+        roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
     List<RoleFindAllSliceCo> roleFindAllSliceCos = roles.getContent().stream()
         .map(roleConvertor::toFindAllSliceCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

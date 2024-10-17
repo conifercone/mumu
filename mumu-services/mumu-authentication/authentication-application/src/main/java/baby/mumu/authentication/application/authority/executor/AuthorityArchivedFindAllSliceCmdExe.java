@@ -57,7 +57,7 @@ public class AuthorityArchivedFindAllSliceCmdExe {
             authorityArchivedFindAllSliceCmd.getAuthorityArchivedFindAllSliceQueryCo())
         .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findArchivedAllSlice(authority,
-        authorityArchivedFindAllSliceCmd.getPageNo(),
+        authorityArchivedFindAllSliceCmd.getCurrent(),
         authorityArchivedFindAllSliceCmd.getPageSize());
     List<AuthorityArchivedFindAllSliceCo> authorityArchivedFindAllSliceCos = authorities.getContent()
         .stream()
