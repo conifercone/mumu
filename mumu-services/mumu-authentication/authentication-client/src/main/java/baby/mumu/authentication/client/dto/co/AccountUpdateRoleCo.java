@@ -16,6 +16,8 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.util.List;
@@ -36,7 +38,9 @@ public class AccountUpdateRoleCo extends BaseClientObject {
   private static final long serialVersionUID = 6110957444309849374L;
 
   @NotNull
+  @Schema(description = "账户ID", requiredMode = RequiredMode.REQUIRED)
   private Long id;
 
+  @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<String> roleCodes;
 }

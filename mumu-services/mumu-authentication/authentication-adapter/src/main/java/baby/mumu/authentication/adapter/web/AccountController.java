@@ -87,7 +87,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
+  public void updateById(
+      @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
   }
 
@@ -97,7 +98,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
-      @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
+      @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
     accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
@@ -106,7 +107,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void disable(@PathVariable(value = "id") Long id) {
+  public void disable(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.disable(id);
   }
 
@@ -142,7 +144,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void resetPassword(@PathVariable(value = "id") Long id) {
+  public void resetPassword(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.resetPassword(id);
   }
 
@@ -152,7 +155,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void resetSystemSettingsBySettingsId(
-      @PathVariable(value = "systemSettingsId") String systemSettingsId) {
+      @Parameter(description = "系统设置ID", required = true) @PathVariable(value = "systemSettingsId") String systemSettingsId) {
     accountService.resetSystemSettingsBySettingsId(systemSettingsId);
   }
 
@@ -210,7 +213,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void archiveById(@PathVariable(value = "accountId") Long accountId) {
+  public void archiveById(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.archiveById(accountId);
   }
 
@@ -219,7 +223,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverFromArchiveById(@PathVariable(value = "accountId") Long accountId) {
+  public void recoverFromArchiveById(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.recoverFromArchiveById(accountId);
   }
 
@@ -238,7 +243,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public AccountBasicInfoCo getAccountBasicInfoById(@PathVariable(value = "id") Long id) {
+  public AccountBasicInfoCo getAccountBasicInfoById(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     return accountService.getAccountBasicInfoById(id);
   }
 
@@ -247,7 +253,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public void offline(@PathVariable(value = "accountId") Long accountId) {
+  public void offline(
+      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.offline(accountId);
   }
 
