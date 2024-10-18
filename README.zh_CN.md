@@ -1,4 +1,4 @@
-![mumu](./logo.svg)
+![mumu](./logo.png)
 
 - [简体中文](README.zh_CN.md)
 - [English](README.md)
