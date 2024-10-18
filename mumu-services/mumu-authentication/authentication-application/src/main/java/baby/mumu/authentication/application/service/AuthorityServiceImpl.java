@@ -271,7 +271,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     authorityFindAllCmd.setName(
         request.hasName() ? request.getName().getValue()
             : null);
-    authorityFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    authorityFindAllCmd.setCurrent(request.hasCurrent() ? request.getCurrent().getValue() : 1);
     authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     return authorityFindAllCmd;
   }

@@ -258,7 +258,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         request.hasCode() ? request.getCode().getValue() : null);
     roleFindAllCmd.setName(
         request.hasName() ? request.getName().getValue() : null);
-    roleFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    roleFindAllCmd.setCurrent(request.hasCurrent() ? request.getCurrent().getValue() : 1);
     roleFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     return roleFindAllCmd;
   }
