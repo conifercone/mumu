@@ -23,12 +23,8 @@ import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageForw
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import baby.mumu.message.client.api.BroadcastTextMessageService;
-import baby.mumu.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -80,14 +76,14 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
-    broadcastTextMessageReadByIdCmdExe.execute(broadcastTextMessageReadByIdCmd);
+  public void readMsgById(Long id) {
+    broadcastTextMessageReadByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
-    broadcastTextMessageDeleteByIdCmdExe.execute(broadcastTextMessageDeleteByIdCmd);
+  public void deleteMsgById(Long id) {
+    broadcastTextMessageDeleteByIdCmdExe.execute(id);
   }
 
   @Override
@@ -99,14 +95,13 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
-      BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
-    broadcastTextMessageArchiveByIdCmdExe.execute(broadcastTextMessageArchiveByIdCmd);
+      Long id) {
+    broadcastTextMessageArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   public void recoverMsgFromArchiveById(
-      BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {
-    broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(
-        broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
+      Long id) {
+    broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(id);
   }
 }

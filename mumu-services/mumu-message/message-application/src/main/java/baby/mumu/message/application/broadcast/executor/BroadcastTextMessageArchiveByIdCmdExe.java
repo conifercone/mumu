@@ -15,12 +15,10 @@
  */
 package baby.mumu.message.application.broadcast.executor;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本广播消息根据ID归档指令执行器
@@ -40,9 +38,7 @@ public class BroadcastTextMessageArchiveByIdCmdExe {
   }
 
   public void execute(
-      @NotNull BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
-    Assert.notNull(broadcastTextMessageArchiveByIdCmd,
-        "BroadcastTextMessageArchiveByIdCmd cannot null");
-    broadcastTextMessageGateway.archiveMsgById(broadcastTextMessageArchiveByIdCmd.getId());
+      Long id) {
+    Optional.ofNullable(id).ifPresent(broadcastTextMessageGateway::archiveMsgById);
   }
 }

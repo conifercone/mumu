@@ -54,8 +54,7 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
     Assert.notNull(subscriptionTextMessageFindAllYouSendCmd,
         "SubscriptionTextMessageFindAllYouSendCmd cannot null");
     Page<SubscriptionTextMessage> allYouSend = subscriptionTextMessageGateway.findAllYouSend(
-        subscriptionTextMessageConvertor.toEntity(
-                subscriptionTextMessageFindAllYouSendCmd.getSubscriptionTextMessageFindAllYouSendQueryCo())
+        subscriptionTextMessageConvertor.toEntity(subscriptionTextMessageFindAllYouSendCmd)
             .orElse(null),
         subscriptionTextMessageFindAllYouSendCmd.getCurrent(),
         subscriptionTextMessageFindAllYouSendCmd.getPageSize());

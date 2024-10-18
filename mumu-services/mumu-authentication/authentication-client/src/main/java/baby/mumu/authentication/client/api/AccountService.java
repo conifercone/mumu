@@ -17,20 +17,13 @@ package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
-import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
@@ -73,9 +66,9 @@ public interface AccountService {
   /**
    * 禁用账户
    *
-   * @param accountDisableCmd 禁用账户指令
+   * @param id 禁用账户指令
    */
-  void disable(AccountDisableCmd accountDisableCmd);
+  void disable(Long id);
 
   /**
    * 退出登录
@@ -99,15 +92,15 @@ public interface AccountService {
   /**
    * 重置密码
    *
-   * @param accountResetPasswordCmd 重置密码指令
+   * @param id 账户ID
    */
-  void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd);
+  void resetPassword(Long id);
 
   /**
    * 重置系统设置
    */
   void resetSystemSettingsBySettingsId(
-      AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd);
+      String systemSettingsId);
 
   /**
    * 修改系统设置
@@ -146,24 +139,24 @@ public interface AccountService {
   /**
    * 根据id归档账户
    *
-   * @param accountArchiveByIdCmd 根据id归档账户指令
+   * @param accountId 账户ID
    */
-  void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd);
+  void archiveById(Long accountId);
 
   /**
    * 根据id查询账户基本信息
    *
-   * @param accountBasicInfoByIdCmd 根据id查询账户基本信息指令
+   * @param id 账户id
    */
-  AccountBasicInfoCo getAccountBasicInfoById(AccountBasicInfoByIdCmd accountBasicInfoByIdCmd);
+  AccountBasicInfoCo getAccountBasicInfoById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param accountRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   * @param accountId 账户id
    */
   void recoverFromArchiveById(
-      AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd);
+      Long accountId);
 
   /**
    * 账户添加地址
@@ -175,9 +168,9 @@ public interface AccountService {
   /**
    * 下线账户
    *
-   * @param accountOfflineCmd 下线账户指令
+   * @param accountId 账户id
    */
-  void offline(AccountOfflineCmd accountOfflineCmd);
+  void offline(Long accountId);
 
   /**
    * 分页查询账户

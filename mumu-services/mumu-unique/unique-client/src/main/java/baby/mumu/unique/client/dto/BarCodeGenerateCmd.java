@@ -15,9 +15,7 @@
  */
 package baby.mumu.unique.client.dto;
 
-import baby.mumu.unique.client.dto.co.BarCodeGenerateCo;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import baby.mumu.basis.enums.ImageFormatEnum;
 import lombok.Data;
 
 /**
@@ -29,7 +27,13 @@ import lombok.Data;
 @Data
 public class BarCodeGenerateCmd {
 
-  @Valid
-  @NotNull
-  private BarCodeGenerateCo barCodeGenerateCo;
+  private String content;
+
+  private int width = 300;
+
+  private int height = 50;
+
+  private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
+
+  private String footContent;
 }

@@ -18,8 +18,8 @@ package baby.mumu.message.infrastructure.broadcast.convertor;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendQueryCo;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageForwardCo;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
@@ -161,8 +161,8 @@ public class BroadcastTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageFindAllYouSendQueryCo broadcastTextMessageFindAllYouSendQueryCo) {
-    return Optional.ofNullable(broadcastTextMessageFindAllYouSendQueryCo)
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    return Optional.ofNullable(broadcastTextMessageFindAllYouSendCmd)
         .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
   }
 

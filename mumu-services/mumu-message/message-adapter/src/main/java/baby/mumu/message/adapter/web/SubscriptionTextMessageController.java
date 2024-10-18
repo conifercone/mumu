@@ -17,14 +17,9 @@ package baby.mumu.message.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.message.client.api.SubscriptionTextMessageService;
-import baby.mumu.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,33 +70,30 @@ public class SubscriptionTextMessageController {
   }
 
   @Operation(summary = "根据ID已读文本订阅消息")
-  @PutMapping("/readMsgById")
+  @PutMapping("/readMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void readMsgById(
-      @RequestBody @Valid SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
-    subscriptionTextMessageService.readMsgById(subscriptionTextMessageReadByIdCmd);
+  public void readMsgById(@PathVariable(value = "id") Long id) {
+    subscriptionTextMessageService.readMsgById(id);
   }
 
   @Operation(summary = "根据ID未读文本订阅消息")
-  @PutMapping("/unreadMsgById")
+  @PutMapping("/unreadMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void unreadMsgById(
-      @RequestBody @Valid SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
-    subscriptionTextMessageService.unreadMsgById(subscriptionTextMessageUnreadByIdCmd);
+  public void unreadMsgById(@PathVariable(value = "id") Long id) {
+    subscriptionTextMessageService.unreadMsgById(id);
   }
 
   @Operation(summary = "根据ID删除文本订阅消息")
-  @DeleteMapping("/deleteMsgById")
+  @DeleteMapping("/deleteMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void deleteMsgById(
-      @RequestBody @Valid SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
-    subscriptionTextMessageService.deleteMsgById(subscriptionTextMessageDeleteByIdCmd);
+  public void deleteMsgById(@PathVariable(value = "id") Long id) {
+    subscriptionTextMessageService.deleteMsgById(id);
   }
 
   @Operation(summary = "查询所有当前用户发送消息")
@@ -108,29 +102,27 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
-      @RequestBody @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+      @ModelAttribute @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
   }
 
   @Operation(summary = "根据ID归档文本订阅消息")
-  @PutMapping("/archiveMsgById")
+  @PutMapping("/archiveMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void archiveMsgById(
-      @RequestBody @Valid SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
-    subscriptionTextMessageService.archiveMsgById(subscriptionTextMessageArchiveByIdCmd);
+  public void archiveMsgById(@PathVariable(value = "id") Long id) {
+    subscriptionTextMessageService.archiveMsgById(id);
   }
 
   @Operation(summary = "根据ID从存档中恢复消息指令")
-  @PutMapping("/recoverMsgFromArchiveById")
+  @PutMapping("/recoverMsgFromArchiveById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverMsgFromArchiveById(
-      @RequestBody @Valid SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
+  public void recoverMsgFromArchiveById(@PathVariable(value = "id") Long id) {
     subscriptionTextMessageService.recoverMsgFromArchiveById(
-        subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
+        id);
   }
 
   @Operation(summary = "查询所有和某人的消息记录")
@@ -139,7 +131,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
-      @RequestBody @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+      @ModelAttribute @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
         subscriptionTextMessageFindAllWithSomeOneCmd);
   }

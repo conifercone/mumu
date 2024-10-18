@@ -15,9 +15,11 @@
  */
 package baby.mumu.log.client.dto;
 
-import baby.mumu.log.client.dto.co.SystemLogFindAllQueryCo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Min;
+import java.time.LocalDateTime;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 系统日志查询所有指令
@@ -28,7 +30,51 @@ import lombok.Data;
 @Data
 public class SystemLogFindAllCmd {
 
-  private SystemLogFindAllQueryCo systemLogFindAllQueryCo;
+  /**
+   * 唯一标识
+   */
+  private String id;
+
+  /**
+   * 日志内容
+   */
+  private String content;
+
+  /**
+   * 系统日志的种类
+   */
+  private String category;
+
+  /**
+   * 系统日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 系统日志失败的文本模板
+   */
+  private String fail;
+
+  /**
+   * 系统日志的记录时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime recordTime;
+
+  /**
+   * 系统日志的开始记录时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime recordStartTime;
+
+  /**
+   * 系统日志的结束记录时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime recordEndTime;
 
   /**
    * 当前页码

@@ -15,8 +15,8 @@
  */
 package baby.mumu.log.infrastructure.system.convertor;
 
+import baby.mumu.log.client.dto.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogFindAllQueryCo;
 import baby.mumu.log.client.dto.co.SystemLogSaveCo;
 import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
 import baby.mumu.log.domain.system.SystemLog;
@@ -56,7 +56,7 @@ public interface SystemLogMapper {
   SystemLog toEntity(SystemLogEsDo systemLogEsDo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogFindAllQueryCo systemLogFindAllQueryCo);
+  SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);

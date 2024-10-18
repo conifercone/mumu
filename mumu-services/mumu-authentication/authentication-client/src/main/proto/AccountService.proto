@@ -94,9 +94,6 @@ message AccountAddressRegisterGrpcCo{
 }
 
 message AccountDisableGrpcCmd{
-  AccountDisableGrpcCo accountDisableGrpcCo = 1;
-}
-
-message AccountDisableGrpcCo{
   google.protobuf.Int64Value id = 1;
 }
+

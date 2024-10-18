@@ -18,20 +18,13 @@ package baby.mumu.authentication.adapter.web;
 import baby.mumu.authentication.client.api.AccountService;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
-import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
@@ -42,6 +35,7 @@ import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.apiguardian.api.API;
@@ -52,6 +46,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,7 +77,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void register(@RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
+  public void register(
+      @Parameter(description = "账户注册指令", required = true) @RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
   }
 
@@ -106,12 +102,12 @@ public class AccountController {
   }
 
   @Operation(summary = "禁用账户")
-  @PutMapping("/disable")
+  @PutMapping("/disable/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void disable(@RequestBody @Valid AccountDisableCmd accountDisableCmd) {
-    accountService.disable(accountDisableCmd);
+  public void disable(@PathVariable(value = "id") Long id) {
+    accountService.disable(id);
   }
 
   @Operation(summary = "退出登录")
@@ -142,23 +138,22 @@ public class AccountController {
   }
 
   @Operation(summary = "重置密码")
-  @PutMapping("/resetPassword")
+  @PutMapping("/resetPassword/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void resetPassword(
-      @RequestBody @Valid AccountResetPasswordCmd accountResetPasswordCmd) {
-    accountService.resetPassword(accountResetPasswordCmd);
+  public void resetPassword(@PathVariable(value = "id") Long id) {
+    accountService.resetPassword(id);
   }
 
   @Operation(summary = "重置系统设置")
-  @PutMapping("/resetSystemSettingsBySettingsId")
+  @PutMapping("/resetSystemSettingsBySettingsId/{systemSettingsId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void resetSystemSettingsBySettingsId(
-      @RequestBody @Valid AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd) {
-    accountService.resetSystemSettingsBySettingsId(accountResetSystemSettingsBySettingsIdCmd);
+      @PathVariable(value = "systemSettingsId") String systemSettingsId) {
+    accountService.resetSystemSettingsBySettingsId(systemSettingsId);
   }
 
   @Operation(summary = "通过设置id修改系统设置")
@@ -196,7 +191,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public ResultResponse<Boolean> verifyPassword(
-      @RequestBody @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+      @ModelAttribute @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return ResultResponse.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
@@ -211,23 +206,21 @@ public class AccountController {
   }
 
   @Operation(summary = "根据id归档账户")
-  @PutMapping("/archiveById")
+  @PutMapping("/archiveById/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void archiveById(
-      @RequestBody @Valid AccountArchiveByIdCmd accountArchiveByIdCmd) {
-    accountService.archiveById(accountArchiveByIdCmd);
+  public void archiveById(@PathVariable(value = "accountId") Long accountId) {
+    accountService.archiveById(accountId);
   }
 
   @Operation(summary = "根据id从归档中恢复账户")
-  @PutMapping("/recoverFromArchiveById")
+  @PutMapping("/recoverFromArchiveById/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverFromArchiveById(
-      @RequestBody @Valid AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
-    accountService.recoverFromArchiveById(accountRecoverFromArchiveByIdCmd);
+  public void recoverFromArchiveById(@PathVariable(value = "accountId") Long accountId) {
+    accountService.recoverFromArchiveById(accountId);
   }
 
   @Operation(summary = "账户添加地址")
@@ -241,23 +234,21 @@ public class AccountController {
   }
 
   @Operation(summary = "根据id查询账户基本信息")
-  @GetMapping("/getAccountBasicInfoById")
+  @GetMapping("/getAccountBasicInfoById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public AccountBasicInfoCo getAccountBasicInfoById(
-      @RequestBody @Valid AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
-    return accountService.getAccountBasicInfoById(accountBasicInfoByIdCmd);
+  public AccountBasicInfoCo getAccountBasicInfoById(@PathVariable(value = "id") Long id) {
+    return accountService.getAccountBasicInfoById(id);
   }
 
   @Operation(summary = "根据id下线账户")
-  @PostMapping("/offline")
+  @PostMapping("/offline/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public void offline(
-      @RequestBody @Valid AccountOfflineCmd accountOfflineCmd) {
-    accountService.offline(accountOfflineCmd);
+  public void offline(@PathVariable(value = "accountId") Long accountId) {
+    accountService.offline(accountId);
   }
 
   @Operation(summary = "分页查询账户")
@@ -276,7 +267,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<AccountFindAllSliceCo> findAllSlice(
-      @RequestBody @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
+      @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 }

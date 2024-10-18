@@ -18,11 +18,6 @@ package baby.mumu.unique.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResultResponse;
 import baby.mumu.unique.client.api.CountryService;
-import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdCmd;
-import baby.mumu.unique.client.dto.CountryGetCityByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import baby.mumu.unique.client.dto.co.CountryGetAllCo;
 import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
 import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
@@ -37,7 +32,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,57 +74,55 @@ public class CountryController {
   }
 
   @Operation(summary = "根据国家ID获取省或州信息")
-  @GetMapping("/getStatesByCountryId")
+  @GetMapping("/getStatesByCountryId/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(@RequestBody
-  CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
+  public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(
+      @PathVariable(value = "id")
+      Long id) {
     return ResultResponse.success(
-        countryService.getStatesByCountryId(countryGetStatesByCountryIdCmd));
+        countryService.getStatesByCountryId(id));
   }
 
   @Operation(summary = "根据省或州ID获取城市")
-  @GetMapping("/getCitiesByStateId")
+  @GetMapping("/getCitiesByStateId/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(@RequestBody
-  CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
-    return ResultResponse.success(
-        countryService.getCitiesByStateId(countryGetCitiesByStateIdCmd));
+  public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(
+      @PathVariable(value = "id")
+      Long id) {
+    return ResultResponse.success(countryService.getCitiesByStateId(id));
   }
 
   @Operation(summary = "根据省或州ID获取省或州")
-  @GetMapping("/getStateById")
+  @GetMapping("/getStateById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetStateByIdCo> getStateById(@RequestBody
-  CountryGetStateByIdCmd countryGetStateByIdCmd) {
-    return ResultResponse.success(
-        countryService.getStateById(countryGetStateByIdCmd));
+  public ResultResponse<CountryGetStateByIdCo> getStateById(@PathVariable(value = "id")
+  Long id) {
+    return ResultResponse.success(countryService.getStateById(id));
   }
 
   @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
-  @GetMapping("/getStateCitiesById")
+  @GetMapping("/getStateCitiesById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@RequestBody
-  CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
-    return ResultResponse.success(
-        countryService.getStateCitiesById(countryGetStateCitiesByIdCmd));
+  public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@PathVariable(value = "id")
+  Long id) {
+    return ResultResponse.success(countryService.getStateCitiesById(id));
   }
 
   @Operation(summary = "根据城市id获取城市指令")
-  @GetMapping("/getCityById")
+  @GetMapping("/getCityById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetCityByIdCo> getCityById(@RequestBody
-  CountryGetCityByIdCmd countryGetCityByIdCmd) {
-    return ResultResponse.success(
-        countryService.getCityById(countryGetCityByIdCmd));
+  public ResultResponse<CountryGetCityByIdCo> getCityById(@PathVariable(value = "id")
+  Long id) {
+    return ResultResponse.success(countryService.getCityById(id));
   }
 }

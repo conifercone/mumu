@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -39,8 +38,8 @@ public class RoleArchiveByIdCmdExe {
     this.roleGateway = roleGateway;
   }
 
-  public void execute(RoleArchiveByIdCmd roleArchiveByIdCmd) {
-    Optional.ofNullable(roleArchiveByIdCmd)
-        .ifPresent(deleteCmd -> roleGateway.archiveById(deleteCmd.getId()));
+  public void execute(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(roleGateway::archiveById);
   }
 }

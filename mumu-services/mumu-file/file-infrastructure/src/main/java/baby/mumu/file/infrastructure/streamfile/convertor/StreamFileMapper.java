@@ -15,7 +15,7 @@
  */
 package baby.mumu.file.infrastructure.streamfile.convertor;
 
-import baby.mumu.file.client.dto.co.StreamFileDownloadCo;
+import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
 import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
 import baby.mumu.file.domain.stream.StreamFile;
@@ -45,7 +45,7 @@ public interface StreamFileMapper {
   StreamFile toEntity(StreamFileRemoveCo streamFileRemoveCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileDownloadCo streamFileDownloadCo);
+  StreamFile toEntity(StreamFileDownloadCmd streamFileDownloadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFileMinioDo toMinioDo(StreamFile streamFile);

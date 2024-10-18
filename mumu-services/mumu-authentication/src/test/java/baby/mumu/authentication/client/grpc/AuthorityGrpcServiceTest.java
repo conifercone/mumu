@@ -22,7 +22,6 @@ import baby.mumu.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcQueryCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
@@ -255,9 +254,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void findAll() {
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
-        .setAuthorityFindAllGrpcQueryCo(
-            AuthorityFindAllGrpcQueryCo.newBuilder().setName(StringValue.of("数据"))
-                .build())
+        .setName(StringValue.of("数据"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -278,9 +275,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd = AuthorityFindAllGrpcCmd.newBuilder()
-        .setAuthorityFindAllGrpcQueryCo(
-            AuthorityFindAllGrpcQueryCo.newBuilder().setName(StringValue.of("数据"))
-                .build())
+        .setName(StringValue.of("数据"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

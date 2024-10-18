@@ -31,27 +31,21 @@ import baby.mumu.authentication.client.api.grpc.AuthorityAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcQueryCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
-import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
-import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
@@ -169,27 +163,10 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     return authorityUpdateCo;
   }
 
-  @NotNull
-  private static AuthorityFindAllQueryCo getAuthorityFindAllQueryCo(
-      @NotNull AuthorityFindAllGrpcCmd request) {
-    AuthorityFindAllQueryCo authorityFindAllQueryCo = new AuthorityFindAllQueryCo();
-    AuthorityFindAllGrpcQueryCo authorityFindAllGrpcQueryCo = request.getAuthorityFindAllGrpcQueryCo();
-    authorityFindAllQueryCo.setId(
-        authorityFindAllGrpcQueryCo.hasId() ? authorityFindAllGrpcQueryCo.getId().getValue()
-            : null);
-    authorityFindAllQueryCo.setCode(
-        authorityFindAllGrpcQueryCo.hasCode() ? authorityFindAllGrpcQueryCo.getCode().getValue()
-            : null);
-    authorityFindAllQueryCo.setName(
-        authorityFindAllGrpcQueryCo.hasName() ? authorityFindAllGrpcQueryCo.getName().getValue()
-            : null);
-    return authorityFindAllQueryCo;
-  }
-
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deleteById(AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
-    authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
+  public void deleteById(Long id) {
+    authorityDeleteByIdCmdExe.execute(id);
   }
 
   @Override
@@ -223,19 +200,16 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   }
 
   @Override
-  public AuthorityFindByIdCo findById(AuthorityFindByIdCmd authorityFindByIdCmd) {
-    return authorityFindByIdCmdExe.execute(authorityFindByIdCmd);
+  public AuthorityFindByIdCo findById(Long id) {
+    return authorityFindByIdCmdExe.execute(id);
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void deleteById(@NotNull AuthorityDeleteByIdGrpcCmd request,
       StreamObserver<Empty> responseObserver) {
-    AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
-    //noinspection DuplicatedCode
-    authorityDeleteByIdCmd.setId(request.hasId() ? request.getId().getValue() : null);
     try {
-      authorityDeleteByIdCmdExe.execute(authorityDeleteByIdCmd);
+      authorityDeleteByIdCmdExe.execute(request.hasId() ? request.getId().getValue() : null);
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
@@ -264,10 +238,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(AuthorityFindAllGrpcCmd request,
       StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
-    AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
-    authorityFindAllCmd.setAuthorityFindAllQueryCo(getAuthorityFindAllQueryCo(request));
-    authorityFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
-    authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
+    AuthorityFindAllCmd authorityFindAllCmd = getAuthorityFindAllCmd(
+        request);
     Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();
     try {
       Page<AuthorityFindAllCo> authorityFindAllCos = authorityFindAllCmdExe.execute(
@@ -286,16 +258,34 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     responseObserver.onCompleted();
   }
 
+  private static @NotNull AuthorityFindAllCmd getAuthorityFindAllCmd(
+      @NotNull AuthorityFindAllGrpcCmd request) {
+    AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
+    //noinspection DuplicatedCode
+    authorityFindAllCmd.setId(
+        request.hasId() ? request.getId().getValue()
+            : null);
+    authorityFindAllCmd.setCode(
+        request.hasCode() ? request.getCode().getValue()
+            : null);
+    authorityFindAllCmd.setName(
+        request.hasName() ? request.getName().getValue()
+            : null);
+    authorityFindAllCmd.setCurrent(request.hasPageNo() ? request.getPageNo().getValue() : 0);
+    authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
+    return authorityFindAllCmd;
+  }
+
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd) {
-    authorityArchiveByIdCmdExe.execute(authorityArchiveByIdCmd);
+  public void archiveById(Long id) {
+    authorityArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(
-      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {
-    authorityRecoverFromArchiveByIdCmdExe.execute(authorityRecoverFromArchiveByIdCmd);
+      Long id) {
+    authorityRecoverFromArchiveByIdCmdExe.execute(id);
   }
 }

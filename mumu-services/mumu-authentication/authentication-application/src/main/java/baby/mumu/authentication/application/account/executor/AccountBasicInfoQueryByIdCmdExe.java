@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
@@ -46,8 +45,8 @@ public class AccountBasicInfoQueryByIdCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public AccountBasicInfoCo execute(AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
-    return Optional.ofNullable(accountBasicInfoByIdCmd).map(AccountBasicInfoByIdCmd::getId)
+  public AccountBasicInfoCo execute(Long id) {
+    return Optional.ofNullable(id)
         .flatMap(accountGateway::getAccountBasicInfoById)
         .flatMap(accountConvertor::toBasicInfoCo)
         .orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));

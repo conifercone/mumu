@@ -18,20 +18,14 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountDisableCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountResetPasswordCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.basis.enums.LanguageEnum;
@@ -85,9 +79,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
@@ -170,13 +163,8 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void disable() throws Exception {
-    AccountDisableCmd accountDisableCmd = new AccountDisableCmd();
-    AccountDisableCo accountDisableCo = new AccountDisableCo();
-    accountDisableCo.setId(1L);
-    accountDisableCmd.setAccountDisableCo(accountDisableCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/disable").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountDisableCmd))
+            .put("/account/disable/1").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -188,13 +176,8 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void resetPassword() throws Exception {
-    AccountResetPasswordCmd accountResetPasswordCmd = new AccountResetPasswordCmd();
-    AccountResetPasswordCo accountResetPasswordCo = new AccountResetPasswordCo();
-    accountResetPasswordCo.setId(1L);
-    accountResetPasswordCmd.setAccountResetPasswordCo(accountResetPasswordCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/resetPassword").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountResetPasswordCmd))
+            .put("/account/resetPassword/1").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -240,9 +223,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrent() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
@@ -262,11 +244,8 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    AccountArchiveByIdCmd accountArchiveByIdCmd = new AccountArchiveByIdCmd();
-    accountArchiveByIdCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/archiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountArchiveByIdCmd))
+            .put("/account/archiveById/1").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -278,11 +257,8 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd = new AccountRecoverFromArchiveByIdCmd();
-    accountRecoverFromArchiveByIdCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/recoverFromArchiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountRecoverFromArchiveByIdCmd))
+            .put("/account/recoverFromArchiveById/1").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

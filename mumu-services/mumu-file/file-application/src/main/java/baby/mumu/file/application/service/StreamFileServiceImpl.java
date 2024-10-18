@@ -23,7 +23,6 @@ import baby.mumu.file.application.streamfile.executor.StreamFileRemoveCmdExe;
 import baby.mumu.file.application.streamfile.executor.StreamFileSyncUploadCmdExe;
 import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCo;
@@ -31,7 +30,6 @@ import baby.mumu.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceImp
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
-import baby.mumu.file.client.dto.co.StreamFileDownloadCo;
 import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
@@ -85,30 +83,19 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
     streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
   }
 
-  @NotNull
-  private static StreamFileDownloadCo getStreamFileDownloadCo(
-      @NotNull StreamFileDownloadGrpcCmd request) {
-    StreamFileDownloadCo streamFileDownloadCo = new StreamFileDownloadCo();
-    StreamFileDownloadGrpcCo streamFileDownloadGrpcCo = request.getStreamFileDownloadGrpcCo();
-    streamFileDownloadCo.setName(
-        streamFileDownloadGrpcCo.hasName() ? streamFileDownloadGrpcCo.getName().getValue() : null);
-    streamFileDownloadCo.setRename(
-        streamFileDownloadGrpcCo.hasRename() ? streamFileDownloadGrpcCo.getRename().getValue()
-            : null);
-    streamFileDownloadCo.setStorageAddress(
-        streamFileDownloadGrpcCo.hasStorageAddress() ? streamFileDownloadGrpcCo.getStorageAddress()
-            .getValue() : null);
-    return streamFileDownloadCo;
-  }
-
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void download(StreamFileDownloadGrpcCmd request,
       @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
     StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
-    StreamFileDownloadCo streamFileDownloadCo = getStreamFileDownloadCo(
-        request);
-    streamFileDownloadCmd.setStreamFileDownloadCo(streamFileDownloadCo);
+    streamFileDownloadCmd.setName(
+        request.hasName() ? request.getName().getValue() : null);
+    streamFileDownloadCmd.setRename(
+        request.hasRename() ? request.getRename().getValue()
+            : null);
+    streamFileDownloadCmd.setStorageAddress(
+        request.hasStorageAddress() ? request.getStorageAddress()
+            .getValue() : null);
     try (InputStream inputStream = streamFileDownloadCmdExe.execute(streamFileDownloadCmd)) {
       ByteString byteString = ByteString.copyFrom(inputStream.readAllBytes());
       BytesValue bytesValue = BytesValue.newBuilder().setValue(byteString).build();

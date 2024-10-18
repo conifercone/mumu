@@ -15,8 +15,8 @@
  */
 package baby.mumu.log.infrastructure.system.convertor;
 
+import baby.mumu.log.client.dto.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogFindAllQueryCo;
 import baby.mumu.log.client.dto.co.SystemLogSaveCo;
 import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
 import baby.mumu.log.domain.system.SystemLog;
@@ -97,12 +97,12 @@ public class SystemLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(
-      SystemLogFindAllQueryCo systemLogFindAllQueryCo) {
-    return Optional.ofNullable(systemLogFindAllQueryCo)
+      SystemLogFindAllCmd systemLogFindAllCmd) {
+    return Optional.ofNullable(systemLogFindAllCmd)
         .map(SystemLogMapper.INSTANCE::toEntity).map(systemLog -> {
-          Optional.ofNullable(systemLogFindAllQueryCo.getRecordStartTime())
+          Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
               .ifPresent(systemLog::setRecordStartTime);
-          Optional.ofNullable(systemLogFindAllQueryCo.getRecordEndTime())
+          Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
               .ifPresent(systemLog::setRecordEndTime);
           return systemLog;
         });

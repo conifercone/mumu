@@ -53,8 +53,7 @@ public class AuthorityArchivedFindAllSliceCmdExe {
       AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
     Assert.notNull(authorityArchivedFindAllSliceCmd,
         "AuthorityArchivedFindAllSliceCmd cannot be null");
-    Authority authority = authorityConvertor.toEntity(
-            authorityArchivedFindAllSliceCmd.getAuthorityArchivedFindAllSliceQueryCo())
+    Authority authority = authorityConvertor.toEntity(authorityArchivedFindAllSliceCmd)
         .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findArchivedAllSlice(authority,
         authorityArchivedFindAllSliceCmd.getCurrent(),

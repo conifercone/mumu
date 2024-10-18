@@ -39,7 +39,6 @@ import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCm
 import baby.mumu.authentication.client.api.AccountService;
 import baby.mumu.authentication.client.api.grpc.AccountAddressRegisterGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
@@ -49,25 +48,17 @@ import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.AccountBasicInfoByIdCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountResetPasswordCmd;
-import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
-import baby.mumu.authentication.client.dto.co.AccountDisableCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
@@ -347,8 +338,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void disable(AccountDisableCmd accountDisableCmd) {
-    accountDisableCmdExe.execute(accountDisableCmd);
+  public void disable(Long id) {
+    accountDisableCmdExe.execute(id);
   }
 
   @Override
@@ -357,25 +348,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountLogoutCmdExe.execute();
   }
 
-  @NotNull
-  private static AccountDisableCo getAccountDisableCo(
-      @NotNull AccountDisableGrpcCmd request) {
-    AccountDisableCo accountDisableCo = new AccountDisableCo();
-    AccountDisableGrpcCo accountDisableGrpcCo = request.getAccountDisableGrpcCo();
-    accountDisableCo.setId(
-        accountDisableGrpcCo.hasId() ? accountDisableGrpcCo.getId().getValue() : null);
-    return accountDisableCo;
-  }
-
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
-    AccountDisableCmd accountDisableCmd = new AccountDisableCmd();
-    AccountDisableCo accountDisableCo = getAccountDisableCo(
-        request);
-    accountDisableCmd.setAccountDisableCo(accountDisableCo);
     try {
-      accountDisableCmdExe.execute(accountDisableCmd);
+      accountDisableCmdExe.execute(request.hasId() ? request.getId().getValue() : null);
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
@@ -396,15 +373,15 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void resetPassword(AccountResetPasswordCmd accountResetPasswordCmd) {
-    accountResetPasswordCmdExe.execute(accountResetPasswordCmd);
+  public void resetPassword(Long id) {
+    accountResetPasswordCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsBySettingsId(
-      AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd) {
-    accountResetSystemSettingsBySettingsIdCmdExe.execute(accountResetSystemSettingsBySettingsIdCmd);
+      String systemSettingsId) {
+    accountResetSystemSettingsBySettingsIdCmdExe.execute(systemSettingsId);
   }
 
   @Override
@@ -443,22 +420,21 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void archiveById(AccountArchiveByIdCmd accountArchiveByIdCmd) {
-    accountArchiveByIdCmdExe.execute(accountArchiveByIdCmd);
+  public void archiveById(Long accountId) {
+    accountArchiveByIdCmdExe.execute(accountId);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public AccountBasicInfoCo getAccountBasicInfoById(
-      AccountBasicInfoByIdCmd accountBasicInfoByIdCmd) {
-    return accountBasicInfoQueryByIdCmdExe.execute(accountBasicInfoByIdCmd);
+  public AccountBasicInfoCo getAccountBasicInfoById(Long id) {
+    return accountBasicInfoQueryByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(
-      AccountRecoverFromArchiveByIdCmd accountRecoverFromArchiveByIdCmd) {
-    accountRecoverFromArchiveByIdCmdExe.execute(accountRecoverFromArchiveByIdCmd);
+      Long accountId) {
+    accountRecoverFromArchiveByIdCmdExe.execute(accountId);
   }
 
   @Override
@@ -469,8 +445,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void offline(AccountOfflineCmd accountOfflineCmd) {
-    accountOfflineCmdExe.execute(accountOfflineCmd);
+  public void offline(Long accountId) {
+    accountOfflineCmdExe.execute(accountId);
   }
 
   @Override

@@ -49,7 +49,7 @@ public class StreamFileDownloadCmdExe {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
     Supplier<MuMuException> downloadFailed = () -> new MuMuException(
         ResultCode.FILE_DOWNLOAD_FAILED);
-    return streamFileConvertor.toEntity(streamFileDownloadCmd.getStreamFileDownloadCo())
+    return streamFileConvertor.toEntity(streamFileDownloadCmd)
         .map(streamFile -> streamFileGateway.download(streamFile)
             .orElseThrow(downloadFailed)
         ).orElseThrow(downloadFailed);

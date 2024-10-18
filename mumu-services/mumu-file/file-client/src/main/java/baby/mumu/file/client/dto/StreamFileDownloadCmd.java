@@ -15,7 +15,6 @@
  */
 package baby.mumu.file.client.dto;
 
-import baby.mumu.file.client.dto.co.StreamFileDownloadCo;
 import lombok.Data;
 
 /**
@@ -27,5 +26,18 @@ import lombok.Data;
 @Data
 public class StreamFileDownloadCmd {
 
-  private StreamFileDownloadCo streamFileDownloadCo;
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
+
+  /**
+   * 源文件名(包含文件拓展名) eg: test.log
+   */
+  private String name;
+
+  /**
+   * 下载重命名(包含文件拓展名) eg: test.log
+   */
+  private String rename;
 }

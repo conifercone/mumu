@@ -51,8 +51,7 @@ public class AuthorityFindAllSliceCmdExe {
 
   public Slice<AuthorityFindAllSliceCo> execute(AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
     Assert.notNull(authorityFindAllSliceCmd, "AuthorityFindAllSliceCmd cannot be null");
-    Authority authority = authorityConvertor.toEntity(
-            authorityFindAllSliceCmd.getAuthorityFindAllSliceQueryCo())
+    Authority authority = authorityConvertor.toEntity(authorityFindAllSliceCmd)
         .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findAllSlice(authority,
         authorityFindAllSliceCmd.getCurrent(), authorityFindAllSliceCmd.getPageSize());

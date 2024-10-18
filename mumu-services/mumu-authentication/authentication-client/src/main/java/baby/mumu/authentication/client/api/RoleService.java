@@ -16,13 +16,10 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
@@ -49,9 +46,9 @@ public interface RoleService {
   /**
    * 根据id删除角色
    *
-   * @param roleDeleteByIdCmd 根据id删除角色指令
+   * @param id 角色ID
    */
-  void deleteById(RoleDeleteByIdCmd roleDeleteByIdCmd);
+  void deleteById(Long id);
 
   /**
    * 根据id更新角色
@@ -96,15 +93,15 @@ public interface RoleService {
   /**
    * 根据id归档角色
    *
-   * @param roleArchiveByIdCmd 根据id归档角色指令
+   * @param id 角色ID
    */
-  void archiveById(RoleArchiveByIdCmd roleArchiveByIdCmd);
+  void archiveById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param roleRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   * @param id 角色ID
    */
   void recoverFromArchiveById(
-      RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd);
+      Long id);
 }

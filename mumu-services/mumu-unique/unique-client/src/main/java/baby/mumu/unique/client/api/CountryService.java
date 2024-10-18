@@ -15,11 +15,6 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdCmd;
-import baby.mumu.unique.client.dto.CountryGetCityByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import baby.mumu.unique.client.dto.co.CountryGetAllCo;
 import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
 import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
@@ -41,17 +36,13 @@ public interface CountryService {
 
   List<CountryGetAllCo> getCountries();
 
-  List<CountryGetStatesByCountryIdCo> getStatesByCountryId(
-      CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd);
+  List<CountryGetStatesByCountryIdCo> getStatesByCountryId(Long id);
 
-  List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
-      CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd);
+  List<CountryGetCitiesByStateIdCo> getCitiesByStateId(Long id);
 
-  CountryGetStateByIdCo getStateById(CountryGetStateByIdCmd countryGetStateByIdCmd);
+  CountryGetStateByIdCo getStateById(Long id);
 
-  CountryGetStateCitiesByIdCo getStateCitiesById(
-      CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd);
+  CountryGetStateCitiesByIdCo getStateCitiesById(Long id);
 
-  CountryGetCityByIdCo getCityById(
-      CountryGetCityByIdCmd countryGetCityByIdCmd);
+  CountryGetCityByIdCo getCityById(Long id);
 }

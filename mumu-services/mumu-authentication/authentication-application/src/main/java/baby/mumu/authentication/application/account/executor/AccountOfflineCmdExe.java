@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountOfflineCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -39,8 +38,8 @@ public class AccountOfflineCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public void execute(AccountOfflineCmd accountOfflineCmd) {
-    Optional.ofNullable(accountOfflineCmd).map(AccountOfflineCmd::getId)
+  public void execute(Long accountId) {
+    Optional.ofNullable(accountId)
         .ifPresent(accountGateway::offline);
   }
 }

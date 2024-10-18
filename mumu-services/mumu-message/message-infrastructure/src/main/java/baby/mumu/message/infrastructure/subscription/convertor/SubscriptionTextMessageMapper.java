@@ -16,9 +16,9 @@
 package baby.mumu.message.infrastructure.subscription.convertor;
 
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendQueryCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
@@ -55,7 +55,7 @@ public interface SubscriptionTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessage toEntity(
-      SubscriptionTextMessageFindAllYouSendQueryCo subscriptionTextMessageFindAllYouSendQueryCo);
+      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(

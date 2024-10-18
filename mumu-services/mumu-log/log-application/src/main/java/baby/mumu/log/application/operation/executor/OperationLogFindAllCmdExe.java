@@ -51,8 +51,7 @@ public class OperationLogFindAllCmdExe {
   public Page<OperationLogFindAllCo> execute(
       @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
-    OperationLog operationLog = operationLogConvertor.toEntity(
-            operationLogFindAllCmd.getOperationLogFindAllQueryCo())
+    OperationLog operationLog = operationLogConvertor.toEntity(operationLogFindAllCmd)
         .orElseGet(OperationLog::new);
     Page<OperationLog> operationLogs = operationLogGateway.findAll(
         operationLog,

@@ -15,9 +15,8 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceQueryCo;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -29,10 +28,18 @@ import lombok.Data;
 @Data
 public class RoleArchivedFindAllSliceCmd {
 
-  @Valid
-  private RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo;
+
+  private Long id;
+
+  private String name;
+
+  private String code;
+
+  private List<Long> authorityIds;
+
   @Min(value = 0, message = "{page.no.validation.min.size}")
   private int current = 0;
+
   @Min(value = 1, message = "{page.size.validation.min.size}")
   private int pageSize = 10;
 }

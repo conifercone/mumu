@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.authority.executor;
 
-import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -39,8 +38,8 @@ public class AuthorityDeleteByIdCmdExe {
     this.authorityGateway = authorityGateway;
   }
 
-  public void execute(AuthorityDeleteByIdCmd authorityDeleteByIdCmd) {
-    Optional.ofNullable(authorityDeleteByIdCmd)
-        .ifPresent(deleteByIdCmd -> authorityGateway.deleteById(deleteByIdCmd.getId()));
+  public void execute(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(authorityGateway::deleteById);
   }
 }

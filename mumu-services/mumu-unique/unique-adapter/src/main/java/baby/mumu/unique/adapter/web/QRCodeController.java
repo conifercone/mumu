@@ -28,7 +28,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,9 +57,9 @@ public class QRCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResultResponse<String> dataUrlGenerate(
-      @RequestBody @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
+      @ModelAttribute @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
     return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-        qrCodeGenerateCmd.getQrCodeGenerateCo().getImageFormat().getMimeType(),
+        qrCodeGenerateCmd.getImageFormat().getMimeType(),
         Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));
   }
 }

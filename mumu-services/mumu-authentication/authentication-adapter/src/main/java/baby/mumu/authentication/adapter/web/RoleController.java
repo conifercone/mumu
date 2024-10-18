@@ -17,13 +17,10 @@ package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.RoleService;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
@@ -40,6 +37,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,12 +74,12 @@ public class RoleController {
   }
 
   @Operation(summary = "根据id删除角色")
-  @DeleteMapping("/deleteById")
+  @DeleteMapping("/deleteById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@RequestBody @Valid RoleDeleteByIdCmd roleDeleteByIdCmd) {
-    roleService.deleteById(roleDeleteByIdCmd);
+  public void deleteById(@PathVariable(value = "id") Long id) {
+    roleService.deleteById(id);
   }
 
   @Operation(summary = "更新角色")
@@ -97,7 +96,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<RoleFindAllCo> findAll(@RequestBody @Valid RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllCo> findAll(@ModelAttribute @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
   }
 
@@ -107,7 +106,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleFindAllSliceCo> findAllSlice(
-      @RequestBody @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
+      @ModelAttribute @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleService.findAllSlice(roleFindAllSliceCmd);
   }
 
@@ -117,7 +116,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Page<RoleArchivedFindAllCo> findArchivedAll(
-      @RequestBody @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+      @ModelAttribute @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleService.findArchivedAll(roleArchivedFindAllCmd);
   }
 
@@ -127,26 +126,25 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
-      @RequestBody @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+      @ModelAttribute @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
   }
 
   @Operation(summary = "根据id归档角色")
-  @PutMapping("/archiveById")
+  @PutMapping("/archiveById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void archiveById(@RequestBody @Valid RoleArchiveByIdCmd roleArchiveByIdCmd) {
-    roleService.archiveById(roleArchiveByIdCmd);
+  public void archiveById(@PathVariable(value = "id") Long id) {
+    roleService.archiveById(id);
   }
 
   @Operation(summary = "根据id从归档中恢复角色")
-  @PutMapping("/recoverFromArchiveById")
+  @PutMapping("/recoverFromArchiveById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverFromArchiveById(
-      @RequestBody @Valid RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd) {
-    roleService.recoverFromArchiveById(roleRecoverFromArchiveByIdCmd);
+  public void recoverFromArchiveById(@PathVariable(value = "id") Long id) {
+    roleService.recoverFromArchiveById(id);
   }
 }

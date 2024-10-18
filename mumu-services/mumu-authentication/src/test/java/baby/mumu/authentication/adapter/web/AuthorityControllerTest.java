@@ -19,13 +19,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
-import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
-import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -84,11 +80,8 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws Exception {
-    AuthorityDeleteByIdCmd authorityDeleteByIdCmd = new AuthorityDeleteByIdCmd();
-    authorityDeleteByIdCmd.setId(3L);
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/authority/deleteById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(authorityDeleteByIdCmd))
+            .delete("/authority/deleteById/3").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -121,9 +114,7 @@ public class AuthorityControllerTest {
     AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
     authorityFindAllCmd.setCurrent(0);
     authorityFindAllCmd.setPageSize(10);
-    AuthorityFindAllQueryCo authorityFindAllQueryCo = new AuthorityFindAllQueryCo();
-    authorityFindAllQueryCo.setId(1L);
-    authorityFindAllCmd.setAuthorityFindAllQueryCo(authorityFindAllQueryCo);
+    authorityFindAllCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/authority/findAll")
             .content(objectMapper.writeValueAsBytes(authorityFindAllCmd))
@@ -138,11 +129,8 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    AuthorityArchiveByIdCmd authorityArchiveByIdCmd = new AuthorityArchiveByIdCmd();
-    authorityArchiveByIdCmd.setId(3L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/archiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(authorityArchiveByIdCmd))
+            .put("/authority/archiveById/3").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -154,11 +142,8 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd = new AuthorityRecoverFromArchiveByIdCmd();
-    authorityRecoverFromArchiveByIdCmd.setId(3L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/recoverFromArchiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(authorityRecoverFromArchiveByIdCmd))
+            .put("/authority/recoverFromArchiveById/3").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

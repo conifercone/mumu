@@ -15,15 +15,15 @@
  */
 package baby.mumu.authentication.infrastructure.role.convertor;
 
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
@@ -57,16 +57,16 @@ public interface RoleMapper {
   Role toEntity(RoleAddCo roleAddCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Role toEntity(RoleFindAllQueryCo roleFindAllQueryCo);
+  Role toEntity(RoleFindAllCmd roleFindAllCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo);
+  Role toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo);
+  Role toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo);
+  Role toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
   Role toEntity(RoleRedisDo roleRedisDo);

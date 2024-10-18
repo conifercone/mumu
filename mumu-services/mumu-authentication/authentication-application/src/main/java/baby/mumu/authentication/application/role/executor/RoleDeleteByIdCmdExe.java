@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -39,8 +38,7 @@ public class RoleDeleteByIdCmdExe {
     this.roleGateway = roleGateway;
   }
 
-  public void execute(RoleDeleteByIdCmd roleDeleteByIdCmd) {
-    Optional.ofNullable(roleDeleteByIdCmd)
-        .ifPresent(deleteCmd -> roleGateway.deleteById(deleteCmd.getId()));
+  public void execute(Long id) {
+    Optional.ofNullable(id).ifPresent(roleGateway::deleteById);
   }
 }

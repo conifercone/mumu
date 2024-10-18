@@ -16,14 +16,10 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
-import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
-import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
@@ -51,9 +47,9 @@ public interface AuthorityService {
   /**
    * 根据id删除权限
    *
-   * @param authorityDeleteByIdCmd 根据id删除权限指令
+   * @param id 权限ID
    */
-  void deleteById(AuthorityDeleteByIdCmd authorityDeleteByIdCmd);
+  void deleteById(Long id);
 
   /**
    * 根据id更新权限
@@ -99,23 +95,23 @@ public interface AuthorityService {
   /**
    * 根据id查询权限
    *
-   * @param authorityFindByIdCmd 根据id查询权限指令
+   * @param id 权限ID
    * @return 查询结果
    */
-  AuthorityFindByIdCo findById(AuthorityFindByIdCmd authorityFindByIdCmd);
+  AuthorityFindByIdCo findById(Long id);
 
   /**
    * 根据id归档权限
    *
-   * @param authorityArchiveByIdCmd 根据id归档权限指令
+   * @param id 权限ID
    */
-  void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd);
+  void archiveById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param authorityRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   * @param id 权限ID
    */
   void recoverFromArchiveById(
-      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd);
+      Long id);
 }

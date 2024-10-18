@@ -28,6 +28,7 @@ import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +68,7 @@ public class SystemLogController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<SystemLogFindAllCo> findAll(
-      @RequestBody @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
+      @ModelAttribute @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogService.findAll(systemLogFindAllCmd);
   }
 }

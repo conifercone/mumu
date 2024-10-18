@@ -15,15 +15,15 @@
  */
 package baby.mumu.authentication.infrastructure.authority.convertor;
 
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -120,13 +120,13 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityFindAllQueryCo authorityFindAllQueryCo) {
-    return Optional.ofNullable(authorityFindAllQueryCo).map(AuthorityMapper.INSTANCE::toEntity);
+  public Optional<Authority> toEntity(AuthorityFindAllCmd authorityFindAllCmd) {
+    return Optional.ofNullable(authorityFindAllCmd).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Authority> toEntity(AuthorityFindAllSliceQueryCo authorityFindAllSliceQueryCo) {
-    return Optional.ofNullable(authorityFindAllSliceQueryCo)
+  public Optional<Authority> toEntity(AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
+    return Optional.ofNullable(authorityFindAllSliceCmd)
         .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
@@ -152,15 +152,15 @@ public class AuthorityConvertor {
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(
-      @Valid AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo) {
-    return Optional.ofNullable(authorityArchivedFindAllQueryCo)
+      @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
+    return Optional.ofNullable(authorityArchivedFindAllCmd)
         .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Authority> toEntity(
-      @Valid AuthorityArchivedFindAllSliceQueryCo authorityArchivedFindAllSliceQueryCo) {
-    return Optional.ofNullable(authorityArchivedFindAllSliceQueryCo)
+      @Valid AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
+    return Optional.ofNullable(authorityArchivedFindAllSliceCmd)
         .map(AuthorityMapper.INSTANCE::toEntity);
   }
 

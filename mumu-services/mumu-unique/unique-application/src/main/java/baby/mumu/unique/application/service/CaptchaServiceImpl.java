@@ -77,26 +77,6 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   }
 
   @NotNull
-  private static SimpleCaptchaGeneratedCo getSimpleCaptchaGeneratedCo(
-      @NotNull SimpleCaptchaGeneratedGrpcCmd request) {
-    SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo = new SimpleCaptchaGeneratedCo();
-    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = request.getSimpleCaptchaGeneratedGrpcCo();
-    simpleCaptchaGeneratedCo.setId(
-        simpleCaptchaGeneratedGrpcCo.hasId() ? simpleCaptchaGeneratedGrpcCo.getId().getValue()
-            : null);
-    simpleCaptchaGeneratedCo.setTtl(
-        simpleCaptchaGeneratedGrpcCo.hasTtl() ? simpleCaptchaGeneratedGrpcCo.getTtl().getValue()
-            : null);
-    simpleCaptchaGeneratedCo.setLength(
-        simpleCaptchaGeneratedGrpcCo.hasLength() ? simpleCaptchaGeneratedGrpcCo.getLength()
-            .getValue() : null);
-    simpleCaptchaGeneratedCo.setTarget(
-        simpleCaptchaGeneratedGrpcCo.hasTarget() ? simpleCaptchaGeneratedGrpcCo.getTarget()
-            .getValue() : null);
-    return simpleCaptchaGeneratedCo;
-  }
-
-  @NotNull
   private static SimpleCaptchaVerifyCo getSimpleCaptchaVerifyCo(
       @NotNull SimpleCaptchaVerifyGrpcCmd request) {
     SimpleCaptchaVerifyCo simpleCaptchaVerifyCo = new SimpleCaptchaVerifyCo();
@@ -115,9 +95,15 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   public void generateSimpleCaptcha(SimpleCaptchaGeneratedGrpcCmd request,
       StreamObserver<SimpleCaptchaGeneratedGrpcCo> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
-    SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo = getSimpleCaptchaGeneratedCo(
-        request);
-    simpleCaptchaGeneratedCmd.setSimpleCaptchaGeneratedCo(simpleCaptchaGeneratedCo);
+    simpleCaptchaGeneratedCmd.setId(
+        request.hasId() ? request.getId().getValue()
+            : null);
+    simpleCaptchaGeneratedCmd.setTtl(
+        request.hasTtl() ? request.getTtl().getValue()
+            : null);
+    simpleCaptchaGeneratedCmd.setLength(
+        request.hasLength() ? request.getLength()
+            .getValue() : null);
     Builder builder = SimpleCaptchaGeneratedGrpcCo.newBuilder();
     try {
       SimpleCaptchaGeneratedCo captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(

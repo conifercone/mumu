@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.barcode.convertor;
 
-import baby.mumu.unique.client.dto.co.BarCodeGenerateCo;
+import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
 import baby.mumu.unique.domain.barcode.BarCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -36,5 +36,5 @@ public interface BarCodeMapper {
   BarCodeMapper INSTANCE = Mappers.getMapper(BarCodeMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  BarCode toEntity(BarCodeGenerateCo barCodeGenerateCo);
+  BarCode toEntity(BarCodeGenerateCmd barCodeGenerateCmd);
 }

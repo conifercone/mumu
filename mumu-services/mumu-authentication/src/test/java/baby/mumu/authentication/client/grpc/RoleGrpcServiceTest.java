@@ -22,7 +22,6 @@ import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcQueryCo;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
@@ -258,9 +257,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void findAll() {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
-        .setRoleFindAllQueryCo(
-            RoleFindAllGrpcQueryCo.newBuilder().setName(StringValue.of("管理员"))
-                .build())
+        .setName(StringValue.of("管理员"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -279,9 +276,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
-        .setRoleFindAllQueryCo(
-            RoleFindAllGrpcQueryCo.newBuilder().setName(StringValue.of("管理员"))
-                .build())
+        .setName(StringValue.of("管理员"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

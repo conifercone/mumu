@@ -6,6 +6,7 @@ apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '26.0.1'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.6.0'
+swagger3AnnotationsVersion = '2.2.22'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
@@ -88,6 +89,8 @@ spring-cloud-starter-consul-discovery = { module = "org.springframework.cloud:sp
 spring-cloud-starter-consul-config = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
 # https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
+# https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
+swagger-annotations-jakarta = { module = "io.swagger.core.v3:swagger-annotations-jakarta", version.ref = "swagger3AnnotationsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb

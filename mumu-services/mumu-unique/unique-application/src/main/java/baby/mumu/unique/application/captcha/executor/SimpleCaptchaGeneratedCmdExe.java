@@ -46,7 +46,7 @@ public class SimpleCaptchaGeneratedCmdExe {
 
   public SimpleCaptchaGeneratedCo execute(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     Assert.notNull(simpleCaptchaGeneratedCmd, "SimpleCaptchaGeneratedCmd cannot be null");
-    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd.getSimpleCaptchaGeneratedCo())
+    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd)
         .map(captchaGateway::generateSimpleCaptcha)
         .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
         .orElseThrow(() -> new MuMuException(

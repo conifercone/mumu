@@ -20,7 +20,6 @@ import baby.mumu.basis.response.ResultCode;
 import baby.mumu.file.AuthenticationRequired;
 import baby.mumu.file.client.api.StreamFileGrpcService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCo;
@@ -66,10 +65,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void download() {
     StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-        .setStreamFileDownloadGrpcCo(
-            StreamFileDownloadGrpcCo.newBuilder().setName(StringValue.of("test2.log"))
-                .setStorageAddress(StringValue.of("test"))
-                .build())
+        .setName(StringValue.of("test2.log"))
+        .setStorageAddress(StringValue.of("test"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
@@ -89,10 +86,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   public void syncDownload() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-        .setStreamFileDownloadGrpcCo(
-            StreamFileDownloadGrpcCo.newBuilder().setName(StringValue.of("test2.log"))
-                .setStorageAddress(StringValue.of("test"))
-                .build())
+        .setName(StringValue.of("test2.log"))
+        .setStorageAddress(StringValue.of("test"))
         .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(

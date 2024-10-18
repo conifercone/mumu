@@ -51,9 +51,7 @@ public class AccountFindAllSliceCmdExe {
 
   public Slice<AccountFindAllSliceCo> execute(
       @NotNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
-    Account account = accountConvertor.toEntity(
-            accountFindAllSliceCmd.getAccountFindAllSliceQueryCo())
-        .orElseGet(Account::new);
+    Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
     Slice<Account> accounts = accountGateway.findAllSlice(account,
         accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
     List<AccountFindAllSliceCo> accountFindAllSliceCos = accounts.getContent().stream()

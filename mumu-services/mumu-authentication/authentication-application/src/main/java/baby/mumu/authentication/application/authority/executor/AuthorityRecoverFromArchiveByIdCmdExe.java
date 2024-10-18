@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.authority.executor;
 
-import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -39,9 +38,8 @@ public class AuthorityRecoverFromArchiveByIdCmdExe {
     this.authorityGateway = authorityGateway;
   }
 
-  public void execute(AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd) {
-    Optional.ofNullable(authorityRecoverFromArchiveByIdCmd)
-        .ifPresent(recoverFromArchiveByIdCmd -> authorityGateway.recoverFromArchiveById(
-            recoverFromArchiveByIdCmd.getId()));
+  public void execute(Long id) {
+    Optional.ofNullable(id)
+        .ifPresent(authorityGateway::recoverFromArchiveById);
   }
 }

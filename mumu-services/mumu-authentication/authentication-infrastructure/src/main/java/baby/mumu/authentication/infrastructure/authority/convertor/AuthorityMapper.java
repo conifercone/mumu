@@ -15,15 +15,15 @@
  */
 package baby.mumu.authentication.infrastructure.authority.convertor;
 
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -58,10 +58,10 @@ public interface AuthorityMapper {
   Authority toEntity(AuthorityAddCo authorityAddCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Authority toEntity(AuthorityFindAllQueryCo authorityFindAllQueryCo);
+  Authority toEntity(AuthorityFindAllCmd authorityFindAllCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Authority toEntity(AuthorityFindAllSliceQueryCo authorityFindAllSliceQueryCo);
+  Authority toEntity(AuthorityFindAllSliceCmd authorityFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.0.0")
   Authority toEntity(AuthorityArchivedDo authorityArchivedDo);
@@ -76,10 +76,10 @@ public interface AuthorityMapper {
   AuthorityDo toDataObject(AuthorityRedisDo authorityRedisDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  Authority toEntity(AuthorityArchivedFindAllQueryCo authorityArchivedFindAllQueryCo);
+  Authority toEntity(AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Authority toEntity(AuthorityArchivedFindAllSliceQueryCo authorityArchivedFindAllSliceQueryCo);
+  Authority toEntity(AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AuthorityUpdateCo authorityUpdateCo, @MappingTarget Authority authority);

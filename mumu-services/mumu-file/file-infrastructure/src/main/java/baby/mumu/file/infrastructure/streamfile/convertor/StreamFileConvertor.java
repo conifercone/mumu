@@ -17,7 +17,7 @@ package baby.mumu.file.infrastructure.streamfile.convertor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResultCode;
-import baby.mumu.file.client.dto.co.StreamFileDownloadCo;
+import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
 import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
 import baby.mumu.file.domain.stream.StreamFile;
@@ -68,10 +68,10 @@ public class StreamFileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<StreamFile> toEntity(StreamFileDownloadCo streamFileDownloadCo) {
-    return Optional.ofNullable(streamFileDownloadCo)
-        .map(downloadCo -> {
-          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(downloadCo);
+  public Optional<StreamFile> toEntity(StreamFileDownloadCmd streamFileDownloadCmd) {
+    return Optional.ofNullable(streamFileDownloadCmd)
+        .map(fileDownloadCmd -> {
+          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(fileDownloadCmd);
           if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
             throw new MuMuException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
           }

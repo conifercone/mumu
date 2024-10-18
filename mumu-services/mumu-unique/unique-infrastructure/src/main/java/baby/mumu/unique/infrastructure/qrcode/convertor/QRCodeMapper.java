@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.qrcode.convertor;
 
-import baby.mumu.unique.client.dto.co.QRCodeGenerateCo;
+import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -36,5 +36,5 @@ public interface QRCodeMapper {
   QRCodeMapper INSTANCE = Mappers.getMapper(QRCodeMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  QRCode toEntity(QRCodeGenerateCo qrCodeGenerateCo);
+  QRCode toEntity(QRCodeGenerateCmd qrCodeGenerateCmd);
 }

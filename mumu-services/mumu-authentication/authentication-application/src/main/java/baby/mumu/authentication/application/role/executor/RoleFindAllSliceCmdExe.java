@@ -49,8 +49,7 @@ public class RoleFindAllSliceCmdExe {
   }
 
   public Slice<RoleFindAllSliceCo> execute(@NotNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllSliceCmd.getRoleFindAllSliceQueryCo())
-        .orElseGet(Role::new);
+    Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
     Slice<Role> roles = roleGateway.findAllSlice(role,
         roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
     List<RoleFindAllSliceCo> roleFindAllSliceCos = roles.getContent().stream()

@@ -16,13 +16,13 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
 import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
@@ -491,10 +491,11 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(
-      AccountFindAllSliceQueryCo accountFindAllSliceQueryCo) {
-    return Optional.ofNullable(accountFindAllSliceQueryCo).map(AccountMapper.INSTANCE::toEntity)
+      AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    return Optional.ofNullable(accountFindAllSliceCmd).map(AccountMapper.INSTANCE::toEntity)
         .map(account -> {
-          setRolesWithIds(account, accountFindAllSliceQueryCo.getRoleIds());
+          Optional.ofNullable(accountFindAllSliceCmd.getRoleIds())
+              .ifPresent(roleIds -> setRolesWithIds(account, roleIds));
           return account;
         });
   }

@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
@@ -44,8 +45,8 @@ public class CaptchaConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<SimpleCaptcha> toEntity(
-      SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo) {
-    return Optional.ofNullable(simpleCaptchaGeneratedCo).map(CaptchaMapper.INSTANCE::toEntity);
+      SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    return Optional.ofNullable(simpleCaptchaGeneratedCmd).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")

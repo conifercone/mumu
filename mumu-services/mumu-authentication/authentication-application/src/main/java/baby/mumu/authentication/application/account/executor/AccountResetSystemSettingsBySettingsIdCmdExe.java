@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountResetSystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -40,9 +39,8 @@ public class AccountResetSystemSettingsBySettingsIdCmdExe {
   }
 
   public void execute(
-      AccountResetSystemSettingsBySettingsIdCmd accountResetSystemSettingsBySettingsIdCmd) {
-    Optional.ofNullable(accountResetSystemSettingsBySettingsIdCmd)
-        .map(AccountResetSystemSettingsBySettingsIdCmd::getSystemSettingsId)
+      String systemSettingsId) {
+    Optional.ofNullable(systemSettingsId)
         .ifPresent(accountGateway::resetSystemSettingsById);
   }
 }

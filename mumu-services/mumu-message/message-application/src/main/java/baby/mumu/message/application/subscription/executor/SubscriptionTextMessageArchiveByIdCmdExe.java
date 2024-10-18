@@ -15,12 +15,10 @@
  */
 package baby.mumu.message.application.subscription.executor;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本订阅消息根据ID归档指令执行器
@@ -40,9 +38,7 @@ public class SubscriptionTextMessageArchiveByIdCmdExe {
   }
 
   public void execute(
-      @NotNull SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
-    Assert.notNull(subscriptionTextMessageArchiveByIdCmd,
-        "SubscriptionTextMessageArchiveByIdCmd cannot null");
-    subscriptionTextMessageGateway.archiveMsgById(subscriptionTextMessageArchiveByIdCmd.getId());
+      Long id) {
+    Optional.ofNullable(id).ifPresent(subscriptionTextMessageGateway::archiveMsgById);
   }
 }

@@ -15,15 +15,15 @@
  */
 package baby.mumu.authentication.infrastructure.role.convertor;
 
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
@@ -207,21 +207,21 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Role> toEntity(RoleFindAllQueryCo roleFindAllQueryCo) {
-    return Optional.ofNullable(roleFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity).map(role -> {
-      if (CollectionUtils.isNotEmpty(roleFindAllQueryCo.getAuthorityIds())) {
-        setAuthorities(role, roleFindAllQueryCo.getAuthorityIds());
+  public Optional<Role> toEntity(RoleFindAllCmd roleFindAllCmd) {
+    return Optional.ofNullable(roleFindAllCmd).map(RoleMapper.INSTANCE::toEntity).map(role -> {
+      if (CollectionUtils.isNotEmpty(roleFindAllCmd.getAuthorityIds())) {
+        setAuthorities(role, roleFindAllCmd.getAuthorityIds());
       }
       return role;
     });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Role> toEntity(RoleFindAllSliceQueryCo roleFindAllSliceQueryCo) {
-    return Optional.ofNullable(roleFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
+  public Optional<Role> toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd) {
+    return Optional.ofNullable(roleFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleFindAllSliceQueryCo.getAuthorityIds())) {
-            setAuthorities(role, roleFindAllSliceQueryCo.getAuthorityIds());
+          if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getAuthorityIds())) {
+            setAuthorities(role, roleFindAllSliceCmd.getAuthorityIds());
           }
           return role;
         });
@@ -252,22 +252,22 @@ public class RoleConvertor {
 
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Role> toEntity(RoleArchivedFindAllQueryCo roleArchivedFindAllQueryCo) {
-    return Optional.ofNullable(roleArchivedFindAllQueryCo).map(RoleMapper.INSTANCE::toEntity)
+  public Optional<Role> toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    return Optional.ofNullable(roleArchivedFindAllCmd).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllQueryCo.getAuthorityIds())) {
-            setAuthorities(role, roleArchivedFindAllQueryCo.getAuthorityIds());
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getAuthorityIds())) {
+            setAuthorities(role, roleArchivedFindAllCmd.getAuthorityIds());
           }
           return role;
         });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Role> toEntity(RoleArchivedFindAllSliceQueryCo roleArchivedFindAllSliceQueryCo) {
-    return Optional.ofNullable(roleArchivedFindAllSliceQueryCo).map(RoleMapper.INSTANCE::toEntity)
+  public Optional<Role> toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    return Optional.ofNullable(roleArchivedFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
         .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceQueryCo.getAuthorityIds())) {
-            setAuthorities(role, roleArchivedFindAllSliceQueryCo.getAuthorityIds());
+          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getAuthorityIds())) {
+            setAuthorities(role, roleArchivedFindAllSliceCmd.getAuthorityIds());
           }
           return role;
         });

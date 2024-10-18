@@ -19,13 +19,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllQueryCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -86,11 +82,8 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws Exception {
-    RoleDeleteByIdCmd roleDeleteByIdCmd = new RoleDeleteByIdCmd();
-    roleDeleteByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/role/deleteById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(roleDeleteByIdCmd))
+            .delete("/role/deleteById/0").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -123,9 +116,7 @@ public class RoleControllerTest {
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
     roleFindAllCmd.setCurrent(0);
     roleFindAllCmd.setPageSize(10);
-    RoleFindAllQueryCo roleFindAllQueryCo = new RoleFindAllQueryCo();
-    roleFindAllQueryCo.setName("管理员");
-    roleFindAllCmd.setRoleFindAllQueryCo(roleFindAllQueryCo);
+    roleFindAllCmd.setName("管理员");
     mockMvc.perform(MockMvcRequestBuilders
             .get("/role/findAll")
             .content(objectMapper.writeValueAsBytes(roleFindAllCmd))
@@ -140,11 +131,8 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    RoleArchiveByIdCmd roleArchiveByIdCmd = new RoleArchiveByIdCmd();
-    roleArchiveByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/role/archiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(roleArchiveByIdCmd))
+            .put("/role/archiveById/0").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -156,11 +144,8 @@ public class RoleControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd = new RoleRecoverFromArchiveByIdCmd();
-    roleRecoverFromArchiveByIdCmd.setId(0L);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/role/recoverFromArchiveById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(roleRecoverFromArchiveByIdCmd))
+            .put("/role/recoverFromArchiveById/0").with(csrf())
             .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)

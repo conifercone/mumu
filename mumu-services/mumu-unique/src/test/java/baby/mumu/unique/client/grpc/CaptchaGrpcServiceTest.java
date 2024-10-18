@@ -59,9 +59,8 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void generateSimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     LOGGER.info("simpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
@@ -72,9 +71,8 @@ public class CaptchaGrpcServiceTest {
   public void syncGenerateSimpleCaptcha() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     ListenableFuture<SimpleCaptchaGeneratedGrpcCo> simpleCaptchaGeneratedGrpcCoListenableFuture = captchaGrpcService.syncGenerateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     simpleCaptchaGeneratedGrpcCoListenableFuture.addListener(() -> {
@@ -94,9 +92,8 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void verifySimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()
@@ -116,9 +113,8 @@ public class CaptchaGrpcServiceTest {
       throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()
