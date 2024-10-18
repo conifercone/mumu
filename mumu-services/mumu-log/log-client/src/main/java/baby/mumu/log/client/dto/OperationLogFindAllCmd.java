@@ -94,8 +94,8 @@ public class OperationLogFindAllCmd {
   /**
    * 当前页码
    */
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int current = 0;
+  @Min(value = 1, message = "{current.validation.min.size}")
+  private int current = 1;
   /**
    * 每页数量
    */

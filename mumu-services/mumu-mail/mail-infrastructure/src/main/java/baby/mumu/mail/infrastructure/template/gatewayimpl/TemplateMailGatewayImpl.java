@@ -20,7 +20,6 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.basis.response.ResultCode;
 import baby.mumu.file.client.api.StreamFileGrpcService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
@@ -73,11 +72,8 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   public void sendMail(TemplateMail templateMail) {
     Optional.ofNullable(templateMail).ifPresent(templateMailDomain -> {
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-          .setStreamFileDownloadGrpcCo(
-              StreamFileDownloadGrpcCo.newBuilder()
-                  .setName(StringValue.of(templateMailDomain.getName()))
-                  .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
-                  .build())
+          .setName(StringValue.of(templateMailDomain.getName()))
+          .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
           .build();
       byte[] bytes = SecurityContextUtil.getTokenValue().orElseThrow(
           () -> new MuMuException(ResultCode.UNAUTHORIZED)).getBytes();

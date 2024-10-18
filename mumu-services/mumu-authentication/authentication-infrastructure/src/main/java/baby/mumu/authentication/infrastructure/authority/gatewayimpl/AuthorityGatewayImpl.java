@@ -139,7 +139,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<Authority> findAll(Authority authority, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<AuthorityDo> repositoryAll = authorityRepository.findAllPage(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new),
         pageRequest);
@@ -153,7 +153,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Authority> findAllSlice(Authority authority, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAllSlice(
         authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
     return new SliceImpl<>(authorityDoSlice.getContent().stream()
@@ -164,7 +164,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Authority> findArchivedAllSlice(Authority authority, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAllSlice(
         authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);
@@ -176,7 +176,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   @Override
   @API(status = Status.STABLE, since = "2.0.0")
   public Page<Authority> findArchivedAll(Authority authority, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAllPage(
         authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);

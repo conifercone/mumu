@@ -171,7 +171,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      PageRequest pageRequest = PageRequest.of(current, pageSize);
+      PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
       Page<BroadcastTextMessageDo> repositoryAll = broadcastTextMessageRepository.findAll(
           broadcastTextMessageDoSpecification,
           pageRequest);

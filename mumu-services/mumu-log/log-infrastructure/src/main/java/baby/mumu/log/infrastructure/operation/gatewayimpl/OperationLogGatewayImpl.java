@@ -113,7 +113,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   @Override
   @SuppressWarnings("DuplicatedCode")
   public Page<OperationLog> findAll(OperationLog operationLog, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Criteria criteria = new Criteria();
     Optional.ofNullable(operationLog).ifPresent(optLog -> {
       Optional.ofNullable(optLog.getId())

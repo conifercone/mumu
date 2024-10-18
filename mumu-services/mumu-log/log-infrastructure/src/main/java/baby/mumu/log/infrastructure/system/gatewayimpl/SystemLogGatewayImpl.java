@@ -91,7 +91,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
   @Override
   @SuppressWarnings("DuplicatedCode")
   public Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Criteria criteria = new Criteria();
     Optional.ofNullable(systemLog).ifPresent(sysLog -> {
       Optional.ofNullable(sysLog.getId())

@@ -167,7 +167,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Page<Role> findAll(Role role, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RoleDo> roleDoPage = roleRepository.findAllPage(
         roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -183,7 +183,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
   public Slice<Role> findAllSlice(Role role, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RoleDo> roleDoSlice = roleRepository.findAllSlice(
         roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -199,7 +199,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
   public Slice<Role> findArchivedAllSlice(Role role, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RoleArchivedDo> roleArchivedDos = roleArchivedRepository.findAllSlice(
         roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
@@ -215,7 +215,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   @Transactional(rollbackFor = Exception.class)
   public Page<Role> findArchivedAll(Role role, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RoleArchivedDo> roleArchivedDoPage = roleArchivedRepository.findAllPage(
         roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
         Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(

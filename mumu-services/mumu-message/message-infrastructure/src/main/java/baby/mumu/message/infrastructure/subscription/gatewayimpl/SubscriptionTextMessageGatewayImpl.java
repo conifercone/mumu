@@ -222,7 +222,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @NotNull
   private PageImpl<SubscriptionTextMessage> getSubscriptionTextMessages(int current, int pageSize,
       Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
         subscriptionTextMessageDoSpecification,
         pageRequest);

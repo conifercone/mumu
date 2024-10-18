@@ -533,7 +533,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Page<Account> findAll(Account account, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<AccountDo> accountDos = accountRepository.findAllPage(
         accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
         Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
@@ -548,7 +548,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(current, pageSize);
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<AccountDo> accountDos = accountRepository.findAllSlice(
         accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
         Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
