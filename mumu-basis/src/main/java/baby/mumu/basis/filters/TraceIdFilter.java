@@ -70,4 +70,8 @@ public class TraceIdFilter implements Filter {
   public static void setTraceId(String traceId) {
     traceIdThreadLocal.set(traceId);
   }
+
+  public static void removeTraceId() {
+    traceIdThreadLocal.remove();
+  }
 }

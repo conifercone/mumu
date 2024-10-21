@@ -86,10 +86,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       // 判断redis中是否存在token
       if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
         TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
-        traceId();
-        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
-        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
-        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
+        try {
+          traceId();
+          LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
+          response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+          ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
+        } finally {
+          TraceIdFilter.removeTraceId();
+        }
         return;
       }
       // 判断token是否合法
@@ -102,6 +106,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
+      } finally {
+        TraceIdFilter.removeTraceId();
       }
       List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());
       if (SecurityContextHolder.getContext().getAuthentication() == null) {
