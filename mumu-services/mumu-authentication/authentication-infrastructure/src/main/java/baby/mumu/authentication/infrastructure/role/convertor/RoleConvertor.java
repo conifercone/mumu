@@ -42,7 +42,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
@@ -188,7 +188,7 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
     return Optional.ofNullable(roleUpdateCo).flatMap(roleUpdateClientObject -> {
       Optional.ofNullable(roleUpdateClientObject.getId())
-          .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
         String codeBeforeUpdated = roleDomain.getCode();
@@ -197,7 +197,7 @@ public class RoleConvertor {
         if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
             && (roleRepository.existsByCode(codeAfterUpdated)
             || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
-          throw new MuMuException(ResultCode.ROLE_CODE_ALREADY_EXISTS);
+          throw new MuMuException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
         }
         Optional.ofNullable(roleUpdateClientObject.getAuthorityIds())
             .ifPresent(authorities -> setAuthorities(roleDomain, authorities));

@@ -33,7 +33,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
@@ -100,7 +100,7 @@ public class AuthorityConvertor {
   public Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
     return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
       if (authorityUpdateClientObject.getId() == null) {
-        throw new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+        throw new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
       }
       return authorityRepository.findById(
               authorityUpdateClientObject.getId()).flatMap(this::toEntity)
@@ -112,7 +112,7 @@ public class AuthorityConvertor {
                 && (authorityRepository.existsByCode(
                 codeAfterUpdate) || authorityArchivedRepository.existsByCode(
                 codeAfterUpdate))) {
-              throw new MuMuException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
+              throw new MuMuException(ResponseCode.AUTHORITY_CODE_ALREADY_EXISTS);
             }
             return authority;
           }).orElse(null);

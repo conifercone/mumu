@@ -17,7 +17,7 @@ package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.constants.CommonConstants;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.QRCodeService;
 import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,9 +56,9 @@ public class QRCodeController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public ResultResponse<String> dataUrlGenerate(
+  public ResponseWrapper<String> dataUrlGenerate(
       @ModelAttribute @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
-    return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
+    return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
         qrCodeGenerateCmd.getImageFormat().getMimeType(),
         Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));
   }

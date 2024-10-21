@@ -27,7 +27,7 @@ import baby.mumu.authentication.client.api.grpc.AuthorityUpdateGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
@@ -85,7 +85,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     Empty empty = authorityGrpcService.add(authorityAddGrpcCmd,
         callCredentials);
@@ -106,7 +106,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<Empty> authorityAddGrpcCoFuture = authorityGrpcService.syncAdd(
         authorityAddGrpcCmd,
@@ -137,7 +137,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
     AuthorityDeleteByIdGrpcCmd authorityDeleteByIdGrpcCmd = AuthorityDeleteByIdGrpcCmd.newBuilder()
@@ -161,7 +161,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
     CountDownLatch latch = new CountDownLatch(1);
@@ -196,7 +196,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
     AuthorityUpdateGrpcCmd authorityUpdateGrpcCmd = AuthorityUpdateGrpcCmd.newBuilder()
@@ -224,7 +224,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     authorityGrpcService.add(authorityAddGrpcCmd, callCredentials);
     CountDownLatch latch = new CountDownLatch(1);
@@ -259,7 +259,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     PageOfAuthorityFindAllGrpcCo pageOfAuthorityFindAllGrpcCo = authorityGrpcService.findAll(
         authorityFindAllGrpcCmd,
@@ -280,7 +280,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<PageOfAuthorityFindAllGrpcCo> pageOfAuthorityFindAllGrpcCoListenableFuture = authorityGrpcService.syncFindAll(
         authorityFindAllGrpcCmd,

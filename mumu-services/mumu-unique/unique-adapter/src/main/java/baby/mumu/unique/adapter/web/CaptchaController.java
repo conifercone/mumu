@@ -16,7 +16,7 @@
 package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.CaptchaService;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
@@ -67,8 +67,8 @@ public class CaptchaController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public ResultResponse<Boolean> verifySimple(
+  public ResponseWrapper<Boolean> verifySimple(
       @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
-    return ResultResponse.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
+    return ResponseWrapper.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
   }
 }

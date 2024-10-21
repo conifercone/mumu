@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.exception;
 
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,18 +34,18 @@ public class MuMuException extends RuntimeException {
   @Serial
   private static final long serialVersionUID = 5646742276995362775L;
 
-  private ResultCode resultCode;
+  private ResponseCode responseCode;
 
   private Object data;
 
-  public MuMuException(@NotNull ResultCode resultCode) {
-    super(resultCode.getResultMsg());
-    this.resultCode = resultCode;
+  public MuMuException(@NotNull ResponseCode responseCode) {
+    super(responseCode.getMessage());
+    this.responseCode = responseCode;
   }
 
-  public MuMuException(@NotNull ResultCode resultCode, Object data) {
-    super(resultCode.getResultMsg());
-    this.resultCode = resultCode;
+  public MuMuException(@NotNull ResponseCode responseCode, Object data) {
+    super(responseCode.getMessage());
+    this.responseCode = responseCode;
     this.data = data;
   }
 }

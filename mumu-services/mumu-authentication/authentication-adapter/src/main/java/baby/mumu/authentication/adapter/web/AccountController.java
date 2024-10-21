@@ -33,7 +33,7 @@ import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -193,9 +193,9 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public ResultResponse<Boolean> verifyPassword(
+  public ResponseWrapper<Boolean> verifyPassword(
       @ModelAttribute @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
-    return ResultResponse.success(accountService.verifyPassword(accountPasswordVerifyCmd));
+    return ResponseWrapper.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
   @Operation(summary = "修改账户密码")

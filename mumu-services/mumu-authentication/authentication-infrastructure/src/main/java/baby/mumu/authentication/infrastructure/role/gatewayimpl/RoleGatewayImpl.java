@@ -31,7 +31,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
@@ -107,7 +107,7 @@ public class RoleGatewayImpl implements RoleGateway {
           roleRepository.persist(roleDo);
           roleRedisRepository.deleteById(roleDo.getId());
         }, () -> {
-          throw new MuMuException(ResultCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
+          throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
         });
     saveRoleAuthorityRelationsData(role);
   }
@@ -133,7 +133,7 @@ public class RoleGatewayImpl implements RoleGateway {
     Optional.ofNullable(id).ifPresent(roleId -> {
       List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId);
       if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
-        throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+        throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
             allAccountByRoleId.stream().map(Account::getUsername).toList());
       }
       roleAuthorityRepository.deleteByRoleId(roleId);
@@ -242,7 +242,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public void archiveById(Long id) {
     List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id);
     if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
-      throw new MuMuException(ResultCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+      throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
     //noinspection DuplicatedCode

@@ -26,7 +26,7 @@ import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
@@ -84,7 +84,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     Empty empty = roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
@@ -105,7 +105,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<Empty> roleAddGrpcCoListenableFuture = roleGrpcService.syncAdd(
         roleAddGrpcCmd,
@@ -136,7 +136,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
@@ -161,7 +161,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
@@ -197,7 +197,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
@@ -226,7 +226,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     roleGrpcService.add(roleAddGrpcCmd,
         callCredentials);
@@ -262,7 +262,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
         roleFindAllGrpcCmd,
@@ -281,7 +281,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<PageOfRoleFindAllGrpcCo> pageOfRoleFindAllGrpcCoListenableFuture = roleGrpcService.syncFindAll(
         roleFindAllGrpcCmd,

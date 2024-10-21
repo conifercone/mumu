@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.exception;
 
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 
 /**
@@ -30,6 +30,6 @@ public class AccountAlreadyExistsException extends MuMuException {
   private static final long serialVersionUID = 7383143329621946676L;
 
   public AccountAlreadyExistsException(String accountName) {
-    super(ResultCode.ACCOUNT_ALREADY_EXISTS, accountName);
+    super(ResponseCode.ACCOUNT_ALREADY_EXISTS, accountName);
   }
 }

@@ -22,8 +22,8 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
 
 import baby.mumu.basis.kotlin.tools.IpUtil;
-import baby.mumu.basis.response.ResultCode;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
@@ -80,15 +80,15 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
                   .setFail(ExceptionUtils.getStackTrace(exception)).build())
           .build());
       LOGGER.error(errorCode);
-      response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
+      response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
       switch (errorCode) {
         case UNSUPPORTED_GRANT_TYPE ->
-            exceptionResponse(response, ResultCode.UNSUPPORTED_GRANT_TYPE, request);
-        case INVALID_CLIENT -> exceptionResponse(response, ResultCode.INVALID_CLIENT, request);
-        case INVALID_GRANT -> exceptionResponse(response, ResultCode.INVALID_GRANT, request);
-        case INVALID_SCOPE -> exceptionResponse(response, ResultCode.INVALID_SCOPE, request);
+          exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
+        case INVALID_CLIENT -> exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
+        case INVALID_GRANT -> exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
+        case INVALID_SCOPE -> exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
         default -> {
-          ResultResponse.exceptionResponse(response, errorCode, error.getDescription());
+          ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
           operationFailLog(errorCode, error.getDescription(), IpUtil.getIpAddr(request));
         }
       }
@@ -99,17 +99,17 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
    * 统一认证异常信息响应
    *
    * @param response   响应
-   * @param resultCode 结果编码
+   * @param responseCode 结果编码
    * @param request    请求信息
    * @throws IOException io异常
    */
-  private void exceptionResponse(HttpServletResponse response, @NotNull ResultCode resultCode,
+  private void exceptionResponse(HttpServletResponse response, @NotNull ResponseCode responseCode,
       HttpServletRequest request)
       throws IOException {
-    ResultResponse.exceptionResponse(response,
-        resultCode);
-    operationFailLog(resultCode.getResultCode(),
-        resultCode.getResultMsg(), IpUtil.getIpAddr(request));
+    ResponseWrapper.exceptionResponse(response,
+      responseCode);
+    operationFailLog(responseCode.getCode(),
+      responseCode.getMessage(), IpUtil.getIpAddr(request));
   }
 
   /**

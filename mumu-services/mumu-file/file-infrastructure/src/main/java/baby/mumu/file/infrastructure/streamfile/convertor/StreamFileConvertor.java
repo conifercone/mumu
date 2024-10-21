@@ -16,7 +16,7 @@
 package baby.mumu.file.infrastructure.streamfile.convertor;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
 import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
@@ -49,12 +49,12 @@ public class StreamFileConvertor {
           StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
           try (InputStream streamFileContent = uploadCo.getContent()) {
             if (streamFileContent == null) {
-              throw new MuMuException(ResultCode.FILE_CONTENT_CANNOT_BE_EMPTY);
+              throw new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY);
             } else {
               streamFile.setContent(streamFileContent);
             }
           } catch (IOException e) {
-            throw new MuMuException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
+            throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
           }
           return streamFile;
         });
@@ -73,10 +73,10 @@ public class StreamFileConvertor {
         .map(fileDownloadCmd -> {
           StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(fileDownloadCmd);
           if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
-            throw new MuMuException(ResultCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+            throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
           }
           if (ObjectUtils.isEmpty(streamFile.getName())) {
-            throw new MuMuException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
+            throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
           }
           return streamFile;
         });
@@ -93,7 +93,7 @@ public class StreamFileConvertor {
               transform.setContent(streamFileContent);
             }
           } catch (IOException e) {
-            throw new MuMuException(ResultCode.INPUT_STREAM_CONVERSION_FAILED);
+            throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
           }
           return transform;
         });

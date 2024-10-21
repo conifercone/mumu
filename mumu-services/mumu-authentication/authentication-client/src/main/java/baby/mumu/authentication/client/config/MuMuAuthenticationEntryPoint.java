@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.client.config;
 
-import baby.mumu.basis.response.ResultCode;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.basis.response.ResponseWrapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -51,20 +51,20 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
       AuthenticationException authException) throws IOException, ServletException {
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
-        LOGGER.error(ResultCode.ACCOUNT_DOES_NOT_EXIST.getResultMsg(), usernameNotFoundException);
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.ACCOUNT_DOES_NOT_EXIST);
+        LOGGER.error(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getMessage(), usernameNotFoundException);
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST);
       }
       case InvalidBearerTokenException invalidBearerTokenException -> {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), invalidBearerTokenException);
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage(), invalidBearerTokenException);
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
-        LOGGER.error(ResultCode.INSUFFICIENT_AUTHENTICATION.getResultMsg(),
+        LOGGER.error(ResponseCode.INSUFFICIENT_AUTHENTICATION.getMessage(),
             insufficientAuthenticationException);
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INSUFFICIENT_AUTHENTICATION);
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INSUFFICIENT_AUTHENTICATION);
       }
       case null, default -> super.commence(request, response, authException);
     }

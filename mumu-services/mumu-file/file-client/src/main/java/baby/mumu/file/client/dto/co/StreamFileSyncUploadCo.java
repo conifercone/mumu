@@ -18,7 +18,7 @@ package baby.mumu.file.client.dto.co;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.InputStream;
 import java.io.Serial;
@@ -70,7 +70,7 @@ public class StreamFileSyncUploadCo extends BaseClientObject {
       return originName;
     } else if (!name.contains(CommonConstants.DOT)) {
       if (ObjectUtils.isEmpty(originName)) {
-        throw new MuMuException(ResultCode.FILE_NAME_CANNOT_BE_EMPTY);
+        throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
       }
       return name.concat(CommonConstants.DOT).concat(
           originName.substring(originName.lastIndexOf(CommonConstants.DOT) + 1));

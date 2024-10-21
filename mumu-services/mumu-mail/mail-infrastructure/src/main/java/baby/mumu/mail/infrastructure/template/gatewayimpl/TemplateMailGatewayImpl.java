@@ -17,7 +17,7 @@ package baby.mumu.mail.infrastructure.template.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.api.StreamFileGrpcService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
@@ -76,7 +76,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
           .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
           .build();
       byte[] bytes = SecurityContextUtil.getTokenValue().orElseThrow(
-          () -> new MuMuException(ResultCode.UNAUTHORIZED)).getBytes();
+        () -> new MuMuException(ResponseCode.UNAUTHORIZED)).getBytes();
       AuthCallCredentials callCredentials = new AuthCallCredentials(
           AuthHeader.builder().bearer().tokenSupplier(
               () -> ByteBuffer.wrap(bytes))
@@ -101,14 +101,14 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
               mimeMessageHelper.setText(mailContent, true);
               javaMailSender.send(mimeMessage);
             } catch (Exception e) {
-              LOGGER.error(ResultCode.EMAIL_SENDING_EXCEPTION.getResultMsg(), e);
-              throw new MuMuException(ResultCode.EMAIL_SENDING_EXCEPTION);
+              LOGGER.error(ResponseCode.EMAIL_SENDING_EXCEPTION.getMessage(), e);
+              throw new MuMuException(ResponseCode.EMAIL_SENDING_EXCEPTION);
             }
           });
         });
       } catch (Exception e) {
-        LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
-        throw new MuMuException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
+        LOGGER.error(ResponseCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getMessage(), e);
+        throw new MuMuException(ResponseCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
       }
     });
   }

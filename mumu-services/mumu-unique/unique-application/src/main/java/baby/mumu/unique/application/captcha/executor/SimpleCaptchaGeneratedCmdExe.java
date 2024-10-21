@@ -16,7 +16,7 @@
 package baby.mumu.unique.application.captcha.executor;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
@@ -50,6 +50,6 @@ public class SimpleCaptchaGeneratedCmdExe {
         .map(captchaGateway::generateSimpleCaptcha)
         .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
         .orElseThrow(() -> new MuMuException(
-            ResultCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
+          ResponseCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
   }
 }

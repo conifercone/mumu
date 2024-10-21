@@ -17,7 +17,7 @@ package baby.mumu.basis.provider;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 
 /**
  * 账户ID实现
@@ -32,6 +32,6 @@ public class RateLimitingAccountIdKeyProviderImpl implements RateLimitingKeyProv
   @Override
   public String generateUniqKey() {
     return String.valueOf(SecurityContextUtil.getLoginAccountId()
-        .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED)));
+      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED)));
   }
 }

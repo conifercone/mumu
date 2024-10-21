@@ -27,7 +27,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
@@ -99,7 +99,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityRepository.persist(authorityDo);
           authorityRedisRepository.deleteById(authorityDo.getId());
         }, () -> {
-          throw new MuMuException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
+          throw new MuMuException(ResponseCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
         });
   }
 
@@ -110,7 +110,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void deleteById(Long id) {
     List<Role> authorities = roleGateway.findAllContainAuthority(id);
     if (CollectionUtils.isNotEmpty(authorities)) {
-      throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+      throw new MuMuException(ResponseCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           authorities.stream().map(Role::getCode).toList());
     }
     Optional.ofNullable(id).ifPresent(authorityId -> {
@@ -205,7 +205,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void archiveById(Long id) {
     List<Role> authorities = roleGateway.findAllContainAuthority(id);
     if (CollectionUtils.isNotEmpty(authorities)) {
-      throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+      throw new MuMuException(ResponseCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           authorities.stream().map(Role::getCode).toList());
     }
     //noinspection DuplicatedCode

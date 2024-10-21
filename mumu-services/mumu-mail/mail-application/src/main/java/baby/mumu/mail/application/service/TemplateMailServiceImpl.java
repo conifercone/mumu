@@ -17,7 +17,7 @@ package baby.mumu.mail.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.mail.application.template.executor.TemplateMailSendCmdExe;
@@ -91,7 +91,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
               templateMailSendGrpcCo.getData().getValue(),
               Map.class) : null);
     } catch (JsonProcessingException e) {
-      throw new MuMuException(ResultCode.INTERNAL_SERVER_ERROR);
+      throw new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR);
     }
     return templateMailSendCo;
   }

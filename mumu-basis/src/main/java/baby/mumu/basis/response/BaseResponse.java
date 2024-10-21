@@ -23,21 +23,21 @@ import jakarta.annotation.Nullable;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface BaseResultInterface {
+public interface BaseResponse {
 
   /**
    * 响应码
    *
    * @return 响应码
    */
-  String getResultCode();
+  String getCode();
 
   /**
    * 错误描述
    *
    * @return 错误描述
    */
-  String getResultMsg();
+  String getMessage();
 
   /**
    * 错误描述
@@ -45,5 +45,5 @@ public interface BaseResultInterface {
    * @param args 参数
    * @return 错误描述
    */
-  String getResultMsg(@Nullable Object[] args);
+  String getMessage(@Nullable Object[] args);
 }

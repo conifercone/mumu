@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.api;
 
-import static baby.mumu.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCmd;

@@ -30,7 +30,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public enum ResultCode implements BaseResultInterface {
+public enum ResponseCode implements BaseResponse {
   SUCCESS(200),
   BAD_REQUEST(400),
   UNAUTHORIZED(401),
@@ -107,31 +107,31 @@ public enum ResultCode implements BaseResultInterface {
   ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0(6037);
   private final Integer code;
 
-  ResultCode(int code) {
+  ResponseCode(int code) {
     this.code = code;
   }
 
   @Contract(pure = true)
   @Override
-  public @NotNull String getResultCode() {
+  public @NotNull String getCode() {
     return this.code.toString();
   }
 
   @Override
-  public @NotNull String getResultMsg() {
-    return getMessage(null);
+  public @NotNull String getMessage() {
+    return makeMessage(null);
   }
 
   @Override
-  public @NotNull String getResultMsg(@Nullable Object[] args) {
-    return getMessage(args);
+  public @NotNull String getMessage(@Nullable Object[] args) {
+    return makeMessage(args);
   }
 
-  private @NotNull String getMessage(@Nullable Object[] args) {
+  private @NotNull String makeMessage(@Nullable Object[] args) {
     return SpringContextUtil.getBean(MessageSource.class)
-        .map(messageSource -> messageSource.getMessage(getResultCode(), args,
+      .map(messageSource -> messageSource.getMessage(getCode(), args,
             SecurityContextUtil.getLoginAccountLanguage()
                 .map(languageEnum -> Locale.of(languageEnum.name()))
-                .orElse(LocaleContextHolder.getLocale()))).orElse(getResultCode());
+              .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }
 }

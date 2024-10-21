@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.exception;
 
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 
 /**
@@ -30,6 +30,6 @@ public class DataConversionException extends MuMuException {
   private static final long serialVersionUID = -1039551120326053286L;
 
   public DataConversionException() {
-    super(ResultCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
+    super(ResponseCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
   }
 }

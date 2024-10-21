@@ -20,7 +20,7 @@ import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTok
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class TokenGatewayImpl implements TokenGateway {
             }
             return false;
           } catch (Exception e) {
-            LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg(), e);
+            LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage(), e);
             return false;
           }
         })

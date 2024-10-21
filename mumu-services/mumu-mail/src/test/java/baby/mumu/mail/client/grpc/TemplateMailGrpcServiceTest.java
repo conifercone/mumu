@@ -16,7 +16,7 @@
 package baby.mumu.mail.client.grpc;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.mail.AuthenticationRequired;
 import baby.mumu.mail.client.api.TemplateMailGrpcService;
 import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
@@ -82,7 +82,7 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken().orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     Empty empty = templateMailGrpcService.sendMail(
         templateMailSendGrpcCmd,
@@ -116,7 +116,7 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
     AuthCallCredentials callCredentials = new AuthCallCredentials(
         AuthHeader.builder().bearer().tokenSupplier(
             () -> ByteBuffer.wrap(getToken().orElseThrow(
-                () -> new MuMuException(ResultCode.INTERNAL_SERVER_ERROR)).getBytes()))
+              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<Empty> emptyListenableFuture = templateMailGrpcService.syncSendMail(
         templateMailSendGrpcCmd,

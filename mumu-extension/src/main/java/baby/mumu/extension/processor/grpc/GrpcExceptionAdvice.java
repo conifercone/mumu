@@ -17,7 +17,7 @@ package baby.mumu.extension.processor.grpc;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.exception.RateLimiterException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
@@ -93,12 +93,12 @@ public class GrpcExceptionAdvice {
       @SuppressWarnings("unused") GRpcExceptionScope scope) {
     Status unauthenticated = Status.UNAUTHENTICATED;
     if (authenticationException != null) {
-      LOGGER.error(ResultCode.UNAUTHORIZED.getResultMsg());
+      LOGGER.error(ResponseCode.UNAUTHORIZED.getMessage());
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
           .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder().setContent(ResultCode.UNAUTHORIZED.getResultMsg())
+            SystemLogSubmitGrpcCo.newBuilder().setContent(ResponseCode.UNAUTHORIZED.getMessage())
                   .setCategory("exception")
-                  .setFail(ResultCode.UNAUTHORIZED.getResultMsg()).build())
+              .setFail(ResponseCode.UNAUTHORIZED.getMessage()).build())
           .build());
       unauthenticated = unauthenticated.withDescription(authenticationException.getMessage())
           .withCause(authenticationException);

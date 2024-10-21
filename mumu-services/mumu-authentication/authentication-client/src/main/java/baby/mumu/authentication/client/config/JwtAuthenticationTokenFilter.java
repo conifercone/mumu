@@ -20,8 +20,8 @@ import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.basis.response.ResponseWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,9 +80,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       // 判断redis中是否存在token
       if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
           TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
       }
       // 判断token是否合法
@@ -90,9 +90,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       try {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
       }
       List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());

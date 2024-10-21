@@ -38,7 +38,7 @@ import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
@@ -146,7 +146,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .setOperationLogSubmitCo(
               OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
                   .setBizNo(account.getUsername())
-                  .setFail(ResultCode.ACCOUNT_ALREADY_EXISTS.getResultMsg()).build())
+                .setFail(ResponseCode.ACCOUNT_ALREADY_EXISTS.getMessage()).build())
           .build());
       throw new AccountAlreadyExistsException(account.getUsername());
     };
@@ -160,7 +160,7 @@ public class AccountGatewayImpl implements AccountGateway {
           //noinspection ResultOfMethodCallIgnored
           ZoneId.of(dataObject.getTimezone());
         } catch (Exception e) {
-          throw new MuMuException(ResultCode.TIME_ZONE_IS_NOT_AVAILABLE);
+          throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
         }
       }
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
@@ -236,7 +236,7 @@ public class AccountGatewayImpl implements AccountGateway {
               accountRedisRepository.deleteById(accountId);
               accountRoleRedisRepository.deleteById(accountId);
             }), () -> {
-          throw new MuMuException(ResultCode.UNAUTHORIZED);
+          throw new MuMuException(ResponseCode.UNAUTHORIZED);
         });
   }
 
@@ -268,7 +268,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRedisRepository.deleteById(id);
       accountRoleRedisRepository.deleteById(id);
     }, () -> {
-      throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+      throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
     });
   }
 
@@ -300,13 +300,13 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
       Assert.isTrue(StringUtils.isNotBlank(initialPassword),
-          ResultCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getResultMsg());
+        ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getMessage());
       accountDo.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountDo);
       accountRedisRepository.deleteById(accountDo.getId());
       accountRoleRedisRepository.deleteById(accountDo.getId());
     }, () -> {
-      throw new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST);
+      throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
     });
   }
 
@@ -324,7 +324,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);
     }, () -> {
-      throw new MuMuException(ResultCode.UNAUTHORIZED);
+      throw new MuMuException(ResponseCode.UNAUTHORIZED);
     });
   }
 
@@ -346,8 +346,8 @@ public class AccountGatewayImpl implements AccountGateway {
     return SecurityContextUtil.getLoginAccountId()
         .map(accountId -> accountRepository.findById(accountId)
             .map(accountDo -> passwordEncoder.matches(password, accountDo.getPassword()))
-            .orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST)))
-        .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED));
+          .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
+      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
   }
 
   @Override
@@ -359,13 +359,13 @@ public class AccountGatewayImpl implements AccountGateway {
           .map(accountId -> accountRepository.findById(accountId)
               .stream()
               .peek(accountDo -> accountDo.setPassword(passwordEncoder.encode(newPassword)))
-              .findAny().orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST)))
-          .orElseThrow(() -> new MuMuException(ResultCode.UNAUTHORIZED));
+            .findAny().orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
+        .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
       accountRepository.merge(newAccountDo);
       accountRedisRepository.deleteById(newAccountDo.getId());
       accountRoleRedisRepository.deleteById(newAccountDo.getId());
     } else {
-      throw new MuMuException(ResultCode.ACCOUNT_PASSWORD_IS_INCORRECT);
+      throw new MuMuException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
   }
 

@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.exception;
 
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 import lombok.Getter;
 
@@ -32,6 +32,6 @@ public class RateLimiterException extends MuMuException {
   private static final long serialVersionUID = 6238973755219029059L;
 
   public RateLimiterException(long remainingWaitingTime) {
-    super(ResultCode.TOO_MANY_REQUESTS, remainingWaitingTime);
+    super(ResponseCode.TOO_MANY_REQUESTS, remainingWaitingTime);
   }
 }

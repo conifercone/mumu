@@ -51,7 +51,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisR
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -258,7 +258,7 @@ public class AccountConvertor {
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterClientObject);
       Optional.ofNullable(account.getId()).ifPresentOrElse(id -> {
         if (id == 0) {
-          throw new MuMuException(ResultCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
+          throw new MuMuException(ResponseCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
         }
       }, () -> account.setId(primaryKeyGrpcService.snowflake()));
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterClientObject.getRoleCodes())
@@ -299,7 +299,7 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountUpdateByIdCo accountUpdateByIdCo) {
     return Optional.ofNullable(accountUpdateByIdCo).flatMap(accountUpdateByIdClientObject -> {
       Optional.ofNullable(accountUpdateByIdClientObject.getId())
-          .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
           .flatMap(this::toEntity).flatMap(account -> {
             String emailBeforeUpdated = account.getEmail();
@@ -314,13 +314,13 @@ public class AccountConvertor {
                 emailBeforeUpdated
             ) && (accountRepository.existsByEmail(emailAfterUpdated)
                 || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
-              throw new MuMuException(ResultCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
+              throw new MuMuException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
             }
             if (StringUtils.isNotBlank(usernameAfterUpdated) && !usernameAfterUpdated.equals(
                 usernameBeforeUpdated
             ) && (accountRepository.existsByUsername(usernameAfterUpdated)
                 || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
-              throw new MuMuException(ResultCode.ACCOUNT_NAME_ALREADY_EXISTS);
+              throw new MuMuException(ResponseCode.ACCOUNT_NAME_ALREADY_EXISTS);
             }
             return Optional.of(account);
           });
@@ -331,11 +331,11 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountUpdateRoleCo accountUpdateRoleCo) {
     return Optional.ofNullable(accountUpdateRoleCo).flatMap(accountUpdateRoleClientObject -> {
       Optional.ofNullable(accountUpdateRoleClientObject.getId())
-          .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<AccountDo> accountDoOptional = accountRepository.findById(
           accountUpdateRoleClientObject.getId());
       AccountDo accountDo = accountDoOptional.orElseThrow(
-          () -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
+        () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountDo).map(account -> {
         Optional.ofNullable(accountUpdateRoleClientObject.getRoleCodes())
             .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
@@ -408,7 +408,7 @@ public class AccountConvertor {
     return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCo)
         .flatMap(accountModifySystemSettingsBySettingsIdCoNotNull -> {
           Optional.ofNullable(accountModifySystemSettingsBySettingsIdCoNotNull.getId())
-              .orElseThrow(() -> new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+            .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
           return accountSystemSettingsMongodbRepository.findById(
                   accountModifySystemSettingsBySettingsIdCoNotNull.getId())
               .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {

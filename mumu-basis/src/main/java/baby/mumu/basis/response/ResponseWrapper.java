@@ -21,9 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.MediaType;
@@ -35,82 +33,90 @@ import org.springframework.http.MediaType;
  * @since 1.0.0
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ResultResponse<T> implements Serializable {
+public class ResponseWrapper<T> implements Serializable {
 
   @Serial
   private static final long serialVersionUID = -630682120634308837L;
+
   /**
    * 响应代码
    */
   private String code;
+
   /**
    * 响应消息
    */
   private String message;
+
   /**
    * 响应结果
    */
   private T data;
 
-  public ResultResponse(@NotNull BaseResultInterface resultCode) {
-    this.code = resultCode.getResultCode();
-    this.message = resultCode.getResultMsg();
+  /**
+   * 是否成功
+   */
+  private Boolean success;
+
+  private ResponseWrapper(@NotNull BaseResponse resultCode, Boolean success) {
+    this.code = resultCode.getCode();
+    this.message = resultCode.getMessage();
+    this.success = success;
   }
 
-  public ResultResponse(@NotNull String code, @NotNull String message) {
+  private ResponseWrapper(@NotNull String code, @NotNull String message, Boolean success) {
     this.code = code;
     this.message = message;
+    this.success = success;
   }
 
   @Contract(" -> new")
-  public static @NotNull ResultResponse<?> success() {
-    return new ResultResponse<>(ResultCode.SUCCESS);
+  public static @NotNull ResponseWrapper<?> success() {
+    return new ResponseWrapper<>(ResponseCode.SUCCESS, true);
   }
 
-  public static <T> @NotNull ResultResponse<T> success(T t) {
-    ResultResponse<T> resultResponse = new ResultResponse<>(ResultCode.SUCCESS);
-    resultResponse.setData(t);
-    return resultResponse;
+  public static <T> @NotNull ResponseWrapper<T> success(T t) {
+    ResponseWrapper<T> responseWrapper = new ResponseWrapper<>(ResponseCode.SUCCESS, true);
+    responseWrapper.setData(t);
+    return responseWrapper;
   }
 
   @Contract("_ -> new")
-  public static @NotNull ResultResponse<?> failure(BaseResultInterface resultCode) {
-    return new ResultResponse<>(resultCode);
+  public static @NotNull ResponseWrapper<?> failure(BaseResponse resultCode) {
+    return new ResponseWrapper<>(resultCode, false);
   }
 
-  public static @NotNull ResultResponse<?> failure(String code, String message) {
-    return new ResultResponse<>(code, message);
+  public static @NotNull ResponseWrapper<?> failure(String code, String message) {
+    return new ResponseWrapper<>(code, message, false);
   }
 
-  public static <T> @NotNull ResultResponse<T> failure(BaseResultInterface resultCode, T t) {
-    ResultResponse<T> resultResponse = new ResultResponse<>(resultCode);
-    resultResponse.setData(t);
-    return resultResponse;
+  public static <T> @NotNull ResponseWrapper<T> failure(BaseResponse resultCode, T t) {
+    ResponseWrapper<T> responseWrapper = new ResponseWrapper<>(resultCode, false);
+    responseWrapper.setData(t);
+    return responseWrapper;
   }
 
   public static void exceptionResponse(@NotNull HttpServletResponse response,
-      BaseResultInterface resultCode)
-      throws IOException {
-    ResultResponse<?> responseResult = ResultResponse.failure(resultCode);
+    BaseResponse resultCode)
+    throws IOException {
+    ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResult = objectMapper.writeValueAsString(responseResult);
     applicationJsonResponse(response, jsonResult);
   }
 
   private static void applicationJsonResponse(@NotNull HttpServletResponse response,
-      String jsonResult)
-      throws IOException {
+    String jsonResult)
+    throws IOException {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(Charsets.UTF_8.name());
     response.getWriter().print(jsonResult);
   }
 
   public static void exceptionResponse(@NotNull HttpServletResponse response,
-      String code, String message)
-      throws IOException {
-    ResultResponse<?> responseResult = ResultResponse.failure(code, message);
+    String code, String message)
+    throws IOException {
+    ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResult = objectMapper.writeValueAsString(responseResult);
     applicationJsonResponse(response, jsonResult);

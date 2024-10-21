@@ -17,7 +17,7 @@ package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.constants.CommonConstants;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.BarCodeService;
 import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,9 +56,9 @@ public class BarCodeController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public ResultResponse<String> dataUrlGenerate(
+  public ResponseWrapper<String> dataUrlGenerate(
       @ModelAttribute @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
-    return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
+    return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
         barCodeGenerateCmd.getImageFormat().getMimeType(),
         Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
   }

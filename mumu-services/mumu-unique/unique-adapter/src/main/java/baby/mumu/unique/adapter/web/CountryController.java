@@ -16,7 +16,7 @@
 package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.CountryService;
 import baby.mumu.unique.client.dto.co.CountryGetAllCo;
 import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
@@ -60,8 +60,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryStateCityGetAllCo>> getCountryStateCity() {
-    return ResultResponse.success(countryService.getCountryStateCity());
+  public ResponseWrapper<List<CountryStateCityGetAllCo>> getCountryStateCity() {
+    return ResponseWrapper.success(countryService.getCountryStateCity());
   }
 
   @Operation(summary = "获取国家详细信息(不包含省或州、市信息)")
@@ -69,8 +69,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryGetAllCo>> getCountries() {
-    return ResultResponse.success(countryService.getCountries());
+  public ResponseWrapper<List<CountryGetAllCo>> getCountries() {
+    return ResponseWrapper.success(countryService.getCountries());
   }
 
   @Operation(summary = "根据国家ID获取省或州信息")
@@ -78,10 +78,10 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(
+  public ResponseWrapper<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(
       @PathVariable(value = "id")
       Long id) {
-    return ResultResponse.success(
+    return ResponseWrapper.success(
         countryService.getStatesByCountryId(id));
   }
 
@@ -90,10 +90,10 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(
+  public ResponseWrapper<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(
       @PathVariable(value = "id")
       Long id) {
-    return ResultResponse.success(countryService.getCitiesByStateId(id));
+    return ResponseWrapper.success(countryService.getCitiesByStateId(id));
   }
 
   @Operation(summary = "根据省或州ID获取省或州")
@@ -101,9 +101,9 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetStateByIdCo> getStateById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetStateByIdCo> getStateById(@PathVariable(value = "id")
   Long id) {
-    return ResultResponse.success(countryService.getStateById(id));
+    return ResponseWrapper.success(countryService.getStateById(id));
   }
 
   @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
@@ -111,9 +111,9 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetStateCitiesByIdCo> getStateCitiesById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetStateCitiesByIdCo> getStateCitiesById(@PathVariable(value = "id")
   Long id) {
-    return ResultResponse.success(countryService.getStateCitiesById(id));
+    return ResponseWrapper.success(countryService.getStateCitiesById(id));
   }
 
   @Operation(summary = "根据城市id获取城市指令")
@@ -121,8 +121,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResultResponse<CountryGetCityByIdCo> getCityById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetCityByIdCo> getCityById(@PathVariable(value = "id")
   Long id) {
-    return ResultResponse.success(countryService.getCityById(id));
+    return ResponseWrapper.success(countryService.getCityById(id));
   }
 }
