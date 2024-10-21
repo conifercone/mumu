@@ -15,9 +15,11 @@
  */
 package baby.mumu.basis.response;
 
+import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Charsets;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -69,6 +71,11 @@ public class ResponseWrapper<T> implements Serializable {
    */
   private T data;
 
+  /**
+   * traceId
+   */
+  private String traceId = TraceIdFilter.getTraceId();
+
 
   private ResponseWrapper(@NotNull BaseResponse resultCode, Boolean success) {
     this.code = resultCode.getCode();
@@ -113,6 +120,7 @@ public class ResponseWrapper<T> implements Serializable {
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
     ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
     applicationJsonResponse(response, jsonResult);
   }
