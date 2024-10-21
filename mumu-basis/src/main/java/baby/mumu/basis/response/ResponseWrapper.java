@@ -15,12 +15,16 @@
  */
 package baby.mumu.basis.response;
 
+import baby.mumu.basis.kotlin.tools.CommonUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import lombok.Data;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +43,11 @@ public class ResponseWrapper<T> implements Serializable {
   private static final long serialVersionUID = -630682120634308837L;
 
   /**
+   * 是否成功
+   */
+  private Boolean success;
+
+  /**
    * 响应代码
    */
   private String code;
@@ -49,14 +58,17 @@ public class ResponseWrapper<T> implements Serializable {
   private String message;
 
   /**
+   * 响应时间
+   */
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+  private OffsetDateTime timestamp = CommonUtil.convertToAccountZone(
+    OffsetDateTime.now(ZoneOffset.UTC));
+
+  /**
    * 响应结果
    */
   private T data;
 
-  /**
-   * 是否成功
-   */
-  private Boolean success;
 
   private ResponseWrapper(@NotNull BaseResponse resultCode, Boolean success) {
     this.code = resultCode.getCode();
