@@ -98,6 +98,7 @@ mumu
 | consul        | 1.15.4                       |
 | minio         | RELEASE.2024-06-13T22-53-53Z |
 | zipkin        | 3.19.0                       |
+| mongodb       | 8.0.1                        |
 
 ## Dependency Statement
 
