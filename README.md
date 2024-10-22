@@ -113,6 +113,3 @@ mumu
 <a href="https://github.com/conifercone/mumu/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=conifercone/mumu"  alt="https://github.com/conifercone/mumu/graphs/contributors"/>
 </a>
-
-<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;border: 0;" src="https://star-history.com/embed?secret=Z2hwX3Z1NnBwTE43MEpaTkh1RTZvQm44aVI0QXNkYW4zNjNzOTVMQQ==#conifercone/mumu&Date">
-</iframe>
