@@ -15,11 +15,11 @@
  */
 package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
@@ -113,8 +113,51 @@ public class AccountFindAllSliceCo extends BaseClientObject {
   /**
    * 地址
    */
-  private List<AccountAddress> addresses;
+  private List<AccountFindAllSliceAddressCo> addresses;
 
+  @Data
+  public static class AccountFindAllSliceAddressCo {
+
+    /**
+     * 唯一主键
+     */
+    private Long id;
+
+    /**
+     * 账户ID
+     */
+    private Long userId;
+
+    /**
+     * 街道地址，包含门牌号和街道信息
+     */
+    @Size(max = 255)
+    private String street;
+
+    /**
+     * 城市信息
+     */
+    @Size(max = 100)
+    private String city;
+
+    /**
+     * 州或省的信息
+     */
+    @Size(max = 100)
+    private String state;
+
+    /**
+     * 邮政编码
+     */
+    @Size(max = 20)
+    private String postalCode;
+
+    /**
+     * 国家信息
+     */
+    @Size(max = 100)
+    private String country;
+  }
 
   @Data
   public static class AccountFindAllRoleCo {
