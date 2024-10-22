@@ -34,10 +34,10 @@
     <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <Policies>
-        <TimeBasedTriggeringPolicy interval="1" />
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         <SizeBasedTriggeringPolicy size="250MB" />
       </Policies>
-      <DefaultRolloverStrategy max="5">
+      <DefaultRolloverStrategy max="30">
         <Delete basePath="${LOG_PATH}/" maxDepth="1">
           <IfFileName glob="*.log"/>
           <IfLastModified age="7d"/>
