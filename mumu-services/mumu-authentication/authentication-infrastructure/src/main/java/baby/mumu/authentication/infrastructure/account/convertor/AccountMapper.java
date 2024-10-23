@@ -15,12 +15,22 @@
  */
 package baby.mumu.authentication.infrastructure.account.convertor;
 
+import baby.mumu.authentication.client.api.grpc.AccountAddressCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleAuthorityCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.LocalDate;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
 import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountAddressCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleAuthorityCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountSystemSettingsCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
@@ -37,6 +47,10 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.Int32Value;
+import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -74,25 +88,25 @@ public interface AccountMapper {
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsMongodbDo toAccountSystemSettingMongodbDo(
-      AccountSystemSettings accountSystemSettings);
+    AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
-      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo);
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
-      AccountAddSystemSettingsCo accountAddSystemSettingsCo);
+    AccountAddSystemSettingsCo accountAddSystemSettingsCo);
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettingMongodbDo(
-      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoSource,
-      @MappingTarget AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoTarget);
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoSource,
+    @MappingTarget AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoTarget);
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettings(
-      AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo,
-      @MappingTarget AccountSystemSettings accountSystemSettings);
+    AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo,
+    @MappingTarget AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountRedisDo toAccountRedisDo(Account account);
@@ -139,32 +153,76 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   Account toEntity(AccountFindAllSliceCmd accountFindAllSliceCmd);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountCurrentLoginGrpcCo toAccountCurrentLoginGrpcCo(
+    AccountCurrentLoginCo accountCurrentLoginCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountAddressCurrentLoginQueryGrpcCo toAccountAddressCurrentLoginQueryGrpcCo(
+    AccountAddressCurrentLoginQueryCo accountAddressCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountRoleCurrentLoginQueryGrpcCo toAccountRoleCurrentLoginQueryGrpcCo(
+    AccountRoleCurrentLoginQueryCo accountRoleCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountRoleAuthorityCurrentLoginQueryGrpcCo toAccountRoleAuthorityCurrentLoginQueryGrpcCo(
+    AccountRoleAuthorityCurrentLoginQueryCo accountRoleAuthorityCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(
+    AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  default Int64Value map(Long value) {
+    return Int64Value.of(value);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  default BoolValue map(Boolean value) {
+    return BoolValue.of(value);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  default StringValue map(String value) {
+    return StringValue.of(value);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  default LocalDate map(java.time.LocalDate value) {
+    return Optional.ofNullable(value)
+      .map(valueNotNull -> LocalDate.newBuilder().setYear(Int32Value.of(valueNotNull.getYear()))
+        .setMonth(Int32Value.of(valueNotNull.getMonthValue()))
+        .setDay(Int32Value.of(valueNotNull.getDayOfMonth()))
+        .build()).orElse(LocalDate.newBuilder().build());
+  }
+
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
+    @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
     CommonUtil.convertToAccountZone(accountCurrentLoginCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
+    @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
     CommonUtil.convertToAccountZone(accountBasicInfoCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountFindAllCo accountFindAllCo) {
+    @MappingTarget AccountFindAllCo accountFindAllCo) {
     CommonUtil.convertToAccountZone(accountFindAllCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountFindAllSliceCo accountFindAllSliceCo) {
+    @MappingTarget AccountFindAllSliceCo accountFindAllSliceCo) {
     CommonUtil.convertToAccountZone(accountFindAllSliceCo);
   }
 
   default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
     return Optional.ofNullable(offsetDateTime)
-        .map(OffsetDateTime::toLocalDateTime).orElse(null);
+      .map(OffsetDateTime::toLocalDateTime).orElse(null);
   }
 }

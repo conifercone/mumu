@@ -37,15 +37,8 @@ import baby.mumu.authentication.application.account.executor.AccountResetSystemS
 import baby.mumu.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import baby.mumu.authentication.client.api.AccountService;
-import baby.mumu.authentication.client.api.grpc.AccountAddressRegisterGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCo;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
@@ -62,24 +55,14 @@ import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
+import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import com.google.protobuf.Empty;
-import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import java.time.LocalDate;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,27 +103,28 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountOfflineCmdExe accountOfflineCmdExe;
   private final AccountFindAllCmdExe accountFindAllCmdExe;
   private final AccountFindAllSliceCmdExe accountFindAllSliceCmdExe;
+  private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
-      AccountUpdateByIdCmdExe accountUpdateByIdCmdExe, AccountDisableCmdExe accountDisableCmdExe,
-      AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
-      AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
-      AccountResetPasswordCmdExe accountResetPasswordCmdExe,
-      AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
-      AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
-      AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
-      AccountChangePasswordCmdExe accountChangePasswordCmdExe,
-      AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
-      AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe,
-      AccountAddAddressCmdExe accountAddAddressCmdExe,
-      AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe,
-      AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
-      AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
-      AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
-      AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
-      AccountFindAllCmdExe accountFindAllCmdExe,
-      AccountFindAllSliceCmdExe accountFindAllSliceCmdExe) {
+    AccountUpdateByIdCmdExe accountUpdateByIdCmdExe, AccountDisableCmdExe accountDisableCmdExe,
+    AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
+    AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
+    AccountResetPasswordCmdExe accountResetPasswordCmdExe,
+    AccountDeleteCurrentCmdExe accountDeleteCurrentCmdExe,
+    AccountUpdateRoleCmdExe accountUpdateRoleCmdExe,
+    AccountPasswordVerifyCmdExe accountPasswordVerifyCmdExe,
+    AccountChangePasswordCmdExe accountChangePasswordCmdExe,
+    AccountArchiveByIdCmdExe accountArchiveByIdCmdExe,
+    AccountRecoverFromArchiveByIdCmdExe accountRecoverFromArchiveByIdCmdExe,
+    AccountAddAddressCmdExe accountAddAddressCmdExe,
+    AccountBasicInfoQueryByIdCmdExe accountBasicInfoQueryByIdCmdExe,
+    AccountResetSystemSettingsBySettingsIdCmdExe accountResetSystemSettingsBySettingsIdCmdExe,
+    AccountModifySystemSettingsBySettingsIdCmdExe accountModifySystemSettingsBySettingsIdCmdExe,
+    AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
+    AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
+    AccountFindAllCmdExe accountFindAllCmdExe,
+    AccountFindAllSliceCmdExe accountFindAllSliceCmdExe, AccountConvertor accountConvertor) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -162,6 +146,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountOfflineCmdExe = accountOfflineCmdExe;
     this.accountFindAllCmdExe = accountFindAllCmdExe;
     this.accountFindAllSliceCmdExe = accountFindAllSliceCmdExe;
+    this.accountConvertor = accountConvertor;
   }
 
   @Override
@@ -171,135 +156,11 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   }
 
   @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void register(@NotNull AccountRegisterGrpcCmd request,
-      StreamObserver<Empty> responseObserver) {
-    AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
-    accountRegisterCmd.setCaptchaId(
-        request.hasCaptchaId() ? request.getCaptchaId().getValue() : null);
-    accountRegisterCmd.setCaptcha(
-        request.hasCaptcha() ? request.getCaptcha().getValue() : null);
-    AccountRegisterCo accountRegisterCo = getAccountRegisterCo(
-        request);
-    accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
-    try {
-      accountRegisterCmdExe.execute(accountRegisterCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
-
-  @NotNull
-  private static AccountRegisterCo getAccountRegisterCo(
-      @NotNull AccountRegisterGrpcCmd request) {
-    AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
-    AccountRegisterGrpcCo accountRegisterGrpcCo = request.getAccountRegisterCo();
-    accountRegisterCo.setId(
-        accountRegisterGrpcCo.hasId() ? accountRegisterGrpcCo.getId().getValue() : null);
-    accountRegisterCo.setUsername(
-        accountRegisterGrpcCo.hasUsername() ? accountRegisterGrpcCo.getUsername().getValue()
-            : null);
-    accountRegisterCo.setPassword(
-        accountRegisterGrpcCo.hasPassword() ? accountRegisterGrpcCo.getPassword().getValue()
-            : null);
-    accountRegisterCo.setRoleCodes(accountRegisterGrpcCo.getRoleCodeList().stream().map(
-        StringValue::getValue).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
-    accountRegisterCo.setAvatarUrl(
-        accountRegisterGrpcCo.hasAvatarUrl() ? accountRegisterGrpcCo.getAvatarUrl().getValue()
-            : null);
-    accountRegisterCo.setPhone(
-        accountRegisterGrpcCo.hasPhone() ? accountRegisterGrpcCo.getPhone().getValue() : null);
-    accountRegisterCo.setEmail(
-        accountRegisterGrpcCo.hasEmail() ? accountRegisterGrpcCo.getEmail().getValue() : null);
-    accountRegisterCo.setTimezone(
-        accountRegisterGrpcCo.hasTimezone() ? accountRegisterGrpcCo.getTimezone().getValue()
-            : null);
-    accountRegisterCo.setSex(
-        accountRegisterGrpcCo.hasSex() ? SexEnum.valueOf(accountRegisterGrpcCo.getSex().name())
-            : null);
-    accountRegisterCo.setLanguage(accountRegisterGrpcCo.hasLanguage() ? LanguageEnum.valueOf(
-        accountRegisterGrpcCo.getLanguage().name()) : null);
-    accountRegisterCo.setBirthday(accountRegisterGrpcCo.hasBirthday() ? LocalDate.of(
-        accountRegisterGrpcCo.getBirthday().getYear().getValue(),
-        accountRegisterGrpcCo.getBirthday().getMonth().getValue(),
-        accountRegisterGrpcCo.getBirthday().getDay().getValue()) : null);
-    accountRegisterCo.setAddresses(accountRegisterGrpcCo.getAddressesList().stream().map(
-            AccountServiceImpl::getAccountAddressRegisterCo)
-        .collect(
-            Collectors.toList()));
-    return accountRegisterCo;
-  }
-
-  private static @NotNull AccountAddressRegisterCo getAccountAddressRegisterCo(
-      @NotNull AccountAddressRegisterGrpcCo accountAddressRegisterGrpcCo) {
-    AccountAddressRegisterCo accountAddressRegisterCo = new AccountAddressRegisterCo();
-    accountAddressRegisterCo.setId(
-        accountAddressRegisterGrpcCo.hasId() ? accountAddressRegisterGrpcCo.getId().getValue()
-            : null);
-    accountAddressRegisterCo.setStreet(
-        accountAddressRegisterGrpcCo.hasStreet() ? accountAddressRegisterGrpcCo.getStreet()
-            .getValue() : null);
-    accountAddressRegisterCo.setCity(
-        accountAddressRegisterGrpcCo.hasCity() ? accountAddressRegisterGrpcCo.getCity().getValue()
-            : null);
-    accountAddressRegisterCo.setState(
-        accountAddressRegisterGrpcCo.hasState() ? accountAddressRegisterGrpcCo.getState().getValue()
-            : null);
-    accountAddressRegisterCo.setPostalCode(
-        accountAddressRegisterGrpcCo.hasPostalCode() ? accountAddressRegisterGrpcCo.getPostalCode()
-            .getValue() : null);
-    accountAddressRegisterCo.setCountry(
-        accountAddressRegisterGrpcCo.hasCountry() ? accountAddressRegisterGrpcCo.getCountry()
-            .getValue() : null);
-    return accountAddressRegisterCo;
-  }
-
-  @Override
   @Transactional(rollbackFor = Exception.class)
   public void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
   }
 
-  @NotNull
-  private static AccountUpdateByIdCo getAccountUpdateByIdCo(
-      @NotNull AccountUpdateByIdGrpcCmd request) {
-    AccountUpdateByIdCo accountUpdateByIdCo = new AccountUpdateByIdCo();
-    AccountUpdateByIdGrpcCo accountUpdateByIdGrpcCo = request.getAccountUpdateByIdGrpcCo();
-    accountUpdateByIdCo.setId(
-        accountUpdateByIdGrpcCo.hasId() ? accountUpdateByIdGrpcCo.getId().getValue() : null);
-    accountUpdateByIdCo.setAvatarUrl(
-        accountUpdateByIdGrpcCo.hasAvatarUrl() ? accountUpdateByIdGrpcCo.getAvatarUrl().getValue()
-            : null);
-    accountUpdateByIdCo.setPhone(
-        accountUpdateByIdGrpcCo.hasPhone() ? accountUpdateByIdGrpcCo.getPhone().getValue() : null);
-    accountUpdateByIdCo.setSex(accountUpdateByIdGrpcCo.hasSex() ? SexEnum.valueOf(
-        accountUpdateByIdGrpcCo.getSex().name()) : null);
-    accountUpdateByIdCo.setEmail(
-        accountUpdateByIdGrpcCo.hasEmail() ? accountUpdateByIdGrpcCo.getEmail().getValue() : null);
-    accountUpdateByIdCo.setTimezone(
-        accountUpdateByIdGrpcCo.hasTimezone() ? accountUpdateByIdGrpcCo.getTimezone().getValue()
-            : null);
-    return accountUpdateByIdCo;
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void updateById(AccountUpdateByIdGrpcCmd request,
-      StreamObserver<Empty> responseObserver) {
-    AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
-    AccountUpdateByIdCo accountUpdateByIdCo = getAccountUpdateByIdCo(
-        request);
-    accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
-    try {
-      accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -307,34 +168,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
   }
 
-  @NotNull
-  private static AccountUpdateRoleCo getAccountUpdateRoleCo(
-      @NotNull AccountUpdateRoleGrpcCmd request) {
-    AccountUpdateRoleCo accountUpdateRoleCo = new AccountUpdateRoleCo();
-    AccountUpdateRoleGrpcCo accountUpdateRoleGrpcCo = request.getAccountUpdateRoleGrpcCo();
-    accountUpdateRoleCo.setId(
-        accountUpdateRoleGrpcCo.hasId() ? accountUpdateRoleGrpcCo.getId().getValue() : null);
-    accountUpdateRoleCo.setRoleCodes(accountUpdateRoleGrpcCo.getRoleCodeList().stream().map(
-        StringValue::getValue).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
-    return accountUpdateRoleCo;
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void updateRoleById(AccountUpdateRoleGrpcCmd request,
-      StreamObserver<Empty> responseObserver) {
-    AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
-    AccountUpdateRoleCo accountUpdateRoleCo = getAccountUpdateRoleCo(
-        request);
-    accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
-    try {
-      accountUpdateRoleCmdExe.execute(accountUpdateRoleCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -348,17 +181,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     accountLogoutCmdExe.execute();
   }
 
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void disable(AccountDisableGrpcCmd request, StreamObserver<Empty> responseObserver) {
-    try {
-      accountDisableCmdExe.execute(request.hasId() ? request.getId().getValue() : null);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -380,24 +202,24 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsBySettingsId(
-      String systemSettingsId) {
+    String systemSettingsId) {
     accountResetSystemSettingsBySettingsIdCmdExe.execute(systemSettingsId);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettingsBySettingsId(
-      AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     accountModifySystemSettingsBySettingsIdCmdExe.execute(
-        accountModifySystemSettingsBySettingsIdCmd);
+      accountModifySystemSettingsBySettingsIdCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addSystemSettings(
-      AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
     accountAddSystemSettingsCmdExe.execute(
-        accountAddSystemSettingsCmd);
+      accountAddSystemSettingsCmd);
   }
 
   @Override
@@ -433,7 +255,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(
-      Long accountId) {
+    Long accountId) {
     accountRecoverFromArchiveByIdCmdExe.execute(accountId);
   }
 
@@ -459,5 +281,20 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public Slice<AccountFindAllSliceCo> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountFindAllSliceCmdExe.execute(accountFindAllSliceCmd);
+  }
+
+  @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+  @Transactional(rollbackFor = Exception.class)
+  public void queryCurrentLoginAccount(Empty request,
+    StreamObserver<AccountCurrentLoginGrpcCo> responseObserver) {
+    try {
+      AccountCurrentLoginCo accountCurrentLoginCo = accountCurrentLoginQueryCmdExe.execute();
+      responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcCo(accountCurrentLoginCo)
+        .orElse(AccountCurrentLoginGrpcCo.getDefaultInstance()));
+      responseObserver.onCompleted();
+    } catch (Exception e) {
+      throw new GRpcRuntimeExceptionWrapper(e);
+    }
   }
 }

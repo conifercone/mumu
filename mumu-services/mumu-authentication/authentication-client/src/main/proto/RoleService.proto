@@ -7,36 +7,7 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
-  rpc add (RoleAddGrpcCmd) returns (google.protobuf.Empty);
-  rpc deleteById (RoleDeleteByIdGrpcCmd) returns (google.protobuf.Empty);
-  rpc updateById (RoleUpdateGrpcCmd) returns (google.protobuf.Empty);
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
-}
-
-message RoleAddGrpcCmd {
-  RoleAddGrpcCo roleAddCo = 1;
-}
-
-message RoleAddGrpcCo {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue name = 2;
-  google.protobuf.StringValue code = 3;
-  repeated int64 authorities = 4;
-}
-
-message RoleDeleteByIdGrpcCmd {
-  google.protobuf.Int64Value id = 1;
-}
-
-message RoleUpdateGrpcCmd {
-  RoleUpdateGrpcCo roleUpdateCo = 1;
-}
-
-message RoleUpdateGrpcCo {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-  repeated int64 authorities = 4;
 }
 
 message RoleFindAllGrpcCmd {

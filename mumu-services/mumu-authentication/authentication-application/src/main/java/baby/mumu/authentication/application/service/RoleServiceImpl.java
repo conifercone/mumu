@@ -27,31 +27,23 @@ import baby.mumu.authentication.application.role.executor.RoleUpdateCmdExe;
 import baby.mumu.authentication.client.api.RoleService;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
-import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleAddGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleDeleteByIdGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllAuthorityGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
-import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleUpdateGrpcCo;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
-import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
@@ -91,12 +83,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
-      RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe,
-      RoleArchiveByIdCmdExe roleArchiveByIdCmdExe,
-      RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
-      RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
-      RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
-      RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe) {
+    RoleUpdateCmdExe roleUpdateCmdExe, RoleFindAllCmdExe roleFindAllCmdExe,
+    RoleArchiveByIdCmdExe roleArchiveByIdCmdExe,
+    RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
+    RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
+    RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
+    RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
@@ -140,106 +132,34 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   public Page<RoleArchivedFindAllCo> findArchivedAll(
-      RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleArchivedFindAllCmdExe.execute(roleArchivedFindAllCmd);
   }
 
   @Override
   public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
-      RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleArchivedFindAllSliceCmdExe.execute(roleArchivedFindAllSliceCmd);
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void add(RoleAddGrpcCmd request, StreamObserver<Empty> responseObserver) {
-    RoleAddCmd roleAddCmd = new RoleAddCmd();
-    RoleAddCo roleAddCo = getRoleAddCo(request);
-    roleAddCmd.setRoleAddCo(roleAddCo);
-    try {
-      roleAddCmdExe.execute(roleAddCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
-
-  @NotNull
-  private static RoleAddCo getRoleAddCo(
-      @NotNull RoleAddGrpcCmd request) {
-    RoleAddCo roleAddCo = new RoleAddCo();
-    RoleAddGrpcCo roleAddGrpcCo = request.getRoleAddCo();
-    //noinspection DuplicatedCode
-    roleAddCo.setId(roleAddGrpcCo.hasId() ? roleAddGrpcCo.getId().getValue() : null);
-    roleAddCo.setCode(roleAddGrpcCo.hasCode() ? roleAddGrpcCo.getCode().getValue() : null);
-    roleAddCo.setName(roleAddGrpcCo.hasName() ? roleAddGrpcCo.getName().getValue() : null);
-    roleAddCo.setAuthorityIds(roleAddGrpcCo.getAuthoritiesList());
-    return roleAddCo;
-  }
-
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void deleteById(@NotNull RoleDeleteByIdGrpcCmd request,
-      StreamObserver<Empty> responseObserver) {
-    try {
-      roleDeleteByIdCmdExe.execute(request.hasId() ? request.getId().getValue() : null);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
-
-  @NotNull
-  private static RoleUpdateCo getRoleUpdateCo(
-      @NotNull RoleUpdateGrpcCmd request) {
-    RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
-    RoleUpdateGrpcCo roleUpdateGrpcCo = request.getRoleUpdateCo();
-    //noinspection DuplicatedCode
-    roleUpdateCo.setId(roleUpdateGrpcCo.hasId() ? roleUpdateGrpcCo.getId().getValue() : null);
-    roleUpdateCo.setCode(roleUpdateGrpcCo.hasCode() ? roleUpdateGrpcCo.getCode().getValue() : null);
-    roleUpdateCo.setName(roleUpdateGrpcCo.hasName() ? roleUpdateGrpcCo.getName().getValue() : null);
-    roleUpdateCo.setAuthorityIds(roleUpdateGrpcCo.getAuthoritiesList());
-    return roleUpdateCo;
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void updateById(RoleUpdateGrpcCmd request,
-      StreamObserver<Empty> responseObserver) {
-    RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
-    RoleUpdateCo roleUpdateCo = getRoleUpdateCo(
-        request);
-    roleUpdateCmd.setRoleUpdateCo(roleUpdateCo);
-    try {
-      roleUpdateCmdExe.execute(roleUpdateCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(RoleFindAllGrpcCmd request,
-      StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
+    StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     RoleFindAllCmd roleFindAllCmd = getRoleFindAllCmd(request);
     Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
     try {
       Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
-          roleFindAllCmd);
+        roleFindAllCmd);
       List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
-          .map(roleFindAllCo -> RoleFindAllGrpcCo.newBuilder()
-              .setId(Int64Value.of(roleFindAllCo.getId()))
-              .setCode(StringValue.of(roleFindAllCo.getCode())).setName(
-                  StringValue.of(roleFindAllCo.getName()))
-              .addAllAuthorities(roleFindAllCo.getAuthorities().stream()
-                  .map(RoleServiceImpl::getRoleFindAllAuthorityGrpcCo).collect(
-                      Collectors.toList()))
-              .build()).toList();
+        .map(roleFindAllCo -> RoleFindAllGrpcCo.newBuilder()
+          .setId(Int64Value.of(roleFindAllCo.getId()))
+          .setCode(StringValue.of(roleFindAllCo.getCode())).setName(
+            StringValue.of(roleFindAllCo.getName()))
+          .addAllAuthorities(roleFindAllCo.getAuthorities().stream()
+            .map(RoleServiceImpl::getRoleFindAllAuthorityGrpcCo).collect(
+              Collectors.toList()))
+          .build()).toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());
     } catch (Exception e) {
@@ -253,11 +173,11 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleFindAllCmd roleFindAllCmd = new RoleFindAllCmd();
     //noinspection DuplicatedCode
     roleFindAllCmd.setId(
-        request.hasId() ? request.getId().getValue() : null);
+      request.hasId() ? request.getId().getValue() : null);
     roleFindAllCmd.setCode(
-        request.hasCode() ? request.getCode().getValue() : null);
+      request.hasCode() ? request.getCode().getValue() : null);
     roleFindAllCmd.setName(
-        request.hasName() ? request.getName().getValue() : null);
+      request.hasName() ? request.getName().getValue() : null);
     roleFindAllCmd.setCurrent(request.hasCurrent() ? request.getCurrent().getValue() : 1);
     roleFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
     return roleFindAllCmd;
@@ -265,12 +185,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @NotNull
   private static RoleFindAllAuthorityGrpcCo getRoleFindAllAuthorityGrpcCo(
-      @NotNull RoleFindAllCo.RoleFindAllAuthorityCo roleFindAllAuthorityCo) {
+    @NotNull RoleFindAllCo.RoleFindAllAuthorityCo roleFindAllAuthorityCo) {
     return RoleFindAllAuthorityGrpcCo.newBuilder().setId(
-            Int64Value.of(roleFindAllAuthorityCo.getId()))
-        .setCode(StringValue.of(roleFindAllAuthorityCo.getCode())).setName(
-            StringValue.of(roleFindAllAuthorityCo.getName()))
-        .build();
+        Int64Value.of(roleFindAllAuthorityCo.getId()))
+      .setCode(StringValue.of(roleFindAllAuthorityCo.getCode())).setName(
+        StringValue.of(roleFindAllAuthorityCo.getName()))
+      .build();
   }
 
   @Override

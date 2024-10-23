@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.infrastructure.account.convertor;
 
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
@@ -89,13 +91,13 @@ public class AccountConvertor {
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
-      RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
-      AccountArchivedRepository accountArchivedRepository,
-      AccountAddressRepository accountAddressRepository,
-      AccountRoleRepository accountRoleRepository,
-      RoleRedisRepository roleRedisRepository,
-      AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
-      AccountRoleRedisRepository accountRoleRedisRepository) {
+    RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+    AccountArchivedRepository accountArchivedRepository,
+    AccountAddressRepository accountAddressRepository,
+    AccountRoleRepository accountRoleRepository,
+    RoleRedisRepository roleRedisRepository,
+    AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
+    AccountRoleRedisRepository accountRoleRedisRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -115,13 +117,13 @@ public class AccountConvertor {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
       setRolesWithIds(account, getRoleIds(accountDataObject.getId()));
       account.setAddresses(
-          accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
-              AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+        accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+          AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       account.setSystemSettings(
-          accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-              .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-                  accountSystemSettingsMongodbDo).stream())
-              .collect(Collectors.toList()));
+        accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
+          .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+            accountSystemSettingsMongodbDo).stream())
+          .collect(Collectors.toList()));
       return account;
     });
   }
@@ -129,70 +131,70 @@ public class AccountConvertor {
   private void setRolesWithIds(Account account, List<Long> roleIds) {
     // 查询缓存中存在的数据
     List<RoleRedisDo> roleRedisDos = roleRedisRepository.findAllById(
-        roleIds);
+      roleIds);
     // 缓存中存在的角色ID
     List<Long> cachedCollectionOfRoleIDs = roleRedisDos.stream()
-        .map(RoleRedisDo::getId)
-        .collect(Collectors.toList());
+      .map(RoleRedisDo::getId)
+      .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisDos.stream()
-        .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
-        .collect(
-            Collectors.toList());
+      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .collect(
+        Collectors.toList());
     // 未缓存的角色
     List<Role> uncachedCollectionOfRole = Optional.of(
-            CollectionUtils.subtract(roleIds, cachedCollectionOfRoleIDs))
-        .filter(CollectionUtils::isNotEmpty).map(
-            uncachedCollectionOfRoleId -> roleRepository.findAllById(
-                    uncachedCollectionOfRoleId)
-                .stream()
-                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
-                .collect(
-                    Collectors.toList())).orElse(new ArrayList<>());
+        CollectionUtils.subtract(roleIds, cachedCollectionOfRoleIDs))
+      .filter(CollectionUtils::isNotEmpty).map(
+        uncachedCollectionOfRoleId -> roleRepository.findAllById(
+            uncachedCollectionOfRoleId)
+          .stream()
+          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .collect(
+            Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
       roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
-          .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
-          .collect(
-              Collectors.toList()));
+        .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
+        .collect(
+          Collectors.toList()));
     }
     // 合并已缓存和未缓存的角色
     account.setRoles(new ArrayList<>(
-        CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
+      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
   }
 
   private void setRolesWithCodes(Account account, List<String> codes) {
     // 查询缓存中存在的数据
     List<RoleRedisDo> roleRedisDos = roleRedisRepository.findByCodeIn(
-        codes);
+      codes);
     // 缓存中存在的角色编码
     List<String> cachedCollectionOfRoleCodes = roleRedisDos.stream()
-        .map(RoleRedisDo::getCode)
-        .collect(Collectors.toList());
+      .map(RoleRedisDo::getCode)
+      .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisDos.stream()
-        .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
-        .collect(
-            Collectors.toList());
+      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .collect(
+        Collectors.toList());
     // 未缓存的角色
     List<Role> uncachedCollectionOfRole = Optional.of(
-            CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
-        .filter(CollectionUtils::isNotEmpty).map(
-            uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
-                .stream()
-                .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
-                .collect(
-                    Collectors.toList())).orElse(new ArrayList<>());
+        CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
+      .filter(CollectionUtils::isNotEmpty).map(
+        uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
+          .stream()
+          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .collect(
+            Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
       roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
-          .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
-          .collect(
-              Collectors.toList()));
+        .flatMap(authority -> roleConvertor.toRoleRedisDo(authority).stream())
+        .collect(
+          Collectors.toList()));
     }
     // 合并已缓存和未缓存的角色
     account.setRoles(new ArrayList<>(
-        CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
+      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
   }
 
   @Contract("_ -> new")
@@ -201,13 +203,13 @@ public class AccountConvertor {
     return Optional.ofNullable(accountDo).map(accountDataObject -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
       account.setAddresses(
-          accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
-              AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+        accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+          AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       account.setSystemSettings(
-          accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-              .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-                  accountSystemSettingsMongodbDo).stream())
-              .collect(Collectors.toList()));
+        accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
+          .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+            accountSystemSettingsMongodbDo).stream())
+          .collect(Collectors.toList()));
       return account;
     });
   }
@@ -216,28 +218,28 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(AccountRedisDo accountRedisDo) {
     return Optional.ofNullable(accountRedisDo).map(AccountMapper.INSTANCE::toEntity)
-        .map(account -> {
-          setRolesWithIds(account, getRoleIds(account.getId()));
-          account.setSystemSettings(
-              accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
-                  .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-                      accountSystemSettingsMongodbDo).stream())
-                  .collect(Collectors.toList()));
-          return account;
-        });
+      .map(account -> {
+        setRolesWithIds(account, getRoleIds(account.getId()));
+        account.setSystemSettings(
+          accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
+            .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
+              accountSystemSettingsMongodbDo).stream())
+            .collect(Collectors.toList()));
+        return account;
+      });
   }
 
   private @NotNull List<Long> getRoleIds(Long account) {
     return accountRoleRedisRepository.findById(account)
-        .map(AccountRoleRedisDo::getRoleIds).orElseGet(() -> {
-          List<Long> roleIds = accountRoleRepository.findByAccountId(account)
-              .stream()
-              .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId)
-              .collect(Collectors.toList());
-          accountRoleRedisRepository.save(
-              new AccountRoleRedisDo(account, roleIds));
-          return roleIds;
-        });
+      .map(AccountRoleRedisDo::getRoleIds).orElseGet(() -> {
+        List<Long> roleIds = accountRoleRepository.findByAccountId(account)
+          .stream()
+          .map(AccountRoleDo::getId).map(AccountRoleDoId::getRoleId)
+          .collect(Collectors.toList());
+        accountRoleRedisRepository.save(
+          new AccountRoleRedisDo(account, roleIds));
+        return roleIds;
+      });
   }
 
   @Contract("_ -> new")
@@ -262,34 +264,34 @@ public class AccountConvertor {
         }
       }, () -> account.setId(primaryKeyGrpcService.snowflake()));
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterClientObject.getRoleCodes())
-          .orElse(new ArrayList<>()));
+        .orElse(new ArrayList<>()));
       Optional.ofNullable(account.getAddresses())
-          .filter(CollectionUtils::isNotEmpty)
-          .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {
-            accountAddress.setUserId(account.getId());
-            if (accountAddress.getId() == null) {
-              accountAddress.setId(primaryKeyGrpcService.snowflake());
-            }
-          }));
+        .filter(CollectionUtils::isNotEmpty)
+        .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {
+          accountAddress.setUserId(account.getId());
+          if (accountAddress.getId() == null) {
+            accountAddress.setId(primaryKeyGrpcService.snowflake());
+          }
+        }));
       Optional.ofNullable(account.getSystemSettings())
-          .ifPresentOrElse(
-              accountSystemSettings -> accountSystemSettings.forEach(accountSystemSettingsItem -> {
-                accountSystemSettingsItem.setUserId(account.getId());
-                if (accountSystemSettingsItem.getId() == null) {
-                  accountSystemSettingsItem.setId(
-                      String.valueOf(primaryKeyGrpcService.snowflake()));
-                }
-              }), () -> account.setSystemSettings(Collections.singletonList(
-                  AccountSystemSettings.builder()
-                      .id(String.valueOf(primaryKeyGrpcService.snowflake()))
-                      .userId(
-                          account.getId()).enabled(true).profile(
-                          AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
-                      .name(
-                          AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
-                      .enabled(true)
-                      .build()))
-          );
+        .ifPresentOrElse(
+          accountSystemSettings -> accountSystemSettings.forEach(accountSystemSettingsItem -> {
+            accountSystemSettingsItem.setUserId(account.getId());
+            if (accountSystemSettingsItem.getId() == null) {
+              accountSystemSettingsItem.setId(
+                String.valueOf(primaryKeyGrpcService.snowflake()));
+            }
+          }), () -> account.setSystemSettings(Collections.singletonList(
+            AccountSystemSettings.builder()
+              .id(String.valueOf(primaryKeyGrpcService.snowflake()))
+              .userId(
+                account.getId()).enabled(true).profile(
+                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
+              .name(
+                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
+              .enabled(true)
+              .build()))
+        );
       accountRegisterClientObject.setId(account.getId());
       return account;
     });
@@ -301,29 +303,29 @@ public class AccountConvertor {
       Optional.ofNullable(accountUpdateByIdClientObject.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       return accountRepository.findById(accountUpdateByIdClientObject.getId())
-          .flatMap(this::toEntity).flatMap(account -> {
-            String emailBeforeUpdated = account.getEmail();
-            String usernameBeforeUpdated = account.getUsername();
-            AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
-            Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
-                .ifPresent(accountAddresses -> accountAddresses.forEach(
-                    accountAddress -> accountAddress.setUserId(account.getId())));
-            String emailAfterUpdated = account.getEmail();
-            String usernameAfterUpdated = account.getUsername();
-            if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
-                emailBeforeUpdated
-            ) && (accountRepository.existsByEmail(emailAfterUpdated)
-                || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
-              throw new MuMuException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
-            }
-            if (StringUtils.isNotBlank(usernameAfterUpdated) && !usernameAfterUpdated.equals(
-                usernameBeforeUpdated
-            ) && (accountRepository.existsByUsername(usernameAfterUpdated)
-                || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
-              throw new MuMuException(ResponseCode.ACCOUNT_NAME_ALREADY_EXISTS);
-            }
-            return Optional.of(account);
-          });
+        .flatMap(this::toEntity).flatMap(account -> {
+          String emailBeforeUpdated = account.getEmail();
+          String usernameBeforeUpdated = account.getUsername();
+          AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
+          Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
+            .ifPresent(accountAddresses -> accountAddresses.forEach(
+              accountAddress -> accountAddress.setUserId(account.getId())));
+          String emailAfterUpdated = account.getEmail();
+          String usernameAfterUpdated = account.getUsername();
+          if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
+            emailBeforeUpdated
+          ) && (accountRepository.existsByEmail(emailAfterUpdated)
+            || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
+            throw new MuMuException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
+          }
+          if (StringUtils.isNotBlank(usernameAfterUpdated) && !usernameAfterUpdated.equals(
+            usernameBeforeUpdated
+          ) && (accountRepository.existsByUsername(usernameAfterUpdated)
+            || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
+            throw new MuMuException(ResponseCode.ACCOUNT_NAME_ALREADY_EXISTS);
+          }
+          return Optional.of(account);
+        });
     });
   }
 
@@ -333,12 +335,12 @@ public class AccountConvertor {
       Optional.ofNullable(accountUpdateRoleClientObject.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<AccountDo> accountDoOptional = accountRepository.findById(
-          accountUpdateRoleClientObject.getId());
+        accountUpdateRoleClientObject.getId());
       AccountDo accountDo = accountDoOptional.orElseThrow(
         () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountDo).map(account -> {
         Optional.ofNullable(accountUpdateRoleClientObject.getRoleCodes())
-            .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
+          .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
         return account;
       });
     });
@@ -346,102 +348,102 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AccountCurrentLoginCo> toCurrentLoginQueryCo(
-      Account account) {
+    Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountBasicInfoCo> toBasicInfoCo(
-      Account account) {
+    Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toBasicInfoCo);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AccountArchivedDo> toArchivedDo(
-      AccountDo accountDo) {
+    AccountDo accountDo) {
     return Optional.ofNullable(accountDo).map(AccountMapper.INSTANCE::toArchivedDo);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AccountDo> toDataObject(
-      AccountArchivedDo accountArchivedDo) {
+    AccountArchivedDo accountArchivedDo) {
     return Optional.ofNullable(accountArchivedDo).map(AccountMapper.INSTANCE::toDataObject);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddressDo> toAccountAddressDo(
-      AccountAddress accountAddress) {
+    AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressDo);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettingsMongodbDo> toAccountSystemSettingMongodbDo(
-      AccountSystemSettings accountSystemSettings) {
+    AccountSystemSettings accountSystemSettings) {
     return Optional.ofNullable(accountSystemSettings)
-        .map(AccountMapper.INSTANCE::toAccountSystemSettingMongodbDo);
+      .map(AccountMapper.INSTANCE::toAccountSystemSettingMongodbDo);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
     return Optional.ofNullable(accountSystemSettingsMongodbDo)
-        .map(AccountMapper.INSTANCE::toAccountSystemSettings);
+      .map(AccountMapper.INSTANCE::toAccountSystemSettings);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-      AccountAddSystemSettingsCo accountAddSystemSettingsCo) {
+    AccountAddSystemSettingsCo accountAddSystemSettingsCo) {
     return Optional.ofNullable(accountAddSystemSettingsCo)
-        .map(accountAddSystemSettingsCoNotNull -> {
-          AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
-              accountAddSystemSettingsCoNotNull);
-          if (StringUtils.isBlank(accountSystemSettings.getId())) {
-            accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
-          }
-          return accountSystemSettings;
-        });
+      .map(accountAddSystemSettingsCoNotNull -> {
+        AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
+          accountAddSystemSettingsCoNotNull);
+        if (StringUtils.isBlank(accountSystemSettings.getId())) {
+          accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
+        }
+        return accountSystemSettings;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-      AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo) {
+    AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo) {
     return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCo)
-        .flatMap(accountModifySystemSettingsBySettingsIdCoNotNull -> {
-          Optional.ofNullable(accountModifySystemSettingsBySettingsIdCoNotNull.getId())
-            .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-          return accountSystemSettingsMongodbRepository.findById(
-                  accountModifySystemSettingsBySettingsIdCoNotNull.getId())
-              .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
-                AccountMapper.INSTANCE.toAccountSystemSettings(
-                    accountModifySystemSettingsBySettingsIdCoNotNull,
-                    accountSystemSettings);
-                return Optional.of(accountSystemSettings);
-              });
-        });
+      .flatMap(accountModifySystemSettingsBySettingsIdCoNotNull -> {
+        Optional.ofNullable(accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+          .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        return accountSystemSettingsMongodbRepository.findById(
+            accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+          .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
+            AccountMapper.INSTANCE.toAccountSystemSettings(
+              accountModifySystemSettingsBySettingsIdCoNotNull,
+              accountSystemSettings);
+            return Optional.of(accountSystemSettings);
+          });
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettingsMongodbDo> resetAccountSystemSettingMongodbDo(
-      AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo) {
     return Optional.ofNullable(accountSystemSettingsMongodbDo)
-        .map(accountSystemSettingsMongodbDoTarget -> {
-          // id，userId,profile,name,enabled,version属性不重置
-          AccountMapper.INSTANCE.toAccountSystemSettingMongodbDo(
-              new AccountSystemSettingsMongodbDo(accountSystemSettingsMongodbDoTarget.getId(),
-                  accountSystemSettingsMongodbDoTarget.getUserId(),
-                  accountSystemSettingsMongodbDoTarget.getProfile(),
-                  accountSystemSettingsMongodbDoTarget.getName(),
-                  accountSystemSettingsMongodbDoTarget.getEnabled(),
-                  accountSystemSettingsMongodbDoTarget.getVersion()),
-              accountSystemSettingsMongodbDoTarget);
-          return accountSystemSettingsMongodbDoTarget;
-        });
+      .map(accountSystemSettingsMongodbDoTarget -> {
+        // id，userId,profile,name,enabled,version属性不重置
+        AccountMapper.INSTANCE.toAccountSystemSettingMongodbDo(
+          new AccountSystemSettingsMongodbDo(accountSystemSettingsMongodbDoTarget.getId(),
+            accountSystemSettingsMongodbDoTarget.getUserId(),
+            accountSystemSettingsMongodbDoTarget.getProfile(),
+            accountSystemSettingsMongodbDoTarget.getName(),
+            accountSystemSettingsMongodbDoTarget.getEnabled(),
+            accountSystemSettingsMongodbDoTarget.getVersion()),
+          accountSystemSettingsMongodbDoTarget);
+        return accountSystemSettingsMongodbDoTarget;
+      });
   }
 
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddress> toEntity(
-      AccountAddAddressCo accountAddAddressCo) {
+    AccountAddAddressCo accountAddAddressCo) {
     return Optional.ofNullable(accountAddAddressCo).map(accountAddAddressCoNonNull -> {
       AccountAddress instanceEntity = AccountMapper.INSTANCE.toAccountAddress(accountAddAddressCo);
       if (instanceEntity.getId() == null) {
@@ -455,48 +457,75 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "2.1.0")
   public List<AccountRoleDo> toAccountRoleDos(Account account) {
     return Optional.ofNullable(account).flatMap(accountNotNull -> Optional.ofNullable(
-            accountNotNull.getRoles())).filter(CollectionUtils::isNotEmpty)
-        .map(roles -> roles.stream().map(role -> {
-          AccountRoleDo accountRoleDo = new AccountRoleDo();
-          accountRoleDo.setId(
-              AccountRoleDoId.builder().roleId(role.getId()).userId(account.getId()).build());
-          accountRoleDo.setAccount(accountRepository.findById(account.getId()).orElse(null));
-          accountRoleDo.setRole(roleRepository.findById(role.getId()).orElse(null));
-          return accountRoleDo;
-        }).collect(Collectors.toList())).orElse(new ArrayList<>());
+        accountNotNull.getRoles())).filter(CollectionUtils::isNotEmpty)
+      .map(roles -> roles.stream().map(role -> {
+        AccountRoleDo accountRoleDo = new AccountRoleDo();
+        accountRoleDo.setId(
+          AccountRoleDoId.builder().roleId(role.getId()).userId(account.getId()).build());
+        accountRoleDo.setAccount(accountRepository.findById(account.getId()).orElse(null));
+        accountRoleDo.setRole(roleRepository.findById(role.getId()).orElse(null));
+        return accountRoleDo;
+      }).collect(Collectors.toList())).orElse(new ArrayList<>());
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountFindAllCo> toFindAllCo(
-      Account account) {
+    Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllCo);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountFindAllSliceCo> toFindAllSliceCo(
-      Account account) {
+    Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllSliceCo);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(
-      AccountFindAllCmd accountFindAllCmd) {
+    AccountFindAllCmd accountFindAllCmd) {
     return Optional.ofNullable(accountFindAllCmd).map(AccountMapper.INSTANCE::toEntity)
-        .map(account -> {
-          Optional.ofNullable(accountFindAllCmd.getRoleIds())
-              .ifPresent(roleIds -> setRolesWithIds(account, roleIds));
-          return account;
-        });
+      .map(account -> {
+        Optional.ofNullable(accountFindAllCmd.getRoleIds())
+          .ifPresent(roleIds -> setRolesWithIds(account, roleIds));
+        return account;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(
-      AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return Optional.ofNullable(accountFindAllSliceCmd).map(AccountMapper.INSTANCE::toEntity)
-        .map(account -> {
-          Optional.ofNullable(accountFindAllSliceCmd.getRoleIds())
-              .ifPresent(roleIds -> setRolesWithIds(account, roleIds));
-          return account;
-        });
+      .map(account -> {
+        Optional.ofNullable(accountFindAllSliceCmd.getRoleIds())
+          .ifPresent(roleIds -> setRolesWithIds(account, roleIds));
+        return account;
+      });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AccountCurrentLoginGrpcCo> toAccountCurrentLoginGrpcCo(
+    AccountCurrentLoginCo accountCurrentLoginCo) {
+    return Optional.ofNullable(accountCurrentLoginCo)
+      .map(AccountMapper.INSTANCE::toAccountCurrentLoginGrpcCo)
+      .map(accountCurrentLoginGrpcCo -> accountCurrentLoginGrpcCo.toBuilder()
+        .addAllRoles(Optional.ofNullable(accountCurrentLoginCo.getRoles())
+          .map(roles -> roles.stream().map(role -> {
+            AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcCo(
+              role);
+            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllAuthorities(
+              Optional.ofNullable(role.getAuthorities()).map(
+                accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
+                  .map(AccountMapper.INSTANCE::toAccountRoleAuthorityCurrentLoginQueryGrpcCo)
+                  .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
+          }).collect(Collectors.toList())).orElse(new ArrayList<>()))
+        .addAllAddresses(Optional.ofNullable(accountCurrentLoginCo.getAddresses())
+          .map(accountAddressCurrentLoginQueryCos -> accountAddressCurrentLoginQueryCos.stream()
+            .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcCo)
+            .collect(Collectors.toList())).orElse(new ArrayList<>()))
+        .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginCo.getSystemSettings())
+          .map(
+            accountSystemSettingsCurrentLoginQueryCos -> accountSystemSettingsCurrentLoginQueryCos.stream()
+              .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcCo)
+              .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
   }
 }
