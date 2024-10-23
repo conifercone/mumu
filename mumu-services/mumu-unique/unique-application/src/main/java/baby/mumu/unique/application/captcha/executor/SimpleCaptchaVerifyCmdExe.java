@@ -18,9 +18,9 @@ package baby.mumu.unique.application.captcha.executor;
 import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 简单验证码验证指令执行器
@@ -36,15 +36,14 @@ public class SimpleCaptchaVerifyCmdExe {
 
   @Autowired
   public SimpleCaptchaVerifyCmdExe(CaptchaGateway captchaGateway,
-      CaptchaConvertor captchaConvertor) {
+    CaptchaConvertor captchaConvertor) {
     this.captchaGateway = captchaGateway;
     this.captchaConvertor = captchaConvertor;
   }
 
   public boolean execute(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
-    Assert.notNull(simpleCaptchaVerifyCmd, "SimpleCaptchaVerifyCmd cannot be null");
-    return captchaConvertor.toEntity(simpleCaptchaVerifyCmd.getSimpleCaptchaVerifyCo())
-        .map(captchaGateway::verifySimpleCaptcha)
-        .orElse(false);
+    return Optional.ofNullable(simpleCaptchaVerifyCmd).flatMap(captchaConvertor::toEntity)
+      .map(captchaGateway::verifySimpleCaptcha)
+      .orElse(false);
   }
 }

@@ -19,7 +19,6 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import java.util.Optional;
@@ -48,11 +47,9 @@ public class CaptchaVerify {
       .orElseThrow(() -> new MuMuException(ResponseCode.CAPTCHA_CANNOT_BE_EMPTY));
     try {
       if (!captchaGrpcService.verifySimpleCaptcha(
-              SimpleCaptchaVerifyGrpcCmd.newBuilder().setSimpleCaptchaVerifyGrpcCo(
-                  SimpleCaptchaVerifyGrpcCo.newBuilder()
-                      .setId(Int64Value.of(captchaIdNotNull)).setSource(
-                          StringValue.of(captchaNotNull)).build()).build())
-          .getResult()) {
+          SimpleCaptchaVerifyGrpcCmd.newBuilder().setId(Int64Value.of(captchaIdNotNull)).setSource(
+            StringValue.of(captchaNotNull)).build())
+        .getResult()) {
         throw new MuMuException(ResponseCode.CAPTCHA_INCORRECT);
       }
     } catch (Exception e) {

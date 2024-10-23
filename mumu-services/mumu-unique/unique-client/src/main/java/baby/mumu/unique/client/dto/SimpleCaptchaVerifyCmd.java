@@ -15,7 +15,6 @@
  */
 package baby.mumu.unique.client.dto;
 
-import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import lombok.Data;
 
 /**
@@ -27,5 +26,13 @@ import lombok.Data;
 @Data
 public class SimpleCaptchaVerifyCmd {
 
-  private SimpleCaptchaVerifyCo simpleCaptchaVerifyCo;
+  /**
+   * 验证码id
+   */
+  private Long id;
+
+  /**
+   * 验证码内容
+   */
+  private String source;
 }

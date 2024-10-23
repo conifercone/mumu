@@ -19,7 +19,6 @@ import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -59,10 +58,10 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void generateSimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     LOGGER.info("simpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
     Assertions.assertNotNull(simpleCaptchaGeneratedGrpcCo);
   }
@@ -71,10 +70,10 @@ public class CaptchaGrpcServiceTest {
   public void syncGenerateSimpleCaptcha() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     ListenableFuture<SimpleCaptchaGeneratedGrpcCo> simpleCaptchaGeneratedGrpcCoListenableFuture = captchaGrpcService.syncGenerateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     simpleCaptchaGeneratedGrpcCoListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = simpleCaptchaGeneratedGrpcCoListenableFuture.get();
@@ -92,17 +91,15 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void verifySimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()
-        .setSimpleCaptchaVerifyGrpcCo(
-            SimpleCaptchaVerifyGrpcCo.newBuilder()
-                .setSource(simpleCaptchaGeneratedGrpcCo.getTarget())
-                .setId(simpleCaptchaGeneratedGrpcCo.getId())).build();
+      .setSource(simpleCaptchaGeneratedGrpcCo.getTarget())
+      .setId(simpleCaptchaGeneratedGrpcCo.getId()).build();
     SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = captchaGrpcService.verifySimpleCaptcha(
-        simpleCaptchaVerifyGrpcCmd);
+      simpleCaptchaVerifyGrpcCmd);
     LOGGER.info("simpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
     Assertions.assertNotNull(simpleCaptchaVerifyGrpcResult);
     Assertions.assertTrue(simpleCaptchaVerifyGrpcResult.getResult());
@@ -110,20 +107,18 @@ public class CaptchaGrpcServiceTest {
 
   @Test
   public void syncVerifySimpleCaptcha()
-      throws InterruptedException {
+    throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()
-        .setSimpleCaptchaVerifyGrpcCo(
-            SimpleCaptchaVerifyGrpcCo.newBuilder()
-                .setSource(simpleCaptchaGeneratedGrpcCo.getTarget())
-                .setId(simpleCaptchaGeneratedGrpcCo.getId())).build();
+      .setSource(simpleCaptchaGeneratedGrpcCo.getTarget())
+      .setId(simpleCaptchaGeneratedGrpcCo.getId()).build();
     ListenableFuture<SimpleCaptchaVerifyGrpcResult> simpleCaptchaVerifyGrpcResultListenableFuture = captchaGrpcService.syncVerifySimpleCaptcha(
-        simpleCaptchaVerifyGrpcCmd);
+      simpleCaptchaVerifyGrpcCmd);
     simpleCaptchaVerifyGrpcResultListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = simpleCaptchaVerifyGrpcResultListenableFuture.get();

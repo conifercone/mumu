@@ -17,7 +17,6 @@ package baby.mumu.authentication.client.config;
 
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
@@ -84,8 +83,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
       // 判断redis中是否存在token
-      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
-        TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
+      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
+        .getValidity()) {
         try {
           traceId();
           LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());

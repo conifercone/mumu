@@ -9,10 +9,9 @@ service TokenService {
 }
 
 message TokenValidityGrpcCmd {
-  TokenValidityGrpcCo tokenValidityCo = 1;
+  string token = 1;
 }
 
 message TokenValidityGrpcCo {
-  string token = 1;
-  bool validity = 2;
+  bool validity = 1;
 }

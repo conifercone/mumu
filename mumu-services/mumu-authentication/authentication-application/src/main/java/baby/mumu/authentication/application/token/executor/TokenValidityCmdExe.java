@@ -16,10 +16,9 @@
 package baby.mumu.authentication.application.token.executor;
 
 import baby.mumu.authentication.client.dto.TokenValidityCmd;
-import baby.mumu.authentication.client.dto.co.TokenValidityCo;
 import baby.mumu.authentication.domain.token.gateway.TokenGateway;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,9 +39,9 @@ public class TokenValidityCmdExe {
     this.tokenGateway = tokenGateway;
   }
 
-  public TokenValidityCo execute(@NotNull TokenValidityCmd tokenValidityCmd) {
-    TokenValidityCo tokenValidityCo = tokenValidityCmd.getTokenValidityCo();
-    tokenValidityCo.setValidity(tokenGateway.validity(tokenValidityCo.getToken()));
-    return tokenValidityCo;
+  public boolean execute(TokenValidityCmd tokenValidityCmd) {
+    return Optional.ofNullable(tokenValidityCmd).map(TokenValidityCmd::getToken)
+      .map(tokenGateway::validity)
+      .orElse(false);
   }
 }

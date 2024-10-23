@@ -15,9 +15,10 @@
  */
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
+import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import java.util.Optional;
@@ -45,22 +46,30 @@ public class CaptchaConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<SimpleCaptcha> toEntity(
-      SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return Optional.ofNullable(simpleCaptchaGeneratedCmd).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<SimpleCaptcha> toEntity(
-      SimpleCaptchaVerifyCo simpleCaptchaVerifyCo) {
-    return Optional.ofNullable(simpleCaptchaVerifyCo).map(CaptchaMapper.INSTANCE::toEntity);
+    SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
+    return Optional.ofNullable(simpleCaptchaVerifyCmd).map(CaptchaMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
-      SimpleCaptcha simpleCaptcha) {
+    SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha)
-        .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedCo);
+      .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<SimpleCaptchaVerifyCmd> toSimpleCaptchaVerifyCmd(
+    SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd) {
+    return Optional.ofNullable(simpleCaptchaVerifyGrpcCmd)
+      .map(CaptchaMapper.INSTANCE::toSimpleCaptchaVerifyCmd);
   }
 }

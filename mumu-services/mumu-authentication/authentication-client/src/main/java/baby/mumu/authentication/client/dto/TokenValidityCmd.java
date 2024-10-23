@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.TokenValidityCo;
 import lombok.Data;
 
 /**
@@ -27,5 +26,5 @@ import lombok.Data;
 @Data
 public class TokenValidityCmd {
 
-  private TokenValidityCo tokenValidityCo;
+  private String token;
 }

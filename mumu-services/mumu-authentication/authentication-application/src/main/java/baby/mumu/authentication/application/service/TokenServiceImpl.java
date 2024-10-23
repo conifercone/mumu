@@ -21,7 +21,6 @@ import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceImp
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
 import baby.mumu.authentication.client.dto.TokenValidityCmd;
-import baby.mumu.authentication.client.dto.co.TokenValidityCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
@@ -54,35 +53,23 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
   }
 
   @Override
-  public TokenValidityCo validity(TokenValidityCmd tokenValidityCmd) {
+  public boolean validity(TokenValidityCmd tokenValidityCmd) {
     return tokenValidityCmdExe.execute(tokenValidityCmd);
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void validity(TokenValidityGrpcCmd request,
-      StreamObserver<TokenValidityGrpcCo> responseObserver) {
+  public void validity(@NotNull TokenValidityGrpcCmd request,
+    StreamObserver<TokenValidityGrpcCo> responseObserver) {
     TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
-    TokenValidityCo tokenValidityCo = getTokenValidityCo(request);
-    tokenValidityCmd.setTokenValidityCo(tokenValidityCo);
-    TokenValidityGrpcCo tokenValidityGrpcCo = request.getTokenValidityCo();
+    tokenValidityCmd.setToken(request.getToken());
     try {
-      TokenValidityCo execute = tokenValidityCmdExe.execute(tokenValidityCmd);
-      tokenValidityGrpcCo = tokenValidityGrpcCo.toBuilder().setValidity(execute.isValidity())
-          .setToken(tokenValidityCo.getToken()).build();
+      responseObserver.onNext(
+        TokenValidityGrpcCo.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
+          .build());
+      responseObserver.onCompleted();
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
-    responseObserver.onNext(tokenValidityGrpcCo);
-    responseObserver.onCompleted();
-  }
-
-  @NotNull
-  private static TokenValidityCo getTokenValidityCo(
-      @NotNull TokenValidityGrpcCmd request) {
-    TokenValidityCo tokenValidityCo = new TokenValidityCo();
-    TokenValidityGrpcCo tokenValidityGrpcCo = request.getTokenValidityCo();
-    tokenValidityCo.setToken(tokenValidityGrpcCo.getToken());
-    return tokenValidityCo;
   }
 }
