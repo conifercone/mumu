@@ -42,16 +42,14 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
-import com.google.protobuf.Int64Value;
-import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +79,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe;
   private final AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe;
   private final AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe;
+  private final AuthorityConvertor authorityConvertor;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -92,7 +91,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityRecoverFromArchiveByIdCmdExe authorityRecoverFromArchiveByIdCmdExe,
     AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe,
     AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe,
-    AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe) {
+    AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe,
+    AuthorityConvertor authorityConvertor) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -103,6 +103,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityArchivedFindAllCmdExe = authorityArchivedFindAllCmdExe;
     this.authorityFindAllSliceCmdExe = authorityFindAllSliceCmdExe;
     this.authorityArchivedFindAllSliceCmdExe = authorityArchivedFindAllSliceCmdExe;
+    this.authorityConvertor = authorityConvertor;
   }
 
   @Override
@@ -156,42 +157,28 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(AuthorityFindAllGrpcCmd request,
     StreamObserver<PageOfAuthorityFindAllGrpcCo> responseObserver) {
-    AuthorityFindAllCmd authorityFindAllCmd = getAuthorityFindAllCmd(
-      request);
-    Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();
-    try {
-      Page<AuthorityFindAllCo> authorityFindAllCos = authorityFindAllCmdExe.execute(
-        authorityFindAllCmd);
-      List<AuthorityFindAllGrpcCo> findAllGrpcCos = authorityFindAllCos.getContent().stream()
-        .map(authorityFindAllCo -> AuthorityFindAllGrpcCo.newBuilder()
-          .setId(Int64Value.of(authorityFindAllCo.getId()))
-          .setCode(StringValue.of(authorityFindAllCo.getCode())).setName(
-            StringValue.of(authorityFindAllCo.getName())).build()).toList();
-      builder.addAllContent(findAllGrpcCos);
-      builder.setTotalPages(authorityFindAllCos.getTotalPages());
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(builder.build());
-    responseObserver.onCompleted();
-  }
+    authorityConvertor.toAuthorityFindAllCmd(request)
+      .ifPresentOrElse((authorityFindAllCmdNotNull) -> {
+        Builder builder = PageOfAuthorityFindAllGrpcCo.newBuilder();
+        try {
+          Page<AuthorityFindAllCo> authorityFindAllCos = authorityFindAllCmdExe.execute(
+            authorityFindAllCmdNotNull);
+          List<AuthorityFindAllGrpcCo> findAllGrpcCos = authorityFindAllCos.getContent().stream()
+            .flatMap(
+              authorityFindAllCo -> authorityConvertor.toAuthorityFindAllGrpcCo(authorityFindAllCo)
+                .stream()).toList();
+          builder.addAllContent(findAllGrpcCos);
+          builder.setTotalPages(authorityFindAllCos.getTotalPages());
+          responseObserver.onNext(builder.build());
+          responseObserver.onCompleted();
+        } catch (Exception e) {
+          throw new GRpcRuntimeExceptionWrapper(e);
+        }
+      }, () -> {
+        responseObserver.onNext(PageOfAuthorityFindAllGrpcCo.getDefaultInstance());
+        responseObserver.onCompleted();
+      });
 
-  private static @NotNull AuthorityFindAllCmd getAuthorityFindAllCmd(
-    @NotNull AuthorityFindAllGrpcCmd request) {
-    AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
-    //noinspection DuplicatedCode
-    authorityFindAllCmd.setId(
-      request.hasId() ? request.getId().getValue()
-        : null);
-    authorityFindAllCmd.setCode(
-      request.hasCode() ? request.getCode().getValue()
-        : null);
-    authorityFindAllCmd.setName(
-      request.hasName() ? request.getName().getValue()
-        : null);
-    authorityFindAllCmd.setCurrent(request.hasCurrent() ? request.getCurrent().getValue() : 1);
-    authorityFindAllCmd.setPageSize(request.hasPageSize() ? request.getPageSize().getValue() : 10);
-    return authorityFindAllCmd;
   }
 
   @Override

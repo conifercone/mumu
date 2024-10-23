@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.infrastructure.authority.convertor;
 
+import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
@@ -31,6 +33,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
@@ -47,7 +50,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AuthorityMapper {
+public interface AuthorityMapper extends GrpcMapper {
 
   AuthorityMapper INSTANCE = Mappers.getMapper(AuthorityMapper.class);
 
@@ -111,6 +114,12 @@ public interface AuthorityMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   AuthorityDo toDataObject(AuthorityArchivedDo authorityArchivedDo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  AuthorityFindAllCmd toAuthorityFindAllCmd(AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AuthorityFindAllGrpcCo toAuthorityFindAllGrpcCo(AuthorityFindAllCo authorityFindAllCo);
+
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget AuthorityFindByIdCo authorityFindByIdCo) {
     CommonUtil.convertToAccountZone(authorityFindByIdCo);
@@ -123,13 +132,13 @@ public interface AuthorityMapper {
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AuthorityFindAllSliceCo authorityFindAllSliceCo) {
+    @MappingTarget AuthorityFindAllSliceCo authorityFindAllSliceCo) {
     CommonUtil.convertToAccountZone(authorityFindAllSliceCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AuthorityArchivedFindAllSliceCo authorityArchivedFindAllSliceCo) {
+    @MappingTarget AuthorityArchivedFindAllSliceCo authorityArchivedFindAllSliceCo) {
     CommonUtil.convertToAccountZone(authorityArchivedFindAllSliceCo);
   }
 }

@@ -15,6 +15,9 @@
  */
 package baby.mumu.authentication.infrastructure.role.convertor;
 
+import baby.mumu.authentication.client.api.grpc.RoleFindAllAuthorityGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
@@ -23,6 +26,7 @@ import baby.mumu.authentication.client.dto.co.RoleAddCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllCo.RoleFindAllAuthorityCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
@@ -30,6 +34,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
@@ -46,7 +51,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RoleMapper {
+public interface RoleMapper extends GrpcMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
@@ -104,6 +109,16 @@ public interface RoleMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   Role toEntity(RoleArchivedDo roleArchivedDo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllGrpcCo toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllAuthorityGrpcCo toRoleFindAllAuthorityGrpcCo(
+    RoleFindAllAuthorityCo roleFindAllAuthorityCo);
+
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
     CommonUtil.convertToAccountZone(roleFindAllCo);
@@ -116,13 +131,13 @@ public interface RoleMapper {
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
+    @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
     CommonUtil.convertToAccountZone(roleArchivedFindAllSliceCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
+    @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
     CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
   }
 }

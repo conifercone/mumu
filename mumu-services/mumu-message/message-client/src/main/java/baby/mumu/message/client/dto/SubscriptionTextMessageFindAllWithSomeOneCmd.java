@@ -31,7 +31,7 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmd {
   @NotNull(message = "{receiver.id.validation.not.null}")
   private Long receiverId;
   @Min(value = 1, message = "{current.validation.min.size}")
-  private int current = 1;
+  private Integer current = 1;
   @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  private Integer pageSize = 10;
 }

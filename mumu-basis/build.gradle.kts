@@ -10,4 +10,5 @@ dependencies {
     implementation(libs.spring.cloud.commons)
     implementation(libs.grpc.api)
     implementation(libs.micrometer.tracing)
+    implementation(libs.protobuf.java)
 }

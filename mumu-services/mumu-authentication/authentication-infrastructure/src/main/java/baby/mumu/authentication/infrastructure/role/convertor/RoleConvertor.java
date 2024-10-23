@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.infrastructure.role.convertor;
 
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
@@ -80,12 +82,12 @@ public class RoleConvertor {
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
-      AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
-      RoleArchivedRepository roleArchivedRepository,
-      RoleAuthorityRepository roleAuthorityRepository,
-      AuthorityRedisRepository authorityRedisRepository,
-      RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
+    AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+    ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
+    RoleArchivedRepository roleArchivedRepository,
+    RoleAuthorityRepository roleAuthorityRepository,
+    AuthorityRedisRepository authorityRedisRepository,
+    RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
@@ -109,48 +111,48 @@ public class RoleConvertor {
 
   private @NotNull List<Long> getAuthorityIds(Role role) {
     return roleAuthorityRedisRepository.findById(role.getId())
-        .map(RoleAuthorityRedisDo::getAuthorityIds).orElseGet(() -> {
-          List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
-              .map(RoleAuthorityDo::getId)
-              .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
-          roleAuthorityRedisRepository.save(new RoleAuthorityRedisDo(role.getId(), authorityIds));
-          return authorityIds;
-        });
+      .map(RoleAuthorityRedisDo::getAuthorityIds).orElseGet(() -> {
+        List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
+          .map(RoleAuthorityDo::getId)
+          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
+        roleAuthorityRedisRepository.save(new RoleAuthorityRedisDo(role.getId(), authorityIds));
+        return authorityIds;
+      });
   }
 
   private void setAuthorities(Role role, List<Long> authorityIds) {
     // 查询缓存中存在的数据
     List<AuthorityRedisDo> authorityRedisDos = authorityRedisRepository.findAllById(
-        authorityIds);
+      authorityIds);
     // 缓存中存在的权限ID
     List<Long> cachedCollectionOfAuthorityIDs = authorityRedisDos.stream()
-        .map(AuthorityRedisDo::getId)
-        .collect(Collectors.toList());
+      .map(AuthorityRedisDo::getId)
+      .collect(Collectors.toList());
     // 已缓存的权限
     List<Authority> cachedCollectionOfAuthority = authorityRedisDos.stream()
-        .flatMap(authorityRedisDo -> authorityConvertor.toEntity(authorityRedisDo).stream())
-        .collect(
-            Collectors.toList());
+      .flatMap(authorityRedisDo -> authorityConvertor.toEntity(authorityRedisDo).stream())
+      .collect(
+        Collectors.toList());
     // 未缓存的权限
     List<Authority> uncachedCollectionOfAuthority = Optional.of(
-            CollectionUtils.subtract(authorityIds, cachedCollectionOfAuthorityIDs))
-        .filter(CollectionUtils::isNotEmpty).map(
-            uncachedCollectionOfAuthorityId -> authorityRepository.findAllById(
-                    uncachedCollectionOfAuthorityId)
-                .stream()
-                .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
-                .collect(
-                    Collectors.toList())).orElse(new ArrayList<>());
+        CollectionUtils.subtract(authorityIds, cachedCollectionOfAuthorityIDs))
+      .filter(CollectionUtils::isNotEmpty).map(
+        uncachedCollectionOfAuthorityId -> authorityRepository.findAllById(
+            uncachedCollectionOfAuthorityId)
+          .stream()
+          .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+          .collect(
+            Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的权限放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfAuthority)) {
       authorityRedisRepository.saveAll(uncachedCollectionOfAuthority.stream()
-          .flatMap(authority -> authorityConvertor.toAuthorityRedisDo(authority).stream())
-          .collect(
-              Collectors.toList()));
+        .flatMap(authority -> authorityConvertor.toAuthorityRedisDo(authority).stream())
+        .collect(
+          Collectors.toList()));
     }
     // 合并已缓存和未缓存的权限
     role.setAuthorities(new ArrayList<>(
-        CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority)));
+      CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority)));
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
@@ -178,8 +180,8 @@ public class RoleConvertor {
         roleAddClientObject.setId(role.getId());
       }
       Optional.ofNullable(roleAddClientObject.getAuthorityIds())
-          .filter(CollectionUtils::isNotEmpty)
-          .ifPresent(authorityIds -> setAuthorities(role, authorityIds));
+        .filter(CollectionUtils::isNotEmpty)
+        .ifPresent(authorityIds -> setAuthorities(role, authorityIds));
       return role;
     });
   }
@@ -195,12 +197,12 @@ public class RoleConvertor {
         RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
         String codeAfterUpdated = roleDomain.getCode();
         if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
-            && (roleRepository.existsByCode(codeAfterUpdated)
-            || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
+          && (roleRepository.existsByCode(codeAfterUpdated)
+          || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new MuMuException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
         }
         Optional.ofNullable(roleUpdateClientObject.getAuthorityIds())
-            .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
+          .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
         return roleDomain;
       }));
     });
@@ -219,21 +221,21 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return Optional.ofNullable(roleFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
-        .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getAuthorityIds())) {
-            setAuthorities(role, roleFindAllSliceCmd.getAuthorityIds());
-          }
-          return role;
-        });
+      .map(role -> {
+        if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getAuthorityIds())) {
+          setAuthorities(role, roleFindAllSliceCmd.getAuthorityIds());
+        }
+        return role;
+      });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<RoleFindAllCo> toFindAllCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllCo).map(roleFindAllCo -> {
       Optional.ofNullable(simpleTextTranslation).flatMap(
-              simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                  roleFindAllCo.getName()))
-          .ifPresent(roleFindAllCo::setName);
+          simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+            roleFindAllCo.getName()))
+        .ifPresent(roleFindAllCo::setName);
       return roleFindAllCo;
     });
   }
@@ -241,69 +243,69 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleFindAllSliceCo> toFindAllSliceCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllSliceCo)
-        .map(roleFindAllSliceCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      roleFindAllSliceCo.getName()))
-              .ifPresent(roleFindAllSliceCo::setName);
-          return roleFindAllSliceCo;
-        });
+      .map(roleFindAllSliceCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              roleFindAllSliceCo.getName()))
+          .ifPresent(roleFindAllSliceCo::setName);
+        return roleFindAllSliceCo;
+      });
   }
 
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return Optional.ofNullable(roleArchivedFindAllCmd).map(RoleMapper.INSTANCE::toEntity)
-        .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getAuthorityIds())) {
-            setAuthorities(role, roleArchivedFindAllCmd.getAuthorityIds());
-          }
-          return role;
-        });
+      .map(role -> {
+        if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getAuthorityIds())) {
+          setAuthorities(role, roleArchivedFindAllCmd.getAuthorityIds());
+        }
+        return role;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return Optional.ofNullable(roleArchivedFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
-        .map(role -> {
-          if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getAuthorityIds())) {
-            setAuthorities(role, roleArchivedFindAllSliceCmd.getAuthorityIds());
-          }
-          return role;
-        });
+      .map(role -> {
+        if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getAuthorityIds())) {
+          setAuthorities(role, roleArchivedFindAllSliceCmd.getAuthorityIds());
+        }
+        return role;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Role> toEntity(RoleRedisDo roleRedisDo) {
     return Optional.ofNullable(roleRedisDo).map(RoleMapper.INSTANCE::toEntity)
-        .map(role -> {
-          setAuthorities(role, getAuthorityIds(role));
-          return role;
-        });
+      .map(role -> {
+        setAuthorities(role, getAuthorityIds(role));
+        return role;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleArchivedFindAllCo> toArchivedFindAllCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllCo)
-        .map(roleArchivedFindAllCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      roleArchivedFindAllCo.getName()))
-              .ifPresent(roleArchivedFindAllCo::setName);
-          return roleArchivedFindAllCo;
-        });
+      .map(roleArchivedFindAllCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              roleArchivedFindAllCo.getName()))
+          .ifPresent(roleArchivedFindAllCo::setName);
+        return roleArchivedFindAllCo;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleArchivedFindAllSliceCo> toArchivedFindAllSliceCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllSliceCo)
-        .map(roleArchivedFindAllSliceCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      roleArchivedFindAllSliceCo.getName()))
-              .ifPresent(roleArchivedFindAllSliceCo::setName);
-          return roleArchivedFindAllSliceCo;
-        });
+      .map(roleArchivedFindAllSliceCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              roleArchivedFindAllSliceCo.getName()))
+          .ifPresent(roleArchivedFindAllSliceCo::setName);
+        return roleArchivedFindAllSliceCo;
+      });
   }
 
 
@@ -335,13 +337,41 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.1.0")
   public List<RoleAuthorityDo> toRoleAuthorityDos(Role role) {
     return Optional.ofNullable(role).flatMap(roleNonNull -> Optional.ofNullable(
-        roleNonNull.getAuthorities())).map(authorities -> authorities.stream().map(authority -> {
+      roleNonNull.getAuthorities())).map(authorities -> authorities.stream().map(authority -> {
       RoleAuthorityDo roleAuthorityDo = new RoleAuthorityDo();
       roleAuthorityDo.setId(RoleAuthorityDoId.builder().roleId(role.getId()).authorityId(
-          authority.getId()).build());
+        authority.getId()).build());
       roleRepository.findById(role.getId()).ifPresent(roleAuthorityDo::setRole);
       authorityRepository.findById(authority.getId()).ifPresent(roleAuthorityDo::setAuthority);
       return roleAuthorityDo;
     }).toList()).orElse(new ArrayList<>());
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleFindAllCmd> toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
+    return Optional.ofNullable(roleFindAllGrpcCmd).map(RoleMapper.INSTANCE::toRoleFindAllCmd)
+      .map(roleFindAllCmd -> {
+        if (roleFindAllCmd.getCurrent() == null) {
+          roleFindAllCmd.setCurrent(1);
+        }
+        if (roleFindAllCmd.getPageSize() == null) {
+          roleFindAllCmd.setPageSize(10);
+        }
+        return roleFindAllCmd;
+      });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<RoleFindAllGrpcCo> toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo) {
+    return Optional.ofNullable(roleFindAllCo).map(RoleMapper.INSTANCE::toRoleFindAllGrpcCo)
+      .map(roleFindAllGrpcCo ->
+        roleFindAllGrpcCo.toBuilder().addAllAuthorities(
+          Optional.ofNullable(roleFindAllCo.getAuthorities()).map(
+            authorities -> authorities.stream()
+              .map(RoleMapper.INSTANCE::toRoleFindAllAuthorityGrpcCo)
+              .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
+      );
   }
 }

@@ -47,10 +47,8 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
-import com.google.protobuf.BoolValue;
+import baby.mumu.basis.mappers.GrpcMapper;
 import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
-import com.google.protobuf.StringValue;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -70,7 +68,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper {
+public interface AccountMapper extends GrpcMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
@@ -172,21 +170,6 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(
     AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
-
-  @API(status = Status.STABLE, since = "2.2.0")
-  default Int64Value map(Long value) {
-    return Int64Value.of(value);
-  }
-
-  @API(status = Status.STABLE, since = "2.2.0")
-  default BoolValue map(Boolean value) {
-    return BoolValue.of(value);
-  }
-
-  @API(status = Status.STABLE, since = "2.2.0")
-  default StringValue map(String value) {
-    return StringValue.of(value);
-  }
 
   @API(status = Status.STABLE, since = "2.2.0")
   default LocalDate map(java.time.LocalDate value) {
