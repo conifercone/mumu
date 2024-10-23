@@ -22,8 +22,6 @@ import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 验证码校验
@@ -34,7 +32,6 @@ import org.slf4j.LoggerFactory;
 public class CaptchaVerify {
 
   private final CaptchaGrpcService captchaGrpcService;
-  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaVerify.class);
 
   public CaptchaVerify(CaptchaGrpcService captchaGrpcService) {
     this.captchaGrpcService = captchaGrpcService;
@@ -53,7 +50,6 @@ public class CaptchaVerify {
         throw new MuMuException(ResponseCode.CAPTCHA_INCORRECT);
       }
     } catch (Exception e) {
-      LOGGER.error(ResponseCode.CAPTCHA_VERIFICATION_EXCEPTION.getMessage(), e);
       throw new MuMuException(ResponseCode.CAPTCHA_VERIFICATION_EXCEPTION);
     }
   }
