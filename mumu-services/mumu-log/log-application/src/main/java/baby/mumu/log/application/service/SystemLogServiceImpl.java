@@ -22,18 +22,16 @@ import baby.mumu.log.application.system.executor.SystemLogFindAllCmdExe;
 import baby.mumu.log.application.system.executor.SystemLogSaveCmdExe;
 import baby.mumu.log.application.system.executor.SystemLogSubmitCmdExe;
 import baby.mumu.log.client.api.SystemLogService;
-import baby.mumu.log.client.api.grpc.SystemLogServiceEmptyResult;
 import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import baby.mumu.log.client.dto.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.SystemLogSaveCmd;
 import baby.mumu.log.client.dto.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
+import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
-import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +52,16 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
 
   private final SystemLogSaveCmdExe systemLogSaveCmdExe;
   private final SystemLogFindAllCmdExe systemLogFindAllCmdExe;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
   public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
-      SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe) {
+    SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe,
+    SystemLogConvertor systemLogConvertor) {
     this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
     this.systemLogSaveCmdExe = systemLogSaveCmdExe;
     this.systemLogFindAllCmdExe = systemLogFindAllCmdExe;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   @Override
@@ -81,30 +82,19 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void submit(SystemLogSubmitGrpcCmd request,
-      StreamObserver<SystemLogServiceEmptyResult> responseObserver) {
-    SystemLogSubmitCmd systemLogSubmitCmd = new SystemLogSubmitCmd();
-    SystemLogSubmitCo systemLogSubmitCo = getSystemLogSubmitCo(
-        request);
-    systemLogSubmitCmd.setSystemLogSubmitCo(systemLogSubmitCo);
-    try {
-      systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    SystemLogServiceEmptyResult build = SystemLogServiceEmptyResult.newBuilder().build();
-    responseObserver.onNext(build);
-    responseObserver.onCompleted();
+    StreamObserver<Empty> responseObserver) {
+    systemLogConvertor.toSystemLogSubmitCmd(request).ifPresentOrElse((systemLogSubmitCmd) -> {
+      try {
+        systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+      } catch (Exception e) {
+        throw new GRpcRuntimeExceptionWrapper(e);
+      }
+    }, () -> {
+      responseObserver.onNext(Empty.getDefaultInstance());
+      responseObserver.onCompleted();
+    });
   }
 
-  @NotNull
-  private static SystemLogSubmitCo getSystemLogSubmitCo(
-      @NotNull SystemLogSubmitGrpcCmd request) {
-    SystemLogSubmitCo systemLogSubmitCo = new SystemLogSubmitCo();
-    SystemLogSubmitGrpcCo systemLogSubmitGrpcCo = request.getSystemLogSubmitCo();
-    systemLogSubmitCo.setContent(systemLogSubmitGrpcCo.getContent());
-    systemLogSubmitCo.setCategory(systemLogSubmitGrpcCo.getCategory());
-    systemLogSubmitCo.setSuccess(systemLogSubmitGrpcCo.getSuccess());
-    systemLogSubmitCo.setFail(systemLogSubmitGrpcCo.getFail());
-    return systemLogSubmitCo;
-  }
 }

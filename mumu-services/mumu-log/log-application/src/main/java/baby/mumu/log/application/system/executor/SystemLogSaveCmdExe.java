@@ -18,10 +18,9 @@ package baby.mumu.log.application.system.executor;
 import baby.mumu.log.client.dto.SystemLogSaveCmd;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 系统日志保存指令执行器
@@ -37,14 +36,13 @@ public class SystemLogSaveCmdExe {
 
   @Autowired
   public SystemLogSaveCmdExe(SystemLogGateway systemLogGateway,
-      SystemLogConvertor systemLogConvertor) {
+    SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
     this.systemLogConvertor = systemLogConvertor;
   }
 
-  public void execute(@NotNull SystemLogSaveCmd systemLogSaveCmd) {
-    Assert.notNull(systemLogSaveCmd, "SystemLogSaveCmd cannot be null");
-    systemLogConvertor.toEntity(systemLogSaveCmd.getSystemLogSaveCo())
-        .ifPresent(systemLogGateway::save);
+  public void execute(SystemLogSaveCmd systemLogSaveCmd) {
+    Optional.ofNullable(systemLogSaveCmd).flatMap(systemLogConvertor::toEntity)
+      .ifPresent(systemLogGateway::save);
   }
 }

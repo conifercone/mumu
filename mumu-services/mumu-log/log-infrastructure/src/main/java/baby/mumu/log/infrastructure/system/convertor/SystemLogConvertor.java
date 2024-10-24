@@ -15,10 +15,11 @@
  */
 package baby.mumu.log.infrastructure.system.convertor;
 
+import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllCmd;
+import baby.mumu.log.client.dto.SystemLogSaveCmd;
+import baby.mumu.log.client.dto.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogSaveCo;
-import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
@@ -56,25 +57,25 @@ public class SystemLogConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(SystemLogMapper.INSTANCE::toKafkaDataObject);
+      .map(SystemLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(SystemLogMapper.INSTANCE::toEsDataObject);
+      .map(SystemLogMapper.INSTANCE::toEsDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogSubmitCo systemLogSubmitCo) {
-    return Optional.ofNullable(systemLogSubmitCo).map(res -> {
+  public Optional<SystemLog> toEntity(SystemLogSubmitCmd systemLogSubmitCmd) {
+    return Optional.ofNullable(systemLogSubmitCmd).map(res -> {
       SystemLog systemLog = SystemLogMapper.INSTANCE.toEntity(res);
       systemLog.setId(
-          Optional.ofNullable(tracer.currentSpan())
-              .map(span -> span.context().traceId()).orElseGet(() ->
-                  String.valueOf(primaryKeyGrpcService.snowflake())));
+        Optional.ofNullable(tracer.currentSpan())
+          .map(span -> span.context().traceId()).orElseGet(() ->
+            String.valueOf(primaryKeyGrpcService.snowflake())));
       systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
       return systemLog;
     });
@@ -82,36 +83,52 @@ public class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogSaveCo systemLogSaveCo) {
-    return Optional.ofNullable(systemLogSaveCo)
-        .map(SystemLogMapper.INSTANCE::toEntity);
+  public Optional<SystemLog> toEntity(SystemLogSaveCmd systemLogSaveCmd) {
+    return Optional.ofNullable(systemLogSaveCmd)
+      .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
     return Optional.ofNullable(systemLogEsDo)
-        .map(SystemLogMapper.INSTANCE::toEntity);
+      .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(
-      SystemLogFindAllCmd systemLogFindAllCmd) {
+    SystemLogFindAllCmd systemLogFindAllCmd) {
     return Optional.ofNullable(systemLogFindAllCmd)
-        .map(SystemLogMapper.INSTANCE::toEntity).map(systemLog -> {
-          Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
-              .ifPresent(systemLog::setRecordStartTime);
-          Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
-              .ifPresent(systemLog::setRecordEndTime);
-          return systemLog;
-        });
+      .map(SystemLogMapper.INSTANCE::toEntity).map(systemLog -> {
+        Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
+          .ifPresent(systemLog::setRecordStartTime);
+        Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
+          .ifPresent(systemLog::setRecordEndTime);
+        return systemLog;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogFindAllCo> toFindAllCo(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-        .map(SystemLogMapper.INSTANCE::toFindAllCo);
+      .map(SystemLogMapper.INSTANCE::toFindAllCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<SystemLogSubmitCmd> toSystemLogSubmitCmd(
+    SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
+    return Optional.ofNullable(systemLogSubmitGrpcCmd)
+      .map(SystemLogMapper.INSTANCE::toSystemLogSubmitCmd);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<SystemLogSaveCmd> toSystemLogSaveCmd(
+    SystemLogKafkaDo systemLogKafkaDo) {
+    return Optional.ofNullable(systemLogKafkaDo)
+      .map(SystemLogMapper.INSTANCE::toSystemLogSaveCmd);
   }
 }

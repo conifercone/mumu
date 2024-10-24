@@ -15,10 +15,11 @@
  */
 package baby.mumu.log.infrastructure.system.convertor;
 
+import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllCmd;
+import baby.mumu.log.client.dto.SystemLogSaveCmd;
+import baby.mumu.log.client.dto.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
-import baby.mumu.log.client.dto.co.SystemLogSaveCo;
-import baby.mumu.log.client.dto.co.SystemLogSubmitCo;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
@@ -47,10 +48,10 @@ public interface SystemLogMapper {
   SystemLogEsDo toEsDataObject(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogSubmitCo systemLogSubmitCo);
+  SystemLog toEntity(SystemLogSubmitCmd systemLogSubmitCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogSaveCo systemLogSaveCo);
+  SystemLog toEntity(SystemLogSaveCmd systemLogSaveCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogEsDo systemLogEsDo);
@@ -62,5 +63,8 @@ public interface SystemLogMapper {
   SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogSaveCo toSaveCo(SystemLogKafkaDo systemLogKafkaDo);
+  SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaDo systemLogKafkaDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  SystemLogSubmitCmd toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd);
 }

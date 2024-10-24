@@ -16,10 +16,8 @@
 package baby.mumu.log.application.consumer.operation;
 
 import baby.mumu.log.client.api.OperationLogService;
-import baby.mumu.log.client.dto.OperationLogSaveCmd;
-import baby.mumu.log.client.dto.co.OperationLogSaveCo;
 import baby.mumu.log.infrastructure.config.LogProperties;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogMapper;
+import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,23 +37,22 @@ import org.springframework.stereotype.Component;
 public class OperationLogConsumer {
 
   private final ObjectMapper objectMapper;
-
   private final OperationLogService operationLogService;
+  private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
-  public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService) {
+  public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService,
+    OperationLogConvertor operationLogConvertor) {
     this.objectMapper = objectMapper;
     this.operationLogService = operationLogService;
+    this.operationLogConvertor = operationLogConvertor;
   }
 
   @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
   public void handle(String operationLog) throws JsonProcessingException {
     OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
-        OperationLogKafkaDo.class);
-    OperationLogSaveCmd operationLogSaveCmd = new OperationLogSaveCmd();
-    OperationLogSaveCo operationLogSaveCo = OperationLogMapper.INSTANCE.toSaveCo(
-        operationLogKafkaDo);
-    operationLogSaveCmd.setOperationLogSaveCo(operationLogSaveCo);
-    operationLogService.save(operationLogSaveCmd);
+      OperationLogKafkaDo.class);
+    operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaDo)
+      .ifPresent(operationLogService::save);
   }
 }

@@ -28,7 +28,6 @@ import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -73,10 +72,9 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
       OAuth2Error error = oAuth2AuthenticationException.getError();
       String errorCode = error.getErrorCode();
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-        .setSystemLogSubmitCo(
-          SystemLogSubmitGrpcCo.newBuilder().setContent(errorCode)
-            .setCategory("exception")
-            .setFail(ExceptionUtils.getStackTrace(exception)).build())
+        .setContent(errorCode)
+        .setCategory("exception")
+        .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
       LOGGER.error(errorCode);
       response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));

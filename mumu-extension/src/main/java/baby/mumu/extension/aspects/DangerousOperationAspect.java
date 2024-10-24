@@ -22,7 +22,6 @@ import baby.mumu.basis.condition.ConditionalExecutor;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -50,26 +49,23 @@ public class DangerousOperationAspect extends AbstractAspect {
   @Before("@annotation(baby.mumu.basis.annotations.DangerousOperation)")
   public void checkDangerousOperation(JoinPoint joinPoint) {
     getCurrentMethod(joinPoint).map(method -> method.getAnnotation(DangerousOperation.class))
-        .ifPresent(
-            annotationNonNull -> SecurityContextUtil.getLoginAccountId()
-                .ifPresent(accountId -> {
-                  String content = String.format(
-                      "The user with user ID %s performed a dangerous operation:%s", accountId,
-                      resolveParameters(annotationNonNull.value(), joinPoint));
-                  systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-                      .setSystemLogSubmitCo(
-                          SystemLogSubmitGrpcCo.newBuilder()
-                              .setContent(content)
-                              .setCategory("dangerousOperation")
-                              .build())
-                      .build());
-                  LOGGER.info(content);
-                }));
+      .ifPresent(
+        annotationNonNull -> SecurityContextUtil.getLoginAccountId()
+          .ifPresent(accountId -> {
+            String content = String.format(
+              "The user with user ID %s performed a dangerous operation:%s", accountId,
+              resolveParameters(annotationNonNull.value(), joinPoint));
+            systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+              .setContent(content)
+              .setCategory("dangerousOperation")
+              .build());
+            LOGGER.info(content);
+          }));
   }
 
   private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
     return ConditionalExecutor.of(value.contains(PERCENT_SIGN))
-        .orElseGet(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
+      .orElseGet(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
   }
 
   private String replaceParameters(@NotNull String value, Object[] args) {

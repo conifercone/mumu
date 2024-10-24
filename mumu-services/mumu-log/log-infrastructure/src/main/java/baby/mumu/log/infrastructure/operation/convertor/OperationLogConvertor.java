@@ -17,9 +17,10 @@ package baby.mumu.log.infrastructure.operation.convertor;
 
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllCmd;
+import baby.mumu.log.client.dto.OperationLogSaveCmd;
 import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogSaveCo;
+import baby.mumu.log.client.dto.co.OperationLogQryCo;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
@@ -83,8 +84,8 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
-    return Optional.ofNullable(operationLogSaveCo).map(OperationLogMapper.INSTANCE::toEntity);
+  public Optional<OperationLog> toEntity(OperationLogSaveCmd operationLogSaveCmd) {
+    return Optional.ofNullable(operationLogSaveCmd).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
 
@@ -122,4 +123,18 @@ public class OperationLogConvertor {
       .map(OperationLogMapper.INSTANCE::toOperationLogSubmitCmd);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
+    OperationLogKafkaDo operationLogKafkaDo) {
+    return Optional.ofNullable(operationLogKafkaDo)
+      .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogQryCo> toQryCo(
+    OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+      .map(OperationLogMapper.INSTANCE::toQryCo);
+  }
 }

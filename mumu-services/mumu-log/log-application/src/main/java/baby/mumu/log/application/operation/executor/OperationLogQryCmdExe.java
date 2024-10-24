@@ -18,9 +18,8 @@ package baby.mumu.log.application.operation.executor;
 import baby.mumu.log.client.dto.OperationLogQryCmd;
 import baby.mumu.log.client.dto.co.OperationLogQryCo;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogMapper;
-import java.util.concurrent.atomic.AtomicReference;
-import org.jetbrains.annotations.NotNull;
+import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,20 +33,18 @@ import org.springframework.stereotype.Component;
 public class OperationLogQryCmdExe {
 
   private final OperationLogGateway operationLogGateway;
+  private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
-  public OperationLogQryCmdExe(OperationLogGateway operationLogGateway) {
+  public OperationLogQryCmdExe(OperationLogGateway operationLogGateway,
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogGateway = operationLogGateway;
+    this.operationLogConvertor = operationLogConvertor;
   }
 
-  public OperationLogQryCo execute(@NotNull OperationLogQryCmd operationLogQryCmd) {
-    AtomicReference<OperationLogQryCo> operationLogQryCo = new AtomicReference<>();
-    operationLogGateway.findOperationLogById(
-        operationLogQryCmd.getId()).ifPresent(operationLog -> {
-      OperationLogQryCo operationLogQryCoTmp = OperationLogMapper.INSTANCE.toQryCo(operationLog);
-      operationLogQryCo.set(operationLogQryCoTmp);
-    });
-    return operationLogQryCo.get();
+  public OperationLogQryCo execute(OperationLogQryCmd operationLogQryCmd) {
+    return Optional.ofNullable(operationLogQryCmd).map(OperationLogQryCmd::getId)
+      .flatMap(operationLogGateway::findOperationLogById).flatMap(operationLogConvertor::toQryCo)
+      .orElse(null);
   }
-
 }
