@@ -15,7 +15,6 @@
  */
 package baby.mumu.log.client.dto;
 
-import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
 import lombok.Data;
 
 /**
@@ -27,5 +26,38 @@ import lombok.Data;
 @Data
 public class OperationLogSubmitCmd {
 
-  private OperationLogSubmitCo operationLogSubmitCo;
+  /**
+   * 日志内容
+   */
+  private String content;
+
+  /**
+   * 操作日志的执行人
+   */
+  private String operator;
+
+  /**
+   * 操作日志绑定的业务对象标识
+   */
+  private String bizNo;
+
+  /**
+   * 操作日志的种类
+   */
+  private String category;
+
+  /**
+   * 扩展参数，记录操作日志的修改详情
+   */
+  private String detail;
+
+  /**
+   * 操作日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 操作日志失败的文本模板
+   */
+  private String fail;
 }

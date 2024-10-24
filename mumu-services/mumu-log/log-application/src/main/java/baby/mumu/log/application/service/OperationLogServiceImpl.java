@@ -23,17 +23,16 @@ import baby.mumu.log.application.operation.executor.OperationLogQryCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogSaveCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogSubmitCmdExe;
 import baby.mumu.log.client.api.OperationLogService;
-import baby.mumu.log.client.api.grpc.OperationLogServiceEmptyResult;
 import baby.mumu.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import baby.mumu.log.client.dto.OperationLogFindAllCmd;
 import baby.mumu.log.client.dto.OperationLogQryCmd;
 import baby.mumu.log.client.dto.OperationLogSaveCmd;
 import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
 import baby.mumu.log.client.dto.co.OperationLogQryCo;
-import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
+import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -54,7 +53,7 @@ import org.springframework.stereotype.Service;
 @GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
-    OperationLogService {
+  OperationLogService {
 
   private final OperationLogSubmitCmdExe operationLogSubmitCmdExe;
 
@@ -63,15 +62,18 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   private final OperationLogQryCmdExe operationLogQryCmdExe;
 
   private final OperationLogFindAllCmdExe operationLogFindAllCmdExe;
+  private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
   public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
-      OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
-      OperationLogFindAllCmdExe operationLogFindAllCmdExe) {
+    OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
+    OperationLogFindAllCmdExe operationLogFindAllCmdExe,
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
     this.operationLogSaveCmdExe = operationLogSaveCmdExe;
     this.operationLogQryCmdExe = operationLogQryCmdExe;
     this.operationLogFindAllCmdExe = operationLogFindAllCmdExe;
+    this.operationLogConvertor = operationLogConvertor;
   }
 
   @Override
@@ -87,19 +89,20 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void submit(@NotNull OperationLogSubmitGrpcCmd request,
-      @NotNull StreamObserver<OperationLogServiceEmptyResult> responseObserver) {
-    OperationLogSubmitCmd operationLogSubmitCmd = new OperationLogSubmitCmd();
-    OperationLogSubmitCo operationLogSubmitCo = getOperationLogSubmitCo(
-        request);
-    operationLogSubmitCmd.setOperationLogSubmitCo(operationLogSubmitCo);
-    try {
-      operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    OperationLogServiceEmptyResult build = OperationLogServiceEmptyResult.newBuilder().build();
-    responseObserver.onNext(build);
-    responseObserver.onCompleted();
+    @NotNull StreamObserver<Empty> responseObserver) {
+    operationLogConvertor.toOperationLogSubmitCmd(request)
+      .ifPresentOrElse((operationLogSubmitCmd) -> {
+        try {
+          operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+          responseObserver.onNext(Empty.getDefaultInstance());
+          responseObserver.onCompleted();
+        } catch (Exception e) {
+          throw new GRpcRuntimeExceptionWrapper(e);
+        }
+      }, () -> {
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+      });
   }
 
   @Override
@@ -112,20 +115,5 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   @Override
   public Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
-  }
-
-  @NotNull
-  private static OperationLogSubmitCo getOperationLogSubmitCo(
-      @NotNull OperationLogSubmitGrpcCmd request) {
-    OperationLogSubmitCo operationLogSubmitCo = new OperationLogSubmitCo();
-    OperationLogSubmitGrpcCo operationLogSubmitGrpcCo = request.getOperationLogSubmitCo();
-    operationLogSubmitCo.setContent(operationLogSubmitGrpcCo.getContent());
-    operationLogSubmitCo.setOperator(operationLogSubmitGrpcCo.getOperator());
-    operationLogSubmitCo.setBizNo(operationLogSubmitGrpcCo.getBizNo());
-    operationLogSubmitCo.setCategory(operationLogSubmitGrpcCo.getCategory());
-    operationLogSubmitCo.setDetail(operationLogSubmitGrpcCo.getDetail());
-    operationLogSubmitCo.setSuccess(operationLogSubmitGrpcCo.getSuccess());
-    operationLogSubmitCo.setFail(operationLogSubmitGrpcCo.getFail());
-    return operationLogSubmitCo;
   }
 }

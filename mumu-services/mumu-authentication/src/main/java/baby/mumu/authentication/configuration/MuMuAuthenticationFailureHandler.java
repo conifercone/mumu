@@ -27,7 +27,6 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,7 +53,7 @@ import org.springframework.stereotype.Component;
 public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      MuMuAuthenticationFailureHandler.class);
+    MuMuAuthenticationFailureHandler.class);
 
   private final OperationLogGrpcService operationLogGrpcService;
 
@@ -62,23 +61,23 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
 
   @Autowired
   public MuMuAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
-      SystemLogGrpcService systemLogGrpcService) {
+    SystemLogGrpcService systemLogGrpcService) {
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
   }
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException exception) throws IOException {
+    AuthenticationException exception) throws IOException {
     if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
       OAuth2Error error = oAuth2AuthenticationException.getError();
       String errorCode = error.getErrorCode();
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-          .setSystemLogSubmitCo(
-              SystemLogSubmitGrpcCo.newBuilder().setContent(errorCode)
-                  .setCategory("exception")
-                  .setFail(ExceptionUtils.getStackTrace(exception)).build())
-          .build());
+        .setSystemLogSubmitCo(
+          SystemLogSubmitGrpcCo.newBuilder().setContent(errorCode)
+            .setCategory("exception")
+            .setFail(ExceptionUtils.getStackTrace(exception)).build())
+        .build());
       LOGGER.error(errorCode);
       response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
       switch (errorCode) {
@@ -98,14 +97,14 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
   /**
    * 统一认证异常信息响应
    *
-   * @param response   响应
+   * @param response     响应
    * @param responseCode 结果编码
-   * @param request    请求信息
+   * @param request      请求信息
    * @throws IOException io异常
    */
   private void exceptionResponse(HttpServletResponse response, @NotNull ResponseCode responseCode,
-      HttpServletRequest request)
-      throws IOException {
+    HttpServletRequest request)
+    throws IOException {
     ResponseWrapper.exceptionResponse(response,
       responseCode);
     operationFailLog(responseCode.getCode(),
@@ -121,11 +120,10 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
    */
   private void operationFailLog(String category, String fail, String ip) {
     operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setOperationLogSubmitCo(
-            OperationLogSubmitGrpcCo.newBuilder().setContent("AuthenticationFailureHandler")
-                .setBizNo(ip)
-                .setCategory(category)
-                .setFail(fail).build())
-        .build());
+      .setContent("AuthenticationFailureHandler")
+      .setBizNo(ip)
+      .setCategory(category)
+      .setFail(fail)
+      .build());
   }
 }

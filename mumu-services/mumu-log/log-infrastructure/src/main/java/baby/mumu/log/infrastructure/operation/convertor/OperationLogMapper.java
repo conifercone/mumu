@@ -15,11 +15,13 @@
  */
 package baby.mumu.log.infrastructure.operation.convertor;
 
+import baby.mumu.basis.mappers.GrpcMapper;
+import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllCmd;
+import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
 import baby.mumu.log.client.dto.co.OperationLogQryCo;
 import baby.mumu.log.client.dto.co.OperationLogSaveCo;
-import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
@@ -37,7 +39,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface OperationLogMapper {
+public interface OperationLogMapper extends GrpcMapper {
 
   OperationLogMapper INSTANCE = Mappers.getMapper(OperationLogMapper.class);
 
@@ -46,7 +48,7 @@ public interface OperationLogMapper {
   OperationLogEsDo toEsDataObject(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLog toEntity(OperationLogSubmitCo operationLogSubmitCo);
+  OperationLog toEntity(OperationLogSubmitCmd operationLogSubmitCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSaveCo operationLogSaveCo);
@@ -65,4 +67,8 @@ public interface OperationLogMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCo toSaveCo(OperationLogKafkaDo operationLogKafkaDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  OperationLogSubmitCmd toOperationLogSubmitCmd(
+    OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd);
 }

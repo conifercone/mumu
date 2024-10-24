@@ -44,7 +44,6 @@ import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCo;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -172,17 +171,15 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRedisRepository.deleteById(account.getId());
       accountRoleRedisRepository.deleteById(account.getId());
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setOperationLogSubmitCo(
-          OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-            .setBizNo(account.getUsername())
-            .setSuccess(String.format("%s注册成功", account.getUsername())).build())
+        .setContent("用户注册")
+        .setBizNo(account.getUsername())
+        .setSuccess(String.format("%s注册成功", account.getUsername()))
         .build());
     }, () -> {
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setOperationLogSubmitCo(
-          OperationLogSubmitGrpcCo.newBuilder().setContent("用户注册")
-            .setBizNo(account.getUsername())
-            .setFail(ResponseCode.ACCOUNT_ALREADY_EXISTS.getMessage()).build())
+        .setContent("用户注册")
+        .setBizNo(account.getUsername())
+        .setFail(ResponseCode.ACCOUNT_ALREADY_EXISTS.getMessage())
         .build());
       throw new AccountAlreadyExistsException(account.getUsername());
     });
@@ -491,11 +488,9 @@ public class AccountGatewayImpl implements AccountGateway {
         SecurityContextHolder.getContext().getAuthentication()));
       SecurityContextUtil.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setOperationLogSubmitCo(
-            OperationLogSubmitGrpcCo.newBuilder().setContent("用户退出登录")
-              .setBizNo(accountName)
-              .setSuccess(String.format("用户%s成功退出登录", accountName))
-              .build())
+          .setContent("用户退出登录")
+          .setBizNo(accountName)
+          .setSuccess(String.format("用户%s成功退出登录", accountName))
           .build()));
     });
   }
@@ -520,11 +515,9 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRoleRedisRepository.deleteById(accountId);
       SecurityContextUtil.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setOperationLogSubmitCo(
-            OperationLogSubmitGrpcCo.newBuilder().setContent("用户下线")
-              .setBizNo(accountName)
-              .setSuccess(String.format("用户%s成功下线", accountName))
-              .build())
+          .setContent("用户下线")
+          .setBizNo(accountName)
+          .setSuccess(String.format("用户%s成功下线", accountName))
           .build()));
     });
   }

@@ -15,10 +15,11 @@
  */
 package baby.mumu.log.infrastructure.operation.convertor;
 
+import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllCmd;
+import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
 import baby.mumu.log.client.dto.co.OperationLogSaveCo;
-import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
@@ -66,13 +67,13 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
-    return Optional.ofNullable(operationLogSubmitCo).map(res -> {
+  public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
+    return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
       OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
       operationLog.setId(
-          Optional.ofNullable(tracer.currentSpan())
-              .map(span -> span.context().traceId()).orElseGet(() ->
-                  String.valueOf(primaryKeyGrpcService.snowflake()))
+        Optional.ofNullable(tracer.currentSpan())
+          .map(span -> span.context().traceId()).orElseGet(() ->
+            String.valueOf(primaryKeyGrpcService.snowflake()))
       );
       operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
       return operationLog;
@@ -96,21 +97,29 @@ public class OperationLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(
-      OperationLogFindAllCmd operationLogFindAllCmd) {
+    OperationLogFindAllCmd operationLogFindAllCmd) {
     return Optional.ofNullable(operationLogFindAllCmd)
-        .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
-          Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
-              .ifPresent(operationLog::setOperatingStartTime);
-          Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
-              .ifPresent(operationLog::setOperatingEndTime);
-          return operationLog;
-        });
+      .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
+        Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
+          .ifPresent(operationLog::setOperatingStartTime);
+        Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
+          .ifPresent(operationLog::setOperatingEndTime);
+        return operationLog;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogSubmitCmd> toOperationLogSubmitCmd(
+    OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+    return Optional.ofNullable(operationLogSubmitGrpcCmd)
+      .map(OperationLogMapper.INSTANCE::toOperationLogSubmitCmd);
   }
 
 }
