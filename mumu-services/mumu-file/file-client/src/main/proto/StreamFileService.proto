@@ -22,10 +22,7 @@ message StreamFileDownloadGrpcResult {
 }
 
 message StreamFileRemoveGrpcCmd {
-  StreamFileRemoveGrpcCo streamFileRemoveGrpcCo = 1;
-}
-
-message StreamFileRemoveGrpcCo {
   google.protobuf.StringValue storageAddress = 1;
   google.protobuf.StringValue name = 2;
 }
+

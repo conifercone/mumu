@@ -17,8 +17,9 @@ package baby.mumu.file.infrastructure.streamfile.convertor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
+import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
 import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
@@ -45,57 +46,65 @@ public class StreamFileConvertor {
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
     return Optional.ofNullable(streamFileSyncUploadCo)
-        .map(uploadCo -> {
-          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
-          try (InputStream streamFileContent = uploadCo.getContent()) {
-            if (streamFileContent == null) {
-              throw new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY);
-            } else {
-              streamFile.setContent(streamFileContent);
-            }
-          } catch (IOException e) {
-            throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+      .map(uploadCo -> {
+        StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
+        try (InputStream streamFileContent = uploadCo.getContent()) {
+          if (streamFileContent == null) {
+            throw new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY);
+          } else {
+            streamFile.setContent(streamFileContent);
           }
-          return streamFile;
-        });
+        } catch (IOException e) {
+          throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+        }
+        return streamFile;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<StreamFile> toEntity(StreamFileRemoveCo streamFileRemoveCo) {
-    return Optional.ofNullable(streamFileRemoveCo).map(StreamFileMapper.INSTANCE::toEntity);
+  public Optional<StreamFile> toEntity(StreamFileRemoveCmd streamFileRemoveCmd) {
+    return Optional.ofNullable(streamFileRemoveCmd).map(StreamFileMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<StreamFile> toEntity(StreamFileDownloadCmd streamFileDownloadCmd) {
     return Optional.ofNullable(streamFileDownloadCmd)
-        .map(fileDownloadCmd -> {
-          StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(fileDownloadCmd);
-          if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
-            throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
-          }
-          if (ObjectUtils.isEmpty(streamFile.getName())) {
-            throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
-          }
-          return streamFile;
-        });
+      .map(fileDownloadCmd -> {
+        StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(fileDownloadCmd);
+        if (ObjectUtils.isEmpty(streamFile.getStorageAddress())) {
+          throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+        }
+        if (ObjectUtils.isEmpty(streamFile.getName())) {
+          throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
+        }
+        return streamFile;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
-        .map(file -> {
-          StreamFileMinioDo transform = StreamFileMapper.INSTANCE.toMinioDo(file);
-          try (InputStream streamFileContent = streamFile.getContent()) {
-            if (streamFileContent != null) {
-              transform.setContent(streamFileContent);
-            }
-          } catch (IOException e) {
-            throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+      .map(file -> {
+        StreamFileMinioDo transform = StreamFileMapper.INSTANCE.toMinioDo(file);
+        try (InputStream streamFileContent = streamFile.getContent()) {
+          if (streamFileContent != null) {
+            transform.setContent(streamFileContent);
           }
-          return transform;
-        });
+        } catch (IOException e) {
+          throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+        }
+        return transform;
+      });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<StreamFileRemoveCmd> toStreamFileRemoveCmd(
+    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd) {
+    return Optional.ofNullable(streamFileRemoveGrpcCmd)
+      .map(StreamFileMapper.INSTANCE::toStreamFileRemoveCmd);
   }
 }

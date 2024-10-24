@@ -25,12 +25,11 @@ import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
-import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCo;
 import baby.mumu.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceImplBase;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
-import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
+import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.Empty;
@@ -58,14 +57,16 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   private final StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe;
   private final StreamFileDownloadCmdExe streamFileDownloadCmdExe;
   private final StreamFileRemoveCmdExe streamFileRemoveCmdExe;
+  private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
   public StreamFileServiceImpl(StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe,
-      StreamFileDownloadCmdExe streamFileDownloadCmdExe,
-      StreamFileRemoveCmdExe streamFileRemoveCmdExe) {
+    StreamFileDownloadCmdExe streamFileDownloadCmdExe,
+    StreamFileRemoveCmdExe streamFileRemoveCmdExe, StreamFileConvertor streamFileConvertor) {
     this.streamFileSyncUploadCmdExe = streamFileSyncUploadCmdExe;
     this.streamFileDownloadCmdExe = streamFileDownloadCmdExe;
     this.streamFileRemoveCmdExe = streamFileRemoveCmdExe;
+    this.streamFileConvertor = streamFileConvertor;
   }
 
   @Override
@@ -86,50 +87,38 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void download(StreamFileDownloadGrpcCmd request,
-      @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
+    @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
     StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
     streamFileDownloadCmd.setName(
-        request.hasName() ? request.getName().getValue() : null);
+      request.hasName() ? request.getName().getValue() : null);
     streamFileDownloadCmd.setRename(
-        request.hasRename() ? request.getRename().getValue()
-            : null);
+      request.hasRename() ? request.getRename().getValue()
+        : null);
     streamFileDownloadCmd.setStorageAddress(
-        request.hasStorageAddress() ? request.getStorageAddress()
-            .getValue() : null);
+      request.hasStorageAddress() ? request.getStorageAddress()
+        .getValue() : null);
     try (InputStream inputStream = streamFileDownloadCmdExe.execute(streamFileDownloadCmd)) {
       ByteString byteString = ByteString.copyFrom(inputStream.readAllBytes());
       BytesValue bytesValue = BytesValue.newBuilder().setValue(byteString).build();
       responseObserver.onNext(
-          StreamFileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
+        StreamFileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
       responseObserver.onCompleted();
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
     }
   }
 
-  @NotNull
-  private static StreamFileRemoveCo getStreamFileRemoveCo(
-      @NotNull StreamFileRemoveGrpcCmd request) {
-    StreamFileRemoveCo streamFileRemoveCo = new StreamFileRemoveCo();
-    StreamFileRemoveGrpcCo streamFileRemoveGrpcCo = request.getStreamFileRemoveGrpcCo();
-    streamFileRemoveCo.setName(
-        streamFileRemoveGrpcCo.hasName() ? streamFileRemoveGrpcCo.getName().getValue() : null);
-    streamFileRemoveCo.setStorageAddress(
-        streamFileRemoveGrpcCo.hasStorageAddress() ? streamFileRemoveGrpcCo.getStorageAddress()
-            .getValue() : null);
-    return streamFileRemoveCo;
-  }
-
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void removeFile(StreamFileRemoveGrpcCmd request,
-      @NotNull StreamObserver<Empty> responseObserver) {
-    StreamFileRemoveCmd streamFileRemoveCmd = new StreamFileRemoveCmd();
-    StreamFileRemoveCo streamFileRemoveCo = getStreamFileRemoveCo(
-        request);
-    streamFileRemoveCmd.setStreamFileRemoveCo(streamFileRemoveCo);
-    streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
-    responseObserver.onNext(Empty.newBuilder().build());
-    responseObserver.onCompleted();
+    @NotNull StreamObserver<Empty> responseObserver) {
+    streamFileConvertor.toStreamFileRemoveCmd(request).ifPresentOrElse((streamFileRemoveCmd) -> {
+      streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
+      responseObserver.onNext(Empty.newBuilder().build());
+      responseObserver.onCompleted();
+    }, () -> {
+      responseObserver.onNext(Empty.newBuilder().build());
+      responseObserver.onCompleted();
+    });
   }
 }

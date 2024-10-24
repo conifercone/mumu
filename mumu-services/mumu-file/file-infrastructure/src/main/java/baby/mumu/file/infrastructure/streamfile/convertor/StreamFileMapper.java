@@ -15,8 +15,10 @@
  */
 package baby.mumu.file.infrastructure.streamfile.convertor;
 
+import baby.mumu.basis.mappers.GrpcMapper;
+import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
+import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
 import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
@@ -34,7 +36,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface StreamFileMapper {
+public interface StreamFileMapper extends GrpcMapper {
 
   StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
 
@@ -42,11 +44,14 @@ public interface StreamFileMapper {
   StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileRemoveCo streamFileRemoveCo);
+  StreamFile toEntity(StreamFileRemoveCmd streamFileRemoveCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileDownloadCmd streamFileDownloadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFileMinioDo toMinioDo(StreamFile streamFile);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  StreamFileRemoveCmd toStreamFileRemoveCmd(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd);
 }

@@ -18,9 +18,9 @@ package baby.mumu.file.application.streamfile.executor;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 流式文件删除指令执行器
@@ -36,14 +36,13 @@ public class StreamFileRemoveCmdExe {
 
   @Autowired
   public StreamFileRemoveCmdExe(StreamFileGateway streamFileGateway,
-      StreamFileConvertor streamFileConvertor) {
+    StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
     this.streamFileConvertor = streamFileConvertor;
   }
 
   public void execute(StreamFileRemoveCmd streamFileRemoveCmd) {
-    Assert.notNull(streamFileRemoveCmd, "StreamFileRemoveCmd cannot be null");
-    streamFileConvertor.toEntity(streamFileRemoveCmd.getStreamFileRemoveCo())
-        .ifPresent(streamFileGateway::removeFile);
+    Optional.ofNullable(streamFileRemoveCmd).flatMap(streamFileConvertor::toEntity)
+      .ifPresent(streamFileGateway::removeFile);
   }
 }
