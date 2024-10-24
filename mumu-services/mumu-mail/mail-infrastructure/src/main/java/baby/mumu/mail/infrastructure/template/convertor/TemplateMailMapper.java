@@ -18,12 +18,11 @@ package baby.mumu.mail.infrastructure.template.convertor;
 import baby.mumu.mail.client.dto.co.TemplateMailSendCo;
 import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo4Desc;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -32,12 +31,11 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TemplateMailMapper {
 
   TemplateMailMapper INSTANCE = Mappers.getMapper(TemplateMailMapper.class);
 
-  @Mapping(target = TemplateMailThymeleafDo4Desc.content, ignore = true)
   @API(status = Status.STABLE, since = "1.0.1")
   TemplateMailThymeleafDo toThymeleafDo(TemplateMail templateMail);
 

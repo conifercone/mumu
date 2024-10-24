@@ -113,8 +113,20 @@ public class ConditionalExecutor {
    * @param <T>          返回值的类型
    * @return 执行结果
    */
-  public <T> T orElse(Supplier<T> action, Supplier<T> defaultValue) {
+  public <T> T orElseGet(Supplier<T> action, Supplier<T> defaultValue) {
     return condition ? action.get() : defaultValue.get();
+  }
+
+  /**
+   * 根据条件判断需要返回的值。
+   *
+   * @param successValue 条件判断成功返回值
+   * @param defaultValue 条件判断失败返回备用值
+   * @param <T>          返回值的类型
+   * @return 执行结果
+   */
+  public <T> T orElse(T successValue, T defaultValue) {
+    return condition ? successValue : defaultValue;
   }
 
   /**

@@ -29,7 +29,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.2
  */
 @Data
-@Document(value = "clientToken")
+@Document(value = "client-token")
 public class ClientTokenRedisDo {
 
   @Id

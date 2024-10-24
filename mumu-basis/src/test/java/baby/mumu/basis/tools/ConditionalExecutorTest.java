@@ -42,7 +42,7 @@ public class ConditionalExecutorTest {
 
   @Test
   public void test3() {
-    System.out.println(ConditionalExecutor.of(true).orElse(() -> {
+    System.out.println(ConditionalExecutor.of(true).orElseGet(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },
@@ -51,7 +51,7 @@ public class ConditionalExecutorTest {
 
   @Test
   public void test4() {
-    System.out.println(ConditionalExecutor.of(false).orElse(() -> {
+    System.out.println(ConditionalExecutor.of(false).orElseGet(() -> {
           System.out.println("代码被执行，生成的消息。");
           return "这是执行的消息。"; // 返回消息
         },

@@ -72,6 +72,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.GrantedAuthority;
@@ -140,8 +141,12 @@ public class AuthorizationConfiguration {
       PasswordEncoder passwordEncoder)
       throws Exception {
     //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
         http.authorizeHttpRequests((authorize) -> {
               AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
                   .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
@@ -205,9 +210,10 @@ public class AuthorizationConfiguration {
                     resourceServerProperties
                 )));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
 
-    return http.build();
+    return http.cors(Customizer.withDefaults()).build();
   }
 
   /**
@@ -424,8 +430,7 @@ public class AuthorizationConfiguration {
                   .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
                   .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
                   .collect(Collectors.toSet());
-              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(
-                      new ArrayList<>(roles))
+              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
                   .stream()
                   .flatMap(
                       opt -> roleAuthorityRepository.findByRoleId(

@@ -51,16 +51,11 @@ public class OperationLogFindAllCmdExe {
   public Page<OperationLogFindAllCo> execute(
       @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
-    OperationLog operationLog = operationLogConvertor.toEntity(
-            operationLogFindAllCmd.getOperationLogFindAllCo())
+    OperationLog operationLog = operationLogConvertor.toEntity(operationLogFindAllCmd)
         .orElseGet(OperationLog::new);
-    Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
-        .ifPresent(operationLog::setOperatingStartTime);
-    Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
-        .ifPresent(operationLog::setOperatingEndTime);
     Page<OperationLog> operationLogs = operationLogGateway.findAll(
         operationLog,
-        operationLogFindAllCmd.getPageNo(),
+        operationLogFindAllCmd.getCurrent(),
         operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
         .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)

@@ -15,9 +15,9 @@
  */
 package baby.mumu.authentication.domain.account;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
@@ -37,8 +37,8 @@ import lombok.experimental.SuperBuilder;
 @RequiredArgsConstructor
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
-@GenerateDescription
-@JsonDeserialize
+@Metamodel
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountAddress extends BasisDomainModel {
 
   @Serial

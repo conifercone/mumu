@@ -16,6 +16,8 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.Valid;
 import lombok.Data;
 
@@ -29,5 +31,6 @@ import lombok.Data;
 public class AccountUpdateByIdCmd {
 
   @Valid
+  @Schema(description = "账户更新内容", requiredMode = RequiredMode.REQUIRED)
   private AccountUpdateByIdCo accountUpdateByIdCo;
 }

@@ -29,7 +29,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.2
  */
 @Data
-@Document(value = "refreshToken")
+@Document(value = "refresh-token")
 public class RefreshTokenRedisDo {
 
   @Id

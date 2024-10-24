@@ -31,8 +31,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 /**
  * 订阅文本消息归档数据对象
@@ -71,9 +69,8 @@ public class SubscriptionTextMessageArchivedDo extends JpaBasisArchivableDataObj
   @Column(name = "message", nullable = false, length = 500)
   private String message;
 
-  @Column(name = "message_status", columnDefinition = "message_status(0, 0)", nullable = false)
-  @JdbcType(PostgreSQLEnumJdbcType.class)
+  @Column(name = "message_status", nullable = false)
   @Enumerated(EnumType.STRING)
-  @ColumnDefault("'UNREAD'::message_status")
+  @ColumnDefault("'UNREAD'")
   private MessageStatusEnum messageStatus;
 }

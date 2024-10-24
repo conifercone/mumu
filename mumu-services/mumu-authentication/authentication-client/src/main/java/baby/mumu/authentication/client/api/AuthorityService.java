@@ -16,17 +16,18 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
-import baby.mumu.authentication.client.dto.AuthorityArchiveByIdCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeleteByIdCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
-import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
-import baby.mumu.authentication.client.dto.AuthorityRecoverFromArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 权限功能API
@@ -46,9 +47,9 @@ public interface AuthorityService {
   /**
    * 根据id删除权限
    *
-   * @param authorityDeleteByIdCmd 根据id删除权限指令
+   * @param id 权限ID
    */
-  void deleteById(AuthorityDeleteByIdCmd authorityDeleteByIdCmd);
+  void deleteById(Long id);
 
   /**
    * 根据id更新权限
@@ -66,6 +67,14 @@ public interface AuthorityService {
   Page<AuthorityFindAllCo> findAll(AuthorityFindAllCmd authorityFindAllCmd);
 
   /**
+   * 分页查询权限（不查询总数）
+   *
+   * @param authorityFindAllSliceCmd 分页查询权限指令
+   * @return 查询结果
+   */
+  Slice<AuthorityFindAllSliceCo> findAllSlice(AuthorityFindAllSliceCmd authorityFindAllSliceCmd);
+
+  /**
    * 分页查询已归档权限
    *
    * @param authorityArchivedFindAllCmd 分页查询已归档权限指令
@@ -75,25 +84,34 @@ public interface AuthorityService {
       AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
 
   /**
-   * 根据id查询权限
+   * 分页查询已归档权限（不查询总数）
    *
-   * @param authorityFindByIdCmd 根据id查询权限指令
+   * @param authorityArchivedFindAllSliceCmd 分页查询权限指令
    * @return 查询结果
    */
-  AuthorityFindByIdCo findById(AuthorityFindByIdCmd authorityFindByIdCmd);
+  Slice<AuthorityArchivedFindAllSliceCo> findArchivedAllSlice(
+      AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
+
+  /**
+   * 根据id查询权限
+   *
+   * @param id 权限ID
+   * @return 查询结果
+   */
+  AuthorityFindByIdCo findById(Long id);
 
   /**
    * 根据id归档权限
    *
-   * @param authorityArchiveByIdCmd 根据id归档权限指令
+   * @param id 权限ID
    */
-  void archiveById(AuthorityArchiveByIdCmd authorityArchiveByIdCmd);
+  void archiveById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param authorityRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   * @param id 权限ID
    */
   void recoverFromArchiveById(
-      AuthorityRecoverFromArchiveByIdCmd authorityRecoverFromArchiveByIdCmd);
+      Long id);
 }

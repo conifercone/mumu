@@ -15,12 +15,10 @@
  */
 package baby.mumu.message.application.subscription.executor;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageReadByIdCmd;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本订阅消息根据ID已读指令执行器
@@ -40,9 +38,7 @@ public class SubscriptionTextMessageReadByIdCmdExe {
   }
 
   public void execute(
-      @NotNull SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
-    Assert.notNull(subscriptionTextMessageReadByIdCmd,
-        "SubscriptionTextMessageReadByIdCmd cannot null");
-    subscriptionTextMessageGateway.readMsgById(subscriptionTextMessageReadByIdCmd.getId());
+      Long id) {
+    Optional.ofNullable(id).ifPresent(subscriptionTextMessageGateway::readMsgById);
   }
 }

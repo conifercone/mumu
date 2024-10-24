@@ -19,6 +19,7 @@ import baby.mumu.basis.client.dto.co.BaseClientObject
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.*
@@ -129,6 +130,22 @@ object CommonUtil {
                 ZoneId.of(timezone)
             )
         }.orElse(localDateTime)
+    }
+
+    /**
+     * 转换为账户时区
+     *
+     * @param offsetDateTime 时间
+     * @return 账户时区时间
+     */
+    @API(status = API.Status.STABLE, since = "2.2.0")
+    @JvmStatic
+    fun convertToAccountZone(
+        offsetDateTime: OffsetDateTime
+    ): OffsetDateTime {
+        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+            offsetDateTime.atZoneSameInstant(ZoneId.of(timezone)).toOffsetDateTime()
+        }.orElse(offsetDateTime)
     }
 
     /**

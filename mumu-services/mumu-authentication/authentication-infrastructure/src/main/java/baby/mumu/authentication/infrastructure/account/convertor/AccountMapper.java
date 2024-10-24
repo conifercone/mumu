@@ -15,28 +15,50 @@
  */
 package baby.mumu.authentication.infrastructure.account.convertor;
 
+import baby.mumu.authentication.client.api.grpc.AccountAddressCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleAuthorityCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.LocalDate;
+import baby.mumu.authentication.client.dto.AccountFindAllCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
+import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountAddressCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleAuthorityCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountSystemSettingsCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
+import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
 import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo.AccountAddressUpdateByIdCo;
 import baby.mumu.authentication.domain.account.Account;
-import baby.mumu.authentication.domain.account.Account4Desc;
 import baby.mumu.authentication.domain.account.AccountAddress;
-import baby.mumu.authentication.domain.account.AccountAddress4Desc;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.GrpcMapper;
+import com.google.protobuf.Int32Value;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -45,62 +67,71 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface AccountMapper {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface AccountMapper extends GrpcMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.addresses, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AccountDo accountDo, @MappingTarget Account account);
+  Account toEntity(AccountDo accountDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Account toEntity(AccountRedisDo accountRedisDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressDo toDataObject(AccountAddress accountAddress);
+  AccountAddressDo toAccountAddressDo(AccountAddress accountAddress);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettingsMongodbDo toAccountSystemSettingMongodbDo(
+    AccountSystemSettings accountSystemSettings);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettings toAccountSystemSettings(
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettings toAccountSystemSettings(
+    AccountAddSystemSettingsCo accountAddSystemSettingsCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  void toAccountSystemSettingMongodbDo(
+    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoSource,
+    @MappingTarget AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoTarget);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  void toAccountSystemSettings(
+    AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo,
+    @MappingTarget AccountSystemSettings accountSystemSettings);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountRedisDo toAccountRedisDo(Account account);
+
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AccountRegisterCo accountRegisterCo, @MappingTarget Account account);
+  Account toEntity(AccountRegisterCo accountRegisterCo);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressRegisterCo accountAddressRegisterCo);
 
-  @Mappings(value = {
-      @Mapping(target = AccountAddress4Desc.userId, ignore = true)
-  })
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressUpdateByIdCo accountAddressUpdateByIdCo);
 
-  @Mappings(value = {
-      @Mapping(target = Account4Desc.authorities, ignore = true),
-      @Mapping(target = Account4Desc.roles, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  AccountCurrentLoginQueryCo toCurrentLoginQueryCo(Account account);
+  AccountCurrentLoginCo toCurrentLoginQueryCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountBasicInfoCo toBasicInfoCo(Account account);
 
   @API(status = Status.STABLE, since = "1.0.4")
   AccountArchivedDo toArchivedDo(AccountDo accountDo);
@@ -108,9 +139,73 @@ public interface AccountMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   AccountDo toDataObject(AccountArchivedDo accountArchivedDo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountFindAllCo toFindAllCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountFindAllSliceCo toFindAllSliceCo(Account account);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Account toEntity(AccountFindAllCmd accountFindAllCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Account toEntity(AccountFindAllSliceCmd accountFindAllSliceCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountCurrentLoginGrpcCo toAccountCurrentLoginGrpcCo(
+    AccountCurrentLoginCo accountCurrentLoginCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountAddressCurrentLoginQueryGrpcCo toAccountAddressCurrentLoginQueryGrpcCo(
+    AccountAddressCurrentLoginQueryCo accountAddressCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountRoleCurrentLoginQueryGrpcCo toAccountRoleCurrentLoginQueryGrpcCo(
+    AccountRoleCurrentLoginQueryCo accountRoleCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountRoleAuthorityCurrentLoginQueryGrpcCo toAccountRoleAuthorityCurrentLoginQueryGrpcCo(
+    AccountRoleAuthorityCurrentLoginQueryCo accountRoleAuthorityCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(
+    AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  default LocalDate map(java.time.LocalDate value) {
+    return Optional.ofNullable(value)
+      .map(valueNotNull -> LocalDate.newBuilder().setYear(Int32Value.of(valueNotNull.getYear()))
+        .setMonth(Int32Value.of(valueNotNull.getMonthValue()))
+        .setDay(Int32Value.of(valueNotNull.getDayOfMonth()))
+        .build()).orElse(LocalDate.newBuilder().build());
+  }
+
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget AccountCurrentLoginQueryCo accountCurrentLoginQueryCo) {
-    CommonUtil.convertToAccountZone(accountCurrentLoginQueryCo);
+    @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
+    CommonUtil.convertToAccountZone(accountCurrentLoginCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
+    CommonUtil.convertToAccountZone(accountBasicInfoCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget AccountFindAllCo accountFindAllCo) {
+    CommonUtil.convertToAccountZone(accountFindAllCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget AccountFindAllSliceCo accountFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(accountFindAllSliceCo);
+  }
+
+  default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
+    return Optional.ofNullable(offsetDateTime)
+      .map(OffsetDateTime::toLocalDateTime).orElse(null);
   }
 }

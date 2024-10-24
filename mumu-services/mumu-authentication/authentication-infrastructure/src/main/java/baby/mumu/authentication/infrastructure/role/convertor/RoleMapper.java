@@ -15,23 +15,33 @@
  */
 package baby.mumu.authentication.infrastructure.role.convertor;
 
+import baby.mumu.authentication.client.api.grpc.RoleFindAllAuthorityGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo4Desc;
+import baby.mumu.authentication.client.dto.co.RoleFindAllCo.RoleFindAllAuthorityCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.domain.role.Role4Desc;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -40,40 +50,49 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface RoleMapper {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface RoleMapper extends GrpcMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleDo roleDo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCo roleAddCo);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  Role toEntity(RoleFindAllCo roleFindAllCo);
+  Role toEntity(RoleFindAllCmd roleFindAllCmd);
 
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  Role toEntity(RoleRedisDo roleRedisDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleRedisDo toRoleRedisDo(Role role);
+
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
 
-  @Mappings(value = {
-      @Mapping(target = RoleFindAllCo4Desc.authorities, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllSliceCo toFindAllSliceCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedFindAllCo toArchivedFindAllCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedFindAllSliceCo toArchivedFindAllSliceCo(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
@@ -81,17 +100,44 @@ public interface RoleMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   RoleArchivedDo toArchivedDo(RoleDo roleDo);
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleArchivedDo toArchivedDo(Role role);
+
   @API(status = Status.STABLE, since = "1.0.4")
   RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  @Mappings(value = {
-      @Mapping(target = Role4Desc.authorities, ignore = true)
-  })
   Role toEntity(RoleArchivedDo roleArchivedDo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllGrpcCo toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  RoleFindAllAuthorityGrpcCo toRoleFindAllAuthorityGrpcCo(
+    RoleFindAllAuthorityCo roleFindAllAuthorityCo);
 
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
     CommonUtil.convertToAccountZone(roleFindAllCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget RoleFindAllSliceCo roleFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(roleFindAllSliceCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
+    CommonUtil.convertToAccountZone(roleArchivedFindAllSliceCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
+    CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
   }
 }

@@ -15,14 +15,9 @@
  */
 package baby.mumu.message.client.api;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
@@ -49,26 +44,26 @@ public interface SubscriptionTextMessageService {
   /**
    * 根据ID已读消息
    *
-   * @param subscriptionTextMessageReadByIdCmd 文本订阅消息根据ID已读指令
+   * @param id 文本订阅消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd);
+  void readMsgById(Long id);
 
   /**
    * 根据ID未读消息
    *
-   * @param subscriptionTextMessageUnreadByIdCmd 文本订阅消息根据ID未读指令
+   * @param id 文本订阅消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void unreadMsgById(SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd);
+  void unreadMsgById(Long id);
 
   /**
    * 根据ID删除消息
    *
-   * @param subscriptionTextMessageDeleteByIdCmd 文本订阅消息根据ID删除指令
+   * @param id 文本订阅消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void deleteMsgById(SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd);
+  void deleteMsgById(Long id);
 
   /**
    * 查询所有当前用户发送消息
@@ -82,19 +77,19 @@ public interface SubscriptionTextMessageService {
   /**
    * 根据ID归档消息
    *
-   * @param subscriptionTextMessageArchiveByIdCmd 文本订阅消息根据ID归档指令
+   * @param id 文本订阅消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void archiveMsgById(SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd);
+  void archiveMsgById(Long id);
 
   /**
    * 根据ID从存档中恢复消息指令
    *
-   * @param subscriptionTextMessageRecoverMsgFromArchiveByIdCmd 文本订阅消息根据ID从存档中恢复消息指令
+   * @param id 文本订阅消息ID
    */
   @API(status = Status.STABLE, since = "1.0.4")
   void recoverMsgFromArchiveById(
-      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
+      Long id);
 
   /**
    * 查询所有和某人的消息记录

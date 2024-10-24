@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.provider;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,19 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class RateLimitingCustomGenerateDefaultProviderImpl implements
     RateLimitingCustomGenerateProvider {
 
-
   @Override
-  public int generateCapacity() {
-    return 5;
-  }
-
-  @Override
-  public long generatePeriod() {
-    return 1;
-  }
-
-  @Override
-  public TimeUnit generateTimeUnit() {
-    return TimeUnit.SECONDS;
+  public @NotNull RateLimitingCustomGenerate generate() {
+    return new RateLimitingCustomGenerate(5, 1, TimeUnit.SECONDS);
   }
 }

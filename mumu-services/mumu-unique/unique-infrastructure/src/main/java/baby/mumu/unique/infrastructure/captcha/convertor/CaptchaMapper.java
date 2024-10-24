@@ -15,18 +15,18 @@
  */
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
+import baby.mumu.basis.mappers.GrpcMapper;
+import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo4Desc;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
-import baby.mumu.unique.domain.captcha.SimpleCaptcha4Desc;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -35,35 +35,25 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface CaptchaMapper {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface CaptchaMapper extends GrpcMapper {
 
   CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaDo toDataObject(SimpleCaptcha simpleCaptcha);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptcha4Desc.source, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptcha toEntity(SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo);
+  SimpleCaptcha toEntity(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptcha4Desc.length, ignore = true),
-      @Mapping(target = SimpleCaptcha4Desc.target, ignore = true),
-      @Mapping(target = SimpleCaptcha4Desc.ttl, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptcha toEntity(SimpleCaptchaVerifyCo simpleCaptchaVerifyCo);
+  SimpleCaptcha toEntity(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);
 
-  @Mappings(value = {
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.creationTime, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.founder, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modificationTime, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.modifier, ignore = true),
-      @Mapping(target = SimpleCaptchaGeneratedCo4Desc.archived, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  SimpleCaptchaVerifyCmd toSimpleCaptchaVerifyCmd(
+    SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd);
+
 }

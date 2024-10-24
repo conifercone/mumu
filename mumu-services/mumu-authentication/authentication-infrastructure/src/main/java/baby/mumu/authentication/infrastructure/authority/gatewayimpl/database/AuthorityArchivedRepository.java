@@ -19,7 +19,12 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -50,4 +55,33 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
    */
   boolean existsByCode(
       @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+
+
+  /**
+   * 切片分页查询已归档的权限（不查询总数）
+   *
+   * @param authorityArchivedDo 查询条件
+   * @param pageable            分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
+          + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
+          + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
+  Slice<AuthorityArchivedDo> findAllSlice(
+      @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
+
+  /**
+   * 分页查询已归档的权限（查询总数）
+   *
+   * @param authorityArchivedDo 查询条件
+   * @param pageable            分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
+          + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
+          + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
+  Page<AuthorityArchivedDo> findAllPage(
+      @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
 }

@@ -18,10 +18,9 @@ package baby.mumu.log.application.operation.executor;
 import baby.mumu.log.client.dto.OperationLogSaveCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 操作日志保存指令执行器
@@ -37,14 +36,13 @@ public class OperationLogSaveCmdExe {
 
   @Autowired
   public OperationLogSaveCmdExe(OperationLogGateway operationLogGateway,
-      OperationLogConvertor operationLogConvertor) {
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogGateway = operationLogGateway;
     this.operationLogConvertor = operationLogConvertor;
   }
 
-  public void execute(@NotNull OperationLogSaveCmd operationLogSaveCmd) {
-    Assert.notNull(operationLogSaveCmd, "OperationLogSaveCmd cannot be null");
-    operationLogConvertor.toEntity(operationLogSaveCmd.getOperationLogSaveCo())
-        .ifPresent(operationLogGateway::save);
+  public void execute(OperationLogSaveCmd operationLogSaveCmd) {
+    Optional.ofNullable(operationLogSaveCmd).flatMap(operationLogConvertor::toEntity)
+      .ifPresent(operationLogGateway::save);
   }
 }

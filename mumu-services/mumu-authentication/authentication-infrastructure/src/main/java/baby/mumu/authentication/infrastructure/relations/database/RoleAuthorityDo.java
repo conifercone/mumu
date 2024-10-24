@@ -17,7 +17,7 @@ package baby.mumu.authentication.infrastructure.relations.database;
 
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisDefaultDataObject;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -42,7 +42,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "role_authorities")
 @DynamicInsert
-@GenerateDescription
+@Metamodel
 public class RoleAuthorityDo extends JpaBasisDefaultDataObject {
 
   @Serial

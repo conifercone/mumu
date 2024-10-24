@@ -7,40 +7,15 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "AuthorityServiceProto";
 
 service AuthorityService {
-  rpc add (AuthorityAddGrpcCmd) returns (google.protobuf.Empty);
-  rpc deleteById (AuthorityDeleteByIdGrpcCmd) returns (google.protobuf.Empty);
-  rpc updateById (AuthorityUpdateGrpcCmd) returns (google.protobuf.Empty);
   rpc findAll (AuthorityFindAllGrpcCmd) returns (PageOfAuthorityFindAllGrpcCo);
 }
 
-message AuthorityAddGrpcCmd {
-  AuthorityAddGrpcCo authorityAddCo = 1;
-}
-
-message AuthorityAddGrpcCo {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-}
-
-message AuthorityDeleteByIdGrpcCmd {
-  google.protobuf.Int64Value id = 1;
-}
-
-message AuthorityUpdateGrpcCmd {
-  AuthorityUpdateGrpcCo authorityUpdateCo = 1;
-}
-
-message AuthorityUpdateGrpcCo {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-}
-
 message AuthorityFindAllGrpcCmd {
-  AuthorityFindAllGrpcCo authorityFindAllCo = 1;
-  google.protobuf.Int32Value page_no = 2;
-  google.protobuf.Int32Value page_size = 3;
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
+  google.protobuf.Int32Value current = 4;
+  google.protobuf.Int32Value page_size = 5;
 }
 
 message AuthorityFindAllGrpcCo {

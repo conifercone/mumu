@@ -15,9 +15,17 @@
  */
 package baby.mumu.authentication.infrastructure.authority.convertor;
 
+import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
@@ -25,8 +33,9 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.Au
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
@@ -55,9 +64,9 @@ public class AuthorityConvertor {
 
   @Autowired
   public AuthorityConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      AuthorityRepository authorityRepository,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
-      AuthorityArchivedRepository authorityArchivedRepository) {
+    AuthorityRepository authorityRepository,
+    ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
+    AuthorityArchivedRepository authorityArchivedRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.authorityRepository = authorityRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
@@ -68,7 +77,7 @@ public class AuthorityConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Authority> toEntity(AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(
-        AuthorityMapper.INSTANCE::toEntity);
+      AuthorityMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -93,28 +102,34 @@ public class AuthorityConvertor {
   public Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
     return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
       if (authorityUpdateClientObject.getId() == null) {
-        throw new MuMuException(ResultCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+        throw new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
       }
       return authorityRepository.findById(
-              authorityUpdateClientObject.getId()).flatMap(this::toEntity)
-          .map(authority -> {
-            String codeBeforeUpdate = authority.getCode();
-            AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
-            String codeAfterUpdate = authority.getCode();
-            if (StringUtils.isNotBlank(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
-                && (authorityRepository.existsByCode(
-                codeAfterUpdate) || authorityArchivedRepository.existsByCode(
-                codeAfterUpdate))) {
-              throw new MuMuException(ResultCode.AUTHORITY_CODE_ALREADY_EXISTS);
-            }
-            return authority;
-          }).orElse(null);
+          authorityUpdateClientObject.getId()).flatMap(this::toEntity)
+        .map(authority -> {
+          String codeBeforeUpdate = authority.getCode();
+          AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
+          String codeAfterUpdate = authority.getCode();
+          if (StringUtils.isNotBlank(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
+            && (authorityRepository.existsByCode(
+            codeAfterUpdate) || authorityArchivedRepository.existsByCode(
+            codeAfterUpdate))) {
+            throw new MuMuException(ResponseCode.AUTHORITY_CODE_ALREADY_EXISTS);
+          }
+          return authority;
+        }).orElse(null);
     });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityFindAllCo authorityFindAllCo) {
-    return Optional.ofNullable(authorityFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
+  public Optional<Authority> toEntity(AuthorityFindAllCmd authorityFindAllCmd) {
+    return Optional.ofNullable(authorityFindAllCmd).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
+    return Optional.ofNullable(authorityFindAllSliceCmd)
+      .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
@@ -122,46 +137,93 @@ public class AuthorityConvertor {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(AuthorityRedisDo authorityRedisDo) {
+    return Optional.ofNullable(authorityRedisDo).map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityRedisDo> toAuthorityRedisDo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toAuthorityRedisDo);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityDo> toDataObject(AuthorityRedisDo authorityRedisDo) {
+    return Optional.ofNullable(authorityRedisDo).map(AuthorityMapper.INSTANCE::toDataObject);
+  }
+
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Authority> toEntity(
-      @Valid AuthorityArchivedFindAllCo authorityArchivedFindAllCo) {
-    return Optional.ofNullable(authorityArchivedFindAllCo).map(AuthorityMapper.INSTANCE::toEntity);
+    @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
+    return Optional.ofNullable(authorityArchivedFindAllCmd)
+      .map(AuthorityMapper.INSTANCE::toEntity);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<Authority> toEntity(
+    @Valid AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
+    return Optional.ofNullable(authorityArchivedFindAllSliceCmd)
+      .map(AuthorityMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindByIdCo> toFindByIdCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindByIdCo)
-        .map(authorityFindByIdCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      authorityFindByIdCo.getName()))
-              .ifPresent(authorityFindByIdCo::setName);
-          return authorityFindByIdCo;
-        });
+      .map(authorityFindByIdCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              authorityFindByIdCo.getName()))
+          .ifPresent(authorityFindByIdCo::setName);
+        return authorityFindByIdCo;
+      });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AuthorityFindAllCo> toFindAllCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllCo)
-        .map(authorityFindAllCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      authorityFindAllCo.getName()))
-              .ifPresent(authorityFindAllCo::setName);
-          return authorityFindAllCo;
-        });
+      .map(authorityFindAllCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              authorityFindAllCo.getName()))
+          .ifPresent(authorityFindAllCo::setName);
+        return authorityFindAllCo;
+      });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityFindAllSliceCo> toFindAllSliceCo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toFindAllSliceCo)
+      .map(authorityFindAllSliceCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              authorityFindAllSliceCo.getName()))
+          .ifPresent(authorityFindAllSliceCo::setName);
+        return authorityFindAllSliceCo;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AuthorityArchivedFindAllCo> toArchivedFindAllCo(Authority authority) {
     return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllCo)
-        .map(authorityArchivedFindAllCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      authorityArchivedFindAllCo.getName()))
-              .ifPresent(authorityArchivedFindAllCo::setName);
-          return authorityArchivedFindAllCo;
-        });
+      .map(authorityArchivedFindAllCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              authorityArchivedFindAllCo.getName()))
+          .ifPresent(authorityArchivedFindAllCo::setName);
+        return authorityArchivedFindAllCo;
+      });
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityArchivedFindAllSliceCo> toArchivedFindAllSliceCo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedFindAllSliceCo)
+      .map(authorityArchivedFindAllSliceCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              authorityArchivedFindAllSliceCo.getName()))
+          .ifPresent(authorityArchivedFindAllSliceCo::setName);
+        return authorityArchivedFindAllSliceCo;
+      });
   }
 
   @Contract("_ -> new")
@@ -171,8 +233,38 @@ public class AuthorityConvertor {
   }
 
   @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityArchivedDo> toArchivedDo(Authority authority) {
+    return Optional.ofNullable(authority).map(AuthorityMapper.INSTANCE::toArchivedDo);
+  }
+
+  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<AuthorityDo> toDataObject(AuthorityArchivedDo authorityArchivedDo) {
     return Optional.ofNullable(authorityArchivedDo).map(AuthorityMapper.INSTANCE::toDataObject);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityFindAllCmd> toAuthorityFindAllCmd(
+    AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd) {
+    return Optional.ofNullable(authorityFindAllGrpcCmd)
+      .map(AuthorityMapper.INSTANCE::toAuthorityFindAllCmd).map(authorityFindAllCmd -> {
+        if (authorityFindAllCmd.getCurrent() == null) {
+          authorityFindAllCmd.setCurrent(1);
+        }
+        if (authorityFindAllCmd.getPageSize() == null) {
+          authorityFindAllCmd.setPageSize(10);
+        }
+        return authorityFindAllCmd;
+      });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<AuthorityFindAllGrpcCo> toAuthorityFindAllGrpcCo(
+    AuthorityFindAllCo authorityFindAllCo) {
+    return Optional.ofNullable(authorityFindAllCo)
+      .map(AuthorityMapper.INSTANCE::toAuthorityFindAllGrpcCo);
   }
 }

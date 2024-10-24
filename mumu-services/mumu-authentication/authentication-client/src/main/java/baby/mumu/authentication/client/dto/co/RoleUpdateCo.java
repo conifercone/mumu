@@ -43,5 +43,5 @@ public class RoleUpdateCo extends BaseClientObject {
   @NotBlankOrNull
   private String code;
 
-  private List<Long> authorities;
+  private List<Long> authorityIds;
 }

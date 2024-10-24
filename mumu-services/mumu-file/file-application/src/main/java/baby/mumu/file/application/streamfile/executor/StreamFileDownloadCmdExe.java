@@ -16,7 +16,7 @@
 package baby.mumu.file.application.streamfile.executor;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
@@ -48,8 +48,8 @@ public class StreamFileDownloadCmdExe {
   public InputStream execute(StreamFileDownloadCmd streamFileDownloadCmd) {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
     Supplier<MuMuException> downloadFailed = () -> new MuMuException(
-        ResultCode.FILE_DOWNLOAD_FAILED);
-    return streamFileConvertor.toEntity(streamFileDownloadCmd.getStreamFileDownloadCo())
+      ResponseCode.FILE_DOWNLOAD_FAILED);
+    return streamFileConvertor.toEntity(streamFileDownloadCmd)
         .map(streamFile -> streamFileGateway.download(streamFile)
             .orElseThrow(downloadFailed)
         ).orElseThrow(downloadFailed);

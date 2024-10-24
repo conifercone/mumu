@@ -19,8 +19,14 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 角色管理
@@ -55,5 +61,37 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param codes code集合
    * @return 角色集合
    */
-  List<RoleDo> findByCodeIn(List<String> codes);
+  List<RoleDo> findByCodeIn(Collection<String> codes);
+
+  /**
+   * 切片分页查询角色（不查询总数）
+   *
+   * @param roleDo         查询条件
+   * @param authoritiesIds 权限ID集合
+   * @param pageable       分页条件
+   * @return 查询结果
+   */
+  @Query("select distinct r from RoleDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
+      + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
+      + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
+      + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+      + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+  Slice<RoleDo> findAllSlice(@Param("roleDo") RoleDo roleDo,
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
+
+  /**
+   * 分页查询角色（查询总数）
+   *
+   * @param roleDo         查询条件
+   * @param authoritiesIds 权限ID集合
+   * @param pageable       分页条件
+   * @return 查询结果
+   */
+  @Query("select distinct r from RoleDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
+      + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
+      + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
+      + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+      + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+  Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 }

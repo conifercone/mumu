@@ -15,7 +15,6 @@
  */
 package baby.mumu.unique.application.country.executor;
 
-import baby.mumu.unique.client.dto.CountryGetStateByIdCmd;
 import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
 import baby.mumu.unique.domain.country.gateway.CountryGateway;
 import baby.mumu.unique.infrastructure.country.convertor.CountryConvertor;
@@ -44,9 +43,9 @@ public class CountryGetStateByIdCmdExe {
   }
 
   public CountryGetStateByIdCo execute(
-      CountryGetStateByIdCmd countryGetStateByIdCmd) {
-    Assert.notNull(countryGetStateByIdCmd, "CountryGetStateByIdCmd cannot be null");
-    return Optional.ofNullable(countryGetStateByIdCmd.getStateId())
+      Long id) {
+    Assert.notNull(id, "id cannot be null");
+    return Optional.of(id)
         .flatMap(countryGateway::getStateById).flatMap(countryConvertor::toCountryGetStateByIdCo)
         .orElse(null);
   }

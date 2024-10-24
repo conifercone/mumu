@@ -24,6 +24,7 @@ import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.annotations.RateLimiters;
 import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider;
+import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider.RateLimitingCustomGenerate;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.rl.RateLimiterStringByteArrayCodec;
@@ -165,9 +166,11 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     if (rateLimiter.customGeneration()) {
       RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(
           rateLimiter.customGenerationProvider());
-      return new BasicInformation(rateLimitingCustomGenerateProvider.generateCapacity(),
-          rateLimitingCustomGenerateProvider.generatePeriod(),
-          rateLimitingCustomGenerateProvider.generateTimeUnit());
+      RateLimitingCustomGenerate generate = rateLimitingCustomGenerateProvider.generate();
+      assert generate != null;
+      return new BasicInformation(generate.capacity(),
+          generate.period(),
+          generate.timeUnit());
     } else {
       return new BasicInformation(rateLimiter.capacity(), rateLimiter.period(),
           rateLimiter.timeUnit());

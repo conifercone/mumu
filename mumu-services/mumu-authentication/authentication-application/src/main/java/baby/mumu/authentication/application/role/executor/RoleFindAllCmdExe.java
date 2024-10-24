@@ -30,7 +30,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色权限指令执行器
+ * 角色查询指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -49,10 +49,10 @@ public class RoleFindAllCmdExe {
   }
 
   public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllCmd.getRoleFindAllCo())
+    Role role = roleConvertor.toEntity(roleFindAllCmd)
         .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
-        roleFindAllCmd.getPageNo(), roleFindAllCmd.getPageSize());
+        roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
     List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
         .map(roleConvertor::toFindAllCo)
         .filter(Optional::isPresent).map(Optional::get).toList();

@@ -16,7 +16,6 @@
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
-import static baby.mumu.basis.constants.PgSqlFunctionNameConstants.ANY_PG;
 
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.MessageStatusEnum;
@@ -31,6 +30,9 @@ import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.Broadcast
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo_;
 import baby.mumu.message.infrastructure.config.MessageProperties;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jobrunr.jobs.annotations.Job;
@@ -67,6 +69,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   private final BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
+  private final BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository;
 
   @Autowired
   public BroadcastTextMessageGatewayImpl(
@@ -74,13 +77,15 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
       MessageProperties messageProperties,
       BroadcastTextMessageRepository broadcastTextMessageRepository,
       BroadcastTextMessageArchivedRepository broadcastTextMessageArchivedRepository,
-      JobScheduler jobScheduler, ExtensionProperties extensionProperties) {
+      JobScheduler jobScheduler, ExtensionProperties extensionProperties,
+      BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository) {
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
     this.messageProperties = messageProperties;
     this.broadcastTextMessageRepository = broadcastTextMessageRepository;
     this.broadcastTextMessageArchivedRepository = broadcastTextMessageArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
+    this.broadcastTextMessageReceiverRepository = broadcastTextMessageReceiverRepository;
   }
 
   @Override
@@ -90,51 +95,43 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             messageProperties.getWebSocket().getAccountBroadcastChannelMap())
         .ifPresent(allOnlineAccountChannels -> broadcastTextMessageConvertor.toDataObject(
                 broadcastTextMessage)
-            .ifPresent(broadcastTextMessageDo -> Optional.ofNullable(
-                    broadcastTextMessageDo.getReceiverIds())
-                .ifPresent(receiverIds -> {
-                  if (CollectionUtils.isNotEmpty(receiverIds)) {
-                    broadcastTextMessageRepository.persist(broadcastTextMessageDo);
-                    receiverIds.forEach(
-                        receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
-                            .ifPresent(accountChannel -> accountChannel.writeAndFlush(
-                                new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
-                  } else {
-                    broadcastTextMessageRepository.persist(broadcastTextMessageDo);
-                  }
-                }))));
+            .ifPresent(broadcastTextMessageDo -> {
+              if (CollectionUtils.isNotEmpty(broadcastTextMessage.getReceiverIds())) {
+                broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+                broadcastTextMessageReceiverRepository.mergeAll(
+                    broadcastTextMessageConvertor.toBroadcastTextMessageSenderReceiverDos(
+                        broadcastTextMessage));
+                broadcastTextMessage.getReceiverIds().forEach(
+                    receiverId -> Optional.ofNullable(allOnlineAccountChannels.get(receiverId))
+                        .ifPresent(accountChannel -> accountChannel.writeAndFlush(
+                            new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
+              } else {
+                broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+              }
+            })));
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
-    Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId().ifPresent(
-        accountId -> {
-          Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
-            List<Predicate> predicateList = new ArrayList<>();
-            predicateList.add(cb.equal(
-                cb.literal(accountId),
-                cb.function(ANY_PG, Long.class,
-                    root.get(BroadcastTextMessageDo_.UNREAD_RECEIVER_IDS))
-            ));
-            predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.id), msgId));
-            predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.messageStatus),
-                MessageStatusEnum.UNREAD));
-            assert query != null;
-            return query.where(predicateList.toArray(new Predicate[0])).getRestriction();
-          };
-          broadcastTextMessageRepository.findOne(broadcastTextMessageDoSpecification)
-              .ifPresent(broadcastTextMessageDo -> {
-                AtomicLong readQuantity = new AtomicLong(broadcastTextMessageDo.getReadQuantity());
-                broadcastTextMessageDo.setReadQuantity(readQuantity.incrementAndGet());
-                Optional.ofNullable(broadcastTextMessageDo.getReadReceiverIds())
-                    .filter(readReceiverIds -> !readReceiverIds.contains(accountId))
-                    .ifPresent(readReceiverIds -> readReceiverIds.add(accountId));
-                Optional.ofNullable(broadcastTextMessageDo.getUnreadReceiverIds())
-                    .filter(unreadReceiverIds -> unreadReceiverIds.contains(accountId))
-                    .ifPresent(unreadReceiverIds -> unreadReceiverIds.remove(accountId));
-                broadcastTextMessageRepository.merge(broadcastTextMessageDo);
-              });
+    Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId()
+        .flatMap(accountId -> broadcastTextMessageReceiverRepository.findById(
+            BroadcastTextMessageReceiverDoId.builder().messageId(msgId).receiverId(accountId)
+                .build())).ifPresent(broadcastTextMessageReceiverDo -> {
+          broadcastTextMessageReceiverDo.setMessageStatus(
+              MessageStatusEnum.READ);
+          broadcastTextMessageReceiverRepository.merge(broadcastTextMessageReceiverDo);
+          List<BroadcastTextMessageReceiverDo> messageSenderReceiverDos = broadcastTextMessageReceiverRepository.findByBroadcastTextMessageId(
+                  msgId).stream().filter(
+                  messageReceiverDo -> MessageStatusEnum.UNREAD.equals(
+                      messageReceiverDo.getMessageStatus()))
+              .collect(Collectors.toList());
+          if (CollectionUtils.isEmpty(messageSenderReceiverDos)) {
+            broadcastTextMessageRepository.findById(msgId).ifPresent(messageSenderReceiverDo -> {
+              messageSenderReceiverDo.setMessageStatus(MessageStatusEnum.READ);
+              broadcastTextMessageRepository.merge(messageSenderReceiverDo);
+            });
+          }
         }));
   }
 
@@ -142,17 +139,18 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
-        .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).ifPresent(accountId ->
-            {
-              broadcastTextMessageRepository.deleteByIdAndSenderId(id, accountId);
-              broadcastTextMessageArchivedRepository.deleteByIdAndSenderId(id, accountId);
-            }
-        );
+        .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).flatMap(accountId ->
+            broadcastTextMessageRepository.findByIdAndSenderId(id, accountId)
+        ).ifPresent(broadcastTextMessageDo -> {
+          broadcastTextMessageRepository.deleteById(id);
+          broadcastTextMessageReceiverRepository.deleteByBroadcastTextMessageId(id);
+          broadcastTextMessageArchivedRepository.deleteById(id);
+        });
   }
 
   @Override
   public Page<BroadcastTextMessage> findAllYouSend(BroadcastTextMessage broadcastTextMessage,
-      int pageNo,
+      int current,
       int pageSize) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
       Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
@@ -173,7 +171,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
             .where(predicateList.toArray(new Predicate[0]))
             .getRestriction();
       };
-      PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+      PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
       Page<BroadcastTextMessageDo> repositoryAll = broadcastTextMessageRepository.findAll(
           broadcastTextMessageDoSpecification,
           pageRequest);
@@ -190,7 +188,8 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   public void archiveMsgById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
-            accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
+            accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
+                accountId)))
         .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchiveDo(
             broadcastTextMessageDo).ifPresent(broadcastTextMessageArchivedDo -> {
           broadcastTextMessageArchivedDo.setArchived(true);
@@ -207,20 +206,24 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @DangerousOperation("根据ID删除ID为%0的广播消息归档数据定时任务")
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(broadcastTextMessageArchivedRepository::deleteById);
+        .ifPresent(messageId -> {
+          broadcastTextMessageArchivedRepository.deleteById(messageId);
+          broadcastTextMessageReceiverRepository.deleteByBroadcastTextMessageId(messageId);
+        });
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
-    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
-            accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId, accountId)))
-        .ifPresent(broadcastTextMessageArchivedDo -> broadcastTextMessageConvertor.toDataObject(
-            broadcastTextMessageArchivedDo).ifPresent(broadcastTextMessageDo -> {
+            accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId,
+                accountId)))
+        .flatMap(
+            broadcastTextMessageConvertor::toDataObject)
+        .ifPresent(broadcastTextMessageDo -> {
           broadcastTextMessageDo.setArchived(false);
-          broadcastTextMessageArchivedRepository.delete(broadcastTextMessageArchivedDo);
+          broadcastTextMessageArchivedRepository.deleteById(broadcastTextMessageDo.getId());
           broadcastTextMessageRepository.persist(broadcastTextMessageDo);
-        }));
+        });
   }
 }

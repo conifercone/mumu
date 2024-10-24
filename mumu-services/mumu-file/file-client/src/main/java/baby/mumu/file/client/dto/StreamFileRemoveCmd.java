@@ -15,7 +15,6 @@
  */
 package baby.mumu.file.client.dto;
 
-import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
 import lombok.Data;
 
 /**
@@ -27,5 +26,13 @@ import lombok.Data;
 @Data
 public class StreamFileRemoveCmd {
 
-  private StreamFileRemoveCo streamFileRemoveCo;
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
+
+  /**
+   * 源文件名(包含文件拓展名) eg: test.log
+   */
+  private String name;
 }

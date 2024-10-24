@@ -23,14 +23,18 @@ import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
+import io.micrometer.tracing.Tracer;
+import java.util.ArrayList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
@@ -55,53 +59,58 @@ public class DefaultSecurityConfig {
   @Bean
   @Order(0)
   public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
-      JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
-      ResourceServerProperties resourceServerProperties)
-      throws Exception {
+    JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
+    ResourceServerProperties resourceServerProperties, ObjectProvider<Tracer> tracers)
+    throws Exception {
     //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
         http.authorizeHttpRequests((authorize) -> {
-              AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
-                  .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
-                      policy.getMatcher());
-          if (StringUtils.isNotBlank(policy.getRole())) {
-            authorizedUrl.hasRole(policy.getRole());
-          } else if (StringUtils.isNotBlank(policy.getAuthority())) {
-            Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+            AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
+              .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
+                policy.getMatcher());
+            if (StringUtils.isNotBlank(policy.getRole())) {
+              authorizedUrl.hasRole(policy.getRole());
+            } else if (StringUtils.isNotBlank(policy.getAuthority())) {
+              Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                 "Permission configuration cannot be empty and cannot start with SCOPE_");
-            authorizedUrl.hasAuthority(
+              authorizedUrl.hasAuthority(
                 CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
-          } else if (policy.isPermitAll()) {
-            authorizedUrl.permitAll();
-          }
+            } else if (policy.isPermitAll()) {
+              authorizedUrl.permitAll();
             }
+          }
         );
       }
     }
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
-        .authorizeHttpRequests((authorize) -> authorize
-            .anyRequest().authenticated()
-        )
-        // Form login handles the redirect to the login page from the
-        // authorization server filter chain
-        .formLogin(withDefaults());
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])))
+      .authorizeHttpRequests((authorize) -> authorize
+        .anyRequest().authenticated()
+      )
+      // Form login handles the redirect to the login page from the
+      // authorization server filter chain
+      .formLogin(withDefaults());
     http.addFilterBefore(
-        new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
-        UsernamePasswordAuthenticationFilter.class);
+      new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
+      UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exceptions) -> exceptions
-        .defaultAuthenticationEntryPointFor(
-            new MuMuAuthenticationEntryPoint(resourceServerProperties
-            ),
-            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-        )
+      .defaultAuthenticationEntryPointFor(
+        new MuMuAuthenticationEntryPoint(resourceServerProperties
+        ),
+        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+      )
     ).oauth2ResourceServer((resourceServer) -> resourceServer
-        .jwt(withDefaults())
-        .authenticationEntryPoint(
-            new MuMuAuthenticationEntryPoint(
-                resourceServerProperties
-            )));
-    return http.build();
+      .jwt(withDefaults())
+      .authenticationEntryPoint(
+        new MuMuAuthenticationEntryPoint(
+          resourceServerProperties
+        )));
+    return http.cors(Customizer.withDefaults()).build();
   }
 }

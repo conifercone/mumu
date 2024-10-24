@@ -15,7 +15,7 @@
  */
 package baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import java.util.Map;
 import lombok.Data;
 
@@ -26,7 +26,7 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
-@GenerateDescription
+@Metamodel
 public class TemplateMailThymeleafDo {
 
   private String content;

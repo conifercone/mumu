@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.provider;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,23 +27,14 @@ import java.util.concurrent.TimeUnit;
 public interface RateLimitingCustomGenerateProvider {
 
   /**
-   * 生成令牌容量
+   * 生成令牌
    *
-   * @return 令牌容量
+   * @return 生成结果
    */
-  int generateCapacity();
+  @NotNull
+  RateLimitingCustomGenerate generate();
 
-  /**
-   * 生成周期
-   *
-   * @return 生成周期
-   */
-  long generatePeriod();
+  record RateLimitingCustomGenerate(int capacity, long period, TimeUnit timeUnit) {
 
-  /**
-   * 生成时间单位
-   *
-   * @return 时间单位
-   */
-  TimeUnit generateTimeUnit();
+  }
 }

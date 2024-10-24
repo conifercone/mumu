@@ -57,4 +57,9 @@ public class AuthenticationClientConfiguration {
       ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new RoleGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
+
+  @Bean
+  public ProjectInformationPrint authenticationClientProjectInformationPrint() {
+    return new ProjectInformationPrint();
+  }
 }

@@ -16,13 +16,17 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchiveByIdCmd;
-import baby.mumu.authentication.client.dto.RoleDeleteByIdCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleRecoverFromArchiveByIdCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
+import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 角色功能API
@@ -42,9 +46,9 @@ public interface RoleService {
   /**
    * 根据id删除角色
    *
-   * @param roleDeleteByIdCmd 根据id删除角色指令
+   * @param id 角色ID
    */
-  void deleteById(RoleDeleteByIdCmd roleDeleteByIdCmd);
+  void deleteById(Long id);
 
   /**
    * 根据id更新角色
@@ -61,19 +65,43 @@ public interface RoleService {
    */
   Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
 
+  /**
+   * 分页查询角色（不查询总数）
+   *
+   * @param roleFindAllSliceCmd 分页查询角色指令
+   * @return 查询结果
+   */
+  Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd);
+
+  /**
+   * 分页查询已归档角色
+   *
+   * @param roleArchivedFindAllCmd 分页查询已归档角色指令
+   * @return 查询结果
+   */
+  Page<RoleArchivedFindAllCo> findArchivedAll(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
+
+  /**
+   * 分页查询已归档角色（不查询总数）
+   *
+   * @param roleArchivedFindAllSliceCmd 分页查询已归档角色指令
+   * @return 查询结果
+   */
+  Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+      RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   /**
    * 根据id归档角色
    *
-   * @param roleArchiveByIdCmd 根据id归档角色指令
+   * @param id 角色ID
    */
-  void archiveById(RoleArchiveByIdCmd roleArchiveByIdCmd);
+  void archiveById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param roleRecoverFromArchiveByIdCmd 通过id从归档中恢复指令
+   * @param id 角色ID
    */
   void recoverFromArchiveById(
-      RoleRecoverFromArchiveByIdCmd roleRecoverFromArchiveByIdCmd);
+      Long id);
 }

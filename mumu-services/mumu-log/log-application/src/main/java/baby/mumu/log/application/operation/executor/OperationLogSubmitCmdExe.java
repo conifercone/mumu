@@ -18,9 +18,9 @@ package baby.mumu.log.application.operation.executor;
 import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 操作日志提交指令执行器
@@ -36,14 +36,13 @@ public class OperationLogSubmitCmdExe {
 
   @Autowired
   public OperationLogSubmitCmdExe(OperationLogGateway operationLogGateway,
-      OperationLogConvertor operationLogConvertor) {
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogGateway = operationLogGateway;
     this.operationLogConvertor = operationLogConvertor;
   }
 
   public void execute(OperationLogSubmitCmd operationLogSubmitCmd) {
-    Assert.notNull(operationLogSubmitCmd, "OperationLogSubmitCmd cannot be null");
-    operationLogConvertor.toEntity(operationLogSubmitCmd.getOperationLogSubmitCo())
-        .ifPresent(operationLogGateway::submit);
+    Optional.ofNullable(operationLogSubmitCmd).flatMap(operationLogConvertor::toEntity)
+      .ifPresent(operationLogGateway::submit);
   }
 }

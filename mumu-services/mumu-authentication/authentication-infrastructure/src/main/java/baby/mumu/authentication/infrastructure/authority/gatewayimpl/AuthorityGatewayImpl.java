@@ -15,8 +15,6 @@
  */
 package baby.mumu.authentication.infrastructure.authority.gatewayimpl;
 
-import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
-
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import baby.mumu.authentication.domain.role.Role;
@@ -25,23 +23,19 @@ import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConv
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo_;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo_;
+import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
@@ -51,7 +45,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,13 +68,14 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   private final AuthorityArchivedRepository authorityArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
+  private final AuthorityRedisRepository authorityRedisRepository;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
       ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
       AuthorityConvertor authorityConvertor,
       AuthorityArchivedRepository authorityArchivedRepository, JobScheduler jobScheduler,
-      ExtensionProperties extensionProperties) {
+      ExtensionProperties extensionProperties, AuthorityRedisRepository authorityRedisRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
@@ -87,6 +83,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     this.authorityArchivedRepository = authorityArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
+    this.authorityRedisRepository = authorityRedisRepository;
   }
 
   @Override
@@ -98,8 +95,11 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
             authorityDo.getCode()) && !authorityArchivedRepository.existsByIdOrCode(
             authorityDo.getId(),
             authorityDo.getCode()))
-        .ifPresentOrElse(authorityRepository::persist, () -> {
-          throw new MuMuException(ResultCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
+        .ifPresentOrElse(authorityDo -> {
+          authorityRepository.persist(authorityDo);
+          authorityRedisRepository.deleteById(authorityDo.getId());
+        }, () -> {
+          throw new MuMuException(ResponseCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
         });
   }
 
@@ -110,12 +110,13 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void deleteById(Long id) {
     List<Role> authorities = roleGateway.findAllContainAuthority(id);
     if (CollectionUtils.isNotEmpty(authorities)) {
-      throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+      throw new MuMuException(ResponseCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           authorities.stream().map(Role::getCode).toList());
     }
     Optional.ofNullable(id).ifPresent(authorityId -> {
       authorityRepository.deleteById(authorityId);
       authorityArchivedRepository.deleteById(authorityId);
+      authorityRedisRepository.deleteById(authorityId);
     });
   }
 
@@ -128,6 +129,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
           try {
             authorityRepository.merge(dataObject);
+            authorityRedisRepository.deleteById(dataObject.getId());
           } finally {
             Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
           }
@@ -136,24 +138,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<Authority> findAll(Authority authority, int pageNo, int pageSize) {
-    Specification<AuthorityDo> authorityDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityDo_.code),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityDo_.name),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
-      Optional.ofNullable(authority.getId())
-          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(AuthorityDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<AuthorityDo> repositoryAll = authorityRepository.findAll(authorityDoSpecification,
+  public Page<Authority> findAll(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<AuthorityDo> repositoryAll = authorityRepository.findAllPage(
+        authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new),
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(authorityConvertor::toEntity)
@@ -163,26 +151,34 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   }
 
   @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<Authority> findAllSlice(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Slice<AuthorityDo> authorityDoSlice = authorityRepository.findAllSlice(
+        authorityConvertor.toDataObject(authority).orElseGet(AuthorityDo::new), pageRequest);
+    return new SliceImpl<>(authorityDoSlice.getContent().stream()
+        .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+        .toList(), pageRequest, authorityDoSlice.hasNext());
+  }
+
+  @Override
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Slice<Authority> findArchivedAllSlice(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Slice<AuthorityArchivedDo> authorityArchivedDos = authorityArchivedRepository.findAllSlice(
+        authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
+        pageRequest);
+    return new SliceImpl<>(authorityArchivedDos.getContent().stream()
+        .flatMap(authorityArchivedDo -> authorityConvertor.toEntity(authorityArchivedDo).stream())
+        .toList(), pageRequest, authorityArchivedDos.hasNext());
+  }
+
+  @Override
   @API(status = Status.STABLE, since = "2.0.0")
-  public Page<Authority> findArchivedAll(Authority authority, int pageNo, int pageSize) {
-    Specification<AuthorityArchivedDo> authorityArchivedDoSpecification = (root, query, cb) -> {
-      List<Predicate> predicateList = new ArrayList<>();
-      Optional.ofNullable(authority.getCode()).filter(StringUtils::isNotBlank)
-          .ifPresent(code -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.code),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, code))));
-      Optional.ofNullable(authority.getName()).filter(StringUtils::isNotBlank)
-          .ifPresent(name -> predicateList.add(cb.like(root.get(AuthorityArchivedDo_.name),
-              String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, name))));
-      Optional.ofNullable(authority.getId())
-          .ifPresent(id -> predicateList.add(cb.equal(root.get(AuthorityArchivedDo_.id), id)));
-      assert query != null;
-      return query.orderBy(cb.desc(root.get(AuthorityArchivedDo_.creationTime)))
-          .where(predicateList.toArray(new Predicate[0]))
-          .getRestriction();
-    };
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-    Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAll(
-        authorityArchivedDoSpecification,
+  public Page<Authority> findArchivedAll(Authority authority, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<AuthorityArchivedDo> repositoryAll = authorityArchivedRepository.findAllPage(
+        authorityConvertor.toArchivedDo(authority).orElseGet(AuthorityArchivedDo::new),
         pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream()
         .map(authorityConvertor::toEntity)
@@ -193,8 +189,14 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   public Optional<Authority> findById(Long id) {
-    return Optional.ofNullable(id).flatMap(authorityRepository::findById).flatMap(
-        authorityConvertor::toEntity);
+    return Optional.ofNullable(id).flatMap(authorityRedisRepository::findById).flatMap(
+        authorityConvertor::toEntity).or(() -> {
+      Optional<Authority> authority = authorityRepository.findById(id)
+          .flatMap(authorityConvertor::toEntity);
+      authority.flatMap(authorityConvertor::toAuthorityRedisDo)
+          .ifPresent(authorityRedisRepository::save);
+      return authority;
+    });
   }
 
   @Override
@@ -203,7 +205,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void archiveById(Long id) {
     List<Role> authorities = roleGateway.findAllContainAuthority(id);
     if (CollectionUtils.isNotEmpty(authorities)) {
-      throw new MuMuException(ResultCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+      throw new MuMuException(ResponseCode.AUTHORITY_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
           authorities.stream().map(Role::getCode).toList());
     }
     //noinspection DuplicatedCode
@@ -212,6 +214,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityArchivedDo.setArchived(true);
           authorityArchivedRepository.persist(authorityArchivedDo);
           authorityRepository.deleteById(authorityArchivedDo.getId());
+          authorityRedisRepository.deleteById(authorityArchivedDo.getId());
           GlobalProperties global = extensionProperties.getGlobal();
           jobScheduler.schedule(Instant.now()
                   .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -224,7 +227,10 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
         .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
-        .ifPresent(authorityArchivedRepository::deleteById);
+        .ifPresent(authorityId -> {
+          authorityArchivedRepository.deleteById(authorityId);
+          authorityRedisRepository.deleteById(authorityId);
+        });
   }
 
   @Override
@@ -235,6 +241,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           authorityDo.setArchived(false);
           authorityArchivedRepository.deleteById(authorityDo.getId());
           authorityRepository.persist(authorityDo);
+          authorityRedisRepository.deleteById(authorityDo.getId());
         });
   }
 }

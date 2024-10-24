@@ -15,11 +15,9 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountArchiveByIdCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -41,9 +39,9 @@ public class AccountArchiveByIdCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public void execute(@NotNull AccountArchiveByIdCmd accountArchiveByIdCmd) {
-    Assert.notNull(accountArchiveByIdCmd, "AccountArchiveByIdCmd cannot be null");
-    Optional.ofNullable(accountArchiveByIdCmd.getId())
+  public void execute(Long accountId) {
+    Assert.notNull(accountId, "accountId cannot be null");
+    Optional.of(accountId)
         .ifPresent(accountGateway::archiveById);
   }
 }

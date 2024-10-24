@@ -49,6 +49,13 @@ public class SecurityContextUtilTest {
   }
 
   @Test
+  public void loginAccountName() {
+    String accountName = SecurityContextUtil.getLoginAccountName().orElse(null);
+    Assertions.assertNotNull(accountName);
+    LOGGER.info("loginAccountName: {}", accountName);
+  }
+
+  @Test
   public void loginAccountLanguage() {
     LanguageEnum languageEnum = SecurityContextUtil.getLoginAccountLanguage().orElse(null);
     Assertions.assertNotNull(languageEnum);

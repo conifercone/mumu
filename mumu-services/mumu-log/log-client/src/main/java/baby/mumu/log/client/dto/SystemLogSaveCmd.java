@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.client.dto;
 
-import baby.mumu.log.client.dto.co.SystemLogSaveCo;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -27,5 +27,33 @@ import lombok.Data;
 @Data
 public class SystemLogSaveCmd {
 
-  private SystemLogSaveCo systemLogSaveCo;
+  /**
+   * 唯一标识
+   */
+  private String id;
+
+  /**
+   * 日志内容
+   */
+  private String content;
+
+  /**
+   * 系统日志的种类
+   */
+  private String category;
+
+  /**
+   * 系统日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 系统日志失败的文本模板
+   */
+  private String fail;
+
+  /**
+   * 系统日志的记录时间
+   */
+  private LocalDateTime recordTime;
 }

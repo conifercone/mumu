@@ -52,11 +52,10 @@ public class AuthorityArchivedFindAllCmdExe {
   public Page<AuthorityArchivedFindAllCo> execute(
       AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
     Assert.notNull(authorityArchivedFindAllCmd, "AuthorityArchivedFindAllCmd cannot be null");
-    Authority authority = authorityConvertor.toEntity(
-            authorityArchivedFindAllCmd.getAuthorityArchivedFindAllCo())
+    Authority authority = authorityConvertor.toEntity(authorityArchivedFindAllCmd)
         .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findArchivedAll(authority,
-        authorityArchivedFindAllCmd.getPageNo(), authorityArchivedFindAllCmd.getPageSize());
+        authorityArchivedFindAllCmd.getCurrent(), authorityArchivedFindAllCmd.getPageSize());
     List<AuthorityArchivedFindAllCo> authorityArchivedFindAllCoList = authorities.getContent()
         .stream()
         .map(authorityConvertor::toArchivedFindAllCo)

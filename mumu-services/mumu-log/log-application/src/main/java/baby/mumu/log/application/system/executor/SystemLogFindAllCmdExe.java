@@ -51,16 +51,11 @@ public class SystemLogFindAllCmdExe {
   public Page<SystemLogFindAllCo> execute(
       @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
-    SystemLog systemLog = systemLogConvertor.toEntity(
-            systemLogFindAllCmd.getSystemLogFindAllCo())
+    SystemLog systemLog = systemLogConvertor.toEntity(systemLogFindAllCmd)
         .orElseGet(SystemLog::new);
-    Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
-        .ifPresent(systemLog::setRecordStartTime);
-    Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
-        .ifPresent(systemLog::setRecordEndTime);
     Page<SystemLog> systemLogs = systemLogGateway.findAll(
         systemLog,
-        systemLogFindAllCmd.getPageNo(),
+        systemLogFindAllCmd.getCurrent(),
         systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
         .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)

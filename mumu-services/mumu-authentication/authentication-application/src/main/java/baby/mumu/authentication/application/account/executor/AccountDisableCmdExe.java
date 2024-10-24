@@ -15,11 +15,9 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountDisableCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -41,11 +39,9 @@ public class AccountDisableCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public void execute(@NotNull AccountDisableCmd accountDisableCmd) {
-    Assert.notNull(accountDisableCmd, "AccountDisableCmd cannot be null");
-    Assert.notNull(accountDisableCmd.getAccountDisableCo(),
-        "AccountDisableCo cannot be null");
-    Optional.ofNullable(accountDisableCmd.getAccountDisableCo().getId())
+  public void execute(Long id) {
+    Assert.notNull(id, "id cannot be null");
+    Optional.of(id)
         .ifPresent(accountGateway::disable);
   }
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.qrcode.convertor;
 
-import baby.mumu.unique.client.dto.co.QRCodeGenerateCo;
+import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import java.util.Optional;
 import org.apiguardian.api.API;
@@ -35,7 +35,7 @@ public class QRCodeConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<QRCode> toEntity(
-      QRCodeGenerateCo qrCodeGenerateCo) {
-    return Optional.ofNullable(qrCodeGenerateCo).map(QRCodeMapper.INSTANCE::toEntity);
+      QRCodeGenerateCmd qrCodeGenerateCmd) {
+    return Optional.ofNullable(qrCodeGenerateCmd).map(QRCodeMapper.INSTANCE::toEntity);
   }
 }

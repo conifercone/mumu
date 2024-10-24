@@ -35,6 +35,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,12 +70,12 @@ public class StreamFileController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public void syncUpload(@RequestParam("streamFileSyncUploadCmd") String streamFileSyncUploadCmd,
-      @RequestParam("file") MultipartFile file) throws IOException {
+    @RequestParam("file") MultipartFile file) throws IOException {
     StreamFileSyncUploadCmd fileUploadCmd = objectMapper.readValue(streamFileSyncUploadCmd,
-        StreamFileSyncUploadCmd.class);
-    fileUploadCmd.getStreamFileSyncUploadCo().setContent(new ByteArrayInputStream(file.getBytes()));
-    fileUploadCmd.getStreamFileSyncUploadCo().setOriginName(file.getOriginalFilename());
-    fileUploadCmd.getStreamFileSyncUploadCo().setSize(file.getSize());
+      StreamFileSyncUploadCmd.class);
+    fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
+    fileUploadCmd.setOriginName(file.getOriginalFilename());
+    fileUploadCmd.setSize(file.getSize());
     streamFileService.syncUploadFile(fileUploadCmd);
   }
 
@@ -83,18 +84,15 @@ public class StreamFileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void download(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd,
-      HttpServletResponse response)
-      throws IOException {
+  public void download(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd,
+    HttpServletResponse response)
+    throws IOException {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
-    Assert.notNull(streamFileDownloadCmd.getStreamFileDownloadCo(),
-        "StreamFileDownloadCo cannot be null");
     response.setHeader("Content-Disposition",
-        "attachment;filename=" + (ObjectUtils.isEmpty(
-            streamFileDownloadCmd.getStreamFileDownloadCo().getRename())
-            ? streamFileDownloadCmd.getStreamFileDownloadCo().getName()
-            : streamFileDownloadCmd.getStreamFileDownloadCo()
-                .getRename()));
+      "attachment;filename=" + (ObjectUtils.isEmpty(
+        streamFileDownloadCmd.getRename())
+        ? streamFileDownloadCmd.getName()
+        : streamFileDownloadCmd.getRename()));
     response.setContentType("application/force-download");
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     IOUtils.copy(streamFileService.download(streamFileDownloadCmd), response.getOutputStream());
@@ -105,10 +103,10 @@ public class StreamFileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public String getStringContent(@RequestBody StreamFileDownloadCmd streamFileDownloadCmd)
-      throws IOException {
+  public String getStringContent(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd)
+    throws IOException {
     return IOUtils.toString(streamFileService.download(streamFileDownloadCmd),
-        StandardCharsets.UTF_8);
+      StandardCharsets.UTF_8);
   }
 
   @Operation(summary = "删除文件")

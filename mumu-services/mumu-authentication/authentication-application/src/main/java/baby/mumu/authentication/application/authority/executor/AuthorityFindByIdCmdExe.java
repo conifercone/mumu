@@ -15,7 +15,6 @@
  */
 package baby.mumu.authentication.application.authority.executor;
 
-import baby.mumu.authentication.client.dto.AuthorityFindByIdCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -44,9 +43,9 @@ public class AuthorityFindByIdCmdExe {
     this.authorityConvertor = authorityConvertor;
   }
 
-  public AuthorityFindByIdCo execute(AuthorityFindByIdCmd authorityFindByIdCmd) {
-    return Optional.ofNullable(authorityFindByIdCmd)
-        .flatMap(findByIdCmd -> authorityGateway.findById(findByIdCmd.getId())).flatMap(
+  public AuthorityFindByIdCo execute(Long id) {
+    return Optional.ofNullable(id)
+        .flatMap(authorityGateway::findById).flatMap(
             authorityConvertor::toFindByIdCo).orElse(null);
 
   }

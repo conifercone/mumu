@@ -16,7 +16,7 @@
 package baby.mumu.unique.application.captcha.executor;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
@@ -46,10 +46,10 @@ public class SimpleCaptchaGeneratedCmdExe {
 
   public SimpleCaptchaGeneratedCo execute(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     Assert.notNull(simpleCaptchaGeneratedCmd, "SimpleCaptchaGeneratedCmd cannot be null");
-    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd.getSimpleCaptchaGeneratedCo())
+    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd)
         .map(captchaGateway::generateSimpleCaptcha)
         .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
         .orElseThrow(() -> new MuMuException(
-            ResultCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
+          ResponseCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
   }
 }

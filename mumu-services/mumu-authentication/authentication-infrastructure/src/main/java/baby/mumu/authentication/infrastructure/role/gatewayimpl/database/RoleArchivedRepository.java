@@ -19,7 +19,13 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobj
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 角色归档管理
@@ -46,4 +52,38 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
    * @return 是否存在
    */
   boolean existsByCode(String code);
+
+  /**
+   * 切片分页查询已归档的角色（不查询总数）
+   *
+   * @param roleArchivedDo 查询条件
+   * @param authoritiesIds 权限ID集合
+   * @param pageable       分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select distinct r from RoleArchivedDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
+          + " where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id}) "
+          + "and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%) "
+          + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+          + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
+  Slice<RoleArchivedDo> findAllSlice(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
+
+  /**
+   * 分页查询已归档的角色（查询总数）
+   *
+   * @param roleArchivedDo 查询条件
+   * @param authoritiesIds 权限ID集合
+   * @param pageable       分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select distinct r from RoleArchivedDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
+          + " where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id}) "
+          + "and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%) "
+          + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+          + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
+  Page<RoleArchivedDo> findAllPage(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
+      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 }

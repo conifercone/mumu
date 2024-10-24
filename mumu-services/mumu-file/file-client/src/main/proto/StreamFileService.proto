@@ -12,10 +12,6 @@ service StreamFileService {
 }
 
 message StreamFileDownloadGrpcCmd {
-  StreamFileDownloadGrpcCo streamFileDownloadGrpcCo = 1;
-}
-
-message StreamFileDownloadGrpcCo {
   google.protobuf.StringValue storageAddress = 1;
   google.protobuf.StringValue name = 2;
   google.protobuf.StringValue rename = 3;
@@ -26,10 +22,7 @@ message StreamFileDownloadGrpcResult {
 }
 
 message StreamFileRemoveGrpcCmd {
-  StreamFileRemoveGrpcCo streamFileRemoveGrpcCo = 1;
-}
-
-message StreamFileRemoveGrpcCo {
   google.protobuf.StringValue storageAddress = 1;
   google.protobuf.StringValue name = 2;
 }
+

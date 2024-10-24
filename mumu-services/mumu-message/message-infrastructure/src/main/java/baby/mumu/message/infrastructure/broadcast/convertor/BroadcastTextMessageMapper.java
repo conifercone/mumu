@@ -16,20 +16,19 @@
 package baby.mumu.message.infrastructure.broadcast.convertor;
 
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageForwardCo;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
-import baby.mumu.message.domain.broadcast.BroadcastTextMessage4Desc;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -38,19 +37,12 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BroadcastTextMessageMapper {
 
   BroadcastTextMessageMapper INSTANCE = Mappers.getMapper(BroadcastTextMessageMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  @Mappings(value = {
-      @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.senderId, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
-  })
   BroadcastTextMessage toEntity(
       BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
 
@@ -60,18 +52,9 @@ public interface BroadcastTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(BroadcastTextMessageDo broadcastTextMessageDo);
 
-  @Mappings(value = {
-      @Mapping(target = BroadcastTextMessage4Desc.id, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.readQuantity, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.readReceiverIds, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.receiverIds, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.senderId, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.unreadQuantity, ignore = true),
-      @Mapping(target = BroadcastTextMessage4Desc.unreadReceiverIds, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(
-      BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo);
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.4")
   BroadcastTextMessageArchivedDo toArchiveDo(BroadcastTextMessageDo broadcastTextMessageDo);

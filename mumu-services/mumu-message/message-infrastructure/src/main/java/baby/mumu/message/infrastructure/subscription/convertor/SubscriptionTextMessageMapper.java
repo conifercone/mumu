@@ -16,21 +16,20 @@
 package baby.mumu.message.infrastructure.subscription.convertor;
 
 import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
-import baby.mumu.message.domain.subscription.SubscriptionTextMessage4Desc;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -39,15 +38,12 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SubscriptionTextMessageMapper {
 
   SubscriptionTextMessageMapper INSTANCE = Mappers.getMapper(SubscriptionTextMessageMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  @Mappings(value = {
-      @Mapping(target = SubscriptionTextMessage4Desc.senderId, ignore = true)
-  })
   SubscriptionTextMessage toEntity(
       SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo);
 
@@ -59,7 +55,7 @@ public interface SubscriptionTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessage toEntity(
-      SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo);
+      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(

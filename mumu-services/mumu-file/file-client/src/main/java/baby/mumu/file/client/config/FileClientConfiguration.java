@@ -37,5 +37,9 @@ public class FileClientConfiguration {
     return new StreamFileGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
+  @Bean
+  public ProjectInformationPrint fileClientProjectInformationPrint() {
+    return new ProjectInformationPrint();
+  }
 
 }

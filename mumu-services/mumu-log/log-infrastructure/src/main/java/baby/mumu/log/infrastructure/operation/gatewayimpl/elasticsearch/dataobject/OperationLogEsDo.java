@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.log.infrastructure.config.LogProperties;
 import java.time.LocalDateTime;
@@ -36,7 +36,7 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
  */
 @Document(indexName = LogProperties.OPERATION_LOG_ES_INDEX_NAME)
 @Data
-@GenerateDescription
+@Metamodel
 public class OperationLogEsDo {
 
   /**

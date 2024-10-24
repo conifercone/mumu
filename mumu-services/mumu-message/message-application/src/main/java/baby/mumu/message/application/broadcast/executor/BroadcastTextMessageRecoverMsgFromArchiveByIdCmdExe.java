@@ -15,12 +15,10 @@
  */
 package baby.mumu.message.application.broadcast.executor;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本广播消息根据ID从存档中恢复消息指令
@@ -40,10 +38,7 @@ public class BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe {
   }
 
   public void execute(
-      @NotNull BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {
-    Assert.notNull(broadcastTextMessageRecoverMsgFromArchiveByIdCmd,
-        "BroadcastTextMessageRecoverMsgFromArchiveByIdCmd cannot null");
-    broadcastTextMessageGateway.recoverMsgFromArchiveById(
-        broadcastTextMessageRecoverMsgFromArchiveByIdCmd.getId());
+      Long id) {
+    Optional.ofNullable(id).ifPresent(broadcastTextMessageGateway::recoverMsgFromArchiveById);
   }
 }

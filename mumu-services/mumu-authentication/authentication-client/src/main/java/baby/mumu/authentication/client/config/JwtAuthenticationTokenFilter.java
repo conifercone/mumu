@@ -17,11 +17,13 @@ package baby.mumu.authentication.client.config;
 
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
 import baby.mumu.basis.enums.TokenClaimsEnum;
+import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.basis.response.ResponseWrapper;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -52,37 +55,44 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-  private static final String TOKEN_HEADER = "Authorization";
   private static final String TOKEN_START = "Bearer ";
   JwtDecoder jwtDecoder;
   TokenGrpcService tokenGrpcService;
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      JwtAuthenticationTokenFilter.class);
+    JwtAuthenticationTokenFilter.class);
+  Tracer tracer;
 
-  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
+  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
+    Tracer tracer) {
     this.jwtDecoder = jwtDecoder;
     this.tokenGrpcService = tokenGrpcService;
+    this.tracer = tracer;
   }
 
   @Override
   protected void doFilterInternal(@NotNull HttpServletRequest request,
-      @NotNull HttpServletResponse response,
-      @NotNull FilterChain filterChain) throws ServletException, IOException {
+    @NotNull HttpServletResponse response,
+    @NotNull FilterChain filterChain) throws ServletException, IOException {
     MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
-        request);
-    String authHeader = mumuHttpServletRequestWrapper.getHeader(TOKEN_HEADER);
+      request);
+    String authHeader = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
     SecurityContextUtil.getLoginAccountLanguage()
-        .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
-            Locale.of(languageEnum.name())));
+      .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+        Locale.of(languageEnum.name())));
     // 存在token
     if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
       // 判断redis中是否存在token
-      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setTokenValidityCo(
-          TokenValidityGrpcCo.newBuilder().setToken(authToken).build()).build()).getValidity()) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
+        .getValidity()) {
+        try {
+          traceId();
+          LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
+          response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+          ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
+        } finally {
+          TraceIdFilter.removeTraceId();
+        }
         return;
       }
       // 判断token是否合法
@@ -90,27 +100,35 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       try {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
-        LOGGER.error(ResultCode.INVALID_TOKEN.getResultMsg());
-        response.setStatus(Integer.parseInt(ResultCode.UNAUTHORIZED.getResultCode()));
-        ResultResponse.exceptionResponse(response, ResultCode.INVALID_TOKEN);
+        traceId();
+        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage());
+        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
+      } finally {
+        TraceIdFilter.removeTraceId();
       }
       List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());
       if (SecurityContextHolder.getContext().getAuthentication() == null) {
         JwtAuthenticationToken authenticationToken =
-            new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
-                    authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
-                .orElse(null));
+          new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
+              authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+            .orElse(null));
         // 重新设置回用户对象
         authenticationToken.setDetails(
-            new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
+          new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         SecurityContextUtil.getLoginAccountLanguage()
-            .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
-                Locale.of(languageEnum.name())));
+          .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+            Locale.of(languageEnum.name())));
       }
     }
     // 放行
     filterChain.doFilter(mumuHttpServletRequestWrapper, response);
+  }
+
+  private void traceId() {
+    Optional.ofNullable(tracer).map(Tracer::currentSpan).map(Span::context)
+      .ifPresent(traceContext -> TraceIdFilter.setTraceId(traceContext.traceId()));
   }
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.barcode.convertor;
 
-import baby.mumu.unique.client.dto.co.BarCodeGenerateCo;
+import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
 import baby.mumu.unique.domain.barcode.BarCode;
 import java.util.Optional;
 import org.apiguardian.api.API;
@@ -35,7 +35,7 @@ public class BarCodeConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<BarCode> toEntity(
-      BarCodeGenerateCo barCodeGenerateCo) {
-    return Optional.ofNullable(barCodeGenerateCo).map(BarCodeMapper.INSTANCE::toEntity);
+      BarCodeGenerateCmd barCodeGenerateCmd) {
+    return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeMapper.INSTANCE::toEntity);
   }
 }

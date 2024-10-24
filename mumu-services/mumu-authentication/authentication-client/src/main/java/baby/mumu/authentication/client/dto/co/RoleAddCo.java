@@ -43,5 +43,5 @@ public class RoleAddCo extends BaseClientObject {
   @NotBlank
   private String code;
 
-  private List<Long> authorities;
+  private List<Long> authorityIds;
 }

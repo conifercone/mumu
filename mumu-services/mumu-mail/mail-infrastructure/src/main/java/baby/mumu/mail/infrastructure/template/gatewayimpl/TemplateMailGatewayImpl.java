@@ -17,10 +17,9 @@ package baby.mumu.mail.infrastructure.template.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.api.StreamFileGrpcService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCo;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
@@ -35,8 +34,6 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.lognet.springboot.grpc.security.AuthHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -55,14 +52,12 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   private final ThymeleafTemplateMailRepository thymeleafTemplateMailRepository;
   private final JavaMailSender javaMailSender;
   private final StreamFileGrpcService streamFileGrpcService;
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      TemplateMailGatewayImpl.class);
   private final TemplateMailConvertor templateMailConvertor;
 
   @Autowired
   public TemplateMailGatewayImpl(ThymeleafTemplateMailRepository thymeleafTemplateMailRepository,
-      JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService,
-      TemplateMailConvertor templateMailConvertor) {
+    JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService,
+    TemplateMailConvertor templateMailConvertor) {
     this.thymeleafTemplateMailRepository = thymeleafTemplateMailRepository;
     this.javaMailSender = javaMailSender;
     this.streamFileGrpcService = streamFileGrpcService;
@@ -73,46 +68,41 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   public void sendMail(TemplateMail templateMail) {
     Optional.ofNullable(templateMail).ifPresent(templateMailDomain -> {
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-          .setStreamFileDownloadGrpcCo(
-              StreamFileDownloadGrpcCo.newBuilder()
-                  .setName(StringValue.of(templateMailDomain.getName()))
-                  .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
-                  .build())
-          .build();
+        .setName(StringValue.of(templateMailDomain.getName()))
+        .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
+        .build();
       byte[] bytes = SecurityContextUtil.getTokenValue().orElseThrow(
-          () -> new MuMuException(ResultCode.UNAUTHORIZED)).getBytes();
+        () -> new MuMuException(ResponseCode.UNAUTHORIZED)).getBytes();
       AuthCallCredentials callCredentials = new AuthCallCredentials(
-          AuthHeader.builder().bearer().tokenSupplier(
-              () -> ByteBuffer.wrap(bytes))
+        AuthHeader.builder().bearer().tokenSupplier(
+          () -> ByteBuffer.wrap(bytes))
       );
       try {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
-            streamFileDownloadGrpcCmd,
-            callCredentials);
+          streamFileDownloadGrpcCmd,
+          callCredentials);
         Optional<TemplateMailThymeleafDo> thymeleafDo = templateMailConvertor.toThymeleafDo(
-            templateMailDomain);
+          templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
           thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()
-              .toStringUtf8());
+            .toStringUtf8());
           thymeleafTemplateMailRepository.processTemplate(thDo).ifPresent(mailContent -> {
             try {
               MimeMessage mimeMessage = javaMailSender.createMimeMessage();
               MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true,
-                  Charsets.UTF_8.name());
+                Charsets.UTF_8.name());
               mimeMessageHelper.setFrom(templateMailDomain.getFrom());
               mimeMessageHelper.setTo(templateMailDomain.getTo());
               mimeMessageHelper.setSubject(templateMailDomain.getSubject());
               mimeMessageHelper.setText(mailContent, true);
               javaMailSender.send(mimeMessage);
             } catch (Exception e) {
-              LOGGER.error(ResultCode.EMAIL_SENDING_EXCEPTION.getResultMsg(), e);
-              throw new MuMuException(ResultCode.EMAIL_SENDING_EXCEPTION);
+              throw new MuMuException(ResponseCode.EMAIL_SENDING_EXCEPTION);
             }
           });
         });
       } catch (Exception e) {
-        LOGGER.error(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE.getResultMsg(), e);
-        throw new MuMuException(ResultCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
+        throw new MuMuException(ResponseCode.FAILED_TO_OBTAIN_EMAIL_TEMPLATE);
       }
     });
   }

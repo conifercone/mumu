@@ -18,10 +18,16 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
+import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
 import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
+import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
+import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
@@ -31,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import java.time.LocalDate;
-import org.intellij.lang.annotations.Language;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +79,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
@@ -86,6 +91,7 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .post("/account/register").with(csrf())
             .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -98,7 +104,7 @@ public class AccountControllerTest {
     accountRegisterCo.setId(31241232131L);
     accountRegisterCo.setUsername("test1");
     accountRegisterCo.setPassword("test1");
-    accountRegisterCo.setRoleCode("admin");
+    accountRegisterCo.setRoleCodes(Collections.singletonList("admin"));
     accountRegisterCo.setAvatarUrl("https://github.com/users/conifercone");
     accountRegisterCo.setPhone("13031723736");
     accountRegisterCo.setSex(SexEnum.MALE);
@@ -112,23 +118,22 @@ public class AccountControllerTest {
     accountAddressRegisterCo.setState("山东省");
     accountAddressRegisterCo.setPostalCode("250101");
     accountAddressRegisterCo.setCountry("中国");
-    accountRegisterCo.setAddress(accountAddressRegisterCo);
+    accountRegisterCo.setAddresses(Collections.singletonList(accountAddressRegisterCo));
     return accountRegisterCo;
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "accountUpdateByIdCo": {
-                 "id": 1,
-                 "username": "test_updated"
-             }
-         }""";
+    AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
+    AccountUpdateByIdCo accountUpdateByIdCo = new AccountUpdateByIdCo();
+    accountUpdateByIdCo.setId(1L);
+    accountUpdateByIdCo.setUsername("test_updated");
+    accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/account/updateById").with(csrf())
-            .content(userInfo.getBytes())
+            .content(objectMapper.writeValueAsBytes(accountUpdateByIdCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -139,16 +144,15 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateRoleById() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "accountUpdateRoleCo": {
-                 "id": 1,
-                 "roleCode": "test"
-             }
-         }""";
+    AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
+    AccountUpdateRoleCo accountUpdateRoleCo = new AccountUpdateRoleCo();
+    accountUpdateRoleCo.setId(1L);
+    accountUpdateRoleCo.setRoleCodes(Collections.singletonList("test"));
+    accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/account/updateRoleById").with(csrf())
-            .content(userInfo.getBytes())
+            .content(objectMapper.writeValueAsBytes(accountUpdateRoleCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -159,15 +163,9 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void disable() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "accountDisableCo": {
-                 "id": 1
-             }
-         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/disable").with(csrf())
-            .content(userInfo.getBytes())
+            .put("/account/disable/1").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -178,15 +176,9 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void resetPassword() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "accountResetPasswordCo": {
-                 "id": 1
-             }
-         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/resetPassword").with(csrf())
-            .content(userInfo.getBytes())
+            .put("/account/resetPassword/1").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -197,13 +189,12 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void verifyPassword() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "password": "admin"
-         }""";
+    AccountPasswordVerifyCmd accountPasswordVerifyCmd = new AccountPasswordVerifyCmd();
+    accountPasswordVerifyCmd.setPassword("admin");
     mockMvc.perform(MockMvcRequestBuilders
             .get("/account/verifyPassword").with(csrf())
-            .content(userInfo.getBytes())
+            .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -214,14 +205,13 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void changePassword() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-             "originalPassword": "admin",
-             "newPassword": "admin1"
-         }""";
+    AccountChangePasswordCmd accountChangePasswordCmd = new AccountChangePasswordCmd();
+    accountChangePasswordCmd.setNewPassword("admin1");
+    accountChangePasswordCmd.setOriginalPassword("admin");
     mockMvc.perform(MockMvcRequestBuilders
             .put("/account/changePassword").with(csrf())
-            .content(userInfo.getBytes())
+            .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -233,9 +223,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrent() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setSimpleCaptchaGeneratedGrpcCo(
-            SimpleCaptchaGeneratedGrpcCo.newBuilder().setLength(Int32Value.of(4))
-                .setTtl(Int64Value.of(500))).build();
+        .setLength(Int32Value.of(4))
+        .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
         simpleCaptchaGeneratedGrpcCmd);
     AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
@@ -244,6 +233,7 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .delete("/account/deleteCurrent").with(csrf())
             .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -254,13 +244,9 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-              "id": 1
-         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/archiveById").with(csrf())
-            .content(userInfo.getBytes())
+            .put("/account/archiveById/1").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -271,13 +257,9 @@ public class AccountControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    @Language("JSON") String userInfo = """
-        {
-              "id": 1
-         }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/recoverFromArchiveById").with(csrf())
-            .content(userInfo.getBytes())
+            .put("/account/recoverFromArchiveById/1").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

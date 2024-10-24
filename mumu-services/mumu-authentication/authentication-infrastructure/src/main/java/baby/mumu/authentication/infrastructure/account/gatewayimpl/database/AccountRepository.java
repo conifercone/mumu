@@ -19,8 +19,14 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 账户基本信息
@@ -74,4 +80,37 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    */
   boolean existsByUsername(String username);
 
+  /**
+   * 切片分页查询账户（不查询总数）
+   *
+   * @param accountDo 查询条件
+   * @param roleIds   角色ID集合
+   * @param pageable  分页条件
+   * @return 查询结果
+   */
+  @Query("select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId"
+      + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
+      + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
+      + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
+      + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
+      + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
+  Slice<AccountDo> findAllSlice(@Param("accountDo") AccountDo accountDo,
+      @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
+
+  /**
+   * 分页查询账户（查询总数）
+   *
+   * @param accountDo 查询条件
+   * @param roleIds   角色ID集合
+   * @param pageable  分页条件
+   * @return 查询结果
+   */
+  @Query("select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId"
+      + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
+      + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
+      + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
+      + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
+      + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
+  Page<AccountDo> findAllPage(@Param("accountDo") AccountDo accountDo,
+      @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 }

@@ -17,7 +17,7 @@ package baby.mumu.unique.infrastructure.captcha.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
 import baby.mumu.unique.domain.pk.gateway.PrimaryKeyGateway;
@@ -56,20 +56,20 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
         .flatMap(simpleCaptchaDomain -> {
           Optional.ofNullable(simpleCaptchaDomain.getId()).ifPresentOrElse(id -> {
             if (simpleCaptchaRepository.existsById(id)) {
-              throw new MuMuException(ResultCode.DATA_ALREADY_EXISTS);
+              throw new MuMuException(ResponseCode.DATA_ALREADY_EXISTS);
             }
           }, () -> simpleCaptchaDomain.setId(primaryKeyGateway.snowflake()));
           Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
               .orElseThrow(() -> new MuMuException(
-                  ResultCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
+                ResponseCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
           if (StringUtils.isBlank(simpleCaptchaDomain.getTarget())) {
             simpleCaptchaDomain.setTarget(
                 CommonUtil.generateRandomString(simpleCaptchaDomain.getLength()));
           }
           Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new MuMuException(
-              ResultCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
+            ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
           return captchaConvertor.toDataObject(simpleCaptchaDomain);
-        }).orElseThrow(() -> new MuMuException(ResultCode.DATA_CONVERSION_FAILED));
+        }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
     simpleCaptchaRepository.save(simpleCaptchaDo);
     return simpleCaptcha;
   }

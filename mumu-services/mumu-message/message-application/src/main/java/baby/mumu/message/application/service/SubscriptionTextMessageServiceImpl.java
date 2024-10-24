@@ -25,14 +25,9 @@ import baby.mumu.message.application.subscription.executor.SubscriptionTextMessa
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageUnreadByIdCmdExe;
 import baby.mumu.message.client.api.SubscriptionTextMessageService;
-import baby.mumu.message.client.dto.SubscriptionTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageUnreadByIdCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
@@ -91,22 +86,22 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void readMsgById(SubscriptionTextMessageReadByIdCmd subscriptionTextMessageReadByIdCmd) {
-    subscriptionTextMessageReadByIdCmdExe.execute(subscriptionTextMessageReadByIdCmd);
+  public void readMsgById(Long id) {
+    subscriptionTextMessageReadByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(
-      SubscriptionTextMessageUnreadByIdCmd subscriptionTextMessageUnreadByIdCmd) {
-    subscriptionTextMessageUnreadByIdCmdExe.execute(subscriptionTextMessageUnreadByIdCmd);
+      Long id) {
+    subscriptionTextMessageUnreadByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(
-      SubscriptionTextMessageDeleteByIdCmd subscriptionTextMessageDeleteByIdCmd) {
-    subscriptionTextMessageDeleteByIdCmdExe.execute(subscriptionTextMessageDeleteByIdCmd);
+      Long id) {
+    subscriptionTextMessageDeleteByIdCmdExe.execute(id);
   }
 
   @Override
@@ -119,16 +114,15 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
-      SubscriptionTextMessageArchiveByIdCmd subscriptionTextMessageArchiveByIdCmd) {
-    subscriptionTextMessageArchiveByIdCmdExe.execute(subscriptionTextMessageArchiveByIdCmd);
+      Long id) {
+    subscriptionTextMessageArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(
-      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmd subscriptionTextMessageRecoverMsgFromArchiveByIdCmd) {
-    subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(
-        subscriptionTextMessageRecoverMsgFromArchiveByIdCmd);
+      Long id) {
+    subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(id);
   }
 
   @Override

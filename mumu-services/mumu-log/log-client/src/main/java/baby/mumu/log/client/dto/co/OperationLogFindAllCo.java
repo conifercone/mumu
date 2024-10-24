@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.client.dto.co;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serial;
@@ -32,11 +32,11 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@GenerateDescription
+@Metamodel
 public class OperationLogFindAllCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 2609860597257012459L;
+  private static final long serialVersionUID = 8882524074818907244L;
 
   /**
    * 唯一标识

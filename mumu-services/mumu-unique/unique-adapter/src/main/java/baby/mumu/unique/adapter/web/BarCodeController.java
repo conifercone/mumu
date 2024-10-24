@@ -17,7 +17,7 @@ package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.constants.CommonConstants;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.BarCodeService;
 import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,10 +56,10 @@ public class BarCodeController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public ResultResponse<String> dataUrlGenerate(
-      @RequestBody @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
-    return ResultResponse.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-        barCodeGenerateCmd.getBarCodeGenerateCo().getImageFormat().getMimeType(),
+  public ResponseWrapper<String> dataUrlGenerate(
+      @ModelAttribute @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
+    return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
+        barCodeGenerateCmd.getImageFormat().getMimeType(),
         Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
   }
 }

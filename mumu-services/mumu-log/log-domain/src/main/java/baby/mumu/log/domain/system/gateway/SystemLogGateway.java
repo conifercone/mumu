@@ -44,9 +44,9 @@ public interface SystemLogGateway {
    * 分页查询系统日志
    *
    * @param systemLog 查询条件
-   * @param pageNo    当前页
+   * @param current    当前页
    * @param pageSize  每页数量
    * @return 查询结果
    */
-  Page<SystemLog> findAll(SystemLog systemLog, int pageNo, int pageSize);
+  Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize);
 }

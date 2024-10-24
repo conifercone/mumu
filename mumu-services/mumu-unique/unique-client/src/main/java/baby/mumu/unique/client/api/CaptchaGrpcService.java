@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.api;
 
-import static baby.mumu.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.unique.client.api.grpc.CaptchaServiceGrpc;

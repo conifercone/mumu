@@ -16,7 +16,6 @@
 package baby.mumu.authentication.client.api;
 
 import baby.mumu.authentication.client.dto.TokenValidityCmd;
-import baby.mumu.authentication.client.dto.co.TokenValidityCo;
 
 /**
  * token service
@@ -32,5 +31,5 @@ public interface TokenService {
    * @param tokenValidityCmd token验证指令
    * @return 验证结果
    */
-  TokenValidityCo validity(TokenValidityCmd tokenValidityCmd);
+  boolean validity(TokenValidityCmd tokenValidityCmd);
 }

@@ -15,7 +15,6 @@
  */
 package baby.mumu.log.client.dto;
 
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Min;
 import java.time.LocalDateTime;
@@ -31,7 +30,38 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 public class SystemLogFindAllCmd {
 
-  private SystemLogFindAllCo systemLogFindAllCo;
+  /**
+   * 唯一标识
+   */
+  private String id;
+
+  /**
+   * 日志内容
+   */
+  private String content;
+
+  /**
+   * 系统日志的种类
+   */
+  private String category;
+
+  /**
+   * 系统日志成功的文本模板
+   */
+  private String success;
+
+  /**
+   * 系统日志失败的文本模板
+   */
+  private String fail;
+
+  /**
+   * 系统日志的记录时间
+   */
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime recordTime;
+
   /**
    * 系统日志的开始记录时间
    */
@@ -45,14 +75,15 @@ public class SystemLogFindAllCmd {
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime recordEndTime;
+
   /**
    * 当前页码
    */
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
+  @Min(value = 1, message = "{current.validation.min.size}")
+  private Integer current = 1;
   /**
    * 每页数量
    */
   @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  private Integer pageSize = 10;
 }

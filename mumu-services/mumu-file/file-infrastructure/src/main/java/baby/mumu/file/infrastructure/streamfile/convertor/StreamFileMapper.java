@@ -15,19 +15,18 @@
  */
 package baby.mumu.file.infrastructure.streamfile.convertor;
 
-import baby.mumu.file.client.dto.co.StreamFileDownloadCo;
-import baby.mumu.file.client.dto.co.StreamFileRemoveCo;
-import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
+import baby.mumu.basis.mappers.GrpcMapper;
+import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
+import baby.mumu.file.client.dto.StreamFileDownloadCmd;
+import baby.mumu.file.client.dto.StreamFileRemoveCmd;
+import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
-import baby.mumu.file.domain.stream.StreamFile4Desc;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo4Desc;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -36,34 +35,23 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface StreamFileMapper {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface StreamFileMapper extends GrpcMapper {
 
   StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
 
-  @Mappings(value = {
-      @Mapping(target = StreamFile4Desc.content, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
+  StreamFile toEntity(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
 
-  @Mappings(value = {
-      @Mapping(target = StreamFile4Desc.content, ignore = true),
-      @Mapping(target = StreamFile4Desc.size, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileRemoveCo streamFileRemoveCo);
+  StreamFile toEntity(StreamFileRemoveCmd streamFileRemoveCmd);
 
-  @Mappings(value = {
-      @Mapping(target = StreamFile4Desc.content, ignore = true),
-      @Mapping(target = StreamFile4Desc.size, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileDownloadCo streamFileDownloadCo);
+  StreamFile toEntity(StreamFileDownloadCmd streamFileDownloadCmd);
 
-  @Mappings(value = {
-      @Mapping(target = StreamFileMinioDo4Desc.content, ignore = true)
-  })
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFileMinioDo toMinioDo(StreamFile streamFile);
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  StreamFileRemoveCmd toStreamFileRemoveCmd(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd);
 }

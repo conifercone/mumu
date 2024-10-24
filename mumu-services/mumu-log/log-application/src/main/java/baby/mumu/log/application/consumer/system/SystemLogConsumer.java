@@ -16,10 +16,8 @@
 package baby.mumu.log.application.consumer.system;
 
 import baby.mumu.log.client.api.SystemLogService;
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
-import baby.mumu.log.client.dto.co.SystemLogSaveCo;
 import baby.mumu.log.infrastructure.config.LogProperties;
-import baby.mumu.log.infrastructure.system.convertor.SystemLogMapper;
+import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,23 +37,22 @@ import org.springframework.stereotype.Component;
 public class SystemLogConsumer {
 
   private final ObjectMapper objectMapper;
-
   private final SystemLogService systemLogService;
+  private final SystemLogConvertor systemLogConvertor;
 
 
   @Autowired
-  public SystemLogConsumer(ObjectMapper objectMapper, SystemLogService systemLogService) {
+  public SystemLogConsumer(ObjectMapper objectMapper, SystemLogService systemLogService,
+    SystemLogConvertor systemLogConvertor) {
     this.objectMapper = objectMapper;
     this.systemLogService = systemLogService;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
   @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
   public void handle(String systemLog) throws JsonProcessingException {
     SystemLogKafkaDo systemLogKafkaDo = objectMapper.readValue(systemLog,
-        SystemLogKafkaDo.class);
-    SystemLogSaveCmd systemLogSaveCmd = new SystemLogSaveCmd();
-    SystemLogSaveCo systemLogSaveCo = SystemLogMapper.INSTANCE.toSaveCo(systemLogKafkaDo);
-    systemLogSaveCmd.setSystemLogSaveCo(systemLogSaveCo);
-    systemLogService.save(systemLogSaveCmd);
+      SystemLogKafkaDo.class);
+    systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaDo).ifPresent(systemLogService::save);
   }
 }

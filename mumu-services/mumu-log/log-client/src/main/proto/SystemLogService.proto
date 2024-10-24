@@ -1,24 +1,17 @@
 syntax = "proto3";
+import "google/protobuf/empty.proto";
 
 option java_multiple_files = true;
 option java_package = "baby.mumu.log.client.api.grpc";
 option java_outer_classname = "SystemLogServiceProto";
 
 service SystemLogService {
-  rpc submit (SystemLogSubmitGrpcCmd) returns (SystemLogServiceEmptyResult);
+  rpc submit (SystemLogSubmitGrpcCmd) returns (google.protobuf.Empty);
 }
 
 message SystemLogSubmitGrpcCmd {
-  SystemLogSubmitGrpcCo systemLogSubmitCo = 1;
-}
-
-message SystemLogSubmitGrpcCo {
   string content = 1;
   string category = 2;
   string success = 3;
   string fail = 4;
-}
-
-message SystemLogServiceEmptyResult {
-
 }

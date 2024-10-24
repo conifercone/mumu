@@ -16,7 +16,7 @@
 package baby.mumu.authentication.configuration;
 
 import baby.mumu.basis.enums.OAuth2Enum;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,18 +55,18 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
     if (StringUtils.isBlank(username) ||
         parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
-      ResultCode accountNameCannotBeEmpty = ResultCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
+      ResponseCode accountNameCannotBeEmpty = ResponseCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
-          new OAuth2Error(accountNameCannotBeEmpty.getResultCode(),
-              accountNameCannotBeEmpty.getResultMsg(), StringUtils.EMPTY));
+        new OAuth2Error(accountNameCannotBeEmpty.getCode(),
+          accountNameCannotBeEmpty.getMessage(), StringUtils.EMPTY));
     }
     String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
     if (StringUtils.isBlank(password) ||
         parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
-      ResultCode accountPasswordCannotBeEmpty = ResultCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
+      ResponseCode accountPasswordCannotBeEmpty = ResponseCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
-          new OAuth2Error(accountPasswordCannotBeEmpty.getResultCode(),
-              accountPasswordCannotBeEmpty.getResultMsg(), StringUtils.EMPTY));
+        new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
+          accountPasswordCannotBeEmpty.getMessage(), StringUtils.EMPTY));
     }
     //收集要传入PasswordGrantAuthenticationToken构造方法的参数，
     //该参数接下来在PasswordGrantAuthenticationProvider中使用

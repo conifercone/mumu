@@ -15,11 +15,11 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,9 +44,9 @@ public class AccountCurrentLoginQueryCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public AccountCurrentLoginQueryCo execute() {
+  public AccountCurrentLoginCo execute() {
     return accountGateway.queryCurrentLoginAccount()
         .flatMap(accountConvertor::toCurrentLoginQueryCo)
-        .orElseThrow(() -> new MuMuException(ResultCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

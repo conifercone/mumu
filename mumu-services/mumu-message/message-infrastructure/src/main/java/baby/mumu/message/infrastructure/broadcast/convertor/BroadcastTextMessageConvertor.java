@@ -15,18 +15,26 @@
  */
 package baby.mumu.message.infrastructure.broadcast.convertor;
 
+import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageForwardCo;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
 import baby.mumu.message.infrastructure.config.MessageProperties;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
@@ -47,14 +55,20 @@ public class BroadcastTextMessageConvertor {
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
   private final SimpleTextTranslation simpleTextTranslation;
+  private final BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository;
+  private final BroadcastTextMessageRepository broadcastTextMessageRepository;
 
   @Autowired
   public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
       MessageProperties messageProperties,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
+      ObjectProvider<SimpleTextTranslation> simpleTextTranslations,
+      BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository,
+      BroadcastTextMessageRepository broadcastTextMessageRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
+    this.broadcastTextMessageReceiverRepository = broadcastTextMessageReceiverRepository;
+    this.broadcastTextMessageRepository = broadcastTextMessageRepository;
   }
 
   @Contract("_ -> new")
@@ -97,18 +111,58 @@ public class BroadcastTextMessageConvertor {
   }
 
   @Contract("_ -> new")
-  @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageDo broadcastTextMessageDo) {
-    return Optional.ofNullable(broadcastTextMessageDo)
-        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+  @API(status = Status.STABLE, since = "2.2.0")
+  public List<BroadcastTextMessageReceiverDo> toBroadcastTextMessageSenderReceiverDos(
+      BroadcastTextMessage broadcastTextMessage) {
+    return Optional.ofNullable(broadcastTextMessage)
+        .flatMap(broadcastTextMessageNotNull ->
+            Optional.ofNullable(broadcastTextMessageNotNull.getReceiverIds())
+                .map(receiverIds -> receiverIds.stream().map(receiverId -> {
+                  BroadcastTextMessageReceiverDo broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDo();
+                  broadcastTextMessageReceiverDo.setMessageStatus(
+                      broadcastTextMessageNotNull.getMessageStatus());
+                  broadcastTextMessageReceiverDo.setId(
+                      BroadcastTextMessageReceiverDoId.builder()
+                          .messageId(broadcastTextMessageNotNull.getId())
+                          .receiverId(receiverId)
+                          .build());
+                  broadcastTextMessageRepository.findById(broadcastTextMessage.getId())
+                      .ifPresent(broadcastTextMessageReceiverDo::setBroadcastTextMessage);
+                  return broadcastTextMessageReceiverDo;
+                }).collect(Collectors.toList()))
+        ).orElse(new ArrayList<>());
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
-    return Optional.ofNullable(broadcastTextMessageFindAllYouSendCo)
+      BroadcastTextMessageDo broadcastTextMessageDo) {
+    return Optional.ofNullable(broadcastTextMessageDo)
+        .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
+          broadcastTextMessage.setReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageId(
+                  broadcastTextMessage.getId()));
+          broadcastTextMessage.setReadQuantity(
+              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
+          broadcastTextMessage.setUnreadQuantity(
+              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
+          broadcastTextMessage.setReadReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
+          broadcastTextMessage.setUnreadReceiverIds(
+              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
+          return broadcastTextMessage;
+        });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "1.0.3")
+  public Optional<BroadcastTextMessage> toEntity(
+      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    return Optional.ofNullable(broadcastTextMessageFindAllYouSendCmd)
         .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
   }
 

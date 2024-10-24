@@ -26,7 +26,7 @@ import baby.mumu.log.infrastructure.config.LogProperties;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
-import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo4Desc;
+import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDoMetamodel;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.SystemLogKafkaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -90,16 +90,16 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   @SuppressWarnings("DuplicatedCode")
-  public Page<SystemLog> findAll(SystemLog systemLog, int pageNo, int pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+  public Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Criteria criteria = new Criteria();
     Optional.ofNullable(systemLog).ifPresent(sysLog -> {
       Optional.ofNullable(sysLog.getId())
           .ifPresent(id -> criteria.and(
-              new Criteria(SystemLogEsDo4Desc.id).matches(id)));
+              new Criteria(SystemLogEsDoMetamodel.id).matches(id)));
       Optional.ofNullable(sysLog.getContent())
           .ifPresent(content -> {
-            String propertyName = SystemLogEsDo4Desc.content;
+            String propertyName = SystemLogEsDoMetamodel.content;
             criteria.and(
                 new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
                     .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -107,11 +107,11 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
           });
       Optional.ofNullable(sysLog.getCategory())
           .ifPresent(category -> criteria.and(
-              new Criteria(SystemLogEsDo4Desc.category).matches(
+              new Criteria(SystemLogEsDoMetamodel.category).matches(
                   category)));
       Optional.ofNullable(sysLog.getSuccess())
           .ifPresent(success -> {
-            String propertyName = SystemLogEsDo4Desc.success;
+            String propertyName = SystemLogEsDoMetamodel.success;
             criteria.and(
                 new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
                     .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -119,7 +119,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
           });
       Optional.ofNullable(sysLog.getFail())
           .ifPresent(fail -> {
-            String propertyName = SystemLogEsDo4Desc.fail;
+            String propertyName = SystemLogEsDoMetamodel.fail;
             criteria.and(
                 new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
                     .matches(fail));
@@ -127,24 +127,24 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
       Optional.ofNullable(sysLog.getRecordTime())
           .ifPresent(
               recordTime -> criteria.and(new Criteria(
-                  SystemLogEsDo4Desc.recordTime).matches(
+                  SystemLogEsDoMetamodel.recordTime).matches(
                   CommonUtil.convertAccountZoneToUTC(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
           .ifPresent(
               recordStartTime -> criteria.and(
                   new Criteria(
-                      SystemLogEsDo4Desc.recordTime).greaterThan(
+                      SystemLogEsDoMetamodel.recordTime).greaterThan(
                       CommonUtil.convertAccountZoneToUTC(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
           .ifPresent(
               recordEndTime -> criteria.and(
                   new Criteria(
-                      SystemLogEsDo4Desc.recordTime).lessThan(
+                      SystemLogEsDoMetamodel.recordTime).lessThan(
                       CommonUtil.convertAccountZoneToUTC(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
         .addSort(
-            Sort.by(SystemLogEsDo4Desc.recordTime).descending());
+            Sort.by(SystemLogEsDoMetamodel.recordTime).descending());
     SearchHits<SystemLogEsDo> searchHits = elasticsearchTemplate.search(query,
         SystemLogEsDo.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()

@@ -109,6 +109,7 @@ subprojects {
                         "-Aos.name=${System.getProperty("os.name")}",
                         "-Ajava.version=${System.getProperty("java.version")}",
                         "-Aproject.version=${project.version}",
+                        "-Aproject.name=${project.name}",
                     )
                 )
             } else {
@@ -167,6 +168,7 @@ subprojects {
         implementation(rootProject.libs.commons.collections4)
         implementation(rootProject.libs.jackson.module.kotlin)
         implementation(rootProject.libs.kotlin.reflect)
+        implementation(rootProject.libs.swagger.annotations.jakarta)
         testImplementation(rootProject.libs.junit.jupiter)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
         implementation(rootProject.libs.mapstruct)

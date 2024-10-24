@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.dto.co;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import java.io.Serial;
 import lombok.Data;
@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@GenerateDescription
+@Metamodel
 public class SimpleCaptchaGeneratedCo extends BaseClientObject {
 
   @Serial

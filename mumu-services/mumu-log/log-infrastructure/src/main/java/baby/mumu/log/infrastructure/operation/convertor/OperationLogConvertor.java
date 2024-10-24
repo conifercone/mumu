@@ -15,9 +15,12 @@
  */
 package baby.mumu.log.infrastructure.operation.convertor;
 
+import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllCmd;
+import baby.mumu.log.client.dto.OperationLogSaveCmd;
+import baby.mumu.log.client.dto.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogSaveCo;
-import baby.mumu.log.client.dto.co.OperationLogSubmitCo;
+import baby.mumu.log.client.dto.co.OperationLogQryCo;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
@@ -65,13 +68,13 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSubmitCo operationLogSubmitCo) {
-    return Optional.ofNullable(operationLogSubmitCo).map(res -> {
+  public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
+    return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
       OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
       operationLog.setId(
-          Optional.ofNullable(tracer.currentSpan())
-              .map(span -> span.context().traceId()).orElseGet(() ->
-                  String.valueOf(primaryKeyGrpcService.snowflake()))
+        Optional.ofNullable(tracer.currentSpan())
+          .map(span -> span.context().traceId()).orElseGet(() ->
+            String.valueOf(primaryKeyGrpcService.snowflake()))
       );
       operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
       return operationLog;
@@ -81,8 +84,8 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSaveCo operationLogSaveCo) {
-    return Optional.ofNullable(operationLogSaveCo).map(OperationLogMapper.INSTANCE::toEntity);
+  public Optional<OperationLog> toEntity(OperationLogSaveCmd operationLogSaveCmd) {
+    return Optional.ofNullable(operationLogSaveCmd).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
 
@@ -95,8 +98,15 @@ public class OperationLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(
-      OperationLogFindAllCo operationLogFindAllCo) {
-    return Optional.ofNullable(operationLogFindAllCo).map(OperationLogMapper.INSTANCE::toEntity);
+    OperationLogFindAllCmd operationLogFindAllCmd) {
+    return Optional.ofNullable(operationLogFindAllCmd)
+      .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
+        Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
+          .ifPresent(operationLog::setOperatingStartTime);
+        Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
+          .ifPresent(operationLog::setOperatingEndTime);
+        return operationLog;
+      });
   }
 
   @Contract("_ -> new")
@@ -105,4 +115,26 @@ public class OperationLogConvertor {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllCo);
   }
 
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogSubmitCmd> toOperationLogSubmitCmd(
+    OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+    return Optional.ofNullable(operationLogSubmitGrpcCmd)
+      .map(OperationLogMapper.INSTANCE::toOperationLogSubmitCmd);
+  }
+
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
+    OperationLogKafkaDo operationLogKafkaDo) {
+    return Optional.ofNullable(operationLogKafkaDo)
+      .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.2.0")
+  public Optional<OperationLogQryCo> toQryCo(
+    OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+      .map(OperationLogMapper.INSTANCE::toQryCo);
+  }
 }

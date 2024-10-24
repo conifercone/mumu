@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.hypersistence.utils.hibernate63)
     implementation(libs.postgresql)
     implementation(libs.redis.om.spring)
+    implementation(libs.spring.boot.starter.data.mongodb)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(libs.hibernate.jpamodelgen)
     implementation(libs.jobrunr.spring.boot3.starter)

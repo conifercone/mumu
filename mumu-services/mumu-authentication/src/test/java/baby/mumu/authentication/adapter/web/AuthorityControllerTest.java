@@ -18,7 +18,12 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import org.intellij.lang.annotations.Language;
+import baby.mumu.authentication.client.dto.AuthorityAddCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
+import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
+import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
+import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,26 +49,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorityControllerTest {
 
   private final MockMvc mockMvc;
+  private final ObjectMapper objectMapper;
 
   @Autowired
-  public AuthorityControllerTest(MockMvc mockMvc) {
+  public AuthorityControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
     this.mockMvc = mockMvc;
+    this.objectMapper = objectMapper;
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
-    @Language("JSON") String authority = """
-        {
-            "authorityAddCo": {
-                "id": 412354321321,
-                "code": "test_code",
-                "name": "test_name"
-            }
-        }""";
+    AuthorityAddCmd authorityAddCmd = new AuthorityAddCmd();
+    AuthorityAddCo authorityAddCo = new AuthorityAddCo();
+    authorityAddCo.setId(412354321321L);
+    authorityAddCo.setCode("test_code");
+    authorityAddCo.setName("test_name");
+    authorityAddCmd.setAuthorityAddCo(authorityAddCo);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/authority/add").with(csrf())
-            .content(authority.getBytes())
+            .content(objectMapper.writeValueAsBytes(authorityAddCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -74,13 +80,9 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws Exception {
-    @Language("JSON") String authority = """
-        {
-           "id": 3
-        }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/authority/deleteById").with(csrf())
-            .content(authority.getBytes())
+            .delete("/authority/deleteById/3").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -91,16 +93,15 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
-    @Language("JSON") String authority = """
-        {
-            "authorityUpdateCo": {
-                "id": 3,
-                "code": "test_updated"
-            }
-        }""";
+    AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
+    AuthorityUpdateCo authorityUpdateCo = new AuthorityUpdateCo();
+    authorityUpdateCo.setId(3L);
+    authorityUpdateCo.setCode("test_updated");
+    authorityUpdateCmd.setAuthorityUpdateCo(authorityUpdateCo);
     mockMvc.perform(MockMvcRequestBuilders
             .put("/authority/updateById").with(csrf())
-            .content(authority.getBytes())
+            .content(objectMapper.writeValueAsBytes(authorityUpdateCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -110,17 +111,14 @@ public class AuthorityControllerTest {
 
   @Test
   public void findAll() throws Exception {
-    @Language("JSON") String authority = """
-        {
-             "authorityFindAllCo": {
-                 "id": 1
-             },
-             "pageNo": 0,
-             "pageSize": 10
-         }""";
+    AuthorityFindAllCmd authorityFindAllCmd = new AuthorityFindAllCmd();
+    authorityFindAllCmd.setCurrent(0);
+    authorityFindAllCmd.setPageSize(10);
+    authorityFindAllCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/authority/findAll")
-            .content(authority.getBytes())
+            .content(objectMapper.writeValueAsBytes(authorityFindAllCmd))
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -131,13 +129,9 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
-    @Language("JSON") String authority = """
-        {
-            "id": 3
-        }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/archiveById").with(csrf())
-            .content(authority.getBytes())
+            .put("/authority/archiveById/3").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )
@@ -148,13 +142,9 @@ public class AuthorityControllerTest {
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
-    @Language("JSON") String authority = """
-        {
-            "id": 3
-        }""";
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/recoverFromArchiveById").with(csrf())
-            .content(authority.getBytes())
+            .put("/authority/recoverFromArchiveById/3").with(csrf())
+            .header("X-Forwarded-For", "123.123.123.123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         )

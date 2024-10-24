@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +39,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "roles_archived")
 @DynamicInsert
-@GenerateDescription
+@Metamodel
 public class RoleArchivedDo extends JpaBasisArchivableDataObject {
 
   @Serial

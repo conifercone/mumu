@@ -15,8 +15,7 @@
  */
 package baby.mumu.message.client.dto;
 
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import jakarta.annotation.Nullable;
+import baby.mumu.basis.enums.MessageStatusEnum;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
@@ -29,10 +28,14 @@ import lombok.Data;
 @Data
 public class SubscriptionTextMessageFindAllYouSendCmd {
 
-  @Nullable
-  private SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo;
-  @Min(value = 0, message = "{page.no.validation.min.size}")
-  private int pageNo = 0;
+
+  private String message;
+
+  private MessageStatusEnum messageStatus;
+
+  @Min(value = 1, message = "{current.validation.min.size}")
+  private Integer current = 1;
+
   @Min(value = 1, message = "{page.size.validation.min.size}")
-  private int pageSize = 10;
+  private Integer pageSize = 10;
 }

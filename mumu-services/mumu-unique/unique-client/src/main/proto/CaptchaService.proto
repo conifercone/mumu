@@ -12,7 +12,9 @@ service CaptchaService {
 }
 
 message SimpleCaptchaGeneratedGrpcCmd {
-  SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = 1;
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.Int64Value ttl = 2;
+  google.protobuf.Int32Value length = 3;
 }
 message SimpleCaptchaGeneratedGrpcCo {
   google.protobuf.Int64Value id = 1;
@@ -21,12 +23,10 @@ message SimpleCaptchaGeneratedGrpcCo {
   google.protobuf.Int32Value length = 4;
 }
 message SimpleCaptchaVerifyGrpcCmd {
-  SimpleCaptchaVerifyGrpcCo simpleCaptchaVerifyGrpcCo = 1;
-}
-message SimpleCaptchaVerifyGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue source = 2;
 }
+
 message SimpleCaptchaVerifyGrpcResult {
   bool result = 1;
 }

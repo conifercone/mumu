@@ -24,11 +24,6 @@ import baby.mumu.unique.application.country.executor.CountryGetStateCitiesByIdCm
 import baby.mumu.unique.application.country.executor.CountryGetStatesByCountryIdCmdExe;
 import baby.mumu.unique.application.country.executor.CountryStateCityGetAllExe;
 import baby.mumu.unique.client.api.CountryService;
-import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdCmd;
-import baby.mumu.unique.client.dto.CountryGetCityByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdCmd;
-import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdCmd;
 import baby.mumu.unique.client.dto.co.CountryGetAllCo;
 import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
 import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
@@ -91,29 +86,29 @@ public class CountryServiceImpl implements CountryService {
 
   @Override
   public List<CountryGetStatesByCountryIdCo> getStatesByCountryId(
-      CountryGetStatesByCountryIdCmd countryGetStatesByCountryIdCmd) {
-    return countryGetStatesByCountryIdCmdExe.execute(countryGetStatesByCountryIdCmd);
+      Long id) {
+    return countryGetStatesByCountryIdCmdExe.execute(id);
   }
 
   @Override
   public List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
-      CountryGetCitiesByStateIdCmd countryGetCitiesByStateIdCmd) {
-    return countryGetCitiesByStateIdCmdExe.execute(countryGetCitiesByStateIdCmd);
+      Long id) {
+    return countryGetCitiesByStateIdCmdExe.execute(id);
   }
 
   @Override
-  public CountryGetStateByIdCo getStateById(CountryGetStateByIdCmd countryGetStateByIdCmd) {
-    return countryGetStateByIdCmdExe.execute(countryGetStateByIdCmd);
+  public CountryGetStateByIdCo getStateById(Long id) {
+    return countryGetStateByIdCmdExe.execute(id);
   }
 
   @Override
   public CountryGetStateCitiesByIdCo getStateCitiesById(
-      CountryGetStateCitiesByIdCmd countryGetStateCitiesByIdCmd) {
-    return countryGetStateCitiesByIdCmdExe.execute(countryGetStateCitiesByIdCmd);
+      Long id) {
+    return countryGetStateCitiesByIdCmdExe.execute(id);
   }
 
   @Override
-  public CountryGetCityByIdCo getCityById(CountryGetCityByIdCmd countryGetCityByIdCmd) {
-    return countryGetCityByIdCmdExe.execute(countryGetCityByIdCmd);
+  public CountryGetCityByIdCo getCityById(Long id) {
+    return countryGetCityByIdCmdExe.execute(id);
   }
 }

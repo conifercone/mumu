@@ -17,7 +17,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge)](https://www.codefactor.io/repository/github/conifercone/mumu)
+[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## Content list
@@ -30,6 +30,20 @@
 - [Contributors](#contributors)
 
 ## Projects
+
+### 🎉 The Delightfully Clean & Ready-to-Go Management System! 🎉
+
+Tired of messy code and setups that make your head spin?
+Meet our **Unbox & Play Management System**! 🎁 Just pop it open, and voilà! You're ready to manage
+like a superstar with code so clean, it sparkles! ✨
+
+🌟 **Why You'll Love It:**
+
+- **Instant Setup**: No magic spells needed—just plug and play!
+- **Spotless Code**: So tidy, you’ll want to give it a gold star!
+- **User-Friendly**: Even your pet goldfish could figure it out!
+
+Join the fun of effortless management and wave goodbye to chaos! Let’s make managing a joyride! 🚀🎈
 
 ## Module Introduction
 
@@ -98,6 +112,7 @@ mumu
 | consul        | 1.15.4                       |
 | minio         | RELEASE.2024-06-13T22-53-53Z |
 | zipkin        | 3.19.0                       |
+| mongodb       | 8.0.1                        |
 
 ## Dependency Statement
 

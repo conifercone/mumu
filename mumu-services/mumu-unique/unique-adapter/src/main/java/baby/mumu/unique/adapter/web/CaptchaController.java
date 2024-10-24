@@ -16,7 +16,7 @@
 package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.response.ResultResponse;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.CaptchaService;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
@@ -27,6 +27,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +58,7 @@ public class CaptchaController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public SimpleCaptchaGeneratedCo simple(
-      @RequestBody SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+      @ModelAttribute SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
   }
 
@@ -66,8 +67,8 @@ public class CaptchaController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public ResultResponse<Boolean> verifySimple(
+  public ResponseWrapper<Boolean> verifySimple(
       @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
-    return ResultResponse.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
+    return ResponseWrapper.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
   }
 }

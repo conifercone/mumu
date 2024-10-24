@@ -54,10 +54,9 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
     Assert.notNull(broadcastTextMessageFindAllYouSendCmd,
         "BroadcastTextMessageFindAllYouSendCmd cannot null");
     Page<BroadcastTextMessage> allYouSend = broadcastTextMessageGateway.findAllYouSend(
-        broadcastTextMessageConvertor.toEntity(
-                broadcastTextMessageFindAllYouSendCmd.getBroadcastTextMessageFindAllYouSendCo())
+        broadcastTextMessageConvertor.toEntity(broadcastTextMessageFindAllYouSendCmd)
             .orElse(null),
-        broadcastTextMessageFindAllYouSendCmd.getPageNo(),
+        broadcastTextMessageFindAllYouSendCmd.getCurrent(),
         broadcastTextMessageFindAllYouSendCmd.getPageSize());
     List<BroadcastTextMessageFindAllYouSendCo> broadcastTextMessageFindAllYouSendCos = allYouSend.getContent()
         .stream()

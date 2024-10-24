@@ -15,15 +15,12 @@
  */
 package baby.mumu.authentication.client.api;
 
-import static baby.mumu.basis.response.ResultCode.GRPC_SERVICE_NOT_FOUND;
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.authentication.client.api.grpc.AccountDisableGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountRegisterGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateByIdGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.AccountUpdateRoleGrpcCmd;
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
@@ -49,8 +46,8 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   private ManagedChannel channel;
 
   public AccountGrpcService(
-      DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
@@ -59,162 +56,44 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
     Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Empty register(AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  @API(status = Status.STABLE, since = "2.2.0")
+  public AccountCurrentLoginGrpcCo queryCurrentLoginAccount(
+    AuthCallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return registerFromGrpc(accountRegisterGrpcCmd);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return queryCurrentLoginAccountFromGrpc(authCallCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<Empty> syncRegister(
-      AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  @API(status = Status.STABLE, since = "2.2.0")
+  public ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccount(
+    AuthCallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return syncRegisterFromGrpc(accountRegisterGrpcCmd);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return syncQueryCurrentLoginAccountFromGrpc(authCallCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Empty updateById(AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd,
-      AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return updateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<Empty> syncUpdateById(
-      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return syncUpdateByIdFromGrpc(accountUpdateByIdGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Empty updateRoleById(AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd,
-      AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return updateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<Empty> syncUpdateRoleById(
-      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return syncUpdateRoleByIdFromGrpc(accountUpdateRoleGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Empty disable(AccountDisableGrpcCmd accountDisableGrpcCmd,
-      AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return disableFromGrpc(accountDisableGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<Empty> syncDisable(
-      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials) {
-    return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return syncDisableFromGrpc(accountDisableGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
-  }
-
-  private Empty registerFromGrpc(
-      AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  private AccountCurrentLoginGrpcCo queryCurrentLoginAccountFromGrpc(
+    AuthCallCredentials authCallCredentials) {
     AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
-        channel);
-    return accountServiceBlockingStub.register(accountRegisterGrpcCmd);
+      channel);
+    return accountServiceBlockingStub.withCallCredentials(authCallCredentials)
+      .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 
-  private @NotNull ListenableFuture<Empty> syncRegisterFromGrpc(
-      AccountRegisterGrpcCmd accountRegisterGrpcCmd) {
+  private @NotNull ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccountFromGrpc(
+    AuthCallCredentials authCallCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
-        channel);
-    return accountServiceFutureStub.register(accountRegisterGrpcCmd);
-  }
-
-
-  private Empty updateByIdFromGrpc(
-      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
-        channel);
-    return accountServiceBlockingStub.withCallCredentials(callCredentials)
-        .updateById(accountUpdateByIdGrpcCmd);
-  }
-
-  private @NotNull ListenableFuture<Empty> syncUpdateByIdFromGrpc(
-      AccountUpdateByIdGrpcCmd accountUpdateByIdGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
-        channel);
-    return accountServiceFutureStub.withCallCredentials(callCredentials)
-        .updateById(accountUpdateByIdGrpcCmd);
-  }
-
-  private Empty updateRoleByIdFromGrpc(
-      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
-        channel);
-    return accountServiceBlockingStub.withCallCredentials(callCredentials)
-        .updateRoleById(accountUpdateRoleGrpcCmd);
-  }
-
-  private @NotNull ListenableFuture<Empty> syncUpdateRoleByIdFromGrpc(
-      AccountUpdateRoleGrpcCmd accountUpdateRoleGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
-        channel);
-    return accountServiceFutureStub.withCallCredentials(callCredentials)
-        .updateRoleById(accountUpdateRoleGrpcCmd);
-  }
-
-  private Empty disableFromGrpc(
-      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
-        channel);
-    return accountServiceBlockingStub.withCallCredentials(callCredentials)
-        .disable(accountDisableGrpcCmd);
-  }
-
-  private @NotNull ListenableFuture<Empty> syncDisableFromGrpc(
-      AccountDisableGrpcCmd accountDisableGrpcCmd, AuthCallCredentials callCredentials) {
-    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
-        channel);
-    return accountServiceFutureStub.withCallCredentials(callCredentials)
-        .disable(accountDisableGrpcCmd);
+      channel);
+    return accountServiceFutureStub.withCallCredentials(authCallCredentials)
+      .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 
 }

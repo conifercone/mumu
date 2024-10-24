@@ -21,7 +21,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -60,4 +65,31 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    */
   boolean existsByCode(
       @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+
+
+  /**
+   * 切片分页查询权限（不查询总数）
+   *
+   * @param authorityDo 查询条件
+   * @param pageable    分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
+          + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
+          + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
+  Slice<AuthorityDo> findAllSlice(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
+
+  /**
+   * 分页查询权限（查询总数）
+   *
+   * @param authorityDo 查询条件
+   * @param pageable    分页条件
+   * @return 查询结果
+   */
+  @Query(
+      "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
+          + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
+          + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
+  Page<AuthorityDo> findAllPage(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
 }

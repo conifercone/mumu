@@ -17,12 +17,8 @@ package baby.mumu.message.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.message.client.api.BroadcastTextMessageService;
-import baby.mumu.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,23 +68,21 @@ public class BroadcastTextMessageController {
   }
 
   @Operation(summary = "根据ID已读文本广播消息")
-  @PutMapping("/readMsgById")
+  @PutMapping("/readMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void readMsgById(
-      @RequestBody BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd) {
-    broadcastTextMessageService.readMsgById(broadcastTextMessageReadByIdCmd);
+  public void readMsgById(@PathVariable(value = "id") Long id) {
+    broadcastTextMessageService.readMsgById(id);
   }
 
   @Operation(summary = "根据ID删除文本广播消息")
-  @DeleteMapping("/deleteMsgById")
+  @DeleteMapping("/deleteMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void deleteMsgById(
-      @RequestBody BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd) {
-    broadcastTextMessageService.deleteMsgById(broadcastTextMessageDeleteByIdCmd);
+  public void deleteMsgById(@PathVariable(value = "id") Long id) {
+    broadcastTextMessageService.deleteMsgById(id);
   }
 
   @Operation(summary = "查询所有当前用户发送消息")
@@ -95,28 +91,25 @@ public class BroadcastTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
-      @RequestBody @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+      @ModelAttribute @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageService.findAllYouSend(broadcastTextMessageFindAllYouSendCmd);
   }
 
   @Operation(summary = "根据ID归档文本广播消息")
-  @PutMapping("/archiveMsgById")
+  @PutMapping("/archiveMsgById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public void archiveMsgById(
-      @RequestBody BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd) {
-    broadcastTextMessageService.archiveMsgById(broadcastTextMessageArchiveByIdCmd);
+  public void archiveMsgById(@PathVariable(value = "id") Long id) {
+    broadcastTextMessageService.archiveMsgById(id);
   }
 
   @Operation(summary = "根据ID从存档中恢复消息指令")
-  @PutMapping("/recoverMsgFromArchiveById")
+  @PutMapping("/recoverMsgFromArchiveById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverMsgFromArchiveById(
-      @RequestBody BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd) {
-    broadcastTextMessageService.recoverMsgFromArchiveById(
-        broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
+  public void recoverMsgFromArchiveById(@PathVariable(value = "id") Long id) {
+    broadcastTextMessageService.recoverMsgFromArchiveById(id);
   }
 }

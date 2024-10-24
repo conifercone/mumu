@@ -26,19 +26,17 @@ import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo.Builder;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaVerifyCo;
+import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +55,19 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
 
   private final SimpleCaptchaGeneratedCmdExe simpleCaptchaGeneratedCmdExe;
   private final SimpleCaptchaVerifyCmdExe simpleCaptchaVerifyCmdExe;
+  private final CaptchaConvertor captchaConvertor;
 
   @Autowired
   public CaptchaServiceImpl(SimpleCaptchaGeneratedCmdExe simpleCaptchaGeneratedCmdExe,
-      SimpleCaptchaVerifyCmdExe simpleCaptchaVerifyCmdExe) {
+    SimpleCaptchaVerifyCmdExe simpleCaptchaVerifyCmdExe, CaptchaConvertor captchaConvertor) {
     this.simpleCaptchaGeneratedCmdExe = simpleCaptchaGeneratedCmdExe;
     this.simpleCaptchaVerifyCmdExe = simpleCaptchaVerifyCmdExe;
+    this.captchaConvertor = captchaConvertor;
   }
 
   @Override
   public SimpleCaptchaGeneratedCo generateSimpleCaptcha(
-      SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return simpleCaptchaGeneratedCmdExe.execute(simpleCaptchaGeneratedCmd);
   }
 
@@ -76,57 +76,29 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
     return simpleCaptchaVerifyCmdExe.execute(simpleCaptchaVerifyCmd);
   }
 
-  @NotNull
-  private static SimpleCaptchaGeneratedCo getSimpleCaptchaGeneratedCo(
-      @NotNull SimpleCaptchaGeneratedGrpcCmd request) {
-    SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo = new SimpleCaptchaGeneratedCo();
-    SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = request.getSimpleCaptchaGeneratedGrpcCo();
-    simpleCaptchaGeneratedCo.setId(
-        simpleCaptchaGeneratedGrpcCo.hasId() ? simpleCaptchaGeneratedGrpcCo.getId().getValue()
-            : null);
-    simpleCaptchaGeneratedCo.setTtl(
-        simpleCaptchaGeneratedGrpcCo.hasTtl() ? simpleCaptchaGeneratedGrpcCo.getTtl().getValue()
-            : null);
-    simpleCaptchaGeneratedCo.setLength(
-        simpleCaptchaGeneratedGrpcCo.hasLength() ? simpleCaptchaGeneratedGrpcCo.getLength()
-            .getValue() : null);
-    simpleCaptchaGeneratedCo.setTarget(
-        simpleCaptchaGeneratedGrpcCo.hasTarget() ? simpleCaptchaGeneratedGrpcCo.getTarget()
-            .getValue() : null);
-    return simpleCaptchaGeneratedCo;
-  }
-
-  @NotNull
-  private static SimpleCaptchaVerifyCo getSimpleCaptchaVerifyCo(
-      @NotNull SimpleCaptchaVerifyGrpcCmd request) {
-    SimpleCaptchaVerifyCo simpleCaptchaVerifyCo = new SimpleCaptchaVerifyCo();
-    SimpleCaptchaVerifyGrpcCo simpleCaptchaVerifyGrpcCo = request.getSimpleCaptchaVerifyGrpcCo();
-    simpleCaptchaVerifyCo.setId(
-        simpleCaptchaVerifyGrpcCo.hasId() ? simpleCaptchaVerifyGrpcCo.getId().getValue()
-            : null);
-    simpleCaptchaVerifyCo.setSource(
-        simpleCaptchaVerifyGrpcCo.hasSource() ? simpleCaptchaVerifyGrpcCo.getSource()
-            .getValue() : null);
-    return simpleCaptchaVerifyCo;
-  }
-
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void generateSimpleCaptcha(SimpleCaptchaGeneratedGrpcCmd request,
-      StreamObserver<SimpleCaptchaGeneratedGrpcCo> responseObserver) {
+    StreamObserver<SimpleCaptchaGeneratedGrpcCo> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
-    SimpleCaptchaGeneratedCo simpleCaptchaGeneratedCo = getSimpleCaptchaGeneratedCo(
-        request);
-    simpleCaptchaGeneratedCmd.setSimpleCaptchaGeneratedCo(simpleCaptchaGeneratedCo);
+    simpleCaptchaGeneratedCmd.setId(
+      request.hasId() ? request.getId().getValue()
+        : null);
+    simpleCaptchaGeneratedCmd.setTtl(
+      request.hasTtl() ? request.getTtl().getValue()
+        : null);
+    simpleCaptchaGeneratedCmd.setLength(
+      request.hasLength() ? request.getLength()
+        .getValue() : null);
     Builder builder = SimpleCaptchaGeneratedGrpcCo.newBuilder();
     try {
       SimpleCaptchaGeneratedCo captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
-          simpleCaptchaGeneratedCmd);
+        simpleCaptchaGeneratedCmd);
       if (captchaGeneratedCo != null) {
         builder.setId(Int64Value.of(captchaGeneratedCo.getId()))
-            .setTtl(Int64Value.of(captchaGeneratedCo.getTtl())).setLength(
-                Int32Value.of(captchaGeneratedCo.getLength()))
-            .setTarget(StringValue.of(captchaGeneratedCo.getTarget()));
+          .setTtl(Int64Value.of(captchaGeneratedCo.getTtl())).setLength(
+            Int32Value.of(captchaGeneratedCo.getLength()))
+          .setTarget(StringValue.of(captchaGeneratedCo.getTarget()));
       }
     } catch (Exception e) {
       throw new GRpcRuntimeExceptionWrapper(e);
@@ -138,19 +110,21 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void verifySimpleCaptcha(SimpleCaptchaVerifyGrpcCmd request,
-      StreamObserver<SimpleCaptchaVerifyGrpcResult> responseObserver) {
-    SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd = new SimpleCaptchaVerifyCmd();
-    SimpleCaptchaVerifyCo simpleCaptchaVerifyCo = getSimpleCaptchaVerifyCo(
-        request);
-    simpleCaptchaVerifyCmd.setSimpleCaptchaVerifyCo(simpleCaptchaVerifyCo);
-    SimpleCaptchaVerifyGrpcResult.Builder builder = SimpleCaptchaVerifyGrpcResult.newBuilder();
-    try {
-      builder.setResult(simpleCaptchaVerifyCmdExe.execute(
-          simpleCaptchaVerifyCmd));
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
-    responseObserver.onNext(builder.build());
-    responseObserver.onCompleted();
+    StreamObserver<SimpleCaptchaVerifyGrpcResult> responseObserver) {
+    captchaConvertor.toSimpleCaptchaVerifyCmd(request)
+      .ifPresentOrElse((simpleCaptchaVerifyCmdNotNull) -> {
+        SimpleCaptchaVerifyGrpcResult.Builder builder = SimpleCaptchaVerifyGrpcResult.newBuilder();
+        try {
+          builder.setResult(simpleCaptchaVerifyCmdExe.execute(
+            simpleCaptchaVerifyCmdNotNull));
+          responseObserver.onNext(builder.build());
+          responseObserver.onCompleted();
+        } catch (Exception e) {
+          throw new GRpcRuntimeExceptionWrapper(e);
+        }
+      }, () -> {
+        responseObserver.onNext(SimpleCaptchaVerifyGrpcResult.getDefaultInstance());
+        responseObserver.onCompleted();
+      });
   }
 }

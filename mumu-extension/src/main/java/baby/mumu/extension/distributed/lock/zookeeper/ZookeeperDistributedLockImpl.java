@@ -16,7 +16,7 @@
 package baby.mumu.extension.distributed.lock.zookeeper;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 
@@ -39,7 +39,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
     try {
       interProcessLock.acquire();
     } catch (Exception e) {
-      throw new MuMuException(ResultCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK);
+      throw new MuMuException(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK);
     }
   }
 
@@ -48,7 +48,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
     try {
       interProcessLock.release();
     } catch (Exception e) {
-      throw new MuMuException(ResultCode.FAILED_TO_RELEASE_DISTRIBUTED_LOCK);
+      throw new MuMuException(ResponseCode.FAILED_TO_RELEASE_DISTRIBUTED_LOCK);
     }
   }
 }

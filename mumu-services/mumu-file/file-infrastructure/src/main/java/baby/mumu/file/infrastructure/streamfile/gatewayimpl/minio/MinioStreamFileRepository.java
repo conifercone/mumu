@@ -16,7 +16,7 @@
 package baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
@@ -73,7 +73,7 @@ public class MinioStreamFileRepository {
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
-        throw new MuMuException(ResultCode.FILE_UPLOAD_FAILED);
+        throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
       }
     });
 
@@ -92,7 +92,7 @@ public class MinioStreamFileRepository {
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
-        throw new MuMuException(ResultCode.FILE_STORAGE_ADDRESS_CREATION_FAILED);
+        throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CREATION_FAILED);
       }
     }
   }
@@ -133,7 +133,7 @@ public class MinioStreamFileRepository {
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
-        throw new MuMuException(ResultCode.FILE_DOWNLOAD_FAILED);
+        throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
       }
     });
   }
@@ -174,7 +174,7 @@ public class MinioStreamFileRepository {
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
-        throw new MuMuException(ResultCode.FILE_DELETION_FAILED);
+        throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
       }
     });
   }

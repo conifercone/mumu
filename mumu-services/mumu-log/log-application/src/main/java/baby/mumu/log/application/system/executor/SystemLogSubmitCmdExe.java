@@ -18,10 +18,9 @@ package baby.mumu.log.application.system.executor;
 import baby.mumu.log.client.dto.SystemLogSubmitCmd;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 系统日志提交指令执行器
@@ -37,14 +36,13 @@ public class SystemLogSubmitCmdExe {
 
   @Autowired
   public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway,
-      SystemLogConvertor systemLogConvertor) {
+    SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
     this.systemLogConvertor = systemLogConvertor;
   }
 
-  public void execute(@NotNull SystemLogSubmitCmd systemLogSubmitCmd) {
-    Assert.notNull(systemLogSubmitCmd, "SystemLogSubmitCmd cannot null");
-    systemLogConvertor.toEntity(systemLogSubmitCmd.getSystemLogSubmitCo())
-        .ifPresent(systemLogGateway::submit);
+  public void execute(SystemLogSubmitCmd systemLogSubmitCmd) {
+    Optional.ofNullable(systemLogSubmitCmd).flatMap(systemLogConvertor::toEntity)
+      .ifPresent(systemLogGateway::submit);
   }
 }

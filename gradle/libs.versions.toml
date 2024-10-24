@@ -3,26 +3,27 @@ springbootVersion = "3.3.4"
 springCloudVersion = "2023.0.3"
 # dependence version
 apiguardianVersion = '1.1.2'
-jetbrainsAnnotationsVersion = '24.0.0'
+jetbrainsAnnotationsVersion = '26.0.1'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.6.0'
+swagger3AnnotationsVersion = '2.2.25'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '5.1.5'
-redisOmSpringVersion = "0.9.5"
+redisOmSpringVersion = "0.9.6"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.2"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.8.2"
-curatorRecipesVersion = "5.7.0"
-flywayVersion = "10.18.0"
+hypersistenceUtilsVersion = "3.8.3"
+curatorRecipesVersion = "5.7.1"
+flywayVersion = "10.20.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.12'
 mapstructVersion = '1.6.2'
 commonsIoVersion = '2.17.0'
 commonsTextVersion = '1.12.0'
-jobrunrSpringBoot3StarterVersion = '7.2.2'
+jobrunrSpringBoot3StarterVersion = '7.3.1'
 alimtVersion = '1.3.1'
 deeplVersion = '1.6.0'
 asciitableVersion = '0.3.2'
@@ -36,12 +37,12 @@ bucket4jVersion = '8.14.0'
 commonsCollections4Version = '4.5.0-M2'
 # bom version
 grpcBomVersion = '1.68.0'
-guavaBomVersion = '33.3.0-jre'
+guavaBomVersion = '33.3.1-jre'
 protobufBomVersion = '4.28.2'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
-kotlinPluginVersion = '2.0.20'
+kotlinPluginVersion = '2.0.21'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -88,8 +89,12 @@ spring-cloud-starter-consul-discovery = { module = "org.springframework.cloud:sp
 spring-cloud-starter-consul-config = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
 # https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
+# https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
+swagger-annotations-jakarta = { module = "io.swagger.core.v3:swagger-annotations-jakarta", version.ref = "swagger3AnnotationsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 spring-boot-starter-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation

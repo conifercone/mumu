@@ -15,12 +15,13 @@
  */
 package baby.mumu.unique.infrastructure.qrcode.convertor;
 
-import baby.mumu.unique.client.dto.co.QRCodeGenerateCo;
+import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -29,11 +30,11 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QRCodeMapper {
 
   QRCodeMapper INSTANCE = Mappers.getMapper(QRCodeMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  QRCode toEntity(QRCodeGenerateCo qrCodeGenerateCo);
+  QRCode toEntity(QRCodeGenerateCmd qrCodeGenerateCmd);
 }

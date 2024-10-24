@@ -42,7 +42,7 @@ public class BarCodeGenerateCmdExe {
 
   public byte[] execute(BarCodeGenerateCmd barCodeGenerateCmd) {
     Assert.notNull(barCodeGenerateCmd, "BarCodeGenerateCmd must not be null");
-    return barCodeConvertor.toEntity(barCodeGenerateCmd.getBarCodeGenerateCo())
+    return barCodeConvertor.toEntity(barCodeGenerateCmd)
         .map(barCodeGateway::generate).orElse(new byte[0]);
   }
 }

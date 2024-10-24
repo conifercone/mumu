@@ -17,13 +17,13 @@ package baby.mumu.authentication.domain.account;
 
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.Period;
@@ -35,11 +35,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -49,12 +50,13 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@JsonDeserialize
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@GenerateDescription
+@Metamodel
+@Data
+@SuperBuilder(toBuilder = true)
 public class Account extends BasisDomainModel implements UserDetails {
 
   @Serial
@@ -63,13 +65,11 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 账户id
    */
-  @Getter
   private Long id;
 
   /**
    * 账户名
    */
-  @Setter
   private String username;
 
   /**
@@ -80,115 +80,79 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 是否启用
    */
+  @Builder.Default
   private Boolean enabled = true;
 
   /**
    * 凭证未过期
    */
+  @Builder.Default
   private Boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
+  @Builder.Default
   private Boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
+  @Builder.Default
   private Boolean accountNonExpired = true;
 
   /**
    * 账户角色
    */
-  @Getter
-  @Setter
   private List<Role> roles;
 
   /**
    * 头像地址
    */
-  @Getter
-  @Setter
   private String avatarUrl;
 
   /**
    * 电话
    */
-  @Getter
-  @Setter
   private String phone;
 
   /**
    * 性别
    */
-  @Getter
-  @Setter
   private SexEnum sex;
 
   /**
    * 电子邮件
    */
-  @Getter
-  @Setter
   private String email;
 
   /**
    * 时区
    */
-  @Getter
-  @Setter
   private String timezone;
 
   /**
    * 语言偏好
    */
-  @Getter
-  @Setter
   private LanguageEnum language;
 
   /**
    * 生日
    */
-  @Getter
-  @Setter
   private LocalDate birthday;
 
   /**
    * 地址
    */
-  @Setter
-  @Getter
   private List<AccountAddress> addresses;
 
-  @Setter
-  private Collection<Authority> authorities;
-
   /**
-   * 年龄
+   * 系统设置
    */
-  private final int age = 0;
-
-  public Account(Long id, String username, String password, List<Role> roles) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.roles = roles;
-  }
-
-  public Account(Long id, String username, String password, Boolean enabled,
-      Boolean accountNonExpired,
-      Boolean credentialsNonExpired, Boolean accountNonLocked, List<Role> roles) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-    this.enabled = enabled;
-    this.accountNonExpired = accountNonExpired;
-    this.credentialsNonExpired = credentialsNonExpired;
-    this.roles = roles;
-    this.accountNonLocked = accountNonLocked;
-  }
+  private List<AccountSystemSettings> systemSettings;
 
   @Override
+  @JsonIgnore
   public Collection<Authority> getAuthorities() {
     return Optional.ofNullable(this.roles)
         .orElse(Collections.emptyList())

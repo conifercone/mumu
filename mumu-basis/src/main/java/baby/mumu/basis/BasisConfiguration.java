@@ -17,9 +17,14 @@ package baby.mumu.basis;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
+import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import io.micrometer.tracing.Tracer;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -35,5 +40,15 @@ public class BasisConfiguration {
   @Order(HIGHEST_PRECEDENCE)
   public SpringContextUtil springContextUtil() {
     return new SpringContextUtil();
+  }
+
+  @Bean
+  public FilterRegistrationBean<TraceIdFilter> mumuTraceIdFilter(
+    ObjectProvider<Tracer> tracer) {
+    FilterRegistrationBean<TraceIdFilter> registrationBean = new FilterRegistrationBean<>();
+    registrationBean.setFilter(new TraceIdFilter(tracer.getIfAvailable()));
+    registrationBean.addUrlPatterns("/*");
+    registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
+    return registrationBean;
   }
 }

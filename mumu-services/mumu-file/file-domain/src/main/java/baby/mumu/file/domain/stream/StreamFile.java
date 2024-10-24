@@ -15,7 +15,7 @@
  */
 package baby.mumu.file.domain.stream;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.InputStream;
 import java.io.Serial;
@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@GenerateDescription
+@Metamodel
 public class StreamFile extends BasisDomainModel {
 
   @Serial

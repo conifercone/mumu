@@ -16,7 +16,7 @@
 package baby.mumu.message.configuration;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.message.infrastructure.config.MessageProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,7 +91,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                   .setIfAbsent(String.valueOf(receiverAccountId));
             });
       } catch (Exception e) {
-        throw new MuMuException(ResultCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
+        throw new MuMuException(ResponseCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
       }
     });
   }

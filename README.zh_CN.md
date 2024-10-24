@@ -17,7 +17,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge)](https://www.codefactor.io/repository/github/conifercone/mumu)
+[![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
 
 ## 内容列表
@@ -30,6 +30,19 @@
 - [贡献者](#贡献者)
 
 ## 项目
+
+### 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
+
+厌倦了那些让你头疼的混乱代码和复杂设置？来看看我们的 **开箱即玩管理系统**！🎁
+只需打开盒子，哇！你就能像超级明星一样轻松管理，代码整洁得闪闪发光！✨
+
+🌟 **你会爱上它的理由：**
+
+- **即时设置**：无需魔法咒语，插上就能玩！
+- **整洁代码**：干净得让你想给它一个金星！
+- **用户友好**：连你的金鱼都能搞定！
+
+加入轻松管理的乐趣，和混乱说再见！让我们把管理变成一场快乐的旅程吧！🚀🎈
 
 ## 模块介绍
 
@@ -98,6 +111,7 @@ mumu
 | consul        | 1.15.4                       |
 | minio         | RELEASE.2024-06-13T22-53-53Z |
 | zipkin        | 3.19.0                       |
+| mongodb       | 8.0.1                        |
 
 ## 依赖声明
 

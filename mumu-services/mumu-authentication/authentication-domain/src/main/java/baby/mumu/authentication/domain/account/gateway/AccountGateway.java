@@ -17,8 +17,11 @@ package baby.mumu.authentication.domain.account.gateway;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 /**
  * 用户领域网关
@@ -142,4 +145,61 @@ public interface AccountGateway {
    * @param accountAddress 账户地址
    */
   void addAddress(AccountAddress accountAddress);
+
+  /**
+   * 获取账户基本信息（不包含账户角色及角色权限信息）
+   *
+   * @param id 账户ID
+   * @return 账户基本信息
+   */
+  Optional<Account> getAccountBasicInfoById(Long id);
+
+  /**
+   * 根据系统设置ID重置系统设置
+   */
+  void resetSystemSettingsById(String systemSettingsId);
+
+  /**
+   * 修改系统设置
+   */
+  void modifySystemSettings(AccountSystemSettings accountSystemSettings);
+
+  /**
+   * 账户添加系统设置
+   *
+   * @param accountSystemSettings 账户系统设置
+   */
+  void addSystemSettings(AccountSystemSettings accountSystemSettings);
+
+  /**
+   * 退出登录
+   */
+  void logout();
+
+  /**
+   * 根据账户id下线账户
+   *
+   * @param id 账户ID
+   */
+  void offline(Long id);
+
+  /**
+   * 分页获取账户
+   *
+   * @param account  查询条件
+   * @param current   页码
+   * @param pageSize 每页数量
+   * @return 查询结果
+   */
+  Page<Account> findAll(Account account, int current, int pageSize);
+
+  /**
+   * 分页获取账户(不查询总数)
+   *
+   * @param account  查询条件
+   * @param current   页码
+   * @param pageSize 每页数量
+   * @return 查询结果
+   */
+  Slice<Account> findAllSlice(Account account, int current, int pageSize);
 }

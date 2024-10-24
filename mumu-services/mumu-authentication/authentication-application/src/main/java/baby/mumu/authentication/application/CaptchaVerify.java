@@ -16,15 +16,12 @@
 package baby.mumu.authentication.application;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResultCode;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCo;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 验证码校验
@@ -35,7 +32,6 @@ import org.slf4j.LoggerFactory;
 public class CaptchaVerify {
 
   private final CaptchaGrpcService captchaGrpcService;
-  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaVerify.class);
 
   public CaptchaVerify(CaptchaGrpcService captchaGrpcService) {
     this.captchaGrpcService = captchaGrpcService;
@@ -43,21 +39,18 @@ public class CaptchaVerify {
 
   public void verifyCaptcha(Long captchaId, String captcha) {
     Long captchaIdNotNull = Optional.ofNullable(captchaId)
-        .orElseThrow(() -> new MuMuException(ResultCode.CAPTCHA_ID_CANNOT_BE_EMPTY));
+      .orElseThrow(() -> new MuMuException(ResponseCode.CAPTCHA_ID_CANNOT_BE_EMPTY));
     String captchaNotNull = Optional.ofNullable(captcha)
-        .orElseThrow(() -> new MuMuException(ResultCode.CAPTCHA_CANNOT_BE_EMPTY));
+      .orElseThrow(() -> new MuMuException(ResponseCode.CAPTCHA_CANNOT_BE_EMPTY));
     try {
       if (!captchaGrpcService.verifySimpleCaptcha(
-              SimpleCaptchaVerifyGrpcCmd.newBuilder().setSimpleCaptchaVerifyGrpcCo(
-                  SimpleCaptchaVerifyGrpcCo.newBuilder()
-                      .setId(Int64Value.of(captchaIdNotNull)).setSource(
-                          StringValue.of(captchaNotNull)).build()).build())
-          .getResult()) {
-        throw new MuMuException(ResultCode.CAPTCHA_INCORRECT);
+          SimpleCaptchaVerifyGrpcCmd.newBuilder().setId(Int64Value.of(captchaIdNotNull)).setSource(
+            StringValue.of(captchaNotNull)).build())
+        .getResult()) {
+        throw new MuMuException(ResponseCode.CAPTCHA_INCORRECT);
       }
     } catch (Exception e) {
-      LOGGER.error(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION.getResultMsg(), e);
-      throw new MuMuException(ResultCode.CAPTCHA_VERIFICATION_EXCEPTION);
+      throw new MuMuException(ResponseCode.CAPTCHA_VERIFICATION_EXCEPTION);
     }
   }
 }

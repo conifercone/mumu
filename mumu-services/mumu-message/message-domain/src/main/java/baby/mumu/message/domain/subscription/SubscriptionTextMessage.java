@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.domain.subscription;
 
-import baby.mumu.basis.annotations.GenerateDescription;
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import java.io.Serial;
@@ -38,7 +38,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@GenerateDescription
+@Metamodel
 public class SubscriptionTextMessage extends BasisDomainModel {
 
   @Serial

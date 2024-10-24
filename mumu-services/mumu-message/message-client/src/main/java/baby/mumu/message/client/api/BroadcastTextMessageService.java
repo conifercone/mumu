@@ -15,12 +15,8 @@
  */
 package baby.mumu.message.client.api;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageArchiveByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageDeleteByIdCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageReadByIdCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageRecoverMsgFromArchiveByIdCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -46,18 +42,18 @@ public interface BroadcastTextMessageService {
   /**
    * 根据ID已读消息
    *
-   * @param broadcastTextMessageReadByIdCmd 文本广播消息根据ID已读指令
+   * @param id 文本广播消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void readMsgById(BroadcastTextMessageReadByIdCmd broadcastTextMessageReadByIdCmd);
+  void readMsgById(Long id);
 
   /**
    * 根据ID删除消息
    *
-   * @param broadcastTextMessageDeleteByIdCmd 文本广播消息根据ID删除指令
+   * @param id 文本广播消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void deleteMsgById(BroadcastTextMessageDeleteByIdCmd broadcastTextMessageDeleteByIdCmd);
+  void deleteMsgById(Long id);
 
   /**
    * 查询所有当前用户发送消息
@@ -71,17 +67,16 @@ public interface BroadcastTextMessageService {
   /**
    * 根据ID归档消息
    *
-   * @param broadcastTextMessageArchiveByIdCmd 文本广播消息根据ID归档指令
+   * @param id 文本广播消息ID
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  void archiveMsgById(BroadcastTextMessageArchiveByIdCmd broadcastTextMessageArchiveByIdCmd);
+  void archiveMsgById(Long id);
 
   /**
    * 根据ID从存档中恢复消息指令
    *
-   * @param broadcastTextMessageRecoverMsgFromArchiveByIdCmd 文本广播消息根据ID从存档中恢复消息指令
+   * @param id 文本广播消息ID
    */
   @API(status = Status.STABLE, since = "1.0.4")
-  void recoverMsgFromArchiveById(
-      BroadcastTextMessageRecoverMsgFromArchiveByIdCmd broadcastTextMessageRecoverMsgFromArchiveByIdCmd);
+  void recoverMsgFromArchiveById(Long id);
 }
