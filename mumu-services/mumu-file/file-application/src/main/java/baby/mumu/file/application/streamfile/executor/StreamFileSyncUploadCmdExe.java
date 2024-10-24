@@ -18,10 +18,10 @@ package baby.mumu.file.application.streamfile.executor;
 import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 流式文件异步上传指令执行器
@@ -37,15 +37,14 @@ public class StreamFileSyncUploadCmdExe {
 
   @Autowired
   public StreamFileSyncUploadCmdExe(StreamFileGateway streamFileGateway,
-      StreamFileConvertor streamFileConvertor) {
+    StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
     this.streamFileConvertor = streamFileConvertor;
   }
 
   @Async
   public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
-    Assert.notNull(streamFileSyncUploadCmd, "StreamFileSyncUploadCmd cannot be null");
-    streamFileConvertor.toEntity(streamFileSyncUploadCmd.getStreamFileSyncUploadCo())
-        .ifPresent(streamFileGateway::uploadFile);
+    Optional.ofNullable(streamFileSyncUploadCmd).flatMap(streamFileConvertor::toEntity)
+      .ifPresent(streamFileGateway::uploadFile);
   }
 }

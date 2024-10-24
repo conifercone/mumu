@@ -19,7 +19,7 @@ import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
+import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import org.apiguardian.api.API;
@@ -41,7 +41,7 @@ public interface StreamFileMapper extends GrpcMapper {
   StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo);
+  StreamFile toEntity(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   StreamFile toEntity(StreamFileRemoveCmd streamFileRemoveCmd);

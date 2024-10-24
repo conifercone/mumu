@@ -20,7 +20,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.co.StreamFileSyncUploadCo;
+import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import java.io.IOException;
@@ -44,11 +44,11 @@ public class StreamFileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<StreamFile> toEntity(StreamFileSyncUploadCo streamFileSyncUploadCo) {
-    return Optional.ofNullable(streamFileSyncUploadCo)
-      .map(uploadCo -> {
-        StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(uploadCo);
-        try (InputStream streamFileContent = uploadCo.getContent()) {
+  public Optional<StreamFile> toEntity(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
+    return Optional.ofNullable(streamFileSyncUploadCmd)
+      .map(fileSyncUploadCmd -> {
+        StreamFile streamFile = StreamFileMapper.INSTANCE.toEntity(fileSyncUploadCmd);
+        try (InputStream streamFileContent = fileSyncUploadCmd.getContent()) {
           if (streamFileContent == null) {
             throw new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY);
           } else {
