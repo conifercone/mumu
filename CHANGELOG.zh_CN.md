@@ -14,9 +14,75 @@
 
 ### 变更
 
-- 按照数据库范式优化消息服务数据库结构。
+### 移除
+
+## [2.2.0] - 2024-10-24
+
+### 新增
+
+- 统一响应结果增加traceId字段。
+- 统一响应结果增加时间戳字段。
+- 账户角色关系、角色权限关系增加缓存。
+- 当前登录账户信息查询接口增加缓存。
+- 账户新增分页查询接口。
+- 新增下线用户接口。
+- 新增退出登录接口。
+- 新增项目启动成功监听器。
+- 新增账户系统设置。
+- 角色增加缓存。
+- 根据ID查询权限增加缓存。
+- 客户端模块增加项目信息打印。
+- 新增根据ID获取账户基本信息接口。
+- 账户ID新增不等于0校验。
+- 角色新增归档数据查询接口。
+- 新增HttpMessageNotReadableException全局异常处理。
+- 已归档权限新增不查询总数的分页查询。
+- 新增检查序列化ID是否存在重复的脚本。
+- 权限新增不查询总数的分页查询。
+- 角色查询增加角色相关权限详细信息返回。
+- 角色新增不查询总数的分页查询。
+- MapStruct mapper统一增加unmappedTargetPolicy = ReportingPolicy.IGNORE。
+
+### 修复
+
+- 修复update_license_current_year.sh执行后可能导致文件内容乱码问题。
+
+### 变更
+
+- 规范接口参数，降低复杂度。
+- 优化grpc接口。
+- 日志保留策略调整。
+- 优化账户查询结果。
+- io.swagger.core.v3:swagger-annotations-jakarta升级至2.2.25。
+- flyway升级至10.20.0。
+- org.jobrunr:jobrunr-spring-boot-3-starter升级至7.3.1。
+- 更新README文档中基础设施部分说明。
+- 规范类名和接口方法名。
+- 更换图标。
+- 完善账户接口参数注释。
+- 分页查询当前页默认从1开始。
+- 按照restful规范重构接口。
+- 页码参数重命名为current。
+- 优化账户登录性能。
+- 在线用户数量统计逻辑优化。
+- CustomDescription注解重命名为Meta、GenerateDescription注解重命名为Metamodel。
+- kotlin升级至2.0.21。
+- org.apache.curator:curator-recipes升级至5.7.1。
+- org.jetbrains:annotations升级至26.0.1。
+- 接口参数由List类型修改为Collection类型。
+- redis-om-spring升级至0.9.6。
+- BaseClientObject日期属性格式修改为符合按照ISO-8601标准。
+- 优化多语言获取逻辑防止NPE。
+- 根据数据库范式重构文本广播消息表及对应逻辑。
+- io.hypersistence:hypersistence-utils-hibernate-63升级至3.8.3。
+- com.google.guava:guava-bom升级至33.3.1-jre。
+- 账户性别&语言类型修改为varchar消除数据库差异。
+- 更新注解处理器提示信息。
 
 ### 移除
+
+- 移除不常用且用途危险的grpc方法。
+- 删除认证相关重复配置。
 
 ## [2.1.0] - 2024-09-30
 
@@ -315,7 +381,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.1.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.2.0...develop
+[2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
