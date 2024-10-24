@@ -14,9 +14,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Optimize the message service database structure according to the database paradigm.
+### Removed
+
+## [2.2.0] - 2024-10-24
+
+### Added
+
+- Add traceId field to unified response results.
+- Add a timestamp field to unified response results.
+- Account role relationships and role permission relationships are cached.
+- Add cache to the current login account information query interface.
+- A new paging query interface for accounts has been added.
+- Added offline user interface.
+- Added a new logout interface.
+- Added new project startup success listener.
+- Added new account system settings.
+- Added character cache.
+- Increase caching based on ID query permissions.
+- The client module adds project information printing.
+- Added an interface to obtain basic account information based on ID.
+- The new account ID is not equal to 0 verification.
+- Added archive data query interface for roles.
+- Added HttpMessageNotReadableException global exception handling.
+- Added paging query without querying the total number for archived permissions.
+- Added a script to check whether serialized IDs are duplicated.
+- Added permission to add paging query without querying the total number.
+- Role query adds role-related permission details returned.
+- The role has added paging query that does not query the total number.
+- MapStruct mapper uniformly adds unmappedTargetPolicy = ReportingPolicy.IGNORE.
+
+### Fixed
+
+- Fixed the issue that the file content may be garbled after execution of
+  update_license_current_year.sh.
+
+### Changed
+
+- Standardize interface parameters and reduce complexity.
+- Optimize grpc interface.
+- Log retention policy adjustment.
+- Optimize account query results.
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.25.
+- flyway upgraded to 10.20.0.
+- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.1.
+- Updated the description of the infrastructure section in the README document.
+- Standardize class names and interface method names.
+- Change icon.
+- Improve account interface parameter comments.
+- Pagination query for the current page starts from 1 by default.
+- Reconstruct the interface according to RESTful specifications.
+- The page number parameter is renamed to current.
+- Optimize account login performance.
+- Logic optimization of online user number statistics.
+- The CustomDescription annotation is renamed to Meta, and the GenerateDescription annotation is
+  renamed to Metamodel.
+- kotlin upgraded to 2.0.21.
+- org.apache.curator:curator-recipes upgraded to 5.7.1.
+- org.jetbrains:annotations upgraded to 26.0.1.
+- The interface parameters are changed from List type to Collection type.
+- redis-om-spring upgraded to 0.9.6.
+- BaseClientObject date attribute format modified to comply with ISO-8601 standard.
+- Optimize multi-language acquisition logic to prevent NPE.
+- Reconstruct the text broadcast message table and corresponding logic according to the database
+  paradigm.
+- io.hypersistence:hypersistence-utils-hibernate-63 is upgraded to 3.8.3.
+- com.google.guava:guava-bom is upgraded to 33.3.1-jre.
+- Change the account gender & language type to varchar to eliminate database differences.
+- Update annotation processor prompt information.
 
 ### Removed
+
+- Removed uncommon and dangerous grpc methods.
+- Delete authentication-related duplicate configurations.
 
 ## [2.1.0] - 2024-09-30
 
@@ -328,7 +397,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.1.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.2.0...develop
+[2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
