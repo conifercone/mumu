@@ -58,6 +58,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class SignatureFilter extends OncePerRequestFilter {
 
+  public static final String X_SIGNATURE = "X-Signature";
+  public static final String X_TIMESTAMP = "X-Timestamp";
+  public static final String PARAMETER_VALUE_CONNECTOR = ",";
   private final ExtensionProperties extensionProperties;
   private static final Logger LOGGER = LoggerFactory.getLogger(
     SignatureFilter.class);
@@ -77,15 +80,15 @@ public class SignatureFilter extends OncePerRequestFilter {
     String requestURI = request.getRequestURI();
     DigitalSignature digitalSignature = extensionProperties.getGlobal().getDigitalSignature();
     if (!isAllowed(requestURI, request.getMethod(), digitalSignature.getAllowlist())) {
-      String signature = request.getHeader("X-Signature");
-      String timestamp = request.getHeader("X-Timestamp");
+      String signature = request.getHeader(X_SIGNATURE);
+      String timestamp = request.getHeader(X_TIMESTAMP);
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
         Map<String, String[]> requestParameterMap = request.getParameterMap();
         Map<String, String> resultMap = requestParameterMap.entrySet()
           .stream()
           .collect(Collectors.toMap(
             Map.Entry::getKey,
-            entry -> String.join(",", entry.getValue())
+            entry -> String.join(PARAMETER_VALUE_CONNECTOR, entry.getValue())
           ));
         String requestParameterJson =
           MapUtils.isNotEmpty(resultMap) ? objectMapper.writeValueAsString(resultMap) : "";
