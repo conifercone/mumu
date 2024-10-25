@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * 全局配置
@@ -42,6 +43,7 @@ public class GlobalProperties {
   /**
    * 数字签名
    */
+  @NestedConfigurationProperty
   private DigitalSignature digitalSignature = new DigitalSignature();
 
 
@@ -61,6 +63,7 @@ public class GlobalProperties {
     /**
      * 白名单
      */
+    @NestedConfigurationProperty
     private List<RequestMethod> allowlist = new ArrayList<>();
 
     /**
