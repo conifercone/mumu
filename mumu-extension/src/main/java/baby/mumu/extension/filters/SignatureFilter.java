@@ -80,18 +80,18 @@ public class SignatureFilter extends OncePerRequestFilter {
       String signature = request.getHeader("X-Signature");
       String timestamp = request.getHeader("X-Timestamp");
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        Map<String, String> resultMap = parameterMap.entrySet()
+        Map<String, String[]> requestParameterMap = request.getParameterMap();
+        Map<String, String> resultMap = requestParameterMap.entrySet()
           .stream()
           .collect(Collectors.toMap(
             Map.Entry::getKey,
             entry -> String.join(",", entry.getValue())
           ));
-        String parameterJson =
+        String requestParameterJson =
           MapUtils.isNotEmpty(resultMap) ? objectMapper.writeValueAsString(resultMap) : "";
         try {
           if (!SignatureUtil.validateSignature(
-            timestamp.concat(requestURI).concat(parameterJson)
+            timestamp.concat(requestURI).concat(requestParameterJson)
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {
