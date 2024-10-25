@@ -71,8 +71,14 @@ public class GlobalProperties {
     @Data
     public static class RequestMethod {
 
+      /**
+       * 请求方法 eg: PUT POST GET DELETE
+       */
       private String method;
 
+      /**
+       * 请求地址，支持模式匹配 eg: /test/**
+       */
       private String url;
     }
   }
