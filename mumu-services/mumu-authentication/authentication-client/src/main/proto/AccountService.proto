@@ -79,7 +79,9 @@ enum SexEnum
 enum LanguageEnum
 {
   ZH = 0;
-  EN = 1;
+  ZH_TW = 1;
+  JA = 2;
+  EN = 3;
 }
 
 enum SystemThemeEnum
