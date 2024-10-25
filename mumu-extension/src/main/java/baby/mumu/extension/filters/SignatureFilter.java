@@ -50,6 +50,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * 签名过滤器
+ * <p>签名格式：时间戳+request URI+request parameter JSON+body JSON</p>
+ * <p>request parameter JSON、body JSON格式：紧凑JSON，不包含多余换行和空格符</p>
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
