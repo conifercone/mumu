@@ -16,6 +16,8 @@
 package baby.mumu.extension;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -36,4 +38,42 @@ public class GlobalProperties {
    * 归档删除期限单位
    */
   private ChronoUnit archiveDeletionPeriodUnit = ChronoUnit.DAYS;
+
+  /**
+   * 数字签名
+   */
+  private DigitalSignature digitalSignature = new DigitalSignature();
+
+
+  @Data
+  public static class DigitalSignature {
+
+    /**
+     * 是否开启
+     */
+    private boolean enabled;
+
+    /**
+     * 签名密钥
+     */
+    private String secretKey = "mumu";
+
+    /**
+     * 白名单
+     */
+    private List<RequestMethod> allowlist = new ArrayList<>();
+
+    /**
+     * 签名算法
+     */
+    private String algorithm = "HmacSHA256";
+
+    @Data
+    public static class RequestMethod {
+
+      private String method;
+
+      private String url;
+    }
+  }
 }
