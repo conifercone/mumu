@@ -49,52 +49,17 @@ Join the fun of effortless management and wave goodbye to chaos! Let’s make ma
 
 ```text
 mumu
-│  ├─ 📂 mumu-services -- mumu services
-│  │  ├─ 📂 mumu-authentication -- authentication service
-│  │  │  │- 📂 authentication-adapter -- authentication service adaptation layer
-│  │  │  │- 📂 authentication-application -- authentication service application layer
-│  │  │  │- 📂 authentication-client -- authentication service client
-│  │  │  │- 📂 authentication-domain -- authentication service domain layer
-│  │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
-│  │  │─ 📂 mumu-file -- file service
-│  │  │  │- 📂 file-adapter -- file service adaptation layer
-│  │  │  │- 📂 file-application -- file service application layer
-│  │  │  │- 📂 file-client -- file service client
-│  │  │  │- 📂 file-domain -- file service domain layer
-│  │  │  │- 📂 file-infrastructure -- file service infrastructure layer
-│  │  │─ 📂 mumu-log -- log service
-│  │  │  │- 📂 log-adapter -- log service adaptation layer
-│  │  │  │- 📂 log-application -- log service application layer
-│  │  │  │- 📂 log-client -- log service client
-│  │  │  │- 📂 log-domain -- log service domain layer
-│  │  │  │- 📂 log-infrastructure -- log service infrastructure layer
-│  │  │─ 📂 mumu-mail -- mail service
-│  │  │  │- 📂 mail-adapter -- mail service adaptation layer
-│  │  │  │- 📂 mail-application -- mail service application layer
-│  │  │  │- 📂 mail-client -- mail service client
-│  │  │  │- 📂 mail-domain -- mail service domain layer
-│  │  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
-│  │  │─ 📂 mumu-message -- message service
-│  │  │  │- 📂 message-adapter -- message service adaptation layer
-│  │  │  │- 📂 message-application -- message service application layer
-│  │  │  │- 📂 message-client -- message service client
-│  │  │  │- 📂 message-domain -- message service domain layer
-│  │  │  │- 📂 message-infrastructure -- message service infrastructure layer
-│  │  │─ 📂 mumu-sms -- sms service
-│  │  │  │- 📂 sms-adapter -- sms service adaptation layer
-│  │  │  │- 📂 sms-application -- sms service application layer
-│  │  │  │- 📂 sms-client -- sms service client
-│  │  │  │- 📂 sms-domain -- sms service domain layer
-│  │  │  │- 📂 sms-infrastructure -- sms service infrastructure layer
-│  │  │─ 📂 mumu-unique -- unique data generation service
-│  │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
-│  │  │  │- 📂 unique-application -- unique data generation service application layer
-│  │  │  │- 📂 unique-client -- unique data generation service client
-│  │  │  │- 📂 unique-domain -- unique data generation service domain layer
-│  │  │  │- 📂 unique-infrastructure -- Unique data generation service infrastructure layer
-│  │─ 📂 mumu-basis -- basic module
-│  │─ 📂 mumu-extension -- expansion module
-│  │─ 📂 mumu-processor -- processor module
+├── mumu-services
+│   ├── mumu-authentication
+│   ├── mumu-file
+│   ├── mumu-log
+│   ├── mumu-mail
+│   ├── mumu-message
+│   ├── mumu-sms
+│   └── mumu-unique
+├── mumu-basis
+├── mumu-extension
+└── mumu-processor
 ```
 
 ## Build
