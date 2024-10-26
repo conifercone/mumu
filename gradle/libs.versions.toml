@@ -35,6 +35,7 @@ javacvVersion = '1.5.10'
 aliyunOcrVersion = '3.1.1'
 bucket4jVersion = '8.14.0'
 commonsCollections4Version = '4.5.0-M2'
+progressbarVersion = '0.10.1'
 # bom version
 grpcBomVersion = '1.68.0'
 guavaBomVersion = '33.3.1-jre'
@@ -240,6 +241,8 @@ commons-collections4 = { module = "org.apache.commons:commons-collections4", ver
 spring-cloud-commons = { module = "org.springframework.cloud:spring-cloud-commons" }
 # https://mvnrepository.com/artifact/io.grpc/grpc-api
 grpc-api = { module = "io.grpc:grpc-api" }
+# https://mvnrepository.com/artifact/me.tongfei/progressbar
+progressbar = { module = "me.tongfei:progressbar", version.ref = "progressbarVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
