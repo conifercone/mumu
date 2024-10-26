@@ -40,6 +40,11 @@ public enum LanguageEnum {
   JA,
 
   /**
+   * 한국인
+   */
+  KO,
+
+  /**
    * English
    */
   EN
