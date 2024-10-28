@@ -60,8 +60,8 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
       Code128Writer code128Writer = new Code128Writer();
       try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
         BitMatrix bitMatrix = code128Writer.encode(barCodeModel.getContent(),
-            BarcodeFormat.CODE_128,
-            barCodeModel.getWidth(), barCodeModel.getHeight(), hints);
+          BarcodeFormat.CODE_128,
+          barCodeModel.getWidth(), barCodeModel.getHeight(), hints);
         BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
         BufferedImage finalImage = this.insertWords(bufferedImage, barCode);
         Assert.notNull(finalImage, "BufferedImage is null");
@@ -76,7 +76,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   private @Nullable BufferedImage insertWords(BufferedImage image, @NotNull BarCode barCode) {
     if (StringUtils.isNotBlank(barCode.getFootContent())) {
       BufferedImage outImage = new BufferedImage(barCode.getWidth(), barCode.getHeight() + 20,
-          BufferedImage.TYPE_INT_RGB);
+        BufferedImage.TYPE_INT_RGB);
       Graphics2D g2d = outImage.createGraphics();
       // 抗锯齿
       this.setGraphics2D(g2d);
@@ -113,7 +113,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     // 消除文字锯齿
     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_DEFAULT);
     Stroke s = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
     g2d.setStroke(s);

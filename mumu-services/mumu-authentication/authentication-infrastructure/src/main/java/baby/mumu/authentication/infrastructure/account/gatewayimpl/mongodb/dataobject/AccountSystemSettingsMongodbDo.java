@@ -49,7 +49,7 @@ public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataOb
   private static final long serialVersionUID = 6286174255794150761L;
 
   public AccountSystemSettingsMongodbDo(String id, Long userId, String profile, String name,
-      boolean enabled, Long version) {
+    boolean enabled, Long version) {
     this.id = id;
     this.userId = userId;
     this.profile = profile;

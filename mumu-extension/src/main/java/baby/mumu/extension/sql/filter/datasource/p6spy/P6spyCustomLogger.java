@@ -48,7 +48,7 @@ public class P6spyCustomLogger extends FormattedLogger {
   public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
   private static final int MAX_LOG_SIZE = 10;
   private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
-      (a, b) -> Long.compare(b, a));
+    (a, b) -> Long.compare(b, a));
 
   @Override
   public void logException(Exception e) {
@@ -62,7 +62,7 @@ public class P6spyCustomLogger extends FormattedLogger {
 
   @Override
   public void logSQL(int connectionId, String now, long elapsed,
-      Category category, String prepared, String sql, String url) {
+    Category category, String prepared, String sql, String url) {
     if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
       if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
         if (!slowQueries.containsValue(sql)) {
@@ -80,11 +80,11 @@ public class P6spyCustomLogger extends FormattedLogger {
       String traceId = null;
       try {
         traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
-            .flatMap(applicationContext -> Optional.ofNullable(
-                applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
-                tracer -> Optional.ofNullable(tracer.currentSpan())
-                    .map(span -> span.context().traceId())
-            ).orElse(null);
+          .flatMap(applicationContext -> Optional.ofNullable(
+            applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
+            tracer -> Optional.ofNullable(tracer.currentSpan())
+              .map(span -> span.context().traceId())
+          ).orElse(null);
       } catch (Exception e) {
         // ignore
       }
@@ -97,7 +97,7 @@ public class P6spyCustomLogger extends FormattedLogger {
       }
       stringBuilder.append("]");
       String msg = strategy.formatMessage(connectionId, now, elapsed,
-          category.toString(), prepared, sql, url);
+        category.toString(), prepared, sql, url);
       stringBuilder.append(msg);
 
       if (Category.ERROR.equals(category)) {
@@ -149,6 +149,6 @@ public class P6spyCustomLogger extends FormattedLogger {
     strings.remove(1);
     strings.remove(1);
     LOGGER.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
-        String.join("\r\n", strings));
+      String.join("\r\n", strings));
   }
 }

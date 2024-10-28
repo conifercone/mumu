@@ -54,12 +54,12 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
 
   @Autowired
   public BroadcastTextMessageServiceImpl(
-      BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe,
-      BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe,
-      BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe,
-      BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe,
-      BroadcastTextMessageArchiveByIdCmdExe broadcastTextMessageArchiveByIdCmdExe,
-      BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe) {
+    BroadcastTextMessageForwardCmdExe broadcastTextMessageForwardCmdExe,
+    BroadcastTextMessageReadByIdCmdExe broadcastTextMessageReadByIdCmdExe,
+    BroadcastTextMessageDeleteByIdCmdExe broadcastTextMessageDeleteByIdCmdExe,
+    BroadcastTextMessageFindAllYouSendCmdExe broadcastTextMessageFindAllYouSendCmdExe,
+    BroadcastTextMessageArchiveByIdCmdExe broadcastTextMessageArchiveByIdCmdExe,
+    BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe) {
     this.broadcastTextMessageForwardCmdExe = broadcastTextMessageForwardCmdExe;
     this.broadcastTextMessageReadByIdCmdExe = broadcastTextMessageReadByIdCmdExe;
     this.broadcastTextMessageDeleteByIdCmdExe = broadcastTextMessageDeleteByIdCmdExe;
@@ -88,20 +88,20 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
 
   @Override
   public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
-      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageFindAllYouSendCmdExe.execute(broadcastTextMessageFindAllYouSendCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
-      Long id) {
+    Long id) {
     broadcastTextMessageArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   public void recoverMsgFromArchiveById(
-      Long id) {
+    Long id) {
     broadcastTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(id);
   }
 }

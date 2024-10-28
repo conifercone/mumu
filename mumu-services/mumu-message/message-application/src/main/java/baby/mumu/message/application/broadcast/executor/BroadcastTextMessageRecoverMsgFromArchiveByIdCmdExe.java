@@ -33,12 +33,12 @@ public class BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe {
 
   @Autowired
   public BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe(
-      BroadcastTextMessageGateway broadcastTextMessageGateway) {
+    BroadcastTextMessageGateway broadcastTextMessageGateway) {
     this.broadcastTextMessageGateway = broadcastTextMessageGateway;
   }
 
   public void execute(
-      Long id) {
+    Long id) {
     Optional.ofNullable(id).ifPresent(broadcastTextMessageGateway::recoverMsgFromArchiveById);
   }
 }

@@ -50,9 +50,9 @@ public class QRCodeGatewayImpl implements QRCodeGateway {
       QRCodeWriter qrCodeWriter = new QRCodeWriter();
       try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
         BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeModel.getContent(), BarcodeFormat.QR_CODE,
-            qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
+          qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
         MatrixToImageWriter.writeToStream(bitMatrix, qrCodeModel.getImageFormat().getExtension(),
-            os);
+          os);
         return os.toByteArray();
       } catch (IOException | WriterException e) {
         throw new RuntimeException(e);

@@ -41,7 +41,7 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
 
   @Autowired
   public AccountRegisterCmdExe(AccountGateway accountGateway,
-      CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
+    CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
     super(captchaGrpcService);
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
@@ -51,6 +51,6 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
   public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
     verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
     accountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
-        .ifPresent(accountGateway::register);
+      .ifPresent(accountGateway::register);
   }
 }

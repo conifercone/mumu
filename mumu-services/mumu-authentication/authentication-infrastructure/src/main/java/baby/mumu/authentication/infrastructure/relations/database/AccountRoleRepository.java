@@ -26,8 +26,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.1.0
  */
 public interface AccountRoleRepository extends
-    BaseJpaRepository<AccountRoleDo, AccountRoleDoId>,
-    JpaSpecificationExecutor<AccountRoleDo> {
+  BaseJpaRepository<AccountRoleDo, AccountRoleDoId>,
+  JpaSpecificationExecutor<AccountRoleDo> {
 
   List<AccountRoleDo> findByAccountId(Long accountId);
 

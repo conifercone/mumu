@@ -60,14 +60,14 @@ public interface BroadcastTextMessageGateway {
    * 分页查询所有当前登录用户转发的文本广播消息
    *
    * @param broadcastTextMessage 查询条件
-   * @param current               页码
+   * @param current              页码
    * @param pageSize             每页数量
    * @return 查询结果
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<BroadcastTextMessage> findAllYouSend(@Nullable BroadcastTextMessage broadcastTextMessage,
-      int current,
-      int pageSize);
+    int current,
+    int pageSize);
 
   /**
    * 根据ID归档消息

@@ -42,21 +42,21 @@ public class AspectConfiguration {
 
   @Bean
   public DangerousOperationAspect dangerousOperationAspect(
-      SystemLogGrpcService systemLogGrpcService) {
+    SystemLogGrpcService systemLogGrpcService) {
     return new DangerousOperationAspect(systemLogGrpcService);
   }
 
   @Bean
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
   public RateLimitingAspect rateLimitingAspect(ApplicationContext applicationContext,
-      ExtensionProperties extensionProperties) {
+    ExtensionProperties extensionProperties) {
     return new RateLimitingAspect(applicationContext, extensionProperties);
   }
 
   @Bean
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
   public RateLimitingKeyProvider rateLimitingHttpIpKeyProviderImpl(
-      HttpServletRequest httpServletRequest) {
+    HttpServletRequest httpServletRequest) {
     return new RateLimitingHttpIpKeyProviderImpl(httpServletRequest);
   }
 

@@ -35,7 +35,7 @@ public class BarCodeConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<BarCode> toEntity(
-      BarCodeGenerateCmd barCodeGenerateCmd) {
+    BarCodeGenerateCmd barCodeGenerateCmd) {
     return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeMapper.INSTANCE::toEntity);
   }
 }

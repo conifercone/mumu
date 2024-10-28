@@ -44,7 +44,7 @@ public interface BroadcastTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   BroadcastTextMessage toEntity(
-      BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
+    BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
 
   @API(status = Status.STABLE, since = "1.0.2")
   BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);
@@ -54,22 +54,22 @@ public interface BroadcastTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(
-      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
+    BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.4")
   BroadcastTextMessageArchivedDo toArchiveDo(BroadcastTextMessageDo broadcastTextMessageDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
   BroadcastTextMessageDo toDataObject(
-      BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo);
+    BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessageFindAllYouSendCo toFindAllYouSendCo(
-      BroadcastTextMessage broadcastTextMessage);
+    BroadcastTextMessage broadcastTextMessage);
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
+    @MappingTarget BroadcastTextMessageFindAllYouSendCo broadcastTextMessageFindAllYouSendCo) {
     CommonUtil.convertToAccountZone(broadcastTextMessageFindAllYouSendCo);
   }
 }

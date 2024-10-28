@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.1.0
  */
 public interface RoleAuthorityRepository extends
-    BaseJpaRepository<RoleAuthorityDo, RoleAuthorityDoId>,
-    JpaSpecificationExecutor<RoleAuthorityDo> {
+  BaseJpaRepository<RoleAuthorityDo, RoleAuthorityDoId>,
+  JpaSpecificationExecutor<RoleAuthorityDo> {
 
   /**
    * 根据权限ID查询角色权限关联关系

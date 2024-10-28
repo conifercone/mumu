@@ -33,7 +33,7 @@ public class RateLimitingGrpcIpKeyProviderImpl implements RateLimitingKeyProvide
   @Override
   public String generateUniqKey() {
     return Optional.ofNullable(ClientIpInterceptor.getClientIp())
-        .filter(StringUtils::isNotBlank)
+      .filter(StringUtils::isNotBlank)
       .orElseThrow(() -> new MuMuException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
   }
 }

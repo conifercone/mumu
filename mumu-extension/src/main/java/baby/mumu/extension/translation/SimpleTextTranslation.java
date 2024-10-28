@@ -35,13 +35,13 @@ public interface SimpleTextTranslation {
   @API(status = Status.STABLE, since = "1.0.3")
   default Optional<String> translateToAccountLanguageIfPossible(String text) {
     return Optional.ofNullable(text).filter(StringUtils::isNotBlank)
-        .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
-          try {
-            return this.translate(text, languageEnum.name().toLowerCase());
-          } catch (Exception e) {
-            // ignore
-          }
-          return null;
-        });
+      .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
+        try {
+          return this.translate(text, languageEnum.name().toLowerCase());
+        } catch (Exception e) {
+          // ignore
+        }
+        return null;
+      });
   }
 }

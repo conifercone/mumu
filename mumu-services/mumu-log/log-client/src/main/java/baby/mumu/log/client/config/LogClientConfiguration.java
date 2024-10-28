@@ -34,13 +34,13 @@ public class LogClientConfiguration {
 
   @Bean
   public OperationLogGrpcService operationLogGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new OperationLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public SystemLogGrpcService systemLogGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new SystemLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 

@@ -73,31 +73,31 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   private final LettuceBasedProxyManager<String> proxyManager;
 
   public RateLimitingAspect(ApplicationContext applicationContext,
-      @NotNull ExtensionProperties extensionProperties) {
+    @NotNull ExtensionProperties extensionProperties) {
     this.applicationContext = applicationContext;
     this.redisClient = RedisClient.create(extensionProperties.getRl().getRedis().getUri());
     this.connection = redisClient.connect(new RateLimiterStringByteArrayCodec());
     this.proxyManager = Bucket4jLettuce.casBasedBuilder(
-            connection.async())
-        .expirationAfterWrite(
-            ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(ofSeconds(10)))
-        .build();
+        connection.async())
+      .expirationAfterWrite(
+        ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(ofSeconds(10)))
+      .build();
   }
 
   @Around("@annotation(baby.mumu.basis.annotations.RateLimiter) || @annotation(baby.mumu.basis.annotations.RateLimiters)")
   public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
     List<RateLimiter> annotations = new ArrayList<>();
     Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiter.class))
-        .ifPresent(annotations::add);
+      .ifPresent(annotations::add);
     Optional.ofNullable(getMethodAnnotation(joinPoint, RateLimiters.class))
-        .map(rateLimiters -> Arrays.asList(rateLimiters.value())).ifPresent(annotations::addAll);
+      .map(rateLimiters -> Arrays.asList(rateLimiters.value())).ifPresent(annotations::addAll);
 
     if (!annotations.isEmpty()) {
       String defaultSignature = DigestUtils.md5Hex(joinPoint.getSignature().toString());
       annotations.stream().distinct().collect(
-          Collectors.groupingBy(
-              x -> RateLimitingKey.builder().keyProvider(x.keyProvider()).prefix(x.prefix())
-                  .build())).forEach((key, val) -> {
+        Collectors.groupingBy(
+          x -> RateLimitingKey.builder().keyProvider(x.keyProvider()).prefix(x.prefix())
+            .build())).forEach((key, val) -> {
         if (StringUtils.isBlank(key.getPrefix())) {
           key.setPrefix(defaultSignature);
         }
@@ -110,7 +110,7 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   }
 
   private void rateLimiting(@NotNull RateLimitingKey rateLimitingKey,
-      @NotNull List<RateLimiter> list) {
+    @NotNull List<RateLimiter> list) {
     Bucket bucket = getBucket(rateLimitingKey, list);
     ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
     if (!probe.isConsumed()) {
@@ -121,9 +121,9 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   }
 
   private Bucket getBucket(@NotNull RateLimitingKey rateLimitingKey,
-      @NotNull List<RateLimiter> list) {
+    @NotNull List<RateLimiter> list) {
     RateLimitingKeyProvider rateLimitingKeyProvider = applicationContext.getBean(
-        rateLimitingKey.getKeyProvider());
+      rateLimitingKey.getKeyProvider());
     String uniqKey = rateLimitingKey.getPrefix() + ":" + rateLimitingKeyProvider.generateUniqKey();
     ConfigurationBuilder configurationBuilder = BucketConfiguration.builder();
 
@@ -136,23 +136,23 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
       switch (timeUnit) {
         case SECONDS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(capacity)
-                  .refillIntervally(capacity, ofSeconds(period)));
+            .addLimit(limit -> limit.capacity(capacity)
+              .refillIntervally(capacity, ofSeconds(period)));
           break;
         case MINUTES:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(capacity)
-                  .refillIntervally(capacity, ofMinutes(period)));
+            .addLimit(limit -> limit.capacity(capacity)
+              .refillIntervally(capacity, ofMinutes(period)));
           break;
         case HOURS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(capacity)
-                  .refillIntervally(capacity, ofHours(period)));
+            .addLimit(limit -> limit.capacity(capacity)
+              .refillIntervally(capacity, ofHours(period)));
           break;
         case DAYS:
           configurationBuilder
-              .addLimit(limit -> limit.capacity(capacity)
-                  .refillIntervally(capacity, ofDays(period)));
+            .addLimit(limit -> limit.capacity(capacity)
+              .refillIntervally(capacity, ofDays(period)));
           break;
         default:
           throw new IllegalStateException("Unexpected value: " + x.timeUnit());
@@ -165,15 +165,15 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   private @NotNull BasicInformation getBasicInformation(@NotNull RateLimiter rateLimiter) {
     if (rateLimiter.customGeneration()) {
       RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(
-          rateLimiter.customGenerationProvider());
+        rateLimiter.customGenerationProvider());
       RateLimitingCustomGenerate generate = rateLimitingCustomGenerateProvider.generate();
       assert generate != null;
       return new BasicInformation(generate.capacity(),
-          generate.period(),
-          generate.timeUnit());
+        generate.period(),
+        generate.timeUnit());
     } else {
       return new BasicInformation(rateLimiter.capacity(), rateLimiter.period(),
-          rateLimiter.timeUnit());
+        rateLimiter.timeUnit());
     }
   }
 

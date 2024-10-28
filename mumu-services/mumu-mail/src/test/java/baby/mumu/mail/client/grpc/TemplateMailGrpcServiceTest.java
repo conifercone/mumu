@@ -60,33 +60,33 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void sendMail() {
     @Language("JSON") String data = """
-        {
-                    "verifyCode": [
-                        5,
-                        2,
-                        8,
-                        4
-                    ]
-                }""";
+      {
+                  "verifyCode": [
+                      5,
+                      2,
+                      8,
+                      4
+                  ]
+              }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-        .setTemplateMailSendGrpcCo(
-            TemplateMailSendGrpcCo.newBuilder()
-                .setName(StringValue.of("template/verification_code.html"))
-                .setAddress(StringValue.of("mail"))
-                .setFrom(StringValue.of("conifercone@163.com"))
-                .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-                .setSubject(StringValue.of("验证码"))
-                .setData(StringValue.of(data))
-                .build())
-        .build();
+      .setTemplateMailSendGrpcCo(
+        TemplateMailSendGrpcCo.newBuilder()
+          .setName(StringValue.of("template/verification_code.html"))
+          .setAddress(StringValue.of("mail"))
+          .setFrom(StringValue.of("conifercone@163.com"))
+          .setTo(StringValue.of("kaiyu.shan@outlook.com"))
+          .setSubject(StringValue.of("验证码"))
+          .setData(StringValue.of(data))
+          .build())
+      .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
-        AuthHeader.builder().bearer().tokenSupplier(
-            () -> ByteBuffer.wrap(getToken().orElseThrow(
-              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken().orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     Empty empty = templateMailGrpcService.sendMail(
-        templateMailSendGrpcCmd,
-        callCredentials);
+      templateMailSendGrpcCmd,
+      callCredentials);
     Assertions.assertNotNull(empty);
   }
 
@@ -94,33 +94,33 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
   public void syncSendMail() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     @Language("JSON") String data = """
-        {
-                    "verifyCode": [
-                        5,
-                        2,
-                        8,
-                        4
-                    ]
-                }""";
+      {
+                  "verifyCode": [
+                      5,
+                      2,
+                      8,
+                      4
+                  ]
+              }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-        .setTemplateMailSendGrpcCo(
-            TemplateMailSendGrpcCo.newBuilder()
-                .setName(StringValue.of("template/verification_code.html"))
-                .setAddress(StringValue.of("mail"))
-                .setFrom(StringValue.of("conifercone@163.com"))
-                .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-                .setSubject(StringValue.of("验证码"))
-                .setData(StringValue.of(data))
-                .build())
-        .build();
+      .setTemplateMailSendGrpcCo(
+        TemplateMailSendGrpcCo.newBuilder()
+          .setName(StringValue.of("template/verification_code.html"))
+          .setAddress(StringValue.of("mail"))
+          .setFrom(StringValue.of("conifercone@163.com"))
+          .setTo(StringValue.of("kaiyu.shan@outlook.com"))
+          .setSubject(StringValue.of("验证码"))
+          .setData(StringValue.of(data))
+          .build())
+      .build();
     AuthCallCredentials callCredentials = new AuthCallCredentials(
-        AuthHeader.builder().bearer().tokenSupplier(
-            () -> ByteBuffer.wrap(getToken().orElseThrow(
-              () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken().orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
     );
     ListenableFuture<Empty> emptyListenableFuture = templateMailGrpcService.syncSendMail(
-        templateMailSendGrpcCmd,
-        callCredentials);
+      templateMailSendGrpcCmd,
+      callCredentials);
     emptyListenableFuture.addListener(() -> {
       try {
         Empty empty = emptyListenableFuture.get();

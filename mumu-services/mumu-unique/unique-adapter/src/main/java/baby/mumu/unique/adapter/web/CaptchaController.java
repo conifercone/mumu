@@ -58,7 +58,7 @@ public class CaptchaController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public SimpleCaptchaGeneratedCo simple(
-      @ModelAttribute SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    @ModelAttribute SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
   }
 
@@ -68,7 +68,7 @@ public class CaptchaController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public ResponseWrapper<Boolean> verifySimple(
-      @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
+    @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
     return ResponseWrapper.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
   }
 }

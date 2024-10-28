@@ -49,15 +49,15 @@ public class RoleArchivedFindAllCmdExe {
   }
 
   public Page<RoleArchivedFindAllCo> execute(
-      @NotNull RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    @NotNull RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     Role role = roleConvertor.toEntity(roleArchivedFindAllCmd)
-        .orElseGet(Role::new);
+      .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findArchivedAll(role,
-        roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
+      roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
     List<RoleArchivedFindAllCo> roleArchivedFindAllCos = roles.getContent().stream()
-        .map(roleConvertor::toArchivedFindAllCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(roleConvertor::toArchivedFindAllCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(roleArchivedFindAllCos, roles.getPageable(),
-        roles.getTotalElements());
+      roles.getTotalElements());
   }
 }

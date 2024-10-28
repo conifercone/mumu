@@ -38,7 +38,7 @@ public class AccountDeleteCurrentCmdExe extends CaptchaVerify {
 
   @Autowired
   public AccountDeleteCurrentCmdExe(AccountGateway accountGateway,
-      CaptchaGrpcService captchaGrpcService) {
+    CaptchaGrpcService captchaGrpcService) {
     super(captchaGrpcService);
     this.accountGateway = accountGateway;
   }

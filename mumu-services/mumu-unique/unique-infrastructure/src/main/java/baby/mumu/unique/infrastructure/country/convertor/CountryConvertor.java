@@ -43,51 +43,51 @@ public class CountryConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryStateCityGetAllCo> toCountryStateCityGetAllCo(
-      Country country) {
+    Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryStateCityGetAllCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStatesByCountryIdCo> toCountryGetStatesByCountryIdCo(
-      State state) {
+    State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStatesByCountryIdCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCitiesByStateIdCo> toCountryGetCitiesByStateIdCo(
-      City city) {
+    City city) {
     return Optional.ofNullable(city).map(CountryMapper.INSTANCE::toCountryGetCitiesByStateIdCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateByIdCo> toCountryGetStateByIdCo(
-      State state) {
+    State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStateByIdCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateCitiesByIdCo> toCountryGetStateCitiesByIdCo(
-      State state) {
+    State state) {
     return Optional.ofNullable(state)
-        .map(CountryMapper.INSTANCE::toCountryGetStateCitiesByIdCo);
+      .map(CountryMapper.INSTANCE::toCountryGetStateCitiesByIdCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCityByIdCo> toCountryGetCityByIdCo(
-      City city) {
+    City city) {
     return Optional.ofNullable(city)
-        .map(CountryMapper.INSTANCE::toCountryGetCityByIdCo);
+      .map(CountryMapper.INSTANCE::toCountryGetCityByIdCo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetAllCo> toCountryGetAllCo(
-      Country country) {
+    Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryGetAllCo);
   }
 }

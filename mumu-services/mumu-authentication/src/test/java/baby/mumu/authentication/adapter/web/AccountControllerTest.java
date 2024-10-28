@@ -69,7 +69,7 @@ public class AccountControllerTest {
 
   @Autowired
   public AccountControllerTest(MockMvc mockMvc, CaptchaGrpcService captchaGrpcService,
-      ObjectMapper objectMapper) {
+    ObjectMapper objectMapper) {
     this.mockMvc = mockMvc;
     this.captchaGrpcService = captchaGrpcService;
     this.objectMapper = objectMapper;
@@ -79,24 +79,24 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
     accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
     accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
     AccountRegisterCo accountRegisterCo = getAccountRegisterCo();
     accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/account/register").with(csrf())
-            .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .post("/account/register").with(csrf())
+        .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   private static @NotNull AccountRegisterCo getAccountRegisterCo() {
@@ -131,14 +131,14 @@ public class AccountControllerTest {
     accountUpdateByIdCo.setUsername("test_updated");
     accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/updateById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountUpdateByIdCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/updateById").with(csrf())
+        .content(objectMapper.writeValueAsBytes(accountUpdateByIdCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
@@ -150,40 +150,40 @@ public class AccountControllerTest {
     accountUpdateRoleCo.setRoleCodes(Collections.singletonList("test"));
     accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/updateRoleById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountUpdateRoleCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/updateRoleById").with(csrf())
+        .content(objectMapper.writeValueAsBytes(accountUpdateRoleCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void disable() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/disable/1").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/disable/1").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void resetPassword() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/resetPassword/1").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/resetPassword/1").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
@@ -192,14 +192,14 @@ public class AccountControllerTest {
     AccountPasswordVerifyCmd accountPasswordVerifyCmd = new AccountPasswordVerifyCmd();
     accountPasswordVerifyCmd.setPassword("admin");
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/account/verifyPassword").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .get("/account/verifyPassword").with(csrf())
+        .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
@@ -209,61 +209,61 @@ public class AccountControllerTest {
     accountChangePasswordCmd.setNewPassword("admin1");
     accountChangePasswordCmd.setOriginalPassword("admin");
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/changePassword").with(csrf())
-            .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/changePassword").with(csrf())
+        .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrent() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-        .setLength(Int32Value.of(4))
-        .setTtl(Int64Value.of(500)).build();
+      .setLength(Int32Value.of(4))
+      .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
-        simpleCaptchaGeneratedGrpcCmd);
+      simpleCaptchaGeneratedGrpcCmd);
     AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
     accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
     accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/account/deleteCurrent").with(csrf())
-            .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .delete("/account/deleteCurrent").with(csrf())
+        .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/archiveById/1").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/archiveById/1").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/account/recoverFromArchiveById/1").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/account/recoverFromArchiveById/1").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 }

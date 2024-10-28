@@ -42,9 +42,9 @@ public class MinioConfiguration {
   @Bean
   public MinioClient minioClient() {
     return MinioClient.builder()
-        .endpoint(fileProperties.getMinio().getEndpoint())
-        .credentials(fileProperties.getMinio().getAccessKey(),
-            fileProperties.getMinio().getSecretKey())
-        .build();
+      .endpoint(fileProperties.getMinio().getEndpoint())
+      .credentials(fileProperties.getMinio().getAccessKey(),
+        fileProperties.getMinio().getSecretKey())
+      .build();
   }
 }

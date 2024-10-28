@@ -35,7 +35,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 public interface AuthorityArchivedRepository extends BaseJpaRepository<AuthorityArchivedDo, Long>,
-    JpaSpecificationExecutor<AuthorityArchivedDo> {
+  JpaSpecificationExecutor<AuthorityArchivedDo> {
 
   /**
    * 判断是否存在指定id和code的权限
@@ -45,7 +45,7 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
    * @return 是否存在
    */
   boolean existsByIdOrCode(Long id,
-      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+    @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 
   /**
    * 判断权限编码是否已存在
@@ -54,7 +54,7 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
    * @return 是否存在
    */
   boolean existsByCode(
-      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+    @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 
 
   /**
@@ -65,11 +65,11 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
    * @return 查询结果
    */
   @Query(
-      "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
-          + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
-          + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
+    "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
+      + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
+      + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
   Slice<AuthorityArchivedDo> findAllSlice(
-      @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
+    @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
 
   /**
    * 分页查询已归档的权限（查询总数）
@@ -79,9 +79,9 @@ public interface AuthorityArchivedRepository extends BaseJpaRepository<Authority
    * @return 查询结果
    */
   @Query(
-      "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
-          + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
-          + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
+    "select a from AuthorityArchivedDo a where (:#{#authorityArchivedDo.id} is null or a.id = :#{#authorityArchivedDo.id}) "
+      + "and (:#{#authorityArchivedDo.name} is null or a.name like %:#{#authorityArchivedDo.name}%) "
+      + "and (:#{#authorityArchivedDo.code} is null or a.code like %:#{#authorityArchivedDo.code}%) order by a.creationTime desc")
   Page<AuthorityArchivedDo> findAllPage(
-      @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
+    @Param("authorityArchivedDo") AuthorityArchivedDo authorityArchivedDo, Pageable pageable);
 }

@@ -131,8 +131,8 @@ public enum ResponseCode implements BaseResponse {
   private @NotNull String makeMessage(@Nullable Object[] args) {
     return SpringContextUtil.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
-            SecurityContextUtil.getLoginAccountLanguage()
-                .map(languageEnum -> Locale.of(languageEnum.name()))
-              .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
+        SecurityContextUtil.getLoginAccountLanguage()
+          .map(languageEnum -> Locale.of(languageEnum.name()))
+          .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }
 }

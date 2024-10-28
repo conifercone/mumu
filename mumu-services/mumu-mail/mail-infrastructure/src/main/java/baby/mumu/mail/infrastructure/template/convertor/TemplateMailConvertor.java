@@ -37,13 +37,13 @@ public class TemplateMailConvertor {
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<TemplateMailThymeleafDo> toThymeleafDo(TemplateMail templateMail) {
     return Optional.ofNullable(templateMail)
-        .map(TemplateMailMapper.INSTANCE::toThymeleafDo);
+      .map(TemplateMailMapper.INSTANCE::toThymeleafDo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
     return Optional.ofNullable(templateMailSendCo)
-        .map(TemplateMailMapper.INSTANCE::toEntity);
+      .map(TemplateMailMapper.INSTANCE::toEntity);
   }
 }

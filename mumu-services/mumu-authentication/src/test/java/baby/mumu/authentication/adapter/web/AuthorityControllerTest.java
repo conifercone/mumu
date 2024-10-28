@@ -67,27 +67,27 @@ public class AuthorityControllerTest {
     authorityAddCo.setName("test_name");
     authorityAddCmd.setAuthorityAddCo(authorityAddCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/authority/add").with(csrf())
-            .content(objectMapper.writeValueAsBytes(authorityAddCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .post("/authority/add").with(csrf())
+        .content(objectMapper.writeValueAsBytes(authorityAddCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void deleteById() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .delete("/authority/deleteById/3").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().is5xxServerError())
-        .andDo(print());
+        .delete("/authority/deleteById/3").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().is5xxServerError())
+      .andDo(print());
   }
 
   @Test
@@ -99,14 +99,14 @@ public class AuthorityControllerTest {
     authorityUpdateCo.setCode("test_updated");
     authorityUpdateCmd.setAuthorityUpdateCo(authorityUpdateCo);
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/updateById").with(csrf())
-            .content(objectMapper.writeValueAsBytes(authorityUpdateCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/authority/updateById").with(csrf())
+        .content(objectMapper.writeValueAsBytes(authorityUpdateCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
@@ -116,39 +116,39 @@ public class AuthorityControllerTest {
     authorityFindAllCmd.setPageSize(10);
     authorityFindAllCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/authority/findAll")
-            .content(objectMapper.writeValueAsBytes(authorityFindAllCmd))
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .get("/authority/findAll")
+        .content(objectMapper.writeValueAsBytes(authorityFindAllCmd))
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void archiveById() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/archiveById/3").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/authority/archiveById/3").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .put("/authority/recoverFromArchiveById/3").with(csrf())
-            .header("X-Forwarded-For", "123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(print());
+        .put("/authority/recoverFromArchiveById/3").with(csrf())
+        .header("X-Forwarded-For", "123.123.123.123")
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+      )
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andDo(print());
   }
 }

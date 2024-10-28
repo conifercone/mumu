@@ -26,7 +26,7 @@ import java.util.Optional;
  * @since 2.2.0
  */
 public interface AccountRedisRepository extends
-    RedisDocumentRepository<AccountRedisDo, Long> {
+  RedisDocumentRepository<AccountRedisDo, Long> {
 
   Optional<AccountRedisDo> findByUsername(String username);
 

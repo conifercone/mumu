@@ -49,16 +49,16 @@ public class RoleArchivedFindAllSliceCmdExe {
   }
 
   public Slice<RoleArchivedFindAllSliceCo> execute(
-      @NotNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    @NotNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     Role role = roleConvertor.toEntity(
-            roleArchivedFindAllSliceCmd)
-        .orElseGet(Role::new);
+        roleArchivedFindAllSliceCmd)
+      .orElseGet(Role::new);
     Slice<Role> roles = roleGateway.findArchivedAllSlice(role,
-        roleArchivedFindAllSliceCmd.getCurrent(), roleArchivedFindAllSliceCmd.getPageSize());
+      roleArchivedFindAllSliceCmd.getCurrent(), roleArchivedFindAllSliceCmd.getPageSize());
     List<RoleArchivedFindAllSliceCo> roleArchivedFindAllSliceCos = roles.getContent().stream()
-        .map(roleConvertor::toArchivedFindAllSliceCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(roleConvertor::toArchivedFindAllSliceCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(roleArchivedFindAllSliceCos, roles.getPageable(),
-        roles.hasNext());
+      roles.hasNext());
   }
 }

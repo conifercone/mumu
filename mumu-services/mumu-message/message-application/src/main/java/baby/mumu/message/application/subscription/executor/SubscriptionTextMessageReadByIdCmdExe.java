@@ -33,12 +33,12 @@ public class SubscriptionTextMessageReadByIdCmdExe {
 
   @Autowired
   public SubscriptionTextMessageReadByIdCmdExe(
-      SubscriptionTextMessageGateway subscriptionTextMessageGateway) {
+    SubscriptionTextMessageGateway subscriptionTextMessageGateway) {
     this.subscriptionTextMessageGateway = subscriptionTextMessageGateway;
   }
 
   public void execute(
-      Long id) {
+    Long id) {
     Optional.ofNullable(id).ifPresent(subscriptionTextMessageGateway::readMsgById);
   }
 }

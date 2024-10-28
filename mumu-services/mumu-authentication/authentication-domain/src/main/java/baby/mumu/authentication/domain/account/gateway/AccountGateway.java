@@ -187,7 +187,7 @@ public interface AccountGateway {
    * 分页获取账户
    *
    * @param account  查询条件
-   * @param current   页码
+   * @param current  页码
    * @param pageSize 每页数量
    * @return 查询结果
    */
@@ -197,7 +197,7 @@ public interface AccountGateway {
    * 分页获取账户(不查询总数)
    *
    * @param account  查询条件
-   * @param current   页码
+   * @param current  页码
    * @param pageSize 每页数量
    * @return 查询结果
    */

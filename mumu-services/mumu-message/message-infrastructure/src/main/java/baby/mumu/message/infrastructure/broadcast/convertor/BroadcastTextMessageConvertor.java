@@ -60,10 +60,10 @@ public class BroadcastTextMessageConvertor {
 
   @Autowired
   public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      MessageProperties messageProperties,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslations,
-      BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository,
-      BroadcastTextMessageRepository broadcastTextMessageRepository) {
+    MessageProperties messageProperties,
+    ObjectProvider<SimpleTextTranslation> simpleTextTranslations,
+    BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository,
+    BroadcastTextMessageRepository broadcastTextMessageRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
@@ -74,126 +74,126 @@ public class BroadcastTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageForwardCo broadcastTextMessageForwardCo) {
+    BroadcastTextMessageForwardCo broadcastTextMessageForwardCo) {
     return Optional.ofNullable(broadcastTextMessageForwardCo)
-        .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
-          BroadcastTextMessage entity = BroadcastTextMessageMapper.INSTANCE.toEntity(res);
-          entity.setSenderId(senderAccountId);
-          entity.setReadReceiverIds(Collections.emptyList());
-          Optional.ofNullable(entity.getReceiverIds())
-              .ifPresentOrElse(receiverIds -> {
-                    entity.setUnreadQuantity((long) receiverIds.size());
-                    entity.setUnreadReceiverIds(receiverIds);
-                  },
-                  () -> {
-                    ArrayList<Long> receiverIds = Collections.list(
-                        messageProperties.getWebSocket().getAccountBroadcastChannelMap().keys());
-                    entity.setReceiverIds(receiverIds);
-                    entity.setUnreadReceiverIds(receiverIds);
-                    entity.setUnreadQuantity((long) receiverIds.size());
-                  });
-          Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
-          }, () -> {
-            Long id = primaryKeyGrpcService.snowflake();
-            entity.setId(id);
-            res.setId(id);
-          });
-          return entity;
-        }));
+      .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
+        BroadcastTextMessage entity = BroadcastTextMessageMapper.INSTANCE.toEntity(res);
+        entity.setSenderId(senderAccountId);
+        entity.setReadReceiverIds(Collections.emptyList());
+        Optional.ofNullable(entity.getReceiverIds())
+          .ifPresentOrElse(receiverIds -> {
+              entity.setUnreadQuantity((long) receiverIds.size());
+              entity.setUnreadReceiverIds(receiverIds);
+            },
+            () -> {
+              ArrayList<Long> receiverIds = Collections.list(
+                messageProperties.getWebSocket().getAccountBroadcastChannelMap().keys());
+              entity.setReceiverIds(receiverIds);
+              entity.setUnreadReceiverIds(receiverIds);
+              entity.setUnreadQuantity((long) receiverIds.size());
+            });
+        Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
+        }, () -> {
+          Long id = primaryKeyGrpcService.snowflake();
+          entity.setId(id);
+          res.setId(id);
+        });
+        return entity;
+      }));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<BroadcastTextMessageDo> toDataObject(
-      BroadcastTextMessage broadcastTextMessage) {
+    BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-        .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+      .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public List<BroadcastTextMessageReceiverDo> toBroadcastTextMessageSenderReceiverDos(
-      BroadcastTextMessage broadcastTextMessage) {
+    BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-        .flatMap(broadcastTextMessageNotNull ->
-            Optional.ofNullable(broadcastTextMessageNotNull.getReceiverIds())
-                .map(receiverIds -> receiverIds.stream().map(receiverId -> {
-                  BroadcastTextMessageReceiverDo broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDo();
-                  broadcastTextMessageReceiverDo.setMessageStatus(
-                      broadcastTextMessageNotNull.getMessageStatus());
-                  broadcastTextMessageReceiverDo.setId(
-                      BroadcastTextMessageReceiverDoId.builder()
-                          .messageId(broadcastTextMessageNotNull.getId())
-                          .receiverId(receiverId)
-                          .build());
-                  broadcastTextMessageRepository.findById(broadcastTextMessage.getId())
-                      .ifPresent(broadcastTextMessageReceiverDo::setBroadcastTextMessage);
-                  return broadcastTextMessageReceiverDo;
-                }).collect(Collectors.toList()))
-        ).orElse(new ArrayList<>());
+      .flatMap(broadcastTextMessageNotNull ->
+        Optional.ofNullable(broadcastTextMessageNotNull.getReceiverIds())
+          .map(receiverIds -> receiverIds.stream().map(receiverId -> {
+            BroadcastTextMessageReceiverDo broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDo();
+            broadcastTextMessageReceiverDo.setMessageStatus(
+              broadcastTextMessageNotNull.getMessageStatus());
+            broadcastTextMessageReceiverDo.setId(
+              BroadcastTextMessageReceiverDoId.builder()
+                .messageId(broadcastTextMessageNotNull.getId())
+                .receiverId(receiverId)
+                .build());
+            broadcastTextMessageRepository.findById(broadcastTextMessage.getId())
+              .ifPresent(broadcastTextMessageReceiverDo::setBroadcastTextMessage);
+            return broadcastTextMessageReceiverDo;
+          }).collect(Collectors.toList()))
+      ).orElse(new ArrayList<>());
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageDo broadcastTextMessageDo) {
+    BroadcastTextMessageDo broadcastTextMessageDo) {
     return Optional.ofNullable(broadcastTextMessageDo)
-        .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
-          broadcastTextMessage.setReceiverIds(
-              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageId(
-                  broadcastTextMessage.getId()));
-          broadcastTextMessage.setReadQuantity(
-              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
-                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
-          broadcastTextMessage.setUnreadQuantity(
-              broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
-                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
-          broadcastTextMessage.setReadReceiverIds(
-              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
-                  broadcastTextMessage.getId(), MessageStatusEnum.READ));
-          broadcastTextMessage.setUnreadReceiverIds(
-              broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
-                  broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
-          return broadcastTextMessage;
-        });
+      .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
+        broadcastTextMessage.setReceiverIds(
+          broadcastTextMessageReceiverRepository.findReceiverIdsByMessageId(
+            broadcastTextMessage.getId()));
+        broadcastTextMessage.setReadQuantity(
+          broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+            broadcastTextMessage.getId(), MessageStatusEnum.READ));
+        broadcastTextMessage.setUnreadQuantity(
+          broadcastTextMessageReceiverRepository.countByMessageIdAndMessageStatus(
+            broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
+        broadcastTextMessage.setReadReceiverIds(
+          broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+            broadcastTextMessage.getId(), MessageStatusEnum.READ));
+        broadcastTextMessage.setUnreadReceiverIds(
+          broadcastTextMessageReceiverRepository.findReceiverIdsByMessageIdAndMessageStatus(
+            broadcastTextMessage.getId(), MessageStatusEnum.UNREAD));
+        return broadcastTextMessage;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return Optional.ofNullable(broadcastTextMessageFindAllYouSendCmd)
-        .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
+      .map(BroadcastTextMessageMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
-      BroadcastTextMessage broadcastTextMessage) {
+    BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-        .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
-        .map(broadcastTextMessageFindAllYouSendCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      broadcastTextMessageFindAllYouSendCo.getMessage()))
-              .ifPresent(broadcastTextMessageFindAllYouSendCo::setMessage);
-          return broadcastTextMessageFindAllYouSendCo;
-        });
+      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+      .map(broadcastTextMessageFindAllYouSendCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              broadcastTextMessageFindAllYouSendCo.getMessage()))
+          .ifPresent(broadcastTextMessageFindAllYouSendCo::setMessage);
+        return broadcastTextMessageFindAllYouSendCo;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<BroadcastTextMessageArchivedDo> toArchiveDo(
-      BroadcastTextMessageDo broadcastTextMessageDo) {
+    BroadcastTextMessageDo broadcastTextMessageDo) {
     return Optional.ofNullable(broadcastTextMessageDo)
-        .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDo);
+      .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<BroadcastTextMessageDo> toDataObject(
-      BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo) {
+    BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo) {
     return Optional.ofNullable(broadcastTextMessageArchivedDo)
-        .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+      .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
   }
 }

@@ -28,7 +28,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @since 2.2.0
  */
 public interface AccountSystemSettingsMongodbRepository extends
-    MongoRepository<AccountSystemSettingsMongodbDo, String> {
+  MongoRepository<AccountSystemSettingsMongodbDo, String> {
 
   List<AccountSystemSettingsMongodbDo> findByUserId(@NotNull Long userId);
 

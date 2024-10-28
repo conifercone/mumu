@@ -64,9 +64,9 @@ public class DatasourceConfiguration {
 
   @Bean
   public DataSource datasource(
-      ObjectProvider<DataSourceProperties> dataSourcePropertiesObjectProvider,
-      DatasourceFilterChain dataSourceFilterChain,
-      ExtensionProperties extensionProperties, HikariConfig hikariConfig) {
+    ObjectProvider<DataSourceProperties> dataSourcePropertiesObjectProvider,
+    DatasourceFilterChain dataSourceFilterChain,
+    ExtensionProperties extensionProperties, HikariConfig hikariConfig) {
     DataSourceProperties dataSourceProperties = dataSourcePropertiesObjectProvider.getIfAvailable();
     Assert.notNull(dataSourceProperties, "No data source properties found");
     hikariConfig.setUsername(dataSourceProperties.getUsername());

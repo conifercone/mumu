@@ -40,6 +40,6 @@ public class RoleRecoverFromArchiveByIdCmdExe {
 
   public void execute(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(roleGateway::recoverFromArchiveById);
+      .ifPresent(roleGateway::recoverFromArchiveById);
   }
 }

@@ -66,9 +66,9 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Autowired
   public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
-      OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
-      PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate,
-      OperationLogConvertor operationLogConvertor) {
+    OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
+    PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate,
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogKafkaRepository = operationLogKafkaRepository;
     this.operationLogEsRepository = operationLogEsRepository;
     this.objectMapper = objectMapper;
@@ -82,8 +82,8 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     operationLogConvertor.toKafkaDataObject(operationLog).ifPresent(res -> {
       try {
         operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
-            objectMapper.writeValueAsString(
-                res));
+          objectMapper.writeValueAsString(
+            res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }
@@ -98,14 +98,14 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   @Override
   public Optional<OperationLog> findOperationLogById(String id) {
     Optional<OperationLog> optionalOperationLog = operationLogEsRepository.findById(
-        id).flatMap(operationLogConvertor::toEntity);
+      id).flatMap(operationLogConvertor::toEntity);
     OperationLog operationLog = new OperationLog();
     operationLog.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
     operationLog.setBizNo(id);
     operationLog.setContent("根据日志ID获取操作日志");
     operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
     optionalOperationLog.ifPresentOrElse(op -> operationLog.setSuccess(op.toString()),
-        () -> operationLog.setFail(String.format("未找到ID为%s的操作日志", id)));
+      () -> operationLog.setFail(String.format("未找到ID为%s的操作日志", id)));
     this.submit(operationLog);
     return optionalOperationLog;
   }
@@ -117,86 +117,86 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     Criteria criteria = new Criteria();
     Optional.ofNullable(operationLog).ifPresent(optLog -> {
       Optional.ofNullable(optLog.getId())
-          .ifPresent(id -> criteria.and(
-              new Criteria(OperationLogEsDoMetamodel.id).matches(id)));
+        .ifPresent(id -> criteria.and(
+          new Criteria(OperationLogEsDoMetamodel.id).matches(id)));
       Optional.ofNullable(optLog.getContent())
-          .ifPresent(content -> {
-            String propertyName = OperationLogEsDoMetamodel.content;
-            criteria.and(
-                new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(content).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(content));
-          });
+        .ifPresent(content -> {
+          String propertyName = OperationLogEsDoMetamodel.content;
+          criteria.and(
+            new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
+              .matches(content).or(propertyName.concat(ES_QUERY_SP))
+              .matches(content));
+        });
       Optional.ofNullable(optLog.getOperator())
-          .ifPresent(operator -> {
-            String propertyName = OperationLogEsDoMetamodel.operator;
-            criteria.and(
-                new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(operator).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(operator));
-          });
+        .ifPresent(operator -> {
+          String propertyName = OperationLogEsDoMetamodel.operator;
+          criteria.and(
+            new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
+              .matches(operator).or(propertyName.concat(ES_QUERY_SP))
+              .matches(operator));
+        });
       Optional.ofNullable(optLog.getBizNo())
-          .ifPresent(bizNo -> criteria.and(
-              new Criteria(OperationLogEsDoMetamodel.bizNo).matches(bizNo)));
+        .ifPresent(bizNo -> criteria.and(
+          new Criteria(OperationLogEsDoMetamodel.bizNo).matches(bizNo)));
       Optional.ofNullable(optLog.getCategory())
-          .ifPresent(category -> criteria.and(
-              new Criteria(OperationLogEsDoMetamodel.category).matches(
-                  category)));
+        .ifPresent(category -> criteria.and(
+          new Criteria(OperationLogEsDoMetamodel.category).matches(
+            category)));
       Optional.ofNullable(optLog.getDetail())
-          .ifPresent(detail -> {
-            String propertyName = OperationLogEsDoMetamodel.detail;
-            criteria.and(
-                new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(detail).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(detail));
-          });
+        .ifPresent(detail -> {
+          String propertyName = OperationLogEsDoMetamodel.detail;
+          criteria.and(
+            new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
+              .matches(detail).or(propertyName.concat(ES_QUERY_SP))
+              .matches(detail));
+        });
       Optional.ofNullable(optLog.getSuccess())
-          .ifPresent(success -> {
-            String propertyName = OperationLogEsDoMetamodel.success;
-            criteria.and(
-                new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(success).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(success));
-          });
+        .ifPresent(success -> {
+          String propertyName = OperationLogEsDoMetamodel.success;
+          criteria.and(
+            new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
+              .matches(success).or(propertyName.concat(ES_QUERY_SP))
+              .matches(success));
+        });
       Optional.ofNullable(optLog.getFail())
-          .ifPresent(fail -> {
-            String propertyName = OperationLogEsDoMetamodel.fail;
-            criteria.and(
-                new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(fail).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(fail));
-          });
+        .ifPresent(fail -> {
+          String propertyName = OperationLogEsDoMetamodel.fail;
+          criteria.and(
+            new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
+              .matches(fail).or(propertyName.concat(ES_QUERY_SP))
+              .matches(fail));
+        });
 
       Optional.ofNullable(optLog.getOperatingTime())
-          .ifPresent(
-              operatingTime -> criteria.and(new Criteria(
-                  OperationLogEsDoMetamodel.operatingTime).matches(
-                  CommonUtil.convertAccountZoneToUTC(operatingTime))));
+        .ifPresent(
+          operatingTime -> criteria.and(new Criteria(
+            OperationLogEsDoMetamodel.operatingTime).matches(
+            CommonUtil.convertAccountZoneToUTC(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
-          .ifPresent(
-              operatingStartTime -> criteria.and(
-                  new Criteria(
-                      OperationLogEsDoMetamodel.operatingTime).greaterThan(
-                      CommonUtil.convertAccountZoneToUTC(operatingStartTime))));
+        .ifPresent(
+          operatingStartTime -> criteria.and(
+            new Criteria(
+              OperationLogEsDoMetamodel.operatingTime).greaterThan(
+              CommonUtil.convertAccountZoneToUTC(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
-          .ifPresent(
-              operatingEndTime -> criteria.and(
-                  new Criteria(
-                      OperationLogEsDoMetamodel.operatingTime).lessThan(
-                      CommonUtil.convertAccountZoneToUTC(operatingEndTime))));
+        .ifPresent(
+          operatingEndTime -> criteria.and(
+            new Criteria(
+              OperationLogEsDoMetamodel.operatingTime).lessThan(
+              CommonUtil.convertAccountZoneToUTC(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
-        .addSort(
-            Sort.by(OperationLogEsDoMetamodel.operatingTime).descending());
+      .addSort(
+        Sort.by(OperationLogEsDoMetamodel.operatingTime).descending());
     SearchHits<OperationLogEsDo> searchHits = elasticsearchTemplate.search(query,
-        OperationLogEsDo.class);
+      OperationLogEsDo.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(operationLogConvertor::toEntity)
-        .filter(Optional::isPresent).map(Optional::get)
-        .peek(operationLogDomain ->
-            operationLogDomain.setOperatingTime(
-                CommonUtil.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))
-        .toList();
+      .map(SearchHit::getContent).map(operationLogConvertor::toEntity)
+      .filter(Optional::isPresent).map(Optional::get)
+      .peek(operationLogDomain ->
+        operationLogDomain.setOperatingTime(
+          CommonUtil.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))
+      .toList();
     return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
   }
 }

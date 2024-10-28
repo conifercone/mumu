@@ -57,9 +57,9 @@ public class BarCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResponseWrapper<String> dataUrlGenerate(
-      @ModelAttribute @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
+    @ModelAttribute @Valid BarCodeGenerateCmd barCodeGenerateCmd) {
     return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-        barCodeGenerateCmd.getImageFormat().getMimeType(),
-        Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
+      barCodeGenerateCmd.getImageFormat().getMimeType(),
+      Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
   }
 }

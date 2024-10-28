@@ -37,7 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig(OcrConfiguration.class)
 @TestPropertySource(properties = {
-    "mumu.extension.ocr.tess4j.enabled=true"
+  "mumu.extension.ocr.tess4j.enabled=true"
 })
 public class Tess4jOcrTest {
 
@@ -123,7 +123,7 @@ public class Tess4jOcrTest {
   }
 
   private @NotNull File getFileFromResource(String fileName)
-      throws IOException {
+    throws IOException {
     Resource resource = resourceLoader.getResource("classpath:" + fileName);
     File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));
     try (var inputStream = resource.getInputStream()) {

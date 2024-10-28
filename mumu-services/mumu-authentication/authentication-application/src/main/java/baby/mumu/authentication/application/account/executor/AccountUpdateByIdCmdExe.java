@@ -46,6 +46,6 @@ public class AccountUpdateByIdCmdExe {
   public void execute(@NotNull AccountUpdateByIdCmd accountUpdateByIdCmd) {
     Assert.notNull(accountUpdateByIdCmd, "AccountUpdateByIdCmd cannot be null");
     accountConvertor.toEntity(accountUpdateByIdCmd.getAccountUpdateByIdCo())
-        .ifPresent(accountGateway::updateById);
+      .ifPresent(accountGateway::updateById);
   }
 }

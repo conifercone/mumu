@@ -33,12 +33,12 @@ public class BroadcastTextMessageReadByIdCmdExe {
 
   @Autowired
   public BroadcastTextMessageReadByIdCmdExe(
-      BroadcastTextMessageGateway broadcastTextMessageGateway) {
+    BroadcastTextMessageGateway broadcastTextMessageGateway) {
     this.broadcastTextMessageGateway = broadcastTextMessageGateway;
   }
 
   public void execute(
-      Long id) {
+    Long id) {
     Optional.ofNullable(id).ifPresent(broadcastTextMessageGateway::readMsgById);
   }
 }

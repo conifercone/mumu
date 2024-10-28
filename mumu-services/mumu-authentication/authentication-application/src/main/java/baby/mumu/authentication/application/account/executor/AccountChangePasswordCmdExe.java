@@ -43,6 +43,6 @@ public class AccountChangePasswordCmdExe {
   public void execute(@NotNull AccountChangePasswordCmd accountChangePasswordCmd) {
     Assert.notNull(accountChangePasswordCmd, "AccountChangePasswordCmd cannot be null");
     accountGateway.changePassword(accountChangePasswordCmd.getOriginalPassword(),
-        accountChangePasswordCmd.getNewPassword());
+      accountChangePasswordCmd.getNewPassword());
   }
 }

@@ -39,8 +39,8 @@ public class Tess4jOcrProcessor implements OcrProcessor {
   @Override
   public String doOcr(Ocr ocr) {
     return Optional.ofNullable(ocr).filter(
-        ocrNonNull -> ocrNonNull.getSourceFile() != null && StringUtils.isNotBlank(
-            ocrNonNull.getTargetLanguage())).map(ocrNonNull -> {
+      ocrNonNull -> ocrNonNull.getSourceFile() != null && StringUtils.isNotBlank(
+        ocrNonNull.getTargetLanguage())).map(ocrNonNull -> {
       tess4j.setLanguage(ocrNonNull.getTargetLanguage());
       try {
         return tess4j.doOCR(ocrNonNull.getSourceFile());

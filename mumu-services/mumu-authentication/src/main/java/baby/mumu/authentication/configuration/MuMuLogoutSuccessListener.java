@@ -47,11 +47,11 @@ public class MuMuLogoutSuccessListener {
     Authentication authentication = event.getAuthentication();
     if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-          jwtAuthenticationToken.getToken().getTokenValue(),
-          OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        jwtAuthenticationToken.getToken().getTokenValue(),
+        OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-          jwtAuthenticationToken.getToken().getTokenValue(),
-          OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        jwtAuthenticationToken.getToken().getTokenValue(),
+        OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
     }
   }
 }

@@ -53,7 +53,7 @@ public class BroadcastTextMessageController {
 
   @Autowired
   public BroadcastTextMessageController(
-      BroadcastTextMessageService broadcastTextMessageService) {
+    BroadcastTextMessageService broadcastTextMessageService) {
     this.broadcastTextMessageService = broadcastTextMessageService;
   }
 
@@ -63,7 +63,7 @@ public class BroadcastTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-      @RequestBody @Valid BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+    @RequestBody @Valid BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageService.forwardMsg(broadcastTextMessageForwardCmd);
   }
 
@@ -91,7 +91,7 @@ public class BroadcastTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
-      @ModelAttribute @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    @ModelAttribute @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageService.findAllYouSend(broadcastTextMessageFindAllYouSendCmd);
   }
 

@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.1
  */
 public interface SimpleCaptchaRepository extends
-    RedisDocumentRepository<SimpleCaptchaDo, Long> {
+  RedisDocumentRepository<SimpleCaptchaDo, Long> {
 
 }

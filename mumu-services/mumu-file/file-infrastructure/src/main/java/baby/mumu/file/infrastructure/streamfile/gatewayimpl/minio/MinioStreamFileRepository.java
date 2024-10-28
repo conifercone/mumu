@@ -64,12 +64,12 @@ public class MinioStreamFileRepository {
     Optional.ofNullable(streamFileMinioDo).ifPresent(minioDo -> {
       try (InputStream minioDoContent = minioDo.getContent()) {
         minioClient.putObject(
-            PutObjectArgs.builder()
-                .bucket(minioDo.getStorageAddress())
-                .object(minioDo.getName())
-                .stream(minioDoContent, minioDoContent.available(),
-                    -1)
-                .build());
+          PutObjectArgs.builder()
+            .bucket(minioDo.getStorageAddress())
+            .object(minioDo.getName())
+            .stream(minioDoContent, minioDoContent.available(),
+              -1)
+            .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
@@ -126,10 +126,10 @@ public class MinioStreamFileRepository {
     return Optional.ofNullable(streamFileMinioDo).map(minioDo -> {
       try {
         return minioClient.getObject(
-            GetObjectArgs.builder()
-                .bucket(minioDo.getStorageAddress())
-                .object(minioDo.getName())
-                .build());
+          GetObjectArgs.builder()
+            .bucket(minioDo.getStorageAddress())
+            .object(minioDo.getName())
+            .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {
@@ -150,7 +150,7 @@ public class MinioStreamFileRepository {
     boolean exist = true;
     try {
       minioClient.statObject(StatObjectArgs.builder().bucket(streamFileMinioDo.getStorageAddress())
-          .object(streamFileMinioDo.getName()).build());
+        .object(streamFileMinioDo.getName()).build());
     } catch (Exception e) {
       exist = false;
     }
@@ -167,10 +167,10 @@ public class MinioStreamFileRepository {
     Optional.ofNullable(streamFileMinioDo).ifPresent(streamFileMinioDomainObject -> {
       try {
         minioClient.removeObject(
-            RemoveObjectArgs.builder()
-                .bucket(streamFileMinioDomainObject.getStorageAddress())
-                .object(streamFileMinioDomainObject.getName())
-                .build());
+          RemoveObjectArgs.builder()
+            .bucket(streamFileMinioDomainObject.getStorageAddress())
+            .object(streamFileMinioDomainObject.getName())
+            .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
                NoSuchAlgorithmException | ServerException | XmlParserException e) {

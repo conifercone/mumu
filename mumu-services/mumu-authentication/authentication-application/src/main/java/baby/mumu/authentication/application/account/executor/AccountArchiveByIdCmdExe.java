@@ -42,6 +42,6 @@ public class AccountArchiveByIdCmdExe {
   public void execute(Long accountId) {
     Assert.notNull(accountId, "accountId cannot be null");
     Optional.of(accountId)
-        .ifPresent(accountGateway::archiveById);
+      .ifPresent(accountGateway::archiveById);
   }
 }

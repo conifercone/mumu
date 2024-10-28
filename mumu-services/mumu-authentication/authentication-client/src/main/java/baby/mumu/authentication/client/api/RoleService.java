@@ -88,7 +88,7 @@ public interface RoleService {
    * @return 查询结果
    */
   Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
-      RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
+    RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   /**
    * 根据id归档角色
@@ -103,5 +103,5 @@ public interface RoleService {
    * @param id 角色ID
    */
   void recoverFromArchiveById(
-      Long id);
+    Long id);
 }

@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.2
  */
 public interface BroadcastTextMessageRepository extends
-    BaseJpaRepository<BroadcastTextMessageDo, Long>,
-    JpaSpecificationExecutor<BroadcastTextMessageDo> {
+  BaseJpaRepository<BroadcastTextMessageDo, Long>,
+  JpaSpecificationExecutor<BroadcastTextMessageDo> {
 
   Optional<BroadcastTextMessageDo> findByIdAndSenderId(Long id, Long senderId);
 }

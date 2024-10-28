@@ -62,7 +62,7 @@ public class RoleAuthorityDoId implements Serializable {
     }
     RoleAuthorityDoId entity = (RoleAuthorityDoId) o;
     return Objects.equals(this.authorityId, entity.authorityId) &&
-        Objects.equals(this.roleId, entity.roleId);
+      Objects.equals(this.roleId, entity.roleId);
   }
 
   @Override

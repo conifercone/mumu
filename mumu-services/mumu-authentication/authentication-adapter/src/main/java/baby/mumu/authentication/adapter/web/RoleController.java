@@ -106,7 +106,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleFindAllSliceCo> findAllSlice(
-      @ModelAttribute @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
+    @ModelAttribute @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleService.findAllSlice(roleFindAllSliceCmd);
   }
 
@@ -116,7 +116,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Page<RoleArchivedFindAllCo> findArchivedAll(
-      @ModelAttribute @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    @ModelAttribute @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleService.findArchivedAll(roleArchivedFindAllCmd);
   }
 
@@ -126,7 +126,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
-      @ModelAttribute @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    @ModelAttribute @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
   }
 

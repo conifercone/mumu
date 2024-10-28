@@ -34,5 +34,5 @@ public interface DatasourceFilterChain {
    * @return 处理后数据源
    */
   DataSource doAfterFilter(DataSource dataSource,
-      ExtensionProperties extensionProperties);
+    ExtensionProperties extensionProperties);
 }

@@ -39,8 +39,8 @@ public class AccountResetSystemSettingsBySettingsIdCmdExe {
   }
 
   public void execute(
-      String systemSettingsId) {
+    String systemSettingsId) {
     Optional.ofNullable(systemSettingsId)
-        .ifPresent(accountGateway::resetSystemSettingsById);
+      .ifPresent(accountGateway::resetSystemSettingsById);
   }
 }

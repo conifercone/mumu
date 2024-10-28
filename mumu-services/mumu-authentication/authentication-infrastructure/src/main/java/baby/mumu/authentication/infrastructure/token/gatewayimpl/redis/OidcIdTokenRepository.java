@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.0
  */
 public interface OidcIdTokenRepository extends
-    RedisDocumentRepository<OidcIdTokenRedisDo, Long> {
+  RedisDocumentRepository<OidcIdTokenRedisDo, Long> {
 
 }

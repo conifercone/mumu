@@ -62,8 +62,8 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Autowired
   public SystemLogGatewayImpl(SystemLogKafkaRepository systemLogKafkaRepository,
-      SystemLogEsRepository systemLogEsRepository, ObjectMapper objectMapper,
-      ElasticsearchTemplate elasticsearchTemplate, SystemLogConvertor systemLogConvertor) {
+    SystemLogEsRepository systemLogEsRepository, ObjectMapper objectMapper,
+    ElasticsearchTemplate elasticsearchTemplate, SystemLogConvertor systemLogConvertor) {
     this.systemLogKafkaRepository = systemLogKafkaRepository;
     this.systemLogEsRepository = systemLogEsRepository;
     this.objectMapper = objectMapper;
@@ -76,7 +76,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     systemLogConvertor.toKafkaDataObject(systemLog).ifPresent(res -> {
       try {
         systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
-            objectMapper.writeValueAsString(res));
+          objectMapper.writeValueAsString(res));
       } catch (JsonProcessingException e) {
         throw new DataConversionException();
       }
@@ -95,64 +95,64 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     Criteria criteria = new Criteria();
     Optional.ofNullable(systemLog).ifPresent(sysLog -> {
       Optional.ofNullable(sysLog.getId())
-          .ifPresent(id -> criteria.and(
-              new Criteria(SystemLogEsDoMetamodel.id).matches(id)));
+        .ifPresent(id -> criteria.and(
+          new Criteria(SystemLogEsDoMetamodel.id).matches(id)));
       Optional.ofNullable(sysLog.getContent())
-          .ifPresent(content -> {
-            String propertyName = SystemLogEsDoMetamodel.content;
-            criteria.and(
-                new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(content).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(content));
-          });
+        .ifPresent(content -> {
+          String propertyName = SystemLogEsDoMetamodel.content;
+          criteria.and(
+            new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
+              .matches(content).or(propertyName.concat(ES_QUERY_SP))
+              .matches(content));
+        });
       Optional.ofNullable(sysLog.getCategory())
-          .ifPresent(category -> criteria.and(
-              new Criteria(SystemLogEsDoMetamodel.category).matches(
-                  category)));
+        .ifPresent(category -> criteria.and(
+          new Criteria(SystemLogEsDoMetamodel.category).matches(
+            category)));
       Optional.ofNullable(sysLog.getSuccess())
-          .ifPresent(success -> {
-            String propertyName = SystemLogEsDoMetamodel.success;
-            criteria.and(
-                new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
-                    .matches(success).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(success));
-          });
+        .ifPresent(success -> {
+          String propertyName = SystemLogEsDoMetamodel.success;
+          criteria.and(
+            new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
+              .matches(success).or(propertyName.concat(ES_QUERY_SP))
+              .matches(success));
+        });
       Optional.ofNullable(sysLog.getFail())
-          .ifPresent(fail -> {
-            String propertyName = SystemLogEsDoMetamodel.fail;
-            criteria.and(
-                new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
-                    .matches(fail));
-          });
+        .ifPresent(fail -> {
+          String propertyName = SystemLogEsDoMetamodel.fail;
+          criteria.and(
+            new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
+              .matches(fail));
+        });
       Optional.ofNullable(sysLog.getRecordTime())
-          .ifPresent(
-              recordTime -> criteria.and(new Criteria(
-                  SystemLogEsDoMetamodel.recordTime).matches(
-                  CommonUtil.convertAccountZoneToUTC(recordTime))));
+        .ifPresent(
+          recordTime -> criteria.and(new Criteria(
+            SystemLogEsDoMetamodel.recordTime).matches(
+            CommonUtil.convertAccountZoneToUTC(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
-          .ifPresent(
-              recordStartTime -> criteria.and(
-                  new Criteria(
-                      SystemLogEsDoMetamodel.recordTime).greaterThan(
-                      CommonUtil.convertAccountZoneToUTC(recordStartTime))));
+        .ifPresent(
+          recordStartTime -> criteria.and(
+            new Criteria(
+              SystemLogEsDoMetamodel.recordTime).greaterThan(
+              CommonUtil.convertAccountZoneToUTC(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
-          .ifPresent(
-              recordEndTime -> criteria.and(
-                  new Criteria(
-                      SystemLogEsDoMetamodel.recordTime).lessThan(
-                      CommonUtil.convertAccountZoneToUTC(recordEndTime))));
+        .ifPresent(
+          recordEndTime -> criteria.and(
+            new Criteria(
+              SystemLogEsDoMetamodel.recordTime).lessThan(
+              CommonUtil.convertAccountZoneToUTC(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
-        .addSort(
-            Sort.by(SystemLogEsDoMetamodel.recordTime).descending());
+      .addSort(
+        Sort.by(SystemLogEsDoMetamodel.recordTime).descending());
     SearchHits<SystemLogEsDo> searchHits = elasticsearchTemplate.search(query,
-        SystemLogEsDo.class);
+      SystemLogEsDo.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()
-        .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
-        .filter(Optional::isPresent).map(Optional::get)
-        .peek(systemLogDomain -> systemLogDomain.setRecordTime(
-            CommonUtil.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
-        .toList();
+      .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
+      .filter(Optional::isPresent).map(Optional::get)
+      .peek(systemLogDomain -> systemLogDomain.setRecordTime(
+        CommonUtil.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
+      .toList();
     return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
 
   }

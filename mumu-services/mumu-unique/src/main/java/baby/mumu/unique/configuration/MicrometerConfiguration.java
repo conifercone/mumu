@@ -35,19 +35,19 @@ public class MicrometerConfiguration {
 
   @Bean
   public ObservationGrpcClientInterceptor observationGrpcClientInterceptor(
-      ObservationRegistry observationRegistry) {
+    ObservationRegistry observationRegistry) {
     return new ObservationGrpcClientInterceptor(observationRegistry);
   }
 
   @Bean
   public ObservationGrpcServerInterceptor observationGrpcServerInterceptor(
-      ObservationRegistry observationRegistry) {
+    ObservationRegistry observationRegistry) {
     return new ObservationGrpcServerInterceptor(observationRegistry);
   }
 
   @Bean
   MeterRegistryCustomizer<MeterRegistry> configurer(
-      @Value("${spring.application.name}") String applicationName) {
+    @Value("${spring.application.name}") String applicationName) {
     return registry -> registry.config().commonTags("application", applicationName);
   }
 }

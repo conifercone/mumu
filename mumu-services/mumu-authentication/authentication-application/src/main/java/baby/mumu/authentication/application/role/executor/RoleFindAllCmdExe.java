@@ -50,13 +50,13 @@ public class RoleFindAllCmdExe {
 
   public Page<RoleFindAllCo> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
     Role role = roleConvertor.toEntity(roleFindAllCmd)
-        .orElseGet(Role::new);
+      .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,
-        roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
+      roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
     List<RoleFindAllCo> roleFindAllCoList = roles.getContent().stream()
-        .map(roleConvertor::toFindAllCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(roleConvertor::toFindAllCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(roleFindAllCoList, roles.getPageable(),
-        roles.getTotalElements());
+      roles.getTotalElements());
   }
 }

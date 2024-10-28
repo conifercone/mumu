@@ -38,7 +38,7 @@ public class AuthenticationLoggingEventListener extends LoggingEventListener {
 
   @Override
   public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
-      int[] updateCounts, SQLException e) {
+    int[] updateCounts, SQLException e) {
     //ignore batch execution results
   }
 

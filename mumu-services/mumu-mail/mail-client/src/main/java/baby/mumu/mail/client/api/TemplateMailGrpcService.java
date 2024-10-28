@@ -42,13 +42,13 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @since 1.0.1
  */
 public class TemplateMailGrpcService extends MailGrpcService implements
-    DisposableBean {
+  DisposableBean {
 
   private ManagedChannel channel;
 
   public TemplateMailGrpcService(
-      DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
@@ -59,46 +59,46 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty sendMail(TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials) {
+    AuthCallCredentials callCredentials) {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return sendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<Empty> syncSendMail(
-      TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials) {
+    TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
+    AuthCallCredentials callCredentials) {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return syncSendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return syncSendMailFromGrpc(templateMailSendGrpcCmd, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
 
   private Empty sendMailFromGrpc(
-      TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials) {
+    TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
+    AuthCallCredentials callCredentials) {
     TemplateMailServiceBlockingStub templateMailServiceBlockingStub = TemplateMailServiceGrpc.newBlockingStub(
-        channel);
+      channel);
     return templateMailServiceBlockingStub.withCallCredentials(callCredentials)
-        .sendMail(templateMailSendGrpcCmd);
+      .sendMail(templateMailSendGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncSendMailFromGrpc(
-      TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-      AuthCallCredentials callCredentials) {
+    TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
+    AuthCallCredentials callCredentials) {
     TemplateMailServiceFutureStub templateMailServiceFutureStub = TemplateMailServiceGrpc.newFutureStub(
-        channel);
+      channel);
     return templateMailServiceFutureStub.withCallCredentials(callCredentials)
-        .sendMail(templateMailSendGrpcCmd);
+      .sendMail(templateMailSendGrpcCmd);
   }
 
 }

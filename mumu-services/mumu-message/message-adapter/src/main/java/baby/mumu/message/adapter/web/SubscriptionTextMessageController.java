@@ -55,7 +55,7 @@ public class SubscriptionTextMessageController {
 
   @Autowired
   public SubscriptionTextMessageController(
-      SubscriptionTextMessageService subscriptionTextMessageService) {
+    SubscriptionTextMessageService subscriptionTextMessageService) {
     this.subscriptionTextMessageService = subscriptionTextMessageService;
   }
 
@@ -65,7 +65,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-      @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
   }
 
@@ -102,7 +102,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
-      @ModelAttribute @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    @ModelAttribute @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
   }
 
@@ -122,7 +122,7 @@ public class SubscriptionTextMessageController {
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverMsgFromArchiveById(@PathVariable(value = "id") Long id) {
     subscriptionTextMessageService.recoverMsgFromArchiveById(
-        id);
+      id);
   }
 
   @Operation(summary = "查询所有和某人的消息记录")
@@ -131,8 +131,8 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
-      @ModelAttribute @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    @ModelAttribute @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
-        subscriptionTextMessageFindAllWithSomeOneCmd);
+      subscriptionTextMessageFindAllWithSomeOneCmd);
   }
 }

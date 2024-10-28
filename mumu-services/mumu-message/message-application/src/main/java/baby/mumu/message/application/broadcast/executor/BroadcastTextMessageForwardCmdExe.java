@@ -37,18 +37,18 @@ public class BroadcastTextMessageForwardCmdExe {
 
   @Autowired
   public BroadcastTextMessageForwardCmdExe(
-      BroadcastTextMessageGateway broadcastTextMessageGateway,
-      BroadcastTextMessageConvertor broadcastTextMessageConvertor) {
+    BroadcastTextMessageGateway broadcastTextMessageGateway,
+    BroadcastTextMessageConvertor broadcastTextMessageConvertor) {
     this.broadcastTextMessageGateway = broadcastTextMessageGateway;
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
   }
 
   public void execute(
-      @NotNull BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+    @NotNull BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     Assert.notNull(broadcastTextMessageForwardCmd,
-        "BroadcastTextMessageForwardCmd cannot null");
+      "BroadcastTextMessageForwardCmd cannot null");
     broadcastTextMessageConvertor.toEntity(
-            broadcastTextMessageForwardCmd.getBroadcastTextMessageForwardCo())
-        .ifPresent(broadcastTextMessageGateway::forwardMsg);
+        broadcastTextMessageForwardCmd.getBroadcastTextMessageForwardCo())
+      .ifPresent(broadcastTextMessageGateway::forwardMsg);
   }
 }

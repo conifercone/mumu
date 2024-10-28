@@ -98,7 +98,7 @@ public class AuthorityController {
   @API(status = Status.STABLE, since = "1.0.0")
   @RateLimiter
   public Page<AuthorityFindAllCo> findAll(
-      @ModelAttribute @Valid AuthorityFindAllCmd authorityFindAllCmd) {
+    @ModelAttribute @Valid AuthorityFindAllCmd authorityFindAllCmd) {
     return authorityService.findAll(authorityFindAllCmd);
   }
 
@@ -108,7 +108,7 @@ public class AuthorityController {
   @API(status = Status.STABLE, since = "2.2.0")
   @RateLimiter
   public Slice<AuthorityFindAllSliceCo> findAllSlice(
-      @ModelAttribute @Valid AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
+    @ModelAttribute @Valid AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
     return authorityService.findAllSlice(authorityFindAllSliceCmd);
   }
 
@@ -118,7 +118,7 @@ public class AuthorityController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public Page<AuthorityArchivedFindAllCo> findArchivedAll(
-      @ModelAttribute @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
+    @ModelAttribute @Valid AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd) {
     return authorityService.findArchivedAll(authorityArchivedFindAllCmd);
   }
 
@@ -128,7 +128,7 @@ public class AuthorityController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<AuthorityArchivedFindAllSliceCo> findArchivedAllSlice(
-      @ModelAttribute @Valid AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
+    @ModelAttribute @Valid AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
     return authorityService.findArchivedAllSlice(authorityArchivedFindAllSliceCmd);
   }
 

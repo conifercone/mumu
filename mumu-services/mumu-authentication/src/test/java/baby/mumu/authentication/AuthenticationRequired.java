@@ -48,22 +48,22 @@ public class AuthenticationRequired {
     MvcResult mvcResult;
     try {
       byte[] encodedBytes = Base64.encodeBase64(
-          String.format("%s:%s", "mumu-client", "mumu").getBytes(
-              StandardCharsets.UTF_8));
+        String.format("%s:%s", "mumu-client", "mumu").getBytes(
+          StandardCharsets.UTF_8));
       mvcResult = mockMvc.perform(MockMvcRequestBuilders
-              .post("/oauth2/token")
-              .param("username", username)
-              .param("password", password)
-              .param("scope", "message.read message.write openid")
-              .param("grant_type", "authorization_password")
-              .header("Authorization",
-                  "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
-              .header("X-Forwarded-For", "123.123.123.123")
-              .accept(MediaType.APPLICATION_JSON)
-              .contentType(MediaType.APPLICATION_JSON_VALUE)
-          )
-          .andExpect(MockMvcResultMatchers.status().isOk())
-          .andReturn();
+          .post("/oauth2/token")
+          .param("username", username)
+          .param("password", password)
+          .param("scope", "message.read message.write openid")
+          .param("grant_type", "authorization_password")
+          .header("Authorization",
+            "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
+          .header("X-Forwarded-For", "123.123.123.123")
+          .accept(MediaType.APPLICATION_JSON)
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andReturn();
     } catch (Exception e) {
       return Optional.empty();
     }

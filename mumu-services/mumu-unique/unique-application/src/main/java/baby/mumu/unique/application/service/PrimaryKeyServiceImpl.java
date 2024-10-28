@@ -61,8 +61,8 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void snowflake(Empty request, @NotNull StreamObserver<SnowflakeResult> responseObserver) {
     SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
-        .setId(primaryKeySnowflakeGenerateExe.execute())
-        .build();
+      .setId(primaryKeySnowflakeGenerateExe.execute())
+      .build();
     responseObserver.onNext(snowflakeResult);
     responseObserver.onCompleted();
   }

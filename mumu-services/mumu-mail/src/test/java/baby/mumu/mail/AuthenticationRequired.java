@@ -51,7 +51,7 @@ public class AuthenticationRequired {
     headers.add("Authorization", "Basic Y2VudGF1ci1jbGllbnQ6Y2VudGF1cg==");
     HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(form, headers);
     ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-        String.class);
+      String.class);
     if (response.getStatusCode().value() == HttpStatus.SC_OK) {
       try {
         String contentAsString = response.getBody();

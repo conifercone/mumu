@@ -40,6 +40,6 @@ public class AuthorityDeleteByIdCmdExe {
 
   public void execute(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(authorityGateway::deleteById);
+      .ifPresent(authorityGateway::deleteById);
   }
 }

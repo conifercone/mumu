@@ -42,17 +42,17 @@ public class AliyunOcrProcessor implements OcrProcessor {
   @Override
   public String doOcr(Ocr ocr) {
     return Optional.ofNullable(ocr).filter(ocrNotNull -> ocrNotNull.getSourceFile() != null)
-        .map(ocrNotNull -> {
-          try {
-            RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
-                .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
-                .setNeedRotate(false);
-            RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
-                recognizeBasicRequest, new RuntimeOptions());
-            return recognizeBasicResponse.getBody().getData();
-          } catch (Exception e) {
-            throw new RuntimeException(e);
-          }
-        }).orElse(StringUtils.EMPTY);
+      .map(ocrNotNull -> {
+        try {
+          RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
+            .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
+            .setNeedRotate(false);
+          RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
+            recognizeBasicRequest, new RuntimeOptions());
+          return recognizeBasicResponse.getBody().getData();
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }).orElse(StringUtils.EMPTY);
   }
 }

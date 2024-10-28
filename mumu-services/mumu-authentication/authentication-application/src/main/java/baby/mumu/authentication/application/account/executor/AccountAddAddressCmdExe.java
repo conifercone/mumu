@@ -47,7 +47,7 @@ public class AccountAddAddressCmdExe {
   public void execute(@NotNull AccountAddAddressCmd accountAddAddressCmd) {
     Assert.notNull(accountAddAddressCmd, "AccountAddAddressCmd cannot be null");
     Optional.ofNullable(accountAddAddressCmd.getAccountAddAddressCo())
-        .flatMap(accountConvertor::toEntity)
-        .ifPresent(accountGateway::addAddress);
+      .flatMap(accountConvertor::toEntity)
+      .ifPresent(accountGateway::addAddress);
   }
 }

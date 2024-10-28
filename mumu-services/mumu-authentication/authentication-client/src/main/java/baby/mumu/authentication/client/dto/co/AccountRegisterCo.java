@@ -89,11 +89,11 @@ public class AccountRegisterCo extends BaseClientObject {
 
   @Schema(description = "系统设置", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<AccountSystemSettingsRegisterCo> systemSettings = Collections.singletonList(
-      AccountSystemSettingsRegisterCo.builder().profile(
-              AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
-          .name(
-              AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
-          .enabled(true).build());
+    AccountSystemSettingsRegisterCo.builder().profile(
+        AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
+      .name(
+        AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
+      .enabled(true).build());
 
   @Data
   public static class AccountAddressRegisterCo {

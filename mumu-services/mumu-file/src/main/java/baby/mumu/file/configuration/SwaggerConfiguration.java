@@ -33,10 +33,10 @@ public class SwaggerConfiguration {
   @Bean
   public OpenAPI fileOpenAPI() {
     return new OpenAPI()
-        .info(new Info().title("mumu file")
-            .description("mumu file API document")
-            .version("v1")
-            .license(new License().name("Apache 2.0")
-                .url("https://www.apache.org/licenses/LICENSE-2.0")));
+      .info(new Info().title("mumu file")
+        .description("mumu file API document")
+        .version("v1")
+        .license(new License().name("Apache 2.0")
+          .url("https://www.apache.org/licenses/LICENSE-2.0")));
   }
 }

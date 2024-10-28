@@ -56,14 +56,14 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   public void drawBorder(FaceDetection faceDetection) {
     Optional.ofNullable(faceDetection).ifPresent(faceDetectionNonNull -> {
       Result result = getResult(
-          faceDetectionNonNull);
+        faceDetectionNonNull);
       // 绘制矩形框在检测到的人脸周围
       try (RectVector faces = result.faces()) {
         faceDetector.detectMultiScale(result.grayImage(), faces);
         for (int i = 0; i < faces.size(); i++) {
           Rect face = faces.get(i);
           opencv_imgproc.rectangle(result.image(), face, Scalar.RED, 2,
-              opencv_imgproc.LINE_8, 0);
+            opencv_imgproc.LINE_8, 0);
         }
         opencv_imgcodecs.imwrite(faceDetection.getImageOutputAbsolutePath(), result.image());
       }

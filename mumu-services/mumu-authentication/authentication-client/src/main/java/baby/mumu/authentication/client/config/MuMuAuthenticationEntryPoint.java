@@ -39,7 +39,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      MuMuAuthenticationEntryPoint.class);
+    MuMuAuthenticationEntryPoint.class);
 
 
   public MuMuAuthenticationEntryPoint(@NotNull ResourceServerProperties resourceServerProperties) {
@@ -48,7 +48,7 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException, ServletException {
+    AuthenticationException authException) throws IOException, ServletException {
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
         LOGGER.error(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getMessage(), usernameNotFoundException);
@@ -62,7 +62,7 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
         LOGGER.error(ResponseCode.INSUFFICIENT_AUTHENTICATION.getMessage(),
-            insufficientAuthenticationException);
+          insufficientAuthenticationException);
         response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
         ResponseWrapper.exceptionResponse(response, ResponseCode.INSUFFICIENT_AUTHENTICATION);
       }

@@ -53,7 +53,7 @@ public interface OperationLogGateway {
    * 分页查询操作日志
    *
    * @param operationLog 查询条件
-   * @param current       当前页
+   * @param current      当前页
    * @param pageSize     每页数量
    * @return 查询结果
    */

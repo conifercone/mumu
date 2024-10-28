@@ -36,10 +36,10 @@ import org.springframework.stereotype.Component;
 public class SystemLogKafkaRepository extends KafkaTemplate<Object, Object> {
 
   public SystemLogKafkaRepository(
-      @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
-      @Autowired ProducerListener<Object, Object> kafkaProducerListener,
-      @Autowired @NotNull ObjectProvider<RecordMessageConverter> messageConverter,
-      @Autowired @NotNull KafkaProperties properties) {
+    @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
+    @Autowired ProducerListener<Object, Object> kafkaProducerListener,
+    @Autowired @NotNull ObjectProvider<RecordMessageConverter> messageConverter,
+    @Autowired @NotNull KafkaProperties properties) {
     super(kafkaProducerFactory);
     PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
     messageConverter.ifUnique(this::setMessageConverter);

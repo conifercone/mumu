@@ -49,11 +49,11 @@ public class OperationLogEsDo {
    * 日志内容
    */
   @MultiField(
-      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-      otherFields = {
-          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-      }
+    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+    otherFields = {
+      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+    }
   )
   private String content;
 
@@ -61,11 +61,11 @@ public class OperationLogEsDo {
    * 操作日志的执行人
    */
   @MultiField(
-      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-      otherFields = {
-          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-      }
+    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+    otherFields = {
+      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+    }
   )
   private String operator;
 
@@ -85,11 +85,11 @@ public class OperationLogEsDo {
    * 扩展参数，记录操作日志的修改详情
    */
   @MultiField(
-      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-      otherFields = {
-          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-      }
+    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+    otherFields = {
+      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+    }
   )
   private String detail;
 
@@ -97,11 +97,11 @@ public class OperationLogEsDo {
    * 操作日志成功的文本模板
    */
   @MultiField(
-      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-      otherFields = {
-          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-      }
+    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+    otherFields = {
+      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+    }
   )
   private String success;
 
@@ -109,11 +109,11 @@ public class OperationLogEsDo {
    * 操作日志失败的文本模板
    */
   @MultiField(
-      mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-      otherFields = {
-          @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-          @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-      }
+    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+    otherFields = {
+      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+    }
   )
   private String fail;
 

@@ -44,7 +44,7 @@ public class AuthorityFindAllCmdExe {
 
   @Autowired
   public AuthorityFindAllCmdExe(AuthorityGateway authorityGateway,
-      AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
     this.authorityConvertor = authorityConvertor;
   }
@@ -52,13 +52,13 @@ public class AuthorityFindAllCmdExe {
   public Page<AuthorityFindAllCo> execute(AuthorityFindAllCmd authorityFindAllCmd) {
     Assert.notNull(authorityFindAllCmd, "AuthorityFindAllCmd cannot be null");
     Authority authority = authorityConvertor.toEntity(authorityFindAllCmd)
-        .orElseGet(Authority::new);
+      .orElseGet(Authority::new);
     Page<Authority> authorities = authorityGateway.findAll(authority,
-        authorityFindAllCmd.getCurrent(), authorityFindAllCmd.getPageSize());
+      authorityFindAllCmd.getCurrent(), authorityFindAllCmd.getPageSize());
     List<AuthorityFindAllCo> authorityFindAllCoList = authorities.getContent().stream()
-        .map(authorityConvertor::toFindAllCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(authorityConvertor::toFindAllCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(authorityFindAllCoList, authorities.getPageable(),
-        authorities.getTotalElements());
+      authorities.getTotalElements());
   }
 }

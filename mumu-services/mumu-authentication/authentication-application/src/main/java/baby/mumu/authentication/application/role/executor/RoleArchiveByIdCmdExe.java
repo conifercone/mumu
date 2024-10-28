@@ -40,6 +40,6 @@ public class RoleArchiveByIdCmdExe {
 
   public void execute(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(roleGateway::archiveById);
+      .ifPresent(roleGateway::archiveById);
   }
 }

@@ -63,7 +63,7 @@ public class BroadcastTextMessageReceiverDoId implements Serializable {
     }
     BroadcastTextMessageReceiverDoId entity = (BroadcastTextMessageReceiverDoId) o;
     return Objects.equals(this.receiverId, entity.receiverId) &&
-        Objects.equals(this.messageId, entity.messageId);
+      Objects.equals(this.messageId, entity.messageId);
   }
 
   @Override

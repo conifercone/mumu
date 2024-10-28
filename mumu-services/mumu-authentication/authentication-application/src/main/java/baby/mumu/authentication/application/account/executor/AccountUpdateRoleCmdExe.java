@@ -46,6 +46,6 @@ public class AccountUpdateRoleCmdExe {
   public void execute(@NotNull AccountUpdateRoleCmd accountUpdateRoleCmd) {
     Assert.notNull(accountUpdateRoleCmd, "AccountUpdateRoleCmd cannot be null");
     accountConvertor.toEntity(accountUpdateRoleCmd.getAccountUpdateRoleCo())
-        .ifPresent(accountGateway::updateRoleById);
+      .ifPresent(accountGateway::updateRoleById);
   }
 }

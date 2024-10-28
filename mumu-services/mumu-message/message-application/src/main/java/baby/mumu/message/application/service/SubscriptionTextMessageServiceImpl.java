@@ -60,14 +60,14 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
 
   @Autowired
   public SubscriptionTextMessageServiceImpl(
-      SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe,
-      SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe,
-      SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe,
-      SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe,
-      SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe,
-      SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe,
-      SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe,
-      SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe) {
+    SubscriptionTextMessageForwardCmdExe subscriptionTextMessageForwardCmdExe,
+    SubscriptionTextMessageReadByIdCmdExe subscriptionTextMessageReadByIdCmdExe,
+    SubscriptionTextMessageDeleteByIdCmdExe subscriptionTextMessageDeleteByIdCmdExe,
+    SubscriptionTextMessageFindAllYouSendCmdExe subscriptionTextMessageFindAllYouSendCmdExe,
+    SubscriptionTextMessageUnreadByIdCmdExe subscriptionTextMessageUnreadByIdCmdExe,
+    SubscriptionTextMessageArchiveByIdCmdExe subscriptionTextMessageArchiveByIdCmdExe,
+    SubscriptionTextMessageFindAllWithSomeOneCmdExe subscriptionTextMessageFindAllWithSomeOneCmdExe,
+    SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe) {
     this.subscriptionTextMessageForwardCmdExe = subscriptionTextMessageForwardCmdExe;
     this.subscriptionTextMessageReadByIdCmdExe = subscriptionTextMessageReadByIdCmdExe;
     this.subscriptionTextMessageDeleteByIdCmdExe = subscriptionTextMessageDeleteByIdCmdExe;
@@ -93,42 +93,42 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(
-      Long id) {
+    Long id) {
     subscriptionTextMessageUnreadByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(
-      Long id) {
+    Long id) {
     subscriptionTextMessageDeleteByIdCmdExe.execute(id);
   }
 
   @Override
   public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
-      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageFindAllYouSendCmdExe.execute(
-        subscriptionTextMessageFindAllYouSendCmd);
+      subscriptionTextMessageFindAllYouSendCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(
-      Long id) {
+    Long id) {
     subscriptionTextMessageArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(
-      Long id) {
+    Long id) {
     subscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe.execute(id);
   }
 
   @Override
   public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
-      SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageFindAllWithSomeOneCmdExe.execute(
-        subscriptionTextMessageFindAllWithSomeOneCmd);
+      subscriptionTextMessageFindAllWithSomeOneCmd);
   }
 }

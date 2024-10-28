@@ -35,10 +35,10 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
-      @NotNull ExtensionProperties extensionProperties) {
+    @NotNull ExtensionProperties extensionProperties) {
     LOGGER.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
-        extensionProperties.getSql().getLog().isEnabled();
+      extensionProperties.getSql().getLog().isEnabled();
     if (enableLog) {
       dataSource = new P6DataSource(dataSource);
       LOGGER.debug("p6spy datasource wrapped datasource");

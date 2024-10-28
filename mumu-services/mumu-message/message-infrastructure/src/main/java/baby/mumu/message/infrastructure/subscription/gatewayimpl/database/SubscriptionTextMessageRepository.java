@@ -28,14 +28,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.2
  */
 public interface SubscriptionTextMessageRepository extends
-    BaseJpaRepository<SubscriptionTextMessageDo, Long>,
-    JpaSpecificationExecutor<SubscriptionTextMessageDo> {
+  BaseJpaRepository<SubscriptionTextMessageDo, Long>,
+  JpaSpecificationExecutor<SubscriptionTextMessageDo> {
 
   Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(@NotNull Long id,
-      @NotNull Long receiverId);
+    @NotNull Long receiverId);
 
   Optional<SubscriptionTextMessageDo> findByIdAndSenderId(@NotNull Long id,
-      @NotNull Long senderId);
+    @NotNull Long senderId);
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 }

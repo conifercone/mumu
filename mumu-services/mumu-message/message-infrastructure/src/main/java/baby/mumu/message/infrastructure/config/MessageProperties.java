@@ -47,7 +47,7 @@ public class MessageProperties {
      */
     @Getter
     private final ChannelGroup channelGroup = new DefaultChannelGroup(
-        GlobalEventExecutor.INSTANCE);
+      GlobalEventExecutor.INSTANCE);
     /**
      * 存放账户与Chanel的对应信息，用于给指定账户发送订阅消息 key: 接收方ID value: Map: key: 发送者ID value: Channel
      */

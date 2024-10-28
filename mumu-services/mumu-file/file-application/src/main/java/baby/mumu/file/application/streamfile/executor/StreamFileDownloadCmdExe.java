@@ -40,7 +40,7 @@ public class StreamFileDownloadCmdExe {
 
   @Autowired
   public StreamFileDownloadCmdExe(StreamFileGateway streamFileGateway,
-      StreamFileConvertor streamFileConvertor) {
+    StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
     this.streamFileConvertor = streamFileConvertor;
   }
@@ -50,8 +50,8 @@ public class StreamFileDownloadCmdExe {
     Supplier<MuMuException> downloadFailed = () -> new MuMuException(
       ResponseCode.FILE_DOWNLOAD_FAILED);
     return streamFileConvertor.toEntity(streamFileDownloadCmd)
-        .map(streamFile -> streamFileGateway.download(streamFile)
-            .orElseThrow(downloadFailed)
-        ).orElseThrow(downloadFailed);
+      .map(streamFile -> streamFileGateway.download(streamFile)
+        .orElseThrow(downloadFailed)
+      ).orElseThrow(downloadFailed);
   }
 }

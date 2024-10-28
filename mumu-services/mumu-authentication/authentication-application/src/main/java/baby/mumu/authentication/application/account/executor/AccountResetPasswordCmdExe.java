@@ -42,6 +42,6 @@ public class AccountResetPasswordCmdExe {
   public void execute(Long id) {
     Assert.notNull(id, "id cannot be null");
     Optional.of(id)
-        .ifPresent(accountGateway::resetPassword);
+      .ifPresent(accountGateway::resetPassword);
   }
 }

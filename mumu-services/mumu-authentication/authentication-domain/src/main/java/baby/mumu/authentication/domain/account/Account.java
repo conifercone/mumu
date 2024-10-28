@@ -155,26 +155,26 @@ public class Account extends BasisDomainModel implements UserDetails {
   @JsonIgnore
   public Collection<Authority> getAuthorities() {
     return Optional.ofNullable(this.roles)
-        .orElse(Collections.emptyList())
-        .stream()
-        .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
-        .values()
-        .stream()
-        .flatMap(role -> {
-          if (CollectionUtils.isEmpty(role.getAuthorities())) {
-            return Stream.empty();
-          }
-          // 将角色权限去重
-          Set<Authority> authorities = new HashSet<>(role.getAuthorities().stream()
-              .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
-              .values());
-          // 添加角色本身的权限
-          authorities.add(Authority.builder()
-              .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
-              .build());
-          return authorities.stream();
-        })
-        .collect(Collectors.toSet());
+      .orElse(Collections.emptyList())
+      .stream()
+      .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
+      .values()
+      .stream()
+      .flatMap(role -> {
+        if (CollectionUtils.isEmpty(role.getAuthorities())) {
+          return Stream.empty();
+        }
+        // 将角色权限去重
+        Set<Authority> authorities = new HashSet<>(role.getAuthorities().stream()
+          .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
+          .values());
+        // 添加角色本身的权限
+        authorities.add(Authority.builder()
+          .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
+          .build());
+        return authorities.stream();
+      })
+      .collect(Collectors.toSet());
   }
 
   @Override
@@ -209,7 +209,7 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   public int getAge() {
     return Optional.ofNullable(this.birthday)
-        .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
-        .orElse(0);
+      .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
+      .orElse(0);
   }
 }

@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.2
  */
 public interface RefreshTokenRepository extends
-    RedisDocumentRepository<RefreshTokenRedisDo, Long> {
+  RedisDocumentRepository<RefreshTokenRedisDo, Long> {
 
 }

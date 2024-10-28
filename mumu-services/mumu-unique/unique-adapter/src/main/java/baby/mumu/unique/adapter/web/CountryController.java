@@ -79,10 +79,10 @@ public class CountryController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(
-      @PathVariable(value = "id")
-      Long id) {
+    @PathVariable(value = "id")
+    Long id) {
     return ResponseWrapper.success(
-        countryService.getStatesByCountryId(id));
+      countryService.getStatesByCountryId(id));
   }
 
   @Operation(summary = "根据省或州ID获取城市")
@@ -91,8 +91,8 @@ public class CountryController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(
-      @PathVariable(value = "id")
-      Long id) {
+    @PathVariable(value = "id")
+    Long id) {
     return ResponseWrapper.success(countryService.getCitiesByStateId(id));
   }
 

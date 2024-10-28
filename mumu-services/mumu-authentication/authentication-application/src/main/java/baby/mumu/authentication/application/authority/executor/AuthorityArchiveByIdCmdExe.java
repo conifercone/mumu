@@ -40,6 +40,6 @@ public class AuthorityArchiveByIdCmdExe {
 
   public void execute(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(authorityGateway::archiveById);
+      .ifPresent(authorityGateway::archiveById);
   }
 }

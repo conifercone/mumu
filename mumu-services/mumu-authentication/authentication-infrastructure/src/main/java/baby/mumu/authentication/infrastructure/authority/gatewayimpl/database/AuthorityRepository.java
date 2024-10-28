@@ -37,7 +37,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long>,
-    JpaSpecificationExecutor<AuthorityDo> {
+  JpaSpecificationExecutor<AuthorityDo> {
 
   /**
    * 查询所有在id集合中的权限
@@ -55,7 +55,7 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @return 是否存在
    */
   boolean existsByIdOrCode(Long id,
-      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+    @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 
   /**
    * 判断权限编码是否已存在
@@ -64,7 +64,7 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @return 是否存在
    */
   boolean existsByCode(
-      @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
+    @Size(max = 50, message = "{authority.code.validation.size}") @NotNull String code);
 
 
   /**
@@ -75,9 +75,9 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @return 查询结果
    */
   @Query(
-      "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
-          + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
-          + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
+    "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
+      + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
+      + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
   Slice<AuthorityDo> findAllSlice(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
 
   /**
@@ -88,8 +88,8 @@ public interface AuthorityRepository extends BaseJpaRepository<AuthorityDo, Long
    * @return 查询结果
    */
   @Query(
-      "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
-          + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
-          + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
+    "select a from AuthorityDo a where (:#{#authorityDo.id} is null or a.id = :#{#authorityDo.id}) "
+      + "and (:#{#authorityDo.name} is null or a.name like %:#{#authorityDo.name}%) "
+      + "and (:#{#authorityDo.code} is null or a.code like %:#{#authorityDo.code}%) order by a.creationTime desc")
   Page<AuthorityDo> findAllPage(@Param("authorityDo") AuthorityDo authorityDo, Pageable pageable);
 }

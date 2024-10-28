@@ -59,12 +59,12 @@ public class CountryServiceImpl implements CountryService {
 
   @Autowired
   public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
-      CountryGetAllExe countryGetAllExe,
-      CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
-      CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe,
-      CountryGetStateByIdCmdExe countryGetStateByIdCmdExe,
-      CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe,
-      CountryGetCityByIdCmdExe countryGetCityByIdCmdExe) {
+    CountryGetAllExe countryGetAllExe,
+    CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
+    CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe,
+    CountryGetStateByIdCmdExe countryGetStateByIdCmdExe,
+    CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe,
+    CountryGetCityByIdCmdExe countryGetCityByIdCmdExe) {
     this.countryStateCityGetAllExe = countryStateCityGetAllExe;
     this.countryGetAllExe = countryGetAllExe;
     this.countryGetStatesByCountryIdCmdExe = countryGetStatesByCountryIdCmdExe;
@@ -86,13 +86,13 @@ public class CountryServiceImpl implements CountryService {
 
   @Override
   public List<CountryGetStatesByCountryIdCo> getStatesByCountryId(
-      Long id) {
+    Long id) {
     return countryGetStatesByCountryIdCmdExe.execute(id);
   }
 
   @Override
   public List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
-      Long id) {
+    Long id) {
     return countryGetCitiesByStateIdCmdExe.execute(id);
   }
 
@@ -103,7 +103,7 @@ public class CountryServiceImpl implements CountryService {
 
   @Override
   public CountryGetStateCitiesByIdCo getStateCitiesById(
-      Long id) {
+    Long id) {
     return countryGetStateCitiesByIdCmdExe.execute(id);
   }
 

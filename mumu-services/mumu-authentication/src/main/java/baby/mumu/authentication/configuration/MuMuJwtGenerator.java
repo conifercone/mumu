@@ -112,13 +112,13 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     }
 
     Builder claimsBuilder = getClaimsBuilder(context,
-        issuer, registeredClient, issuedAt, expiresAt);
+      issuer, registeredClient, issuedAt, expiresAt);
 
     JwsHeader.Builder jwsHeaderBuilder = JwsHeader.with(jwsAlgorithm);
 
     if (this.jwtCustomizer != null) {
       JwtEncodingContext.Builder jwtContextBuilder = getJwtContextBuilder(
-          context, jwsHeaderBuilder, claimsBuilder);
+        context, jwsHeaderBuilder, claimsBuilder);
 
       JwtEncodingContext jwtContext = jwtContextBuilder.build();
       this.jwtCustomizer.customize(jwtContext);
@@ -134,18 +134,18 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
 
   private static boolean calibration(@NotNull OAuth2TokenContext context) {
     if (context.getTokenType() == null ||
-        (!OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) &&
-            !OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue()))) {
+      (!OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) &&
+        !OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue()))) {
       return true;
     }
     return OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) &&
-        !OAuth2TokenFormat.SELF_CONTAINED.equals(
-            context.getRegisteredClient().getTokenSettings().getAccessTokenFormat());
+      !OAuth2TokenFormat.SELF_CONTAINED.equals(
+        context.getRegisteredClient().getTokenSettings().getAccessTokenFormat());
   }
 
   private static JwtEncodingContext.Builder getJwtContextBuilder(
-      @NotNull OAuth2TokenContext context,
-      JwsHeader.Builder jwsHeaderBuilder, Builder claimsBuilder) {
+    @NotNull OAuth2TokenContext context,
+    JwsHeader.Builder jwsHeaderBuilder, Builder claimsBuilder) {
     // @formatter:off
       JwtEncodingContext.Builder jwtContextBuilder = JwtEncodingContext.with(jwsHeaderBuilder, claimsBuilder)
           .registeredClient(context.getRegisteredClient())
@@ -171,7 +171,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   }
 
   private static @NotNull JwtClaimsSet.Builder getClaimsBuilder(@NotNull OAuth2TokenContext context,
-      String issuer, RegisteredClient registeredClient, Instant issuedAt, Instant expiresAt) {
+    String issuer, RegisteredClient registeredClient, Instant issuedAt, Instant expiresAt) {
     // @formatter:off
     Builder claimsBuilder = JwtClaimsSet.builder();
     if (StringUtils.isNotBlank(issuer)) {
@@ -230,9 +230,9 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         tokenRedisDo.setTtl(between.toSeconds());
         clientTokenRepository.save(tokenRedisDo);
       } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
-          .equals(context.getAuthorizationGrantType().getValue())
-          || AuthorizationGrantType.REFRESH_TOKEN
-          .equals(context.getAuthorizationGrantType())) {
+        .equals(context.getAuthorizationGrantType().getValue())
+        || AuthorizationGrantType.REFRESH_TOKEN
+        .equals(context.getAuthorizationGrantType())) {
         TokenRedisDo tokenRedisDo = new TokenRedisDo();
         tokenRedisDo.setId(Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
         tokenRedisDo.setTokenValue(tokenValue);
@@ -242,7 +242,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
       OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
       oidcIdTokenRedisDo.setId(
-          Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+        Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
       oidcIdTokenRedisDo.setTokenValue(tokenValue);
       oidcIdTokenRedisDo.setTtl(between.toSeconds());
       oidcIdTokenRepository.save(oidcIdTokenRedisDo);
@@ -263,7 +263,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   }
 
   public void setTokenRepository(
-      TokenRepository tokenRepository) {
+    TokenRepository tokenRepository) {
     Assert.notNull(tokenRepository, "tokenRepository cannot be null");
     this.tokenRepository = tokenRepository;
   }

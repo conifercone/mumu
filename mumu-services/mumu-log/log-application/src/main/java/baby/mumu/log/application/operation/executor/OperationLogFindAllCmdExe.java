@@ -43,26 +43,26 @@ public class OperationLogFindAllCmdExe {
 
   @Autowired
   public OperationLogFindAllCmdExe(OperationLogGateway operationLogGateway,
-      OperationLogConvertor operationLogConvertor) {
+    OperationLogConvertor operationLogConvertor) {
     this.operationLogGateway = operationLogGateway;
     this.operationLogConvertor = operationLogConvertor;
   }
 
   public Page<OperationLogFindAllCo> execute(
-      @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
+    @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
     OperationLog operationLog = operationLogConvertor.toEntity(operationLogFindAllCmd)
-        .orElseGet(OperationLog::new);
+      .orElseGet(OperationLog::new);
     Page<OperationLog> operationLogs = operationLogGateway.findAll(
-        operationLog,
-        operationLogFindAllCmd.getCurrent(),
-        operationLogFindAllCmd.getPageSize());
+      operationLog,
+      operationLogFindAllCmd.getCurrent(),
+      operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
-        .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)
-        .map(Optional::get)
-        .toList();
+      .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)
+      .map(Optional::get)
+      .toList();
     return new PageImpl<>(operationLogFindAllCos, operationLogs.getPageable(),
-        operationLogs.getTotalElements());
+      operationLogs.getTotalElements());
   }
 
 }

@@ -44,25 +44,25 @@ public class AuthorityArchivedFindAllSliceCmdExe {
 
   @Autowired
   public AuthorityArchivedFindAllSliceCmdExe(AuthorityGateway authorityGateway,
-      AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
     this.authorityConvertor = authorityConvertor;
   }
 
   public Slice<AuthorityArchivedFindAllSliceCo> execute(
-      AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
+    AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd) {
     Assert.notNull(authorityArchivedFindAllSliceCmd,
-        "AuthorityArchivedFindAllSliceCmd cannot be null");
+      "AuthorityArchivedFindAllSliceCmd cannot be null");
     Authority authority = authorityConvertor.toEntity(authorityArchivedFindAllSliceCmd)
-        .orElseGet(Authority::new);
+      .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findArchivedAllSlice(authority,
-        authorityArchivedFindAllSliceCmd.getCurrent(),
-        authorityArchivedFindAllSliceCmd.getPageSize());
+      authorityArchivedFindAllSliceCmd.getCurrent(),
+      authorityArchivedFindAllSliceCmd.getPageSize());
     List<AuthorityArchivedFindAllSliceCo> authorityArchivedFindAllSliceCos = authorities.getContent()
-        .stream()
-        .map(authorityConvertor::toArchivedFindAllSliceCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .stream()
+      .map(authorityConvertor::toArchivedFindAllSliceCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(authorityArchivedFindAllSliceCos, authorities.getPageable(),
-        authorities.hasNext());
+      authorities.hasNext());
   }
 }

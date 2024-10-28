@@ -44,7 +44,7 @@ public class AuthorityFindAllSliceCmdExe {
 
   @Autowired
   public AuthorityFindAllSliceCmdExe(AuthorityGateway authorityGateway,
-      AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
     this.authorityConvertor = authorityConvertor;
   }
@@ -52,13 +52,13 @@ public class AuthorityFindAllSliceCmdExe {
   public Slice<AuthorityFindAllSliceCo> execute(AuthorityFindAllSliceCmd authorityFindAllSliceCmd) {
     Assert.notNull(authorityFindAllSliceCmd, "AuthorityFindAllSliceCmd cannot be null");
     Authority authority = authorityConvertor.toEntity(authorityFindAllSliceCmd)
-        .orElseGet(Authority::new);
+      .orElseGet(Authority::new);
     Slice<Authority> authorities = authorityGateway.findAllSlice(authority,
-        authorityFindAllSliceCmd.getCurrent(), authorityFindAllSliceCmd.getPageSize());
+      authorityFindAllSliceCmd.getCurrent(), authorityFindAllSliceCmd.getPageSize());
     List<AuthorityFindAllSliceCo> authorityFindAllSliceCoList = authorities.getContent().stream()
-        .map(authorityConvertor::toFindAllSliceCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(authorityConvertor::toFindAllSliceCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(authorityFindAllSliceCoList, authorities.getPageable(),
-        authorities.hasNext());
+      authorities.hasNext());
   }
 }

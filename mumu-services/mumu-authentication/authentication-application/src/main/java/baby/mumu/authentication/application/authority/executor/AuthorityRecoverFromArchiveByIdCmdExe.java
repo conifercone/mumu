@@ -40,6 +40,6 @@ public class AuthorityRecoverFromArchiveByIdCmdExe {
 
   public void execute(Long id) {
     Optional.ofNullable(id)
-        .ifPresent(authorityGateway::recoverFromArchiveById);
+      .ifPresent(authorityGateway::recoverFromArchiveById);
   }
 }

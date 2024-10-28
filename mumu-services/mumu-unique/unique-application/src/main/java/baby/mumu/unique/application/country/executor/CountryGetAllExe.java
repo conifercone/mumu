@@ -37,14 +37,14 @@ public class CountryGetAllExe {
 
   @Autowired
   public CountryGetAllExe(CountryGateway countryGateway,
-      CountryConvertor countryConvertor) {
+    CountryConvertor countryConvertor) {
     this.countryGateway = countryGateway;
     this.countryConvertor = countryConvertor;
   }
 
   public List<CountryGetAllCo> execute() {
     return countryGateway.getCountries().stream()
-        .map(country -> countryConvertor.toCountryGetAllCo(country).orElse(null)).filter(
-            Objects::nonNull).toList();
+      .map(country -> countryConvertor.toCountryGetAllCo(country).orElse(null)).filter(
+        Objects::nonNull).toList();
   }
 }

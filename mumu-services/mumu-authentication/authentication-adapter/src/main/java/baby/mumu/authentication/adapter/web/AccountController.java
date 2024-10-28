@@ -78,7 +78,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(
-      @Parameter(description = "账户注册指令", required = true) @RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
+    @Parameter(description = "账户注册指令", required = true) @RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
   }
 
@@ -88,7 +88,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(
-      @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
   }
 
@@ -98,7 +98,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
-      @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
     accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
@@ -108,7 +108,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.disable(id);
   }
 
@@ -145,7 +145,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.resetPassword(id);
   }
 
@@ -155,7 +155,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void resetSystemSettingsBySettingsId(
-      @Parameter(description = "系统设置ID", required = true) @PathVariable(value = "systemSettingsId") String systemSettingsId) {
+    @Parameter(description = "系统设置ID", required = true) @PathVariable(value = "systemSettingsId") String systemSettingsId) {
     accountService.resetSystemSettingsBySettingsId(systemSettingsId);
   }
 
@@ -165,7 +165,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void modifySystemSettingsBySettingsId(
-      @RequestBody @Valid AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    @RequestBody @Valid AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
   }
 
@@ -175,7 +175,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void addSystemSettings(
-      @RequestBody @Valid AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    @RequestBody @Valid AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
     accountService.addSystemSettings(accountAddSystemSettingsCmd);
   }
 
@@ -194,7 +194,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public ResponseWrapper<Boolean> verifyPassword(
-      @ModelAttribute @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+    @ModelAttribute @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return ResponseWrapper.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
@@ -204,7 +204,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(
-      @RequestBody @Valid AccountChangePasswordCmd accountChangePasswordCmd) {
+    @RequestBody @Valid AccountChangePasswordCmd accountChangePasswordCmd) {
     accountService.changePassword(accountChangePasswordCmd);
   }
 
@@ -214,7 +214,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.archiveById(accountId);
   }
 
@@ -224,7 +224,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.recoverFromArchiveById(accountId);
   }
 
@@ -234,7 +234,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public void addAddress(
-      @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
+    @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
     accountService.addAddress(accountAddAddressCmd);
   }
 
@@ -244,7 +244,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public AccountBasicInfoCo getAccountBasicInfoById(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     return accountService.getAccountBasicInfoById(id);
   }
 
@@ -254,7 +254,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void offline(
-      @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.offline(accountId);
   }
 
@@ -264,7 +264,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Page<AccountFindAllCo> findAll(
-      @ModelAttribute @Valid AccountFindAllCmd accountFindAllCmd) {
+    @ModelAttribute @Valid AccountFindAllCmd accountFindAllCmd) {
     return accountService.findAll(accountFindAllCmd);
   }
 
@@ -274,7 +274,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<AccountFindAllSliceCo> findAllSlice(
-      @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 }

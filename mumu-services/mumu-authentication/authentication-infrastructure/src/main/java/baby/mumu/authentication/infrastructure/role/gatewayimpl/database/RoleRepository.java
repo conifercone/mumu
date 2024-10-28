@@ -35,7 +35,7 @@ import org.springframework.data.repository.query.Param;
  * @since 1.0.0
  */
 public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
-    JpaSpecificationExecutor<RoleDo> {
+  JpaSpecificationExecutor<RoleDo> {
 
 
   /**
@@ -72,12 +72,12 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 查询结果
    */
   @Query("select distinct r from RoleDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
-      + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
-      + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
-      + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
-      + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+    + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
+    + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
+    + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+    + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
   Slice<RoleDo> findAllSlice(@Param("roleDo") RoleDo roleDo,
-      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
+    @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 
   /**
    * 分页查询角色（查询总数）
@@ -88,10 +88,10 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 查询结果
    */
   @Query("select distinct r from RoleDo r left join RoleAuthorityDo ra on r.id =ra.id.roleId"
-      + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
-      + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
-      + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
-      + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+    + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
+    + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
+    + "and (:#{#authoritiesIds} is null or ra.id.authorityId in :#{#authoritiesIds}) "
+    + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
   Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
-      @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
+    @Param("authoritiesIds") Collection<Long> authoritiesIds, Pageable pageable);
 }

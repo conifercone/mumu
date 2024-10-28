@@ -41,8 +41,8 @@ public class AccountRecoverFromArchiveByIdCmdExe {
 
   public void execute(Long accountId) {
     Assert.notNull(accountId,
-        "accountId cannot be null");
+      "accountId cannot be null");
     Optional.of(accountId)
-        .ifPresent(accountGateway::recoverFromArchiveById);
+      .ifPresent(accountGateway::recoverFromArchiveById);
   }
 }

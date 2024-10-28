@@ -28,11 +28,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.3
  */
 public interface SubscriptionTextMessageArchivedRepository extends
-    BaseJpaRepository<SubscriptionTextMessageArchivedDo, Long>,
-    JpaSpecificationExecutor<SubscriptionTextMessageArchivedDo> {
+  BaseJpaRepository<SubscriptionTextMessageArchivedDo, Long>,
+  JpaSpecificationExecutor<SubscriptionTextMessageArchivedDo> {
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);
 
   Optional<SubscriptionTextMessageArchivedDo> findByIdAndSenderId(@NotNull Long id,
-      @NotNull Long senderId);
+    @NotNull Long senderId);
 }

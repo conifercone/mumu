@@ -35,7 +35,7 @@ import org.springframework.data.repository.query.Param;
  * @since 1.0.0
  */
 public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
-    JpaSpecificationExecutor<AccountDo> {
+  JpaSpecificationExecutor<AccountDo> {
 
   /**
    * 根据用户名查询账户
@@ -62,7 +62,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 是否存在
    */
   boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
-      @Size(max = 200) String email);
+    @Size(max = 200) String email);
 
   /**
    * 邮箱地址是否存在
@@ -89,13 +89,13 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId"
-      + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
-      + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
-      + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
-      + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
-      + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
+    + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
+    + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
+    + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
+    + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
+    + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
   Slice<AccountDo> findAllSlice(@Param("accountDo") AccountDo accountDo,
-      @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
+    @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 
   /**
    * 分页查询账户（查询总数）
@@ -106,11 +106,11 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId"
-      + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
-      + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
-      + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
-      + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
-      + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
+    + " where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id}) "
+    + "and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%) "
+    + "and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%) "
+    + "and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds}) "
+    + "and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc")
   Page<AccountDo> findAllPage(@Param("accountDo") AccountDo accountDo,
-      @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
+    @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 }

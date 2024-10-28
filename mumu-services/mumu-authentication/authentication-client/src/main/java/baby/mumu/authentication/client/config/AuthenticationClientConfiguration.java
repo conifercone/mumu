@@ -36,25 +36,25 @@ public class AuthenticationClientConfiguration {
 
   @Bean
   public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new TokenGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new AccountGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public AuthorityGrpcService authorityGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new AuthorityGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new RoleGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 

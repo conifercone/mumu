@@ -46,9 +46,9 @@ public class MuMuOfflineSuccessListener {
     String tokenValue = event.getTokenValue();
     if (StringUtils.isNotBlank(tokenValue)) {
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
-          OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
-          OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
     }
   }
 }

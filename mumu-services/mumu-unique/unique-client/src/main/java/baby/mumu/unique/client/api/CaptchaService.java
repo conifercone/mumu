@@ -28,7 +28,7 @@ import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
 public interface CaptchaService {
 
   SimpleCaptchaGeneratedCo generateSimpleCaptcha(
-      SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
+    SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
 
   boolean verifySimpleCaptcha(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);
 }

@@ -39,7 +39,7 @@ public class AuthorityUpdateCmdExe {
 
   @Autowired
   public AuthorityUpdateCmdExe(AuthorityGateway authorityGateway,
-      AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
     this.authorityConvertor = authorityConvertor;
   }
@@ -47,6 +47,6 @@ public class AuthorityUpdateCmdExe {
   public void execute(@NotNull AuthorityUpdateCmd authorityUpdateCmd) {
     Assert.notNull(authorityUpdateCmd, "AuthorityUpdateCmd cannot be null");
     authorityConvertor.toEntity(authorityUpdateCmd.getAuthorityUpdateCo())
-        .ifPresent(authorityGateway::updateById);
+      .ifPresent(authorityGateway::updateById);
   }
 }

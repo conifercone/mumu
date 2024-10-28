@@ -39,23 +39,23 @@ class MailGrpcService {
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
   public MailGrpcService(DiscoveryClient discoveryClient,
-      @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
-        serviceInstance -> {
-          NameResolverRegistry.getDefaultRegistry()
-              .register(new DiscoveryClientNameResolverProvider(discoveryClient));
-          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-                  "discovery-client://grpc-mail")
-              .defaultLoadBalancingPolicy("round_robin")
-              .usePlaintext();
-          Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
-          return builder.build();
-        });
+      serviceInstance -> {
+        NameResolverRegistry.getDefaultRegistry()
+          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
+        ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
+            "discovery-client://grpc-mail")
+          .defaultLoadBalancingPolicy("round_robin")
+          .usePlaintext();
+        Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
+        return builder.build();
+      });
   }
 
   protected boolean serviceAvailable() {

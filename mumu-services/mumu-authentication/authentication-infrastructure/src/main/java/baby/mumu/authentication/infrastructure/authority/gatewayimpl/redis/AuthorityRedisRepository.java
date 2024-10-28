@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 2.2.0
  */
 public interface AuthorityRedisRepository extends
-    RedisDocumentRepository<AuthorityRedisDo, Long> {
+  RedisDocumentRepository<AuthorityRedisDo, Long> {
 
 }

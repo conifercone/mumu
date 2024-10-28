@@ -72,7 +72,7 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
-      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
+    SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   /**
    * 根据ID归档消息
@@ -89,7 +89,7 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.4")
   void recoverMsgFromArchiveById(
-      Long id);
+    Long id);
 
   /**
    * 查询所有和某人的消息记录
@@ -99,5 +99,5 @@ public interface SubscriptionTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
-      SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd);
+    SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd);
 }

@@ -33,7 +33,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(LogProperties.class)
 public class ElasticsearchConfiguration extends
-    org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
+  org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
 
   private final LogProperties logProperties;
 
@@ -46,16 +46,16 @@ public class ElasticsearchConfiguration extends
   public @NotNull ClientConfiguration clientConfiguration() {
     // 使用构建器来提供集群地址
     return ClientConfiguration.builder()
-        // 设置连接地址
-        .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
-        // 启用ssl并配置CA指纹
-        .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
-        // 设置用户名密码
-        .withBasicAuth(logProperties.getElasticsearch().getUsername(),
-            logProperties.getElasticsearch().getPassword())
-        .withSocketTimeout(60000)
-        .withConnectTimeout(60000)
-        // 创建连接信息
-        .build();
+      // 设置连接地址
+      .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
+      // 启用ssl并配置CA指纹
+      .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
+      // 设置用户名密码
+      .withBasicAuth(logProperties.getElasticsearch().getUsername(),
+        logProperties.getElasticsearch().getPassword())
+      .withSocketTimeout(60000)
+      .withConnectTimeout(60000)
+      // 创建连接信息
+      .build();
   }
 }

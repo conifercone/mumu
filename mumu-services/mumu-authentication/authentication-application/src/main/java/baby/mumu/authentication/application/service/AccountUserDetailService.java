@@ -42,13 +42,13 @@ public class AccountUserDetailService implements UserDetailsService {
 
   @Override
   public @NotNull UserDetails loadUserByUsername(String usernameOrEmail)
-      throws UsernameNotFoundException {
+    throws UsernameNotFoundException {
     Assert.hasText(usernameOrEmail, "username or email is required");
     Supplier<UsernameNotFoundException> usernameNotFoundExceptionSupplier = () -> new UsernameNotFoundException(
-        usernameOrEmail);
+      usernameOrEmail);
     return CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
-        usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
-        : accountGateway.findAccountByUsername(usernameOrEmail)
-            .orElseThrow(usernameNotFoundExceptionSupplier);
+      usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
+      : accountGateway.findAccountByUsername(usernameOrEmail)
+        .orElseThrow(usernameNotFoundExceptionSupplier);
   }
 }

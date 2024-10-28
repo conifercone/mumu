@@ -51,7 +51,7 @@ import org.springframework.stereotype.Service;
 @GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "TemplateMailServiceImpl")
 public class TemplateMailServiceImpl extends TemplateMailServiceImplBase implements
-    TemplateMailService {
+  TemplateMailService {
 
   private final TemplateMailSendCmdExe templateMailSendCmdExe;
   private final ObjectMapper objectMapper = new ObjectMapper();
@@ -69,27 +69,27 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
   }
 
   private @NotNull TemplateMailSendCo getTemplateMailSendCo(
-      @NotNull TemplateMailSendGrpcCmd request) {
+    @NotNull TemplateMailSendGrpcCmd request) {
     TemplateMailSendCo templateMailSendCo = new TemplateMailSendCo();
     TemplateMailSendGrpcCo templateMailSendGrpcCo = request.getTemplateMailSendGrpcCo();
     templateMailSendCo.setTo(
-        templateMailSendGrpcCo.hasTo() ? templateMailSendGrpcCo.getTo().getValue() : null);
+      templateMailSendGrpcCo.hasTo() ? templateMailSendGrpcCo.getTo().getValue() : null);
     templateMailSendCo.setName(
-        templateMailSendGrpcCo.hasName() ? templateMailSendGrpcCo.getName().getValue() : null);
+      templateMailSendGrpcCo.hasName() ? templateMailSendGrpcCo.getName().getValue() : null);
     templateMailSendCo.setFrom(
-        templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : username);
+      templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : username);
     templateMailSendCo.setAddress(
-        templateMailSendGrpcCo.hasAddress() ? templateMailSendGrpcCo.getAddress().getValue()
-            : null);
+      templateMailSendGrpcCo.hasAddress() ? templateMailSendGrpcCo.getAddress().getValue()
+        : null);
     templateMailSendCo.setSubject(
-        templateMailSendGrpcCo.hasSubject() ? templateMailSendGrpcCo.getSubject().getValue()
-            : null);
+      templateMailSendGrpcCo.hasSubject() ? templateMailSendGrpcCo.getSubject().getValue()
+        : null);
     try {
       //noinspection unchecked
       templateMailSendCo.setData(
-          templateMailSendGrpcCo.hasData() ? (Map<String, Object>) objectMapper.readValue(
-              templateMailSendGrpcCo.getData().getValue(),
-              Map.class) : null);
+        templateMailSendGrpcCo.hasData() ? (Map<String, Object>) objectMapper.readValue(
+          templateMailSendGrpcCo.getData().getValue(),
+          Map.class) : null);
     } catch (JsonProcessingException e) {
       throw new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR);
     }
@@ -101,7 +101,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
   public void sendMail(TemplateMailSendGrpcCmd request, StreamObserver<Empty> responseObserver) {
     TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
     TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(
-        request);
+      request);
     templateMailSendCmd.setTemplateMailSendCo(templateMailSendCo);
     try {
       templateMailSendCmdExe.execute(templateMailSendCmd);

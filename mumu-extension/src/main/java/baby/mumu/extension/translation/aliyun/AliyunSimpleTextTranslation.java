@@ -45,22 +45,22 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
   public String translate(String text, @NotNull String targetLanguage) throws Exception {
     RuntimeOptions runtime = new RuntimeOptions();
     GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
-        .setSourceText(text);
+      .setSourceText(text);
     GetDetectLanguageResponse detectLanguageWithOptions = client.getDetectLanguageWithOptions(
-        getDetectLanguageRequest, runtime);
+      getDetectLanguageRequest, runtime);
     String detectedLanguage = detectLanguageWithOptions.getBody().getDetectedLanguage();
     if (targetLanguage.equals(detectedLanguage)) {
       return text;
     }
     TranslateGeneralRequest translateGeneralRequest = new TranslateGeneralRequest().setFormatType(
-            "text")
-        .setSourceLanguage(detectedLanguage)
-        .setTargetLanguage(targetLanguage)
-        .setSourceText(text)
-        .setScene("general");
+        "text")
+      .setSourceLanguage(detectedLanguage)
+      .setTargetLanguage(targetLanguage)
+      .setSourceText(text)
+      .setScene("general");
 
     TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
-        translateGeneralRequest, runtime);
+      translateGeneralRequest, runtime);
     return translateGeneralResponse.getBody().getData().getTranslated();
   }
 }

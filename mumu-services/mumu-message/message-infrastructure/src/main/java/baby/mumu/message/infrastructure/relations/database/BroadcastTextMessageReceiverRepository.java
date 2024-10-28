@@ -29,22 +29,22 @@ import org.springframework.data.repository.query.Param;
  * @since 2.2.0
  */
 public interface BroadcastTextMessageReceiverRepository extends
-    BaseJpaRepository<BroadcastTextMessageReceiverDo, BroadcastTextMessageReceiverDoId>,
-    JpaSpecificationExecutor<BroadcastTextMessageReceiverDo> {
+  BaseJpaRepository<BroadcastTextMessageReceiverDo, BroadcastTextMessageReceiverDoId>,
+  JpaSpecificationExecutor<BroadcastTextMessageReceiverDo> {
 
   List<BroadcastTextMessageReceiverDo> findByBroadcastTextMessageId(Long messageId);
 
   @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDo b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
   List<Long> findReceiverIdsByMessageIdAndMessageStatus(
-      @Param("messageId") Long messageId, @Param("messageStatus") MessageStatusEnum messageStatus);
+    @Param("messageId") Long messageId, @Param("messageStatus") MessageStatusEnum messageStatus);
 
   @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDo b where b.id.messageId=:messageId")
   List<Long> findReceiverIdsByMessageId(
-      @Param("messageId") Long messageId);
+    @Param("messageId") Long messageId);
 
   @Query("select count(distinct b.id.receiverId) from BroadcastTextMessageReceiverDo b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
   Long countByMessageIdAndMessageStatus(@Param("messageId") Long messageId,
-      @Param("messageStatus") MessageStatusEnum messageStatus);
+    @Param("messageStatus") MessageStatusEnum messageStatus);
 
   void deleteByBroadcastTextMessageId(Long messageId);
 }

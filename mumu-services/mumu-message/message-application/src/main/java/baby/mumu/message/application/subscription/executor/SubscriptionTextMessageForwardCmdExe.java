@@ -37,18 +37,18 @@ public class SubscriptionTextMessageForwardCmdExe {
 
   @Autowired
   public SubscriptionTextMessageForwardCmdExe(
-      SubscriptionTextMessageGateway subscriptionTextMessageGateway,
-      SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
+    SubscriptionTextMessageGateway subscriptionTextMessageGateway,
+    SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
     this.subscriptionTextMessageGateway = subscriptionTextMessageGateway;
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
   public void execute(
-      @NotNull SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    @NotNull SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     Assert.notNull(subscriptionTextMessageForwardCmd,
-        "SubscriptionTextMessageForwardCmd cannot null");
+      "SubscriptionTextMessageForwardCmd cannot null");
     subscriptionTextMessageConvertor.toEntity(
-            subscriptionTextMessageForwardCmd.getSubscriptionTextMessageForwardCo())
-        .ifPresent(subscriptionTextMessageGateway::forwardMsg);
+        subscriptionTextMessageForwardCmd.getSubscriptionTextMessageForwardCo())
+      .ifPresent(subscriptionTextMessageGateway::forwardMsg);
   }
 }

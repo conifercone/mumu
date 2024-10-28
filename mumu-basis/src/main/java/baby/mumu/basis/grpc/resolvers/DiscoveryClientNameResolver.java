@@ -64,9 +64,9 @@ public class DiscoveryClientNameResolver extends NameResolver {
 
   private void init() {
     listener.onResult(ResolutionResult.newBuilder()
-        .setAddresses(fetchAddresses())
-        .setAttributes(Attributes.EMPTY)
-        .build());
+      .setAddresses(fetchAddresses())
+      .setAttributes(Attributes.EMPTY)
+      .build());
   }
 
   @Override
@@ -76,10 +76,10 @@ public class DiscoveryClientNameResolver extends NameResolver {
   @Contract(" -> new")
   private @NotNull @Unmodifiable List<EquivalentAddressGroup> fetchAddresses() {
     return List.of(new EquivalentAddressGroup(Optional.ofNullable(
-            discoveryClient.getInstances(serviceName)).map(
-            serviceInstances -> serviceInstances.stream().map(
-                serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
-                    serviceInstance.getPort())).collect(Collectors.toList()))
-        .orElse(new ArrayList<>())));
+        discoveryClient.getInstances(serviceName)).map(
+        serviceInstances -> serviceInstances.stream().map(
+          serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
+            serviceInstance.getPort())).collect(Collectors.toList()))
+      .orElse(new ArrayList<>())));
   }
 }

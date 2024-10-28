@@ -39,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class SecurityContextUtilTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      SecurityContextUtilTest.class);
+    SecurityContextUtilTest.class);
 
   @Test
   public void loginAccountId() {

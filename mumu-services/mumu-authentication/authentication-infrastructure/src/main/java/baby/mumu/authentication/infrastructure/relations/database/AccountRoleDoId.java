@@ -63,7 +63,7 @@ public class AccountRoleDoId implements Serializable {
     }
     AccountRoleDoId entity = (AccountRoleDoId) o;
     return Objects.equals(this.userId, entity.userId) &&
-        Objects.equals(this.roleId, entity.roleId);
+      Objects.equals(this.roleId, entity.roleId);
   }
 
   @Override

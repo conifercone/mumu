@@ -51,11 +51,11 @@ public class RoleFindAllSliceCmdExe {
   public Slice<RoleFindAllSliceCo> execute(@NotNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
     Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
     Slice<Role> roles = roleGateway.findAllSlice(role,
-        roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
+      roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
     List<RoleFindAllSliceCo> roleFindAllSliceCos = roles.getContent().stream()
-        .map(roleConvertor::toFindAllSliceCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(roleConvertor::toFindAllSliceCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(roleFindAllSliceCos, roles.getPageable(),
-        roles.hasNext());
+      roles.hasNext());
   }
 }

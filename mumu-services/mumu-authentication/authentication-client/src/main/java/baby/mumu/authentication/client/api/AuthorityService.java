@@ -81,7 +81,7 @@ public interface AuthorityService {
    * @return 查询结果
    */
   Page<AuthorityArchivedFindAllCo> findArchivedAll(
-      AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
+    AuthorityArchivedFindAllCmd authorityArchivedFindAllCmd);
 
   /**
    * 分页查询已归档权限（不查询总数）
@@ -90,7 +90,7 @@ public interface AuthorityService {
    * @return 查询结果
    */
   Slice<AuthorityArchivedFindAllSliceCo> findArchivedAllSlice(
-      AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
+    AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
 
   /**
    * 根据id查询权限
@@ -113,5 +113,5 @@ public interface AuthorityService {
    * @param id 权限ID
    */
   void recoverFromArchiveById(
-      Long id);
+    Long id);
 }

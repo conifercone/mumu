@@ -38,15 +38,15 @@ public class AuthorityFindByIdCmdExe {
 
   @Autowired
   public AuthorityFindByIdCmdExe(AuthorityGateway authorityGateway,
-      AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor) {
     this.authorityGateway = authorityGateway;
     this.authorityConvertor = authorityConvertor;
   }
 
   public AuthorityFindByIdCo execute(Long id) {
     return Optional.ofNullable(id)
-        .flatMap(authorityGateway::findById).flatMap(
-            authorityConvertor::toFindByIdCo).orElse(null);
+      .flatMap(authorityGateway::findById).flatMap(
+        authorityConvertor::toFindByIdCo).orElse(null);
 
   }
 }

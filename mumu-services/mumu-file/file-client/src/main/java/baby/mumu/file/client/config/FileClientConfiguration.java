@@ -33,7 +33,7 @@ public class FileClientConfiguration {
 
   @Bean
   public StreamFileGrpcService streamFileGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new StreamFileGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 

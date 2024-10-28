@@ -43,26 +43,26 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
 
   @Autowired
   public SubscriptionTextMessageFindAllWithSomeOneCmdExe(
-      SubscriptionTextMessageGateway subscriptionTextMessageGateway,
-      SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
+    SubscriptionTextMessageGateway subscriptionTextMessageGateway,
+    SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
     this.subscriptionTextMessageGateway = subscriptionTextMessageGateway;
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
   public Page<SubscriptionTextMessageFindAllWithSomeOneCo> execute(
-      @NotNull SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    @NotNull SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     Assert.notNull(subscriptionTextMessageFindAllWithSomeOneCmd,
-        "SubscriptionTextMessageFindAllWithSomeOneCmd cannot null");
+      "SubscriptionTextMessageFindAllWithSomeOneCmd cannot null");
     Page<SubscriptionTextMessage> allMessageRecordWithSomeone = subscriptionTextMessageGateway.findAllMessageRecordWithSomeone(
-        subscriptionTextMessageFindAllWithSomeOneCmd.getCurrent(),
-        subscriptionTextMessageFindAllWithSomeOneCmd.getPageSize(),
-        subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
+      subscriptionTextMessageFindAllWithSomeOneCmd.getCurrent(),
+      subscriptionTextMessageFindAllWithSomeOneCmd.getPageSize(),
+      subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
     List<SubscriptionTextMessageFindAllWithSomeOneCo> subscriptionTextMessageFindAllWithSomeOneCos = allMessageRecordWithSomeone.getContent()
-        .stream()
-        .map(subscriptionTextMessageConvertor::toFindAllWithSomeOne)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .stream()
+      .map(subscriptionTextMessageConvertor::toFindAllWithSomeOne)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllWithSomeOneCos,
-        allMessageRecordWithSomeone.getPageable(),
-        allMessageRecordWithSomeone.getTotalElements());
+      allMessageRecordWithSomeone.getPageable(),
+      allMessageRecordWithSomeone.getTotalElements());
   }
 }

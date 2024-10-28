@@ -96,9 +96,9 @@ public class NettyConfiguration {
                 3、核心功能是将http协议升级为ws协议，保持长连接
                 */
         socketChannel.pipeline().addLast(
-            new WebSocketServerProtocolHandler(messageProperties.getWebSocket().getPath(),
-                WEBSOCKET_PROTOCOL, true,
-                65536 * 10));
+          new WebSocketServerProtocolHandler(messageProperties.getWebSocket().getPath(),
+            WEBSOCKET_PROTOCOL, true,
+            65536 * 10));
         // 自定义的handler，处理业务逻辑
         socketChannel.pipeline().addLast(webSocketHandler());
       }

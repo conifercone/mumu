@@ -54,7 +54,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
     if (StringUtils.isBlank(username) ||
-        parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
+      parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
       ResponseCode accountNameCannotBeEmpty = ResponseCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
         new OAuth2Error(accountNameCannotBeEmpty.getCode(),
@@ -62,7 +62,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     }
     String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
     if (StringUtils.isBlank(password) ||
-        parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
+      parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
       ResponseCode accountPasswordCannotBeEmpty = ResponseCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
         new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
@@ -74,8 +74,8 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     //遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
     parameters.forEach((key, value) -> {
       if (!key.equals(OAuth2ParameterNames.GRANT_TYPE) &&
-          !key.equals(OAuth2ParameterNames.CLIENT_ID) &&
-          !key.equals(OAuth2ParameterNames.CODE)) {
+        !key.equals(OAuth2ParameterNames.CLIENT_ID) &&
+        !key.equals(OAuth2ParameterNames.CODE)) {
         additionalParameters.put(key, value.getFirst());
       }
     });
@@ -91,7 +91,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
    * @return 请求参数
    */
   private static @NotNull MultiValueMap<String, String> getParameters(
-      @NotNull HttpServletRequest request) {
+    @NotNull HttpServletRequest request) {
     Map<String, String[]> parameterMap = request.getParameterMap();
     MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>(parameterMap.size());
     parameterMap.forEach((key, values) -> {

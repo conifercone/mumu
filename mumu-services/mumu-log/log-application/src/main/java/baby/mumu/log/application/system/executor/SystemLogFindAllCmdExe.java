@@ -43,25 +43,25 @@ public class SystemLogFindAllCmdExe {
 
   @Autowired
   public SystemLogFindAllCmdExe(SystemLogGateway systemLogGateway,
-      SystemLogConvertor systemLogConvertor) {
+    SystemLogConvertor systemLogConvertor) {
     this.systemLogGateway = systemLogGateway;
     this.systemLogConvertor = systemLogConvertor;
   }
 
   public Page<SystemLogFindAllCo> execute(
-      @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
+    @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
     SystemLog systemLog = systemLogConvertor.toEntity(systemLogFindAllCmd)
-        .orElseGet(SystemLog::new);
+      .orElseGet(SystemLog::new);
     Page<SystemLog> systemLogs = systemLogGateway.findAll(
-        systemLog,
-        systemLogFindAllCmd.getCurrent(),
-        systemLogFindAllCmd.getPageSize());
+      systemLog,
+      systemLogFindAllCmd.getCurrent(),
+      systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
-        .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)
-        .toList();
+      .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)
+      .toList();
     return new PageImpl<>(systemLogFindAllCos, systemLogs.getPageable(),
-        systemLogs.getTotalElements());
+      systemLogs.getTotalElements());
   }
 
 }

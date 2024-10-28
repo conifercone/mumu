@@ -33,12 +33,12 @@ public class SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe {
 
   @Autowired
   public SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe(
-      SubscriptionTextMessageGateway subscriptionTextMessageGateway) {
+    SubscriptionTextMessageGateway subscriptionTextMessageGateway) {
     this.subscriptionTextMessageGateway = subscriptionTextMessageGateway;
   }
 
   public void execute(
-      Long id) {
+    Long id) {
     Optional.ofNullable(id).ifPresent(subscriptionTextMessageGateway::recoverMsgFromArchiveById);
   }
 }

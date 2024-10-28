@@ -43,14 +43,14 @@ public class ClientIpInterceptor implements ServerInterceptor {
 
   @Override
   public <ReqT, RespT> Listener<ReqT> interceptCall(@NotNull ServerCall<ReqT, RespT> call,
-      Metadata headers,
-      ServerCallHandler<ReqT, RespT> next) {
+    Metadata headers,
+    ServerCallHandler<ReqT, RespT> next) {
     Attributes attributes = call.getAttributes();
     String clientIp = Optional.ofNullable(attributes.get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR))
-        .filter(socketAddress -> socketAddress instanceof InetSocketAddress)
-        .map(socketAddress -> ((InetSocketAddress) socketAddress).getAddress().getHostAddress())
-        .orElse(
-            StringUtils.EMPTY);
+      .filter(socketAddress -> socketAddress instanceof InetSocketAddress)
+      .map(socketAddress -> ((InetSocketAddress) socketAddress).getAddress().getHostAddress())
+      .orElse(
+        StringUtils.EMPTY);
     Context context = Context.current().withValue(CLIENT_IP_KEY, clientIp);
     return Contexts.interceptCall(context, call, headers, next);
   }

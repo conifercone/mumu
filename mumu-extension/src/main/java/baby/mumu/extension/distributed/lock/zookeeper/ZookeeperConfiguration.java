@@ -50,10 +50,10 @@ public class ZookeeperConfiguration {
   public InterProcessLock mumuInterProcessLock() {
     ZookeeperProperties zookeeper = extensionProperties.getDistributed().getLock().getZookeeper();
     CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(
-        zookeeper.getConnectString(),
-        zookeeper.getSessionTimeoutMs(),
-        zookeeper.getConnectionTimeoutMs(),
-        new RetryNTimes(zookeeper.getRetryCount(), zookeeper.getElapsedTimeMs()));
+      zookeeper.getConnectString(),
+      zookeeper.getSessionTimeoutMs(),
+      zookeeper.getConnectionTimeoutMs(),
+      new RetryNTimes(zookeeper.getRetryCount(), zookeeper.getElapsedTimeMs()));
     curatorFramework.start();
     return new InterProcessMutex(curatorFramework, "/locks");
   }
