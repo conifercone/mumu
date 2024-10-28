@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "3.3.4"
+springbootVersion = "3.3.5"
 springCloudVersion = "2023.0.3"
 # dependence version
 apiguardianVersion = '1.1.2'
