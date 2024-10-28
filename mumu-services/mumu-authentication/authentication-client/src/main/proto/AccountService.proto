@@ -82,7 +82,8 @@ enum LanguageEnum
   ZH_TW = 1;
   JA = 2;
   KO = 3;
-  EN = 4;
+  RU = 4;
+  EN = 5;
 }
 
 enum SystemThemeEnum

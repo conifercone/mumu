@@ -45,6 +45,11 @@ public enum LanguageEnum {
   KO,
 
   /**
+   * Русский
+   */
+  RU,
+
+  /**
    * English
    */
   EN
