@@ -6,3 +6,17 @@ documentation:
 # Add 'enhancement' label to any PR where the head branch name starts with `feature` or has a `feature` section in the name
 enhancement:
   - head-branch: [ '^feature', 'feature' ]
+
+# Add 'bug' label to any PR where the head branch name starts with `hotfix` or has a `hotfix` section in the name
+bug:
+  - head-branch: [ '^hotfix', 'hotfix' ]
+
+# Add 'dependencies' label to any change to libs.versions.toml files within the entire repository
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: 'libs.versions.toml'
+
+# Add 'source' label to any change to src files within the source dir
+source:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**/*'
