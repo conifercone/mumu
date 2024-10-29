@@ -30,7 +30,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class FileProperties {
 
   @NestedConfigurationProperty
-  private Minio minio;
+  private Minio minio = new Minio();
 
   @Data
   public static class Minio {

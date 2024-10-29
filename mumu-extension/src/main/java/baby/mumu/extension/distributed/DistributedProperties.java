@@ -32,5 +32,5 @@ public class DistributedProperties {
    * 分布式锁相关配置
    */
   @NestedConfigurationProperty
-  private LockProperties lock;
+  private LockProperties lock = new LockProperties();
 }

@@ -31,5 +31,5 @@ public class SqlProperties {
    * 日志相关配置
    */
   @NestedConfigurationProperty
-  private SqlLogProperties log;
+  private SqlLogProperties log = new SqlLogProperties();
 }

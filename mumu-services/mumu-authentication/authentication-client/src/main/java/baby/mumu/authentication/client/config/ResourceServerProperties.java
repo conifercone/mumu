@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.client.config;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,10 +34,10 @@ public class ResourceServerProperties {
   private String loginAddress = "http://localhost:31100/login";
 
   @NestedConfigurationProperty
-  private List<Policy> policies;
+  private List<Policy> policies = new ArrayList<>();
 
   @NestedConfigurationProperty
-  private List<Grpc> grpcs;
+  private List<Grpc> grpcs = new ArrayList<>();
 
 
   @Data
@@ -65,7 +66,7 @@ public class ResourceServerProperties {
     private String serviceFullPath;
 
     @NestedConfigurationProperty
-    private List<GrpcPolicy> grpcPolicies;
+    private List<GrpcPolicy> grpcPolicies = new ArrayList<>();
   }
 
   /**
