@@ -21,6 +21,7 @@ import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SpringContextUtil;
 import io.micrometer.tracing.Tracer;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,7 @@ public class BasisConfiguration {
   }
 
   @Bean
+  @ConditionalOnClass(Tracer.class)
   public FilterRegistrationBean<TraceIdFilter> mumuTraceIdFilter(
     ObjectProvider<Tracer> tracer) {
     FilterRegistrationBean<TraceIdFilter> registrationBean = new FilterRegistrationBean<>();
