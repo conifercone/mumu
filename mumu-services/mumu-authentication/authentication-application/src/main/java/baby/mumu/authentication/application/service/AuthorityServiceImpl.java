@@ -28,6 +28,7 @@ import baby.mumu.authentication.application.authority.executor.AuthorityUpdateCm
 import baby.mumu.authentication.client.api.AuthorityService;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
@@ -44,12 +45,16 @@ import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
+import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
+import java.util.Optional;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,6 +156,22 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   @Override
   public AuthorityFindByIdCo findById(Long id) {
     return authorityFindByIdCmdExe.execute(id);
+  }
+
+  @Override
+  public void findById(Int64Value request,
+    StreamObserver<AuthorityFindByIdGrpcCo> responseObserver) {
+    Runnable runnable = () -> {
+      throw new GRpcRuntimeExceptionWrapper(
+        new MuMuException(ResponseCode.AUTHORITY_DOES_NOT_EXIST));
+    };
+    Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
+      (id) -> authorityConvertor.toAuthorityFindByIdGrpcCo(
+          authorityFindByIdCmdExe.execute(id.getValue()))
+        .ifPresentOrElse((authorityFindByIdGrpcCo) -> {
+          responseObserver.onNext(authorityFindByIdGrpcCo);
+          responseObserver.onCompleted();
+        }, runnable), runnable);
   }
 
   @Override

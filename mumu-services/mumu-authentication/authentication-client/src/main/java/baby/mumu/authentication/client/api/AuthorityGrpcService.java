@@ -18,12 +18,14 @@ package baby.mumu.authentication.client.api;
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceFutureStub;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
@@ -82,6 +84,31 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
+  public AuthorityFindByIdGrpcCo findById(Int64Value id,
+    AuthCallCredentials callCredentials) {
+    return Optional.ofNullable(channel)
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return findByIdFromGrpc(id, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+  }
+
+  @API(status = Status.STABLE, since = "2.3.0")
+  public ListenableFuture<AuthorityFindByIdGrpcCo> syncFindById(
+    Int64Value id,
+    AuthCallCredentials callCredentials) {
+    return Optional.ofNullable(channel)
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return syncFindByIdFromGrpc(id, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+  }
+
   private PageOfAuthorityFindAllGrpcCo findAllFromGrpc(
     AuthorityFindAllGrpcCmd authorityFindAllGrpcCmd,
     AuthCallCredentials callCredentials) {
@@ -100,4 +127,21 @@ public class AuthorityGrpcService extends AuthenticationGrpcService implements
       .findAll(authorityFindAllGrpcCmd);
   }
 
+  private AuthorityFindByIdGrpcCo findByIdFromGrpc(
+    Int64Value id,
+    AuthCallCredentials callCredentials) {
+    AuthorityServiceBlockingStub authorityServiceBlockingStub = AuthorityServiceGrpc.newBlockingStub(
+      channel);
+    return authorityServiceBlockingStub.withCallCredentials(callCredentials)
+      .findById(id);
+  }
+
+  private @NotNull ListenableFuture<AuthorityFindByIdGrpcCo> syncFindByIdFromGrpc(
+    Int64Value id,
+    AuthCallCredentials callCredentials) {
+    AuthorityServiceFutureStub authorityServiceFutureStub = AuthorityServiceGrpc.newFutureStub(
+      channel);
+    return authorityServiceFutureStub.withCallCredentials(callCredentials)
+      .findById(id);
+  }
 }

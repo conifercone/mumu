@@ -19,11 +19,13 @@ import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.AuthorityGrpcService;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
@@ -102,6 +104,45 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
         LOGGER.info("Sync PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
         Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
         Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+  @Test
+  public void findById() {
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    AuthorityFindByIdGrpcCo authorityFindByIdGrpcCo = authorityGrpcService.findById(
+      Int64Value.of(1),
+      callCredentials);
+    LOGGER.info("AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
+    Assertions.assertNotNull(authorityFindByIdGrpcCo);
+  }
+
+  @Test
+  public void syncFindById() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<AuthorityFindByIdGrpcCo> authorityFindByIdGrpcCoListenableFuture = authorityGrpcService.syncFindById(
+      Int64Value.of(1),
+      callCredentials);
+    authorityFindByIdGrpcCoListenableFuture.addListener(() -> {
+      try {
+        AuthorityFindByIdGrpcCo authorityFindByIdGrpcCo = authorityFindByIdGrpcCoListenableFuture.get();
+        LOGGER.info("Sync AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
+        Assertions.assertNotNull(authorityFindByIdGrpcCo);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

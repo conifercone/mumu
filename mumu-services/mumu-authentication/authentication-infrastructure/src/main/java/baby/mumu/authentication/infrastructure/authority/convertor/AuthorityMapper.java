@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
@@ -119,6 +120,9 @@ public interface AuthorityMapper extends GrpcMapper {
 
   @API(status = Status.STABLE, since = "2.2.0")
   AuthorityFindAllGrpcCo toAuthorityFindAllGrpcCo(AuthorityFindAllCo authorityFindAllCo);
+
+  @API(status = Status.STABLE, since = "2.3.0")
+  AuthorityFindByIdGrpcCo toAuthorityFindByIdGrpcCo(AuthorityFindByIdCo authorityFindByIdCo);
 
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget AuthorityFindByIdCo authorityFindByIdCo) {

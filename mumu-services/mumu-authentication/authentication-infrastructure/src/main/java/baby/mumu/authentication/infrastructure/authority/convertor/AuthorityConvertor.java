@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
@@ -266,5 +267,13 @@ public class AuthorityConvertor {
     AuthorityFindAllCo authorityFindAllCo) {
     return Optional.ofNullable(authorityFindAllCo)
       .map(AuthorityMapper.INSTANCE::toAuthorityFindAllGrpcCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.3.0")
+  public Optional<AuthorityFindByIdGrpcCo> toAuthorityFindByIdGrpcCo(
+    AuthorityFindByIdCo authorityFindByIdCo) {
+    return Optional.ofNullable(authorityFindByIdCo)
+      .map(AuthorityMapper.INSTANCE::toAuthorityFindByIdGrpcCo);
   }
 }
