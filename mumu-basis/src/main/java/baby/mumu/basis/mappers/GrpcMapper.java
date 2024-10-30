@@ -20,6 +20,7 @@ import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import com.google.protobuf.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -94,5 +95,26 @@ public interface GrpcMapper {
           .setSeconds(localDateTimeNotNull.toInstant(ZoneOffset.UTC).getEpochSecond())
           .setNanos(localDateTimeNotNull.toInstant(ZoneOffset.UTC).getNano()).build())
       .orElse(Timestamp.getDefaultInstance());
+  }
+
+  default OffsetDateTime toOffsetDateTime(Timestamp timestamp) {
+    return Optional.ofNullable(timestamp).map(
+        timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
+          timestampNotNull.getNanos()).atZone(ZoneOffset.UTC).toOffsetDateTime())
+      .orElse(null);
+  }
+
+  default LocalDate toLocalDate(Timestamp timestamp) {
+    return Optional.ofNullable(timestamp).map(
+        timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
+          timestampNotNull.getNanos()).atZone(ZoneOffset.UTC).toLocalDate())
+      .orElse(null);
+  }
+
+  default LocalDateTime toLocalDateTime(Timestamp timestamp) {
+    return Optional.ofNullable(timestamp).map(
+        timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
+          timestampNotNull.getNanos()).atZone(ZoneOffset.UTC).toLocalDateTime())
+      .orElse(null);
   }
 }

@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -127,5 +128,41 @@ public class AuthorityMapperTest {
     System.out.println("Month: " + month);
     System.out.println("Day: " + day);
     System.out.println(timestamp);
+  }
+
+  @Test
+  public void timestamp2OffsetDateTime() {
+    Timestamp timestamp = Timestamp.newBuilder()
+      .setSeconds(1698643200)
+      .setNanos(0)
+      .build();
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    OffsetDateTime offsetDateTime = instance.toOffsetDateTime(timestamp);
+    String format = offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
+    System.out.println(format);
+  }
+
+  @Test
+  public void timestamp2LocalDateTime() {
+    Timestamp timestamp = Timestamp.newBuilder()
+      .setSeconds(1698643200)
+      .setNanos(0)
+      .build();
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    LocalDateTime localDateTime = instance.toLocalDateTime(timestamp);
+    String format = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+    System.out.println(format);
+  }
+
+  @Test
+  public void timestamp2LocalDate() {
+    Timestamp timestamp = Timestamp.newBuilder()
+      .setSeconds(1698643200)
+      .setNanos(0)
+      .build();
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    LocalDate localDate = instance.toLocalDate(timestamp);
+    String format = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    System.out.println(format);
   }
 }
