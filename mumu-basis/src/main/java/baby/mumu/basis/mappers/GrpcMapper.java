@@ -75,12 +75,14 @@ public interface GrpcMapper {
       .orElse(null);
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default Timestamp map(OffsetDateTime offsetDateTime) {
     return Optional.ofNullable(offsetDateTime).map(
       offsetDateTimeNotNull -> Timestamp.newBuilder().setSeconds(offsetDateTime.toEpochSecond())
         .setNanos(offsetDateTime.getNano()).build()).orElse(Timestamp.getDefaultInstance());
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default Timestamp map(LocalDate localDate) {
     return Optional.ofNullable(localDate).map(
         localDateNotNull -> Timestamp.newBuilder()
@@ -89,6 +91,7 @@ public interface GrpcMapper {
       .orElse(Timestamp.getDefaultInstance());
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default Timestamp map(LocalDateTime localDateTime) {
     return Optional.ofNullable(localDateTime).map(
         localDateTimeNotNull -> Timestamp.newBuilder()
@@ -97,6 +100,7 @@ public interface GrpcMapper {
       .orElse(Timestamp.getDefaultInstance());
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default OffsetDateTime toOffsetDateTime(Timestamp timestamp) {
     return Optional.ofNullable(timestamp).map(
         timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
@@ -104,6 +108,7 @@ public interface GrpcMapper {
       .orElse(null);
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default LocalDate toLocalDate(Timestamp timestamp) {
     return Optional.ofNullable(timestamp).map(
         timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
@@ -111,6 +116,7 @@ public interface GrpcMapper {
       .orElse(null);
   }
 
+  @API(status = Status.STABLE, since = "2.3.0")
   default LocalDateTime toLocalDateTime(Timestamp timestamp) {
     return Optional.ofNullable(timestamp).map(
         timestampNotNull -> Instant.ofEpochSecond(timestampNotNull.getSeconds(),
