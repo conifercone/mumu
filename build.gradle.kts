@@ -103,6 +103,7 @@ subprojects {
                 .any { it.name.contains("mumu-processor") }
             if (hasProcessor) {
                 options.compilerArgs.addAll(
+                    @Suppress("SpellCheckingInspection")
                     listOf(
                         "-Amapstruct.unmappedTargetPolicy=IGNORE",
                         "-Agradle.version=${gradle.gradleVersion}",
@@ -113,6 +114,7 @@ subprojects {
                     )
                 )
             } else {
+                @Suppress("SpellCheckingInspection")
                 options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
             }
         }
@@ -123,6 +125,7 @@ subprojects {
         org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java
     ) {
         compilerOptions {
+            @Suppress("SpellCheckingInspection")
             freeCompilerArgs.add("-Xjsr305=strict")
         }
     }
