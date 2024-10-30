@@ -18,6 +18,8 @@ package baby.mumu.authentication.application.authority.executor;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ public class AuthorityFindByIdCmdExe {
   public AuthorityFindByIdCo execute(Long id) {
     return Optional.ofNullable(id)
       .flatMap(authorityGateway::findById).flatMap(
-        authorityConvertor::toFindByIdCo).orElse(null);
-
+        authorityConvertor::toFindByIdCo)
+      .orElseThrow(() -> new MuMuException(ResponseCode.AUTHORITY_DOES_NOT_EXIST));
   }
 }
