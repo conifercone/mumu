@@ -19,6 +19,8 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/conifercone/mumu)
+![GitHub contributors](https://img.shields.io/github/contributors/conifercone/mumu)
 
 ## Content list
 
