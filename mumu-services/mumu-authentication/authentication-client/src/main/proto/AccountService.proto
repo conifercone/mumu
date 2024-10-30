@@ -1,6 +1,7 @@
 syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 option java_multiple_files = true;
 option java_package = "baby.mumu.authentication.client.api.grpc";
@@ -23,9 +24,7 @@ message AccountCurrentLoginGrpcCo{
   oneof language_wrapper {
     LanguageEnum language = 8;
   }
-  oneof birthday_wrapper {
-    LocalDate birthday = 9;
-  }
+  google.protobuf.Timestamp birthday = 9;
   repeated AccountRoleCurrentLoginQueryGrpcCo roles = 10;
   repeated AccountAddressCurrentLoginQueryGrpcCo addresses = 11;
   repeated AccountSystemSettingsCurrentLoginQueryGrpcCo systemSettings = 12;
@@ -96,11 +95,5 @@ enum SystemThemeModeEnum
   DAY = 0;
   NIGHT = 1;
   SYNC_WITH_SYSTEM = 2;
-}
-
-message LocalDate {
-  google.protobuf.Int32Value year = 1;
-  google.protobuf.Int32Value month = 2;
-  google.protobuf.Int32Value day = 3;
 }
 

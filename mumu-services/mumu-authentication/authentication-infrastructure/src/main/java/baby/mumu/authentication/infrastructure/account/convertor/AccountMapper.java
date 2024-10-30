@@ -20,7 +20,6 @@ import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleAuthorityCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
-import baby.mumu.authentication.client.api.grpc.LocalDate;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
@@ -48,7 +47,6 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.datao
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.basis.mappers.GrpcMapper;
-import com.google.protobuf.Int32Value;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -170,15 +168,6 @@ public interface AccountMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(
     AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
-
-  @API(status = Status.STABLE, since = "2.2.0")
-  default LocalDate map(java.time.LocalDate value) {
-    return Optional.ofNullable(value)
-      .map(valueNotNull -> LocalDate.newBuilder().setYear(Int32Value.of(valueNotNull.getYear()))
-        .setMonth(Int32Value.of(valueNotNull.getMonthValue()))
-        .setDay(Int32Value.of(valueNotNull.getDayOfMonth()))
-        .build()).orElse(LocalDate.newBuilder().build());
-  }
 
   @AfterMapping
   default void convertToAccountTimezone(

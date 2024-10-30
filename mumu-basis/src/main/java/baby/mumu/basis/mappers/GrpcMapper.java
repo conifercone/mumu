@@ -19,6 +19,11 @@ import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
+import com.google.protobuf.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -67,5 +72,27 @@ public interface GrpcMapper {
   default String map(StringValue value) {
     return Optional.ofNullable(value).filter(StringValue::isInitialized).map(StringValue::getValue)
       .orElse(null);
+  }
+
+  default Timestamp map(OffsetDateTime offsetDateTime) {
+    return Optional.ofNullable(offsetDateTime).map(
+      offsetDateTimeNotNull -> Timestamp.newBuilder().setSeconds(offsetDateTime.toEpochSecond())
+        .setNanos(offsetDateTime.getNano()).build()).orElse(Timestamp.getDefaultInstance());
+  }
+
+  default Timestamp map(LocalDate localDate) {
+    return Optional.ofNullable(localDate).map(
+        localDateNotNull -> Timestamp.newBuilder()
+          .setSeconds(localDateNotNull.atStartOfDay().toInstant(ZoneOffset.UTC).getEpochSecond())
+          .setNanos(localDateNotNull.atStartOfDay().toInstant(ZoneOffset.UTC).getNano()).build())
+      .orElse(Timestamp.getDefaultInstance());
+  }
+
+  default Timestamp map(LocalDateTime localDateTime) {
+    return Optional.ofNullable(localDateTime).map(
+        localDateTimeNotNull -> Timestamp.newBuilder()
+          .setSeconds(localDateTimeNotNull.toInstant(ZoneOffset.UTC).getEpochSecond())
+          .setNanos(localDateTimeNotNull.toInstant(ZoneOffset.UTC).getNano()).build())
+      .orElse(Timestamp.getDefaultInstance());
   }
 }

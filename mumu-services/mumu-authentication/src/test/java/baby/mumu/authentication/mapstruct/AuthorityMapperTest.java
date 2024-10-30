@@ -19,7 +19,12 @@ import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityMapper;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
+import com.google.protobuf.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -53,5 +58,74 @@ public class AuthorityMapperTest {
     authority.setName("test");
     instance.toEntity(authorityUpdateCo, authority);
     System.out.println(authority);
+  }
+
+  @Test
+  public void offsetDateTime2Timestamp() {
+    OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneId.of("UTC"));
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    Timestamp timestamp = instance.map(offsetDateTime);
+    // 从 Timestamp 获取秒和纳秒
+    long seconds = timestamp.getSeconds();
+    int nanos = timestamp.getNanos();
+    // 将 Timestamp 转换为 Instant
+    Instant instant = Instant.ofEpochSecond(seconds, nanos);
+    // 将 Instant 转换为 LocalDate
+    LocalDate localDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+    // 获取年、月、日
+    int year = localDate.getYear();
+    int month = localDate.getMonthValue();
+    int day = localDate.getDayOfMonth();
+    // 打印结果
+    System.out.println("Year: " + year);
+    System.out.println("Month: " + month);
+    System.out.println("Day: " + day);
+    System.out.println(timestamp);
+  }
+
+  @Test
+  public void localDate2Timestamp() {
+    LocalDate now = LocalDate.now(ZoneId.of("UTC"));
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    Timestamp timestamp = instance.map(now);
+    // 从 Timestamp 获取秒和纳秒
+    long seconds = timestamp.getSeconds();
+    int nanos = timestamp.getNanos();
+    // 将 Timestamp 转换为 Instant
+    Instant instant = Instant.ofEpochSecond(seconds, nanos);
+    // 将 Instant 转换为 LocalDate
+    LocalDate localDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+    // 获取年、月、日
+    int year = localDate.getYear();
+    int month = localDate.getMonthValue();
+    int day = localDate.getDayOfMonth();
+    // 打印结果
+    System.out.println("Year: " + year);
+    System.out.println("Month: " + month);
+    System.out.println("Day: " + day);
+    System.out.println(timestamp);
+  }
+
+  @Test
+  public void localDateTime2Timestamp() {
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+    AuthorityMapper instance = AuthorityMapper.INSTANCE;
+    Timestamp timestamp = instance.map(now);
+    // 从 Timestamp 获取秒和纳秒
+    long seconds = timestamp.getSeconds();
+    int nanos = timestamp.getNanos();
+    // 将 Timestamp 转换为 Instant
+    Instant instant = Instant.ofEpochSecond(seconds, nanos);
+    // 将 Instant 转换为 LocalDate
+    LocalDate localDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+    // 获取年、月、日
+    int year = localDate.getYear();
+    int month = localDate.getMonthValue();
+    int day = localDate.getDayOfMonth();
+    // 打印结果
+    System.out.println("Year: " + year);
+    System.out.println("Month: " + month);
+    System.out.println("Day: " + day);
+    System.out.println(timestamp);
   }
 }
