@@ -18,17 +18,17 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
+import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
+import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
-import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
@@ -59,7 +59,7 @@ public interface AuthorityMapper extends GrpcMapper {
   Authority toEntity(AuthorityDo authorityDo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Authority toEntity(AuthorityAddCo authorityAddCo);
+  Authority toEntity(AuthorityAddCmd authorityAddCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Authority toEntity(AuthorityFindAllCmd authorityFindAllCmd);
@@ -86,7 +86,7 @@ public interface AuthorityMapper extends GrpcMapper {
   Authority toEntity(AuthorityArchivedFindAllSliceCmd authorityArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AuthorityUpdateCo authorityUpdateCo, @MappingTarget Authority authority);
+  void toEntity(AuthorityUpdateCmd authorityUpdateCmd, @MappingTarget Authority authority);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AuthorityFindByIdCo toFindByIdCo(Authority authority);

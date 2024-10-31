@@ -15,8 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -28,6 +27,11 @@ import lombok.Data;
 @Data
 public class AuthorityAddCmd {
 
-  @Valid
-  private AuthorityAddCo authorityAddCo;
+  private Long id;
+
+  @Size(max = 50, message = "{authority.code.validation.size}")
+  private String code;
+
+  @Size(max = 200, message = "{authority.name.validation.size}")
+  private String name;
 }

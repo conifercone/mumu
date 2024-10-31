@@ -22,12 +22,9 @@ import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.dto.AccountRegisterCmd;
+import baby.mumu.authentication.client.dto.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
@@ -38,7 +35,6 @@ import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
 import java.time.LocalDate;
 import java.util.Collections;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -86,8 +82,24 @@ public class AccountControllerTest {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
     accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
     accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
-    AccountRegisterCo accountRegisterCo = getAccountRegisterCo();
-    accountRegisterCmd.setAccountRegisterCo(accountRegisterCo);
+    accountRegisterCmd.setId(31241232131L);
+    accountRegisterCmd.setUsername("test1");
+    accountRegisterCmd.setPassword("test1");
+    accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
+    accountRegisterCmd.setAvatarUrl("https://github.com/users/conifercone");
+    accountRegisterCmd.setPhone("13031723736");
+    accountRegisterCmd.setSex(SexEnum.MALE);
+    accountRegisterCmd.setLanguage(LanguageEnum.ZH);
+    accountRegisterCmd.setTimezone("Asia/Shanghai");
+    accountRegisterCmd.setEmail("547913250@qq.com");
+    accountRegisterCmd.setBirthday(LocalDate.of(1995, 8, 2));
+    AccountAddressRegisterCmd accountAddressRegisterCmd = new AccountAddressRegisterCmd();
+    accountAddressRegisterCmd.setStreet("历城区");
+    accountAddressRegisterCmd.setCity("济南市");
+    accountAddressRegisterCmd.setState("山东省");
+    accountAddressRegisterCmd.setPostalCode("250101");
+    accountAddressRegisterCmd.setCountry("中国");
+    accountRegisterCmd.setAddresses(Collections.singletonList(accountAddressRegisterCmd));
     mockMvc.perform(MockMvcRequestBuilders
         .post("/account/register").with(csrf())
         .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
@@ -99,37 +111,12 @@ public class AccountControllerTest {
       .andDo(print());
   }
 
-  private static @NotNull AccountRegisterCo getAccountRegisterCo() {
-    AccountRegisterCo accountRegisterCo = new AccountRegisterCo();
-    accountRegisterCo.setId(31241232131L);
-    accountRegisterCo.setUsername("test1");
-    accountRegisterCo.setPassword("test1");
-    accountRegisterCo.setRoleCodes(Collections.singletonList("admin"));
-    accountRegisterCo.setAvatarUrl("https://github.com/users/conifercone");
-    accountRegisterCo.setPhone("13031723736");
-    accountRegisterCo.setSex(SexEnum.MALE);
-    accountRegisterCo.setLanguage(LanguageEnum.ZH);
-    accountRegisterCo.setTimezone("Asia/Shanghai");
-    accountRegisterCo.setEmail("547913250@qq.com");
-    accountRegisterCo.setBirthday(LocalDate.of(1995, 8, 2));
-    AccountAddressRegisterCo accountAddressRegisterCo = new AccountAddressRegisterCo();
-    accountAddressRegisterCo.setStreet("历城区");
-    accountAddressRegisterCo.setCity("济南市");
-    accountAddressRegisterCo.setState("山东省");
-    accountAddressRegisterCo.setPostalCode("250101");
-    accountAddressRegisterCo.setCountry("中国");
-    accountRegisterCo.setAddresses(Collections.singletonList(accountAddressRegisterCo));
-    return accountRegisterCo;
-  }
-
   @Test
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
     AccountUpdateByIdCmd accountUpdateByIdCmd = new AccountUpdateByIdCmd();
-    AccountUpdateByIdCo accountUpdateByIdCo = new AccountUpdateByIdCo();
-    accountUpdateByIdCo.setId(1L);
-    accountUpdateByIdCo.setUsername("test_updated");
-    accountUpdateByIdCmd.setAccountUpdateByIdCo(accountUpdateByIdCo);
+    accountUpdateByIdCmd.setId(1L);
+    accountUpdateByIdCmd.setUsername("test_updated");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/updateById").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountUpdateByIdCmd))
@@ -145,10 +132,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void updateRoleById() throws Exception {
     AccountUpdateRoleCmd accountUpdateRoleCmd = new AccountUpdateRoleCmd();
-    AccountUpdateRoleCo accountUpdateRoleCo = new AccountUpdateRoleCo();
-    accountUpdateRoleCo.setId(1L);
-    accountUpdateRoleCo.setRoleCodes(Collections.singletonList("test"));
-    accountUpdateRoleCmd.setAccountUpdateRoleCo(accountUpdateRoleCo);
+    accountUpdateRoleCmd.setId(1L);
+    accountUpdateRoleCmd.setRoleCodes(Collections.singletonList("test"));
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/updateRoleById").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountUpdateRoleCmd))

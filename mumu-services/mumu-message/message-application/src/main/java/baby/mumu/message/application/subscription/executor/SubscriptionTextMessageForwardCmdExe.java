@@ -18,10 +18,9 @@ package baby.mumu.message.application.subscription.executor;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本订阅消息转发指令执行器
@@ -43,12 +42,9 @@ public class SubscriptionTextMessageForwardCmdExe {
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
-  public void execute(
-    @NotNull SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
-    Assert.notNull(subscriptionTextMessageForwardCmd,
-      "SubscriptionTextMessageForwardCmd cannot null");
-    subscriptionTextMessageConvertor.toEntity(
-        subscriptionTextMessageForwardCmd.getSubscriptionTextMessageForwardCo())
+  public void execute(SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    Optional.ofNullable(subscriptionTextMessageForwardCmd)
+      .flatMap(subscriptionTextMessageConvertor::toEntity)
       .ifPresent(subscriptionTextMessageGateway::forwardMsg);
   }
 }

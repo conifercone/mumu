@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.mapstruct;
 
-import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
+import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityMapper;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
@@ -51,13 +51,13 @@ public class AuthorityMapperTest {
   @Test
   public void toEntityForExistObject() {
     AuthorityMapper instance = AuthorityMapper.INSTANCE;
-    AuthorityUpdateCo authorityUpdateCo = new AuthorityUpdateCo();
-    authorityUpdateCo.setId(1L);
-    authorityUpdateCo.setCode("test");
+    AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
+    authorityUpdateCmd.setId(1L);
+    authorityUpdateCmd.setCode("test");
     Authority authority = new Authority();
     authority.setId(2L);
     authority.setName("test");
-    instance.toEntity(authorityUpdateCo, authority);
+    instance.toEntity(authorityUpdateCmd, authority);
     System.out.println(authority);
   }
 

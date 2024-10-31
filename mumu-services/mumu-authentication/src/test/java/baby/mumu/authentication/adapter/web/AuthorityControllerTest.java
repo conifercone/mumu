@@ -21,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
-import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
-import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +59,9 @@ public class AuthorityControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     AuthorityAddCmd authorityAddCmd = new AuthorityAddCmd();
-    AuthorityAddCo authorityAddCo = new AuthorityAddCo();
-    authorityAddCo.setId(412354321321L);
-    authorityAddCo.setCode("test_code");
-    authorityAddCo.setName("test_name");
-    authorityAddCmd.setAuthorityAddCo(authorityAddCo);
+    authorityAddCmd.setId(412354321321L);
+    authorityAddCmd.setCode("test_code");
+    authorityAddCmd.setName("test_name");
     mockMvc.perform(MockMvcRequestBuilders
         .post("/authority/add").with(csrf())
         .content(objectMapper.writeValueAsBytes(authorityAddCmd))
@@ -94,10 +90,8 @@ public class AuthorityControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
     AuthorityUpdateCmd authorityUpdateCmd = new AuthorityUpdateCmd();
-    AuthorityUpdateCo authorityUpdateCo = new AuthorityUpdateCo();
-    authorityUpdateCo.setId(3L);
-    authorityUpdateCo.setCode("test_updated");
-    authorityUpdateCmd.setAuthorityUpdateCo(authorityUpdateCo);
+    authorityUpdateCmd.setId(3L);
+    authorityUpdateCmd.setCode("test_updated");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/authority/updateById").with(csrf())
         .content(objectMapper.writeValueAsBytes(authorityUpdateCmd))

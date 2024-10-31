@@ -18,17 +18,17 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllAuthorityGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo.RoleFindAllAuthorityCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
@@ -59,7 +59,7 @@ public interface RoleMapper extends GrpcMapper {
   Role toEntity(RoleDo roleDo);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Role toEntity(RoleAddCo roleAddCo);
+  Role toEntity(RoleAddCmd roleAddCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleFindAllCmd roleFindAllCmd);
@@ -80,7 +80,7 @@ public interface RoleMapper extends GrpcMapper {
   RoleRedisDo toRoleRedisDo(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(RoleUpdateCo roleUpdateCo, @MappingTarget Role role);
+  void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   RoleFindAllCo toFindAllCo(Role role);

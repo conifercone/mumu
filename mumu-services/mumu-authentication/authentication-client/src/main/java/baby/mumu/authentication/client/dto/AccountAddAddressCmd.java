@@ -15,8 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -28,6 +27,38 @@ import lombok.Data;
 @Data
 public class AccountAddAddressCmd {
 
-  @Valid
-  private AccountAddAddressCo accountAddAddressCo;
+  /**
+   * 唯一主键
+   */
+  private Long id;
+
+  /**
+   * 街道地址，包含门牌号和街道信息
+   */
+  @Size(max = 255)
+  private String street;
+
+  /**
+   * 城市信息
+   */
+  @Size(max = 100)
+  private String city;
+
+  /**
+   * 州或省的信息
+   */
+  @Size(max = 100)
+  private String state;
+
+  /**
+   * 邮政编码
+   */
+  @Size(max = 20)
+  private String postalCode;
+
+  /**
+   * 国家信息
+   */
+  @Size(max = 100)
+  private String country;
 }

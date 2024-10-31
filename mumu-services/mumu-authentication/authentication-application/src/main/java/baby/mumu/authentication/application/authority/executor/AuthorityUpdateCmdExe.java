@@ -19,10 +19,9 @@ import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 更新权限指令执行器
@@ -44,9 +43,8 @@ public class AuthorityUpdateCmdExe {
     this.authorityConvertor = authorityConvertor;
   }
 
-  public void execute(@NotNull AuthorityUpdateCmd authorityUpdateCmd) {
-    Assert.notNull(authorityUpdateCmd, "AuthorityUpdateCmd cannot be null");
-    authorityConvertor.toEntity(authorityUpdateCmd.getAuthorityUpdateCo())
+  public void execute(AuthorityUpdateCmd authorityUpdateCmd) {
+    Optional.ofNullable(authorityUpdateCmd).flatMap(authorityConvertor::toEntity)
       .ifPresent(authorityGateway::updateById);
   }
 }

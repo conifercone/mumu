@@ -46,8 +46,6 @@ public class AccountModifySystemSettingsBySettingsIdCmdExe {
   public void execute(
     AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmd)
-      .map(
-        AccountModifySystemSettingsBySettingsIdCmd::getAccountModifySystemSettingsBySettingsIdCo)
       .flatMap(accountConvertor::toAccountSystemSettings)
       .ifPresent(accountGateway::modifySystemSettings);
   }

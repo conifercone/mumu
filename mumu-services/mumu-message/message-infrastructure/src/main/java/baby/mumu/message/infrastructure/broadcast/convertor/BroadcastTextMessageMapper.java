@@ -17,8 +17,8 @@ package baby.mumu.message.infrastructure.broadcast.convertor;
 
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageForwardCo;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
@@ -44,7 +44,7 @@ public interface BroadcastTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   BroadcastTextMessage toEntity(
-    BroadcastTextMessageForwardCo broadcastTextMessageForwardCo);
+    BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
   BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);

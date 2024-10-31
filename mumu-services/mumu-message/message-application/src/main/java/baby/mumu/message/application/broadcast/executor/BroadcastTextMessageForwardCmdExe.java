@@ -18,10 +18,9 @@ package baby.mumu.message.application.broadcast.executor;
 import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 文本广播消息转发指令执行器
@@ -43,12 +42,9 @@ public class BroadcastTextMessageForwardCmdExe {
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
   }
 
-  public void execute(
-    @NotNull BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
-    Assert.notNull(broadcastTextMessageForwardCmd,
-      "BroadcastTextMessageForwardCmd cannot null");
-    broadcastTextMessageConvertor.toEntity(
-        broadcastTextMessageForwardCmd.getBroadcastTextMessageForwardCo())
+  public void execute(BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+    Optional.ofNullable(broadcastTextMessageForwardCmd)
+      .flatMap(broadcastTextMessageConvertor::toEntity)
       .ifPresent(broadcastTextMessageGateway::forwardMsg);
   }
 }

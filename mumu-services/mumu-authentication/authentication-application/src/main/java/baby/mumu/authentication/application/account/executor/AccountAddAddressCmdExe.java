@@ -20,10 +20,8 @@ import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 账户添加地址指令执行器
@@ -44,9 +42,8 @@ public class AccountAddAddressCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public void execute(@NotNull AccountAddAddressCmd accountAddAddressCmd) {
-    Assert.notNull(accountAddAddressCmd, "AccountAddAddressCmd cannot be null");
-    Optional.ofNullable(accountAddAddressCmd.getAccountAddAddressCo())
+  public void execute(AccountAddAddressCmd accountAddAddressCmd) {
+    Optional.ofNullable(accountAddAddressCmd)
       .flatMap(accountConvertor::toEntity)
       .ifPresent(accountGateway::addAddress);
   }

@@ -17,16 +17,16 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.RoleAddCo;
+import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
@@ -172,14 +172,14 @@ public class RoleConvertor {
 
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Role> toEntity(RoleAddCo roleAddCo) {
-    return Optional.ofNullable(roleAddCo).map(roleAddClientObject -> {
-      Role role = RoleMapper.INSTANCE.toEntity(roleAddClientObject);
+  public Optional<Role> toEntity(RoleAddCmd roleAddCmd) {
+    return Optional.ofNullable(roleAddCmd).map(roleAddCmdNotNull -> {
+      Role role = RoleMapper.INSTANCE.toEntity(roleAddCmdNotNull);
       if (role.getId() == null) {
         role.setId(primaryKeyGrpcService.snowflake());
-        roleAddClientObject.setId(role.getId());
+        roleAddCmdNotNull.setId(role.getId());
       }
-      Optional.ofNullable(roleAddClientObject.getAuthorityIds())
+      Optional.ofNullable(roleAddCmdNotNull.getAuthorityIds())
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(authorityIds -> setAuthorities(role, authorityIds));
       return role;
@@ -187,21 +187,21 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Role> toEntity(RoleUpdateCo roleUpdateCo) {
-    return Optional.ofNullable(roleUpdateCo).flatMap(roleUpdateClientObject -> {
-      Optional.ofNullable(roleUpdateClientObject.getId())
+  public Optional<Role> toEntity(RoleUpdateCmd roleUpdateCmd) {
+    return Optional.ofNullable(roleUpdateCmd).flatMap(roleUpdateCmdNotNull -> {
+      Optional.ofNullable(roleUpdateCmdNotNull.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-      Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateClientObject.getId());
+      Optional<RoleDo> roleDoOptional = roleRepository.findById(roleUpdateCmdNotNull.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
         String codeBeforeUpdated = roleDomain.getCode();
-        RoleMapper.INSTANCE.toEntity(roleUpdateClientObject, roleDomain);
+        RoleMapper.INSTANCE.toEntity(roleUpdateCmdNotNull, roleDomain);
         String codeAfterUpdated = roleDomain.getCode();
         if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
           && (roleRepository.existsByCode(codeAfterUpdated)
           || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new MuMuException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
         }
-        Optional.ofNullable(roleUpdateClientObject.getAuthorityIds())
+        Optional.ofNullable(roleUpdateCmdNotNull.getAuthorityIds())
           .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
         return roleDomain;
       }));

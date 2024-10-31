@@ -18,17 +18,17 @@ package baby.mumu.authentication.infrastructure.authority.convertor;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
+import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.AuthorityAddCo;
+import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
-import baby.mumu.authentication.client.dto.co.AuthorityUpdateCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
@@ -88,28 +88,28 @@ public class AuthorityConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityAddCo authorityAddCo) {
-    return Optional.ofNullable(authorityAddCo).map(authorityAddClientObject -> {
-      Authority authority = AuthorityMapper.INSTANCE.toEntity(authorityAddClientObject);
+  public Optional<Authority> toEntity(AuthorityAddCmd authorityAddCmd) {
+    return Optional.ofNullable(authorityAddCmd).map(authorityAddCmdNotNull -> {
+      Authority authority = AuthorityMapper.INSTANCE.toEntity(authorityAddCmdNotNull);
       if (authority.getId() == null) {
         authority.setId(primaryKeyGrpcService.snowflake());
-        authorityAddClientObject.setId(authority.getId());
+        authorityAddCmdNotNull.setId(authority.getId());
       }
       return authority;
     });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Authority> toEntity(AuthorityUpdateCo authorityUpdateCo) {
-    return Optional.ofNullable(authorityUpdateCo).map(authorityUpdateClientObject -> {
-      if (authorityUpdateClientObject.getId() == null) {
+  public Optional<Authority> toEntity(AuthorityUpdateCmd authorityUpdateCmd) {
+    return Optional.ofNullable(authorityUpdateCmd).map(authorityUpdateCmdNotNull -> {
+      if (authorityUpdateCmdNotNull.getId() == null) {
         throw new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
       }
       return authorityRepository.findById(
-          authorityUpdateClientObject.getId()).flatMap(this::toEntity)
+          authorityUpdateCmdNotNull.getId()).flatMap(this::toEntity)
         .map(authority -> {
           String codeBeforeUpdate = authority.getCode();
-          AuthorityMapper.INSTANCE.toEntity(authorityUpdateClientObject, authority);
+          AuthorityMapper.INSTANCE.toEntity(authorityUpdateCmdNotNull, authority);
           String codeAfterUpdate = authority.getCode();
           if (StringUtils.isNotBlank(codeAfterUpdate) && !codeAfterUpdate.equals(codeBeforeUpdate)
             && (authorityRepository.existsByCode(

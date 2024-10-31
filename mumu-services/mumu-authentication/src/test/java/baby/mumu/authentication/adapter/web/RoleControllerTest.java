@@ -21,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleAddCo;
-import baby.mumu.authentication.client.dto.co.RoleUpdateCo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -62,12 +60,10 @@ public class RoleControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
-    RoleAddCo roleAddCo = new RoleAddCo();
-    roleAddCo.setId(451235432L);
-    roleAddCo.setName("测试角色");
-    roleAddCo.setCode("test_code");
-    roleAddCo.setAuthorityIds(Arrays.asList(1L, 2L));
-    roleAddCmd.setRoleAddCo(roleAddCo);
+    roleAddCmd.setId(451235432L);
+    roleAddCmd.setName("测试角色");
+    roleAddCmd.setCode("test_code");
+    roleAddCmd.setAuthorityIds(Arrays.asList(1L, 2L));
     mockMvc.perform(MockMvcRequestBuilders
         .post("/role/add").with(csrf())
         .content(objectMapper.writeValueAsBytes(roleAddCmd))
@@ -96,10 +92,8 @@ public class RoleControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void updateById() throws Exception {
     RoleUpdateCmd roleUpdateCmd = new RoleUpdateCmd();
-    RoleUpdateCo roleUpdateCo = new RoleUpdateCo();
-    roleUpdateCo.setId(0L);
-    roleUpdateCo.setCode("test_updated");
-    roleUpdateCmd.setRoleUpdateCo(roleUpdateCo);
+    roleUpdateCmd.setId(0L);
+    roleUpdateCmd.setCode("test_updated");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/role/updateById").with(csrf())
         .content(objectMapper.writeValueAsBytes(roleUpdateCmd))

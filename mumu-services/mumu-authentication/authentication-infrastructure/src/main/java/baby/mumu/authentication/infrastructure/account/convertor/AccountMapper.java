@@ -20,10 +20,15 @@ import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleAuthorityCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
+import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
+import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.dto.AccountRegisterCmd;
+import baby.mumu.authentication.client.dto.AccountRegisterCmd.AccountAddressRegisterCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd.AccountAddressUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountAddressCurrentLoginQueryCo;
@@ -32,11 +37,6 @@ import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleC
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountSystemSettingsCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo.AccountAddressRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo.AccountAddressUpdateByIdCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
@@ -92,7 +92,7 @@ public interface AccountMapper extends GrpcMapper {
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
-    AccountAddSystemSettingsCo accountAddSystemSettingsCo);
+    AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettingMongodbDo(
@@ -101,29 +101,29 @@ public interface AccountMapper extends GrpcMapper {
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettings(
-    AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo,
+    AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd,
     @MappingTarget AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountRedisDo toAccountRedisDo(Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toAccountAddress(AccountAddAddressCo accountAddAddressCo);
+  AccountAddress toAccountAddress(AccountAddAddressCmd accountAddAddressCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountDo toDataObject(Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Account toEntity(AccountRegisterCo accountRegisterCo);
+  Account toEntity(AccountRegisterCmd accountRegisterCmd);
 
   @API(status = Status.STABLE, since = "2.1.0")
-  AccountAddress toAccountAddress(AccountAddressRegisterCo accountAddressRegisterCo);
+  AccountAddress toAccountAddress(AccountAddressRegisterCmd accountAddressRegisterCmd);
 
   @API(status = Status.STABLE, since = "2.1.0")
-  AccountAddress toAccountAddress(AccountAddressUpdateByIdCo accountAddressUpdateByIdCo);
+  AccountAddress toAccountAddress(AccountAddressUpdateByIdCmd accountAddressUpdateByIdCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  void toEntity(AccountUpdateByIdCo accountUpdateByIdCo, @MappingTarget Account account);
+  void toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd, @MappingTarget Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
   AccountCurrentLoginCo toCurrentLoginQueryCo(Account account);

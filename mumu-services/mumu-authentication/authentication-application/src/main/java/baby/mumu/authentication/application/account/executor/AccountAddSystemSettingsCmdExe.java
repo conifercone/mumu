@@ -46,7 +46,6 @@ public class AccountAddSystemSettingsCmdExe {
   public void execute(
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
     Optional.ofNullable(accountAddSystemSettingsCmd)
-      .map(AccountAddSystemSettingsCmd::getAccountAddSystemSettingsCo)
       .flatMap(accountConvertor::toAccountSystemSettings)
       .ifPresent(accountGateway::addSystemSettings);
   }

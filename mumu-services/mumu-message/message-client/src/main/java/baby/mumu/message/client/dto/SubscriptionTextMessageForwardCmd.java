@@ -15,7 +15,8 @@
  */
 package baby.mumu.message.client.dto;
 
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
+import baby.mumu.basis.enums.MessageStatusEnum;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -27,5 +28,12 @@ import lombok.Data;
 @Data
 public class SubscriptionTextMessageForwardCmd {
 
-  private SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo;
+  private Long id;
+
+  private Long receiverId;
+
+  @NotBlank(message = "{text.message.validation.not.blank}")
+  private String message;
+
+  private MessageStatusEnum messageStatus;
 }

@@ -18,9 +18,9 @@ package baby.mumu.message.infrastructure.subscription.convertor;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
@@ -55,8 +55,8 @@ public class SubscriptionTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<SubscriptionTextMessage> toEntity(
-    SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo) {
-    return Optional.ofNullable(subscriptionTextMessageForwardCo)
+    SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    return Optional.ofNullable(subscriptionTextMessageForwardCmd)
       .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
         SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
         entity.setSenderId(senderAccountId);
