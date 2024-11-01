@@ -243,6 +243,8 @@ spring-cloud-commons = { module = "org.springframework.cloud:spring-cloud-common
 grpc-api = { module = "io.grpc:grpc-api" }
 # https://mvnrepository.com/artifact/me.tongfei/progressbar
 progressbar = { module = "me.tongfei:progressbar", version.ref = "progressbarVersion" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
+spring-data-redis = { module = "org.springframework.data:spring-data-redis" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

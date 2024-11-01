@@ -29,6 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -44,6 +45,10 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
+@TestPropertySource(properties = {
+  "mumu.extension.global.digital-signature.enabled=false",
+  "mumu.extension.idempotent.request-id.enabled=false"
+})
 public class AuthorityControllerTest {
 
   private final MockMvc mockMvc;

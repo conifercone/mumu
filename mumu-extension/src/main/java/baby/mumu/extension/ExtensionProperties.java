@@ -18,6 +18,7 @@ package baby.mumu.extension;
 import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.distributed.DistributedProperties;
 import baby.mumu.extension.fd.FaceDetectionProperties;
+import baby.mumu.extension.idempotent.IdempotentProperties;
 import baby.mumu.extension.ocr.OcrProperties;
 import baby.mumu.extension.rl.RateLimiterProperties;
 import baby.mumu.extension.sql.SqlProperties;
@@ -83,4 +84,10 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private RateLimiterProperties rl = new RateLimiterProperties();
+
+  /**
+   * 幂等配置
+   */
+  @NestedConfigurationProperty
+  private IdempotentProperties idempotent = new IdempotentProperties();
 }
