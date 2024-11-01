@@ -33,6 +33,15 @@
 
 ## Projects
 
+> Although there are many mature backend management systems on the market,
+> my strong preference for clean code has made it difficult to find a suitable project.
+> So, I decided to create my own open-source backend management system that is both clean and
+> feature-complete.
+> This led to the creation of "mumu," named after my son (Mu Mu).
+> Just as I hope for my child's healthy growth, I also wish for the mumu project to thrive.
+> For as long as I live, this project will remain free and open-source for both individuals
+> and organizations to use without any charges.
+
 ### 🎉 The Delightfully Clean & Ready-to-Go Management System! 🎉
 
 Tired of messy code and setups that make your head spin?
