@@ -3,5 +3,5 @@
 |  |'.'|  |' ,-.  |,--.|  |
 |  |   |  |\ '-'  ||  ||  |
 `--'   `--' `--`--'`--'`--'
-${application.title} : ${application.formatted-version}
+${application.title} Version : ${application.formatted-version}
 Spring Boot Version : ${spring-boot.formatted-version}

@@ -20,4 +20,5 @@ dependencies {
     testImplementation(libs.grpc.client.spring.boot.starter)
     implementation(libs.redis.om.spring)
     annotationProcessor(libs.redis.om.spring)
+    annotationProcessor(project(":mumu-processor"))
 }

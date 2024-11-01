@@ -17,8 +17,11 @@ package baby.mumu.message;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -40,9 +43,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement
+@Metamodel(projectName = true, projectVersion = true)
 public class MuMuMessageApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuMessageApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuMessageApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put("application.title", MuMuMessageApplicationMetamodel.projectName);
+    defaultProperties.put("application.formatted-version",
+      String.format(" (v%s)", MuMuMessageApplicationMetamodel.projectVersion));
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

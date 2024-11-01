@@ -15,6 +15,9 @@
  */
 package baby.mumu.mail;
 
+import baby.mumu.basis.annotations.Metamodel;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -25,9 +28,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.1
  */
 @SpringBootApplication
+@Metamodel(projectName = true, projectVersion = true)
 public class MuMuMailApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuMailApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuMailApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put("application.title", MuMuMailApplicationMetamodel.projectName);
+    defaultProperties.put("application.formatted-version",
+      String.format(" (v%s)", MuMuMailApplicationMetamodel.projectVersion));
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

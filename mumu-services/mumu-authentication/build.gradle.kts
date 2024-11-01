@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.redis.om.spring)
     implementation(libs.jobrunr.spring.boot3.starter)
     annotationProcessor(libs.redis.om.spring)
+    annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
 }
 
