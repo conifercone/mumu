@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)
 @EnableRedisDocumentRepositories(basePackages = "baby.mumu.unique.infrastructure.**")
-@Metamodel(projectName = true, projectVersion = true)
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuUniqueApplication {
 
   public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class MuMuUniqueApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuUniqueApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      String.format(" (v%s)", MuMuUniqueApplicationMetamodel.projectVersion));
+      MuMuUniqueApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

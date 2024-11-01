@@ -33,7 +33,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @SpringBootApplication
 @EnableConfigurationProperties
-@Metamodel(projectName = true, projectVersion = true)
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuFileApplication {
 
   public static void main(String[] args) {
@@ -43,7 +43,7 @@ public class MuMuFileApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuFileApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      String.format(" (v%s)", MuMuFileApplicationMetamodel.projectVersion));
+      MuMuFileApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

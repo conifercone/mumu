@@ -52,6 +52,20 @@ public @interface Metamodel {
   String projectVersionFiledName() default "projectVersion";
 
   /**
+   * 是否生成格式化后的项目版本号
+   *
+   * @since 2.3.0
+   */
+  boolean formattedProjectVersion() default false;
+
+  /**
+   * 格式化后的项目版本号字段名
+   *
+   * @since 2.3.0
+   */
+  String formattedProjectVersionFiledName() default "formattedProjectVersion";
+
+  /**
    * 是否生成项目名
    *
    * @since 2.2.0

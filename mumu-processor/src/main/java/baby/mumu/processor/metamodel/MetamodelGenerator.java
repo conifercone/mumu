@@ -262,6 +262,17 @@ public class MetamodelGenerator extends AbstractProcessor {
         .build();
       builder.addField(fieldSpec);
     }
+    if (annotation.formattedProjectVersion()) {
+      FieldSpec fieldSpec = FieldSpec.builder(String.class,
+          annotation.formattedProjectVersionFiledName())
+        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+        .initializer("$S", String.format("(v%s)", projectVersion))
+        .addJavadoc(String.format(
+          "@see %s.%s {@link %s}",
+          packageName, entityName, Metamodel.class.getName()))
+        .build();
+      builder.addField(fieldSpec);
+    }
     if (annotation.projectName()) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectNameFiledName())
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement
-@Metamodel(projectName = true, projectVersion = true)
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuMessageApplication {
 
   public static void main(String[] args) {
@@ -54,7 +54,7 @@ public class MuMuMessageApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuMessageApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      String.format(" (v%s)", MuMuMessageApplicationMetamodel.projectVersion));
+      MuMuMessageApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

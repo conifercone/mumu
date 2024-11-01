@@ -29,7 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.1
  */
 @SpringBootApplication
-@Metamodel(projectName = true, projectVersion = true)
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuMailApplication {
 
   public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class MuMuMailApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuMailApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      String.format(" (v%s)", MuMuMailApplicationMetamodel.projectVersion));
+      MuMuMailApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }
