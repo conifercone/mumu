@@ -19,6 +19,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
+import baby.mumu.basis.constants.SpringBootConstants;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +55,9 @@ public class MuMuAuthenticationApplication {
     SpringApplication springApplication = new SpringApplication(
       MuMuAuthenticationApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put("application.title", MuMuAuthenticationApplicationMetamodel.projectName);
-    defaultProperties.put("application.formatted-version",
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuAuthenticationApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       String.format(" (v%s)", MuMuAuthenticationApplicationMetamodel.projectVersion));
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);

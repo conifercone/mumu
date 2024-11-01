@@ -16,6 +16,7 @@
 package baby.mumu.log;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.SpringBootConstants;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
@@ -35,8 +36,9 @@ public class MuMuLogApplication {
     SpringApplication springApplication = new SpringApplication(
       MuMuLogApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put("application.title", MuMuLogApplicationMetamodel.projectName);
-    defaultProperties.put("application.formatted-version",
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuLogApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       String.format(" (v%s)", MuMuLogApplicationMetamodel.projectVersion));
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);

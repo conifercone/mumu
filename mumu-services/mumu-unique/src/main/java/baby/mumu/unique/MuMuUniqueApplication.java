@@ -16,6 +16,7 @@
 package baby.mumu.unique;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.SpringBootConstants;
 import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
@@ -40,8 +41,9 @@ public class MuMuUniqueApplication {
     SpringApplication springApplication = new SpringApplication(
       MuMuUniqueApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put("application.title", MuMuUniqueApplicationMetamodel.projectName);
-    defaultProperties.put("application.formatted-version",
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuUniqueApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       String.format(" (v%s)", MuMuUniqueApplicationMetamodel.projectVersion));
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
