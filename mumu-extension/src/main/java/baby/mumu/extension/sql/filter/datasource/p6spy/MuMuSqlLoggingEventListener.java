@@ -15,28 +15,31 @@
  */
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.P6Factory;
-import com.p6spy.engine.spy.P6LoadableOptions;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.common.StatementInformation;
+import com.p6spy.engine.logging.LoggingEventListener;
+import java.sql.SQLException;
 
 /**
- * P6Factory
+ * LoggingEventListener
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public class AuthenticationLogFactory implements P6Factory {
+public class MuMuSqlLoggingEventListener extends LoggingEventListener {
 
-  @Override
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
-    return new P6LogOptions(optionsRepository);
+  private static MuMuSqlLoggingEventListener instance;
+
+  public static MuMuSqlLoggingEventListener getInstance() {
+    if (null == instance) {
+      instance = new MuMuSqlLoggingEventListener();
+    }
+    return instance;
   }
 
   @Override
-  public JdbcEventListener getJdbcEventListener() {
-    return AuthenticationLoggingEventListener.getInstance();
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
+    int[] updateCounts, SQLException e) {
+    //ignore batch execution results
   }
+
 }
-

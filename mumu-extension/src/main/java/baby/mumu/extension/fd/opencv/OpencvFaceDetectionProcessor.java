@@ -74,9 +74,6 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   private static @NotNull Result getResult(@NotNull FaceDetection faceDetectionNonNull) {
     String imagePath = faceDetectionNonNull.getImageAbsolutePath();
     Mat image = opencv_imgcodecs.imread(imagePath);
-    if (image.empty()) {
-      throw new RuntimeException("Unable to load image: " + imagePath);
-    }
     Mat grayImage = new Mat();
     opencv_imgproc.cvtColor(image, grayImage, opencv_imgproc.COLOR_BGR2GRAY);
     RectVector faces = new RectVector();

@@ -216,7 +216,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
         try {
           yield objectMapper.writeValueAsString(ResponseWrapper.success(string));
         } catch (JsonProcessingException e) {
-          throw new RuntimeException(e);
+          throw new MuMuException(ResponseCode.DATA_CONVERSION_FAILED);
         }
       }
       case ClientObject clientObject -> ResponseWrapper.success(clientObject);

@@ -42,9 +42,9 @@ public class ClientIpInterceptor implements ServerInterceptor {
   private static final Key<String> CLIENT_IP_KEY = Context.key("client-ip");
 
   @Override
-  public <ReqT, RespT> Listener<ReqT> interceptCall(@NotNull ServerCall<ReqT, RespT> call,
+  public <Q, P> Listener<Q> interceptCall(@NotNull ServerCall<Q, P> call,
     Metadata headers,
-    ServerCallHandler<ReqT, RespT> next) {
+    ServerCallHandler<Q, P> next) {
     Attributes attributes = call.getAttributes();
     String clientIp = Optional.ofNullable(attributes.get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR))
       .filter(socketAddress -> socketAddress instanceof InetSocketAddress)

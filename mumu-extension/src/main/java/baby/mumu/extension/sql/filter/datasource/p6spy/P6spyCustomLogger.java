@@ -64,18 +64,10 @@ public class P6spyCustomLogger extends FormattedLogger {
   public void logSQL(int connectionId, String now, long elapsed,
     Category category, String prepared, String sql, String url) {
     if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
-      if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
-        if (!slowQueries.containsValue(sql)) {
-          slowQueries.put(elapsed, sql);
-        }
-        if (slowQueries.size() > MAX_LOG_SIZE) {
-          slowQueries.pollLastEntry();
-        }
-        logTopSQLs();
-      }
-      String LF = "\n";
+      slowSqlRecord(elapsed, sql);
+      String lf = "\n";
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(LF).append("====>");
+      stringBuilder.append(lf).append("====>");
       stringBuilder.append("trace-id:[");
       String traceId = null;
       try {
@@ -100,15 +92,31 @@ public class P6spyCustomLogger extends FormattedLogger {
         category.toString(), prepared, sql, url);
       stringBuilder.append(msg);
 
-      if (Category.ERROR.equals(category)) {
-        LOGGER.error(stringBuilder.toString());
-      } else if (Category.WARN.equals(category)) {
-        LOGGER.warn(stringBuilder.toString());
-      } else if (Category.DEBUG.equals(category)) {
-        LOGGER.debug(stringBuilder.toString());
-      } else {
-        LOGGER.info(stringBuilder.toString());
+      print(category, stringBuilder);
+    }
+  }
+
+  private static void print(Category category, StringBuilder stringBuilder) {
+    if (Category.ERROR.equals(category)) {
+      LOGGER.error(stringBuilder.toString());
+    } else if (Category.WARN.equals(category)) {
+      LOGGER.warn(stringBuilder.toString());
+    } else if (Category.DEBUG.equals(category)) {
+      LOGGER.debug(stringBuilder.toString());
+    } else {
+      LOGGER.info(stringBuilder.toString());
+    }
+  }
+
+  private void slowSqlRecord(long elapsed, String sql) {
+    if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
+      if (!slowQueries.containsValue(sql)) {
+        slowQueries.put(elapsed, sql);
       }
+      if (slowQueries.size() > MAX_LOG_SIZE) {
+        slowQueries.pollLastEntry();
+      }
+      logTopSQLs();
     }
   }
 

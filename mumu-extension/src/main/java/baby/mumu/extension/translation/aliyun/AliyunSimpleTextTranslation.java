@@ -15,6 +15,8 @@
  */
 package baby.mumu.extension.translation.aliyun;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import com.aliyun.alimt20181012.Client;
 import com.aliyun.alimt20181012.models.GetDetectLanguageRequest;
@@ -42,25 +44,29 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NotNull String targetLanguage) throws Exception {
-    RuntimeOptions runtime = new RuntimeOptions();
-    GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
-      .setSourceText(text);
-    GetDetectLanguageResponse detectLanguageWithOptions = client.getDetectLanguageWithOptions(
-      getDetectLanguageRequest, runtime);
-    String detectedLanguage = detectLanguageWithOptions.getBody().getDetectedLanguage();
-    if (targetLanguage.equals(detectedLanguage)) {
-      return text;
-    }
-    TranslateGeneralRequest translateGeneralRequest = new TranslateGeneralRequest().setFormatType(
-        "text")
-      .setSourceLanguage(detectedLanguage)
-      .setTargetLanguage(targetLanguage)
-      .setSourceText(text)
-      .setScene("general");
+  public String translate(String text, @NotNull String targetLanguage) throws MuMuException {
+    try {
+      RuntimeOptions runtime = new RuntimeOptions();
+      GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
+        .setSourceText(text);
+      GetDetectLanguageResponse detectLanguageWithOptions = client.getDetectLanguageWithOptions(
+        getDetectLanguageRequest, runtime);
+      String detectedLanguage = detectLanguageWithOptions.getBody().getDetectedLanguage();
+      if (targetLanguage.equals(detectedLanguage)) {
+        return text;
+      }
+      TranslateGeneralRequest translateGeneralRequest = new TranslateGeneralRequest().setFormatType(
+          "text")
+        .setSourceLanguage(detectedLanguage)
+        .setTargetLanguage(targetLanguage)
+        .setSourceText(text)
+        .setScene("general");
 
-    TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
-      translateGeneralRequest, runtime);
-    return translateGeneralResponse.getBody().getData().getTranslated();
+      TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
+        translateGeneralRequest, runtime);
+      return translateGeneralResponse.getBody().getData().getTranslated();
+    } catch (Exception e) {
+      throw new MuMuException(ResponseCode.TRANSLATION_FAILED);
+    }
   }
 }

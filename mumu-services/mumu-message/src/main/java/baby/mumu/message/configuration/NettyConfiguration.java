@@ -127,7 +127,7 @@ public class NettyConfiguration {
       try {
         start();
       } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+        Thread.currentThread().interrupt();
       }
     }).start();
   }

@@ -78,6 +78,7 @@ import org.jetbrains.annotations.NotNull;
 @SupportedOptions({"gradle.version", "os.name", "java.version", "project.version", "project.name"})
 public class MetamodelGenerator extends AbstractProcessor {
 
+  public static final String SEE_S_S_LINK_S = "@see %s.%s {@link %s}";
   private Messager messager;
   private Elements elementUtils;
   private Types typeUtils;
@@ -172,9 +173,9 @@ public class MetamodelGenerator extends AbstractProcessor {
       "The current class is automatically generated, please do not modify it.\n\n"
         + (StringUtils.isNotBlank(authorName) && StringUtils.isNotBlank(authorEmail)
         ? String.format(
-        "@author <a href=\"mailto:%s\">%s</a>\n", authorEmail, authorName) : StringUtils.EMPTY)
+        "@author <a href=\"mailto:%s\">%s</a>%n", authorEmail, authorName) : StringUtils.EMPTY)
         + String.format(
-        "@see %s.%s\n", packageName, entityName) + String.format(
+        "@see %s.%s%n", packageName, entityName) + String.format(
         "@since %s", projectVersion));
     JavaFile javaFile = JavaFile
       .builder(packageName, builder.build())
@@ -242,7 +243,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", custom.value())
         .addJavadoc(String.format(
-          "@see %s.%s {@link %s}",
+          SEE_S_S_LINK_S,
           packageName, entityName, Metamodel.class.getName()))
         .build();
       builder.addField(fieldSpec);
@@ -257,7 +258,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", projectVersion)
         .addJavadoc(String.format(
-          "@see %s.%s {@link %s}",
+          SEE_S_S_LINK_S,
           packageName, entityName, Metamodel.class.getName()))
         .build();
       builder.addField(fieldSpec);
@@ -268,7 +269,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", String.format("(v%s)", projectVersion))
         .addJavadoc(String.format(
-          "@see %s.%s {@link %s}",
+          SEE_S_S_LINK_S,
           packageName, entityName, Metamodel.class.getName()))
         .build();
       builder.addField(fieldSpec);
@@ -278,7 +279,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", projectName)
         .addJavadoc(String.format(
-          "@see %s.%s {@link %s}",
+          SEE_S_S_LINK_S,
           packageName, entityName, Metamodel.class.getName()))
         .build();
       builder.addField(fieldSpec);
@@ -294,7 +295,10 @@ public class MetamodelGenerator extends AbstractProcessor {
       String email = reader.readLine();
       process.waitFor();
       return Optional.of(email);
-    } catch (IOException | InterruptedException e) {
+    } catch (IOException e) {
+      return Optional.empty();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       return Optional.empty();
     }
   }
@@ -308,7 +312,10 @@ public class MetamodelGenerator extends AbstractProcessor {
       String userName = reader.readLine();
       process.waitFor();
       return Optional.of(userName);
-    } catch (IOException | InterruptedException e) {
+    } catch (IOException e) {
+      return Optional.empty();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       return Optional.empty();
     }
   }

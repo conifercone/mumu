@@ -15,6 +15,8 @@
  */
 package baby.mumu.extension.ocr.tess4j;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ocr.Ocr;
 import baby.mumu.extension.ocr.OcrProcessor;
 import java.util.Optional;
@@ -45,7 +47,7 @@ public class Tess4jOcrProcessor implements OcrProcessor {
       try {
         return tess4j.doOCR(ocrNonNull.getSourceFile());
       } catch (TesseractException e) {
-        throw new RuntimeException(e);
+        throw new MuMuException(ResponseCode.OCR_RECOGNITION_FAILED);
       }
     }).orElse(StringUtils.EMPTY);
   }

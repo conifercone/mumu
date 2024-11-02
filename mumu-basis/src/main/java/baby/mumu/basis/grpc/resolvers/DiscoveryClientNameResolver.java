@@ -69,8 +69,12 @@ public class DiscoveryClientNameResolver extends NameResolver {
       .build());
   }
 
+  /**
+   * This method is intentionally left blank because No operation needed for this implementation.
+   */
   @Override
   public void shutdown() {
+    // No operation needed for this implementation.
   }
 
   @Contract(" -> new")
