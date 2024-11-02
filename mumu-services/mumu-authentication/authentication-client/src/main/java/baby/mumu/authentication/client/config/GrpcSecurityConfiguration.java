@@ -44,7 +44,7 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final ResourceServerProperties resourceServerProperties;
-  private final String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
+  private final static String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
 
   @Autowired
   public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
