@@ -15,6 +15,8 @@
  */
 package baby.mumu.unique.infrastructure.country.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.country.City;
 import baby.mumu.unique.domain.country.Country;
 import baby.mumu.unique.domain.country.State;
@@ -142,7 +144,7 @@ public class CountryGatewayImpl implements CountryGateway {
         .collect(Collectors.toMap(State::getId,
           state -> Optional.ofNullable(state.getCities()).orElse(new ArrayList<>())));
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new MuMuException(ResponseCode.GEOGRAPHIC_DATA_LOADING_FAILED);
     }
   }
 }

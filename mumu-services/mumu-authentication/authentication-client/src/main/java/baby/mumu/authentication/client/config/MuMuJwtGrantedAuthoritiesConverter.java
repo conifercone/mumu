@@ -137,9 +137,9 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
       this.logger.trace(LogMessage.format("Looking for scopes in claim %s", claimName));
     }
     Object authorities = jwt.getClaim(claimName);
-    if (authorities instanceof String) {
-      if (StringUtils.isNotBlank((String) authorities)) {
-        return Arrays.asList(((String) authorities).split(this.authoritiesClaimDelimiter));
+    if (authorities instanceof String authoritiesString) {
+      if (StringUtils.isNotBlank(authoritiesString)) {
+        return Arrays.asList(authoritiesString.split(this.authoritiesClaimDelimiter));
       }
       return Collections.emptyList();
     }

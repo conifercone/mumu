@@ -41,7 +41,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class RequestIdFilter extends OncePerRequestFilter {
 
   private final RequestIdIdempotentProcessor requestIdIdempotentProcessor;
-  private static final Logger LOGGER = LoggerFactory.getLogger(
+  private static final Logger logger = LoggerFactory.getLogger(
     RequestIdFilter.class);
   private final ExtensionProperties extensionProperties;
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -62,7 +62,7 @@ public class RequestIdFilter extends OncePerRequestFilter {
       extensionProperties.getIdempotent().getAllowlist())) && (
       StringUtils.isBlank(requestIdHeaderValue) || requestIdIdempotentProcessor.processed(
         requestIdHeaderValue))) {
-      LOGGER.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
+      logger.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
       response.setStatus(Integer.parseInt(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getCode()));
       ResponseWrapper.exceptionResponse(response, ResponseCode.REQUEST_HAS_BEEN_PROCESSED);
       return;

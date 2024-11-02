@@ -35,7 +35,7 @@ import org.springframework.context.ApplicationContext;
 public class ConditionalAspect extends AbstractAspect {
 
   private final ApplicationContext applicationContext;
-  private static final Logger LOGGER = LoggerFactory.getLogger(ConditionalAspect.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConditionalAspect.class);
 
   public ConditionalAspect(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -53,7 +53,7 @@ public class ConditionalAspect extends AbstractAspect {
             throw new RuntimeException(e);
           }
         }, () -> {
-          LOGGER.warn("{} method execution conditions are not met",
+          logger.warn("{} method execution conditions are not met",
             joinPoint.getSignature().getName());
           return null;
         })).orElse(joinPoint.proceed());

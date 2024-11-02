@@ -62,7 +62,7 @@ public class SignatureFilter extends OncePerRequestFilter {
   public static final String X_TIMESTAMP = "X-Timestamp";
   public static final String PARAMETER_VALUE_CONNECTOR = ",";
   private final ExtensionProperties extensionProperties;
-  private static final Logger LOGGER = LoggerFactory.getLogger(
+  private static final Logger logger = LoggerFactory.getLogger(
     SignatureFilter.class);
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -98,21 +98,21 @@ public class SignatureFilter extends OncePerRequestFilter {
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {
-            LOGGER.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+            logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             ResponseWrapper.exceptionResponse(response,
               ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
             return;
           }
         } catch (Exception e) {
-          LOGGER.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+          logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
           response.setStatus(HttpStatus.BAD_REQUEST.value());
           ResponseWrapper.exceptionResponse(response,
             ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
           return;
         }
       } else {
-        LOGGER.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+        logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         ResponseWrapper.exceptionResponse(response,
           ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);

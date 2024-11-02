@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 /**
  * es配置类
@@ -32,13 +33,13 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 @Configuration
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(LogProperties.class)
-public class ElasticsearchConfiguration extends
-  org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration {
+public class MuMuElasticsearchConfiguration extends
+  ElasticsearchConfiguration {
 
   private final LogProperties logProperties;
 
   @Autowired
-  public ElasticsearchConfiguration(LogProperties logProperties) {
+  public MuMuElasticsearchConfiguration(LogProperties logProperties) {
     this.logProperties = logProperties;
   }
 

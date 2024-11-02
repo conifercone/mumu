@@ -61,10 +61,9 @@ public class MuMuOAuth2RefreshTokenGenerator implements
       return null;
     }
     Account account = (Account) context.getPrincipal().getPrincipal();
-    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
-      if (!refreshTokenRepository.existsById(account.getId())) {
-        throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_GRANT);
-      }
+    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())
+      && !refreshTokenRepository.existsById(account.getId())) {
+      throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_GRANT);
     }
     Instant issuedAt = Instant.now();
     Instant expiresAt = issuedAt.plus(

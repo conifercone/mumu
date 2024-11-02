@@ -44,7 +44,7 @@ import org.slf4j.MDC;
  */
 public class P6spyCustomLogger extends FormattedLogger {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(P6spyCustomLogger.class);
+  private static final Logger logger = LoggerFactory.getLogger(P6spyCustomLogger.class);
   public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
   private static final int MAX_LOG_SIZE = 10;
   private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
@@ -52,12 +52,12 @@ public class P6spyCustomLogger extends FormattedLogger {
 
   @Override
   public void logException(Exception e) {
-    LOGGER.info("", e);
+    logger.info("", e);
   }
 
   @Override
   public void logText(String text) {
-    LOGGER.info(text);
+    logger.info(text);
   }
 
   @Override
@@ -98,13 +98,13 @@ public class P6spyCustomLogger extends FormattedLogger {
 
   private static void print(Category category, StringBuilder stringBuilder) {
     if (Category.ERROR.equals(category)) {
-      LOGGER.error(stringBuilder.toString());
+      logger.error(stringBuilder.toString());
     } else if (Category.WARN.equals(category)) {
-      LOGGER.warn(stringBuilder.toString());
+      logger.warn(stringBuilder.toString());
     } else if (Category.DEBUG.equals(category)) {
-      LOGGER.debug(stringBuilder.toString());
+      logger.debug(stringBuilder.toString());
     } else {
-      LOGGER.info(stringBuilder.toString());
+      logger.info(stringBuilder.toString());
     }
   }
 
@@ -123,13 +123,13 @@ public class P6spyCustomLogger extends FormattedLogger {
   @Override
   public boolean isCategoryEnabled(Category category) {
     if (Category.ERROR.equals(category)) {
-      return LOGGER.isErrorEnabled();
+      return logger.isErrorEnabled();
     } else if (Category.WARN.equals(category)) {
-      return LOGGER.isWarnEnabled();
+      return logger.isWarnEnabled();
     } else if (Category.DEBUG.equals(category)) {
-      return LOGGER.isDebugEnabled();
+      return logger.isDebugEnabled();
     } else {
-      return LOGGER.isInfoEnabled();
+      return logger.isInfoEnabled();
     }
   }
 
@@ -156,7 +156,7 @@ public class P6spyCustomLogger extends FormattedLogger {
     strings.addFirst(CommonConstants.SLOW_SQL_TABLE_HEADER);
     strings.remove(1);
     strings.remove(1);
-    LOGGER.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
+    logger.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
       String.join("\r\n", strings));
   }
 }

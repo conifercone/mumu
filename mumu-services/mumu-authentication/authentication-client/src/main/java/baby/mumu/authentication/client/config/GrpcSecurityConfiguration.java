@@ -50,9 +50,9 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
   public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
     JwtAuthenticationConverter jwtAuthenticationConverter,
     ResourceServerProperties resourceServerProperties) {
-    JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
-    jwtAuthenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
-    this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+    JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
+    authenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
+    this.jwtAuthenticationProvider = authenticationProvider;
     this.resourceServerProperties = resourceServerProperties;
   }
 

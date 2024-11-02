@@ -48,7 +48,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MessageProperties.class)
 public class NettyConfiguration {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(NettyConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(NettyConfiguration.class);
   private static final String WEBSOCKET_PROTOCOL = "WebSocket";
   private EventLoopGroup bossGroup;
   private EventLoopGroup workGroup;
@@ -105,7 +105,7 @@ public class NettyConfiguration {
     });
     // 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
     ChannelFuture channelFuture = bootstrap.bind().sync();
-    LOGGER.info("Server started and listen on:{}", channelFuture.channel().localAddress());
+    logger.info("Server started and listen on:{}", channelFuture.channel().localAddress());
     // 对关闭通道进行监听
     channelFuture.channel().closeFuture().sync();
   }

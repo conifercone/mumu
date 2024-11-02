@@ -53,7 +53,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   private final RoleGrpcService roleGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger LOGGER = LoggerFactory.getLogger(RoleGrpcServiceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(RoleGrpcServiceTest.class);
 
   @Autowired
   public RoleGrpcServiceTest(RoleGrpcService roleGrpcService, MockMvc mockMvc) {
@@ -74,7 +74,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    LOGGER.info("PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
+    logger.info("PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
     Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
     Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
   }
@@ -96,7 +96,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     pageOfRoleFindAllGrpcCoListenableFuture.addListener(() -> {
       try {
         PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = pageOfRoleFindAllGrpcCoListenableFuture.get();
-        LOGGER.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
+        logger.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
         Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
         Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
         latch.countDown();

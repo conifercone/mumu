@@ -30,18 +30,18 @@ import org.slf4j.LoggerFactory;
  */
 public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(P6spyDataSourceFilter.class);
+  private static final Logger logger = LoggerFactory.getLogger(P6spyDataSourceFilter.class);
 
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
     @NotNull ExtensionProperties extensionProperties) {
-    LOGGER.debug("P6spyDataSourceFilter afterCreate starting...");
+    logger.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
       extensionProperties.getSql().getLog().isEnabled();
     if (enableLog) {
       dataSource = new P6DataSource(dataSource);
-      LOGGER.debug("p6spy datasource wrapped datasource");
+      logger.debug("p6spy datasource wrapped datasource");
     }
 
     return dataSource;

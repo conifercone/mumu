@@ -51,7 +51,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger LOGGER = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
 
   @Autowired
   public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc) {
@@ -69,7 +69,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
     AccountCurrentLoginGrpcCo accountCurrentLoginGrpcCo = accountGrpcService.queryCurrentLoginAccount(
       callCredentials);
     Assertions.assertNotNull(accountCurrentLoginGrpcCo);
-    LOGGER.info("AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
+    logger.info("AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
   }
 
   @Test
@@ -86,7 +86,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
       try {
         AccountCurrentLoginGrpcCo accountCurrentLoginGrpcCo = accountCurrentLoginGrpcCoListenableFuture.get();
         Assertions.assertNotNull(accountCurrentLoginGrpcCo);
-        LOGGER.info("Sync AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
+        logger.info("Sync AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

@@ -51,7 +51,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
+  private static final Logger logger = LoggerFactory.getLogger(
     MuMuAuthenticationFailureHandler.class);
 
   private final OperationLogGrpcService operationLogGrpcService;
@@ -76,7 +76,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      LOGGER.error(errorCode);
+      logger.error(errorCode);
       response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
       switch (errorCode) {
         case UNSUPPORTED_GRANT_TYPE ->

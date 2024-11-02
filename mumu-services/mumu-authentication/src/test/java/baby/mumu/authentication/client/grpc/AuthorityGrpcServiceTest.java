@@ -56,7 +56,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
 
   private final AuthorityGrpcService authorityGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityGrpcServiceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(AuthorityGrpcServiceTest.class);
 
   @Autowired
   public AuthorityGrpcServiceTest(AuthorityGrpcService authorityGrpcService, MockMvc mockMvc) {
@@ -77,9 +77,9 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     PageOfAuthorityFindAllGrpcCo pageOfAuthorityFindAllGrpcCo = authorityGrpcService.findAll(
       authorityFindAllGrpcCmd,
       callCredentials);
-    LOGGER.info("PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
+    logger.info("PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
     pageOfAuthorityFindAllGrpcCo.getContentList().stream().map(AuthorityFindAllGrpcCo::getName)
-      .map(StringValue::getValue).forEach(LOGGER::info);
+      .map(StringValue::getValue).forEach(logger::info);
     Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
     Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
   }
@@ -101,7 +101,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     pageOfAuthorityFindAllGrpcCoListenableFuture.addListener(() -> {
       try {
         PageOfAuthorityFindAllGrpcCo pageOfAuthorityFindAllGrpcCo = pageOfAuthorityFindAllGrpcCoListenableFuture.get();
-        LOGGER.info("Sync PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
+        logger.info("Sync PageOfAuthorityFindAllGrpcCo: {}", pageOfAuthorityFindAllGrpcCo);
         Assertions.assertNotNull(pageOfAuthorityFindAllGrpcCo);
         Assertions.assertFalse(pageOfAuthorityFindAllGrpcCo.getContentList().isEmpty());
         latch.countDown();
@@ -123,7 +123,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     AuthorityFindByIdGrpcCo authorityFindByIdGrpcCo = authorityGrpcService.findById(
       Int64Value.of(1),
       callCredentials);
-    LOGGER.info("AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
+    logger.info("AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
     Assertions.assertNotNull(authorityFindByIdGrpcCo);
   }
 
@@ -141,7 +141,7 @@ public class AuthorityGrpcServiceTest extends AuthenticationRequired {
     authorityFindByIdGrpcCoListenableFuture.addListener(() -> {
       try {
         AuthorityFindByIdGrpcCo authorityFindByIdGrpcCo = authorityFindByIdGrpcCoListenableFuture.get();
-        LOGGER.info("Sync AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
+        logger.info("Sync AuthorityFindByIdGrpcCo: {}", authorityFindByIdGrpcCo);
         Assertions.assertNotNull(authorityFindByIdGrpcCo);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

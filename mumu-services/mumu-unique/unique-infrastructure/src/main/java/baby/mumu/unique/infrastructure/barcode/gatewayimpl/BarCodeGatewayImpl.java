@@ -15,6 +15,8 @@
  */
 package baby.mumu.unique.infrastructure.barcode.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.barcode.BarCode;
 import baby.mumu.unique.domain.barcode.gateway.BarCodeGateway;
 import com.google.common.base.Charsets;
@@ -33,7 +35,7 @@ import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +56,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   @Override
   public byte[] generate(BarCode barCode) {
     return Optional.ofNullable(barCode).map(barCodeModel -> {
-      Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
+      HashMap<EncodeHintType, Object> hints = new HashMap<>();
       hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
       hints.put(EncodeHintType.CHARACTER_SET, Charsets.UTF_8.name());
       Code128Writer code128Writer = new Code128Writer();
@@ -68,7 +70,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
         ImageIO.write(finalImage, barCode.getImageFormat().getExtension(), os);
         return os.toByteArray();
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        throw new MuMuException(ResponseCode.BARCODE_GENERATION_FAILED);
       }
     }).orElse(new byte[0]);
   }
