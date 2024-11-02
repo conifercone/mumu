@@ -12,6 +12,7 @@ plugins {
     id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
     id(libs.plugins.signing.get().pluginId)
     id(libs.plugins.projectReport.get().pluginId)
+    id(libs.plugins.checkstyle.get().pluginId)
 }
 
 @Suppress("UnstableApiUsage")
@@ -49,6 +50,7 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
     apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
     apply(plugin = rootProject.libs.plugins.projectReport.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.checkstyle.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
@@ -60,6 +62,10 @@ subprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
+    }
+
+    checkstyle {
+        toolVersion = "10.20.0"
     }
 
     signing {
