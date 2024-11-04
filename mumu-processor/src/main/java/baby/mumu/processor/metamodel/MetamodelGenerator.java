@@ -297,7 +297,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
       String email = reader.readLine();
       process.waitFor();
-      return Optional.of(email);
+      return Optional.ofNullable(email);
     } catch (IOException e) {
       return Optional.empty();
     } catch (InterruptedException e) {
@@ -317,7 +317,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
       String userName = reader.readLine();
       process.waitFor();
-      return Optional.of(userName);
+      return Optional.ofNullable(userName);
     } catch (IOException e) {
       return Optional.empty();
     } catch (InterruptedException e) {
