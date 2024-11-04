@@ -35,3 +35,7 @@ jobs:
 
       - name: PMD with Gradle Wrapper
         run: ./gradlew pmdMain
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PMD
+          path: build/reports/pmd/main.html
