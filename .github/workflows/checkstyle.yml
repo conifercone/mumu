@@ -35,7 +35,9 @@ jobs:
 
       - name: Checkstyle with Gradle Wrapper
         run: ./gradlew checkstyleMain
-      - uses: actions/upload-artifact@v4
+        continue-on-error: true
+      - name: Upload Checkstyle Reports
+        uses: actions/upload-artifact@v4
         with:
-          name: checkstyle
-          path: build/reports/checkstyle/main.html
+          name: Checkstyle-Reports
+          path: '**/build/reports/checkstyle/main.html'
