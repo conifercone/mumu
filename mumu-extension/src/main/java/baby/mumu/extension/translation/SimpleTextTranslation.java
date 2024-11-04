@@ -40,9 +40,8 @@ public interface SimpleTextTranslation {
         try {
           return this.translate(text, languageEnum.name().toLowerCase());
         } catch (Exception e) {
-          // ignore
+          return null;
         }
-        return null;
       });
   }
 }

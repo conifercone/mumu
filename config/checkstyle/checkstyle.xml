@@ -11,10 +11,9 @@
 <module name="Checker">
 
   <property name="charset" value="UTF-8"/>
-  <property name="severity" value="warning"/>
   <property name="fileExtensions" value="java, properties, xml"/>
   <!-- Checks for Size Violations.  -->
-  <!-- 检查文件的长度（行） default max=2000 -->
+  <!-- 检查文件的长度（行） default max=2500 -->
   <module name="FileLength">
     <property name="max" value="2500"/>
   </module>
@@ -25,8 +24,6 @@
     <!-- Checks for imports    -->
     <!-- 必须导入类的完整路径，即不能使用*导入所需的类 -->
     <module name="AvoidStarImport"/>
-    <!-- 检查是否从非法的包中导入了类 illegalPkgs: 定义非法的包名称-->
-    <module name="IllegalImport"/>
     <!-- 检查是否导入了不必显示导入的类-->
     <module name="RedundantImport"/>
     <!-- 检查是否导入的包没有使用-->

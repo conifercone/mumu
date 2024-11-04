@@ -13,6 +13,7 @@ plugins {
     id(libs.plugins.signing.get().pluginId)
     id(libs.plugins.projectReport.get().pluginId)
     id(libs.plugins.checkstyle.get().pluginId)
+    id(libs.plugins.pmd.get().pluginId)
 }
 
 @Suppress("UnstableApiUsage")
@@ -51,6 +52,7 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
     apply(plugin = rootProject.libs.plugins.projectReport.get().pluginId)
     apply(plugin = rootProject.libs.plugins.checkstyle.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.pmd.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
@@ -66,6 +68,15 @@ subprojects {
 
     checkstyle {
         toolVersion = "10.20.0"
+    }
+
+    pmd {
+        isConsoleOutput = true
+        toolVersion = "7.0.0"
+        ruleSetFiles = files(
+            rootProject.file("config/pmd/category/java/errorprone.xml"),
+            rootProject.file("config/pmd/category/java/bestpractices.xml")
+        )
     }
 
     signing {

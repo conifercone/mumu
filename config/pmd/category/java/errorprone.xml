@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="mumu error prone"
+  xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+  <description>Rules that identify code that is likely to cause errors.</description>
+  <exclude-pattern>.*/build/.*</exclude-pattern>
+  <!-- 避免捕获 NullPointerException -->
+  <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"/>
+  <!-- 避免在 equals 方法中比较 null -->
+  <rule ref="category/java/errorprone.xml/EqualsNull"/>
+  <!-- 检查空的 catch 代码块，避免吞掉异常 -->
+  <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+</ruleset>
