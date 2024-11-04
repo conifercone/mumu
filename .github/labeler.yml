@@ -14,9 +14,9 @@ bug:
 # Add 'dependencies' label to any change to libs.versions.toml files within the entire repository
 dependencies:
   - changed-files:
-      - any-glob-to-any-file: 'libs.versions.toml'
+      - any-glob-to-any-file: '**/libs.versions.toml'
 
 # Add 'source' label to any change to src files within the source dir
 source:
   - changed-files:
-      - any-glob-to-any-file: 'src/**/*'
+      - any-glob-to-any-file: '**/src/**/*'
