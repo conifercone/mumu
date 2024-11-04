@@ -12,10 +12,14 @@ on:
     branches: [ "main","develop" ]
     paths:
       - '**/*.java'
+      - '**/*.properties'
+      - '**/*.xml'
   pull_request:
     branches: [ "main","develop" ]
     paths:
       - '**/*.java'
+      - '**/*.properties'
+      - '**/*.xml'
 
 jobs:
   build:
