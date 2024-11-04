@@ -287,6 +287,9 @@ public class MetamodelGenerator extends AbstractProcessor {
   }
 
   private Optional<String> getGitEmail() {
+    if (gitNotAvailable()) {
+      return Optional.empty();
+    }
     try {
       ProcessBuilder processBuilder = new ProcessBuilder("git", "config", "user.email");
       processBuilder.redirectErrorStream(true);
@@ -304,6 +307,9 @@ public class MetamodelGenerator extends AbstractProcessor {
   }
 
   private Optional<String> getGitUserName() {
+    if (gitNotAvailable()) {
+      return Optional.empty();
+    }
     try {
       ProcessBuilder processBuilder = new ProcessBuilder("git", "config", "user.name");
       processBuilder.redirectErrorStream(true);
@@ -317,6 +323,19 @@ public class MetamodelGenerator extends AbstractProcessor {
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       return Optional.empty();
+    }
+  }
+
+  private boolean gitNotAvailable() {
+    try {
+      ProcessBuilder processBuilder = new ProcessBuilder("git", "--version");
+      processBuilder.redirectErrorStream(true);
+      Process process = processBuilder.start();
+      int exitCode = process.waitFor();
+      return exitCode != 0;
+    } catch (IOException | InterruptedException e) {
+      Thread.currentThread().interrupt();
+      return true;
     }
   }
 }
