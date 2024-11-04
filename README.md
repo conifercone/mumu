@@ -2,6 +2,7 @@
 
 - [简体中文](README.zh_CN.md)
 - [English](README.md)
+- [日本語](README.ja.md)
 
 # mumu
 
