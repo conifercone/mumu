@@ -10,8 +10,12 @@ name: PMD
 on:
   push:
     branches: [ "main","develop" ]
+    paths:
+      - '**/*.java'
   pull_request:
     branches: [ "main","develop" ]
+    paths:
+      - '**/*.java'
 
 jobs:
   build:
