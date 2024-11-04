@@ -79,6 +79,15 @@ subprojects {
         )
     }
 
+    tasks.withType<Pmd> {
+        incrementalAnalysis = true
+        outputs.cacheIf { true }
+    }
+
+    tasks.withType<Checkstyle> {
+        outputs.cacheIf { true }
+    }
+
     signing {
         val mumuSigningKeyId = "mumu_signing_key_id"
         val mumuSigningKey = "mumu_signing_key"
