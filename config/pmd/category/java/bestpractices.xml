@@ -11,4 +11,6 @@
   <rule ref="category/java/bestpractices.xml/MissingOverride"/>
   <!-- Java 允许在一行中使用多个相同类型的变量声明。但是，这会导致代码非常混乱。此规则查找同一行上的多个声明 -->
   <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine"/>
+  <!--  文字优先比较，在所有字符串比较中将常量字符串放在首位防止空指针-->
+  <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons"/>
 </ruleset>

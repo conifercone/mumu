@@ -73,9 +73,9 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     Map<String, Object> additionalParameters = new HashMap<>();
     //遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
     parameters.forEach((key, value) -> {
-      if (!key.equals(OAuth2ParameterNames.GRANT_TYPE) &&
-        !key.equals(OAuth2ParameterNames.CLIENT_ID) &&
-        !key.equals(OAuth2ParameterNames.CODE)) {
+      if (!OAuth2ParameterNames.GRANT_TYPE.equals(key) &&
+        !OAuth2ParameterNames.CLIENT_ID.equals(key) &&
+        !OAuth2ParameterNames.CODE.equals(key)) {
         additionalParameters.put(key, value.getFirst());
       }
     });
