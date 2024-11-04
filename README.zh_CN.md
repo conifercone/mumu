@@ -16,7 +16,6 @@
 [![GitHub language count](https://img.shields.io/github/languages/count/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml?label=Dependency%20Submission)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
