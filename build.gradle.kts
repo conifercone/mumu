@@ -16,6 +16,24 @@ plugins {
     id(libs.plugins.pmd.get().pluginId)
 }
 
+
+tasks.register<Copy>("installGitHooks") {
+    group = "setup"
+    description = "Copies git hooks to .git/hooks"
+    // 源文件路径
+    val hookFile = file("${project.rootDir}/scripts/pre-commit")
+    // 目标目录
+    val targetDir = file("${project.rootDir}/.git/hooks")
+    from(hookFile)
+    into(targetDir)
+    // 这里可以设置目标文件名
+    rename("pre-commit", "pre-commit")
+    // 设置执行权限（可选）
+    doLast {
+        targetDir.resolve("pre-commit").setExecutable(true)
+    }
+}
+
 @Suppress("UnstableApiUsage")
 val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")

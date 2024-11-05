@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# 获取所有被暂存的文件
+changed_files=$(git diff --cached --name-only)
+
+# 过滤出 Java、Properties 和 XML 文件
+java_files=$(echo "$changed_files" | grep '\.java$')
+properties_files=$(echo "$changed_files" | grep '\.properties$')
+xml_files=$(echo "$changed_files" | grep '\.xml$')
+
+# 初始化标志
+pmd_needed=0
+checkstyle_needed=0
+
+# 检查是否有 Java 文件，设置 PMD 标志
+if [ ! -z "$java_files" ]; then
+    pmd_needed=1
+    checkstyle_needed=1 # Java 文件也需要检查 Checkstyle
+fi
+
+# 检查是否有 Properties 或 XML 文件，设置 Checkstyle 标志
+if [ ! -z "$properties_files" ] || [ ! -z "$xml_files" ]; then
+    checkstyle_needed=1
+fi
+
+# 如果没有文件需要检查，直接退出
+if [ $pmd_needed -eq 0 ] && [ $checkstyle_needed -eq 0 ]; then
+    echo "No relevant files changed, skipping PMD and Checkstyle."
+    exit 0
+fi
+
+# 输出信息
+if [ $pmd_needed -eq 1 ]; then
+    echo "Running PMD on changed Java files..."
+    ./gradlew pmdMain
+    if [ $? -ne 0 ]; then
+        echo "PMD check failed. Please fix the issues before committing."
+        exit 1
+    fi
+fi
+
+if [ $checkstyle_needed -eq 1 ]; then
+    echo "Running Checkstyle on changed Java, Properties, and XML files..."
+    ./gradlew checkstyleMain
+    if [ $? -ne 0 ]; then
+        echo "Checkstyle check failed. Please fix the issues before committing."
+        exit 1
+    fi
+fi
+
+echo "PMD and Checkstyle checks passed."
