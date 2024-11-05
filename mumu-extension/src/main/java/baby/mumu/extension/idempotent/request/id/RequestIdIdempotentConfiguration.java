@@ -36,6 +36,13 @@ import org.springframework.context.annotation.Import;
 @Import({RedisRequestIdIdempotentConfiguration.class})
 public class RequestIdIdempotentConfiguration {
 
+  /**
+   * 请求ID过滤器，防止重放攻击
+   *
+   * @param requestIdIdempotentProcessor 请求 id 幂等处理器
+   * @param extensionProperties          扩展属性
+   * @return 请求ID过滤器
+   */
   @Bean
   @ConditionalOnBean(RequestIdIdempotentProcessor.class)
   public RequestIdFilter mumuRequestIdFilter(
