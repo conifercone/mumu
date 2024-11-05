@@ -1,7 +1,10 @@
 # 贡献者誓言行为规范
 
 - [简体中文](CODE_OF_CONDUCT.zh_CN.md)
+- [繁體中文](CODE_OF_CONDUCT.zh_TW.md)
 - [English](CODE_OF_CONDUCT.md)
+- [日本語](CODE_OF_CONDUCT.ja.md)
+- [한국어](CODE_OF_CONDUCT.ko.md)
 
 ## 我们的承诺
 
