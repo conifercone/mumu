@@ -25,27 +25,27 @@ fi
 
 # 如果没有文件需要检查，直接退出
 if [ $pmd_needed -eq 0 ] && [ $checkstyle_needed -eq 0 ]; then
-    echo "No relevant files changed, skipping PMD and Checkstyle."
+    echo "🌞 No relevant files changed, skipping PMD and Checkstyle."
     exit 0
 fi
 
 # 输出信息
 if [ $pmd_needed -eq 1 ]; then
-    echo "Running PMD on changed Java files..."
+    echo "🦉 Running PMD on changed Java files..."
     ./gradlew pmdMain
     if [ $? -ne 0 ]; then
-        echo "PMD check failed. Please fix the issues before committing."
+        echo "🌥️ PMD check failed. Please fix the issues before committing."
         exit 1
     fi
 fi
 
 if [ $checkstyle_needed -eq 1 ]; then
-    echo "Running Checkstyle on changed Java, Properties, and XML files..."
+    echo "🦉 Running Checkstyle on changed Java, Properties, and XML files..."
     ./gradlew checkstyleMain
     if [ $? -ne 0 ]; then
-        echo "Checkstyle check failed. Please fix the issues before committing."
+        echo "🌥️ Checkstyle check failed. Please fix the issues before committing."
         exit 1
     fi
 fi
 
-echo "PMD and Checkstyle checks passed."
+echo "🎉 PMD and Checkstyle checks passed."
