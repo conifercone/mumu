@@ -1,10 +1,10 @@
 ![mumu](./logo.svg)
 
-- [简体中文](README.zh_CN.md)
-- [繁體中文](README.zh_TW.md)
+- [简体中文](docs/README.zh_CN.md)
+- [繁體中文](docs/README.zh_TW.md)
 - [English](README.md)
-- [日本語](README.ja.md)
-- [한국어](README.ko.md)
+- [日本語](docs/README.ja.md)
+- [한국어](docs/README.ko.md)
 
 # mumu
 

@@ -1,6 +1,6 @@
 # Contributing to MuMu
 
-- [简体中文](CONTRIBUTING.zh_CN.md)
+- [简体中文](docs/CONTRIBUTING.zh_CN.md)
 - [English](CONTRIBUTING.md)
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍

@@ -1,7 +1,7 @@
 # 安全政策
 
 - [简体中文](SECURITY.zh_CN.md)
-- [English](SECURITY.md)
+- [English](../SECURITY.md)
 
 ## 支持的版本
 

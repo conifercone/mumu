@@ -1,8 +1,8 @@
-![mumu](./logo.svg)
+![mumu](../logo.svg)
 
 - [简体中文](README.zh_CN.md)
 - [繁體中文](README.zh_TW.md)
-- [English](README.md)
+- [English](../README.md)
 - [日本語](README.ja.md)
 - [한국어](README.ko.md)
 
@@ -26,36 +26,36 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/conifercone/mumu)
 ![GitHub contributors](https://img.shields.io/github/contributors/conifercone/mumu)
 
-## 目錄
+## 内容列表
 
-- [專案](#專案)
-- [模組介紹](#模組介紹)
-- [建置](#建置)
-- [相依聲明](#相依聲明)
-- [授權](#授權)
-- [貢獻者](#貢獻者)
+- [项目](#项目)
+- [模块介绍](#模块介绍)
+- [构建](#构建)
+- [依赖声明](#依赖声明)
+- [许可](#许可)
+- [贡献者](#贡献者)
 
-## 專案
+## 项目
 
-> 雖然市面上已經有許多成熟的後台管理系統，但由於我對於整潔的程式碼有強烈的執念，所以一直找不到合適的專案。
-> 因此決定自己動手開源一個程式碼整潔且功能完善的後台管理系統。這就是 mumu 的由來，mumu 名稱來自我的兒子（沐沐），
-> 希望他能夠健康成長，同樣也希望 mumu 專案能夠茁壯成長。只要我在世，本專案將永遠免費開源，供個人和組織自由使用。
+> 虽然市面上已经有了很多成熟的后台管理系统，但是无奈本人有严重的代码洁癖，所以一直没有找到合适的项目，
+> 于是决定自己动手开源一个代码整洁、功能完善的后台管理系统。于是就有了mumu，mumu名称源自我的儿子（沐沐），
+> 本着希望孩子健康长大的愿望，我也希望mumu项目可以茁壮成长，在我有生之年，本项目都不会采取任何收费措施，
+> 所有代码功能会始终免费开源给个人及组织使用。
 
-### 🎉 令人愉快的即用型整潔管理系統！ 🎉
+### 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
 
-對那些讓你頭疼的混亂程式碼和複雜設置感到厭倦了嗎？
-來試試我們的 **即用型管理系統**！🎁
-只需打開，它就會如超級巨星般輕鬆運行，程式碼潔淨得閃閃發亮！✨
+厌倦了那些让你头疼的混乱代码和复杂设置？来看看我们的 **开箱即玩管理系统**！🎁
+只需打开盒子，哇！你就能像超级明星一样轻松管理，代码整洁得闪闪发光！✨
 
-🌟 **你會愛上它的理由：**
+🌟 **你会爱上它的理由：**
 
-- **即時設置**：不需要任何魔法咒語，只需插上就能運行！
-- **整潔程式碼**：乾淨到你會想給它一顆金星！
-- **使用者友好**：即使你的金魚也能搞懂！
+- **即时设置**：无需魔法咒语，插上就能玩！
+- **整洁代码**：干净得让你想给它一个金星！
+- **用户友好**：连你的金鱼都能搞定！
 
-加入輕鬆管理的樂趣，和混亂說再見！讓管理變成一場愉快的旅程吧！🚀🎈
+加入轻松管理的乐趣，和混乱说再见！让我们把管理变成一场快乐的旅程吧！🚀🎈
 
-## 模組介紹
+## 模块介绍
 
 ```text
 mumu
@@ -72,11 +72,11 @@ mumu
 └── mumu-processor
 ```
 
-## 建置
+## 构建
 
-### 基礎設施
+### 基础设施
 
-| 名稱            | 版本                           |
+| name          | releases                     |
 |---------------|------------------------------|
 | apisix        | 3.8.0                        |
 | elasticsearch | 8.12.0                       |
@@ -89,16 +89,16 @@ mumu
 | zipkin        | 3.19.0                       |
 | mongodb       | 8.0.1                        |
 
-## 相依聲明
+## 依赖声明
 
-[**相依圖**](https://github.com/conifercone/mumu/network/dependencies)
+[**Dependency graph**](https://github.com/conifercone/mumu/network/dependencies)
 
-## 授權
+## 许可
 
-[Apache License 2.0](LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+[Apache License 2.0](../LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
 
-## 貢獻者
+## 贡献者
 
 <a href="https://github.com/conifercone/mumu/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=conifercone/mumu"  alt="https://github.com/conifercone/mumu/graphs/contributors"/>
-</a> 
+</a>

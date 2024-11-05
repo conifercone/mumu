@@ -1,7 +1,7 @@
 # 更新日志
 
 - [简体中文](CHANGELOG.zh_CN.md)
-- [English](CHANGELOG.md)
+- [English](../CHANGELOG.md)
 
 该项目的所有显着更改都将记录在该文件中。
 

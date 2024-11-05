@@ -1,6 +1,6 @@
 # Changelog
 
-- [简体中文](CHANGELOG.zh_CN.md)
+- [简体中文](docs/CHANGELOG.zh_CN.md)
 - [English](CHANGELOG.md)
 
 All notable changes to this project will be documented in this file.
