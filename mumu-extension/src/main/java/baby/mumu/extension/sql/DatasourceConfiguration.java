@@ -22,22 +22,18 @@ import baby.mumu.extension.sql.filter.datasource.DataSourceFilter;
 import baby.mumu.extension.sql.filter.datasource.DatasourceFilterChain;
 import baby.mumu.extension.sql.filter.datasource.DatasourceFilterChainImpl;
 import baby.mumu.extension.sql.filter.datasource.P6spyDataSourceFilter;
-import com.google.common.base.Strings;
 import com.p6spy.engine.spy.P6DataSource;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
 import javax.sql.DataSource;
-import org.springframework.beans.factory.ObjectProvider;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.util.Assert;
 
 /**
  * 数据源配置类
@@ -63,27 +59,19 @@ public class DatasourceConfiguration {
   }
 
   @Bean
-  public DataSource datasource(
-    ObjectProvider<DataSourceProperties> dataSourcePropertiesObjectProvider,
-    DatasourceFilterChain dataSourceFilterChain,
-    ExtensionProperties extensionProperties, HikariConfig hikariConfig) {
-    DataSourceProperties dataSourceProperties = dataSourcePropertiesObjectProvider.getIfAvailable();
-    Assert.notNull(dataSourceProperties, "No data source properties found");
-    hikariConfig.setUsername(dataSourceProperties.getUsername());
-    hikariConfig.setPassword(dataSourceProperties.getPassword());
-    hikariConfig.setJdbcUrl(dataSourceProperties.getUrl());
-    String driverClassName = dataSourceProperties.getDriverClassName();
-    if (!Strings.isNullOrEmpty(driverClassName)) {
-      hikariConfig.setDriverClassName(driverClassName);
-    }
-    HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
-    return dataSourceFilterChain.doAfterFilter(hikariDataSource, extensionProperties);
-  }
-
-  @Bean
-  @ConfigurationProperties(prefix = "spring.datasource.hikari")
-  public HikariConfig hikariConfig() {
-    return new HikariConfig();
+  public BeanPostProcessor dataSourceWrapperProcessor(DatasourceFilterChain dataSourceFilterChain,
+    ExtensionProperties extensionProperties) {
+    return new BeanPostProcessor() {
+      @Override
+      public Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String beanName)
+        throws BeansException {
+        if (bean instanceof DataSource originalDataSource) {
+          // 包装原始数据源
+          return dataSourceFilterChain.doAfterFilter(originalDataSource, extensionProperties);
+        }
+        return bean;
+      }
+    };
   }
 
   /**
