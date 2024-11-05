@@ -21,16 +21,24 @@ tasks.register<Copy>("installGitHooks") {
     group = "setup"
     description = "Copies git hooks to .git/hooks"
     // 源文件路径
-    val hookFile = file("${project.rootDir}/scripts/pre-commit")
+    val preCommitHookFile = file("${project.rootDir}/scripts/pre-commit")
+    val commitMsgHookFile = file("${project.rootDir}/scripts/commit-msg")
     // 目标目录
     val targetDir = file("${project.rootDir}/.git/hooks")
-    from(hookFile)
+    // 复制 pre-commit 文件
+    from(preCommitHookFile) {
+        rename("pre-commit", "pre-commit") // 设置目标文件名
+    }
+    // 复制 commit-msg 文件
+    from(commitMsgHookFile) {
+        rename("commit-msg", "commit-msg") // 设置目标文件名
+    }
+    // 设置目标目录
     into(targetDir)
-    // 这里可以设置目标文件名
-    rename("pre-commit", "pre-commit")
     // 设置执行权限（可选）
     doLast {
         targetDir.resolve("pre-commit").setExecutable(true)
+        targetDir.resolve("commit-msg").setExecutable(true)
     }
 }
 
