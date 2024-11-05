@@ -1,6 +1,7 @@
 ![mumu](./logo.svg)
 
 - [简体中文](README.zh_CN.md)
+- [繁體中文](README.zh_TW.md)
 - [English](README.md)
 - [日本語](README.ja.md)
 
