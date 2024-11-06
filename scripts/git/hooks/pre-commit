@@ -32,7 +32,7 @@ fi
 # 输出信息
 if [ $pmd_needed -eq 1 ]; then
     echo "🦉 Running PMD on changed Java files..."
-    ./gradlew pmdMain
+    ./gradlew pmdMain --parallel --build-cache
     if [ $? -ne 0 ]; then
         echo "🌥️ PMD check failed. Please fix the issues before committing."
         exit 1
@@ -41,7 +41,7 @@ fi
 
 if [ $checkstyle_needed -eq 1 ]; then
     echo "🦉 Running Checkstyle on changed Java, Properties, and XML files..."
-    ./gradlew checkstyleMain
+    ./gradlew checkstyleMain --parallel --build-cache
     if [ $? -ne 0 ]; then
         echo "🌥️ Checkstyle check failed. Please fix the issues before committing."
         exit 1
