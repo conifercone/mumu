@@ -33,6 +33,6 @@ public class MuMuApplicationStartupListener implements ApplicationListener<Appli
 
   @Override
   public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
-    logger.info("Startup completed!");
+    logger.info("🎉 Startup completed!");
   }
 }

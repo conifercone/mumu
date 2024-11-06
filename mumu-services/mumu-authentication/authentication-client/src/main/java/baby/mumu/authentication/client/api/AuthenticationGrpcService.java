@@ -34,6 +34,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class AuthenticationGrpcService {
 
+  public static final String GRPC_AUTHENTICATION = "grpc-authentication";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -45,12 +46,13 @@ class AuthenticationGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
+    //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       serviceInstance -> {
         NameResolverRegistry.getDefaultRegistry()
           .register(new DiscoveryClientNameResolverProvider(discoveryClient));
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://grpc-authentication")
+            "discovery-client://" + GRPC_AUTHENTICATION)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -59,6 +61,6 @@ class AuthenticationGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances("grpc-authentication"));
+    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_AUTHENTICATION));
   }
 }

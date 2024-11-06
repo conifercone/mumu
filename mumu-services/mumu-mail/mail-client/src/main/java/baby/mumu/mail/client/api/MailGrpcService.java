@@ -34,6 +34,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class MailGrpcService {
 
+  public static final String GRPC_MAIL = "grpc-mail";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -45,12 +46,13 @@ class MailGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
+    //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       serviceInstance -> {
         NameResolverRegistry.getDefaultRegistry()
           .register(new DiscoveryClientNameResolverProvider(discoveryClient));
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://grpc-mail")
+            "discovery-client://" + GRPC_MAIL)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -59,7 +61,7 @@ class MailGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances("grpc-mail"));
+    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_MAIL));
   }
 
 }
