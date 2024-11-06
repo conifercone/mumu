@@ -25,7 +25,7 @@ fi
 
 # 如果没有文件需要检查，直接退出
 if [ $pmd_needed -eq 0 ] && [ $checkstyle_needed -eq 0 ]; then
-    echo "🌞 No relevant files changed, skipping PMD and Checkstyle."
+    echo "☀️ No relevant files changed, skipping PMD and Checkstyle."
     exit 0
 fi
 

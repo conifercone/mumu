@@ -7,7 +7,7 @@ commit_message=$(cat "$1")
 pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9\-_一-龥]+\))?: [A-Z一-龥].{0,50}"
 
 if ! echo "$commit_message" | grep -qE "$pattern"; then
-    echo "Error: Commit message does not conform to the mumu commit format."
+    echo "🌥️ Commit message does not conform to the mumu commit format."
     echo "Please use the following format: "
     echo "<type>(<scope>): <subject>"
     echo "<BLANK LINE>"
