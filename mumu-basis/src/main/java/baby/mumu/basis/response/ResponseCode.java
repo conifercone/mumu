@@ -112,7 +112,8 @@ public enum ResponseCode implements BaseResponse {
   TRANSLATION_FAILED(6040),
   QR_CODE_GENERATION_FAILED(6041),
   BARCODE_GENERATION_FAILED(6042),
-  GEOGRAPHIC_DATA_LOADING_FAILED(6043);
+  GEOGRAPHIC_DATA_LOADING_FAILED(6043),
+  AUTHORITY_CYCLE(6044);
   private final Integer code;
 
   ResponseCode(int code) {

@@ -25,6 +25,9 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.Au
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDoId;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
@@ -35,6 +38,8 @@ import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -69,13 +74,15 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
   private final AuthorityRedisRepository authorityRedisRepository;
+  private final AuthorityPathsRepository authorityPathsRepository;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
     ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
     AuthorityConvertor authorityConvertor,
     AuthorityArchivedRepository authorityArchivedRepository, JobScheduler jobScheduler,
-    ExtensionProperties extensionProperties, AuthorityRedisRepository authorityRedisRepository) {
+    ExtensionProperties extensionProperties, AuthorityRedisRepository authorityRedisRepository,
+    AuthorityPathsRepository authorityPathsRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
@@ -84,6 +91,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
     this.authorityRedisRepository = authorityRedisRepository;
+    this.authorityPathsRepository = authorityPathsRepository;
   }
 
   @Override
@@ -97,6 +105,9 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         authorityDo.getCode()))
       .ifPresentOrElse(authorityDo -> {
         authorityRepository.persist(authorityDo);
+        authorityPathsRepository.persist(
+          new AuthorityPathsDo(new AuthorityPathsDoId(authorityDo.getId(), authorityDo.getId()),
+            authorityDo, authorityDo, 0L));
         authorityRedisRepository.deleteById(authorityDo.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
@@ -115,6 +126,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     }
     Optional.ofNullable(id).ifPresent(authorityId -> {
       authorityRepository.deleteById(authorityId);
+      authorityPathsRepository.deleteByDescendantIdOrAncestorId(authorityId, authorityId);
       authorityArchivedRepository.deleteById(authorityId);
       authorityRedisRepository.deleteById(authorityId);
     });
@@ -229,6 +241,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
       .ifPresent(authorityId -> {
         authorityArchivedRepository.deleteById(authorityId);
+        authorityPathsRepository.deleteByDescendantIdOrAncestorId(authorityId, authorityId);
         authorityRedisRepository.deleteById(authorityId);
       });
   }
@@ -243,5 +256,63 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         authorityRepository.persist(authorityDo);
         authorityRedisRepository.deleteById(authorityDo.getId());
       });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAncestor(Long descendantId, Long ancestorId) {
+    Optional<AuthorityDo> ancestorAuthorityDoOptional = authorityRepository.findById(ancestorId);
+    Optional<AuthorityDo> descendantAuthorityDoOptional = authorityRepository.findById(
+      descendantId);
+    if (ancestorAuthorityDoOptional.isPresent() && descendantAuthorityDoOptional.isPresent()) {
+      // 后代权限
+      AuthorityDo descendantAuthorityDo = descendantAuthorityDoOptional.get();
+      // 为节点添加从所有祖先到自身的路径
+      List<AuthorityPathsDo> ancestorAuthorities = authorityPathsRepository.findByDescendantId(
+        ancestorId);
+      // 成环检测
+      Set<Long> ancestorIds = ancestorAuthorities.stream()
+        .map(authorityPathsDo -> authorityPathsDo.getId().getAncestorId())
+        .collect(
+          Collectors.toSet());
+      if (ancestorIds.contains(descendantId)) {
+        throw new MuMuException(ResponseCode.AUTHORITY_CYCLE);
+      }
+      List<AuthorityPathsDo> authorityPathsDos = ancestorAuthorities.stream()
+        .map(ancestorAuthority -> new AuthorityPathsDo(
+          new AuthorityPathsDoId(ancestorAuthority.getId().getAncestorId(), descendantId),
+          ancestorAuthority.getAncestor(), descendantAuthorityDo, ancestorAuthority.getDepth() + 1))
+        .collect(
+          Collectors.toList());
+      boolean existsDescendantAuthorities = authorityPathsRepository.existsDescendantAuthorities(
+        ancestorId);
+      authorityPathsRepository.persistAll(authorityPathsDos);
+      if (!existsDescendantAuthorities) {
+        authorityRedisRepository.deleteById(ancestorId);
+      }
+    }
+  }
+
+  @Override
+  public Page<Authority> findRootAuthorities(int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<AuthorityPathsDo> repositoryAll = authorityPathsRepository.findRootAuthorities(
+      pageRequest);
+    List<Authority> authorities = repositoryAll.getContent().stream().flatMap(
+        authorityPathsDo -> findById(authorityPathsDo.getId().getAncestorId()).stream())
+      .collect(Collectors.toList());
+    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  public Page<Authority> findDirectAuthorities(Long ancestorId, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<AuthorityPathsDo> repositoryAll = authorityPathsRepository.findDirectAuthorities(
+      ancestorId,
+      pageRequest);
+    List<Authority> authorities = repositoryAll.getContent().stream().flatMap(
+        authorityPathsDo -> findById(authorityPathsDo.getId().getDescendantId()).stream())
+      .collect(Collectors.toList());
+    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
 }

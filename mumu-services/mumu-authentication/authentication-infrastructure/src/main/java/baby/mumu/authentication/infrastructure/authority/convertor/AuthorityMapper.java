@@ -29,6 +29,8 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindDirectCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindRootCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
@@ -124,9 +126,27 @@ public interface AuthorityMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.3.0")
   AuthorityFindByIdGrpcCo toAuthorityFindByIdGrpcCo(AuthorityFindByIdCo authorityFindByIdCo);
 
+  @API(status = Status.STABLE, since = "2.3.0")
+  AuthorityFindRootCo toAuthorityFindRootCo(Authority authority);
+
+  @API(status = Status.STABLE, since = "2.3.0")
+  AuthorityFindDirectCo toAuthorityFindDirectCo(Authority authority);
+
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget AuthorityFindByIdCo authorityFindByIdCo) {
     CommonUtil.convertToAccountZone(authorityFindByIdCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget AuthorityFindDirectCo authorityFindDirectCo) {
+    CommonUtil.convertToAccountZone(authorityFindDirectCo);
+  }
+
+
+  @AfterMapping
+  default void convertToAccountTimezone(@MappingTarget AuthorityFindRootCo authorityFindRootCo) {
+    CommonUtil.convertToAccountZone(authorityFindRootCo);
   }
 
   @AfterMapping

@@ -64,6 +64,11 @@ public class Authority extends BasisDomainModel implements GrantedAuthority {
   @Size(max = 200, message = "{authority.name.validation.size}")
   private String name;
 
+  /**
+   * 有后代权限
+   */
+  private boolean hasDescendant;
+
   @Override
   public String getAuthority() {
     return code;

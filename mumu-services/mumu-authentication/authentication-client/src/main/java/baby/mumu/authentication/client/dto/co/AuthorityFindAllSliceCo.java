@@ -43,4 +43,6 @@ public class AuthorityFindAllSliceCo extends BaseClientObject {
 
   @Size(max = 200, message = "{authority.name.validation.size}")
   private String name;
+
+  private boolean hasDescendant;
 }

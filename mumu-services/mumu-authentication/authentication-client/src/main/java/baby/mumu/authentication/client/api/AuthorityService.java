@@ -15,17 +15,22 @@
  */
 package baby.mumu.authentication.client.api;
 
+import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindRootCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindDirectCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindRootCo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -114,4 +119,26 @@ public interface AuthorityService {
    */
   void recoverFromArchiveById(
     Long id);
+
+  /**
+   * 添加祖先权限
+   *
+   * @param authorityAddAncestorCmd 添加祖先权限指令
+   */
+  void addAncestor(AuthorityAddAncestorCmd authorityAddAncestorCmd);
+
+  /**
+   * 获取所有根权限
+   *
+   * @return 根权限
+   */
+  Page<AuthorityFindRootCo> findRootAuthorities(AuthorityFindRootCmd authorityFindRootCmd);
+
+
+  /**
+   * 获取直系后代权限
+   *
+   * @return 直系后代权限
+   */
+  Page<AuthorityFindDirectCo> findDirectAuthorities(AuthorityFindDirectCmd authorityFindDirectCmd);
 }

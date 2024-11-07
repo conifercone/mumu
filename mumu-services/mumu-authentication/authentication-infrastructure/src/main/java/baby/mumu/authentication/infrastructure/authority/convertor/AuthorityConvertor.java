@@ -29,12 +29,15 @@ import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindDirectCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindRootCo;
 import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityArchivedRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityArchivedDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -62,23 +65,34 @@ public class AuthorityConvertor {
   private final AuthorityRepository authorityRepository;
   private final SimpleTextTranslation simpleTextTranslation;
   private final AuthorityArchivedRepository authorityArchivedRepository;
+  private final AuthorityPathsRepository authorityPathsRepository;
 
   @Autowired
   public AuthorityConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
     AuthorityRepository authorityRepository,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
-    AuthorityArchivedRepository authorityArchivedRepository) {
+    AuthorityArchivedRepository authorityArchivedRepository,
+    AuthorityPathsRepository authorityPathsRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.authorityRepository = authorityRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.authorityArchivedRepository = authorityArchivedRepository;
+    this.authorityPathsRepository = authorityPathsRepository;
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Authority> toEntity(AuthorityDo authorityDo) {
     return Optional.ofNullable(authorityDo).map(
-      AuthorityMapper.INSTANCE::toEntity);
+      AuthorityMapper.INSTANCE::toEntity).flatMap(this::hasDescendant);
+  }
+
+  private Optional<Authority> hasDescendant(Authority authority) {
+    return Optional.ofNullable(authority).map(authorityNotNull -> {
+      authorityNotNull.setHasDescendant(
+        authorityPathsRepository.existsDescendantAuthorities(authority.getId()));
+      return authorityNotNull;
+    });
   }
 
   @Contract("_ -> new")
@@ -275,5 +289,21 @@ public class AuthorityConvertor {
     AuthorityFindByIdCo authorityFindByIdCo) {
     return Optional.ofNullable(authorityFindByIdCo)
       .map(AuthorityMapper.INSTANCE::toAuthorityFindByIdGrpcCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.3.0")
+  public Optional<AuthorityFindRootCo> toAuthorityFindRootCo(
+    Authority authority) {
+    return Optional.ofNullable(authority)
+      .map(AuthorityMapper.INSTANCE::toAuthorityFindRootCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.3.0")
+  public Optional<AuthorityFindDirectCo> toAuthorityFindDirectCo(
+    Authority authority) {
+    return Optional.ofNullable(authority)
+      .map(AuthorityMapper.INSTANCE::toAuthorityFindDirectCo);
   }
 }

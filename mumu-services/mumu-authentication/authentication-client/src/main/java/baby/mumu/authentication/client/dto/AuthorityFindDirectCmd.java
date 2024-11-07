@@ -13,36 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.dto.co;
+package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 权限查询客户端对象
+ * 获取直系后代权限指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.3.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
-public class AuthorityFindAllCo extends BaseClientObject {
+public class AuthorityFindDirectCmd extends BaseClientObject {
+
 
   @Serial
-  private static final long serialVersionUID = 7732716410353532916L;
+  private static final long serialVersionUID = 5856987077548749371L;
 
-  private Long id;
+  @NotNull
+  private Long ancestorId;
 
-  @Size(max = 50, message = "{authority.code.validation.size}")
-  private String code;
+  @Min(value = 1, message = "{current.validation.min.size}")
+  private Integer current = 1;
 
-  @Size(max = 200, message = "{authority.name.validation.size}")
-  private String name;
-
-  private boolean hasDescendant;
+  @Min(value = 1, message = "{page.size.validation.min.size}")
+  private Integer pageSize = 10;
 }

@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import org.apache.commons.collections4.MapUtils;
@@ -84,12 +85,12 @@ public class SignatureFilter extends OncePerRequestFilter {
       String timestamp = request.getHeader(X_TIMESTAMP);
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
         Map<String, String[]> requestParameterMap = request.getParameterMap();
-        Map<String, String> resultMap = requestParameterMap.entrySet()
+        Map<String, String> resultMap = new TreeMap<>(requestParameterMap.entrySet()
           .stream()
           .collect(Collectors.toMap(
             Map.Entry::getKey,
             entry -> String.join(PARAMETER_VALUE_CONNECTOR, entry.getValue())
-          ));
+          )));
         String requestParameterJson =
           MapUtils.isNotEmpty(resultMap) ? objectMapper.writeValueAsString(resultMap) : "";
         try {

@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.application.service;
 
+import baby.mumu.authentication.application.authority.executor.AuthorityAddAncestorCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityAddCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityArchiveByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllCmdExe;
@@ -23,6 +24,8 @@ import baby.mumu.authentication.application.authority.executor.AuthorityDeleteBy
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllSliceCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
+import baby.mumu.authentication.application.authority.executor.AuthorityFindDirectCmdExe;
+import baby.mumu.authentication.application.authority.executor.AuthorityFindRootCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityUpdateCmdExe;
 import baby.mumu.authentication.client.api.AuthorityService;
@@ -32,17 +35,22 @@ import baby.mumu.authentication.client.api.grpc.AuthorityFindByIdGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AuthorityServiceGrpc.AuthorityServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfAuthorityFindAllGrpcCo.Builder;
+import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
+import baby.mumu.authentication.client.dto.AuthorityFindRootCmd;
 import baby.mumu.authentication.client.dto.AuthorityUpdateCmd;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.AuthorityFindByIdCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindDirectCo;
+import baby.mumu.authentication.client.dto.co.AuthorityFindRootCo;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
@@ -85,6 +93,9 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe;
   private final AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe;
   private final AuthorityConvertor authorityConvertor;
+  private final AuthorityAddAncestorCmdExe authorityAddAncestorCmdExe;
+  private final AuthorityFindRootCmdExe authorityFindRootCmdExe;
+  private final AuthorityFindDirectCmdExe authorityFindDirectCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -97,7 +108,9 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityArchivedFindAllCmdExe authorityArchivedFindAllCmdExe,
     AuthorityFindAllSliceCmdExe authorityFindAllSliceCmdExe,
     AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe,
-    AuthorityConvertor authorityConvertor) {
+    AuthorityConvertor authorityConvertor, AuthorityAddAncestorCmdExe authorityAddAncestorCmdExe,
+    AuthorityFindRootCmdExe authorityFindRootCmdExe,
+    AuthorityFindDirectCmdExe authorityFindDirectCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -109,6 +122,9 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityFindAllSliceCmdExe = authorityFindAllSliceCmdExe;
     this.authorityArchivedFindAllSliceCmdExe = authorityArchivedFindAllSliceCmdExe;
     this.authorityConvertor = authorityConvertor;
+    this.authorityAddAncestorCmdExe = authorityAddAncestorCmdExe;
+    this.authorityFindRootCmdExe = authorityFindRootCmdExe;
+    this.authorityFindDirectCmdExe = authorityFindDirectCmdExe;
   }
 
   @Override
@@ -213,5 +229,22 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public void recoverFromArchiveById(
     Long id) {
     authorityRecoverFromArchiveByIdCmdExe.execute(id);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAncestor(AuthorityAddAncestorCmd authorityAddAncestorCmd) {
+    authorityAddAncestorCmdExe.execute(authorityAddAncestorCmd);
+  }
+
+  @Override
+  public Page<AuthorityFindRootCo> findRootAuthorities(AuthorityFindRootCmd authorityFindRootCmd) {
+    return authorityFindRootCmdExe.execute(authorityFindRootCmd);
+  }
+
+  @Override
+  public Page<AuthorityFindDirectCo> findDirectAuthorities(
+    AuthorityFindDirectCmd authorityFindDirectCmd) {
+    return authorityFindDirectCmdExe.execute(authorityFindDirectCmd);
   }
 }

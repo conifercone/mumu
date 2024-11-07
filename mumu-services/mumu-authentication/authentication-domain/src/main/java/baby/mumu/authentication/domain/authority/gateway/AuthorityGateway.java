@@ -111,4 +111,29 @@ public interface AuthorityGateway {
    * @param id 权限id
    */
   void recoverFromArchiveById(Long id);
+
+  /**
+   * 给指定后代权限添加祖先权限
+   *
+   * @param descendantId 后代权限ID
+   * @param ancestorId   祖先权限ID
+   */
+  void addAncestor(Long descendantId, Long ancestorId);
+
+  /**
+   * 获取所有根权限
+   *
+   * @return 根权限列表
+   */
+  Page<Authority> findRootAuthorities(int current, int pageSize);
+
+  /**
+   * 获取直系后代权限
+   *
+   * @param ancestorId 祖先ID
+   * @param current    当前页
+   * @param pageSize   每页数量
+   * @return 直系后代
+   */
+  Page<Authority> findDirectAuthorities(Long ancestorId, int current, int pageSize);
 }

@@ -15,33 +15,28 @@
  */
 package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
-import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 权限查询客户端对象
+ * 获取所有根权限客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.3.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
-public class AuthorityFindAllCo extends BaseClientObject {
+public class AuthorityFindRootCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 7732716410353532916L;
+  private static final long serialVersionUID = -3550924228550529768L;
 
   private Long id;
 
-  @Size(max = 50, message = "{authority.code.validation.size}")
   private String code;
 
-  @Size(max = 200, message = "{authority.name.validation.size}")
   private String name;
 
   private boolean hasDescendant;

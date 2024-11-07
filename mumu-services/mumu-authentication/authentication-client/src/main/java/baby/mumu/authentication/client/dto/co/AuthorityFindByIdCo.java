@@ -31,11 +31,13 @@ import lombok.EqualsAndHashCode;
 public class AuthorityFindByIdCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = -3550924228550529768L;
+  private static final long serialVersionUID = -5970443088796936455L;
 
   private Long id;
 
   private String code;
 
   private String name;
+
+  private boolean hasDescendant;
 }
