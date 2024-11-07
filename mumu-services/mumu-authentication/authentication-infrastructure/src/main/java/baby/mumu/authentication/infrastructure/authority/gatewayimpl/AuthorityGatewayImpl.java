@@ -278,6 +278,9 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       if (ancestorIds.contains(descendantId)) {
         throw new MuMuException(ResponseCode.AUTHORITY_CYCLE);
       }
+      if (authorityPathsRepository.existsById(new AuthorityPathsDoId(ancestorId, descendantId))) {
+        throw new MuMuException(ResponseCode.AUTHORITY_PATH_ALREADY_EXISTS);
+      }
       List<AuthorityPathsDo> authorityPathsDos = ancestorAuthorities.stream()
         .map(ancestorAuthority -> new AuthorityPathsDo(
           new AuthorityPathsDoId(ancestorAuthority.getId().getAncestorId(), descendantId),
