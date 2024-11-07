@@ -72,6 +72,6 @@ public class Role extends BasisDomainModel {
   /**
    * 角色权限后代
    */
-  private List<Authority> descendantAuthorities;
+  private transient List<Authority> descendantAuthorities;
 
 }
