@@ -62,5 +62,10 @@ public class RoleFindAllSliceCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    /**
+     * 有后代权限
+     */
+    private boolean hasDescendant;
   }
 }

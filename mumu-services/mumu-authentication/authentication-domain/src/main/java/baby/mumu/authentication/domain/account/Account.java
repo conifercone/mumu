@@ -165,9 +165,10 @@ public class Account extends BasisDomainModel implements UserDetails {
           return Stream.empty();
         }
         // 将角色权限去重
-        Set<Authority> authorities = new HashSet<>(role.getAuthorities().stream()
-          .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
-          .values());
+        Set<Authority> authorities = new HashSet<>(
+          CollectionUtils.union(role.getAuthorities(), role.getDescendantAuthorities()).stream()
+            .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
+            .values());
         // 添加角色本身的权限
         authorities.add(Authority.builder()
           .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))

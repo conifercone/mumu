@@ -33,6 +33,9 @@ import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConv
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDoId;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDoId;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
@@ -79,6 +82,7 @@ public class RoleConvertor {
   private final RoleAuthorityRepository roleAuthorityRepository;
   private final AuthorityRedisRepository authorityRedisRepository;
   private final RoleAuthorityRedisRepository roleAuthorityRedisRepository;
+  private final AuthorityPathsRepository authorityPathsRepository;
 
   @Autowired
   public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
@@ -87,7 +91,8 @@ public class RoleConvertor {
     RoleArchivedRepository roleArchivedRepository,
     RoleAuthorityRepository roleAuthorityRepository,
     AuthorityRedisRepository authorityRedisRepository,
-    RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
+    RoleAuthorityRedisRepository roleAuthorityRedisRepository,
+    AuthorityPathsRepository authorityPathsRepository) {
     this.authorityConvertor = authorityConvertor;
     this.roleRepository = roleRepository;
     this.authorityRepository = authorityRepository;
@@ -97,6 +102,7 @@ public class RoleConvertor {
     this.roleAuthorityRepository = roleAuthorityRepository;
     this.authorityRedisRepository = authorityRedisRepository;
     this.roleAuthorityRedisRepository = roleAuthorityRedisRepository;
+    this.authorityPathsRepository = authorityPathsRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -109,7 +115,7 @@ public class RoleConvertor {
     });
   }
 
-  private @NotNull List<Long> getAuthorityIds(Role role) {
+  private @NotNull List<Long> getAuthorityIds(@NotNull Role role) {
     return roleAuthorityRedisRepository.findById(role.getId())
       .map(RoleAuthorityRedisDo::getAuthorityIds).orElseGet(() -> {
         List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
@@ -121,6 +127,22 @@ public class RoleConvertor {
   }
 
   private void setAuthorities(Role role, List<Long> authorityIds) {
+    Optional.ofNullable(role).ifPresent(roleDataObject -> {
+      ArrayList<Authority> authorities = getAuthorities(
+        Optional.ofNullable(authorityIds).map(
+            authorityIdsNotNull -> authorityIdsNotNull.stream().distinct()
+              .collect(Collectors.toList()))
+          .orElse(new ArrayList<>()));
+      roleDataObject.setAuthorities(authorities);
+      roleDataObject.setDescendantAuthorities(
+        getAuthorities(authorityPathsRepository.findByAncestorIdIn(
+          authorities.stream().filter(Authority::isHasDescendant).map(Authority::getId)
+            .collect(Collectors.toList())).stream().map(AuthorityPathsDo::getId).map(
+          AuthorityPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
+    });
+  }
+
+  private @NotNull ArrayList<Authority> getAuthorities(List<Long> authorityIds) {
     // 查询缓存中存在的数据
     List<AuthorityRedisDo> authorityRedisDos = authorityRedisRepository.findAllById(
       authorityIds);
@@ -151,8 +173,8 @@ public class RoleConvertor {
           Collectors.toList()));
     }
     // 合并已缓存和未缓存的权限
-    role.setAuthorities(new ArrayList<>(
-      CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority)));
+    return new ArrayList<>(
+      CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority));
   }
 
   @API(status = Status.STABLE, since = "1.0.4")

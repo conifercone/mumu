@@ -16,6 +16,7 @@
 package baby.mumu.authentication.infrastructure.relations.database;
 
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +68,15 @@ public interface AuthorityPathsRepository extends
   @Query("select a from AuthorityPathsDo a where a.depth = 1 and a.id.ancestorId = :ancestorId")
   Page<AuthorityPathsDo> findDirectAuthorities(@Param("ancestorId") Long ancestorId,
     Pageable pageable);
+
+  /**
+   * 获取所有后代权限（不包含祖先自身）
+   *
+   * @param ancestorIds 祖先权限ID集合
+   * @return 后代权限
+   */
+  @Query("select a from AuthorityPathsDo a where a.depth != 0 and a.id.ancestorId in :#{#ancestorIds}")
+  List<AuthorityPathsDo> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
 
   /**
    * 是否存在后代权限
