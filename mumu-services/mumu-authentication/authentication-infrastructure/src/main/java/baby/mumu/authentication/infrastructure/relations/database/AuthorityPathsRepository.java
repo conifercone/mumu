@@ -123,7 +123,7 @@ public interface AuthorityPathsRepository extends
    * @param ancestorId   祖先ID
    */
   @Modifying
-  @Query("delete from AuthorityPathsDo a where a.descendant.id=:descendantId and a.ancestor.id=:ancestorId and a.depth = 1")
+  @Query("delete from AuthorityPathsDo a where a.ancestor.id=:ancestorId and a.descendant.id=:descendantId and a.depth = 1")
   @Transactional
   void deleteDirectly(@Param("descendantId") Long descendantId,
     @Param("ancestorId") Long ancestorId);
@@ -133,19 +133,19 @@ public interface AuthorityPathsRepository extends
    * 删除所有不可达节点
    */
   @Modifying
-  @Query(value = "WITH RECURSIVE reachable_paths AS ( " +
-    "    SELECT id AS ancestor_id, id AS descendant_id, 0 AS depth " +
-    "    FROM authority_paths " +
-    "    UNION ALL " +
-    "    SELECT p.ancestor_id, a.descendant_id, p.depth + 1 AS depth " +
-    "    FROM authority_paths p " +
-    "    JOIN authority_paths a ON p.descendant_id = a.ancestor_id " +
+  @Query("DELETE FROM AuthorityPathsDo ap1 " +
+    "WHERE ap1.depth > 1 " +
+    "AND NOT EXISTS (" +
+    "   SELECT 1 " +
+    "   FROM AuthorityPathsDo ap2 " +
+    "   JOIN AuthorityPathsDo ap3 " +
+    "       ON ap2.descendant.id = ap3.ancestor.id " +  // ap2 的后代是 ap3 的祖先
+    "   WHERE ap2.ancestor.id = ap1.ancestor.id " +  // 同一个祖先
+    "   AND ap3.descendant.id = ap1.descendant.id " +  // 同一个后代
+    "   AND ap2.depth = 1 " +
+    "   AND ap3.depth = 1 " +
     ") " +
-    "DELETE FROM authority_paths " +
-    "WHERE (ancestor_id, descendant_id, depth) NOT IN ( " +
-    "    SELECT ancestor_id, descendant_id, depth FROM reachable_paths " +
-    ") " +
-    "AND ancestor_id != descendant_id", nativeQuery = true)
+    "AND ap1.ancestor.id != ap1.descendant.id")  // 确保不删除自身的路径
   @Transactional
   void deleteUnreachableData();
 }
