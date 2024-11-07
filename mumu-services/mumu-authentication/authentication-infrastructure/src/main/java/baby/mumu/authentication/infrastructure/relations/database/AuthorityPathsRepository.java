@@ -21,8 +21,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 权限路径
@@ -45,10 +47,12 @@ public interface AuthorityPathsRepository extends
   /**
    * 根据祖先ID和后代ID删除所有关系
    *
-   * @param descendantId 后代ID
-   * @param ancestorId   祖先ID
+   * @param authorityId 祖先ID
    */
-  void deleteByDescendantIdOrAncestorId(Long descendantId, Long ancestorId);
+  @Modifying
+  @Query("delete from AuthorityPathsDo a where a.id.descendantId=:authorityId or a.id.ancestorId=:authorityId")
+  @Transactional
+  void deleteAllPathsByAuthorityId(@Param("authorityId") Long authorityId);
 
   /**
    * 获取所有根权限

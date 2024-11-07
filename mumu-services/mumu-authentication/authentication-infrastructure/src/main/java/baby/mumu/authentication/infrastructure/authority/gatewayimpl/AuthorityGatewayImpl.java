@@ -126,7 +126,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     }
     Optional.ofNullable(id).ifPresent(authorityId -> {
       authorityRepository.deleteById(authorityId);
-      authorityPathsRepository.deleteByDescendantIdOrAncestorId(authorityId, authorityId);
+      authorityPathsRepository.deleteAllPathsByAuthorityId(authorityId);
       authorityArchivedRepository.deleteById(authorityId);
       authorityRedisRepository.deleteById(authorityId);
     });
@@ -241,7 +241,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
       .ifPresent(authorityId -> {
         authorityArchivedRepository.deleteById(authorityId);
-        authorityPathsRepository.deleteByDescendantIdOrAncestorId(authorityId, authorityId);
+        authorityPathsRepository.deleteAllPathsByAuthorityId(authorityId);
         authorityRedisRepository.deleteById(authorityId);
       });
   }
