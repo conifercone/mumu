@@ -136,4 +136,13 @@ public interface AuthorityGateway {
    * @return 直系后代
    */
   Page<Authority> findDirectAuthorities(Long ancestorId, int current, int pageSize);
+
+
+  /**
+   * 删除权限路径
+   *
+   * @param descendantId 后代权限ID
+   * @param ancestorId   祖先权限ID
+   */
+  void deletePath(Long descendantId, Long ancestorId);
 }

@@ -284,12 +284,9 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
           ancestorAuthority.getAncestor(), descendantAuthorityDo, ancestorAuthority.getDepth() + 1))
         .collect(
           Collectors.toList());
-      boolean existsDescendantAuthorities = authorityPathsRepository.existsDescendantAuthorities(
-        ancestorId);
       authorityPathsRepository.persistAll(authorityPathsDos);
-      if (!existsDescendantAuthorities) {
-        authorityRedisRepository.deleteById(ancestorId);
-      }
+      authorityRedisRepository.deleteById(ancestorId);
+      authorityRedisRepository.deleteById(descendantId);
     }
   }
 
@@ -314,5 +311,13 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         authorityPathsDo -> findById(authorityPathsDo.getId().getDescendantId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deletePath(Long descendantId, Long ancestorId) {
+    authorityPathsRepository.deleteByDescendantIdAndAncestorId(descendantId, ancestorId);
+    authorityRedisRepository.deleteById(ancestorId);
+    authorityRedisRepository.deleteById(descendantId);
   }
 }

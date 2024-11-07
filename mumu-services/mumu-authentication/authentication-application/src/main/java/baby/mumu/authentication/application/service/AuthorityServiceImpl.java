@@ -21,6 +21,7 @@ import baby.mumu.authentication.application.authority.executor.AuthorityArchiveB
 import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityArchivedFindAllSliceCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityDeleteByIdCmdExe;
+import baby.mumu.authentication.application.authority.executor.AuthorityDeletePathCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindAllSliceCmdExe;
 import baby.mumu.authentication.application.authority.executor.AuthorityFindByIdCmdExe;
@@ -39,6 +40,7 @@ import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AuthorityDeletePathCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
@@ -96,6 +98,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   private final AuthorityAddAncestorCmdExe authorityAddAncestorCmdExe;
   private final AuthorityFindRootCmdExe authorityFindRootCmdExe;
   private final AuthorityFindDirectCmdExe authorityFindDirectCmdExe;
+  private final AuthorityDeletePathCmdExe authorityDeletePathCmdExe;
 
   @Autowired
   public AuthorityServiceImpl(AuthorityAddCmdExe authorityAddCmdExe,
@@ -110,7 +113,8 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     AuthorityArchivedFindAllSliceCmdExe authorityArchivedFindAllSliceCmdExe,
     AuthorityConvertor authorityConvertor, AuthorityAddAncestorCmdExe authorityAddAncestorCmdExe,
     AuthorityFindRootCmdExe authorityFindRootCmdExe,
-    AuthorityFindDirectCmdExe authorityFindDirectCmdExe) {
+    AuthorityFindDirectCmdExe authorityFindDirectCmdExe,
+    AuthorityDeletePathCmdExe authorityDeletePathCmdExe) {
     this.authorityAddCmdExe = authorityAddCmdExe;
     this.authorityDeleteByIdCmdExe = authorityDeleteByIdCmdExe;
     this.authorityUpdateCmdExe = authorityUpdateCmdExe;
@@ -125,6 +129,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
     this.authorityAddAncestorCmdExe = authorityAddAncestorCmdExe;
     this.authorityFindRootCmdExe = authorityFindRootCmdExe;
     this.authorityFindDirectCmdExe = authorityFindDirectCmdExe;
+    this.authorityDeletePathCmdExe = authorityDeletePathCmdExe;
   }
 
   @Override
@@ -246,5 +251,11 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
   public Page<AuthorityFindDirectCo> findDirectAuthorities(
     AuthorityFindDirectCmd authorityFindDirectCmd) {
     return authorityFindDirectCmdExe.execute(authorityFindDirectCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deletePath(AuthorityDeletePathCmd authorityDeletePathCmd) {
+    authorityDeletePathCmdExe.execute(authorityDeletePathCmd);
   }
 }

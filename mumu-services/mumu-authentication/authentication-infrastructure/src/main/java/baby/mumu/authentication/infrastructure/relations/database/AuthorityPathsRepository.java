@@ -90,4 +90,12 @@ public interface AuthorityPathsRepository extends
    */
   @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE id.ancestorId = :ancestorId AND depth != 0")
   boolean existsDescendantAuthorities(@Param("ancestorId") Long ancestorId);
+
+  /**
+   * 根据祖先ID和后代ID删除权限路径
+   *
+   * @param descendantId 后代ID
+   * @param ancestorId   祖先ID
+   */
+  void deleteByDescendantIdAndAncestorId(Long descendantId, Long ancestorId);
 }
