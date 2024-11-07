@@ -19,12 +19,11 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisDefaultDataObject;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
@@ -52,15 +51,14 @@ public class AuthorityPathsDo extends JpaBasisDefaultDataObject {
   @Serial
   private static final long serialVersionUID = 5664371470283158730L;
 
-  @EmbeddedId
-  private AuthorityPathsDoId id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-  @MapsId("ancestorId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "ancestor_id", nullable = false)
   private AuthorityDo ancestor;
 
-  @MapsId("descendantId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "descendant_id", nullable = false)
   private AuthorityDo descendant;

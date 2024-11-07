@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2.3.0
  */
 public interface AuthorityPathsRepository extends
-  BaseJpaRepository<AuthorityPathsDo, AuthorityPathsDoId>,
+  BaseJpaRepository<AuthorityPathsDo, Long>,
   JpaSpecificationExecutor<AuthorityPathsDo> {
 
   /**
@@ -50,7 +50,7 @@ public interface AuthorityPathsRepository extends
    * @param authorityId 祖先ID
    */
   @Modifying
-  @Query("delete from AuthorityPathsDo a where a.id.descendantId=:authorityId or a.id.ancestorId=:authorityId")
+  @Query("delete from AuthorityPathsDo a where a.descendant.id=:authorityId or a.ancestor.id=:authorityId")
   @Transactional
   void deleteAllPathsByAuthorityId(@Param("authorityId") Long authorityId);
 
@@ -60,7 +60,7 @@ public interface AuthorityPathsRepository extends
    * @return 根权限
    */
   @Query("select a from AuthorityPathsDo a where a.depth = 0 and not exists "
-    + "(select 1 from AuthorityPathsDo b where b.id.descendantId = a.id.ancestorId and b.depth > 0)")
+    + "(select 1 from AuthorityPathsDo b where b.descendant.id = a.ancestor.id and b.depth > 0)")
   Page<AuthorityPathsDo> findRootAuthorities(Pageable pageable);
 
   /**
@@ -69,7 +69,7 @@ public interface AuthorityPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 直系后代权限
    */
-  @Query("select a from AuthorityPathsDo a where a.depth = 1 and a.id.ancestorId = :ancestorId")
+  @Query("select a from AuthorityPathsDo a where a.depth = 1 and a.ancestor.id = :ancestorId")
   Page<AuthorityPathsDo> findDirectAuthorities(@Param("ancestorId") Long ancestorId,
     Pageable pageable);
 
@@ -79,7 +79,7 @@ public interface AuthorityPathsRepository extends
    * @param ancestorIds 祖先权限ID集合
    * @return 后代权限
    */
-  @Query("select a from AuthorityPathsDo a where a.depth != 0 and a.id.ancestorId in :#{#ancestorIds}")
+  @Query("select a from AuthorityPathsDo a where a.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
   List<AuthorityPathsDo> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
 
   /**
@@ -88,14 +88,64 @@ public interface AuthorityPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 是否存在
    */
-  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE id.ancestorId = :ancestorId AND depth != 0")
+  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND depth = 1")
   boolean existsDescendantAuthorities(@Param("ancestorId") Long ancestorId);
 
+
   /**
-   * 根据祖先ID和后代ID删除权限路径
+   * 路径是否已存在
+   *
+   * @param descendantId 后代ID
+   * @param ancestorId   祖先ID
+   * @return 是否已存在
+   */
+  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND descendant.id = :descendantId AND depth = 1")
+  boolean existsPath(@Param("descendantId") Long descendantId,
+    @Param("ancestorId") Long ancestorId);
+
+  /**
+   * 路径是否已存在
+   *
+   * @param descendantId 后代ID
+   * @param ancestorId   祖先ID
+   * @param depth        路径深度
+   * @return 是否已存在
+   */
+  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND descendant.id = :descendantId AND depth = :depth")
+  boolean existsPath(@Param("descendantId") Long descendantId,
+    @Param("ancestorId") Long ancestorId,
+    @Param("depth") Long depth);
+
+  /**
+   * 根据祖先ID和后代ID删除直系权限路径
    *
    * @param descendantId 后代ID
    * @param ancestorId   祖先ID
    */
-  void deleteByDescendantIdAndAncestorId(Long descendantId, Long ancestorId);
+  @Modifying
+  @Query("delete from AuthorityPathsDo a where a.descendant.id=:descendantId and a.ancestor.id=:ancestorId and a.depth = 1")
+  @Transactional
+  void deleteDirectly(@Param("descendantId") Long descendantId,
+    @Param("ancestorId") Long ancestorId);
+
+
+  /**
+   * 删除所有不可达节点
+   */
+  @Modifying
+  @Query(value = "WITH RECURSIVE reachable_paths AS ( " +
+    "    SELECT id AS ancestor_id, id AS descendant_id, 0 AS depth " +
+    "    FROM authority_paths " +
+    "    UNION ALL " +
+    "    SELECT p.ancestor_id, a.descendant_id, p.depth + 1 AS depth " +
+    "    FROM authority_paths p " +
+    "    JOIN authority_paths a ON p.descendant_id = a.ancestor_id " +
+    ") " +
+    "DELETE FROM authority_paths " +
+    "WHERE (ancestor_id, descendant_id, depth) NOT IN ( " +
+    "    SELECT ancestor_id, descendant_id, depth FROM reachable_paths " +
+    ") " +
+    "AND ancestor_id != descendant_id", nativeQuery = true)
+  @Transactional
+  void deleteUnreachableData();
 }
