@@ -15,10 +15,8 @@
  */
 package baby.mumu.authentication.application.authority.executor;
 
-import baby.mumu.authentication.client.dto.AuthorityDeletePathCmd;
 import baby.mumu.authentication.domain.authority.gateway.AuthorityGateway;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,11 +37,7 @@ public class AuthorityDeletePathCmdExe {
     this.authorityGateway = authorityGateway;
   }
 
-  public void execute(
-    AuthorityDeletePathCmd authorityDeletePathCmd) {
-    Optional.ofNullable(authorityDeletePathCmd)
-      .ifPresent(authorityDeletePathCmdNotNull -> authorityGateway.deletePath(
-        authorityDeletePathCmdNotNull.getDescendantId(),
-        authorityDeletePathCmdNotNull.getAncestorId()));
+  public void execute(Long ancestorId, Long descendantId) {
+    authorityGateway.deletePath(ancestorId, descendantId);
   }
 }

@@ -141,8 +141,8 @@ public interface AuthorityGateway {
   /**
    * 删除权限路径
    *
-   * @param descendantId 后代权限ID
    * @param ancestorId   祖先权限ID
+   * @param descendantId 后代权限ID
    */
-  void deletePath(Long descendantId, Long ancestorId);
+  void deletePath(Long ancestorId, Long descendantId);
 }

@@ -20,7 +20,6 @@ import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeletePathCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
@@ -195,12 +194,12 @@ public class AuthorityController {
   }
 
   @Operation(summary = "删除权限路径")
-  @DeleteMapping("/deletePath")
+  @DeleteMapping("/deletePath/{ancestorId}/{descendantId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public void deletePath(
-    @RequestBody AuthorityDeletePathCmd authorityDeletePathCmd) {
-    authorityService.deletePath(authorityDeletePathCmd);
+  public void deletePath(@PathVariable(value = "ancestorId") Long ancestorId,
+    @PathVariable(value = "descendantId") Long descendantId) {
+    authorityService.deletePath(ancestorId, descendantId);
   }
 }

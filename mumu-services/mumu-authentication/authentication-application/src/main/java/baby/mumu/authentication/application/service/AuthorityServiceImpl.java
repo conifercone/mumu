@@ -40,7 +40,6 @@ import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeletePathCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
@@ -255,7 +254,7 @@ public class AuthorityServiceImpl extends AuthorityServiceImplBase implements Au
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deletePath(AuthorityDeletePathCmd authorityDeletePathCmd) {
-    authorityDeletePathCmdExe.execute(authorityDeletePathCmd);
+  public void deletePath(Long ancestorId, Long descendantId) {
+    authorityDeletePathCmdExe.execute(ancestorId, descendantId);
   }
 }

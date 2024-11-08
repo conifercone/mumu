@@ -322,7 +322,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void deletePath(Long descendantId, Long ancestorId) {
+  public void deletePath(Long ancestorId, Long descendantId) {
     if (authorityPathsRepository.existsDescendantAuthorities(descendantId)) {
       throw new MuMuException(ResponseCode.DESCENDANT_AUTHORITY_HAS_DESCENDANT_AUTHORITY);
     }

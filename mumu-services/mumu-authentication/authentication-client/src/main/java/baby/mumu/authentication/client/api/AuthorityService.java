@@ -19,7 +19,6 @@ import baby.mumu.authentication.client.dto.AuthorityAddAncestorCmd;
 import baby.mumu.authentication.client.dto.AuthorityAddCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AuthorityDeletePathCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.AuthorityFindDirectCmd;
@@ -146,7 +145,8 @@ public interface AuthorityService {
   /**
    * 删除权限路径
    *
-   * @param authorityDeletePathCmd 删除权限路径指令
+   * @param ancestorId   祖先ID
+   * @param descendantId 后代ID
    */
-  void deletePath(AuthorityDeletePathCmd authorityDeletePathCmd);
+  void deletePath(Long ancestorId, Long descendantId);
 }
