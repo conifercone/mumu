@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2.3.0
  */
 public interface AuthorityPathsRepository extends
-  BaseJpaRepository<AuthorityPathsDo, Long>,
+  BaseJpaRepository<AuthorityPathsDo, AuthorityPathsDoId>,
   JpaSpecificationExecutor<AuthorityPathsDo> {
 
   /**
@@ -59,8 +59,8 @@ public interface AuthorityPathsRepository extends
    *
    * @return 根权限
    */
-  @Query("select a from AuthorityPathsDo a where a.depth = 0 and not exists "
-    + "(select 1 from AuthorityPathsDo b where b.descendant.id = a.ancestor.id and b.depth > 0)")
+  @Query("select a from AuthorityPathsDo a where a.id.depth = 0 and not exists "
+    + "(select 1 from AuthorityPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)")
   Page<AuthorityPathsDo> findRootAuthorities(Pageable pageable);
 
   /**
@@ -69,7 +69,7 @@ public interface AuthorityPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 直系后代权限
    */
-  @Query("select a from AuthorityPathsDo a where a.depth = 1 and a.ancestor.id = :ancestorId")
+  @Query("select a from AuthorityPathsDo a where a.id.depth = 1 and a.ancestor.id = :ancestorId")
   Page<AuthorityPathsDo> findDirectAuthorities(@Param("ancestorId") Long ancestorId,
     Pageable pageable);
 
@@ -79,7 +79,7 @@ public interface AuthorityPathsRepository extends
    * @param ancestorIds 祖先权限ID集合
    * @return 后代权限
    */
-  @Query("select a from AuthorityPathsDo a where a.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
+  @Query("select a from AuthorityPathsDo a where a.id.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
   List<AuthorityPathsDo> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
 
   /**
@@ -88,45 +88,8 @@ public interface AuthorityPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 是否存在
    */
-  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND depth = 1")
+  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND id.depth = 1")
   boolean existsDescendantAuthorities(@Param("ancestorId") Long ancestorId);
-
-
-  /**
-   * 路径是否已存在
-   *
-   * @param descendantId 后代ID
-   * @param ancestorId   祖先ID
-   * @return 是否已存在
-   */
-  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND descendant.id = :descendantId AND depth = 1")
-  boolean existsPath(@Param("descendantId") Long descendantId,
-    @Param("ancestorId") Long ancestorId);
-
-  /**
-   * 路径是否已存在
-   *
-   * @param descendantId 后代ID
-   * @param ancestorId   祖先ID
-   * @param depth        路径深度
-   * @return 是否已存在
-   */
-  @Query("SELECT COUNT(*) > 0 FROM AuthorityPathsDo WHERE ancestor.id = :ancestorId AND descendant.id = :descendantId AND depth = :depth")
-  boolean existsPath(@Param("descendantId") Long descendantId,
-    @Param("ancestorId") Long ancestorId,
-    @Param("depth") Long depth);
-
-  /**
-   * 根据祖先ID和后代ID删除直系权限路径
-   *
-   * @param descendantId 后代ID
-   * @param ancestorId   祖先ID
-   */
-  @Modifying
-  @Query("delete from AuthorityPathsDo a where a.ancestor.id=:ancestorId and a.descendant.id=:descendantId and a.depth = 1")
-  @Transactional
-  void deleteDirectly(@Param("descendantId") Long descendantId,
-    @Param("ancestorId") Long ancestorId);
 
 
   /**
@@ -134,7 +97,7 @@ public interface AuthorityPathsRepository extends
    */
   @Modifying
   @Query("DELETE FROM AuthorityPathsDo ap1 " +
-    "WHERE ap1.depth > 1 " +
+    "WHERE ap1.id.depth > 1 " +
     "AND NOT EXISTS (" +
     "   SELECT 1 " +
     "   FROM AuthorityPathsDo ap2 " +
@@ -142,8 +105,8 @@ public interface AuthorityPathsRepository extends
     "       ON ap2.descendant.id = ap3.ancestor.id " +  // ap2 的后代是 ap3 的祖先
     "   WHERE ap2.ancestor.id = ap1.ancestor.id " +  // 同一个祖先
     "   AND ap3.descendant.id = ap1.descendant.id " +  // 同一个后代
-    "   AND ap2.depth = 1 " +
-    "   AND ap3.depth = 1 " +
+    "   AND ap2.id.depth = 1 " +
+    "   AND ap3.id.depth = 1 " +
     ") " +
     "AND ap1.ancestor.id != ap1.descendant.id")  // 确保不删除自身的路径
   @Transactional

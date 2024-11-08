@@ -31,10 +31,10 @@ import baby.mumu.authentication.domain.authority.Authority;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
 import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
 import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDoId;
@@ -137,8 +137,8 @@ public class RoleConvertor {
       roleDataObject.setDescendantAuthorities(
         getAuthorities(authorityPathsRepository.findByAncestorIdIn(
           authorities.stream().filter(Authority::isHasDescendant).map(Authority::getId)
-            .collect(Collectors.toList())).stream().map(AuthorityPathsDo::getDescendant).map(
-          AuthorityDo::getId).distinct().collect(Collectors.toList())));
+            .collect(Collectors.toList())).stream().map(AuthorityPathsDo::getId).map(
+          AuthorityPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
     });
   }
 

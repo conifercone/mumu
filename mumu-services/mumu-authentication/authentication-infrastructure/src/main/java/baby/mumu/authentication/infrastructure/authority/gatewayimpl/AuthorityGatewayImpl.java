@@ -26,6 +26,7 @@ import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.da
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
 import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.exception.MuMuException;
@@ -33,7 +34,6 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.List;
@@ -75,7 +75,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
   private final ExtensionProperties extensionProperties;
   private final AuthorityRedisRepository authorityRedisRepository;
   private final AuthorityPathsRepository authorityPathsRepository;
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
 
   @Autowired
   public AuthorityGatewayImpl(AuthorityRepository authorityRepository,
@@ -83,8 +82,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     AuthorityConvertor authorityConvertor,
     AuthorityArchivedRepository authorityArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties, AuthorityRedisRepository authorityRedisRepository,
-    AuthorityPathsRepository authorityPathsRepository,
-    PrimaryKeyGrpcService primaryKeyGrpcService) {
+    AuthorityPathsRepository authorityPathsRepository) {
     this.authorityRepository = authorityRepository;
     this.roleGateway = roleGateway;
     this.authorityConvertor = authorityConvertor;
@@ -94,7 +92,6 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     this.extensionProperties = extensionProperties;
     this.authorityRedisRepository = authorityRedisRepository;
     this.authorityPathsRepository = authorityPathsRepository;
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
   }
 
   @Override
@@ -109,8 +106,8 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       .ifPresentOrElse(authorityDo -> {
         authorityRepository.persist(authorityDo);
         authorityPathsRepository.persist(
-          new AuthorityPathsDo(primaryKeyGrpcService.snowflake(),
-            authorityDo, authorityDo, 0L));
+          new AuthorityPathsDo(new AuthorityPathsDoId(authorityDo.getId(), authorityDo.getId(), 0L),
+            authorityDo, authorityDo));
         authorityRedisRepository.deleteById(authorityDo.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.AUTHORITY_CODE_OR_ID_ALREADY_EXISTS);
@@ -275,21 +272,23 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
         ancestorId);
       // 成环检测
       Set<Long> ancestorIds = ancestorAuthorities.stream()
-        .map(authorityPathsDo -> authorityPathsDo.getAncestor().getId())
+        .map(authorityPathsDo -> authorityPathsDo.getId().getAncestorId())
         .collect(
           Collectors.toSet());
       if (ancestorIds.contains(descendantId)) {
         throw new MuMuException(ResponseCode.AUTHORITY_CYCLE);
       }
-      if (authorityPathsRepository.existsPath(descendantId, ancestorId)) {
+      if (authorityPathsRepository.existsById(
+        new AuthorityPathsDoId(ancestorId, descendantId, 1L))) {
         throw new MuMuException(ResponseCode.AUTHORITY_PATH_ALREADY_EXISTS);
       }
       List<AuthorityPathsDo> authorityPathsDos = ancestorAuthorities.stream()
-        .map(ancestorAuthority -> new AuthorityPathsDo(primaryKeyGrpcService.snowflake(),
-          ancestorAuthority.getAncestor(), descendantAuthorityDo, ancestorAuthority.getDepth() + 1))
-        .filter(authorityPathsDo -> !authorityPathsRepository.existsPath(
-          authorityPathsDo.getDescendant().getId(), authorityPathsDo.getAncestor()
-            .getId(), authorityPathsDo.getDepth()))
+        .map(ancestorAuthority -> new AuthorityPathsDo(
+          new AuthorityPathsDoId(ancestorAuthority.getId().getAncestorId(), descendantId,
+            ancestorAuthority.getId().getDepth() + 1),
+          ancestorAuthority.getAncestor(), descendantAuthorityDo))
+        .filter(authorityPathsDo -> !authorityPathsRepository.existsById(authorityPathsDo.getId())
+        )
         .collect(
           Collectors.toList());
       authorityPathsRepository.persistAll(authorityPathsDos);
@@ -304,7 +303,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     Page<AuthorityPathsDo> repositoryAll = authorityPathsRepository.findRootAuthorities(
       pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream().flatMap(
-        authorityPathsDo -> findById(authorityPathsDo.getAncestor().getId()).stream())
+        authorityPathsDo -> findById(authorityPathsDo.getId().getAncestorId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
@@ -316,7 +315,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
       ancestorId,
       pageRequest);
     List<Authority> authorities = repositoryAll.getContent().stream().flatMap(
-        authorityPathsDo -> findById(authorityPathsDo.getDescendant().getId()).stream())
+        authorityPathsDo -> findById(authorityPathsDo.getId().getDescendantId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
@@ -327,7 +326,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
     if (authorityPathsRepository.existsDescendantAuthorities(descendantId)) {
       throw new MuMuException(ResponseCode.DESCENDANT_AUTHORITY_HAS_DESCENDANT_AUTHORITY);
     }
-    authorityPathsRepository.deleteDirectly(descendantId, ancestorId);
+    authorityPathsRepository.deleteById(new AuthorityPathsDoId(ancestorId, descendantId, 1L));
     authorityPathsRepository.deleteUnreachableData();
     authorityRedisRepository.deleteById(ancestorId);
     authorityRedisRepository.deleteById(descendantId);
