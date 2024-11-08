@@ -262,6 +262,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Job(name = "删除ID为：%0 的角色归档数据")
   @DangerousOperation("根据ID删除ID为%0的角色归档数据定时任务")
+  @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
       .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())

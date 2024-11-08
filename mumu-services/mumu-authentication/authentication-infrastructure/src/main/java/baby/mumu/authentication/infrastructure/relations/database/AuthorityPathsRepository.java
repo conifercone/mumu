@@ -24,7 +24,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 权限路径
@@ -51,7 +50,6 @@ public interface AuthorityPathsRepository extends
    */
   @Modifying
   @Query("delete from AuthorityPathsDo a where a.descendant.id=:authorityId or a.ancestor.id=:authorityId")
-  @Transactional
   void deleteAllPathsByAuthorityId(@Param("authorityId") Long authorityId);
 
   /**
@@ -108,7 +106,6 @@ public interface AuthorityPathsRepository extends
     "   AND ap2.id.depth = 1 " +
     "   AND ap3.id.depth = 1 " +
     ") " +
-    "AND ap1.ancestor.id != ap1.descendant.id")  // 确保不删除自身的路径
-  @Transactional
+    "AND ap1.ancestor.id != ap1.descendant.id")
   void deleteUnreachableData();
 }

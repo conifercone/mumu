@@ -236,6 +236,7 @@ public class AuthorityGatewayImpl implements AuthorityGateway {
 
   @Job(name = "删除ID为：%0 的权限归档数据")
   @DangerousOperation("根据ID删除ID为%0的权限归档数据定时任务")
+  @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
       .filter(authorityId -> roleGateway.findAllContainAuthority(authorityId).isEmpty())
