@@ -5,6 +5,8 @@ on:
     paths:
       - '**/build.gradle.kts'
       - 'gradle/libs.versions.toml'
+    branches:
+      - main
 
 
 permissions:
