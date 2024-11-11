@@ -3,11 +3,19 @@
 # 获取提交信息
 commit_message=$(cat "$1")
 
+ignore_pattern="^Merge (tag|branch|pull request)"
+
 # 定义正则表达式，匹配 mumu 提交规范
 pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9\-_一-龥＠#\$%&*()+=~\`!?\^|;:'\",.<>/\\\[\]{}\x{4e00}-\x{9fa5}]+\))?: .{0,50}$"
 
+if echo "$commit_message" | grep -P "$ignore_pattern"; then
+  echo "☀️ This submission does not require verification."
+  exit 0
+fi
+
 # 使用 grep -P 来检查提交信息是否符合正则表达式
 if ! echo "$commit_message" | grep -P "$pattern"; then
+    echo "🌥️ Illegal commit message: $commit_message"
     echo "🌥️ Commit message does not conform to the mumu commit format."
     echo "Please use the following format: "
     echo "<type>(<scope>): <subject>"
