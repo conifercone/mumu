@@ -22,7 +22,7 @@ if [ ! -z "$java_files" ]; then
 fi
 
 # 检查是否有 Kotlin 文件
-if [ ! -z "kotlin_files" ]; then
+if [ ! -z "$kotlin_files" ]; then
     update_license_needed=1
 fi
 
