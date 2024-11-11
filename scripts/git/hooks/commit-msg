@@ -4,9 +4,10 @@
 commit_message=$(cat "$1")
 
 # 定义正则表达式，匹配 mumu 提交规范
-pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9\-_一-龥]+\))?: [A-Z一-龥].{0,50}"
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9\-_一-龥＠#\$%&*()+=~\`!?\^|;:'\",.<>/\\\[\]{}\x{4e00}-\x{9fa5}]+\))?: .{0,50}$"
 
-if ! echo "$commit_message" | grep -qE "$pattern"; then
+# 使用 grep -P 来检查提交信息是否符合正则表达式
+if ! echo "$commit_message" | grep -P "$pattern"; then
     echo "🌥️ Commit message does not conform to the mumu commit format."
     echo "Please use the following format: "
     echo "<type>(<scope>): <subject>"
@@ -18,9 +19,9 @@ if ! echo "$commit_message" | grep -qE "$pattern"; then
     echo "<scope> may contain Chinese characters and should be lowercase."
     echo "<subject> should start with a capital letter and may contain Chinese characters."
     echo "It should also be a brief description (maximum 50 characters)."
-    echo "<type>(<scope>): <subject> part must be included"
+    echo "<type>(<scope>): <subject> part must be included."
     echo "<body>: this is optional, 72-character wrapped. This should answer: Why was this change necessary? How does it address the problem? Are there any side effects?"
-    echo "<footer>: this is optional, Include a link to the ticket, if any. eg: Closes #11, contains destructive updates, if any. eg: BREAKING CHANGE: destructive update content"
+    echo "<footer>: this is optional, include a link to the ticket, if any. e.g.: Closes #11, contains destructive updates, if any. e.g.: BREAKING CHANGE: destructive update content."
     exit 1
 fi
 
