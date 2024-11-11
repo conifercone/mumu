@@ -62,5 +62,7 @@ if [ $update_license_needed -eq 1 ]; then
   echo "🦉 Running Update license on changed Java or Kotlin files..."
   # 执行update_license脚本
   ./update_license.sh
+  # 暂存变更
+  git add .
   echo "🎉 License updated."
 fi
