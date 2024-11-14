@@ -4,16 +4,16 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 plugins {
-    id(libs.plugins.springboot.get().pluginId) version libs.versions.springbootVersion apply false
-    id(libs.plugins.lombok.get().pluginId) version libs.versions.lombokPluginVersion
-    id(libs.plugins.protobuf.get().pluginId) version libs.versions.protobufPluginVersion apply false
-    id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.signing.get().pluginId)
-    id(libs.plugins.projectReport.get().pluginId)
-    id(libs.plugins.checkstyle.get().pluginId)
-    id(libs.plugins.pmd.get().pluginId)
+    alias(libs.plugins.springboot) apply false
+    alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinPluginSpring)
+    alias(libs.plugins.kotlinPluginJpa)
+    alias(libs.plugins.signing)
+    alias(libs.plugins.projectReport)
+    alias(libs.plugins.checkstyle)
+    alias(libs.plugins.pmd)
 }
 
 
@@ -39,7 +39,6 @@ tasks.register<Copy>("installGitHooks") {
     }
 }
 
-@Suppress("UnstableApiUsage")
 val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()

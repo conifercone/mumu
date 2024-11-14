@@ -1,5 +1,5 @@
 plugins {
-    id(libs.plugins.flyway.get().pluginId) version libs.versions.flywayVersion
+    alias(libs.plugins.flyway)
 }
 
 dependencies {
