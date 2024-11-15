@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.domain.role;
 
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -67,11 +67,11 @@ public class Role extends BasisDomainModel {
   /**
    * 角色权限
    */
-  private List<Authority> authorities;
+  private List<Permission> permissions;
 
   /**
    * 角色权限后代
    */
-  private transient List<Authority> descendantAuthorities;
+  private transient List<Permission> descendantPermissions;
 
 }

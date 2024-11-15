@@ -36,5 +36,5 @@ public class RoleAddCmd {
   @NotBlank
   private String code;
 
-  private List<Long> authorityIds;
+  private List<Long> permissionIds;
 }

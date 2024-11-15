@@ -43,10 +43,10 @@ public class RoleFindAllSliceCo extends BaseClientObject {
 
   private String code;
 
-  private List<RoleFindAllSliceAuthorityCo> authorities;
+  private List<RoleFindAllSlicePermissionCo> permissions;
 
   @Data
-  public static class RoleFindAllSliceAuthorityCo {
+  public static class RoleFindAllSlicePermissionCo {
 
     /**
      * 权限id

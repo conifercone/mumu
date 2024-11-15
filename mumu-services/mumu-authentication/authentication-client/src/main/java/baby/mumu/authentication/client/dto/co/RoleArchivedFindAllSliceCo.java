@@ -42,10 +42,10 @@ public class RoleArchivedFindAllSliceCo extends BaseClientObject {
 
   private String code;
 
-  private List<RoleArchivedFindAllSliceAuthorityCo> authorities;
+  private List<RoleArchivedFindAllSlicePermissionCo> permissions;
 
   @Data
-  public static class RoleArchivedFindAllSliceAuthorityCo {
+  public static class RoleArchivedFindAllSlicePermissionCo {
 
     /**
      * 权限id

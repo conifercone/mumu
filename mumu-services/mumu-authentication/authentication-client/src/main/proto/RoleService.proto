@@ -22,10 +22,10 @@ message RoleFindAllGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  repeated RoleFindAllAuthorityGrpcCo authorities = 4;
+  repeated RoleFindAllPermissionGrpcCo permissions = 4;
 }
 
-message RoleFindAllAuthorityGrpcCo {
+message RoleFindAllPermissionGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;

@@ -67,7 +67,7 @@ public class RoleControllerTest {
     roleAddCmd.setId(451235432L);
     roleAddCmd.setName("测试角色");
     roleAddCmd.setCode("test_code");
-    roleAddCmd.setAuthorityIds(Arrays.asList(1L, 2L));
+    roleAddCmd.setPermissionIds(Arrays.asList(1L, 2L));
     mockMvc.perform(MockMvcRequestBuilders
         .post("/role/add").with(csrf())
         .content(objectMapper.writeValueAsBytes(roleAddCmd))

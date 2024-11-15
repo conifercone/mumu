@@ -34,7 +34,7 @@ public class RoleFindAllCmd {
 
   private String code;
 
-  private List<Long> authorityIds;
+  private List<Long> permissionIds;
 
   @Min(value = 1, message = "{current.validation.min.size}")
   private Integer current = 1;

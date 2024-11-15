@@ -34,7 +34,7 @@ message AccountRoleCurrentLoginQueryGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  repeated AccountRoleAuthorityCurrentLoginQueryGrpcCo authorities = 4;
+  repeated AccountRolePermissionCurrentLoginQueryGrpcCo permissions = 4;
 }
 
 message AccountAddressCurrentLoginQueryGrpcCo {
@@ -60,7 +60,7 @@ message AccountSystemSettingsCurrentLoginQueryGrpcCo {
 }
 
 
-message AccountRoleAuthorityCurrentLoginQueryGrpcCo{
+message AccountRolePermissionCurrentLoginQueryGrpcCo{
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;

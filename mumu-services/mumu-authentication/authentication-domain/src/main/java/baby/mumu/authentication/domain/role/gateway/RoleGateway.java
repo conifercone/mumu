@@ -92,10 +92,10 @@ public interface RoleGateway {
   /**
    * 查询角色(包含指定权限)
    *
-   * @param authorityId 权限id
+   * @param permissionId 权限id
    * @return 查询结果
    */
-  List<Role> findAllContainAuthority(Long authorityId);
+  List<Role> findAllContainPermission(Long permissionId);
 
   /**
    * 根据id归档

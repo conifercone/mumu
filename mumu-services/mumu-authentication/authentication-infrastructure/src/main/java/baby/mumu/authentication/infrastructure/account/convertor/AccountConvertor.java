@@ -512,10 +512,10 @@ public class AccountConvertor {
           .map(roles -> roles.stream().map(role -> {
             AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcCo(
               role);
-            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllAuthorities(
-              Optional.ofNullable(role.getAuthorities()).map(
+            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
+              Optional.ofNullable(role.getPermissions()).map(
                 accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
-                  .map(AccountMapper.INSTANCE::toAccountRoleAuthorityCurrentLoginQueryGrpcCo)
+                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcCo)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginCo.getAddresses())

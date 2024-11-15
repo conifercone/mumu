@@ -17,8 +17,8 @@ package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AccountAddressCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AccountRoleAuthorityCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRolePermissionCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
 import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
 import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
@@ -32,8 +32,8 @@ import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd.AccountAddressUp
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountAddressCurrentLoginQueryCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleAuthorityCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRoleCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountRolePermissionCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo.AccountSystemSettingsCurrentLoginQueryCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
@@ -162,8 +162,8 @@ public interface AccountMapper extends GrpcMapper {
     AccountRoleCurrentLoginQueryCo accountRoleCurrentLoginQueryCo);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRoleAuthorityCurrentLoginQueryGrpcCo toAccountRoleAuthorityCurrentLoginQueryGrpcCo(
-    AccountRoleAuthorityCurrentLoginQueryCo accountRoleAuthorityCurrentLoginQueryCo);
+  AccountRolePermissionCurrentLoginQueryGrpcCo toAccountRolePermissionCurrentLoginQueryGrpcCo(
+    AccountRolePermissionCurrentLoginQueryCo accountRolePermissionCurrentLoginQueryCo);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(

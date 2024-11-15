@@ -24,9 +24,9 @@ import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
@@ -386,7 +386,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-    RoleAuthorityRepository roleAuthorityRepository) {
+    RolePermissionRepository rolePermissionRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -433,13 +433,13 @@ public class AuthorizationConfiguration {
             Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
               .stream()
               .flatMap(
-                opt -> roleAuthorityRepository.findByRoleId(
+                opt -> rolePermissionRepository.findByRoleId(
                     opt.getId()).stream()
-                  .map(RoleAuthorityDo::getAuthority))
-              .collect(Collectors.toMap(AuthorityDo::getId, authorityDo -> authorityDo,
+                  .map(RolePermissionDo::getPermission))
+              .collect(Collectors.toMap(PermissionDo::getId, authorityDo -> authorityDo,
                 (existing, replacement) -> existing))
               .values()
-              .stream().map(AuthorityDo::getCode)
+              .stream().map(PermissionDo::getCode)
               .collect(Collectors.toSet());
             authorityCodesFromRoles.addAll(scopes);
             return authorityCodesFromRoles;

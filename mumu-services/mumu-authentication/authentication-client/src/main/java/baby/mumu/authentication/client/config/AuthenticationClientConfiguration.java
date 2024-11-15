@@ -16,7 +16,7 @@
 package baby.mumu.authentication.client.config;
 
 import baby.mumu.authentication.client.api.AccountGrpcService;
-import baby.mumu.authentication.client.api.AuthorityGrpcService;
+import baby.mumu.authentication.client.api.PermissionGrpcService;
 import baby.mumu.authentication.client.api.RoleGrpcService;
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -47,9 +47,9 @@ public class AuthenticationClientConfiguration {
   }
 
   @Bean
-  public AuthorityGrpcService authorityGrpcService(DiscoveryClient discoveryClient,
+  public PermissionGrpcService permissionGrpcService(DiscoveryClient discoveryClient,
     ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new AuthorityGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new PermissionGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean

@@ -27,20 +27,20 @@ import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.authority.convertor.AuthorityConvertor;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.AuthorityRepository;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.AuthorityRedisRepository;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.redis.dataobject.AuthorityRedisDo;
-import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDo;
-import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsDoId;
-import baby.mumu.authentication.infrastructure.relations.database.AuthorityPathsRepository;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDoId;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
-import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisDo;
-import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisRepository;
+import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.PermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsDoId;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDoId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisDo;
+import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
@@ -73,36 +73,36 @@ import org.springframework.stereotype.Component;
 @Component
 public class RoleConvertor {
 
-  private final AuthorityConvertor authorityConvertor;
+  private final PermissionConvertor permissionConvertor;
   private final RoleRepository roleRepository;
-  private final AuthorityRepository authorityRepository;
+  private final PermissionRepository permissionRepository;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final SimpleTextTranslation simpleTextTranslation;
   private final RoleArchivedRepository roleArchivedRepository;
-  private final RoleAuthorityRepository roleAuthorityRepository;
-  private final AuthorityRedisRepository authorityRedisRepository;
-  private final RoleAuthorityRedisRepository roleAuthorityRedisRepository;
-  private final AuthorityPathsRepository authorityPathsRepository;
+  private final RolePermissionRepository rolePermissionRepository;
+  private final PermissionRedisRepository permissionRedisRepository;
+  private final RolePermissionRedisRepository rolePermissionRedisRepository;
+  private final PermissionPathsRepository permissionPathsRepository;
 
   @Autowired
-  public RoleConvertor(AuthorityConvertor authorityConvertor, RoleRepository roleRepository,
-    AuthorityRepository authorityRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+  public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
+    PermissionRepository permissionRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     RoleArchivedRepository roleArchivedRepository,
-    RoleAuthorityRepository roleAuthorityRepository,
-    AuthorityRedisRepository authorityRedisRepository,
-    RoleAuthorityRedisRepository roleAuthorityRedisRepository,
-    AuthorityPathsRepository authorityPathsRepository) {
-    this.authorityConvertor = authorityConvertor;
+    RolePermissionRepository rolePermissionRepository,
+    PermissionRedisRepository permissionRedisRepository,
+    RolePermissionRedisRepository rolePermissionRedisRepository,
+    PermissionPathsRepository permissionPathsRepository) {
+    this.permissionConvertor = permissionConvertor;
     this.roleRepository = roleRepository;
-    this.authorityRepository = authorityRepository;
+    this.permissionRepository = permissionRepository;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.roleArchivedRepository = roleArchivedRepository;
-    this.roleAuthorityRepository = roleAuthorityRepository;
-    this.authorityRedisRepository = authorityRedisRepository;
-    this.roleAuthorityRedisRepository = roleAuthorityRedisRepository;
-    this.authorityPathsRepository = authorityPathsRepository;
+    this.rolePermissionRepository = rolePermissionRepository;
+    this.permissionRedisRepository = permissionRedisRepository;
+    this.rolePermissionRedisRepository = rolePermissionRedisRepository;
+    this.permissionPathsRepository = permissionPathsRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -110,71 +110,71 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleDo).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
-      setAuthorities(role, getAuthorityIds(role));
+      setAuthorities(role, getPermissionIds(role));
       return role;
     });
   }
 
-  private @NotNull List<Long> getAuthorityIds(@NotNull Role role) {
-    return roleAuthorityRedisRepository.findById(role.getId())
-      .map(RoleAuthorityRedisDo::getAuthorityIds).orElseGet(() -> {
-        List<Long> authorityIds = roleAuthorityRepository.findByRoleId(role.getId()).stream()
-          .map(RoleAuthorityDo::getId)
-          .map(RoleAuthorityDoId::getAuthorityId).distinct().collect(Collectors.toList());
-        roleAuthorityRedisRepository.save(new RoleAuthorityRedisDo(role.getId(), authorityIds));
-        return authorityIds;
+  private @NotNull List<Long> getPermissionIds(@NotNull Role role) {
+    return rolePermissionRedisRepository.findById(role.getId())
+      .map(RolePermissionRedisDo::getPermissionIds).orElseGet(() -> {
+        List<Long> permissionIds = rolePermissionRepository.findByRoleId(role.getId()).stream()
+          .map(RolePermissionDo::getId)
+          .map(RolePermissionDoId::getPermissionId).distinct().collect(Collectors.toList());
+        rolePermissionRedisRepository.save(new RolePermissionRedisDo(role.getId(), permissionIds));
+        return permissionIds;
       });
   }
 
-  private void setAuthorities(Role role, List<Long> authorityIds) {
+  private void setAuthorities(Role role, List<Long> permissionIds) {
     Optional.ofNullable(role).ifPresent(roleDataObject -> {
-      ArrayList<Authority> authorities = getAuthorities(
-        Optional.ofNullable(authorityIds).map(
-            authorityIdsNotNull -> authorityIdsNotNull.stream().distinct()
+      ArrayList<Permission> authorities = getAuthorities(
+        Optional.ofNullable(permissionIds).map(
+            permissionIdsNotNull -> permissionIdsNotNull.stream().distinct()
               .collect(Collectors.toList()))
           .orElse(new ArrayList<>()));
-      roleDataObject.setAuthorities(authorities);
-      roleDataObject.setDescendantAuthorities(
-        getAuthorities(authorityPathsRepository.findByAncestorIdIn(
-          authorities.stream().filter(Authority::isHasDescendant).map(Authority::getId)
-            .collect(Collectors.toList())).stream().map(AuthorityPathsDo::getId).map(
-          AuthorityPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
+      roleDataObject.setPermissions(authorities);
+      roleDataObject.setDescendantPermissions(
+        getAuthorities(permissionPathsRepository.findByAncestorIdIn(
+          authorities.stream().filter(Permission::isHasDescendant).map(Permission::getId)
+            .collect(Collectors.toList())).stream().map(PermissionPathsDo::getId).map(
+          PermissionPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
     });
   }
 
-  private @NotNull ArrayList<Authority> getAuthorities(List<Long> authorityIds) {
+  private @NotNull ArrayList<Permission> getAuthorities(List<Long> permissionIds) {
     // 查询缓存中存在的数据
-    List<AuthorityRedisDo> authorityRedisDos = authorityRedisRepository.findAllById(
-      authorityIds);
+    List<PermissionRedisDo> permissionRedisDos = permissionRedisRepository.findAllById(
+      permissionIds);
     // 缓存中存在的权限ID
-    List<Long> cachedCollectionOfAuthorityIDs = authorityRedisDos.stream()
-      .map(AuthorityRedisDo::getId)
+    List<Long> cachedCollectionOfPermissionIDs = permissionRedisDos.stream()
+      .map(PermissionRedisDo::getId)
       .collect(Collectors.toList());
     // 已缓存的权限
-    List<Authority> cachedCollectionOfAuthority = authorityRedisDos.stream()
-      .flatMap(authorityRedisDo -> authorityConvertor.toEntity(authorityRedisDo).stream())
+    List<Permission> cachedCollectionOfPermission = permissionRedisDos.stream()
+      .flatMap(permissionRedisDo -> permissionConvertor.toEntity(permissionRedisDo).stream())
       .collect(
         Collectors.toList());
     // 未缓存的权限
-    List<Authority> uncachedCollectionOfAuthority = Optional.of(
-        CollectionUtils.subtract(authorityIds, cachedCollectionOfAuthorityIDs))
+    List<Permission> uncachedCollectionOfPermission = Optional.of(
+        CollectionUtils.subtract(permissionIds, cachedCollectionOfPermissionIDs))
       .filter(CollectionUtils::isNotEmpty).map(
-        uncachedCollectionOfAuthorityId -> authorityRepository.findAllById(
-            uncachedCollectionOfAuthorityId)
+        uncachedCollectionOfPermissionId -> permissionRepository.findAllById(
+            uncachedCollectionOfPermissionId)
           .stream()
-          .flatMap(authorityDo -> authorityConvertor.toEntity(authorityDo).stream())
+          .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
           .collect(
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的权限放入缓存
-    if (CollectionUtils.isNotEmpty(uncachedCollectionOfAuthority)) {
-      authorityRedisRepository.saveAll(uncachedCollectionOfAuthority.stream()
-        .flatMap(authority -> authorityConvertor.toAuthorityRedisDo(authority).stream())
+    if (CollectionUtils.isNotEmpty(uncachedCollectionOfPermission)) {
+      permissionRedisRepository.saveAll(uncachedCollectionOfPermission.stream()
+        .flatMap(permission -> permissionConvertor.toPermissionRedisDo(permission).stream())
         .collect(
           Collectors.toList()));
     }
     // 合并已缓存和未缓存的权限
     return new ArrayList<>(
-      CollectionUtils.union(cachedCollectionOfAuthority, uncachedCollectionOfAuthority));
+      CollectionUtils.union(cachedCollectionOfPermission, uncachedCollectionOfPermission));
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
@@ -182,7 +182,7 @@ public class RoleConvertor {
     //noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedDo).map(roleArchivedDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
-      setAuthorities(role, getAuthorityIds(role));
+      setAuthorities(role, getPermissionIds(role));
       return role;
     });
   }
@@ -201,9 +201,9 @@ public class RoleConvertor {
         role.setId(primaryKeyGrpcService.snowflake());
         roleAddCmdNotNull.setId(role.getId());
       }
-      Optional.ofNullable(roleAddCmdNotNull.getAuthorityIds())
+      Optional.ofNullable(roleAddCmdNotNull.getPermissionIds())
         .filter(CollectionUtils::isNotEmpty)
-        .ifPresent(authorityIds -> setAuthorities(role, authorityIds));
+        .ifPresent(permissionIds -> setAuthorities(role, permissionIds));
       return role;
     });
   }
@@ -223,7 +223,7 @@ public class RoleConvertor {
           || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
           throw new MuMuException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
         }
-        Optional.ofNullable(roleUpdateCmdNotNull.getAuthorityIds())
+        Optional.ofNullable(roleUpdateCmdNotNull.getPermissionIds())
           .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
         return roleDomain;
       }));
@@ -233,8 +233,8 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RoleFindAllCmd roleFindAllCmd) {
     return Optional.ofNullable(roleFindAllCmd).map(RoleMapper.INSTANCE::toEntity).map(role -> {
-      if (CollectionUtils.isNotEmpty(roleFindAllCmd.getAuthorityIds())) {
-        setAuthorities(role, roleFindAllCmd.getAuthorityIds());
+      if (CollectionUtils.isNotEmpty(roleFindAllCmd.getPermissionIds())) {
+        setAuthorities(role, roleFindAllCmd.getPermissionIds());
       }
       return role;
     });
@@ -244,8 +244,8 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return Optional.ofNullable(roleFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
       .map(role -> {
-        if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getAuthorityIds())) {
-          setAuthorities(role, roleFindAllSliceCmd.getAuthorityIds());
+        if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getPermissionIds())) {
+          setAuthorities(role, roleFindAllSliceCmd.getPermissionIds());
         }
         return role;
       });
@@ -279,8 +279,8 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return Optional.ofNullable(roleArchivedFindAllCmd).map(RoleMapper.INSTANCE::toEntity)
       .map(role -> {
-        if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getAuthorityIds())) {
-          setAuthorities(role, roleArchivedFindAllCmd.getAuthorityIds());
+        if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getPermissionIds())) {
+          setAuthorities(role, roleArchivedFindAllCmd.getPermissionIds());
         }
         return role;
       });
@@ -290,8 +290,8 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return Optional.ofNullable(roleArchivedFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
       .map(role -> {
-        if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getAuthorityIds())) {
-          setAuthorities(role, roleArchivedFindAllSliceCmd.getAuthorityIds());
+        if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getPermissionIds())) {
+          setAuthorities(role, roleArchivedFindAllSliceCmd.getPermissionIds());
         }
         return role;
       });
@@ -301,7 +301,7 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleRedisDo roleRedisDo) {
     return Optional.ofNullable(roleRedisDo).map(RoleMapper.INSTANCE::toEntity)
       .map(role -> {
-        setAuthorities(role, getAuthorityIds(role));
+        setAuthorities(role, getPermissionIds(role));
         return role;
       });
   }
@@ -357,15 +357,15 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.1.0")
-  public List<RoleAuthorityDo> toRoleAuthorityDos(Role role) {
+  public List<RolePermissionDo> toRolePermissionDos(Role role) {
     return Optional.ofNullable(role).flatMap(roleNonNull -> Optional.ofNullable(
-      roleNonNull.getAuthorities())).map(authorities -> authorities.stream().map(authority -> {
-      RoleAuthorityDo roleAuthorityDo = new RoleAuthorityDo();
-      roleAuthorityDo.setId(RoleAuthorityDoId.builder().roleId(role.getId()).authorityId(
-        authority.getId()).build());
-      roleRepository.findById(role.getId()).ifPresent(roleAuthorityDo::setRole);
-      authorityRepository.findById(authority.getId()).ifPresent(roleAuthorityDo::setAuthority);
-      return roleAuthorityDo;
+      roleNonNull.getPermissions())).map(authorities -> authorities.stream().map(permission -> {
+      RolePermissionDo rolePermissionDo = new RolePermissionDo();
+      rolePermissionDo.setId(RolePermissionDoId.builder().roleId(role.getId()).permissionId(
+        permission.getId()).build());
+      roleRepository.findById(role.getId()).ifPresent(rolePermissionDo::setRole);
+      permissionRepository.findById(permission.getId()).ifPresent(rolePermissionDo::setPermission);
+      return rolePermissionDo;
     }).toList()).orElse(new ArrayList<>());
   }
 
@@ -389,10 +389,10 @@ public class RoleConvertor {
   public Optional<RoleFindAllGrpcCo> toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo) {
     return Optional.ofNullable(roleFindAllCo).map(RoleMapper.INSTANCE::toRoleFindAllGrpcCo)
       .map(roleFindAllGrpcCo ->
-        roleFindAllGrpcCo.toBuilder().addAllAuthorities(
-          Optional.ofNullable(roleFindAllCo.getAuthorities()).map(
-            authorities -> authorities.stream()
-              .map(RoleMapper.INSTANCE::toRoleFindAllAuthorityGrpcCo)
+        roleFindAllGrpcCo.toBuilder().addAllPermissions(
+          Optional.ofNullable(roleFindAllCo.getPermissions()).map(
+            permissions -> permissions.stream()
+              .map(RoleMapper.INSTANCE::toRoleFindAllPermissionGrpcCo)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
       );
   }

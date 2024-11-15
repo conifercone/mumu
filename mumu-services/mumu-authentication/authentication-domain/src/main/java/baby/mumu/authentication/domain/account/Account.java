@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.domain.account;
 
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
@@ -153,7 +153,7 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Override
   @JsonIgnore
-  public Collection<Authority> getAuthorities() {
+  public Collection<Permission> getAuthorities() {
     return Optional.ofNullable(this.roles)
       .orElse(Collections.emptyList())
       .stream()
@@ -161,16 +161,16 @@ public class Account extends BasisDomainModel implements UserDetails {
       .values()
       .stream()
       .flatMap(role -> {
-        if (CollectionUtils.isEmpty(role.getAuthorities())) {
+        if (CollectionUtils.isEmpty(role.getPermissions())) {
           return Stream.empty();
         }
         // 将角色权限去重
-        Set<Authority> authorities = new HashSet<>(
-          CollectionUtils.union(role.getAuthorities(), role.getDescendantAuthorities()).stream()
-            .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
+        Set<Permission> authorities = new HashSet<>(
+          CollectionUtils.union(role.getPermissions(), role.getDescendantPermissions()).stream()
+            .collect(Collectors.toMap(Permission::getCode, authority -> authority, (v1, v2) -> v1))
             .values());
         // 添加角色本身的权限
-        authorities.add(Authority.builder()
+        authorities.add(Permission.builder()
           .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
           .build());
         return authorities.stream();

@@ -36,5 +36,5 @@ public class RoleUpdateCmd {
   @NotBlankOrNull
   private String code;
 
-  private List<Long> authorityIds;
+  private List<Long> permissionIds;
 }
