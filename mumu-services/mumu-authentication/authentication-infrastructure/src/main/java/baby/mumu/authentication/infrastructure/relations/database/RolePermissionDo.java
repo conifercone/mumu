@@ -60,5 +60,4 @@ public class RolePermissionDo extends JpaBasisDefaultDataObject {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "permission_id", nullable = false)
   private PermissionDo permission;
-
 }
