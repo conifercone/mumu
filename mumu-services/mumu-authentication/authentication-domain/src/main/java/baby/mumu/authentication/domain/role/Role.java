@@ -20,6 +20,7 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -72,6 +73,6 @@ public class Role extends BasisDomainModel {
   /**
    * 角色权限后代
    */
-  private transient List<Permission> descendantPermissions;
+  private transient List<Permission> descendantPermissions = new ArrayList<>();
 
 }

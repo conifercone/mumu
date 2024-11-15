@@ -134,11 +134,15 @@ public class RoleConvertor {
               .collect(Collectors.toList()))
           .orElse(new ArrayList<>()));
       roleDataObject.setPermissions(authorities);
-      roleDataObject.setDescendantPermissions(
-        getAuthorities(permissionPathsRepository.findByAncestorIdIn(
-          authorities.stream().filter(Permission::isHasDescendant).map(Permission::getId)
-            .collect(Collectors.toList())).stream().map(PermissionPathsDo::getId).map(
-          PermissionPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
+      List<Long> ancestorIds = authorities.stream().filter(Permission::isHasDescendant)
+        .map(Permission::getId)
+        .collect(Collectors.toList());
+      if (CollectionUtils.isNotEmpty(ancestorIds)) {
+        roleDataObject.setDescendantPermissions(
+          getAuthorities(permissionPathsRepository.findByAncestorIdIn(
+            ancestorIds).stream().map(PermissionPathsDo::getId).map(
+            PermissionPathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
+      }
     });
   }
 
