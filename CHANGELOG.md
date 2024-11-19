@@ -16,6 +16,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [2.3.0] - 2024-11-19
+
+### Added
+
+- Added support for Japanese, Traditional Chinese, Korean, and Russian localization.
+- Added digital signature filter to prevent replay attacks.
+- Added gRPC interface to fetch permissions by ID.
+- Added exception handling to AuthorityFindByIdCmdExe.
+- Added idempotency extension feature.
+- Added formatted version number generation feature.
+- Added checkstyle plugin.
+- Added PMD plugin.
+- Added checkstyle and PMD GitHub workflows.
+- Added Git hook scripts.
+- Added lineage feature for permissions.
+
+### Changed
+
+- Optimized datasource extension configuration.
+- Improved signature verification logic.
+- Upgraded Gradle to version 8.11.
+- Upgraded com.aliyun:ocr_api20210707 to 3.1.2.
+- Upgraded com.deepl.api:deepl-java to 1.7.0.
+- Upgraded org.bytedeco:javacv-platform to 1.5.11.
+- Upgraded Flyway to 10.21.0.
+- Upgraded MapStruct to 1.6.3.
+- Upgraded io.hypersistence:hypersistence-utils-hibernate-63 to 3.9.0.
+- Upgraded gRPC to 1.68.1.
+- Upgraded com.redis.om:redis-om-spring to 0.9.7.
+- Upgraded io.minio:minio to 8.5.13.
+- Upgraded Protobuf to 4.28.3.
+- Upgraded Spring Boot to 3.3.5.
+- Upgraded org.apache.zookeeper:zookeeper to 3.9.3.
+
+### Fixed
+
+- Fixed missing banner information issue when starting the project in IntelliJ.
+- Fixed code standard issues.
+
 ## [2.2.0] - 2024-10-24
 
 ### Added
@@ -397,7 +436,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.2.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.3.0...develop
+[2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
