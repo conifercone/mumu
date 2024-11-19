@@ -23,6 +23,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -73,6 +74,7 @@ public class Role extends BasisDomainModel {
   /**
    * 角色权限后代
    */
+  @Builder.Default
   private transient List<Permission> descendantPermissions = new ArrayList<>();
 
 }
