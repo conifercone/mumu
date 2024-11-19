@@ -16,6 +16,45 @@
 
 ### 移除
 
+## [2.3.0] - 2024-11-19
+
+### 新增
+
+- 国际化新增日语、中文繁体、韩语、俄语支持。
+- 新增数字签名过滤器预防重放攻击。
+- 新增根据ID获取权限grpc接口。
+- AuthorityFindByIdCmdExe新增异常处理。
+- 新增幂等性拓展功能。
+- 新增格式化后版本号生成功能。
+- 新增checkstyle插件。
+- 新增pmd插件.
+- 新增checkstyle、pmd github workflow。
+- 新增git hook脚本。
+- 权限新增血缘关系功能。
+
+### 变更
+
+- 优化数据源拓展配置。
+- 优化签名验证逻辑。
+- gradle版本升级至8.11。
+- com.aliyun:ocr_api20210707升级至3.1.2。
+- com.deepl.api:deepl-java升级至1.7.0。
+- org.bytedeco:javacv-platform升级至1.5.11。
+- flyway升级至10.21.0。
+- mapstruct升级至1.6.3。
+- io.hypersistence:hypersistence-utils-hibernate-63升级至3.9.0。
+- grpc升级至1.68.1。
+- com.redis.om:redis-om-spring升级至0.9.7。
+- io.minio:minio升级至8.5.13。
+- protobuf升级至4.28.3。
+- springboot升级至3.3.5。
+- org.apache.zookeeper:zookeeper升级至3.9.3。
+
+### 修复
+
+- 修复Intellij启动项目banner信息缺失问题。
+- 修复代码规范问题。
+
 ## [2.2.0] - 2024-10-24
 
 ### 新增
@@ -381,7 +420,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.2.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.3.0...develop
+[2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
