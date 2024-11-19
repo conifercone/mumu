@@ -67,29 +67,29 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
       try {
         JsonNode messageTextJsonNode = objectMapper.readTree(messageText);
         long receiverAccountId = messageTextJsonNode.get(RECEIVER_ACCOUNT_ID)
-            .longValue();
+          .longValue();
         Optional.ofNullable(messageTextJsonNode.get(SENDER_ACCOUNT_ID))
-            .ifPresentOrElse(senderAccountStringId -> {
-              long senderAccountId = senderAccountStringId.longValue();
-              ConcurrentHashMap<Long, Channel> longChannelConcurrentHashMap = messageProperties.getWebSocket()
-                  .getAccountSubscriptionChannelMap()
-                  .computeIfAbsent(receiverAccountId, key -> new ConcurrentHashMap<>());
-              longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, key -> ctx.channel());
-              // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
-              AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
-              ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
-              AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
-              ctx.channel().attr(receiverAccountIdKey)
-                  .setIfAbsent(String.valueOf(receiverAccountId));
-            }, () -> {
-              messageProperties.getWebSocket()
-                  .getAccountBroadcastChannelMap()
-                  .computeIfAbsent(receiverAccountId, key -> ctx.channel());
-              // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
-              AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
-              ctx.channel().attr(receiverAccountIdKey)
-                  .setIfAbsent(String.valueOf(receiverAccountId));
-            });
+          .ifPresentOrElse(senderAccountStringId -> {
+            long senderAccountId = senderAccountStringId.longValue();
+            ConcurrentHashMap<Long, Channel> longChannelConcurrentHashMap = messageProperties.getWebSocket()
+              .getAccountSubscriptionChannelMap()
+              .computeIfAbsent(receiverAccountId, key -> new ConcurrentHashMap<>());
+            longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, key -> ctx.channel());
+            // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+            AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
+            ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
+            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+            ctx.channel().attr(receiverAccountIdKey)
+              .setIfAbsent(String.valueOf(receiverAccountId));
+          }, () -> {
+            messageProperties.getWebSocket()
+              .getAccountBroadcastChannelMap()
+              .computeIfAbsent(receiverAccountId, key -> ctx.channel());
+            // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+            ctx.channel().attr(receiverAccountIdKey)
+              .setIfAbsent(String.valueOf(receiverAccountId));
+          });
       } catch (Exception e) {
         throw new MuMuException(ResponseCode.WEBSOCKET_SERVER_CONNECTION_FAILED);
       }
@@ -113,14 +113,14 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     AttributeKey<String> senderAccountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
     AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
     Optional.ofNullable(ctx.channel().attr(receiverAccountIdKey).get())
-        .ifPresent(
-            receiverAccountId -> Optional.ofNullable(ctx.channel().attr(senderAccountIdKey).get())
-                .ifPresentOrElse(
-                    senderAccountId -> messageProperties.getWebSocket()
-                        .getAccountSubscriptionChannelMap()
-                        .get(Long.parseLong(receiverAccountId))
-                        .remove(Long.parseLong(senderAccountId)),
-                    () -> messageProperties.getWebSocket().getAccountBroadcastChannelMap()
-                        .remove(Long.parseLong(receiverAccountId))));
+      .ifPresent(
+        receiverAccountId -> Optional.ofNullable(ctx.channel().attr(senderAccountIdKey).get())
+          .ifPresentOrElse(
+            senderAccountId -> messageProperties.getWebSocket()
+              .getAccountSubscriptionChannelMap()
+              .get(Long.parseLong(receiverAccountId))
+              .remove(Long.parseLong(senderAccountId)),
+            () -> messageProperties.getWebSocket().getAccountBroadcastChannelMap()
+              .remove(Long.parseLong(receiverAccountId))));
   }
 }

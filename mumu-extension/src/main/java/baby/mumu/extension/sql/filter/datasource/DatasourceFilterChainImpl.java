@@ -40,7 +40,7 @@ public class DatasourceFilterChainImpl implements DatasourceFilterChain {
 
   @Override
   public DataSource doAfterFilter(DataSource dataSource,
-      ExtensionProperties extensionProperties) {
+    ExtensionProperties extensionProperties) {
     if (!filters.isEmpty()) {
       for (DataSourceFilter filter : filters) {
         dataSource = filter.afterCreate(dataSource, extensionProperties);

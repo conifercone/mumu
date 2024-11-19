@@ -40,7 +40,7 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
    */
   @Override
   public String formatMessage(int connectionId, String now, long elapsed, String category,
-      String prepared, String sql, String url) {
+    String prepared, String sql, String url) {
     String templateStart = "====>";
     String templateEnd = "\n";
     //耗时格式化模板
@@ -52,8 +52,8 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
     //当前时间
     String nowFormatTemplate = templateStart + "now:[%s]" + templateEnd;
     return !Strings.isNullOrEmpty(sql) ? templateEnd + String.format(timeConsumingFormatTemplate,
-        elapsed) + String.format(nowFormatTemplate,
-        now) + String.format(sqlFormatTemplate, sql.replaceAll("\\s+", " ")) + String.format(
-        datasourceFormatTemplate, url) : "";
+      elapsed) + String.format(nowFormatTemplate,
+      now) + String.format(sqlFormatTemplate, sql.replaceAll("\\s+", " ")) + String.format(
+      datasourceFormatTemplate, url) : "";
   }
 }

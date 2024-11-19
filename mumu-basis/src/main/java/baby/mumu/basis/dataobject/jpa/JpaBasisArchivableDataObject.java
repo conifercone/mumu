@@ -33,7 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 public class JpaBasisArchivableDataObject extends JpaBasisDefaultDataObject implements
-    ArchivableDataObject {
+  ArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = -382042388255526616L;

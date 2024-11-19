@@ -15,6 +15,8 @@
  */
 package baby.mumu.unique.infrastructure.qrcode.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import baby.mumu.unique.domain.qrcode.gateway.QRCodeGateway;
 import com.google.common.base.Charsets;
@@ -27,7 +29,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -43,19 +45,19 @@ public class QRCodeGatewayImpl implements QRCodeGateway {
   @Override
   public byte[] generate(QRCode qrCode) {
     return Optional.ofNullable(qrCode).map(qrCodeModel -> {
-      Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
+      HashMap<EncodeHintType, Object> hints = new HashMap<>();
       hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
       hints.put(EncodeHintType.CHARACTER_SET, Charsets.UTF_8.name());
       hints.put(EncodeHintType.MARGIN, 1);
       QRCodeWriter qrCodeWriter = new QRCodeWriter();
       try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
         BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeModel.getContent(), BarcodeFormat.QR_CODE,
-            qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
+          qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
         MatrixToImageWriter.writeToStream(bitMatrix, qrCodeModel.getImageFormat().getExtension(),
-            os);
+          os);
         return os.toByteArray();
       } catch (IOException | WriterException e) {
-        throw new RuntimeException(e);
+        throw new MuMuException(ResponseCode.QR_CODE_GENERATION_FAILED);
       }
     }).orElse(new byte[0]);
   }

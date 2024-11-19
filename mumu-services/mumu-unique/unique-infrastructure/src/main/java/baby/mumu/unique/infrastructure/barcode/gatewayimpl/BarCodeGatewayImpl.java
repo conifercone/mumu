@@ -15,6 +15,8 @@
  */
 package baby.mumu.unique.infrastructure.barcode.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.barcode.BarCode;
 import baby.mumu.unique.domain.barcode.gateway.BarCodeGateway;
 import com.google.common.base.Charsets;
@@ -33,7 +35,7 @@ import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
@@ -54,21 +56,21 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   @Override
   public byte[] generate(BarCode barCode) {
     return Optional.ofNullable(barCode).map(barCodeModel -> {
-      Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
+      HashMap<EncodeHintType, Object> hints = new HashMap<>();
       hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
       hints.put(EncodeHintType.CHARACTER_SET, Charsets.UTF_8.name());
       Code128Writer code128Writer = new Code128Writer();
       try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
         BitMatrix bitMatrix = code128Writer.encode(barCodeModel.getContent(),
-            BarcodeFormat.CODE_128,
-            barCodeModel.getWidth(), barCodeModel.getHeight(), hints);
+          BarcodeFormat.CODE_128,
+          barCodeModel.getWidth(), barCodeModel.getHeight(), hints);
         BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
         BufferedImage finalImage = this.insertWords(bufferedImage, barCode);
         Assert.notNull(finalImage, "BufferedImage is null");
         ImageIO.write(finalImage, barCode.getImageFormat().getExtension(), os);
         return os.toByteArray();
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        throw new MuMuException(ResponseCode.BARCODE_GENERATION_FAILED);
       }
     }).orElse(new byte[0]);
   }
@@ -76,7 +78,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
   private @Nullable BufferedImage insertWords(BufferedImage image, @NotNull BarCode barCode) {
     if (StringUtils.isNotBlank(barCode.getFootContent())) {
       BufferedImage outImage = new BufferedImage(barCode.getWidth(), barCode.getHeight() + 20,
-          BufferedImage.TYPE_INT_RGB);
+        BufferedImage.TYPE_INT_RGB);
       Graphics2D g2d = outImage.createGraphics();
       // 抗锯齿
       this.setGraphics2D(g2d);
@@ -113,7 +115,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     // 消除文字锯齿
     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_DEFAULT);
     Stroke s = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
     g2d.setStroke(s);

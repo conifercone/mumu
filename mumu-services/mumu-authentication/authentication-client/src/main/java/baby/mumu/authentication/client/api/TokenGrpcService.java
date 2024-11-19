@@ -43,8 +43,8 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
   private ManagedChannel channel;
 
   public TokenGrpcService(
-      DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
@@ -56,16 +56,16 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
   @API(status = Status.STABLE, since = "1.0.0")
   public TokenValidityGrpcCo validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return validityFromGrpc(tokenValidityGrpcCmd);
-        })
-        .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return validityFromGrpc(tokenValidityGrpcCmd);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private @Nullable TokenValidityGrpcCo validityFromGrpc(
-      TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+    TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     TokenServiceBlockingStub tokenServiceBlockingStub = TokenServiceGrpc.newBlockingStub(channel);
     return tokenServiceBlockingStub.validity(tokenValidityGrpcCmd);
   }

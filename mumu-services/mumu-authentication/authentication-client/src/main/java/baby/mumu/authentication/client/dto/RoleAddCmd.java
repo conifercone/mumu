@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.RoleAddCo;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -28,6 +28,13 @@ import lombok.Data;
 @Data
 public class RoleAddCmd {
 
-  @Valid
-  private RoleAddCo roleAddCo;
+  private Long id;
+
+  @NotBlank
+  private String name;
+
+  @NotBlank
+  private String code;
+
+  private List<Long> permissionIds;
 }

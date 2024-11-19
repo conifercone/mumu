@@ -64,14 +64,14 @@ public class JpaMongodbBasisDefaultDataObject implements DataObject {
   @Override
   public OffsetDateTime getCreationTime() {
     return Optional.ofNullable(creationTime)
-        .map(creationTimeNotNull -> OffsetDateTime.of(creationTimeNotNull, ZoneOffset.UTC))
-        .orElse(null);
+      .map(creationTimeNotNull -> OffsetDateTime.of(creationTimeNotNull, ZoneOffset.UTC))
+      .orElse(null);
   }
 
   @Override
   public OffsetDateTime getModificationTime() {
     return Optional.ofNullable(modificationTime)
-        .map(modificationTimeNotNull -> OffsetDateTime.of(modificationTimeNotNull, ZoneOffset.UTC))
-        .orElse(null);
+      .map(modificationTimeNotNull -> OffsetDateTime.of(modificationTimeNotNull, ZoneOffset.UTC))
+      .orElse(null);
   }
 }

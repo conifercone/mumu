@@ -41,7 +41,7 @@ public class TemplateMailSendCmdExe {
 
   @Autowired
   public TemplateMailSendCmdExe(TemplateMailGateway templateMailGateway,
-      TemplateMailConvertor templateMailConvertor) {
+    TemplateMailConvertor templateMailConvertor) {
     this.templateMailGateway = templateMailGateway;
     this.templateMailConvertor = templateMailConvertor;
   }
@@ -52,6 +52,6 @@ public class TemplateMailSendCmdExe {
       templateMailSendCmd.getTemplateMailSendCo().setFrom(username);
     }
     templateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())
-        .ifPresent(templateMailGateway::sendMail);
+      .ifPresent(templateMailGateway::sendMail);
   }
 }

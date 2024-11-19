@@ -37,17 +37,17 @@ public class CountryGetStateCitiesByIdCmdExe {
 
   @Autowired
   public CountryGetStateCitiesByIdCmdExe(CountryGateway countryGateway,
-      CountryConvertor countryConvertor) {
+    CountryConvertor countryConvertor) {
     this.countryGateway = countryGateway;
     this.countryConvertor = countryConvertor;
   }
 
   public CountryGetStateCitiesByIdCo execute(
-      Long id) {
+    Long id) {
     Assert.notNull(id, "id cannot be null");
     return Optional.of(id)
-        .flatMap(countryGateway::getStateCitiesById)
-        .flatMap(countryConvertor::toCountryGetStateCitiesByIdCo)
-        .orElse(null);
+      .flatMap(countryGateway::getStateCitiesById)
+      .flatMap(countryConvertor::toCountryGetStateCitiesByIdCo)
+      .orElse(null);
   }
 }

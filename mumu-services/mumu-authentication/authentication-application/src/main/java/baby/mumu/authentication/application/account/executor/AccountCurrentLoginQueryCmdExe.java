@@ -39,14 +39,14 @@ public class AccountCurrentLoginQueryCmdExe {
 
   @Autowired
   public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway,
-      AccountConvertor accountConvertor) {
+    AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   public AccountCurrentLoginCo execute() {
     return accountGateway.queryCurrentLoginAccount()
-        .flatMap(accountConvertor::toCurrentLoginQueryCo)
+      .flatMap(accountConvertor::toCurrentLoginQueryCo)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

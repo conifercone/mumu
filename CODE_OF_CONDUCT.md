@@ -1,7 +1,10 @@
 # Contributor Covenant Code of Conduct
 
-- [简体中文](CODE_OF_CONDUCT.zh_CN.md)
+- [简体中文](docs/CODE_OF_CONDUCT.zh_CN.md)
+- [繁體中文](docs/CODE_OF_CONDUCT.zh_TW.md)
 - [English](CODE_OF_CONDUCT.md)
+- [日本語](docs/CODE_OF_CONDUCT.ja.md)
+- [한국어](docs/CODE_OF_CONDUCT.ko.md)
 
 ## Our Pledge
 
@@ -109,7 +112,7 @@ Violating these terms may lead to a permanent ban.
 ### 4. Permanent Ban
 
 **Community Impact**: Demonstrating a pattern of violation of community
-standards, including sustained inappropriate behavior,  harassment of an
+standards, including sustained inappropriate behavior, harassment of an
 individual, or aggression toward or disparagement of classes of individuals.
 
 **Consequence**: A permanent ban from any sort of public interaction within

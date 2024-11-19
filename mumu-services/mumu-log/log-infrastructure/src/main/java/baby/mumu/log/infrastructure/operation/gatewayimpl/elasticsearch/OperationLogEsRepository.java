@@ -25,6 +25,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * @since 1.0.0
  */
 public interface OperationLogEsRepository extends
-    ElasticsearchRepository<OperationLogEsDo, String> {
+  ElasticsearchRepository<OperationLogEsDo, String> {
 
 }

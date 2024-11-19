@@ -29,11 +29,11 @@ import org.slf4j.LoggerFactory;
 @Metamodel(projectVersion = true, projectName = true)
 public class ProjectInformationPrint {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(ProjectInformationPrint.class);
+  private final Logger logger = LoggerFactory.getLogger(ProjectInformationPrint.class);
 
   @PostConstruct
   public void run() {
-    LOGGER.info(":: {} :: {}", ProjectInformationPrintMetamodel.projectName,
-        ProjectInformationPrintMetamodel.projectVersion);
+    logger.info(":: {} :: {}", ProjectInformationPrintMetamodel.projectName,
+      ProjectInformationPrintMetamodel.projectVersion);
   }
 }

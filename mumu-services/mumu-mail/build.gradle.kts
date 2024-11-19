@@ -20,4 +20,5 @@ dependencies {
     implementation(libs.spring.boot.starter.thymeleaf)
     implementation(libs.jasypt)
     implementation(libs.swagger3Ui)
+    annotationProcessor(project(":mumu-processor"))
 }

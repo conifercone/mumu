@@ -42,6 +42,6 @@ public class AccountDisableCmdExe {
   public void execute(Long id) {
     Assert.notNull(id, "id cannot be null");
     Optional.of(id)
-        .ifPresent(accountGateway::disable);
+      .ifPresent(accountGateway::disable);
   }
 }

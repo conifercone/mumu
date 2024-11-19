@@ -21,7 +21,7 @@ import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,16 +41,18 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
 
   @Autowired
   public AccountRegisterCmdExe(AccountGateway accountGateway,
-      CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
+    CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
     super(captchaGrpcService);
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public void execute(@NotNull AccountRegisterCmd accountRegisterCmd) {
-    verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
-    accountConvertor.toEntity(accountRegisterCmd.getAccountRegisterCo())
-        .ifPresent(accountGateway::register);
+  public void execute(AccountRegisterCmd accountRegisterCmd) {
+    Optional.ofNullable(accountRegisterCmd).flatMap(accountConvertor::toEntity)
+      .ifPresent(account -> {
+        verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
+        accountGateway.register(account);
+      });
   }
 }

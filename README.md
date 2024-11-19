@@ -1,7 +1,10 @@
 ![mumu](./logo.svg)
 
-- [简体中文](README.zh_CN.md)
+- [简体中文](docs/README.zh_CN.md)
+- [繁體中文](docs/README.zh_TW.md)
 - [English](README.md)
+- [日本語](docs/README.ja.md)
+- [한국어](docs/README.ko.md)
 
 # mumu
 
@@ -16,9 +19,12 @@
 [![GitHub language count](https://img.shields.io/github/languages/count/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
 ![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/dependency-submission.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
 [![Slack](https://img.shields.io/badge/Slack-Join%20Our%20Community-green)](https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/conifercone/mumu)
+![GitHub contributors](https://img.shields.io/github/contributors/conifercone/mumu)
 
 ## Content list
 
@@ -30,6 +36,15 @@
 - [Contributors](#contributors)
 
 ## Projects
+
+> Although there are many mature backend management systems on the market,
+> my strong preference for clean code has made it difficult to find a suitable project.
+> So, I decided to create my own open-source backend management system that is both clean and
+> feature-complete.
+> This led to the creation of "mumu," named after my son (沐沐).
+> Just as I hope for my child's healthy growth, I also wish for the mumu project to thrive.
+> For as long as I live, this project will remain free and open-source for both individuals
+> and organizations to use without any charges.
 
 ### 🎉 The Delightfully Clean & Ready-to-Go Management System! 🎉
 
@@ -49,52 +64,17 @@ Join the fun of effortless management and wave goodbye to chaos! Let’s make ma
 
 ```text
 mumu
-│  ├─ 📂 mumu-services -- mumu services
-│  │  ├─ 📂 mumu-authentication -- authentication service
-│  │  │  │- 📂 authentication-adapter -- authentication service adaptation layer
-│  │  │  │- 📂 authentication-application -- authentication service application layer
-│  │  │  │- 📂 authentication-client -- authentication service client
-│  │  │  │- 📂 authentication-domain -- authentication service domain layer
-│  │  │  │- 📂 authentication-infrastructure -- authentication service infrastructure layer
-│  │  │─ 📂 mumu-file -- file service
-│  │  │  │- 📂 file-adapter -- file service adaptation layer
-│  │  │  │- 📂 file-application -- file service application layer
-│  │  │  │- 📂 file-client -- file service client
-│  │  │  │- 📂 file-domain -- file service domain layer
-│  │  │  │- 📂 file-infrastructure -- file service infrastructure layer
-│  │  │─ 📂 mumu-log -- log service
-│  │  │  │- 📂 log-adapter -- log service adaptation layer
-│  │  │  │- 📂 log-application -- log service application layer
-│  │  │  │- 📂 log-client -- log service client
-│  │  │  │- 📂 log-domain -- log service domain layer
-│  │  │  │- 📂 log-infrastructure -- log service infrastructure layer
-│  │  │─ 📂 mumu-mail -- mail service
-│  │  │  │- 📂 mail-adapter -- mail service adaptation layer
-│  │  │  │- 📂 mail-application -- mail service application layer
-│  │  │  │- 📂 mail-client -- mail service client
-│  │  │  │- 📂 mail-domain -- mail service domain layer
-│  │  │  │- 📂 mail-infrastructure -- mail service infrastructure layer
-│  │  │─ 📂 mumu-message -- message service
-│  │  │  │- 📂 message-adapter -- message service adaptation layer
-│  │  │  │- 📂 message-application -- message service application layer
-│  │  │  │- 📂 message-client -- message service client
-│  │  │  │- 📂 message-domain -- message service domain layer
-│  │  │  │- 📂 message-infrastructure -- message service infrastructure layer
-│  │  │─ 📂 mumu-sms -- sms service
-│  │  │  │- 📂 sms-adapter -- sms service adaptation layer
-│  │  │  │- 📂 sms-application -- sms service application layer
-│  │  │  │- 📂 sms-client -- sms service client
-│  │  │  │- 📂 sms-domain -- sms service domain layer
-│  │  │  │- 📂 sms-infrastructure -- sms service infrastructure layer
-│  │  │─ 📂 mumu-unique -- unique data generation service
-│  │  │  │- 📂 unique-adapter -- unique data generation service adaptation layer
-│  │  │  │- 📂 unique-application -- unique data generation service application layer
-│  │  │  │- 📂 unique-client -- unique data generation service client
-│  │  │  │- 📂 unique-domain -- unique data generation service domain layer
-│  │  │  │- 📂 unique-infrastructure -- Unique data generation service infrastructure layer
-│  │─ 📂 mumu-basis -- basic module
-│  │─ 📂 mumu-extension -- expansion module
-│  │─ 📂 mumu-processor -- processor module
+├── mumu-services
+│   ├── mumu-authentication
+│   ├── mumu-file
+│   ├── mumu-log
+│   ├── mumu-mail
+│   ├── mumu-message
+│   ├── mumu-sms
+│   └── mumu-unique
+├── mumu-basis
+├── mumu-extension
+└── mumu-processor
 ```
 
 ## Build

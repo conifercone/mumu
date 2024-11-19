@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2.2.0
  */
 public interface RoleRedisRepository extends
-    RedisDocumentRepository<RoleRedisDo, Long> {
+  RedisDocumentRepository<RoleRedisDo, Long> {
 
   List<RoleRedisDo> findByCodeIn(List<String> codes);
 }

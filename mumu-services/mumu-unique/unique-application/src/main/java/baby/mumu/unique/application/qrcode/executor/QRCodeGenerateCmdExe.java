@@ -43,6 +43,6 @@ public class QRCodeGenerateCmdExe {
   public byte[] execute(QRCodeGenerateCmd qrCodeGenerateCmd) {
     Assert.notNull(qrCodeGenerateCmd, "QRCodeGenerateCmd must not be null");
     return qrCodeConvertor.toEntity(qrCodeGenerateCmd)
-        .map(qrCodeGateway::generate).orElse(new byte[0]);
+      .map(qrCodeGateway::generate).orElse(new byte[0]);
   }
 }

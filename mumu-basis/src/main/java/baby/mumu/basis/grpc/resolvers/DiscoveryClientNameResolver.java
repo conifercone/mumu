@@ -64,22 +64,26 @@ public class DiscoveryClientNameResolver extends NameResolver {
 
   private void init() {
     listener.onResult(ResolutionResult.newBuilder()
-        .setAddresses(fetchAddresses())
-        .setAttributes(Attributes.EMPTY)
-        .build());
+      .setAddresses(fetchAddresses())
+      .setAttributes(Attributes.EMPTY)
+      .build());
   }
 
+  /**
+   * This method is intentionally left blank because No operation needed for this implementation.
+   */
   @Override
   public void shutdown() {
+    // No operation needed for this implementation.
   }
 
   @Contract(" -> new")
   private @NotNull @Unmodifiable List<EquivalentAddressGroup> fetchAddresses() {
     return List.of(new EquivalentAddressGroup(Optional.ofNullable(
-            discoveryClient.getInstances(serviceName)).map(
-            serviceInstances -> serviceInstances.stream().map(
-                serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
-                    serviceInstance.getPort())).collect(Collectors.toList()))
-        .orElse(new ArrayList<>())));
+        discoveryClient.getInstances(serviceName)).map(
+        serviceInstances -> serviceInstances.stream().map(
+          serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
+            serviceInstance.getPort())).collect(Collectors.toList()))
+      .orElse(new ArrayList<>())));
   }
 }

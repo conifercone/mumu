@@ -30,7 +30,27 @@ public enum LanguageEnum {
   ZH,
 
   /**
-   * 英语
+   * 漢語（中文繁體）
+   */
+  ZH_TW,
+
+  /**
+   * 日本語
+   */
+  JA,
+
+  /**
+   * 한국인
+   */
+  KO,
+
+  /**
+   * Русский
+   */
+  RU,
+
+  /**
+   * English
    */
   EN
 }

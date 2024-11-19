@@ -16,14 +16,12 @@
 package baby.mumu.authentication.application.role.executor;
 
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 角色更新指令执行器
@@ -44,10 +42,8 @@ public class RoleUpdateCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public void execute(@NotNull RoleUpdateCmd roleUpdateCmd) {
-    Assert.notNull(roleUpdateCmd, "RoleUpdateCmd cannot be null");
-    Assert.notNull(roleUpdateCmd.getRoleUpdateCo(), "RoleUpdateCo cannot be null");
-    Role role = roleConvertor.toEntity(roleUpdateCmd.getRoleUpdateCo()).orElse(null);
-    roleGateway.updateById(role);
+  public void execute(RoleUpdateCmd roleUpdateCmd) {
+    Optional.ofNullable(roleUpdateCmd).flatMap(roleConvertor::toEntity)
+      .ifPresent(roleGateway::updateById);
   }
 }

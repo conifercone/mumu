@@ -43,26 +43,26 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
 
   @Autowired
   public SubscriptionTextMessageFindAllYouSendCmdExe(
-      SubscriptionTextMessageGateway subscriptionTextMessageGateway,
-      SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
+    SubscriptionTextMessageGateway subscriptionTextMessageGateway,
+    SubscriptionTextMessageConvertor subscriptionTextMessageConvertor) {
     this.subscriptionTextMessageGateway = subscriptionTextMessageGateway;
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
   public Page<SubscriptionTextMessageFindAllYouSendCo> execute(
-      @NotNull SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    @NotNull SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     Assert.notNull(subscriptionTextMessageFindAllYouSendCmd,
-        "SubscriptionTextMessageFindAllYouSendCmd cannot null");
+      "SubscriptionTextMessageFindAllYouSendCmd cannot null");
     Page<SubscriptionTextMessage> allYouSend = subscriptionTextMessageGateway.findAllYouSend(
-        subscriptionTextMessageConvertor.toEntity(subscriptionTextMessageFindAllYouSendCmd)
-            .orElse(null),
-        subscriptionTextMessageFindAllYouSendCmd.getCurrent(),
-        subscriptionTextMessageFindAllYouSendCmd.getPageSize());
+      subscriptionTextMessageConvertor.toEntity(subscriptionTextMessageFindAllYouSendCmd)
+        .orElse(null),
+      subscriptionTextMessageFindAllYouSendCmd.getCurrent(),
+      subscriptionTextMessageFindAllYouSendCmd.getPageSize());
     List<SubscriptionTextMessageFindAllYouSendCo> subscriptionTextMessageFindAllYouSendCos = allYouSend.getContent()
-        .stream()
-        .map(subscriptionTextMessageConvertor::toFindAllYouSendCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .stream()
+      .map(subscriptionTextMessageConvertor::toFindAllYouSendCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllYouSendCos, allYouSend.getPageable(),
-        allYouSend.getTotalElements());
+      allYouSend.getTotalElements());
   }
 }

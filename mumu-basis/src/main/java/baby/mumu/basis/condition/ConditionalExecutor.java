@@ -43,7 +43,7 @@ public class ConditionalExecutor {
 
   @Contract("_, _ -> new")
   public static <T> @NotNull ConditionalExecutor of(@NotNull Predicate<T> predicate,
-      @NotNull Supplier<T> supplier) {
+    @NotNull Supplier<T> supplier) {
     return new ConditionalExecutor(predicate.test(supplier.get()));
   }
 
@@ -63,7 +63,7 @@ public class ConditionalExecutor {
   }
 
   public <T> ConditionalExecutor condition(@NotNull Predicate<T> predicate,
-      @NotNull Supplier<T> supplier) {
+    @NotNull Supplier<T> supplier) {
     this.condition = predicate.test(supplier.get());
     return this;
   }

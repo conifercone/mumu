@@ -13,4 +13,5 @@ dependencies {
     testImplementation(libs.spring.web)
     implementation(libs.jasypt)
     implementation(libs.swagger3Ui)
+    annotationProcessor(project(":mumu-processor"))
 }

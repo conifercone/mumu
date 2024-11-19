@@ -15,6 +15,8 @@
  */
 package baby.mumu.unique.infrastructure.country.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.country.City;
 import baby.mumu.unique.domain.country.Country;
 import baby.mumu.unique.domain.country.State;
@@ -83,15 +85,15 @@ public class CountryGatewayImpl implements CountryGateway {
   @Override
   public List<State> getStatesByCountryId(Long countryId) {
     return Optional.ofNullable(countryId)
-        .map(countryIdNonNull -> countryIdMappingStates.getOrDefault(countryId, new ArrayList<>()))
-        .orElse(new ArrayList<>());
+      .map(countryIdNonNull -> countryIdMappingStates.getOrDefault(countryId, new ArrayList<>()))
+      .orElse(new ArrayList<>());
   }
 
   @Override
   public List<City> getCitiesByStateId(Long stateId) {
     return Optional.ofNullable(stateId)
-        .map(stateIdNonNull -> stateIdMappingCities.getOrDefault(stateIdNonNull, new ArrayList<>()))
-        .orElse(new ArrayList<>());
+      .map(stateIdNonNull -> stateIdMappingCities.getOrDefault(stateIdNonNull, new ArrayList<>()))
+      .orElse(new ArrayList<>());
   }
 
   @Override
@@ -116,33 +118,33 @@ public class CountryGatewayImpl implements CountryGateway {
       this.countriesStatesCities = objectMapper.readValue(inputStream, new TypeReference<>() {
       });
       this.countries = this.countriesStatesCities.stream().map(SerializationUtils::clone)
-          .peek(country -> country.setStates(null))
-          .toList();
+        .peek(country -> country.setStates(null))
+        .toList();
       this.stateIdMappingStateCities = this.countriesStatesCities.stream()
-          .flatMap(country -> country.getStates().stream())
-          .collect(Collectors.toMap(State::getId, state -> state));
+        .flatMap(country -> country.getStates().stream())
+        .collect(Collectors.toMap(State::getId, state -> state));
       this.stateIdMappingState = this.countriesStatesCities.stream().map(SerializationUtils::clone)
-          .flatMap(country -> country.getStates().stream())
-          .collect(Collectors.toMap(State::getId, state -> {
-            state.setCities(null);
-            return state;
-          }));
+        .flatMap(country -> country.getStates().stream())
+        .collect(Collectors.toMap(State::getId, state -> {
+          state.setCities(null);
+          return state;
+        }));
       this.cityIdMappingCity = this.countriesStatesCities.stream()
-          .flatMap(country -> country.getStates().stream())
-          .flatMap(state -> state.getCities().stream())
-          .collect(Collectors.toMap(City::getId, city -> city));
+        .flatMap(country -> country.getStates().stream())
+        .flatMap(state -> state.getCities().stream())
+        .collect(Collectors.toMap(City::getId, city -> city));
       this.countryIdMappingStates = this.countriesStatesCities.stream().parallel()
-          .collect(Collectors.toMap(Country::getId,
-              country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>()).stream()
-                  .map(SerializationUtils::clone).peek(state -> state.setCities(null))
-                  .collect(Collectors.toList())));
+        .collect(Collectors.toMap(Country::getId,
+          country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>()).stream()
+            .map(SerializationUtils::clone).peek(state -> state.setCities(null))
+            .collect(Collectors.toList())));
       this.stateIdMappingCities = this.countriesStatesCities.stream().parallel()
-          .flatMap(country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>())
-              .stream())
-          .collect(Collectors.toMap(State::getId,
-              state -> Optional.ofNullable(state.getCities()).orElse(new ArrayList<>())));
+        .flatMap(country -> Optional.ofNullable(country.getStates()).orElse(new ArrayList<>())
+          .stream())
+        .collect(Collectors.toMap(State::getId,
+          state -> Optional.ofNullable(state.getCities()).orElse(new ArrayList<>())));
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new MuMuException(ResponseCode.GEOGRAPHIC_DATA_LOADING_FAILED);
     }
   }
 }

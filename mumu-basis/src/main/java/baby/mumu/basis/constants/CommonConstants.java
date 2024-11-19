@@ -65,8 +65,8 @@ public final class CommonConstants {
    * sql 左右模糊查询模板
    */
   public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = PERCENT_SIGN.concat(PERCENT_SIGN)
-      .concat(
-          STRING_FORMAT).concat(PERCENT_SIGN).concat(PERCENT_SIGN);
+    .concat(
+      STRING_FORMAT).concat(PERCENT_SIGN).concat(PERCENT_SIGN);
 
   /**
    * 角色前缀

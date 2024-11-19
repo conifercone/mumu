@@ -34,13 +34,14 @@ public class MuMuException extends RuntimeException {
   @Serial
   private static final long serialVersionUID = 5646742276995362775L;
 
-  private ResponseCode responseCode;
+  private final ResponseCode responseCode;
 
-  private Object data;
+  private final transient Object data;
 
   public MuMuException(@NotNull ResponseCode responseCode) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
+    this.data = null;
   }
 
   public MuMuException(@NotNull ResponseCode responseCode, Object data) {

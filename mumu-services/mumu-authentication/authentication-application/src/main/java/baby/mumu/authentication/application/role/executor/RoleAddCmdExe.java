@@ -19,10 +19,9 @@ import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 角色添加指令执行器
@@ -43,9 +42,7 @@ public class RoleAddCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public void execute(@NotNull RoleAddCmd roleAddCmd) {
-    Assert.notNull(roleAddCmd, "RoleAddCmd cannot be null");
-    Assert.notNull(roleAddCmd.getRoleAddCo(), "RoleAddCo cannot be null");
-    roleConvertor.toEntity(roleAddCmd.getRoleAddCo()).ifPresent(roleGateway::add);
+  public void execute(RoleAddCmd roleAddCmd) {
+    Optional.ofNullable(roleAddCmd).flatMap(roleConvertor::toEntity).ifPresent(roleGateway::add);
   }
 }

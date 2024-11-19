@@ -16,7 +16,7 @@
 package baby.mumu.authentication.client.config;
 
 import baby.mumu.authentication.client.api.AccountGrpcService;
-import baby.mumu.authentication.client.api.AuthorityGrpcService;
+import baby.mumu.authentication.client.api.PermissionGrpcService;
 import baby.mumu.authentication.client.api.RoleGrpcService;
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -36,25 +36,25 @@ public class AuthenticationClientConfiguration {
 
   @Bean
   public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new TokenGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new AccountGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
-  public AuthorityGrpcService authorityGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new AuthorityGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+  public PermissionGrpcService permissionGrpcService(DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    return new PermissionGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new RoleGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 

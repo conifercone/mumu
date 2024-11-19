@@ -18,9 +18,9 @@ package baby.mumu.message.infrastructure.subscription.convertor;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
@@ -47,7 +47,7 @@ public class SubscriptionTextMessageConvertor {
 
   @Autowired
   public SubscriptionTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-      ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
+    ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
@@ -55,88 +55,88 @@ public class SubscriptionTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<SubscriptionTextMessage> toEntity(
-      SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo) {
-    return Optional.ofNullable(subscriptionTextMessageForwardCo)
-        .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
-          SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
-          entity.setSenderId(senderAccountId);
-          Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
-          }, () -> {
-            Long id = primaryKeyGrpcService.snowflake();
-            entity.setId(id);
-            res.setId(id);
-          });
-          return entity;
-        }));
+    SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    return Optional.ofNullable(subscriptionTextMessageForwardCmd)
+      .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
+        SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
+        entity.setSenderId(senderAccountId);
+        Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
+        }, () -> {
+          Long id = primaryKeyGrpcService.snowflake();
+          entity.setId(id);
+          res.setId(id);
+        });
+        return entity;
+      }));
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
   public Optional<SubscriptionTextMessageDo> toDataObject(
-      SubscriptionTextMessage subscriptionTextMessage) {
+    SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<SubscriptionTextMessage> toEntity(
-      SubscriptionTextMessageDo subscriptionTextMessageDo) {
+    SubscriptionTextMessageDo subscriptionTextMessageDo) {
     return Optional.ofNullable(subscriptionTextMessageDo)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<SubscriptionTextMessage> toEntity(
-      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return Optional.ofNullable(subscriptionTextMessageFindAllYouSendCmd)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<SubscriptionTextMessageFindAllYouSendCo> toFindAllYouSendCo(
-      SubscriptionTextMessage subscriptionTextMessage) {
+    SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendCo)
-        .map(subscriptionTextMessageFindAllYouSendCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      subscriptionTextMessageFindAllYouSendCo.getMessage()))
-              .ifPresent(subscriptionTextMessageFindAllYouSendCo::setMessage);
-          return subscriptionTextMessageFindAllYouSendCo;
-        });
+      .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+      .map(subscriptionTextMessageFindAllYouSendCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              subscriptionTextMessageFindAllYouSendCo.getMessage()))
+          .ifPresent(subscriptionTextMessageFindAllYouSendCo::setMessage);
+        return subscriptionTextMessageFindAllYouSendCo;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<SubscriptionTextMessageFindAllWithSomeOneCo> toFindAllWithSomeOne(
-      SubscriptionTextMessage subscriptionTextMessage) {
+    SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne)
-        .map(subscriptionTextMessageFindAllWithSomeOneCo -> {
-          Optional.ofNullable(simpleTextTranslation).flatMap(
-                  simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                      subscriptionTextMessageFindAllWithSomeOneCo.getMessage()))
-              .ifPresent(subscriptionTextMessageFindAllWithSomeOneCo::setMessage);
-          return subscriptionTextMessageFindAllWithSomeOneCo;
-        });
+      .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne)
+      .map(subscriptionTextMessageFindAllWithSomeOneCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              subscriptionTextMessageFindAllWithSomeOneCo.getMessage()))
+          .ifPresent(subscriptionTextMessageFindAllWithSomeOneCo::setMessage);
+        return subscriptionTextMessageFindAllWithSomeOneCo;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<SubscriptionTextMessageArchivedDo> toArchiveDo(
-      SubscriptionTextMessageDo subscriptionTextMessageDo) {
+    SubscriptionTextMessageDo subscriptionTextMessageDo) {
     return Optional.ofNullable(subscriptionTextMessageDo)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toArchiveDo);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toArchiveDo);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<SubscriptionTextMessageDo> toDataObject(
-      SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo) {
+    SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo) {
     return Optional.ofNullable(subscriptionTextMessageArchivedDo)
-        .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
   }
 }

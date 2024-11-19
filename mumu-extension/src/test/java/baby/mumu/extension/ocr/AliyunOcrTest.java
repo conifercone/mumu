@@ -36,7 +36,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig(OcrConfiguration.class)
 @TestPropertySource(properties = {
-    "mumu.extension.ocr.aliyun.enabled=true"
+  "mumu.extension.ocr.aliyun.enabled=true"
 })
 public class AliyunOcrTest {
 
@@ -68,7 +68,7 @@ public class AliyunOcrTest {
   }
 
   private @NotNull File getFileFromResource(String fileName)
-      throws IOException {
+    throws IOException {
     Resource resource = resourceLoader.getResource("classpath:" + fileName);
     File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));
     try (var inputStream = resource.getInputStream()) {

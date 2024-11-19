@@ -39,7 +39,7 @@ public class SimpleCaptchaGeneratedCmdExe {
 
   @Autowired
   public SimpleCaptchaGeneratedCmdExe(CaptchaGateway captchaGateway,
-      CaptchaConvertor captchaConvertor) {
+    CaptchaConvertor captchaConvertor) {
     this.captchaGateway = captchaGateway;
     this.captchaConvertor = captchaConvertor;
   }
@@ -47,9 +47,9 @@ public class SimpleCaptchaGeneratedCmdExe {
   public SimpleCaptchaGeneratedCo execute(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     Assert.notNull(simpleCaptchaGeneratedCmd, "SimpleCaptchaGeneratedCmd cannot be null");
     return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd)
-        .map(captchaGateway::generateSimpleCaptcha)
-        .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
-        .orElseThrow(() -> new MuMuException(
-          ResponseCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
+      .map(captchaGateway::generateSimpleCaptcha)
+      .flatMap(captchaConvertor::toSimpleCaptchaGeneratedCo)
+      .orElseThrow(() -> new MuMuException(
+        ResponseCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
   }
 }

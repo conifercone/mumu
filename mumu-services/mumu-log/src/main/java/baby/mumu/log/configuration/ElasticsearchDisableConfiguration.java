@@ -32,10 +32,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "false")
 @EnableAutoConfiguration(exclude = {
-    ElasticsearchRestClientAutoConfiguration.class,
-    ElasticsearchReactiveHealthContributorAutoConfiguration.class,
-    ElasticsearchClientAutoConfiguration.class,
-    ElasticsearchRestHealthContributorAutoConfiguration.class
+  ElasticsearchRestClientAutoConfiguration.class,
+  ElasticsearchReactiveHealthContributorAutoConfiguration.class,
+  ElasticsearchClientAutoConfiguration.class,
+  ElasticsearchRestHealthContributorAutoConfiguration.class
 })
 public class ElasticsearchDisableConfiguration {
 

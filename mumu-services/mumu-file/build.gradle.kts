@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.jasypt)
     implementation(libs.swagger3Ui)
     implementation(libs.minio)
+    annotationProcessor(project(":mumu-processor"))
 }

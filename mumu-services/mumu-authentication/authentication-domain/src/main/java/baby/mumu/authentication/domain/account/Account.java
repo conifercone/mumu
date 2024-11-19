@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.domain.account;
 
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
@@ -153,28 +153,29 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   @Override
   @JsonIgnore
-  public Collection<Authority> getAuthorities() {
+  public Collection<Permission> getAuthorities() {
     return Optional.ofNullable(this.roles)
-        .orElse(Collections.emptyList())
-        .stream()
-        .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
-        .values()
-        .stream()
-        .flatMap(role -> {
-          if (CollectionUtils.isEmpty(role.getAuthorities())) {
-            return Stream.empty();
-          }
-          // 将角色权限去重
-          Set<Authority> authorities = new HashSet<>(role.getAuthorities().stream()
-              .collect(Collectors.toMap(Authority::getCode, authority -> authority, (v1, v2) -> v1))
-              .values());
-          // 添加角色本身的权限
-          authorities.add(Authority.builder()
-              .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
-              .build());
-          return authorities.stream();
-        })
-        .collect(Collectors.toSet());
+      .orElse(Collections.emptyList())
+      .stream()
+      .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
+      .values()
+      .stream()
+      .flatMap(role -> {
+        if (CollectionUtils.isEmpty(role.getPermissions())) {
+          return Stream.empty();
+        }
+        // 将角色权限去重
+        Set<Permission> authorities = new HashSet<>(
+          CollectionUtils.union(role.getPermissions(), role.getDescendantPermissions()).stream()
+            .collect(Collectors.toMap(Permission::getCode, authority -> authority, (v1, v2) -> v1))
+            .values());
+        // 添加角色本身的权限
+        authorities.add(Permission.builder()
+          .code(CommonConstants.ROLE_PREFIX.concat(role.getCode()))
+          .build());
+        return authorities.stream();
+      })
+      .collect(Collectors.toSet());
   }
 
   @Override
@@ -209,7 +210,7 @@ public class Account extends BasisDomainModel implements UserDetails {
 
   public int getAge() {
     return Optional.ofNullable(this.birthday)
-        .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
-        .orElse(0);
+      .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
+      .orElse(0);
   }
 }

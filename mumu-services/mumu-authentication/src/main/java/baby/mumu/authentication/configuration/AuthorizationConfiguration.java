@@ -24,9 +24,9 @@ import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.authentication.infrastructure.authority.gatewayimpl.database.dataobject.AuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
@@ -134,12 +134,12 @@ public class AuthorizationConfiguration {
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
   public SecurityFilterChain authorizationServerSecurityFilterChain(@NotNull HttpSecurity http,
-      OAuth2AuthorizationService authorizationService,
-      OAuth2TokenGenerator<?> tokenGenerator,
-      MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
-      ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-      PasswordEncoder passwordEncoder)
-      throws Exception {
+    OAuth2AuthorizationService authorizationService,
+    OAuth2TokenGenerator<?> tokenGenerator,
+    MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
+    ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
+    PasswordEncoder passwordEncoder)
+    throws Exception {
     //noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
@@ -148,70 +148,70 @@ public class AuthorizationConfiguration {
           csrfIgnoreUrls.add(policy.getMatcher());
         }
         http.authorizeHttpRequests((authorize) -> {
-              AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
-                  .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
-                      policy.getMatcher());
-              if (StringUtils.isNotBlank(policy.getRole())) {
-                authorizedUrl.hasRole(policy.getRole());
-              } else if (StringUtils.isNotBlank(policy.getAuthority())) {
-                Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
-                    "Permission configuration cannot be empty and cannot start with SCOPE_");
-                authorizedUrl.hasAuthority(
-                    CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
-              } else if (policy.isPermitAll()) {
-                authorizedUrl.permitAll();
-              }
+            AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
+              .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
+                policy.getMatcher());
+            if (StringUtils.isNotBlank(policy.getRole())) {
+              authorizedUrl.hasRole(policy.getRole());
+            } else if (StringUtils.isNotBlank(policy.getAuthority())) {
+              Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                "Permission configuration cannot be empty and cannot start with SCOPE_");
+              authorizedUrl.hasAuthority(
+                CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
+            } else if (policy.isPermitAll()) {
+              authorizedUrl.permitAll();
             }
+          }
         );
       }
     }
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
-            oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
-                mumuAuthenticationFailureHandler))
-        //设置自定义密码模式
-        .tokenEndpoint(tokenEndpoint ->
-            tokenEndpoint
-                .errorResponseHandler(mumuAuthenticationFailureHandler)
-                .accessTokenRequestConverter(
-                    new PasswordGrantAuthenticationConverter())
-                .authenticationProvider(
-                    new PasswordGrantAuthenticationProvider(
-                        authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
-        .oidc(oidc -> oidc.userInfoEndpoint(
-            userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
-                oidcUserInfoAuthenticationContext -> {
-                  OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
-                  Map<String, Object> claims = new HashMap<>();
-                  claims.put("accessToken", accessToken);
-                  claims.put("sub",
-                      oidcUserInfoAuthenticationContext.getAuthorization()
-                          .getPrincipalName());
-                  return new OidcUserInfo(claims);
-                })));
+        oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
+          mumuAuthenticationFailureHandler))
+      //设置自定义密码模式
+      .tokenEndpoint(tokenEndpoint ->
+        tokenEndpoint
+          .errorResponseHandler(mumuAuthenticationFailureHandler)
+          .accessTokenRequestConverter(
+            new PasswordGrantAuthenticationConverter())
+          .authenticationProvider(
+            new PasswordGrantAuthenticationProvider(
+              authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
+      .oidc(oidc -> oidc.userInfoEndpoint(
+        userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
+          oidcUserInfoAuthenticationContext -> {
+            OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("accessToken", accessToken);
+            claims.put("sub",
+              oidcUserInfoAuthenticationContext.getAuthorization()
+                .getPrincipalName());
+            return new OidcUserInfo(claims);
+          })));
 
     // Redirect to the login page when not authenticated from the
     // authorization endpoint
     http.exceptionHandling((exceptions) -> exceptions
-            .defaultAuthenticationEntryPointFor(
-                new MuMuAuthenticationEntryPoint(
-                    resourceServerProperties
-                ),
-                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-            ).authenticationEntryPoint(
-                new MuMuAuthenticationEntryPoint(resourceServerProperties
-                ))
-        )
-        // Accept access tokens for User Info and/or Client Registration
-        .oauth2ResourceServer((resourceServer) -> resourceServer
-            .jwt(withDefaults())
-            .authenticationEntryPoint(
-                new MuMuAuthenticationEntryPoint(
-                    resourceServerProperties
-                )));
+        .defaultAuthenticationEntryPointFor(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          ),
+          new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+        ).authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(resourceServerProperties
+          ))
+      )
+      // Accept access tokens for User Info and/or Client Registration
+      .oauth2ResourceServer((resourceServer) -> resourceServer
+        .jwt(withDefaults())
+        .authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          )));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
+      .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+      .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
 
     return http.cors(Customizer.withDefaults()).build();
   }
@@ -221,11 +221,11 @@ public class AuthorizationConfiguration {
    */
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
-      OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
-      TokenRepository tokenRepository,
-      OidcIdTokenRepository oidcIdTokenRepository,
-      ClientTokenRepository clientTokenRepository,
-      RefreshTokenRepository refreshTokenRepository) {
+    OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
+    TokenRepository tokenRepository,
+    OidcIdTokenRepository oidcIdTokenRepository,
+    ClientTokenRepository clientTokenRepository,
+    RefreshTokenRepository refreshTokenRepository) {
     MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
     jwtGenerator.setTokenRepository(tokenRepository);
@@ -235,7 +235,7 @@ public class AuthorizationConfiguration {
     MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
     refreshTokenGenerator.setRefreshTokenRepository(refreshTokenRepository);
     return new DelegatingOAuth2TokenGenerator(
-        jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
+      jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
   }
 
   /**
@@ -267,12 +267,12 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate,
-      OAuth2AuthorizationServerProperties properties, PasswordEncoder passwordEncoder) {
+    OAuth2AuthorizationServerProperties properties, PasswordEncoder passwordEncoder) {
     OAuth2AuthorizationServerPropertiesMapper oAuth2AuthorizationServerPropertiesMapper = new OAuth2AuthorizationServerPropertiesMapper(
-        properties, passwordEncoder);
+      properties, passwordEncoder);
     List<RegisteredClient> registeredClients = oAuth2AuthorizationServerPropertiesMapper.asRegisteredClients();
     JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(
-        jdbcTemplate);
+      jdbcTemplate);
     registeredClients.forEach(jdbcRegisteredClientRepository::save);
     return jdbcRegisteredClientRepository;
   }
@@ -286,11 +286,11 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate,
-      RegisteredClientRepository registeredClientRepository) {
+    RegisteredClientRepository registeredClientRepository) {
     JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(
-        jdbcTemplate, registeredClientRepository);
+      jdbcTemplate, registeredClientRepository);
     JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper(
-        registeredClientRepository);
+      registeredClientRepository);
     ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModules(new CoreJackson2Module());
@@ -311,7 +311,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate,
-      RegisteredClientRepository registeredClientRepository) {
+    RegisteredClientRepository registeredClientRepository) {
     return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
   }
 
@@ -333,9 +333,9 @@ public class AuthorizationConfiguration {
     RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
     RSAKey rsaKey = new RSAKey.Builder(publicKey)
-        .privateKey(privateKey)
-        .keyID(UUID.randomUUID().toString())
-        .build();
+      .privateKey(privateKey)
+      .keyID(UUID.randomUUID().toString())
+      .build();
     JWKSet jwkSet = new JWKSet(rsaKey);
     return new ImmutableJWKSet<>(jwkSet);
   }
@@ -375,7 +375,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public AuthorizationServerSettings authorizationServerSettings(
-      @Value("${server.port}") Integer port) {
+    @Value("${server.port}") Integer port) {
     return AuthorizationServerSettings.builder().issuer("http://localhost:" + port).build();
   }
 
@@ -386,7 +386,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-      RoleAuthorityRepository roleAuthorityRepository) {
+    RolePermissionRepository rolePermissionRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -396,11 +396,11 @@ public class AuthorizationConfiguration {
         Collection<? extends GrantedAuthority> authorities = account.getAuthorities();
         // 提取权限并转为字符串
         Set<String> authoritySet = Optional.ofNullable(authorities).orElse(Collections.emptyList())
-            .stream()
-            // 获取权限字符串
-            .map(GrantedAuthority::getAuthority)
-            // 去重
-            .collect(Collectors.toSet());
+          .stream()
+          // 获取权限字符串
+          .map(GrantedAuthority::getAuthority)
+          // 去重
+          .collect(Collectors.toSet());
         // 合并scope与用户信息
         authoritySet.addAll(scopes);
         JwtClaimsSet.Builder claims = context.getClaims();
@@ -408,43 +408,43 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
-            context.getAuthorizationGrantType().getValue());
+          context.getAuthorizationGrantType().getValue());
         if (StringUtils.isNotBlank(account.getTimezone())) {
           claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
         }
         Optional.ofNullable(account.getLanguage())
-            .ifPresent(
-                languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
+          .ifPresent(
+            languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
       } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(
-          context.getAuthorizationGrantType())) {
+        context.getAuthorizationGrantType())) {
         JwtClaimsSet.Builder claims = context.getClaims();
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
-            context.getAuthorizationGrantType().getValue());
+          context.getAuthorizationGrantType().getValue());
         Set<String> authoritySet = Optional.ofNullable(
-                ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
-                    .getPrincipal()).getRegisteredClient()
-            )
-            .map(RegisteredClient::getScopes)
-            .map(scopes -> {
-              Set<String> roles = scopes.stream()
-                  .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
-                  .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
-                  .collect(Collectors.toSet());
-              Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
-                  .stream()
-                  .flatMap(
-                      opt -> roleAuthorityRepository.findByRoleId(
-                              opt.getId()).stream()
-                          .map(RoleAuthorityDo::getAuthority))
-                  .collect(Collectors.toMap(AuthorityDo::getId, authorityDo -> authorityDo,
-                      (existing, replacement) -> existing))
-                  .values()
-                  .stream().map(AuthorityDo::getCode)
-                  .collect(Collectors.toSet());
-              authorityCodesFromRoles.addAll(scopes);
-              return authorityCodesFromRoles;
-            })
-            .orElse(Collections.emptySet());
+            ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
+              .getPrincipal()).getRegisteredClient()
+          )
+          .map(RegisteredClient::getScopes)
+          .map(scopes -> {
+            Set<String> roles = scopes.stream()
+              .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
+              .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
+              .collect(Collectors.toSet());
+            Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
+              .stream()
+              .flatMap(
+                opt -> rolePermissionRepository.findByRoleId(
+                    opt.getId()).stream()
+                  .map(RolePermissionDo::getPermission))
+              .collect(Collectors.toMap(PermissionDo::getId, authorityDo -> authorityDo,
+                (existing, replacement) -> existing))
+              .values()
+              .stream().map(PermissionDo::getCode)
+              .collect(Collectors.toSet());
+            authorityCodesFromRoles.addAll(scopes);
+            return authorityCodesFromRoles;
+          })
+          .orElse(Collections.emptySet());
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
       }
     };
@@ -457,7 +457,7 @@ public class AuthorizationConfiguration {
 
   private KeyPair loadKeyPair(String keyPath, @NotNull String keyPassword, String keyPair) {
     KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-        new FileSystemResource(keyPath), keyPassword.toCharArray());
+      new FileSystemResource(keyPath), keyPassword.toCharArray());
     return keyStoreKeyFactory.getKeyPair(keyPair, keyPassword.toCharArray());
   }
 }

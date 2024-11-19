@@ -81,14 +81,15 @@ class ConcurrentCache<K, V>(private val size: Int) {
         mappingFunction: Function<in K, out V>
     ): V? {
         Objects.requireNonNull(mappingFunction)
-        var v: V?
-        if (get(key).also { v = it } == null) {
-            var newValue: V
-            if (mappingFunction.apply(key).also { newValue = it } != null) {
+        val v: V? = this[key]
+        if (v == null) {
+            val newValue: V? = mappingFunction.apply(key)
+            if (newValue != null) {
                 put(key, newValue)
                 return newValue
             }
         }
         return v
     }
+
 }

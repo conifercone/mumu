@@ -42,11 +42,11 @@ public class ThymeleafTemplateMailRepository {
 
   public Optional<String> processTemplate(TemplateMailThymeleafDo templateMailThymeleafDo) {
     return Optional.ofNullable(templateMailThymeleafDo).flatMap(thDo -> Optional.ofNullable(
-        thDo.getData())).map(thDoData -> {
+      thDo.getData())).map(thDoData -> {
       Context context = new Context();
       thDoData.forEach(context::setVariable);
       TemplateSpec templateSpec = new TemplateSpec(templateMailThymeleafDo.getContent(),
-          TemplateMode.HTML);
+        TemplateMode.HTML);
       return templateEngine.process(templateSpec, context);
     });
   }

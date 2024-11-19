@@ -40,15 +40,15 @@ public class AccountBasicInfoQueryByIdCmdExe {
 
   @Autowired
   public AccountBasicInfoQueryByIdCmdExe(AccountGateway accountGateway,
-      AccountConvertor accountConvertor) {
+    AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   public AccountBasicInfoCo execute(Long id) {
     return Optional.ofNullable(id)
-        .flatMap(accountGateway::getAccountBasicInfoById)
-        .flatMap(accountConvertor::toBasicInfoCo)
+      .flatMap(accountGateway::getAccountBasicInfoById)
+      .flatMap(accountConvertor::toBasicInfoCo)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

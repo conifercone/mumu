@@ -15,6 +15,10 @@
  */
 package baby.mumu.sms;
 
+import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.SpringBootConstants;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -25,9 +29,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.1
  */
 @SpringBootApplication
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuSmsApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuSmsApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuSmsApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuSmsApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+      MuMuSmsApplicationMetamodel.formattedProjectVersion);
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

@@ -15,10 +15,10 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -30,7 +30,10 @@ import lombok.Data;
 @Data
 public class AccountUpdateRoleCmd {
 
-  @Valid
-  @Schema(description = "账户更新角色内容", requiredMode = RequiredMode.REQUIRED)
-  private AccountUpdateRoleCo accountUpdateRoleCo;
+  @NotNull
+  @Schema(description = "账户ID", requiredMode = RequiredMode.REQUIRED)
+  private Long id;
+
+  @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
+  private List<String> roleCodes;
 }

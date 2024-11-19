@@ -15,6 +15,8 @@
  */
 package baby.mumu.extension.ocr.aliyun;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ocr.Ocr;
 import baby.mumu.extension.ocr.OcrProcessor;
 import com.aliyun.ocr_api20210707.Client;
@@ -42,17 +44,17 @@ public class AliyunOcrProcessor implements OcrProcessor {
   @Override
   public String doOcr(Ocr ocr) {
     return Optional.ofNullable(ocr).filter(ocrNotNull -> ocrNotNull.getSourceFile() != null)
-        .map(ocrNotNull -> {
-          try {
-            RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
-                .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
-                .setNeedRotate(false);
-            RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
-                recognizeBasicRequest, new RuntimeOptions());
-            return recognizeBasicResponse.getBody().getData();
-          } catch (Exception e) {
-            throw new RuntimeException(e);
-          }
-        }).orElse(StringUtils.EMPTY);
+      .map(ocrNotNull -> {
+        try {
+          RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
+            .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
+            .setNeedRotate(false);
+          RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
+            recognizeBasicRequest, new RuntimeOptions());
+          return recognizeBasicResponse.getBody().getData();
+        } catch (Exception e) {
+          throw new MuMuException(ResponseCode.OCR_RECOGNITION_FAILED);
+        }
+      }).orElse(StringUtils.EMPTY);
   }
 }

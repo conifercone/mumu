@@ -42,10 +42,10 @@ public class RoleArchivedFindAllSliceCo extends BaseClientObject {
 
   private String code;
 
-  private List<RoleArchivedFindAllSliceAuthorityCo> authorities;
+  private List<RoleArchivedFindAllSlicePermissionCo> permissions;
 
   @Data
-  public static class RoleArchivedFindAllSliceAuthorityCo {
+  public static class RoleArchivedFindAllSlicePermissionCo {
 
     /**
      * 权限id
@@ -61,5 +61,10 @@ public class RoleArchivedFindAllSliceCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    /**
+     * 有后代权限
+     */
+    private boolean hasDescendant;
   }
 }

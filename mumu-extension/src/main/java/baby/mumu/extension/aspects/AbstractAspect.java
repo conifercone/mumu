@@ -31,17 +31,12 @@ import org.jetbrains.annotations.NotNull;
 public abstract class AbstractAspect {
 
   protected <T extends Annotation> T getMethodAnnotation(@NotNull JoinPoint joinPoint,
-      Class<T> clazz) {
+    Class<T> clazz) throws NoSuchMethodException {
     T annotation = null;
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
     Class<?>[] paramTypeArray = methodSignature.getParameterTypes();
-    Method transferMoney = null;
-    try {
-      transferMoney = joinPoint.getTarget().getClass()
-          .getDeclaredMethod(methodSignature.getName(), paramTypeArray);
-    } catch (NoSuchMethodException ignore) {
-    }
-    assert transferMoney != null;
+    Method transferMoney = joinPoint.getTarget().getClass()
+      .getDeclaredMethod(methodSignature.getName(), paramTypeArray);
     boolean annotationPresent = transferMoney.isAnnotationPresent(clazz);
     if (annotationPresent) {
       annotation = transferMoney.getAnnotation(clazz);

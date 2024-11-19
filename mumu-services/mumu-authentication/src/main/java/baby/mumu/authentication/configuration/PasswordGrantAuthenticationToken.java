@@ -35,8 +35,8 @@ public class PasswordGrantAuthenticationToken extends OAuth2AuthorizationGrantAu
   private static final long serialVersionUID = -7378665661159716254L;
 
   public PasswordGrantAuthenticationToken(Authentication clientPrincipal,
-      @Nullable Map<String, Object> additionalParameters) {
+    @Nullable Map<String, Object> additionalParameters) {
     super(new AuthorizationGrantType(OAuth2Enum.GRANT_TYPE_PASSWORD.getName()),
-        clientPrincipal, additionalParameters);
+      clientPrincipal, additionalParameters);
   }
 }

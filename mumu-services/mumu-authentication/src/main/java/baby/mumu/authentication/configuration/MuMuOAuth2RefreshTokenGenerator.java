@@ -43,10 +43,10 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
  * @since 1.0.2
  */
 public class MuMuOAuth2RefreshTokenGenerator implements
-    OAuth2TokenGenerator<OAuth2RefreshToken> {
+  OAuth2TokenGenerator<OAuth2RefreshToken> {
 
   private final StringKeyGenerator refreshTokenGenerator = new Base64StringKeyGenerator(
-      Base64.getUrlEncoder().withoutPadding(), 96);
+    Base64.getUrlEncoder().withoutPadding(), 96);
   @Setter
   private RefreshTokenRepository refreshTokenRepository;
 
@@ -61,16 +61,15 @@ public class MuMuOAuth2RefreshTokenGenerator implements
       return null;
     }
     Account account = (Account) context.getPrincipal().getPrincipal();
-    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
-      if (!refreshTokenRepository.existsById(account.getId())) {
-        throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_GRANT);
-      }
+    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())
+      && !refreshTokenRepository.existsById(account.getId())) {
+      throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_GRANT);
     }
     Instant issuedAt = Instant.now();
     Instant expiresAt = issuedAt.plus(
-        context.getRegisteredClient().getTokenSettings().getRefreshTokenTimeToLive());
+      context.getRegisteredClient().getTokenSettings().getRefreshTokenTimeToLive());
     OAuth2RefreshToken oAuth2RefreshToken = new OAuth2RefreshToken(
-        this.refreshTokenGenerator.generateKey(), issuedAt, expiresAt);
+      this.refreshTokenGenerator.generateKey(), issuedAt, expiresAt);
     RefreshTokenRedisDo refreshTokenRedisDo = new RefreshTokenRedisDo();
     String tokenValue = oAuth2RefreshToken.getTokenValue();
     refreshTokenRedisDo.setRefreshTokenValue(tokenValue);
@@ -82,7 +81,7 @@ public class MuMuOAuth2RefreshTokenGenerator implements
   }
 
   private static boolean isPublicClientForAuthorizationCodeGrant(
-      @NotNull OAuth2TokenContext context) {
+    @NotNull OAuth2TokenContext context) {
     // @formatter:off
     if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType()) &&
         (context.getAuthorizationGrant().getPrincipal() instanceof OAuth2ClientAuthenticationToken clientPrincipal)) {

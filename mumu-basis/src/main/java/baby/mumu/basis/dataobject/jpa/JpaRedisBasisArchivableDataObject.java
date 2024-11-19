@@ -27,7 +27,7 @@ import lombok.Setter;
  */
 @Setter
 public class JpaRedisBasisArchivableDataObject extends JpaRedisBasisDefaultDataObject implements
-    ArchivableDataObject {
+  ArchivableDataObject {
 
   @Serial
   private static final long serialVersionUID = -9004328530785061008L;

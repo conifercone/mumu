@@ -100,19 +100,19 @@ public interface AccountService {
    * 重置系统设置
    */
   void resetSystemSettingsBySettingsId(
-      String systemSettingsId);
+    String systemSettingsId);
 
   /**
    * 修改系统设置
    */
   void modifySystemSettingsBySettingsId(
-      AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd);
+    AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd);
 
   /**
    * 添加系统设置
    */
   void addSystemSettings(
-      AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
+    AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   /**
    * 删除当前账户
@@ -156,7 +156,7 @@ public interface AccountService {
    * @param accountId 账户id
    */
   void recoverFromArchiveById(
-      Long accountId);
+    Long accountId);
 
   /**
    * 账户添加地址

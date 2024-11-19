@@ -38,17 +38,15 @@ public class AccountModifySystemSettingsBySettingsIdCmdExe {
 
   @Autowired
   public AccountModifySystemSettingsBySettingsIdCmdExe(AccountGateway accountGateway,
-      AccountConvertor accountConvertor) {
+    AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   public void execute(
-      AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmd)
-        .map(
-            AccountModifySystemSettingsBySettingsIdCmd::getAccountModifySystemSettingsBySettingsIdCo)
-        .flatMap(accountConvertor::toAccountSystemSettings)
-        .ifPresent(accountGateway::modifySystemSettings);
+      .flatMap(accountConvertor::toAccountSystemSettings)
+      .ifPresent(accountGateway::modifySystemSettings);
   }
 }

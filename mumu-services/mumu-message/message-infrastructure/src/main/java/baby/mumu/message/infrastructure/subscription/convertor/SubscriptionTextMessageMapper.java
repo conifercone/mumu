@@ -17,9 +17,9 @@ package baby.mumu.message.infrastructure.subscription.convertor;
 
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageForwardCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
@@ -45,7 +45,7 @@ public interface SubscriptionTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.2")
   SubscriptionTextMessage toEntity(
-      SubscriptionTextMessageForwardCo subscriptionTextMessageForwardCo);
+    SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
   SubscriptionTextMessageDo toDataObject(SubscriptionTextMessage subscriptionTextMessage);
@@ -55,33 +55,33 @@ public interface SubscriptionTextMessageMapper {
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessage toEntity(
-      SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
+    SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(
-      SubscriptionTextMessage subscriptionTextMessage);
+    SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessageFindAllWithSomeOneCo toFindAllWithSomeOne(
-      SubscriptionTextMessage subscriptionTextMessage);
+    SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.4")
   SubscriptionTextMessageArchivedDo toArchiveDo(
-      SubscriptionTextMessageDo subscriptionTextMessageDo);
+    SubscriptionTextMessageDo subscriptionTextMessageDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
   SubscriptionTextMessageDo toDataObject(
-      SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo);
+    SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo);
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
+    @MappingTarget SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
     CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllYouSendCo);
   }
 
   @AfterMapping
   default void convertToAccountTimezone(
-      @MappingTarget SubscriptionTextMessageFindAllWithSomeOneCo subscriptionTextMessageFindAllWithSomeOneCo) {
+    @MappingTarget SubscriptionTextMessageFindAllWithSomeOneCo subscriptionTextMessageFindAllWithSomeOneCo) {
     CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllWithSomeOneCo);
   }
 }

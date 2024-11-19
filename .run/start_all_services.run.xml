@@ -7,6 +7,6 @@
     <toRun name="MuMuMessageApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuSmsApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuUniqueApplication-dev" type="SpringBootApplicationConfigurationType"/>
-    <method v="2" />
+    <method v="2"/>
   </configuration>
 </component>

@@ -34,31 +34,33 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class UniqueGrpcService {
 
+  public static final String GRPC_UNIQUE = "grpc-unique";
   private final DiscoveryClient discoveryClient;
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
   public UniqueGrpcService(DiscoveryClient discoveryClient,
-      @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
+    //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
-        serviceInstance -> {
-          NameResolverRegistry.getDefaultRegistry()
-              .register(new DiscoveryClientNameResolverProvider(discoveryClient));
-          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-                  "discovery-client://grpc-unique")
-              .defaultLoadBalancingPolicy("round_robin")
-              .usePlaintext();
-          Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
-          return builder.build();
-        });
+      serviceInstance -> {
+        NameResolverRegistry.getDefaultRegistry()
+          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
+        ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
+            "discovery-client://" + GRPC_UNIQUE)
+          .defaultLoadBalancingPolicy("round_robin")
+          .usePlaintext();
+        Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
+        return builder.build();
+      });
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances("grpc-unique"));
+    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_UNIQUE));
   }
 
 }

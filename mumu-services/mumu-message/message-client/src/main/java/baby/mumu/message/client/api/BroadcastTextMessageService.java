@@ -62,7 +62,7 @@ public interface BroadcastTextMessageService {
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
-      BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
+    BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   /**
    * 根据ID归档消息

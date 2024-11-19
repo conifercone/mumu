@@ -38,8 +38,8 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
  */
 public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      MuMuAuthenticationEntryPoint.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    MuMuAuthenticationEntryPoint.class);
 
 
   public MuMuAuthenticationEntryPoint(@NotNull ResourceServerProperties resourceServerProperties) {
@@ -48,21 +48,21 @@ public class MuMuAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoi
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException, ServletException {
+    AuthenticationException authException) throws IOException, ServletException {
     switch (authException) {
       case UsernameNotFoundException usernameNotFoundException -> {
-        LOGGER.error(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getMessage(), usernameNotFoundException);
+        logger.error(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getMessage(), usernameNotFoundException);
         response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
         ResponseWrapper.exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST);
       }
       case InvalidBearerTokenException invalidBearerTokenException -> {
-        LOGGER.error(ResponseCode.INVALID_TOKEN.getMessage(), invalidBearerTokenException);
+        logger.error(ResponseCode.INVALID_TOKEN.getMessage(), invalidBearerTokenException);
         response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
       }
       case InsufficientAuthenticationException insufficientAuthenticationException -> {
-        LOGGER.error(ResponseCode.INSUFFICIENT_AUTHENTICATION.getMessage(),
-            insufficientAuthenticationException);
+        logger.error(ResponseCode.INSUFFICIENT_AUTHENTICATION.getMessage(),
+          insufficientAuthenticationException);
         response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
         ResponseWrapper.exceptionResponse(response, ResponseCode.INSUFFICIENT_AUTHENTICATION);
       }

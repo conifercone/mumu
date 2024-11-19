@@ -57,9 +57,9 @@ public class QRCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResponseWrapper<String> dataUrlGenerate(
-      @ModelAttribute @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
+    @ModelAttribute @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
     return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-        qrCodeGenerateCmd.getImageFormat().getMimeType(),
-        Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));
+      qrCodeGenerateCmd.getImageFormat().getMimeType(),
+      Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));
   }
 }

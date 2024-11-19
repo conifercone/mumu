@@ -44,20 +44,20 @@ public class AccountFindAllSliceCmdExe {
 
   @Autowired
   public AccountFindAllSliceCmdExe(AccountGateway accountGateway,
-      AccountConvertor accountConvertor) {
+    AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   public Slice<AccountFindAllSliceCo> execute(
-      @NotNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    @NotNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
     Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
     Slice<Account> accounts = accountGateway.findAllSlice(account,
-        accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
+      accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
     List<AccountFindAllSliceCo> accountFindAllSliceCos = accounts.getContent().stream()
-        .map(accountConvertor::toFindAllSliceCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(accountConvertor::toFindAllSliceCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(accountFindAllSliceCos, accounts.getPageable(),
-        accounts.hasNext());
+      accounts.hasNext());
   }
 }

@@ -68,13 +68,13 @@ public interface SubscriptionTextMessageGateway {
    * 查询所有你发送的消息
    *
    * @param subscriptionTextMessage 文本订阅消息
-   * @param current                  当前页码
+   * @param current                 当前页码
    * @param pageSize                当前页数量
    * @return 查询结果
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<SubscriptionTextMessage> findAllYouSend(SubscriptionTextMessage subscriptionTextMessage,
-      int current, int pageSize);
+    int current, int pageSize);
 
   /**
    * 根据ID归档消息
@@ -97,12 +97,12 @@ public interface SubscriptionTextMessageGateway {
   /**
    * 查询所有和某人的消息记录
    *
-   * @param current     当前页码
+   * @param current    当前页码
    * @param pageSize   当前页数量
    * @param receiverId 接收者ID
    * @return 查询结果
    */
   @API(status = Status.STABLE, since = "1.0.3")
   Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(int current, int pageSize,
-      Long receiverId);
+    Long receiverId);
 }

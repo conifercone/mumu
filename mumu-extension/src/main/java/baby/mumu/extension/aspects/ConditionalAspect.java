@@ -35,7 +35,7 @@ import org.springframework.context.ApplicationContext;
 public class ConditionalAspect extends AbstractAspect {
 
   private final ApplicationContext applicationContext;
-  private static final Logger LOGGER = LoggerFactory.getLogger(ConditionalAspect.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConditionalAspect.class);
 
   public ConditionalAspect(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -44,18 +44,18 @@ public class ConditionalAspect extends AbstractAspect {
   @Around("@annotation(baby.mumu.basis.annotations.Conditional)")
   public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
     return Optional.ofNullable(getMethodAnnotation(joinPoint, Conditional.class))
-        .map(conditional -> ConditionalExecutor.of(
-                applicationContext.getBean(conditional.value()).matches())
-            .orElseGet(() -> {
-              try {
-                return joinPoint.proceed();
-              } catch (Throwable e) {
-                throw new RuntimeException(e);
-              }
-            }, () -> {
-              LOGGER.warn("{} method execution conditions are not met",
-                  joinPoint.getSignature().getName());
-              return null;
-            })).orElse(joinPoint.proceed());
+      .map(conditional -> ConditionalExecutor.of(
+          applicationContext.getBean(conditional.value()).matches())
+        .orElseGet(() -> {
+          try {
+            return joinPoint.proceed();
+          } catch (Throwable e) {
+            throw new RuntimeException(e);
+          }
+        }, () -> {
+          logger.warn("{} method execution conditions are not met",
+            joinPoint.getSignature().getName());
+          return null;
+        })).orElse(joinPoint.proceed());
   }
 }

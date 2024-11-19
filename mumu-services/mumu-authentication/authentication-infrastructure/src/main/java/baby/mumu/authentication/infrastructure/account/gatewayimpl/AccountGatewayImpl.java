@@ -386,6 +386,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Job(name = "删除ID为：%0 的账户归档数据")
   @DangerousOperation("根据ID删除ID为%0的账户归档数据定时任务")
+  @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);

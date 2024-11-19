@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.4
  */
 public interface AccountArchivedRepository extends BaseJpaRepository<AccountArchivedDo, Long>,
-    JpaSpecificationExecutor<AccountArchivedDo> {
+  JpaSpecificationExecutor<AccountArchivedDo> {
 
   /**
    * 根据id或者username或者email判断用户是否存在
@@ -39,7 +39,7 @@ public interface AccountArchivedRepository extends BaseJpaRepository<AccountArch
    * @return 是否存在
    */
   boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
-      @Size(max = 200) String email);
+    @Size(max = 200) String email);
 
   /**
    * 邮箱地址是否存在

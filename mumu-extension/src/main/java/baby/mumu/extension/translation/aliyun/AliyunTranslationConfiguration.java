@@ -43,16 +43,16 @@ public class AliyunTranslationConfiguration {
   @ConditionalOnMissingBean(Client.class)
   public Client alimtClient(ExtensionProperties extensionProperties) throws Exception {
     AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
-        .getAliyun();
+      .getAliyun();
     Config config = new Config()
-        .setAccessKeyId(
-            StringUtils.isBlank(aliyunTranslationProperties.getAccessKeyId()) ? System.getenv(
-                "ALIBABA_CLOUD_ACCESS_KEY_ID")
-                : aliyunTranslationProperties.getAccessKeyId())
-        .setAccessKeySecret(
-            StringUtils.isBlank(aliyunTranslationProperties.getAccessKeySecret()) ? System.getenv(
-                "ALIBABA_CLOUD_ACCESS_KEY_SECRET")
-                : aliyunTranslationProperties.getAccessKeySecret());
+      .setAccessKeyId(
+        StringUtils.isBlank(aliyunTranslationProperties.getAccessKeyId()) ? System.getenv(
+          "ALIBABA_CLOUD_ACCESS_KEY_ID")
+          : aliyunTranslationProperties.getAccessKeyId())
+      .setAccessKeySecret(
+        StringUtils.isBlank(aliyunTranslationProperties.getAccessKeySecret()) ? System.getenv(
+          "ALIBABA_CLOUD_ACCESS_KEY_SECRET")
+          : aliyunTranslationProperties.getAccessKeySecret());
     config.endpoint = aliyunTranslationProperties.getEndpoint();
     return new Client(config);
   }

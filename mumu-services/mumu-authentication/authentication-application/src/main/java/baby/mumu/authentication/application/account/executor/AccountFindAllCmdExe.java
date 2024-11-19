@@ -44,20 +44,20 @@ public class AccountFindAllCmdExe {
 
   @Autowired
   public AccountFindAllCmdExe(AccountGateway accountGateway,
-      AccountConvertor accountConvertor) {
+    AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
   public Page<AccountFindAllCo> execute(@NotNull AccountFindAllCmd accountFindAllCmd) {
     Account account = accountConvertor.toEntity(accountFindAllCmd)
-        .orElseGet(Account::new);
+      .orElseGet(Account::new);
     Page<Account> accounts = accountGateway.findAll(account,
-        accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
+      accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
     List<AccountFindAllCo> accountFindAllCos = accounts.getContent().stream()
-        .map(accountConvertor::toFindAllCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .map(accountConvertor::toFindAllCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(accountFindAllCos, accounts.getPageable(),
-        accounts.getTotalElements());
+      accounts.getTotalElements());
   }
 }

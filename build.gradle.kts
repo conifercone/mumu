@@ -1,19 +1,44 @@
 import java.nio.charset.StandardCharsets
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 plugins {
-    id(libs.plugins.springboot.get().pluginId) version libs.versions.springbootVersion apply false
-    id(libs.plugins.lombok.get().pluginId) version libs.versions.lombokPluginVersion
-    id(libs.plugins.protobuf.get().pluginId) version libs.versions.protobufPluginVersion apply false
-    id(libs.plugins.kotlinJvm.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.kotlinPluginSpring.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.kotlinPluginJpa.get().pluginId) version libs.versions.kotlinPluginVersion
-    id(libs.plugins.signing.get().pluginId)
-    id(libs.plugins.projectReport.get().pluginId)
+    alias(libs.plugins.springboot) apply false
+    alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinPluginSpring)
+    alias(libs.plugins.kotlinPluginJpa)
+    alias(libs.plugins.signing)
+    alias(libs.plugins.projectReport)
+    alias(libs.plugins.checkstyle)
+    alias(libs.plugins.pmd)
 }
 
-@Suppress("UnstableApiUsage")
+
+tasks.register<Copy>("installGitHooks") {
+    group = "setup"
+    description = "Copies git hooks to .git/hooks"
+    // 源文件路径
+    val hooksDir = file("${project.rootDir}/.git/hooks")
+    val sourceDir = file("${project.rootDir}/scripts/git/hooks")
+    val updateLicenseShell = file("${project.rootDir}/update_license.sh")
+    // 将文件从源目录拷贝到目标目录
+    from(sourceDir)
+    // 目标目录
+    into(hooksDir)
+    // 设置执行权限（可选）
+    doLast {
+        // 设置 update_license.sh 的执行权限
+        updateLicenseShell.setExecutable(true)
+        // 设置 pre-commit 的执行权限
+        hooksDir.resolve("pre-commit").setExecutable(true)
+        // 设置 commit-msg 的执行权限
+        hooksDir.resolve("commit-msg").setExecutable(true)
+    }
+}
+
 val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()
@@ -48,6 +73,8 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.java.get().pluginId)
     apply(plugin = rootProject.libs.plugins.signing.get().pluginId)
     apply(plugin = rootProject.libs.plugins.projectReport.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.checkstyle.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.pmd.get().pluginId)
     apply(plugin = rootProject.libs.plugins.javaLibrary.get().pluginId)
     apply(plugin = rootProject.libs.plugins.idea.get().pluginId)
     apply(plugin = rootProject.libs.plugins.lombok.get().pluginId)
@@ -59,6 +86,28 @@ subprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
+    }
+
+    checkstyle {
+        toolVersion = "10.20.0"
+    }
+
+    pmd {
+        isConsoleOutput = true
+        toolVersion = "7.0.0"
+        ruleSetFiles = files(
+            rootProject.file("config/pmd/category/java/errorprone.xml"),
+            rootProject.file("config/pmd/category/java/bestpractices.xml")
+        )
+    }
+
+    tasks.withType<Pmd> {
+        incrementalAnalysis = true
+        outputs.cacheIf { true }
+    }
+
+    tasks.withType<Checkstyle> {
+        outputs.cacheIf { true }
     }
 
     signing {
@@ -103,6 +152,7 @@ subprojects {
                 .any { it.name.contains("mumu-processor") }
             if (hasProcessor) {
                 options.compilerArgs.addAll(
+                    @Suppress("SpellCheckingInspection")
                     listOf(
                         "-Amapstruct.unmappedTargetPolicy=IGNORE",
                         "-Agradle.version=${gradle.gradleVersion}",
@@ -113,6 +163,7 @@ subprojects {
                     )
                 )
             } else {
+                @Suppress("SpellCheckingInspection")
                 options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
             }
         }
@@ -123,6 +174,7 @@ subprojects {
         org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java
     ) {
         compilerOptions {
+            @Suppress("SpellCheckingInspection")
             freeCompilerArgs.add("-Xjsr305=strict")
         }
     }
@@ -139,8 +191,8 @@ subprojects {
                 "Built-Gradle" to gradle.gradleVersion,
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
-                "Build-Timestamp" to LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"))
             )
         }
     }
@@ -168,6 +220,7 @@ subprojects {
         implementation(rootProject.libs.commons.collections4)
         implementation(rootProject.libs.jackson.module.kotlin)
         implementation(rootProject.libs.kotlin.reflect)
+        implementation(rootProject.libs.progressbar)
         implementation(rootProject.libs.swagger.annotations.jakarta)
         testImplementation(rootProject.libs.junit.jupiter)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)

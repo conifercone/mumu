@@ -43,26 +43,26 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
 
   @Autowired
   public BroadcastTextMessageFindAllYouSendCmdExe(
-      BroadcastTextMessageGateway broadcastTextMessageGateway,
-      BroadcastTextMessageConvertor broadcastTextMessageConvertor) {
+    BroadcastTextMessageGateway broadcastTextMessageGateway,
+    BroadcastTextMessageConvertor broadcastTextMessageConvertor) {
     this.broadcastTextMessageGateway = broadcastTextMessageGateway;
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
   }
 
   public Page<BroadcastTextMessageFindAllYouSendCo> execute(
-      @NotNull BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    @NotNull BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     Assert.notNull(broadcastTextMessageFindAllYouSendCmd,
-        "BroadcastTextMessageFindAllYouSendCmd cannot null");
+      "BroadcastTextMessageFindAllYouSendCmd cannot null");
     Page<BroadcastTextMessage> allYouSend = broadcastTextMessageGateway.findAllYouSend(
-        broadcastTextMessageConvertor.toEntity(broadcastTextMessageFindAllYouSendCmd)
-            .orElse(null),
-        broadcastTextMessageFindAllYouSendCmd.getCurrent(),
-        broadcastTextMessageFindAllYouSendCmd.getPageSize());
+      broadcastTextMessageConvertor.toEntity(broadcastTextMessageFindAllYouSendCmd)
+        .orElse(null),
+      broadcastTextMessageFindAllYouSendCmd.getCurrent(),
+      broadcastTextMessageFindAllYouSendCmd.getPageSize());
     List<BroadcastTextMessageFindAllYouSendCo> broadcastTextMessageFindAllYouSendCos = allYouSend.getContent()
-        .stream()
-        .map(broadcastTextMessageConvertor::toFindAllYouSendCo)
-        .filter(Optional::isPresent).map(Optional::get).toList();
+      .stream()
+      .map(broadcastTextMessageConvertor::toFindAllYouSendCo)
+      .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(broadcastTextMessageFindAllYouSendCos, allYouSend.getPageable(),
-        allYouSend.getTotalElements());
+      allYouSend.getTotalElements());
   }
 }

@@ -90,7 +90,7 @@ public class ResponseWrapper<T> implements Serializable {
   }
 
   @Contract(" -> new")
-  public static @NotNull ResponseWrapper<?> success() {
+  public static @NotNull <T> ResponseWrapper<T> success() {
     return new ResponseWrapper<>(ResponseCode.SUCCESS, true);
   }
 
@@ -101,11 +101,11 @@ public class ResponseWrapper<T> implements Serializable {
   }
 
   @Contract("_ -> new")
-  public static @NotNull ResponseWrapper<?> failure(BaseResponse resultCode) {
+  public static @NotNull <T> ResponseWrapper<T> failure(BaseResponse resultCode) {
     return new ResponseWrapper<>(resultCode, false);
   }
 
-  public static @NotNull ResponseWrapper<?> failure(String code, String message) {
+  public static @NotNull <T> ResponseWrapper<T> failure(String code, String message) {
     return new ResponseWrapper<>(code, message, false);
   }
 

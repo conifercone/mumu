@@ -15,8 +15,12 @@
  */
 package baby.mumu.unique;
 
+import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.SpringBootConstants;
 import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -30,9 +34,18 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)
 @EnableRedisDocumentRepositories(basePackages = "baby.mumu.unique.infrastructure.**")
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuUniqueApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuUniqueApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuUniqueApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuUniqueApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+      MuMuUniqueApplicationMetamodel.formattedProjectVersion);
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

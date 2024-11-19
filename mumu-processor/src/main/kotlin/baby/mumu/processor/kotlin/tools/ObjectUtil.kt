@@ -37,6 +37,9 @@ import javax.lang.model.util.Types
  */
 object ObjectUtil {
 
+    /**
+     * 获取所有字段
+     */
     @JvmStatic
     fun getFields(element: Element): List<VariableElement> {
         val fields = mutableListOf<VariableElement>()

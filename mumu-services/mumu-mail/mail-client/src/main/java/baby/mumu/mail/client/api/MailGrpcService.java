@@ -34,32 +34,34 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class MailGrpcService {
 
+  public static final String GRPC_MAIL = "grpc-mail";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
   public MailGrpcService(DiscoveryClient discoveryClient,
-      @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
+    //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
-        serviceInstance -> {
-          NameResolverRegistry.getDefaultRegistry()
-              .register(new DiscoveryClientNameResolverProvider(discoveryClient));
-          ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-                  "discovery-client://grpc-mail")
-              .defaultLoadBalancingPolicy("round_robin")
-              .usePlaintext();
-          Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
-          return builder.build();
-        });
+      serviceInstance -> {
+        NameResolverRegistry.getDefaultRegistry()
+          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
+        ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
+            "discovery-client://" + GRPC_MAIL)
+          .defaultLoadBalancingPolicy("round_robin")
+          .usePlaintext();
+        Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
+        return builder.build();
+      });
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances("grpc-mail"));
+    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_MAIL));
   }
 
 }

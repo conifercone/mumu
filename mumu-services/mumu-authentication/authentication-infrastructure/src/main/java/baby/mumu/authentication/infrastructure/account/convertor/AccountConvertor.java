@@ -17,18 +17,18 @@ package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
 import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
+import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllCmd;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.AccountAddAddressCo;
-import baby.mumu.authentication.client.dto.co.AccountAddSystemSettingsCo;
+import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.dto.AccountRegisterCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
 import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
 import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AccountModifySystemSettingsBySettingsIdCo;
-import baby.mumu.authentication.client.dto.co.AccountRegisterCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateByIdCo;
-import baby.mumu.authentication.client.dto.co.AccountUpdateRoleCo;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
@@ -255,15 +255,15 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Account> toEntity(AccountRegisterCo accountRegisterCo) {
-    return Optional.ofNullable(accountRegisterCo).map(accountRegisterClientObject -> {
-      Account account = AccountMapper.INSTANCE.toEntity(accountRegisterClientObject);
+  public Optional<Account> toEntity(AccountRegisterCmd accountRegisterCmd) {
+    return Optional.ofNullable(accountRegisterCmd).map(accountRegisterCmdNotNull -> {
+      Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
       Optional.ofNullable(account.getId()).ifPresentOrElse(id -> {
         if (id == 0) {
           throw new MuMuException(ResponseCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
         }
       }, () -> account.setId(primaryKeyGrpcService.snowflake()));
-      setRolesWithCodes(account, Optional.ofNullable(accountRegisterClientObject.getRoleCodes())
+      setRolesWithCodes(account, Optional.ofNullable(accountRegisterCmdNotNull.getRoleCodes())
         .orElse(new ArrayList<>()));
       Optional.ofNullable(account.getAddresses())
         .filter(CollectionUtils::isNotEmpty)
@@ -292,21 +292,21 @@ public class AccountConvertor {
               .enabled(true)
               .build()))
         );
-      accountRegisterClientObject.setId(account.getId());
+      accountRegisterCmdNotNull.setId(account.getId());
       return account;
     });
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Account> toEntity(AccountUpdateByIdCo accountUpdateByIdCo) {
-    return Optional.ofNullable(accountUpdateByIdCo).flatMap(accountUpdateByIdClientObject -> {
-      Optional.ofNullable(accountUpdateByIdClientObject.getId())
+  public Optional<Account> toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    return Optional.ofNullable(accountUpdateByIdCmd).flatMap(accountUpdateByIdCmdNotNull -> {
+      Optional.ofNullable(accountUpdateByIdCmdNotNull.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-      return accountRepository.findById(accountUpdateByIdClientObject.getId())
+      return accountRepository.findById(accountUpdateByIdCmdNotNull.getId())
         .flatMap(this::toEntity).flatMap(account -> {
           String emailBeforeUpdated = account.getEmail();
           String usernameBeforeUpdated = account.getUsername();
-          AccountMapper.INSTANCE.toEntity(accountUpdateByIdClientObject, account);
+          AccountMapper.INSTANCE.toEntity(accountUpdateByIdCmdNotNull, account);
           Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
             .ifPresent(accountAddresses -> accountAddresses.forEach(
               accountAddress -> accountAddress.setUserId(account.getId())));
@@ -330,16 +330,16 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Account> toEntity(AccountUpdateRoleCo accountUpdateRoleCo) {
-    return Optional.ofNullable(accountUpdateRoleCo).flatMap(accountUpdateRoleClientObject -> {
-      Optional.ofNullable(accountUpdateRoleClientObject.getId())
+  public Optional<Account> toEntity(AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    return Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountUpdateRoleCmdNotNull -> {
+      Optional.ofNullable(accountUpdateRoleCmdNotNull.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<AccountDo> accountDoOptional = accountRepository.findById(
-        accountUpdateRoleClientObject.getId());
+        accountUpdateRoleCmdNotNull.getId());
       AccountDo accountDo = accountDoOptional.orElseThrow(
         () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountDo).map(account -> {
-        Optional.ofNullable(accountUpdateRoleClientObject.getRoleCodes())
+        Optional.ofNullable(accountUpdateRoleCmdNotNull.getRoleCodes())
           .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
         return account;
       });
@@ -392,11 +392,11 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-    AccountAddSystemSettingsCo accountAddSystemSettingsCo) {
-    return Optional.ofNullable(accountAddSystemSettingsCo)
-      .map(accountAddSystemSettingsCoNotNull -> {
+    AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    return Optional.ofNullable(accountAddSystemSettingsCmd)
+      .map(accountAddSystemSettingsCmdNotNull -> {
         AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
-          accountAddSystemSettingsCoNotNull);
+          accountAddSystemSettingsCmdNotNull);
         if (StringUtils.isBlank(accountSystemSettings.getId())) {
           accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
         }
@@ -406,16 +406,16 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-    AccountModifySystemSettingsBySettingsIdCo accountModifySystemSettingsBySettingsIdCo) {
-    return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCo)
-      .flatMap(accountModifySystemSettingsBySettingsIdCoNotNull -> {
-        Optional.ofNullable(accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+    AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmd)
+      .flatMap(accountModifySystemSettingsBySettingsIdCmdNotNull -> {
+        Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
           .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
         return accountSystemSettingsMongodbRepository.findById(
-            accountModifySystemSettingsBySettingsIdCoNotNull.getId())
+            accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
           .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
             AccountMapper.INSTANCE.toAccountSystemSettings(
-              accountModifySystemSettingsBySettingsIdCoNotNull,
+              accountModifySystemSettingsBySettingsIdCmdNotNull,
               accountSystemSettings);
             return Optional.of(accountSystemSettings);
           });
@@ -443,12 +443,12 @@ public class AccountConvertor {
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddress> toEntity(
-    AccountAddAddressCo accountAddAddressCo) {
-    return Optional.ofNullable(accountAddAddressCo).map(accountAddAddressCoNonNull -> {
-      AccountAddress instanceEntity = AccountMapper.INSTANCE.toAccountAddress(accountAddAddressCo);
+    AccountAddAddressCmd accountAddAddressCmd) {
+    return Optional.ofNullable(accountAddAddressCmd).map(accountAddAddressCmdNonNull -> {
+      AccountAddress instanceEntity = AccountMapper.INSTANCE.toAccountAddress(accountAddAddressCmd);
       if (instanceEntity.getId() == null) {
         instanceEntity.setId(primaryKeyGrpcService.snowflake());
-        accountAddAddressCoNonNull.setId(instanceEntity.getId());
+        accountAddAddressCmdNonNull.setId(instanceEntity.getId());
       }
       return instanceEntity;
     });
@@ -512,10 +512,10 @@ public class AccountConvertor {
           .map(roles -> roles.stream().map(role -> {
             AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcCo(
               role);
-            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllAuthorities(
-              Optional.ofNullable(role.getAuthorities()).map(
+            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
+              Optional.ofNullable(role.getPermissions()).map(
                 accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
-                  .map(AccountMapper.INSTANCE::toAccountRoleAuthorityCurrentLoginQueryGrpcCo)
+                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcCo)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginCo.getAddresses())

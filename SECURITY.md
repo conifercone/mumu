@@ -1,6 +1,6 @@
 # Security Policy
 
-- [简体中文](SECURITY.zh_CN.md)
+- [简体中文](docs/SECURITY.zh_CN.md)
 - [English](SECURITY.md)
 
 ## Supported Versions
@@ -9,6 +9,9 @@
 |---------|-----------|
 | 1.0.x   | ✅         |
 | 2.0.x   | ✅         |
+| 2.1.x   | ✅         |
+| 2.2.x   | ✅         |
+| 2.3.x   | ✅         |
 
 ## Reporting a Vulnerability
 

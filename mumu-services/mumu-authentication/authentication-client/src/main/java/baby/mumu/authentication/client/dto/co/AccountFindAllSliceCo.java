@@ -168,11 +168,11 @@ public class AccountFindAllSliceCo extends BaseClientObject {
 
     private String code;
 
-    private List<AccountFindAllAuthorityCo> authorities;
+    private List<AccountFindAllPermissionCo> permissions;
   }
 
   @Data
-  public static class AccountFindAllAuthorityCo {
+  public static class AccountFindAllPermissionCo {
 
     /**
      * 权限id

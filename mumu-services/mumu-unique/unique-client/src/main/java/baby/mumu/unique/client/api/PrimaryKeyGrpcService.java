@@ -38,13 +38,13 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 @Observed(name = "PrimaryKeyGrpcService")
 public class PrimaryKeyGrpcService extends UniqueGrpcService implements DisposableBean,
-    InitializingBean {
+  InitializingBean {
 
   private ManagedChannel channel;
 
   public PrimaryKeyGrpcService(
-      DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
@@ -61,18 +61,18 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
 
   public Long snowflake() {
     return Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .map(ch -> {
-          channel = ch;
-          return snowflakeFromGrpc();
-        })
-        .orElseGet(YitIdHelper::nextId);
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return snowflakeFromGrpc();
+      })
+      .orElseGet(YitIdHelper::nextId);
   }
 
   private @NotNull Long snowflakeFromGrpc() {
     PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
-        channel);
+      channel);
     return primaryKeyServiceBlockingStub.snowflake(
-        Empty.newBuilder().build()).getId();
+      Empty.newBuilder().build()).getId();
   }
 }

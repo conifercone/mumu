@@ -2,9 +2,12 @@ name: Dependency Submission
 
 on:
   push:
+    paths:
+      - '**/build.gradle.kts'
+      - 'gradle/libs.versions.toml'
     branches:
-      - develop
       - main
+
 
 permissions:
   contents: write
@@ -20,5 +23,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@v3

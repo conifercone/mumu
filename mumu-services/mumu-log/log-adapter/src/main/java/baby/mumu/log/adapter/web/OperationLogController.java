@@ -79,7 +79,7 @@ public class OperationLogController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<OperationLogFindAllCo> findAll(
-      @ModelAttribute @Valid OperationLogFindAllCmd operationLogFindAllCmd) {
+    @ModelAttribute @Valid OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogService.findAll(operationLogFindAllCmd);
   }
 

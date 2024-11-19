@@ -40,18 +40,18 @@ public class CountryGetCitiesByStateIdCmdExe {
 
   @Autowired
   public CountryGetCitiesByStateIdCmdExe(CountryGateway countryGateway,
-      CountryConvertor countryConvertor) {
+    CountryConvertor countryConvertor) {
     this.countryGateway = countryGateway;
     this.countryConvertor = countryConvertor;
   }
 
   public List<CountryGetCitiesByStateIdCo> execute(
-      Long id) {
+    Long id) {
     Assert.notNull(id, "id cannot be null");
     return Optional.of(id)
-        .map(stateId -> countryGateway.getCitiesByStateId(stateId).stream()
-            .map(city -> countryConvertor.toCountryGetCitiesByStateIdCo(city).orElse(null))
-            .filter(
-                Objects::nonNull).toList()).orElse(new ArrayList<>());
+      .map(stateId -> countryGateway.getCitiesByStateId(stateId).stream()
+        .map(city -> countryConvertor.toCountryGetCitiesByStateIdCo(city).orElse(null))
+        .filter(
+          Objects::nonNull).toList()).orElse(new ArrayList<>());
   }
 }

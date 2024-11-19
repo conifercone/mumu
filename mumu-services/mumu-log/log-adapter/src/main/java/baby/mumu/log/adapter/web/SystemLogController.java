@@ -68,7 +68,7 @@ public class SystemLogController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<SystemLogFindAllCo> findAll(
-      @ModelAttribute @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
+    @ModelAttribute @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogService.findAll(systemLogFindAllCmd);
   }
 }

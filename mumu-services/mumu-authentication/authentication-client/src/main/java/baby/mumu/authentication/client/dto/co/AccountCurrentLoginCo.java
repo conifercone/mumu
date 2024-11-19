@@ -126,11 +126,11 @@ public class AccountCurrentLoginCo extends BaseClientObject {
     /**
      * 角色权限
      */
-    private List<AccountRoleAuthorityCurrentLoginQueryCo> authorities;
+    private List<AccountRolePermissionCurrentLoginQueryCo> permissions;
   }
 
   @Data
-  public static class AccountRoleAuthorityCurrentLoginQueryCo {
+  public static class AccountRolePermissionCurrentLoginQueryCo {
 
     /**
      * 权限id

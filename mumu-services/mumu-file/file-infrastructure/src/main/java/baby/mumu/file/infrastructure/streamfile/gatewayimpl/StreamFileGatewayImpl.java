@@ -47,7 +47,7 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
 
   @Autowired
   public StreamFileGatewayImpl(MinioStreamFileRepository minioStreamFileRepository,
-      StreamFileConvertor streamFileConvertor) {
+    StreamFileConvertor streamFileConvertor) {
     this.minioStreamFileRepository = minioStreamFileRepository;
     this.streamFileConvertor = streamFileConvertor;
   }
@@ -56,9 +56,9 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-        .flatMap(streamFileConvertor::toMinioDo)
-        .filter(minioDo -> minioDo.getContent() != null && StringUtils.isNotBlank(
-            minioDo.getName()))
+      .flatMap(streamFileConvertor::toMinioDo)
+      .filter(minioDo -> minioDo.getContent() != null && StringUtils.isNotBlank(
+        minioDo.getName()))
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
     if (StringUtils.isNotBlank(streamFileMinioDo.getStorageAddress())) {
       minioStreamFileRepository.createStorageAddress(streamFileMinioDo.getStorageAddress());
@@ -72,27 +72,27 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<InputStream> download(StreamFile streamFile) {
     return Optional.ofNullable(streamFile).flatMap(streamFileConvertor::toMinioDo).filter(
-        file -> {
-          if (ObjectUtils.isEmpty(file.getStorageAddress())) {
-            throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
-          } else if (!minioStreamFileRepository.storageAddressExists(file.getStorageAddress())) {
-            throw new MuMuException(ResponseCode.THE_FILE_STORAGE_ADDRESS_DOES_NOT_EXIST);
-          }
-          if (ObjectUtils.isEmpty(file.getName())) {
-            throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
-          }
-          if (!minioStreamFileRepository.existed(file)) {
-            throw new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST);
-          }
-          return Boolean.TRUE;
-        }).flatMap(minioStreamFileRepository::download);
+      file -> {
+        if (ObjectUtils.isEmpty(file.getStorageAddress())) {
+          throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
+        } else if (!minioStreamFileRepository.storageAddressExists(file.getStorageAddress())) {
+          throw new MuMuException(ResponseCode.THE_FILE_STORAGE_ADDRESS_DOES_NOT_EXIST);
+        }
+        if (ObjectUtils.isEmpty(file.getName())) {
+          throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
+        }
+        if (!minioStreamFileRepository.existed(file)) {
+          throw new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST);
+        }
+        return Boolean.TRUE;
+      }).flatMap(minioStreamFileRepository::download);
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(StreamFile streamFile) {
     StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-        .flatMap(streamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
+      .flatMap(streamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
     minioStreamFileRepository.removeFile(streamFileMinioDo);
   }

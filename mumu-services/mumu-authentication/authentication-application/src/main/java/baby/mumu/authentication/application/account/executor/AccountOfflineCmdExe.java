@@ -40,6 +40,6 @@ public class AccountOfflineCmdExe {
 
   public void execute(Long accountId) {
     Optional.ofNullable(accountId)
-        .ifPresent(accountGateway::offline);
+      .ifPresent(accountGateway::offline);
   }
 }

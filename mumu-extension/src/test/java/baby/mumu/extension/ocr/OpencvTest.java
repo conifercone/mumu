@@ -35,7 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig(FaceDetectionConfiguration.class)
 @TestPropertySource(properties = {
-    "mumu.extension.fd.opencv.enabled=true"
+  "mumu.extension.fd.opencv.enabled=true"
 })
 public class OpencvTest {
 
@@ -52,7 +52,7 @@ public class OpencvTest {
   void numberOfFaces() throws IOException {
     FaceDetection faceDetection = new FaceDetection();
     faceDetection.setImageAbsolutePath(
-        resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
+      resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
     Long l = faceDetectionProcessor.numberOfFaces(faceDetection);
     Assertions.assertEquals(4, l);
   }
@@ -61,7 +61,7 @@ public class OpencvTest {
   void drawBorder() throws IOException {
     FaceDetection faceDetection = new FaceDetection();
     faceDetection.setImageAbsolutePath(
-        resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
+      resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
     File faces = File.createTempFile("faces", ".jpg");
     faceDetection.setImageOutputAbsolutePath(faces.getAbsolutePath());
     faceDetectionProcessor.drawBorder(faceDetection);

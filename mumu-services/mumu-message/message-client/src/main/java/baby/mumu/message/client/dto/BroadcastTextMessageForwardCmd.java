@@ -15,8 +15,9 @@
  */
 package baby.mumu.message.client.dto;
 
-import baby.mumu.message.client.dto.co.BroadcastTextMessageForwardCo;
-import jakarta.validation.Valid;
+import baby.mumu.basis.enums.MessageStatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import java.util.Collection;
 import lombok.Data;
 
 /**
@@ -28,6 +29,12 @@ import lombok.Data;
 @Data
 public class BroadcastTextMessageForwardCmd {
 
-  @Valid
-  private BroadcastTextMessageForwardCo broadcastTextMessageForwardCo;
+  private Long id;
+
+  private Collection<Long> receiverIds;
+
+  @NotBlank(message = "{text.message.validation.not.blank}")
+  private String message;
+
+  private MessageStatusEnum messageStatus;
 }

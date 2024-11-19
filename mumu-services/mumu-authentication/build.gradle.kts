@@ -1,5 +1,5 @@
 plugins {
-    id(libs.plugins.flyway.get().pluginId) version libs.versions.flywayVersion
+    alias(libs.plugins.flyway)
 }
 
 dependencies {
@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.redis.om.spring)
     implementation(libs.jobrunr.spring.boot3.starter)
     annotationProcessor(libs.redis.om.spring)
+    annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
 }
 

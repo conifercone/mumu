@@ -48,7 +48,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class CaptchaGrpcServiceTest {
 
   private final CaptchaGrpcService captchaGrpcService;
-  private static final Logger LOGGER = LoggerFactory.getLogger(CaptchaGrpcServiceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(CaptchaGrpcServiceTest.class);
 
   @Autowired
   public CaptchaGrpcServiceTest(CaptchaGrpcService captchaGrpcService) {
@@ -62,7 +62,7 @@ public class CaptchaGrpcServiceTest {
       .setTtl(Int64Value.of(500)).build();
     SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
-    LOGGER.info("simpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
+    logger.info("simpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
     Assertions.assertNotNull(simpleCaptchaGeneratedGrpcCo);
   }
 
@@ -77,7 +77,7 @@ public class CaptchaGrpcServiceTest {
     simpleCaptchaGeneratedGrpcCoListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaGeneratedGrpcCo simpleCaptchaGeneratedGrpcCo = simpleCaptchaGeneratedGrpcCoListenableFuture.get();
-        LOGGER.info("Sync SimpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
+        logger.info("Sync SimpleCaptchaGeneratedGrpcCo : {}", simpleCaptchaGeneratedGrpcCo);
         Assertions.assertNotNull(simpleCaptchaGeneratedGrpcCo);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
@@ -100,7 +100,7 @@ public class CaptchaGrpcServiceTest {
       .setId(simpleCaptchaGeneratedGrpcCo.getId()).build();
     SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = captchaGrpcService.verifySimpleCaptcha(
       simpleCaptchaVerifyGrpcCmd);
-    LOGGER.info("simpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
+    logger.info("simpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
     Assertions.assertNotNull(simpleCaptchaVerifyGrpcResult);
     Assertions.assertTrue(simpleCaptchaVerifyGrpcResult.getResult());
   }
@@ -122,7 +122,7 @@ public class CaptchaGrpcServiceTest {
     simpleCaptchaVerifyGrpcResultListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = simpleCaptchaVerifyGrpcResultListenableFuture.get();
-        LOGGER.info("Sync SimpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
+        logger.info("Sync SimpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
         Assertions.assertNotNull(simpleCaptchaVerifyGrpcResult);
         Assertions.assertTrue(simpleCaptchaVerifyGrpcResult.getResult());
         countDownLatch.countDown();

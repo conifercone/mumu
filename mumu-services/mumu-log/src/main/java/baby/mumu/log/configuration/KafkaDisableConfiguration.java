@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "false")
 @EnableAutoConfiguration(exclude = {
-    KafkaAutoConfiguration.class
+  KafkaAutoConfiguration.class
 })
 public class KafkaDisableConfiguration {
 

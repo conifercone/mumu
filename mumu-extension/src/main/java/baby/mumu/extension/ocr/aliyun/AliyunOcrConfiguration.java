@@ -46,10 +46,10 @@ public class AliyunOcrConfiguration {
     AliyunOcrProperties aliyun = extensionProperties.getOcr().getAliyun();
     Config config = new Config();
     config.setAccessKeyId(
-        StringUtils.isBlank(aliyun.getAccessKeyId()) ? System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
-            : aliyun.getAccessKeyId());
+      StringUtils.isBlank(aliyun.getAccessKeyId()) ? System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
+        : aliyun.getAccessKeyId());
     config.setAccessKeySecret(StringUtils.isBlank(aliyun.getAccessKeySecret()) ? System.getenv(
-        "ALIBABA_CLOUD_ACCESS_KEY_SECRET") : aliyun.getAccessKeySecret());
+      "ALIBABA_CLOUD_ACCESS_KEY_SECRET") : aliyun.getAccessKeySecret());
     config.setEndpoint(aliyun.getEndpoint());
     return new Client(config);
   }

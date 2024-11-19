@@ -17,12 +17,12 @@ package baby.mumu.authentication.infrastructure.role.gatewayimpl;
 
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityDo;
-import baby.mumu.authentication.infrastructure.relations.database.RoleAuthorityRepository;
-import baby.mumu.authentication.infrastructure.relations.redis.RoleAuthorityRedisRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
+import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
@@ -71,18 +71,18 @@ public class RoleGatewayImpl implements RoleGateway {
   private final RoleArchivedRepository roleArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
-  private final RoleAuthorityRepository roleAuthorityRepository;
+  private final RolePermissionRepository rolePermissionRepository;
   private final RoleRedisRepository roleRedisRepository;
-  private final RoleAuthorityRedisRepository roleAuthorityRedisRepository;
+  private final RolePermissionRedisRepository rolePermissionRedisRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
-      ObjectProvider<DistributedLock> distributedLockObjectProvider,
-      AccountGateway accountGateway, RoleConvertor roleConvertor,
-      RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
-      ExtensionProperties extensionProperties,
-      RoleAuthorityRepository roleAuthorityRepository,
-      RoleRedisRepository roleRedisRepository,
-      RoleAuthorityRedisRepository roleAuthorityRedisRepository) {
+    ObjectProvider<DistributedLock> distributedLockObjectProvider,
+    AccountGateway accountGateway, RoleConvertor roleConvertor,
+    RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
+    ExtensionProperties extensionProperties,
+    RolePermissionRepository rolePermissionRepository,
+    RoleRedisRepository roleRedisRepository,
+    RolePermissionRedisRepository rolePermissionRedisRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -90,9 +90,9 @@ public class RoleGatewayImpl implements RoleGateway {
     this.roleArchivedRepository = roleArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
-    this.roleAuthorityRepository = roleAuthorityRepository;
+    this.rolePermissionRepository = rolePermissionRepository;
     this.roleRedisRepository = roleRedisRepository;
-    this.roleAuthorityRedisRepository = roleAuthorityRedisRepository;
+    this.rolePermissionRedisRepository = rolePermissionRedisRepository;
   }
 
   @Override
@@ -101,14 +101,14 @@ public class RoleGatewayImpl implements RoleGateway {
   public void add(Role role) {
     //保存角色数据
     Optional.ofNullable(role).flatMap(roleConvertor::toDataObject)
-        .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode())
-            && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
-        .ifPresentOrElse(roleDo -> {
-          roleRepository.persist(roleDo);
-          roleRedisRepository.deleteById(roleDo.getId());
-        }, () -> {
-          throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
-        });
+      .filter(roleDo -> !roleRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode())
+        && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
+      .ifPresentOrElse(roleDo -> {
+        roleRepository.persist(roleDo);
+        roleRedisRepository.deleteById(roleDo.getId());
+      }, () -> {
+        throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
+      });
     saveRoleAuthorityRelationsData(role);
   }
 
@@ -117,10 +117,10 @@ public class RoleGatewayImpl implements RoleGateway {
   protected void saveRoleAuthorityRelationsData(Role role) {
     //保存角色权限关系数据（如果存在关系）
     Optional.ofNullable(role).ifPresent(roleNonNull -> {
-      List<RoleAuthorityDo> roleAuthorityDos = roleConvertor.toRoleAuthorityDos(role);
-      if (CollectionUtils.isNotEmpty(roleAuthorityDos)) {
-        roleAuthorityRepository.persistAll(roleAuthorityDos);
-        roleAuthorityRedisRepository.deleteById(roleNonNull.getId());
+      List<RolePermissionDo> rolePermissionDos = roleConvertor.toRolePermissionDos(role);
+      if (CollectionUtils.isNotEmpty(rolePermissionDos)) {
+        rolePermissionRepository.persistAll(rolePermissionDos);
+        rolePermissionRedisRepository.deleteById(roleNonNull.getId());
       }
     });
   }
@@ -134,13 +134,13 @@ public class RoleGatewayImpl implements RoleGateway {
       List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId);
       if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
         throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-            allAccountByRoleId.stream().map(Account::getUsername).toList());
+          allAccountByRoleId.stream().map(Account::getUsername).toList());
       }
-      roleAuthorityRepository.deleteByRoleId(roleId);
+      rolePermissionRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
       roleArchivedRepository.deleteById(roleId);
       roleRedisRepository.deleteById(roleId);
-      roleAuthorityRedisRepository.deleteById(roleId);
+      rolePermissionRedisRepository.deleteById(roleId);
     });
   }
 
@@ -153,10 +153,10 @@ public class RoleGatewayImpl implements RoleGateway {
       try {
         roleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
         //删除权限关系数据重新添加
-        roleAuthorityRepository.deleteByRoleId(roleDomain.getId());
+        rolePermissionRepository.deleteByRoleId(roleDomain.getId());
         saveRoleAuthorityRelationsData(roleDomain);
         roleRedisRepository.deleteById(roleDomain.getId());
-        roleAuthorityRedisRepository.deleteById(roleDomain.getId());
+        rolePermissionRedisRepository.deleteById(roleDomain.getId());
       } finally {
         Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
       }
@@ -169,14 +169,14 @@ public class RoleGatewayImpl implements RoleGateway {
   public Page<Role> findAll(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RoleDo> roleDoPage = roleRepository.findAllPage(
-        roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
-        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
-                roleEntity.getAuthorities()))
-            .map(authorities -> authorities.stream().map(Authority::getId).collect(
-                Collectors.toList())).orElse(null), pageRequest);
+      roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
+      Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+          roleEntity.getPermissions()))
+        .map(authorities -> authorities.stream().map(Permission::getId).collect(
+          Collectors.toList())).orElse(null), pageRequest);
     return new PageImpl<>(roleDoPage.getContent().stream()
-        .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
-        .toList(), pageRequest, roleDoPage.getTotalElements());
+      .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+      .toList(), pageRequest, roleDoPage.getTotalElements());
   }
 
   @Override
@@ -185,14 +185,14 @@ public class RoleGatewayImpl implements RoleGateway {
   public Slice<Role> findAllSlice(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RoleDo> roleDoSlice = roleRepository.findAllSlice(
-        roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
-        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
-                roleEntity.getAuthorities()))
-            .map(authorities -> authorities.stream().map(Authority::getId).collect(
-                Collectors.toList())).orElse(null), pageRequest);
+      roleConvertor.toDataObject(role).orElseGet(RoleDo::new),
+      Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+          roleEntity.getPermissions()))
+        .map(authorities -> authorities.stream().map(Permission::getId).collect(
+          Collectors.toList())).orElse(null), pageRequest);
     return new SliceImpl<>(roleDoSlice.getContent().stream()
-        .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
-        .toList(), pageRequest, roleDoSlice.hasNext());
+      .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
+      .toList(), pageRequest, roleDoSlice.hasNext());
   }
 
   @Override
@@ -201,14 +201,14 @@ public class RoleGatewayImpl implements RoleGateway {
   public Slice<Role> findArchivedAllSlice(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RoleArchivedDo> roleArchivedDos = roleArchivedRepository.findAllSlice(
-        roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
-        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
-                roleEntity.getAuthorities()))
-            .map(authorities -> authorities.stream().map(Authority::getId).collect(
-                Collectors.toList())).orElse(null), pageRequest);
+      roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
+      Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+          roleEntity.getPermissions()))
+        .map(authorities -> authorities.stream().map(Permission::getId).collect(
+          Collectors.toList())).orElse(null), pageRequest);
     return new SliceImpl<>(roleArchivedDos.getContent().stream()
-        .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
-        .toList(), pageRequest, roleArchivedDos.hasNext());
+      .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
+      .toList(), pageRequest, roleArchivedDos.hasNext());
   }
 
   @Override
@@ -217,23 +217,23 @@ public class RoleGatewayImpl implements RoleGateway {
   public Page<Role> findArchivedAll(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RoleArchivedDo> roleArchivedDoPage = roleArchivedRepository.findAllPage(
-        roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
-        Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
-                roleEntity.getAuthorities()))
-            .map(authorities -> authorities.stream().map(Authority::getId).collect(
-                Collectors.toList())).orElse(null), pageRequest);
+      roleConvertor.toArchivedDo(role).orElseGet(RoleArchivedDo::new),
+      Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
+          roleEntity.getPermissions()))
+        .map(authorities -> authorities.stream().map(Permission::getId).collect(
+          Collectors.toList())).orElse(null), pageRequest);
     return new PageImpl<>(roleArchivedDoPage.getContent().stream()
-        .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
-        .toList(), pageRequest, roleArchivedDoPage.getTotalElements());
+      .flatMap(roleArchivedDo -> roleConvertor.toEntity(roleArchivedDo).stream())
+      .toList(), pageRequest, roleArchivedDoPage.getTotalElements());
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
-  public List<Role> findAllContainAuthority(Long authorityId) {
-    return roleAuthorityRepository.findByAuthorityId(authorityId).stream()
-        .flatMap(roleAuthorityDo -> roleConvertor.toEntity(roleAuthorityDo.getRole()).stream())
-        .toList();
+  public List<Role> findAllContainPermission(Long permissionId) {
+    return rolePermissionRepository.findByPermissionId(permissionId).stream()
+      .flatMap(roleAuthorityDo -> roleConvertor.toEntity(roleAuthorityDo.getRole()).stream())
+      .toList();
   }
 
   @Override
@@ -243,46 +243,47 @@ public class RoleGatewayImpl implements RoleGateway {
     List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id);
     if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
       throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
-          allAccountByRoleId.stream().map(Account::getUsername).toList());
+        allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(roleRepository::findById)
-        .flatMap(roleConvertor::toArchivedDo).ifPresent(roleArchivedDo -> {
-          roleArchivedDo.setArchived(true);
-          roleArchivedRepository.persist(roleArchivedDo);
-          roleRepository.deleteById(roleArchivedDo.getId());
-          roleRedisRepository.deleteById(roleArchivedDo.getId());
-          roleAuthorityRedisRepository.deleteById(roleArchivedDo.getId());
-          GlobalProperties global = extensionProperties.getGlobal();
-          jobScheduler.schedule(Instant.now()
-                  .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-              () -> deleteArchivedDataJob(roleArchivedDo.getId()));
-        });
+      .flatMap(roleConvertor::toArchivedDo).ifPresent(roleArchivedDo -> {
+        roleArchivedDo.setArchived(true);
+        roleArchivedRepository.persist(roleArchivedDo);
+        roleRepository.deleteById(roleArchivedDo.getId());
+        roleRedisRepository.deleteById(roleArchivedDo.getId());
+        rolePermissionRedisRepository.deleteById(roleArchivedDo.getId());
+        GlobalProperties global = extensionProperties.getGlobal();
+        jobScheduler.schedule(Instant.now()
+            .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+          () -> deleteArchivedDataJob(roleArchivedDo.getId()));
+      });
   }
 
   @Job(name = "删除ID为：%0 的角色归档数据")
   @DangerousOperation("根据ID删除ID为%0的角色归档数据定时任务")
+  @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id)
-        .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())
-        .ifPresent(roleIdNotNull -> {
-          roleArchivedRepository.deleteById(roleIdNotNull);
-          roleAuthorityRepository.deleteByRoleId(roleIdNotNull);
-          roleRedisRepository.deleteById(roleIdNotNull);
-          roleAuthorityRedisRepository.deleteById(roleIdNotNull);
-        });
+      .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())
+      .ifPresent(roleIdNotNull -> {
+        roleArchivedRepository.deleteById(roleIdNotNull);
+        rolePermissionRepository.deleteByRoleId(roleIdNotNull);
+        roleRedisRepository.deleteById(roleIdNotNull);
+        rolePermissionRedisRepository.deleteById(roleIdNotNull);
+      });
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
     Optional.ofNullable(id).flatMap(roleArchivedRepository::findById)
-        .flatMap(roleConvertor::toDataObject).ifPresent(roleDo -> {
-          roleDo.setArchived(false);
-          roleArchivedRepository.deleteById(roleDo.getId());
-          roleRepository.persist(roleDo);
-          roleRedisRepository.deleteById(roleDo.getId());
-          roleAuthorityRedisRepository.deleteById(roleDo.getId());
-        });
+      .flatMap(roleConvertor::toDataObject).ifPresent(roleDo -> {
+        roleDo.setArchived(false);
+        roleArchivedRepository.deleteById(roleDo.getId());
+        roleRepository.persist(roleDo);
+        roleRedisRepository.deleteById(roleDo.getId());
+        rolePermissionRedisRepository.deleteById(roleDo.getId());
+      });
   }
 }

@@ -17,4 +17,5 @@ dependencies {
         exclude(group = "org.skyscreamer", module = "jsonassert")
     }
     testImplementation(libs.jasypt)
+    annotationProcessor(project(":mumu-processor"))
 }

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2.1.0
  */
 public class RateLimitingCustomGenerateDefaultProviderImpl implements
-    RateLimitingCustomGenerateProvider {
+  RateLimitingCustomGenerateProvider {
 
   @Override
   public @NotNull RateLimitingCustomGenerate generate() {

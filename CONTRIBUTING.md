@@ -1,6 +1,6 @@
 # Contributing to MuMu
 
-- [简体中文](CONTRIBUTING.zh_CN.md)
+- [简体中文](docs/CONTRIBUTING.zh_CN.md)
 - [English](CONTRIBUTING.md)
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
@@ -169,13 +169,10 @@ features and known issues in detail in the release notes to help users make choi
 
 ### Other version control specifications
 
-Although semantic versioning is the most widely accepted standard, other specifications and
-variations exist:
+This project uses additional Git Short Hash to improve version control:
 
-1. **Date Versioning**: Use date as part of the version number, such as `2024.09.04`. This method is
-   suitable for projects with a high release frequency.
-2. **Git Hash**: Some projects will use the Git commit hash as part of the version number,
-   especially during development or continuous integration.
+1. **Git Short Hash**: Use Git short commit hash as part of the version number, especially during
+   development or continuous integration. Example: 1.0.0-dev-fe456874.
 
 ### Official reference
 

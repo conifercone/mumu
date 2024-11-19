@@ -47,7 +47,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
   private final PasswordEncoder passwordEncoder;
 
   OAuth2AuthorizationServerPropertiesMapper(OAuth2AuthorizationServerProperties properties,
-      PasswordEncoder passwordEncoder) {
+    PasswordEncoder passwordEncoder) {
     this.properties = properties;
     this.passwordEncoder = passwordEncoder;
   }
@@ -74,8 +74,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
   public List<RegisteredClient> asRegisteredClients() {
     List<RegisteredClient> registeredClients = new ArrayList<>();
     this.properties.getClient()
-        .forEach((registrationId, client) -> registeredClients.add(
-            getRegisteredClient(registrationId, client)));
+      .forEach((registrationId, client) -> registeredClients.add(
+        getRegisteredClient(registrationId, client)));
     return registeredClients;
   }
 
@@ -87,17 +87,17 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     map.from(passwordEncoder.encode(registration.getClientSecret())).to(builder::clientSecret);
     map.from(registration::getClientName).to(builder::clientName);
     registration.getClientAuthenticationMethods()
-        .forEach((clientAuthenticationMethod) -> map.from(clientAuthenticationMethod)
-            .as(ClientAuthenticationMethod::new)
-            .to(builder::clientAuthenticationMethod));
+      .forEach((clientAuthenticationMethod) -> map.from(clientAuthenticationMethod)
+        .as(ClientAuthenticationMethod::new)
+        .to(builder::clientAuthenticationMethod));
     registration.getAuthorizationGrantTypes()
-        .forEach((authorizationGrantType) -> map.from(authorizationGrantType)
-            .as(AuthorizationGrantType::new)
-            .to(builder::authorizationGrantType));
+      .forEach((authorizationGrantType) -> map.from(authorizationGrantType)
+        .as(AuthorizationGrantType::new)
+        .to(builder::authorizationGrantType));
     registration.getRedirectUris()
-        .forEach((redirectUri) -> map.from(redirectUri).to(builder::redirectUri));
+      .forEach((redirectUri) -> map.from(redirectUri).to(builder::redirectUri));
     registration.getPostLogoutRedirectUris()
-        .forEach((redirectUri) -> map.from(redirectUri).to(builder::postLogoutRedirectUri));
+      .forEach((redirectUri) -> map.from(redirectUri).to(builder::postLogoutRedirectUri));
     registration.getScopes().forEach((scope) -> map.from(scope).to(builder::scope));
     builder.clientSettings(getClientSettings(client, map));
     builder.tokenSettings(getTokenSettings(client, map));
@@ -105,19 +105,19 @@ public class OAuth2AuthorizationServerPropertiesMapper {
   }
 
   private @NotNull ClientSettings getClientSettings(@NotNull Client client,
-      @NotNull PropertyMapper map) {
+    @NotNull PropertyMapper map) {
     ClientSettings.Builder builder = ClientSettings.builder();
     map.from(client::isRequireProofKey).to(builder::requireProofKey);
     map.from(client::isRequireAuthorizationConsent).to(builder::requireAuthorizationConsent);
     map.from(client::getJwkSetUri).to(builder::jwkSetUrl);
     map.from(client::getTokenEndpointAuthenticationSigningAlgorithm)
-        .as(this::jwsAlgorithm)
-        .to(builder::tokenEndpointAuthenticationSigningAlgorithm);
+      .as(this::jwsAlgorithm)
+      .to(builder::tokenEndpointAuthenticationSigningAlgorithm);
     return builder.build();
   }
 
   private @NotNull TokenSettings getTokenSettings(@NotNull Client client,
-      @NotNull PropertyMapper map) {
+    @NotNull PropertyMapper map) {
     OAuth2AuthorizationServerProperties.Token token = client.getToken();
     TokenSettings.Builder builder = TokenSettings.builder();
     map.from(token::getAuthorizationCodeTimeToLive).to(builder::authorizationCodeTimeToLive);
@@ -127,8 +127,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     map.from(token::isReuseRefreshTokens).to(builder::reuseRefreshTokens);
     map.from(token::getRefreshTokenTimeToLive).to(builder::refreshTokenTimeToLive);
     map.from(token::getIdTokenSignatureAlgorithm)
-        .as(this::signatureAlgorithm)
-        .to(builder::idTokenSignatureAlgorithm);
+      .as(this::signatureAlgorithm)
+      .to(builder::idTokenSignatureAlgorithm);
     return builder.build();
   }
 

@@ -33,12 +33,12 @@ public class BroadcastTextMessageDeleteByIdCmdExe {
 
   @Autowired
   public BroadcastTextMessageDeleteByIdCmdExe(
-      BroadcastTextMessageGateway broadcastTextMessageGateway) {
+    BroadcastTextMessageGateway broadcastTextMessageGateway) {
     this.broadcastTextMessageGateway = broadcastTextMessageGateway;
   }
 
   public void execute(
-      Long id) {
+    Long id) {
     Optional.ofNullable(id).ifPresent(broadcastTextMessageGateway::deleteMsgById);
   }
 }

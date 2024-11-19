@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 subprojects {
@@ -20,8 +21,8 @@ subprojects {
                     "Built-Gradle" to gradle.gradleVersion,
                     "Build-OS" to System.getProperty("os.name"),
                     "Build-Jdk" to System.getProperty("java.version"),
-                    "Build-Timestamp" to LocalDateTime.now()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"))
                 )
             }
         }

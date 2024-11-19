@@ -44,7 +44,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
 
   @Autowired
   public CaptchaGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
-      SimpleCaptchaRepository simpleCaptchaRepository, CaptchaConvertor captchaConvertor) {
+    SimpleCaptchaRepository simpleCaptchaRepository, CaptchaConvertor captchaConvertor) {
     this.primaryKeyGateway = primaryKeyGateway;
     this.simpleCaptchaRepository = simpleCaptchaRepository;
     this.captchaConvertor = captchaConvertor;
@@ -53,23 +53,23 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
   @Override
   public SimpleCaptcha generateSimpleCaptcha(SimpleCaptcha simpleCaptcha) {
     SimpleCaptchaDo simpleCaptchaDo = Optional.ofNullable(simpleCaptcha)
-        .flatMap(simpleCaptchaDomain -> {
-          Optional.ofNullable(simpleCaptchaDomain.getId()).ifPresentOrElse(id -> {
-            if (simpleCaptchaRepository.existsById(id)) {
-              throw new MuMuException(ResponseCode.DATA_ALREADY_EXISTS);
-            }
-          }, () -> simpleCaptchaDomain.setId(primaryKeyGateway.snowflake()));
-          Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
-              .orElseThrow(() -> new MuMuException(
-                ResponseCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
-          if (StringUtils.isBlank(simpleCaptchaDomain.getTarget())) {
-            simpleCaptchaDomain.setTarget(
-                CommonUtil.generateRandomString(simpleCaptchaDomain.getLength()));
+      .flatMap(simpleCaptchaDomain -> {
+        Optional.ofNullable(simpleCaptchaDomain.getId()).ifPresentOrElse(id -> {
+          if (simpleCaptchaRepository.existsById(id)) {
+            throw new MuMuException(ResponseCode.DATA_ALREADY_EXISTS);
           }
-          Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new MuMuException(
-            ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
-          return captchaConvertor.toDataObject(simpleCaptchaDomain);
-        }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
+        }, () -> simpleCaptchaDomain.setId(primaryKeyGateway.snowflake()));
+        Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
+          .orElseThrow(() -> new MuMuException(
+            ResponseCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
+        if (StringUtils.isBlank(simpleCaptchaDomain.getTarget())) {
+          simpleCaptchaDomain.setTarget(
+            CommonUtil.generateRandomString(simpleCaptchaDomain.getLength()));
+        }
+        Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new MuMuException(
+          ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
+        return captchaConvertor.toDataObject(simpleCaptchaDomain);
+      }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
     simpleCaptchaRepository.save(simpleCaptchaDo);
     return simpleCaptcha;
   }
@@ -77,8 +77,8 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
   @Override
   public boolean verifySimpleCaptcha(SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).flatMap(
-            simpleCaptchaDomain -> simpleCaptchaRepository.findById(simpleCaptchaDomain.getId()))
-        .map(simpleCaptchaDo -> simpleCaptchaDo.getTarget().equals(simpleCaptcha.getSource()))
-        .orElse(false);
+        simpleCaptchaDomain -> simpleCaptchaRepository.findById(simpleCaptchaDomain.getId()))
+      .map(simpleCaptchaDo -> simpleCaptchaDo.getTarget().equals(simpleCaptcha.getSource()))
+      .orElse(false);
   }
 }

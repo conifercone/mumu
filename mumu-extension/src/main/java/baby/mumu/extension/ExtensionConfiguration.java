@@ -19,6 +19,8 @@ import baby.mumu.extension.aspects.AspectConfiguration;
 import baby.mumu.extension.cors.MuMuCorsConfiguration;
 import baby.mumu.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
+import baby.mumu.extension.filters.FilterConfiguration;
+import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
 import baby.mumu.extension.nosql.MongodbConfiguration;
 import baby.mumu.extension.ocr.OcrConfiguration;
@@ -38,9 +40,10 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
-    ZookeeperConfiguration.class, MuMuCorsConfiguration.class, DatasourceConfiguration.class,
-    TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
-    FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class})
+  ZookeeperConfiguration.class, MuMuCorsConfiguration.class, DatasourceConfiguration.class,
+  TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
+  FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class,
+  FilterConfiguration.class, IdempotentConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 

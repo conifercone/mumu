@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -48,9 +51,9 @@ public class ToolsTest {
   @Test
   public void getCountriesInEnglish() {
     List<String> collect = Arrays.stream(Locale.getISOCountries())
-        .map(code -> Locale.of("", code))
-        .map(res -> res.getDisplayCountry(Locale.ENGLISH))
-        .toList();
+      .map(code -> Locale.of("", code))
+      .map(res -> res.getDisplayCountry(Locale.ENGLISH))
+      .toList();
     System.out.println(collect);
   }
 
@@ -76,5 +79,20 @@ public class ToolsTest {
     System.out.println((String) null);
     //noinspection RedundantCast
     Assertions.assertFalse(StringUtils.isNotBlank((String) null));
+  }
+
+  @Test
+  public void progressBar() {
+    List<String> list = Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
+      "1", "1", "1", "1");
+    ProgressBarBuilder pbb = new ProgressBarBuilder();
+    pbb.setStyle(ProgressBarStyle.ASCII);
+    ProgressBar.wrap(list, pbb).forEach(res -> {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 }

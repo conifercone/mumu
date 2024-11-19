@@ -15,6 +15,10 @@
  */
 package baby.mumu.file;
 
+import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.SpringBootConstants;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,9 +33,18 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @SpringBootApplication
 @EnableConfigurationProperties
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuFileApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuFileApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuFileApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuFileApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+      MuMuFileApplicationMetamodel.formattedProjectVersion);
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

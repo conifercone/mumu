@@ -35,7 +35,7 @@ public class QRCodeConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<QRCode> toEntity(
-      QRCodeGenerateCmd qrCodeGenerateCmd) {
+    QRCodeGenerateCmd qrCodeGenerateCmd) {
     return Optional.ofNullable(qrCodeGenerateCmd).map(QRCodeMapper.INSTANCE::toEntity);
   }
 }

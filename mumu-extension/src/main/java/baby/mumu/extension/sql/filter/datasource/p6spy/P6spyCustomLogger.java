@@ -44,49 +44,41 @@ import org.slf4j.MDC;
  */
 public class P6spyCustomLogger extends FormattedLogger {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(P6spyCustomLogger.class);
+  private static final Logger logger = LoggerFactory.getLogger(P6spyCustomLogger.class);
   public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
   private static final int MAX_LOG_SIZE = 10;
   private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
-      (a, b) -> Long.compare(b, a));
+    (a, b) -> Long.compare(b, a));
 
   @Override
   public void logException(Exception e) {
-    LOGGER.info("", e);
+    logger.info("", e);
   }
 
   @Override
   public void logText(String text) {
-    LOGGER.info(text);
+    logger.info(text);
   }
 
   @Override
   public void logSQL(int connectionId, String now, long elapsed,
-      Category category, String prepared, String sql, String url) {
+    Category category, String prepared, String sql, String url) {
     if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
-      if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
-        if (!slowQueries.containsValue(sql)) {
-          slowQueries.put(elapsed, sql);
-        }
-        if (slowQueries.size() > MAX_LOG_SIZE) {
-          slowQueries.pollLastEntry();
-        }
-        logTopSQLs();
-      }
-      String LF = "\n";
+      slowSqlRecord(elapsed, sql);
+      String lf = "\n";
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(LF).append("====>");
+      stringBuilder.append(lf).append("====>");
       stringBuilder.append("trace-id:[");
-      String traceId = null;
+      String traceId;
       try {
         traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
-            .flatMap(applicationContext -> Optional.ofNullable(
-                applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
-                tracer -> Optional.ofNullable(tracer.currentSpan())
-                    .map(span -> span.context().traceId())
-            ).orElse(null);
+          .flatMap(applicationContext -> Optional.ofNullable(
+            applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
+            tracer -> Optional.ofNullable(tracer.currentSpan())
+              .map(span -> span.context().traceId())
+          ).orElse(null);
       } catch (Exception e) {
-        // ignore
+        traceId = "";
       }
       if (Strings.isNullOrEmpty(traceId)) {
         String uuid = String.valueOf(UUID.randomUUID());
@@ -97,31 +89,47 @@ public class P6spyCustomLogger extends FormattedLogger {
       }
       stringBuilder.append("]");
       String msg = strategy.formatMessage(connectionId, now, elapsed,
-          category.toString(), prepared, sql, url);
+        category.toString(), prepared, sql, url);
       stringBuilder.append(msg);
 
-      if (Category.ERROR.equals(category)) {
-        LOGGER.error(stringBuilder.toString());
-      } else if (Category.WARN.equals(category)) {
-        LOGGER.warn(stringBuilder.toString());
-      } else if (Category.DEBUG.equals(category)) {
-        LOGGER.debug(stringBuilder.toString());
-      } else {
-        LOGGER.info(stringBuilder.toString());
+      print(category, stringBuilder);
+    }
+  }
+
+  private static void print(Category category, StringBuilder stringBuilder) {
+    if (Category.ERROR.equals(category)) {
+      logger.error(stringBuilder.toString());
+    } else if (Category.WARN.equals(category)) {
+      logger.warn(stringBuilder.toString());
+    } else if (Category.DEBUG.equals(category)) {
+      logger.debug(stringBuilder.toString());
+    } else {
+      logger.info(stringBuilder.toString());
+    }
+  }
+
+  private void slowSqlRecord(long elapsed, String sql) {
+    if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
+      if (!slowQueries.containsValue(sql)) {
+        slowQueries.put(elapsed, sql);
       }
+      if (slowQueries.size() > MAX_LOG_SIZE) {
+        slowQueries.pollLastEntry();
+      }
+      logTopSQLs();
     }
   }
 
   @Override
   public boolean isCategoryEnabled(Category category) {
     if (Category.ERROR.equals(category)) {
-      return LOGGER.isErrorEnabled();
+      return logger.isErrorEnabled();
     } else if (Category.WARN.equals(category)) {
-      return LOGGER.isWarnEnabled();
+      return logger.isWarnEnabled();
     } else if (Category.DEBUG.equals(category)) {
-      return LOGGER.isDebugEnabled();
+      return logger.isDebugEnabled();
     } else {
-      return LOGGER.isInfoEnabled();
+      return logger.isInfoEnabled();
     }
   }
 
@@ -148,7 +156,7 @@ public class P6spyCustomLogger extends FormattedLogger {
     strings.addFirst(CommonConstants.SLOW_SQL_TABLE_HEADER);
     strings.remove(1);
     strings.remove(1);
-    LOGGER.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
-        String.join("\r\n", strings));
+    logger.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
+      String.join("\r\n", strings));
   }
 }

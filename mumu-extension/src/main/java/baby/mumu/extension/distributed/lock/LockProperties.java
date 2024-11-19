@@ -32,5 +32,5 @@ public class LockProperties {
    * zookeeper相关配置
    */
   @NestedConfigurationProperty
-  private ZookeeperProperties zookeeper;
+  private ZookeeperProperties zookeeper = new ZookeeperProperties();
 }

@@ -44,15 +44,15 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final ResourceServerProperties resourceServerProperties;
-  private final String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
+  private final static String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
 
   @Autowired
   public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
-      JwtAuthenticationConverter jwtAuthenticationConverter,
-      ResourceServerProperties resourceServerProperties) {
-    JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
-    jwtAuthenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
-    this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+    JwtAuthenticationConverter jwtAuthenticationConverter,
+    ResourceServerProperties resourceServerProperties) {
+    JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
+    authenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
+    this.jwtAuthenticationProvider = authenticationProvider;
     this.resourceServerProperties = resourceServerProperties;
   }
 
@@ -61,35 +61,35 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
     Registry authorizeRequests = builder.authorizeRequests();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getGrpcs())) {
       resourceServerProperties.getGrpcs()
-          .forEach(grpc -> {
-            if (CollectionUtils.isNotEmpty(grpc.getGrpcPolicies())) {
-              grpc.getGrpcPolicies().forEach(grpcPolicy -> {
-                try {
-                  Class<?> clazz = Class.forName(grpc.getServiceFullPath());
-                  Method method = clazz.getDeclaredMethod(String.format(GRPC_GET_METHOD_TEMPLATE,
-                      StringUtils.capitalize(grpcPolicy.getMethod())));
-                  AuthorizedMethod methods = authorizeRequests.methods(
-                      (MethodDescriptor<?, ?>) method.invoke(null));
-                  if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
-                    methods.hasAnyRole(grpcPolicy.getRole());
-                  } else if (StringUtils.isNotBlank(
-                      grpcPolicy.getAuthority())) {
-                    Assert.isTrue(
-                        !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
-                        "Permission configuration cannot be empty and cannot start with SCOPE_");
-                    methods.hasAnyAuthority(
-                        CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()));
-                  }
-                } catch (ClassNotFoundException | InvocationTargetException |
-                         IllegalAccessException | NoSuchMethodException e) {
-                  throw new RuntimeException(e);
+        .forEach(grpc -> {
+          if (CollectionUtils.isNotEmpty(grpc.getGrpcPolicies())) {
+            grpc.getGrpcPolicies().forEach(grpcPolicy -> {
+              try {
+                Class<?> clazz = Class.forName(grpc.getServiceFullPath());
+                Method method = clazz.getDeclaredMethod(String.format(GRPC_GET_METHOD_TEMPLATE,
+                  StringUtils.capitalize(grpcPolicy.getMethod())));
+                AuthorizedMethod methods = authorizeRequests.methods(
+                  (MethodDescriptor<?, ?>) method.invoke(null));
+                if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
+                  methods.hasAnyRole(grpcPolicy.getRole());
+                } else if (StringUtils.isNotBlank(
+                  grpcPolicy.getAuthority())) {
+                  Assert.isTrue(
+                    !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                    "Permission configuration cannot be empty and cannot start with SCOPE_");
+                  methods.hasAnyAuthority(
+                    CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()));
                 }
-              });
-            }
-          });
+              } catch (ClassNotFoundException | InvocationTargetException |
+                       IllegalAccessException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+              }
+            });
+          }
+        });
     }
     authorizeRequests
-        .and()
-        .authenticationProvider(jwtAuthenticationProvider);
+      .and()
+      .authenticationProvider(jwtAuthenticationProvider);
   }
 }

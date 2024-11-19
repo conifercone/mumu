@@ -33,7 +33,7 @@ public class MailClientConfiguration {
 
   @Bean
   public TemplateMailGrpcService templateMailGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new TemplateMailGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 

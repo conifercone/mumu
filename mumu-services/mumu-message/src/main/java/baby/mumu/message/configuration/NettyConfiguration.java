@@ -48,7 +48,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MessageProperties.class)
 public class NettyConfiguration {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(NettyConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(NettyConfiguration.class);
   private static final String WEBSOCKET_PROTOCOL = "WebSocket";
   private EventLoopGroup bossGroup;
   private EventLoopGroup workGroup;
@@ -96,16 +96,16 @@ public class NettyConfiguration {
                 3、核心功能是将http协议升级为ws协议，保持长连接
                 */
         socketChannel.pipeline().addLast(
-            new WebSocketServerProtocolHandler(messageProperties.getWebSocket().getPath(),
-                WEBSOCKET_PROTOCOL, true,
-                65536 * 10));
+          new WebSocketServerProtocolHandler(messageProperties.getWebSocket().getPath(),
+            WEBSOCKET_PROTOCOL, true,
+            65536 * 10));
         // 自定义的handler，处理业务逻辑
         socketChannel.pipeline().addLast(webSocketHandler());
       }
     });
     // 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
     ChannelFuture channelFuture = bootstrap.bind().sync();
-    LOGGER.info("Server started and listen on:{}", channelFuture.channel().localAddress());
+    logger.info("Server started and listen on:{}", channelFuture.channel().localAddress());
     // 对关闭通道进行监听
     channelFuture.channel().closeFuture().sync();
   }
@@ -127,7 +127,7 @@ public class NettyConfiguration {
       try {
         start();
       } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+        Thread.currentThread().interrupt();
       }
     }).start();
   }

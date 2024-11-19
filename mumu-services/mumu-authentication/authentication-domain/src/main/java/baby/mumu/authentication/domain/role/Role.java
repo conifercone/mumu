@@ -15,13 +15,15 @@
  */
 package baby.mumu.authentication.domain.role;
 
-import baby.mumu.authentication.domain.authority.Authority;
+import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,6 +69,12 @@ public class Role extends BasisDomainModel {
   /**
    * 角色权限
    */
-  private List<Authority> authorities;
+  private List<Permission> permissions;
+
+  /**
+   * 角色权限后代
+   */
+  @Builder.Default
+  private transient List<Permission> descendantPermissions = new ArrayList<>();
 
 }

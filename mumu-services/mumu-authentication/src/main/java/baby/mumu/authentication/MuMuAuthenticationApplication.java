@@ -17,8 +17,12 @@ package baby.mumu.authentication;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
+import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
+import baby.mumu.basis.constants.SpringBootConstants;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -44,9 +48,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement
+@Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuAuthenticationApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MuMuAuthenticationApplication.class, args);
+    SpringApplication springApplication = new SpringApplication(
+      MuMuAuthenticationApplication.class);
+    Map<String, Object> defaultProperties = new HashMap<>();
+    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+      MuMuAuthenticationApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+      MuMuAuthenticationApplicationMetamodel.formattedProjectVersion);
+    springApplication.setDefaultProperties(defaultProperties);
+    springApplication.run(args);
   }
 }

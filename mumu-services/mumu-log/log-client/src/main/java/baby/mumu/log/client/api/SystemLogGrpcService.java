@@ -36,8 +36,8 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
   private ManagedChannel channel;
 
   public SystemLogGrpcService(
-      DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    DiscoveryClient discoveryClient,
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     super(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
@@ -49,16 +49,16 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   public void syncSubmit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     Optional.ofNullable(channel)
-        .or(this::getManagedChannelUsePlaintext)
-        .ifPresent(ch -> {
-          channel = ch;
-          syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
-        });
+      .or(this::getManagedChannelUsePlaintext)
+      .ifPresent(ch -> {
+        channel = ch;
+        syncSubmitFromGrpc(systemLogSubmitGrpcCmd);
+      });
   }
 
   private void syncSubmitFromGrpc(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     SystemLogServiceFutureStub systemLogServiceFutureStub = SystemLogServiceGrpc.newFutureStub(
-        channel);
+      channel);
     //noinspection ResultOfMethodCallIgnored
     systemLogServiceFutureStub.submit(systemLogSubmitGrpcCmd);
   }

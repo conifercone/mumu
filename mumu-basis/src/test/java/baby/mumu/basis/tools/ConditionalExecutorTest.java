@@ -30,9 +30,9 @@ public class ConditionalExecutorTest {
   @Test
   public void test() {
     ConditionalExecutor.of(true).ifTrue(System.out::println, () -> "生成的消息").condition(true)
-        .ifTrue(() -> System.out.println("测试消息"))
-        .condition(false).ifFalse(() -> System.out.println("测试消息（条件不成立）"))
-        .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
+      .ifTrue(() -> System.out.println("测试消息"))
+      .condition(false).ifFalse(() -> System.out.println("测试消息（条件不成立）"))
+      .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
   }
 
   @Test
@@ -43,19 +43,19 @@ public class ConditionalExecutorTest {
   @Test
   public void test3() {
     System.out.println(ConditionalExecutor.of(true).orElseGet(() -> {
-          System.out.println("代码被执行，生成的消息。");
-          return "这是执行的消息。"; // 返回消息
-        },
-        () -> "这是备用消息。"));
+        System.out.println("代码被执行，生成的消息。");
+        return "这是执行的消息。"; // 返回消息
+      },
+      () -> "这是备用消息。"));
   }
 
   @Test
   public void test4() {
     System.out.println(ConditionalExecutor.of(false).orElseGet(() -> {
-          System.out.println("代码被执行，生成的消息。");
-          return "这是执行的消息。"; // 返回消息
-        },
-        () -> "这是备用消息。"));
+        System.out.println("代码被执行，生成的消息。");
+        return "这是执行的消息。"; // 返回消息
+      },
+      () -> "这是备用消息。"));
   }
 
   @Test
@@ -77,7 +77,7 @@ public class ConditionalExecutorTest {
     Runnable successAction = () -> System.out.println(successTest);
     Runnable failAction = () -> System.out.println(failTest);
     ConditionalExecutor.of(true).ifTrueElse(successAction, failAction).condition(false)
-        .ifTrueElse(successAction, failAction);
+      .ifTrueElse(successAction, failAction);
   }
 
   @Test
@@ -92,7 +92,7 @@ public class ConditionalExecutorTest {
     Predicate<String> predicate1 = (res) -> res.contains("测试");
     Predicate<String> predicate2 = (res) -> res.contains("11");
     ConditionalExecutor.of(predicate1.or(predicate2), () -> "11")
-        .ifTrue(() -> System.out.println(test));
+      .ifTrue(() -> System.out.println(test));
   }
 
   public boolean booleanSupplier() {

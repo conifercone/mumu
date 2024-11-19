@@ -19,10 +19,9 @@ import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 账户更新角色指令执行器
@@ -43,9 +42,8 @@ public class AccountUpdateRoleCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public void execute(@NotNull AccountUpdateRoleCmd accountUpdateRoleCmd) {
-    Assert.notNull(accountUpdateRoleCmd, "AccountUpdateRoleCmd cannot be null");
-    accountConvertor.toEntity(accountUpdateRoleCmd.getAccountUpdateRoleCo())
-        .ifPresent(accountGateway::updateRoleById);
+  public void execute(AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountConvertor::toEntity)
+      .ifPresent(accountGateway::updateRoleById);
   }
 }

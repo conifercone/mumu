@@ -36,7 +36,7 @@ public class StringSanitizerModule extends SimpleModule {
     addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
       @Override
       public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
-          throws IOException {
+        throws IOException {
         return Strings.emptyToNull(jsonParser.getValueAsString().trim());
       }
     });

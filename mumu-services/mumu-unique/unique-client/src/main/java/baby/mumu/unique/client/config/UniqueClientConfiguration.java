@@ -34,13 +34,13 @@ public class UniqueClientConfiguration {
 
   @Bean
   public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean
   public CaptchaGrpcService captchaGrpcService(DiscoveryClient discoveryClient,
-      ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     return new CaptchaGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
