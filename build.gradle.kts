@@ -51,6 +51,7 @@ allprojects {
         if (versionString.contains("-")) "$versionString-$gitHash" else versionString
 
     repositories {
+        maven("https://maven.aliyun.com/repository/public")
         mavenCentral()
         maven("https://repo.spring.io/milestone")
     }
