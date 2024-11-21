@@ -15,62 +15,29 @@
  */
 package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
 import java.io.Serial;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 角色查询客户端对象（不查询总数）
+ * 获取直系后代角色客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
-public class RoleFindAllSliceCo extends BaseClientObject {
+public class RoleFindDirectCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 354147586039980402L;
-
+  private static final long serialVersionUID = 3504852170569088538L;
 
   private Long id;
 
-  private String name;
-
   private String code;
 
-  private List<RoleFindAllSlicePermissionCo> permissions;
+  private String name;
 
-  /**
-   * 有后代角色
-   */
   private boolean hasDescendant;
-
-  @Data
-  public static class RoleFindAllSlicePermissionCo {
-
-    /**
-     * 权限id
-     */
-    private Long id;
-
-    /**
-     * 权限编码
-     */
-    private String code;
-
-    /**
-     * 权限名称
-     */
-    private String name;
-
-    /**
-     * 有后代权限
-     */
-    private boolean hasDescendant;
-  }
 }

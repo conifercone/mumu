@@ -15,16 +15,22 @@
  */
 package baby.mumu.authentication.client.api;
 
+import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
+import baby.mumu.authentication.client.dto.RoleFindRootCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -104,4 +110,43 @@ public interface RoleService {
    */
   void recoverFromArchiveById(
     Long id);
+
+  /**
+   * 添加祖先角色
+   *
+   * @param roleAddAncestorCmd 添加祖先角色指令
+   */
+  void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd);
+
+  /**
+   * 获取所有根角色
+   *
+   * @return 根角色
+   */
+  Page<RoleFindRootCo> findRootRoles(RoleFindRootCmd roleFindRootCmd);
+
+
+  /**
+   * 获取直系后代角色
+   *
+   * @return 直系后代角色
+   */
+  Page<RoleFindDirectCo> findDirectRoles(
+    RoleFindDirectCmd roleFindDirectCmd);
+
+  /**
+   * 删除角色路径
+   *
+   * @param ancestorId   祖先ID
+   * @param descendantId 后代ID
+   */
+  void deletePath(Long ancestorId, Long descendantId);
+
+  /**
+   * 根据角色ID查询指定角色信息
+   *
+   * @param id 角色ID
+   * @return 角色信息
+   */
+  RoleFindByIdCo findById(Long id);
 }

@@ -15,13 +15,18 @@
  */
 package baby.mumu.authentication.application.service;
 
+import baby.mumu.authentication.application.role.executor.RoleAddAncestorCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleAddCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllSliceCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeleteByIdCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleDeletePathCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllSliceCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleFindByIdCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleFindDirectCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleFindRootCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleUpdateCmdExe;
 import baby.mumu.authentication.client.api.RoleService;
@@ -30,16 +35,22 @@ import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
+import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
+import baby.mumu.authentication.client.dto.RoleFindRootCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -77,6 +88,11 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe;
   private final RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe;
   private final RoleConvertor roleConvertor;
+  private final RoleFindByIdCmdExe roleFindByIdCmdExe;
+  private final RoleAddAncestorCmdExe roleAddAncestorCmdExe;
+  private final RoleFindRootCmdExe roleFindRootCmdExe;
+  private final RoleFindDirectCmdExe roleFindDirectCmdExe;
+  private final RoleDeletePathCmdExe roleDeletePathCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
@@ -85,7 +101,10 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
     RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
     RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
-    RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor) {
+    RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor,
+    RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddAncestorCmdExe roleAddAncestorCmdExe,
+    RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
+    RoleDeletePathCmdExe roleDeletePathCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
@@ -96,6 +115,11 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     this.roleArchivedFindAllCmdExe = roleArchivedFindAllCmdExe;
     this.roleArchivedFindAllSliceCmdExe = roleArchivedFindAllSliceCmdExe;
     this.roleConvertor = roleConvertor;
+    this.roleFindByIdCmdExe = roleFindByIdCmdExe;
+    this.roleAddAncestorCmdExe = roleAddAncestorCmdExe;
+    this.roleFindRootCmdExe = roleFindRootCmdExe;
+    this.roleFindDirectCmdExe = roleFindDirectCmdExe;
+    this.roleDeletePathCmdExe = roleDeletePathCmdExe;
   }
 
   @Override
@@ -175,5 +199,32 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
     roleRecoverFromArchiveByIdCmdExe.execute(id);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd) {
+    roleAddAncestorCmdExe.execute(roleAddAncestorCmd);
+  }
+
+  @Override
+  public Page<RoleFindRootCo> findRootRoles(RoleFindRootCmd roleFindRootCmd) {
+    return roleFindRootCmdExe.execute(roleFindRootCmd);
+  }
+
+  @Override
+  public Page<RoleFindDirectCo> findDirectRoles(RoleFindDirectCmd roleFindDirectCmd) {
+    return roleFindDirectCmdExe.execute(roleFindDirectCmd);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deletePath(Long ancestorId, Long descendantId) {
+    roleDeletePathCmdExe.execute(ancestorId, descendantId);
+  }
+
+  @Override
+  public RoleFindByIdCo findById(Long id) {
+    return roleFindByIdCmdExe.execute(id);
   }
 }

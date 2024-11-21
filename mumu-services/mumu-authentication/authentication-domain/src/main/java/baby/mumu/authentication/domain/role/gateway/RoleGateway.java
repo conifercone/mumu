@@ -17,6 +17,7 @@ package baby.mumu.authentication.domain.role.gateway;
 
 import baby.mumu.authentication.domain.role.Role;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -110,4 +111,46 @@ public interface RoleGateway {
    * @param id 角色id
    */
   void recoverFromArchiveById(Long id);
+
+  /**
+   * 给指定后代角色添加祖先角色
+   *
+   * @param descendantId 后代角色ID
+   * @param ancestorId   祖先角色ID
+   */
+  void addAncestor(Long descendantId, Long ancestorId);
+
+  /**
+   * 获取所有根角色
+   *
+   * @return 根角色列表
+   */
+  Page<Role> findRootRoles(int current, int pageSize);
+
+  /**
+   * 获取直系后代角色
+   *
+   * @param ancestorId 祖先ID
+   * @param current    当前页
+   * @param pageSize   每页数量
+   * @return 直系后代
+   */
+  Page<Role> findDirectRoles(Long ancestorId, int current, int pageSize);
+
+
+  /**
+   * 删除角色路径
+   *
+   * @param ancestorId   祖先角色ID
+   * @param descendantId 后代角色ID
+   */
+  void deletePath(Long ancestorId, Long descendantId);
+
+  /**
+   * 根据id查询角色详情
+   *
+   * @param id 角色id
+   * @return 角色信息
+   */
+  Optional<Role> findById(Long id);
 }

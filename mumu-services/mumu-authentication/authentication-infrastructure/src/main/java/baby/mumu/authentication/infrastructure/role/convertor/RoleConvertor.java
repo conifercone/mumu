@@ -27,6 +27,9 @@ import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -36,6 +39,7 @@ import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.data
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsDo;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsDoId;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDoId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
@@ -83,6 +87,7 @@ public class RoleConvertor {
   private final PermissionRedisRepository permissionRedisRepository;
   private final RolePermissionRedisRepository rolePermissionRedisRepository;
   private final PermissionPathsRepository permissionPathsRepository;
+  private final RolePathsRepository rolePathsRepository;
 
   @Autowired
   public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
@@ -92,7 +97,7 @@ public class RoleConvertor {
     RolePermissionRepository rolePermissionRepository,
     PermissionRedisRepository permissionRedisRepository,
     RolePermissionRedisRepository rolePermissionRedisRepository,
-    PermissionPathsRepository permissionPathsRepository) {
+    PermissionPathsRepository permissionPathsRepository, RolePathsRepository rolePathsRepository) {
     this.permissionConvertor = permissionConvertor;
     this.roleRepository = roleRepository;
     this.permissionRepository = permissionRepository;
@@ -103,6 +108,7 @@ public class RoleConvertor {
     this.permissionRedisRepository = permissionRedisRepository;
     this.rolePermissionRedisRepository = rolePermissionRedisRepository;
     this.permissionPathsRepository = permissionPathsRepository;
+    this.rolePathsRepository = rolePathsRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -112,6 +118,14 @@ public class RoleConvertor {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       setAuthorities(role, getPermissionIds(role));
       return role;
+    }).flatMap(this::hasDescendant);
+  }
+
+  private Optional<Role> hasDescendant(Role role) {
+    return Optional.ofNullable(role).map(roleNotNull -> {
+      roleNotNull.setHasDescendant(
+        rolePathsRepository.existsDescendantRoles(role.getId()));
+      return roleNotNull;
     });
   }
 
@@ -399,5 +413,23 @@ public class RoleConvertor {
               .map(RoleMapper.INSTANCE::toRoleFindAllPermissionGrpcCo)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
       );
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<RoleFindByIdCo> toRoleFindByIdCo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<RoleFindRootCo> toRoleFindRootCo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindRootCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<RoleFindDirectCo> toRoleFindDirectCo(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectCo);
   }
 }

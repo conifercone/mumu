@@ -77,4 +77,9 @@ public class Role extends BasisDomainModel {
   @Builder.Default
   private transient List<Permission> descendantPermissions = new ArrayList<>();
 
+  /**
+   * 有后代角色
+   */
+  private boolean hasDescendant;
+
 }

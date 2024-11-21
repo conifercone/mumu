@@ -29,6 +29,9 @@ import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo.RoleFindAllPermissionCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
@@ -88,6 +91,15 @@ public interface RoleMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllSliceCo toFindAllSliceCo(Role role);
 
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindByIdCo toRoleFindByIdCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindRootCo toRoleFindRootCo(Role role);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindDirectCo toRoleFindDirectCo(Role role);
+
   @API(status = Status.STABLE, since = "2.2.0")
   RoleArchivedFindAllCo toArchivedFindAllCo(Role role);
 
@@ -139,5 +151,23 @@ public interface RoleMapper extends GrpcMapper {
   default void convertToAccountTimezone(
     @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
     CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget RoleFindByIdCo roleFindByIdCo) {
+    CommonUtil.convertToAccountZone(roleFindByIdCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget RoleFindRootCo roleFindRootCo) {
+    CommonUtil.convertToAccountZone(roleFindRootCo);
+  }
+
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget RoleFindDirectCo roleFindDirectCo) {
+    CommonUtil.convertToAccountZone(roleFindDirectCo);
   }
 }

@@ -23,19 +23,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 角色查询客户端对象（不查询总数）
+ * 根据ID查询角色客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Metamodel
-public class RoleFindAllSliceCo extends BaseClientObject {
+public class RoleFindByIdCo extends BaseClientObject {
 
   @Serial
-  private static final long serialVersionUID = 354147586039980402L;
-
+  private static final long serialVersionUID = 3483995440957679059L;
 
   private Long id;
 
@@ -43,7 +42,7 @@ public class RoleFindAllSliceCo extends BaseClientObject {
 
   private String code;
 
-  private List<RoleFindAllSlicePermissionCo> permissions;
+  private List<RoleFindByIdPermissionCo> permissions;
 
   /**
    * 有后代角色
@@ -51,7 +50,7 @@ public class RoleFindAllSliceCo extends BaseClientObject {
   private boolean hasDescendant;
 
   @Data
-  public static class RoleFindAllSlicePermissionCo {
+  public static class RoleFindByIdPermissionCo {
 
     /**
      * 权限id

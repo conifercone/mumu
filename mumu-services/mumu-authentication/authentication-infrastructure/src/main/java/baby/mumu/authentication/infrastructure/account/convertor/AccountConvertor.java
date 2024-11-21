@@ -45,6 +45,9 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobj
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsDoId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisDo;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -88,6 +91,7 @@ public class AccountConvertor {
   private final RoleRedisRepository roleRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
   private final AccountRoleRedisRepository accountRoleRedisRepository;
+  private final RolePathsRepository rolePathsRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
@@ -97,7 +101,8 @@ public class AccountConvertor {
     AccountRoleRepository accountRoleRepository,
     RoleRedisRepository roleRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
-    AccountRoleRedisRepository accountRoleRedisRepository) {
+    AccountRoleRedisRepository accountRoleRedisRepository,
+    RolePathsRepository rolePathsRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -108,6 +113,7 @@ public class AccountConvertor {
     this.roleRedisRepository = roleRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
     this.accountRoleRedisRepository = accountRoleRedisRepository;
+    this.rolePathsRepository = rolePathsRepository;
   }
 
   @Contract("_ -> new")
@@ -129,6 +135,17 @@ public class AccountConvertor {
   }
 
   private void setRolesWithIds(Account account, List<Long> roleIds) {
+    Optional.ofNullable(account).ifPresent(accountNotNull -> {
+      ArrayList<Role> roles = getRoles(
+        Optional.ofNullable(roleIds).map(
+            roleIdsNotNull -> roleIdsNotNull.stream().distinct()
+              .collect(Collectors.toList()))
+          .orElse(new ArrayList<>()));
+      initializeRoles(accountNotNull, roles);
+    });
+  }
+
+  private @NotNull ArrayList<Role> getRoles(List<Long> roleIds) {
     // 查询缓存中存在的数据
     List<RoleRedisDo> roleRedisDos = roleRedisRepository.findAllById(
       roleIds);
@@ -159,11 +176,35 @@ public class AccountConvertor {
           Collectors.toList()));
     }
     // 合并已缓存和未缓存的角色
-    account.setRoles(new ArrayList<>(
-      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
+    return new ArrayList<>(
+      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole));
   }
 
   private void setRolesWithCodes(Account account, List<String> codes) {
+    Optional.ofNullable(account).ifPresent(accountNotNull -> {
+      ArrayList<Role> roles = getRolesByCodes(
+        Optional.ofNullable(codes).map(
+            codeIdsNotNull -> codeIdsNotNull.stream().distinct()
+              .collect(Collectors.toList()))
+          .orElse(new ArrayList<>()));
+      initializeRoles(accountNotNull, roles);
+    });
+  }
+
+  private void initializeRoles(@NotNull Account accountNotNull, ArrayList<Role> roles) {
+    accountNotNull.setRoles(roles);
+    List<Long> ancestorIds = roles.stream().filter(Role::isHasDescendant)
+      .map(Role::getId)
+      .collect(Collectors.toList());
+    if (CollectionUtils.isNotEmpty(ancestorIds)) {
+      accountNotNull.setDescendantRoles(
+        getRoles(rolePathsRepository.findByAncestorIdIn(
+          ancestorIds).stream().map(RolePathsDo::getId).map(
+          RolePathsDoId::getDescendantId).distinct().collect(Collectors.toList())));
+    }
+  }
+
+  private @NotNull ArrayList<Role> getRolesByCodes(List<String> codes) {
     // 查询缓存中存在的数据
     List<RoleRedisDo> roleRedisDos = roleRedisRepository.findByCodeIn(
       codes);
@@ -193,8 +234,8 @@ public class AccountConvertor {
           Collectors.toList()));
     }
     // 合并已缓存和未缓存的角色
-    account.setRoles(new ArrayList<>(
-      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole)));
+    return new ArrayList<>(
+      CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole));
   }
 
   @Contract("_ -> new")

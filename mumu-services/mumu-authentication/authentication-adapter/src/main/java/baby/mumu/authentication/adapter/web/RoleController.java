@@ -16,16 +16,22 @@
 package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.RoleService;
+import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
+import baby.mumu.authentication.client.dto.RoleFindRootCmd;
 import baby.mumu.authentication.client.dto.RoleUpdateCmd;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
 import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -146,5 +152,53 @@ public class RoleController {
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(@PathVariable(value = "id") Long id) {
     roleService.recoverFromArchiveById(id);
+  }
+
+  @Operation(summary = "添加祖先角色")
+  @PutMapping("/addAncestor")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public void addAncestor(@RequestBody @Valid RoleAddAncestorCmd roleAddAncestorCmd) {
+    roleService.addAncestor(roleAddAncestorCmd);
+  }
+
+  @Operation(summary = "获取所有根角色")
+  @GetMapping("/findRoot")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Page<RoleFindRootCo> findRoot(
+    @ModelAttribute RoleFindRootCmd roleFindRootCmd) {
+    return roleService.findRootRoles(roleFindRootCmd);
+  }
+
+  @Operation(summary = "获取直系后代角色")
+  @GetMapping("/findDirect")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Page<RoleFindDirectCo> findDirect(
+    @ModelAttribute RoleFindDirectCmd roleFindDirectCmd) {
+    return roleService.findDirectRoles(roleFindDirectCmd);
+  }
+
+  @Operation(summary = "删除角色路径")
+  @DeleteMapping("/deletePath/{ancestorId}/{descendantId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public void deletePath(@PathVariable(value = "ancestorId") Long ancestorId,
+    @PathVariable(value = "descendantId") Long descendantId) {
+    roleService.deletePath(ancestorId, descendantId);
+  }
+
+  @Operation(summary = "根据id查询角色")
+  @GetMapping("/findById/{id}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public RoleFindByIdCo findById(@PathVariable(value = "id") Long id) {
+    return roleService.findById(id);
   }
 }

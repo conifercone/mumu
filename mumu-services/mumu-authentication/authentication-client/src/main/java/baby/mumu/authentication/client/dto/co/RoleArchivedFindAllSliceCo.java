@@ -44,6 +44,11 @@ public class RoleArchivedFindAllSliceCo extends BaseClientObject {
 
   private List<RoleArchivedFindAllSlicePermissionCo> permissions;
 
+  /**
+   * 有后代角色
+   */
+  private boolean hasDescendant;
+
   @Data
   public static class RoleArchivedFindAllSlicePermissionCo {
 

@@ -13,64 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.dto.co;
+package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.Min;
 import java.io.Serial;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 角色查询客户端对象（不查询总数）
+ * 获取所有根角色指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
-public class RoleFindAllSliceCo extends BaseClientObject {
+public class RoleFindRootCmd extends BaseClientObject {
+
 
   @Serial
-  private static final long serialVersionUID = 354147586039980402L;
+  private static final long serialVersionUID = -8765072343713377521L;
 
+  @Min(value = 1, message = "{current.validation.min.size}")
+  private Integer current = 1;
 
-  private Long id;
-
-  private String name;
-
-  private String code;
-
-  private List<RoleFindAllSlicePermissionCo> permissions;
-
-  /**
-   * 有后代角色
-   */
-  private boolean hasDescendant;
-
-  @Data
-  public static class RoleFindAllSlicePermissionCo {
-
-    /**
-     * 权限id
-     */
-    private Long id;
-
-    /**
-     * 权限编码
-     */
-    private String code;
-
-    /**
-     * 权限名称
-     */
-    private String name;
-
-    /**
-     * 有后代权限
-     */
-    private boolean hasDescendant;
-  }
+  @Min(value = 1, message = "{page.size.validation.min.size}")
+  private Integer pageSize = 10;
 }
