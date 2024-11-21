@@ -19,10 +19,13 @@ import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.RoleGrpcService;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
@@ -99,6 +102,46 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
         logger.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
         Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
         Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+
+  @Test
+  public void findById() {
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleGrpcService.findById(
+      RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
+      callCredentials);
+    logger.info("RoleFindByIdGrpcCo: {}", roleFindByIdGrpcCo);
+    Assertions.assertNotNull(roleFindByIdGrpcCo);
+  }
+
+  @Test
+  public void syncFindById() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    AuthCallCredentials callCredentials = new AuthCallCredentials(
+      AuthHeader.builder().bearer().tokenSupplier(
+        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
+          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
+    );
+    ListenableFuture<RoleFindByIdGrpcCo> roleFindByIdGrpcCoListenableFuture = roleGrpcService.syncFindById(
+      RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
+      callCredentials);
+    roleFindByIdGrpcCoListenableFuture.addListener(() -> {
+      try {
+        RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleFindByIdGrpcCoListenableFuture.get();
+        logger.info("Sync RoleFindByIdGrpcCo: {}", roleFindByIdGrpcCo);
+        Assertions.assertNotNull(roleFindByIdGrpcCo);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

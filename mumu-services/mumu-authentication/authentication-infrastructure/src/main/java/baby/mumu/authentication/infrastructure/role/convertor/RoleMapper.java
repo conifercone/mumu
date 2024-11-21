@@ -18,6 +18,7 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllPermissionGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
@@ -130,6 +131,10 @@ public interface RoleMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllPermissionGrpcCo toRoleFindAllPermissionGrpcCo(
     RoleFindAllPermissionCo roleFindAllPermissionCo);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindByIdGrpcCo toRoleFindByIdGrpcCo(
+    RoleFindByIdCo roleFindByIdCo);
 
   @AfterMapping
   default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {

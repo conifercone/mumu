@@ -19,6 +19,8 @@ import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
@@ -81,6 +83,31 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
+  @API(status = Status.STABLE, since = "2.4.0")
+  public RoleFindByIdGrpcCo findById(RoleId roleId,
+    AuthCallCredentials callCredentials) {
+    return Optional.ofNullable(channel)
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return findByIdFromGrpc(roleId, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+  }
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  public ListenableFuture<RoleFindByIdGrpcCo> syncFindById(
+    RoleId roleId,
+    AuthCallCredentials callCredentials) {
+    return Optional.ofNullable(channel)
+      .or(this::getManagedChannelUsePlaintext)
+      .map(ch -> {
+        channel = ch;
+        return syncFindByIdFromGrpc(roleId, callCredentials);
+      })
+      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+  }
+
   private PageOfRoleFindAllGrpcCo findAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     AuthCallCredentials callCredentials) {
@@ -97,5 +124,23 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
     return roleServiceFutureStub.withCallCredentials(callCredentials)
       .findAll(roleFindAllGrpcCmd);
   }
+
+  private RoleFindByIdGrpcCo findByIdFromGrpc(
+    RoleId roleId,
+    AuthCallCredentials callCredentials) {
+    RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
+    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+      .findById(roleId);
+  }
+
+  private @NotNull ListenableFuture<RoleFindByIdGrpcCo> syncFindByIdFromGrpc(
+    RoleId roleId,
+    AuthCallCredentials callCredentials) {
+    RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
+      channel);
+    return roleServiceFutureStub.withCallCredentials(callCredentials)
+      .findById(roleId);
+  }
+
 
 }

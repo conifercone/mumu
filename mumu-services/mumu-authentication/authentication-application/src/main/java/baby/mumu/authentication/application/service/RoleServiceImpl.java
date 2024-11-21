@@ -34,6 +34,8 @@ import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
@@ -53,12 +55,16 @@ import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
 import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
+import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
+import java.util.Optional;
 import org.lognet.springboot.grpc.GRpcService;
 import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,6 +193,19 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       responseObserver.onNext(PageOfRoleFindAllGrpcCo.getDefaultInstance());
       responseObserver.onCompleted();
     });
+  }
+
+  @Override
+  public void findById(RoleId request, StreamObserver<RoleFindByIdGrpcCo> responseObserver) {
+    Optional.ofNullable(request).filter(RoleId::hasId).map(RoleId::getId).map(Int64Value::getValue)
+      .map(
+        roleFindByIdCmdExe::execute).flatMap(roleConvertor::toRoleFindByIdGrpcCo)
+      .ifPresentOrElse((roleFindByIdGrpcCo) -> {
+        responseObserver.onNext(roleFindByIdGrpcCo);
+        responseObserver.onCompleted();
+      }, () -> {
+        throw new GRpcRuntimeExceptionWrapper(new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST));
+      });
   }
 
   @Override

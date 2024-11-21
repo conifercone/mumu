@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
@@ -431,5 +432,11 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindDirectCo> toRoleFindDirectCo(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<RoleFindByIdGrpcCo> toRoleFindByIdGrpcCo(RoleFindByIdCo roleFindByIdCo) {
+    return Optional.ofNullable(roleFindByIdCo).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcCo);
   }
 }

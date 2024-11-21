@@ -8,6 +8,7 @@ option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
+  rpc findById (RoleId) returns (RoleFindByIdGrpcCo);
 }
 
 message RoleFindAllGrpcCmd {
@@ -18,17 +19,30 @@ message RoleFindAllGrpcCmd {
   google.protobuf.Int32Value page_size = 5;
 }
 
+message RoleId {
+  google.protobuf.Int64Value id = 1;
+}
+
+message RoleFindByIdGrpcCo {
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
+  bool hasDescendant = 4;
+}
+
 message RoleFindAllGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
   repeated RoleFindAllPermissionGrpcCo permissions = 4;
+  bool hasDescendant = 5;
 }
 
 message RoleFindAllPermissionGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  bool hasDescendant = 5;
 }
 
 message PageOfRoleFindAllGrpcCo {
