@@ -15,12 +15,13 @@
  */
 package baby.mumu.authentication.client.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.tracing.Tracer;
-import java.util.ArrayList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
@@ -29,15 +30,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.util.Assert;
 
 /**
@@ -46,6 +48,7 @@ import org.springframework.util.Assert;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
+@EnableWebSecurity
 @Configuration
 @EnableConfigurationProperties(ResourceServerProperties.class)
 public class JWTSecurityConfig {
@@ -58,15 +61,10 @@ public class JWTSecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
+  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder,
     TokenGrpcService tokenGrpcService, ObjectProvider<Tracer> tracers) throws Exception {
-    //noinspection DuplicatedCode
-    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
       for (Policy policy : resourceServerProperties.getPolicies()) {
-        if (policy.isPermitAll()) {
-          csrfIgnoreUrls.add(policy.getMatcher());
-        }
         http.authorizeHttpRequests((authorize) -> {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
               .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
@@ -87,22 +85,32 @@ public class JWTSecurityConfig {
     }
     http.authorizeHttpRequests(
       (authorize) -> authorize.anyRequest()
-        .authenticated());
-    http.oauth2ResourceServer(
-        resourceServerConfigurer -> resourceServerConfigurer.jwt(
-            jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-          .authenticationEntryPoint(
-            new MuMuAuthenticationEntryPoint(resourceServerProperties
-            )))
-      .csrf(csrf -> csrf.csrfTokenRepository(
-          CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
+        .authenticated()).formLogin(withDefaults());
     http.addFilterBefore(
       new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
       UsernamePasswordAuthenticationFilter.class);
+    // Redirect to the login page when not authenticated from the
+    // authorization endpoint
+    http.exceptionHandling((exceptions) -> exceptions
+        .defaultAuthenticationEntryPointFor(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          ),
+          new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+        ).authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(resourceServerProperties
+          ))
+      )
+      // Accept access tokens for User Info and/or Client Registration
+      .oauth2ResourceServer((resourceServer) -> resourceServer
+        .jwt(withDefaults())
+        .authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          )));
     return http.cors(Customizer.withDefaults()).build();
   }
+
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -112,5 +120,4 @@ public class JWTSecurityConfig {
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
   }
-
 }

@@ -18,6 +18,7 @@ package baby.mumu.basis.grpc.resolvers;
 import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
 import io.grpc.NameResolver;
+import io.grpc.StatusOr;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class DiscoveryClientNameResolver extends NameResolver {
 
   private void init() {
     listener.onResult(ResolutionResult.newBuilder()
-      .setAddresses(fetchAddresses())
+      .setAddressesOrError(StatusOr.fromValue(fetchAddresses()))
       .setAttributes(Attributes.EMPTY)
       .build());
   }
