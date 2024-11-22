@@ -33,6 +33,7 @@ import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTok
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
 import baby.mumu.basis.constants.CommonConstants;
+import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties;
@@ -401,10 +402,10 @@ public class AuthorizationConfiguration {
           .map(GrantedAuthority::getAuthority)
           // 去重
           .collect(Collectors.toSet());
-        // 合并scope与用户信息
-        authoritySet.addAll(scopes);
+        boolean isPasswordType = OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
+          .equals(context.getAuthorizationGrantType().getValue());
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
+        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), isPasswordType ? authoritySet : scopes);
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
