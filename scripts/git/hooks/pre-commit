@@ -40,7 +40,7 @@ fi
 # 输出信息
 if [ $pmd_needed -eq 1 ]; then
     echo "🦉 Running PMD on changed Java files..."
-    if ./gradlew pmdMain --parallel --build-cache; then
+    if ./gradlew clean pmdMain --parallel --build-cache; then
       echo "🎉 PMD checks passed.";
     else
       echo "🌥️ PMD check failed. Please fix the issues before committing.";
