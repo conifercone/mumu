@@ -24,13 +24,13 @@ import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServic
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -58,7 +58,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
 
   @API(status = Status.STABLE, since = "2.2.0")
   public AccountCurrentLoginGrpcCo queryCurrentLoginAccount(
-    AuthCallCredentials authCallCredentials) {
+    CallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -70,7 +70,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
 
   @API(status = Status.STABLE, since = "2.2.0")
   public ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccount(
-    AuthCallCredentials authCallCredentials) {
+    CallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -81,7 +81,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   private AccountCurrentLoginGrpcCo queryCurrentLoginAccountFromGrpc(
-    AuthCallCredentials authCallCredentials) {
+    CallCredentials authCallCredentials) {
     AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
       channel);
     return accountServiceBlockingStub.withCallCredentials(authCallCredentials)
@@ -89,7 +89,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   private @NotNull ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccountFromGrpc(
-    AuthCallCredentials authCallCredentials) {
+    CallCredentials authCallCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
       channel);
     return accountServiceFutureStub.withCallCredentials(authCallCredentials)

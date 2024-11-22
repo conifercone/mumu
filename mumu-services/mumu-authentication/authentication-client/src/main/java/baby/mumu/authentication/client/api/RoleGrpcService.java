@@ -26,13 +26,13 @@ import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceBlock
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -60,7 +60,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "1.0.0")
   public PageOfRoleFindAllGrpcCo findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -73,7 +73,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAll(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -85,7 +85,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "2.4.0")
   public RoleFindByIdGrpcCo findById(RoleId roleId,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -98,7 +98,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   @API(status = Status.STABLE, since = "2.4.0")
   public ListenableFuture<RoleFindByIdGrpcCo> syncFindById(
     RoleId roleId,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -110,7 +110,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   private PageOfRoleFindAllGrpcCo findAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
     return roleServiceBlockingStub.withCallCredentials(callCredentials)
       .findAll(roleFindAllGrpcCmd);
@@ -118,7 +118,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   private @NotNull ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
       channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials)
@@ -127,7 +127,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   private RoleFindByIdGrpcCo findByIdFromGrpc(
     RoleId roleId,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
     return roleServiceBlockingStub.withCallCredentials(callCredentials)
       .findById(roleId);
@@ -135,7 +135,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   private @NotNull ListenableFuture<RoleFindByIdGrpcCo> syncFindByIdFromGrpc(
     RoleId roleId,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
       channel);
     return roleServiceFutureStub.withCallCredentials(callCredentials)

@@ -26,13 +26,13 @@ import baby.mumu.authentication.client.api.grpc.PermissionServiceGrpc.Permission
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Int64Value;
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -61,7 +61,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.0")
   public PageOfPermissionFindAllGrpcCo findAll(PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -74,7 +74,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<PageOfPermissionFindAllGrpcCo> syncFindAll(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -86,7 +86,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   @API(status = Status.STABLE, since = "2.3.0")
   public PermissionFindByIdGrpcCo findById(Int64Value id,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -99,7 +99,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   @API(status = Status.STABLE, since = "2.3.0")
   public ListenableFuture<PermissionFindByIdGrpcCo> syncFindById(
     Int64Value id,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -111,7 +111,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   private PageOfPermissionFindAllGrpcCo findAllFromGrpc(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
       channel);
     return permissionServiceBlockingStub.withCallCredentials(callCredentials)
@@ -120,7 +120,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   private @NotNull ListenableFuture<PageOfPermissionFindAllGrpcCo> syncFindAllFromGrpc(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
       channel);
     return permissionServiceFutureStub.withCallCredentials(callCredentials)
@@ -129,7 +129,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   private PermissionFindByIdGrpcCo findByIdFromGrpc(
     Int64Value id,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
       channel);
     return permissionServiceBlockingStub.withCallCredentials(callCredentials)
@@ -138,7 +138,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
 
   private @NotNull ListenableFuture<PermissionFindByIdGrpcCo> syncFindByIdFromGrpc(
     Int64Value id,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
       channel);
     return permissionServiceFutureStub.withCallCredentials(callCredentials)
