@@ -33,8 +33,7 @@ spring:
         format: YAML
         data-key: ${spring.application.name}
         watch:
-          enabled: true
-          delay: 1000
+          enabled: false
         prefixes: mumu
         acl-token: ${consul_token}
       discovery:
