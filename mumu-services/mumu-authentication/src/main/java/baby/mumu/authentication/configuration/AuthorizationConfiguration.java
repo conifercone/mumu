@@ -16,7 +16,12 @@
 package baby.mumu.authentication.configuration;
 
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import baby.mumu.authentication.application.service.AccountUserDetailService;
+import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
+import baby.mumu.authentication.client.config.ResourceServerProperties;
+import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
@@ -44,6 +49,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,6 +59,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,9 +70,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -97,6 +107,10 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.util.Assert;
 
 /**
  * 授权配置
@@ -124,9 +138,34 @@ public class AuthorizationConfiguration {
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
     MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
-    UserDetailsService userDetailsService,
+    ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
     PasswordEncoder passwordEncoder)
     throws Exception {
+    //noinspection DuplicatedCode
+    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
+    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
+      for (Policy policy : resourceServerProperties.getPolicies()) {
+        if (policy.isPermitAll()) {
+          csrfIgnoreUrls.add(policy.getMatcher());
+        }
+        http.authorizeHttpRequests((authorize) -> {
+            AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
+              .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
+                policy.getMatcher());
+            if (StringUtils.isNotBlank(policy.getRole())) {
+              authorizedUrl.hasRole(policy.getRole());
+            } else if (StringUtils.isNotBlank(policy.getAuthority())) {
+              Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                "Permission configuration cannot be empty and cannot start with SCOPE_");
+              authorizedUrl.hasAuthority(
+                CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
+            } else if (policy.isPermitAll()) {
+              authorizedUrl.permitAll();
+            }
+          }
+        );
+      }
+    }
     OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
         oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
@@ -151,9 +190,32 @@ public class AuthorizationConfiguration {
                 .getPrincipalName());
             return new OidcUserInfo(claims);
           })));
+
+    // Redirect to the login page when not authenticated from the
+    // authorization endpoint
+    http.exceptionHandling((exceptions) -> exceptions
+        .defaultAuthenticationEntryPointFor(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          ),
+          new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+        ).authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(resourceServerProperties
+          ))
+      )
+      // Accept access tokens for User Info and/or Client Registration
+      .oauth2ResourceServer((resourceServer) -> resourceServer
+        .jwt(withDefaults())
+        .authenticationEntryPoint(
+          new MuMuAuthenticationEntryPoint(
+            resourceServerProperties
+          )));
+    http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+      .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+      .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
+
     return http.cors(Customizer.withDefaults()).build();
   }
-
 
   /**
    * 配置token生成器
