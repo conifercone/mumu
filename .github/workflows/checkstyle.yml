@@ -42,7 +42,7 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
       - name: Checkstyle with Gradle Wrapper
-        run: ./gradlew checkstyleMain --parallel --build-cache
+        run: ./gradlew checkstyleMain
         continue-on-error: true
       - name: Upload Checkstyle Reports
         uses: actions/upload-artifact@v4

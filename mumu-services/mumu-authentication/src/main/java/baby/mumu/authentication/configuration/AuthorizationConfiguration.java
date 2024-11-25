@@ -19,7 +19,8 @@ package baby.mumu.authentication.configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import baby.mumu.authentication.application.service.AccountUserDetailService;
-import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
+import baby.mumu.authentication.client.api.TokenGrpcService;
+import baby.mumu.authentication.client.config.JwtAuthenticationTokenFilter;
 import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
@@ -45,6 +46,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import io.micrometer.tracing.Tracer;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -62,6 +64,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -75,6 +78,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -107,6 +111,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -120,6 +126,7 @@ import org.springframework.util.Assert;
  */
 @Configuration
 @EnableConfigurationProperties(ExtensionProperties.class)
+@EnableWebSecurity
 public class AuthorizationConfiguration {
 
   /**
@@ -138,8 +145,48 @@ public class AuthorizationConfiguration {
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
     MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
-    ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
+    UserDetailsService userDetailsService,
     PasswordEncoder passwordEncoder)
+    throws Exception {
+    OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
+        oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
+          mumuAuthenticationFailureHandler))
+      //设置自定义密码模式
+      .tokenEndpoint(tokenEndpoint ->
+        tokenEndpoint
+          .errorResponseHandler(mumuAuthenticationFailureHandler)
+          .accessTokenRequestConverter(
+            new PasswordGrantAuthenticationConverter())
+          .authenticationProvider(
+            new PasswordGrantAuthenticationProvider(
+              authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
+      .oidc(oidc -> oidc.userInfoEndpoint(
+        userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
+          oidcUserInfoAuthenticationContext -> {
+            OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("accessToken", accessToken);
+            claims.put("sub",
+              oidcUserInfoAuthenticationContext.getAuthorization()
+                .getPrincipalName());
+            return new OidcUserInfo(claims);
+          })));
+    http.exceptionHandling((exceptions) -> exceptions
+      .defaultAuthenticationEntryPointFor(
+        new LoginUrlAuthenticationEntryPoint("/login"),
+        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+      )
+    ).oauth2ResourceServer((resourceServer) -> resourceServer
+      .jwt(withDefaults()));
+    return http.cors(Customizer.withDefaults()).build();
+  }
+
+  @Bean
+  @Order(0)
+  public SecurityFilterChain defaultSecurityFilterChain(@NotNull HttpSecurity http,
+    JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
+    ResourceServerProperties resourceServerProperties, ObjectProvider<Tracer> tracers)
     throws Exception {
     //noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
@@ -166,53 +213,18 @@ public class AuthorizationConfiguration {
         );
       }
     }
-    OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
-        oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
-          mumuAuthenticationFailureHandler))
-      //设置自定义密码模式
-      .tokenEndpoint(tokenEndpoint ->
-        tokenEndpoint
-          .errorResponseHandler(mumuAuthenticationFailureHandler)
-          .accessTokenRequestConverter(
-            new PasswordGrantAuthenticationConverter())
-          .authenticationProvider(
-            new PasswordGrantAuthenticationProvider(
-              authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
-      .oidc(oidc -> oidc.userInfoEndpoint(
-        userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
-          oidcUserInfoAuthenticationContext -> {
-            OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("accessToken", accessToken);
-            claims.put("sub",
-              oidcUserInfoAuthenticationContext.getAuthorization()
-                .getPrincipalName());
-            return new OidcUserInfo(claims);
-          })));
-
-    // Redirect to the login page when not authenticated from the
-    // authorization endpoint
-    http.exceptionHandling((exceptions) -> exceptions
-        .defaultAuthenticationEntryPointFor(
-          new MuMuAuthenticationEntryPoint(
-            resourceServerProperties
-          ),
-          new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-        ).authenticationEntryPoint(
-          new MuMuAuthenticationEntryPoint(resourceServerProperties
-          ))
-      )
-      // Accept access tokens for User Info and/or Client Registration
-      .oauth2ResourceServer((resourceServer) -> resourceServer
-        .jwt(withDefaults())
-        .authenticationEntryPoint(
-          new MuMuAuthenticationEntryPoint(
-            resourceServerProperties
-          )));
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-      .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-      .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+        .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])))
+      .authorizeHttpRequests((authorize) -> authorize
+        .anyRequest().authenticated()
+      )
+      // Form login handles the redirect to the login page from the
+      // authorization server filter chain
+      .formLogin(withDefaults());
+    http.addFilterBefore(
+      new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
+      UsernamePasswordAuthenticationFilter.class);
 
     return http.cors(Customizer.withDefaults()).build();
   }

@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -48,6 +49,7 @@ import org.springframework.util.Assert;
  */
 @Configuration
 @EnableConfigurationProperties(ResourceServerProperties.class)
+@EnableWebSecurity
 public class JWTSecurityConfig {
 
   private final ResourceServerProperties resourceServerProperties;
@@ -90,10 +92,8 @@ public class JWTSecurityConfig {
         .authenticated());
     http.oauth2ResourceServer(
         resourceServerConfigurer -> resourceServerConfigurer.jwt(
-            jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-          .authenticationEntryPoint(
-            new MuMuAuthenticationEntryPoint(resourceServerProperties
-            )))
+          jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+      )
       .csrf(csrf -> csrf.csrfTokenRepository(
           CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
