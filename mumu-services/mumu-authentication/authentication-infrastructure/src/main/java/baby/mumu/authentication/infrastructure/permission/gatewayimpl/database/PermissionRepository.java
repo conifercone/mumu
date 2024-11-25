@@ -19,6 +19,7 @@ import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.d
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -84,4 +85,6 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
       + "and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc")
   Page<PermissionDo> findAllPage(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
+
+  List<PermissionDo> findAllByCodeIn(List<String> codes);
 }

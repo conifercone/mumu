@@ -103,10 +103,10 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
   private void exceptionResponse(HttpServletResponse response, @NotNull ResponseCode responseCode,
     HttpServletRequest request)
     throws IOException {
-    ResponseWrapper.exceptionResponse(response,
-      responseCode);
     operationFailLog(responseCode.getCode(),
       responseCode.getMessage(), IpUtil.getIpAddr(request));
+    ResponseWrapper.exceptionResponse(response,
+      responseCode);
   }
 
   /**

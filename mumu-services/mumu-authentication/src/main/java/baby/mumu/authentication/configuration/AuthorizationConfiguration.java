@@ -25,14 +25,18 @@ import baby.mumu.authentication.client.config.ResourceServerProperties;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
+import baby.mumu.authentication.domain.permission.Permission;
+import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
-import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
-import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
+import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.Oauth2AuthenticationRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
@@ -61,6 +65,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -94,6 +99,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
@@ -107,6 +113,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
@@ -235,18 +242,18 @@ public class AuthorizationConfiguration {
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
     OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
-    TokenRepository tokenRepository,
+    PasswordTokenRepository passwordTokenRepository,
     OidcIdTokenRepository oidcIdTokenRepository,
     ClientTokenRepository clientTokenRepository,
-    RefreshTokenRepository refreshTokenRepository) {
+    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
     MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
-    jwtGenerator.setTokenRepository(tokenRepository);
+    jwtGenerator.setPasswordTokenRepository(passwordTokenRepository);
     jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
     jwtGenerator.setClientTokenRepository(clientTokenRepository);
+    jwtGenerator.setAuthorizeCodeTokenRepository(authorizeCodeTokenRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
-    refreshTokenGenerator.setRefreshTokenRepository(refreshTokenRepository);
     return new DelegatingOAuth2TokenGenerator(
       jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
   }
@@ -399,7 +406,9 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-    RolePermissionRepository rolePermissionRepository) {
+    RoleConvertor roleConvertor, PermissionRepository permissionRepository,
+    PermissionConvertor permissionConvertor,
+    Oauth2AuthenticationRepository oauth2AuthenticationRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -414,14 +423,18 @@ public class AuthorizationConfiguration {
           .map(GrantedAuthority::getAuthority)
           // 去重
           .collect(Collectors.toSet());
+        String originAuthorizationGrantTypeValue = getOriginAuthorizationGrantTypeValue(
+          oauth2AuthenticationRepository, context);
         boolean isPasswordType = OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
-          .equals(context.getAuthorizationGrantType().getValue());
+          .equals(originAuthorizationGrantTypeValue);
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), isPasswordType ? authoritySet : scopes);
+        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), isPasswordType ? authoritySet
+          : getFullScopes(roleRepository, roleConvertor, permissionRepository, permissionConvertor,
+            scopes));
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
-          context.getAuthorizationGrantType().getValue());
+          originAuthorizationGrantTypeValue);
         if (StringUtils.isNotBlank(account.getTimezone())) {
           claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
         }
@@ -438,29 +451,67 @@ public class AuthorizationConfiguration {
               .getPrincipal()).getRegisteredClient()
           )
           .map(RegisteredClient::getScopes)
-          .map(scopes -> {
-            Set<String> roles = scopes.stream()
-              .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
-              .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
-              .collect(Collectors.toSet());
-            Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
-              .stream()
-              .flatMap(
-                opt -> rolePermissionRepository.findByRoleId(
-                    opt.getId()).stream()
-                  .map(RolePermissionDo::getPermission))
-              .collect(Collectors.toMap(PermissionDo::getId, authorityDo -> authorityDo,
-                (existing, replacement) -> existing))
-              .values()
-              .stream().map(PermissionDo::getCode)
-              .collect(Collectors.toSet());
-            authorityCodesFromRoles.addAll(scopes);
-            return authorityCodesFromRoles;
-          })
+          .map(scopes -> getFullScopes(roleRepository, roleConvertor, permissionRepository,
+            permissionConvertor, scopes))
           .orElse(Collections.emptySet());
         claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
       }
     };
+  }
+
+  private static String getOriginAuthorizationGrantTypeValue(
+    Oauth2AuthenticationRepository oauth2AuthenticationRepository,
+    @NotNull OAuth2TokenContext context) {
+    //noinspection DuplicatedCode
+    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
+      OAuth2Authorization authorization = context.getAuthorization();
+      if (authorization != null && authorization.getRefreshToken() != null) {
+        // 获取刷新令牌信息
+        return oauth2AuthenticationRepository.findByRefreshTokenValue(
+          authorization.getRefreshToken().getToken().getTokenValue()).map(
+          Oauth2AuthorizationDo::getAuthorizationGrantType).orElse("");
+      }
+    }
+    return context.getAuthorizationGrantType().getValue();
+  }
+
+  private static @NotNull Set<String> getFullScopes(@NotNull RoleRepository roleRepository,
+    RoleConvertor roleConvertor, @NotNull PermissionRepository permissionRepository,
+    PermissionConvertor permissionConvertor, @NotNull Set<String> scopes) {
+    Set<String> roles = scopes.stream()
+      .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
+      .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
+      .collect(Collectors.toSet());
+    Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
+      .stream().flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+      .flatMap(role -> Stream.concat(
+        role.getPermissions() != null
+          ? role.getPermissions().stream()
+          : Stream.empty(),
+        role.getDescendantPermissions() != null
+          ? role.getDescendantPermissions().stream()
+          : Stream.empty()
+      )).map(Permission::getCode).collect(Collectors.toSet());
+    List<String> permissionCodes = scopes.stream()
+      .filter(scope -> !scope.startsWith(CommonConstants.ROLE_PREFIX))
+      .distinct()
+      .collect(Collectors.toList());
+    List<Permission> permissions = permissionRepository.findAllByCodeIn(permissionCodes)
+      .stream()
+      .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
+      .toList();
+    List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
+      .map(Permission::getId)
+      .collect(Collectors.toList());
+    List<PermissionDo> descendantPermissions = permissionRepository.findAllById(
+      descendantIds);
+    Collection<String> allPermissionCodes = CollectionUtils.union(
+      permissions.stream().map(Permission::getCode).collect(Collectors.toSet()),
+      descendantPermissions.stream().map(PermissionDo::getCode)
+        .collect(Collectors.toSet()));
+    authorityCodesFromRoles.addAll(scopes);
+    authorityCodesFromRoles.addAll(allPermissionCodes);
+    return authorityCodesFromRoles;
   }
 
   @Bean

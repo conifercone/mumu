@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.TokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.PasswordTokenRedisDo;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -24,7 +24,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface TokenRepository extends
-  RedisDocumentRepository<TokenRedisDo, Long> {
+public interface PasswordTokenRepository extends
+  RedisDocumentRepository<PasswordTokenRedisDo, Long> {
 
 }

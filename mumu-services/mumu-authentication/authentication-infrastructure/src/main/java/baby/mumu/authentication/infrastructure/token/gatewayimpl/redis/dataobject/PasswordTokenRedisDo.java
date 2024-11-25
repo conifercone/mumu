@@ -23,24 +23,24 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * refresh token redis数据对象
+ * 密码模式 token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.2
+ * @since 1.0.0
  */
 @Data
-@Document(value = "refresh-token")
-public class RefreshTokenRedisDo {
+@Document(value = "password-token")
+public class PasswordTokenRedisDo {
 
   @Id
   @Indexed
   private Long id;
 
   /**
-   * refreshToken值
+   * token值
    */
   @TextIndexed
-  private String refreshTokenValue;
+  private String tokenValue;
 
   /**
    * 存活时间

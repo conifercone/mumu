@@ -23,14 +23,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * token redis数据对象
+ * 授权码 token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.4.0
  */
 @Data
-@Document(value = "token")
-public class TokenRedisDo {
+@Document(value = "authorize-code-token")
+public class AuthorizeCodeTokenRedisDo {
 
   @Id
   @Indexed
