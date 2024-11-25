@@ -71,7 +71,7 @@ public class TokenGatewayImpl implements TokenGateway {
               Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
 
           }
-          return false;
+          return true;
         } catch (Exception ignore) {
           return false;
         }
