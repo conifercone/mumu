@@ -66,7 +66,6 @@ import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -176,19 +175,15 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
     roleConvertor.toRoleFindAllCmd(request).ifPresentOrElse(roleFindAllCmdNotNull -> {
       Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
-      try {
-        Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
-          roleFindAllCmdNotNull);
-        List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
-          .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcCo(roleFindAllCo).stream())
-          .toList();
-        builder.addAllContent(findAllGrpcCos);
-        builder.setTotalPages(roleFindAllCos.getTotalPages());
-        responseObserver.onNext(builder.build());
-        responseObserver.onCompleted();
-      } catch (Exception e) {
-        throw new GRpcRuntimeExceptionWrapper(e);
-      }
+      Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
+        roleFindAllCmdNotNull);
+      List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
+        .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcCo(roleFindAllCo).stream())
+        .toList();
+      builder.addAllContent(findAllGrpcCos);
+      builder.setTotalPages(roleFindAllCos.getTotalPages());
+      responseObserver.onNext(builder.build());
+      responseObserver.onCompleted();
     }, () -> {
       responseObserver.onNext(PageOfRoleFindAllGrpcCo.getDefaultInstance());
       responseObserver.onCompleted();
@@ -204,7 +199,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         responseObserver.onNext(roleFindByIdGrpcCo);
         responseObserver.onCompleted();
       }, () -> {
-        throw new GRpcRuntimeExceptionWrapper(new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST));
+        throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST);
       });
   }
 

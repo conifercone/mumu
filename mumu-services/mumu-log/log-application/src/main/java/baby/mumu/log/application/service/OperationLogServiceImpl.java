@@ -38,7 +38,6 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerIntercepto
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -92,13 +91,9 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     @NotNull StreamObserver<Empty> responseObserver) {
     operationLogConvertor.toOperationLogSubmitCmd(request)
       .ifPresentOrElse((operationLogSubmitCmd) -> {
-        try {
-          operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-          responseObserver.onNext(Empty.getDefaultInstance());
-          responseObserver.onCompleted();
-        } catch (Exception e) {
-          throw new GRpcRuntimeExceptionWrapper(e);
-        }
+        operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
       }, () -> {
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();

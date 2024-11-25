@@ -16,6 +16,8 @@
 package baby.mumu.file.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.file.application.streamfile.executor.StreamFileDownloadCmdExe;
@@ -39,7 +41,6 @@ import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,7 +105,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
         StreamFileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
       responseObserver.onCompleted();
     } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
+      throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
     }
   }
 

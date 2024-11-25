@@ -29,7 +29,6 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerIntercepto
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,13 +62,9 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
     StreamObserver<TokenValidityGrpcCo> responseObserver) {
     TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
     tokenValidityCmd.setToken(request.getToken());
-    try {
-      responseObserver.onNext(
-        TokenValidityGrpcCo.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
-          .build());
-      responseObserver.onCompleted();
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
+    responseObserver.onNext(
+      TokenValidityGrpcCo.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
+        .build());
+    responseObserver.onCompleted();
   }
 }

@@ -64,7 +64,6 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -288,13 +287,10 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void queryCurrentLoginAccount(Empty request,
     StreamObserver<AccountCurrentLoginGrpcCo> responseObserver) {
-    try {
-      AccountCurrentLoginCo accountCurrentLoginCo = accountCurrentLoginQueryCmdExe.execute();
-      responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcCo(accountCurrentLoginCo)
-        .orElse(AccountCurrentLoginGrpcCo.getDefaultInstance()));
-      responseObserver.onCompleted();
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
+    AccountCurrentLoginCo accountCurrentLoginCo = accountCurrentLoginQueryCmdExe.execute();
+    responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcCo(accountCurrentLoginCo)
+      .orElse(AccountCurrentLoginGrpcCo.getDefaultInstance()));
+    responseObserver.onCompleted();
+
   }
 }

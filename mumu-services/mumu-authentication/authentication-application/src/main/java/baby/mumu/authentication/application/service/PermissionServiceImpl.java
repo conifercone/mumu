@@ -65,7 +65,6 @@ import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -183,8 +182,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   public void findById(Int64Value request,
     StreamObserver<PermissionFindByIdGrpcCo> responseObserver) {
     Runnable runnable = () -> {
-      throw new GRpcRuntimeExceptionWrapper(
-        new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+      throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
     };
     Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
       (id) -> permissionConvertor.toPermissionFindByIdGrpcCo(
@@ -202,21 +200,17 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     permissionConvertor.toPermissionFindAllCmd(request)
       .ifPresentOrElse((permissionFindAllCmdNotNull) -> {
         Builder builder = PageOfPermissionFindAllGrpcCo.newBuilder();
-        try {
-          Page<PermissionFindAllCo> permissionFindAllCos = permissionFindAllCmdExe.execute(
-            permissionFindAllCmdNotNull);
-          List<PermissionFindAllGrpcCo> findAllGrpcCos = permissionFindAllCos.getContent().stream()
-            .flatMap(
-              permissionFindAllCo -> permissionConvertor.toPermissionFindAllGrpcCo(
-                  permissionFindAllCo)
-                .stream()).toList();
-          builder.addAllContent(findAllGrpcCos);
-          builder.setTotalPages(permissionFindAllCos.getTotalPages());
-          responseObserver.onNext(builder.build());
-          responseObserver.onCompleted();
-        } catch (Exception e) {
-          throw new GRpcRuntimeExceptionWrapper(e);
-        }
+        Page<PermissionFindAllCo> permissionFindAllCos = permissionFindAllCmdExe.execute(
+          permissionFindAllCmdNotNull);
+        List<PermissionFindAllGrpcCo> findAllGrpcCos = permissionFindAllCos.getContent().stream()
+          .flatMap(
+            permissionFindAllCo -> permissionConvertor.toPermissionFindAllGrpcCo(
+                permissionFindAllCo)
+              .stream()).toList();
+        builder.addAllContent(findAllGrpcCos);
+        builder.setTotalPages(permissionFindAllCos.getTotalPages());
+        responseObserver.onNext(builder.build());
+        responseObserver.onCompleted();
       }, () -> {
         responseObserver.onNext(PageOfPermissionFindAllGrpcCo.getDefaultInstance());
         responseObserver.onCompleted();

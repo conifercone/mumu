@@ -38,7 +38,6 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,18 +90,15 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
       request.hasLength() ? request.getLength()
         .getValue() : null);
     Builder builder = SimpleCaptchaGeneratedGrpcCo.newBuilder();
-    try {
-      SimpleCaptchaGeneratedCo captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
-        simpleCaptchaGeneratedCmd);
-      if (captchaGeneratedCo != null) {
-        builder.setId(Int64Value.of(captchaGeneratedCo.getId()))
-          .setTtl(Int64Value.of(captchaGeneratedCo.getTtl())).setLength(
-            Int32Value.of(captchaGeneratedCo.getLength()))
-          .setTarget(StringValue.of(captchaGeneratedCo.getTarget()));
-      }
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
+    SimpleCaptchaGeneratedCo captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
+      simpleCaptchaGeneratedCmd);
+    if (captchaGeneratedCo != null) {
+      builder.setId(Int64Value.of(captchaGeneratedCo.getId()))
+        .setTtl(Int64Value.of(captchaGeneratedCo.getTtl())).setLength(
+          Int32Value.of(captchaGeneratedCo.getLength()))
+        .setTarget(StringValue.of(captchaGeneratedCo.getTarget()));
     }
+
     responseObserver.onNext(builder.build());
     responseObserver.onCompleted();
   }
@@ -114,14 +110,11 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
     captchaConvertor.toSimpleCaptchaVerifyCmd(request)
       .ifPresentOrElse((simpleCaptchaVerifyCmdNotNull) -> {
         SimpleCaptchaVerifyGrpcResult.Builder builder = SimpleCaptchaVerifyGrpcResult.newBuilder();
-        try {
-          builder.setResult(simpleCaptchaVerifyCmdExe.execute(
-            simpleCaptchaVerifyCmdNotNull));
-          responseObserver.onNext(builder.build());
-          responseObserver.onCompleted();
-        } catch (Exception e) {
-          throw new GRpcRuntimeExceptionWrapper(e);
-        }
+        builder.setResult(simpleCaptchaVerifyCmdExe.execute(
+          simpleCaptchaVerifyCmdNotNull));
+        responseObserver.onNext(builder.build());
+        responseObserver.onCompleted();
+
       }, () -> {
         responseObserver.onNext(SimpleCaptchaVerifyGrpcResult.getDefaultInstance());
         responseObserver.onCompleted();

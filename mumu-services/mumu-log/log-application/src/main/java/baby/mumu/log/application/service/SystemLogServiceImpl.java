@@ -33,7 +33,6 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -84,13 +83,9 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   public void submit(SystemLogSubmitGrpcCmd request,
     StreamObserver<Empty> responseObserver) {
     systemLogConvertor.toSystemLogSubmitCmd(request).ifPresentOrElse((systemLogSubmitCmd) -> {
-      try {
-        systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
-      } catch (Exception e) {
-        throw new GRpcRuntimeExceptionWrapper(e);
-      }
+      systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
+      responseObserver.onNext(Empty.getDefaultInstance());
+      responseObserver.onCompleted();
     }, () -> {
       responseObserver.onNext(Empty.getDefaultInstance());
       responseObserver.onCompleted();

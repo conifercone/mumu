@@ -36,7 +36,6 @@ import io.micrometer.observation.annotation.Observed;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -103,11 +102,8 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(
       request);
     templateMailSendCmd.setTemplateMailSendCo(templateMailSendCo);
-    try {
-      templateMailSendCmdExe.execute(templateMailSendCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
+    templateMailSendCmdExe.execute(templateMailSendCmd);
+
     responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }
