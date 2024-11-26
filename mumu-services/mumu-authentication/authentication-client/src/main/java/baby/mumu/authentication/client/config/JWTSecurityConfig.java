@@ -103,6 +103,8 @@ public class JWTSecurityConfig {
     http.addFilterBefore(
       new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
       UsernamePasswordAuthenticationFilter.class);
+    http.exceptionHandling(exceptionHandling -> exceptionHandling
+      .accessDeniedHandler(mumuAccessDeniedHandler()));
     return http.formLogin(withDefaults()).cors(Customizer.withDefaults()).build();
   }
 
@@ -113,6 +115,11 @@ public class JWTSecurityConfig {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
+  }
+
+  @Bean
+  public MuMuAccessDeniedHandler mumuAccessDeniedHandler() {
+    return new MuMuAccessDeniedHandler();
   }
 
 }
