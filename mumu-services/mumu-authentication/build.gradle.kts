@@ -35,6 +35,7 @@ dependencies {
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
+    implementation(libs.spring.security.rsa)
 }
 
 buildscript {

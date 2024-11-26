@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.client.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
@@ -101,7 +103,7 @@ public class JWTSecurityConfig {
     http.addFilterBefore(
       new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
       UsernamePasswordAuthenticationFilter.class);
-    return http.cors(Customizer.withDefaults()).build();
+    return http.formLogin(withDefaults()).cors(Customizer.withDefaults()).build();
   }
 
   @Bean
