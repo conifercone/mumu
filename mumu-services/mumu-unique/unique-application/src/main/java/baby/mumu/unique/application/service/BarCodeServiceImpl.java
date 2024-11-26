@@ -15,13 +15,10 @@
  */
 package baby.mumu.unique.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.unique.application.barcode.executor.BarCodeGenerateCmdExe;
 import baby.mumu.unique.client.api.BarCodeService;
 import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,7 +28,6 @@ import org.springframework.stereotype.Service;
  * @since 1.0.4
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "BarCodeServiceImpl")
 public class BarCodeServiceImpl implements BarCodeService {
 

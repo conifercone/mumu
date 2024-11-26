@@ -15,7 +15,6 @@
  */
 package baby.mumu.unique.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.unique.application.country.executor.CountryGetAllExe;
 import baby.mumu.unique.application.country.executor.CountryGetCitiesByStateIdCmdExe;
 import baby.mumu.unique.application.country.executor.CountryGetCityByIdCmdExe;
@@ -31,10 +30,8 @@ import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
 import baby.mumu.unique.client.dto.co.CountryGetStateCitiesByIdCo;
 import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
 import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +42,6 @@ import org.springframework.stereotype.Service;
  * @since 2.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "CountryServiceImpl")
 public class CountryServiceImpl implements CountryService {
 

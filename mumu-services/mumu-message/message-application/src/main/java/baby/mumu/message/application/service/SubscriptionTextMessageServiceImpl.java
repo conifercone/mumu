@@ -15,7 +15,6 @@
  */
 package baby.mumu.message.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageArchiveByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageDeleteByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageFindAllWithSomeOneCmdExe;
@@ -30,9 +29,7 @@ import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -45,7 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.2
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "SubscriptionTextMessageServiceImpl")
 public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessageService {
 

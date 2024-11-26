@@ -15,7 +15,6 @@
  */
 package baby.mumu.message.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageArchiveByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageDeleteByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageFindAllYouSendCmdExe;
@@ -26,9 +25,7 @@ import baby.mumu.message.client.api.BroadcastTextMessageService;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.2
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "BroadcastTextMessageServiceImpl")
 public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageService {
 
