@@ -21,10 +21,9 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import io.grpc.Status;
+import net.devh.boot.grpc.server.advice.GrpcAdvice;
+import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.lognet.springboot.grpc.recovery.GRpcExceptionHandler;
-import org.lognet.springboot.grpc.recovery.GRpcExceptionScope;
-import org.lognet.springboot.grpc.recovery.GRpcServiceAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ import org.springframework.security.core.AuthenticationException;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@GRpcServiceAdvice
+@GrpcAdvice
 public class GrpcExceptionAdvice {
 
   private final SystemLogGrpcService systemLogGrpcService;
@@ -50,9 +49,8 @@ public class GrpcExceptionAdvice {
 
 
   @SuppressWarnings("unused")
-  @GRpcExceptionHandler
-  public Status handle(MuMuException mumuException,
-    @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
+  @GrpcExceptionHandler
+  public Status handle(MuMuException mumuException) {
     Status internal = Status.INTERNAL;
     if (mumuException != null) {
       logger.error(mumuException.getMessage(), mumuException);
@@ -67,9 +65,8 @@ public class GrpcExceptionAdvice {
   }
 
   @SuppressWarnings("unused")
-  @GRpcExceptionHandler
-  public Status handle(RateLimiterException rateLimiterException,
-    @SuppressWarnings("unused") GRpcExceptionScope gRpcExceptionScope) {
+  @GrpcExceptionHandler
+  public Status handle(RateLimiterException rateLimiterException) {
     Status resourceExhausted = Status.RESOURCE_EXHAUSTED;
     if (rateLimiterException != null) {
       logger.error(rateLimiterException.getMessage(), rateLimiterException);
@@ -85,9 +82,8 @@ public class GrpcExceptionAdvice {
   }
 
   @SuppressWarnings("unused")
-  @GRpcExceptionHandler
-  public Status handle(AuthenticationException authenticationException,
-    @SuppressWarnings("unused") GRpcExceptionScope scope) {
+  @GrpcExceptionHandler
+  public Status handle(AuthenticationException authenticationException) {
     Status unauthenticated = Status.UNAUTHENTICATED;
     if (authenticationException != null) {
       logger.error(ResponseCode.UNAUTHORIZED.getMessage(), authenticationException);

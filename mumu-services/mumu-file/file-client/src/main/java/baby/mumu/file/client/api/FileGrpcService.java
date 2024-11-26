@@ -15,13 +15,14 @@
  */
 package baby.mumu.file.client.api;
 
-import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import java.time.Duration;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -34,7 +35,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class FileGrpcService {
 
-  public static final String GRPC_FILE = "grpc-file";
+  public static final String GRPC_FILE = "file";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -49,8 +50,6 @@ class FileGrpcService {
     //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       serviceInstance -> {
-        NameResolverRegistry.getDefaultRegistry()
-          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
             "discovery-client://" + GRPC_FILE)
           .defaultLoadBalancingPolicy("round_robin")
@@ -61,7 +60,23 @@ class FileGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_FILE));
+    //noinspection DuplicatedCode
+    RetryConfig config = RetryConfig.custom()
+      .maxAttempts(5) // 最大尝试 5 次
+      .waitDuration(Duration.ofSeconds(2)) // 每次重试间隔 2 秒
+      .retryOnResult(result -> !(Boolean) result)
+      .build();
+
+    Retry retry = Retry.of(GRPC_FILE, config);
+
+    Supplier<Boolean> retryableSupplier = Retry.decorateSupplier(retry, () ->
+      !discoveryClient.getInstances(GRPC_FILE).isEmpty()
+    );
+    try {
+      return retryableSupplier.get();
+    } catch (Exception e) {
+      return false;
+    }
   }
 
 }

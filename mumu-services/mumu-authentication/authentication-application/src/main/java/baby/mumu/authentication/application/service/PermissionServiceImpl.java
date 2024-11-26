@@ -64,7 +64,7 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerIntercepto
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -78,7 +78,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "PermissionServiceImpl")
 public class PermissionServiceImpl extends PermissionServiceImplBase implements PermissionService {
 

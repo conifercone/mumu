@@ -27,14 +27,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
-import java.nio.ByteBuffer;
+import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 public class RoleGrpcServiceTest extends AuthenticationRequired {
@@ -69,11 +68,10 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
       .setName(StringValue.of("管理员"))
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+
     PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
@@ -88,11 +86,9 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
       .setName(StringValue.of("管理员"))
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<PageOfRoleFindAllGrpcCo> pageOfRoleFindAllGrpcCoListenableFuture = roleGrpcService.syncFindAll(
       roleFindAllGrpcCmd,
       callCredentials);
@@ -114,11 +110,9 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   public void findById() {
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleGrpcService.findById(
       RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
       callCredentials);
@@ -129,11 +123,9 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncFindById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<RoleFindByIdGrpcCo> roleFindByIdGrpcCoListenableFuture = roleGrpcService.syncFindById(
       RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
       callCredentials);

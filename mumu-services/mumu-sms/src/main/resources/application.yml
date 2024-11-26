@@ -44,3 +44,6 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         acl-token: ${consul_token}
+        heartbeat:
+          enabled: true
+          use-actuator-health: false

@@ -41,6 +41,7 @@ public class DiscoveryClientNameResolver extends NameResolver {
   private final String serviceName;
   private Listener2 listener;
   private final DiscoveryClient discoveryClient;
+  private final String GRPC_PORT_META_KEY = "gRPC_port";
 
   public DiscoveryClientNameResolver(String serviceName, DiscoveryClient discoveryClient) {
     this.serviceName = serviceName;
@@ -83,8 +84,9 @@ public class DiscoveryClientNameResolver extends NameResolver {
     return List.of(new EquivalentAddressGroup(Optional.ofNullable(
         discoveryClient.getInstances(serviceName)).map(
         serviceInstances -> serviceInstances.stream().map(
-          serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
-            serviceInstance.getPort())).collect(Collectors.toList()))
+            serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
+              Integer.parseInt(serviceInstance.getMetadata().get(GRPC_PORT_META_KEY))))
+          .collect(Collectors.toList()))
       .orElse(new ArrayList<>())));
   }
 }

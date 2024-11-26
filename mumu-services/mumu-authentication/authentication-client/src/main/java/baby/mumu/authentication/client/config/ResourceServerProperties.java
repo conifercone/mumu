@@ -80,5 +80,7 @@ public class ResourceServerProperties {
     private String authority;
 
     private String role;
+
+    private boolean permitAll;
   }
 }

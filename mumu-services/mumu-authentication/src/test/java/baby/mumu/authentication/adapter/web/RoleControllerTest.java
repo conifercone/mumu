@@ -47,7 +47,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
-  "mumu.extension.global.digital-signature.enabled=false"
+  "mumu.extension.global.digital-signature.enabled=false",
+  "mumu.extension.idempotent.request-id.enabled=false"
 })
 public class RoleControllerTest {
 

@@ -22,14 +22,13 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.nio.ByteBuffer;
+import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 public class AccountGrpcServiceTest extends AuthenticationRequired {
@@ -61,11 +60,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   public void queryCurrentLoginAccount() {
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc, "admin", "admin").orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc, "admin", "admin").orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     AccountCurrentLoginGrpcCo accountCurrentLoginGrpcCo = accountGrpcService.queryCurrentLoginAccount(
       callCredentials);
     Assertions.assertNotNull(accountCurrentLoginGrpcCo);
@@ -75,11 +72,9 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncQueryCurrentLoginAccount() {
     CountDownLatch countDownLatch = new CountDownLatch(1);
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc, "admin", "admin").orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc, "admin", "admin").orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<AccountCurrentLoginGrpcCo> accountCurrentLoginGrpcCoListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
       callCredentials);
     accountCurrentLoginGrpcCoListenableFuture.addListener(() -> {

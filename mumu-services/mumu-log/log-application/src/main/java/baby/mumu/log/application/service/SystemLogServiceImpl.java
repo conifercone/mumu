@@ -32,7 +32,7 @@ import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
   private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;

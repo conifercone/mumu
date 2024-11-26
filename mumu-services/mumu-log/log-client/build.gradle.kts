@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.javax.annotation.api)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
+    implementation(libs.resilience4j.retry)
     api(libs.protobuf.java)
 }
 

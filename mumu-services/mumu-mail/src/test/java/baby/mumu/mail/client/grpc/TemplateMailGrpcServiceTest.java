@@ -25,15 +25,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
-import java.nio.ByteBuffer;
+import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.lognet.springboot.grpc.security.AuthHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +44,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
@@ -79,11 +78,9 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
           .setData(StringValue.of(data))
           .build())
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken().orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken().orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     Empty empty = templateMailGrpcService.sendMail(
       templateMailSendGrpcCmd,
       callCredentials);
@@ -113,11 +110,9 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
           .setData(StringValue.of(data))
           .build())
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken().orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken().orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<Empty> emptyListenableFuture = templateMailGrpcService.syncSendMail(
       templateMailSendGrpcCmd,
       callCredentials);

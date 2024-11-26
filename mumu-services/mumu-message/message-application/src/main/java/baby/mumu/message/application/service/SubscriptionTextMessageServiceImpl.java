@@ -32,7 +32,7 @@ import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOne
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.2
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "SubscriptionTextMessageServiceImpl")
 public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessageService {
 

@@ -21,7 +21,7 @@ import baby.mumu.unique.client.api.QRCodeService;
 import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.4
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "QRCodeServiceImpl")
 public class QRCodeServiceImpl implements QRCodeService {
 
