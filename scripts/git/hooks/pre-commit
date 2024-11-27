@@ -21,7 +21,7 @@ if [ ! -z "$kotlin_files" ]; then
 fi
 
 # 如果没有文件需要检查，直接退出
-if [ [ $update_license_needed -eq 0 ]; then
+if [ $update_license_needed -eq 0 ]; then
     echo "☀️ No relevant files changed, skipping Update license."
     exit 0
 fi
