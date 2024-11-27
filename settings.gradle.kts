@@ -4,6 +4,11 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+buildCache {
+    local {
+        directory = file("${rootDir}/build-cache")
+    }
+}
 
 rootProject.name = "mumu"
 include("mumu-services:mumu-authentication")
