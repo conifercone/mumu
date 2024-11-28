@@ -67,6 +67,11 @@ public class Role extends BasisDomainModel {
   private String name;
 
   /**
+   * 描述
+   */
+  private String description;
+
+  /**
    * 角色权限
    */
   private List<Permission> permissions;

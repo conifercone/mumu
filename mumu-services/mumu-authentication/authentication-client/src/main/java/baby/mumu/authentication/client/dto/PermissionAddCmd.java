@@ -34,4 +34,7 @@ public class PermissionAddCmd {
 
   @Size(max = 200, message = "{permission.name.validation.size}")
   private String name;
+
+  @Size(max = 500)
+  private String description;
 }

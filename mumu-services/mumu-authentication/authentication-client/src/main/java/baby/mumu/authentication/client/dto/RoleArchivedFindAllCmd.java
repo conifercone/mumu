@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 
@@ -33,6 +34,9 @@ public class RoleArchivedFindAllCmd {
   private String name;
 
   private String code;
+
+  @Size(max = 500)
+  private String description;
 
   private List<Long> permissionIds;
 

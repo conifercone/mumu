@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 /**
@@ -67,4 +68,11 @@ public class RoleDo extends JpaBasisArchivableDataObject {
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
+  /**
+   * 角色描述
+   */
+  @Size(max = 500)
+  @ColumnDefault("''")
+  @Column(name = "description", nullable = false, length = 500)
+  private String description;
 }

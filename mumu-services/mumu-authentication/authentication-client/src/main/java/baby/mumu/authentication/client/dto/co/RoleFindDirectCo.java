@@ -39,5 +39,7 @@ public class RoleFindDirectCo extends BaseClientObject {
 
   private String name;
 
+  private String description;
+
   private boolean hasDescendant;
 }

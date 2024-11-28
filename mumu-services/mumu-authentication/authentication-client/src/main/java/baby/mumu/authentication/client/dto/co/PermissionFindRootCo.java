@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.client.dto.co.BaseClientObject;
+import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,6 +39,9 @@ public class PermissionFindRootCo extends BaseClientObject {
   private String code;
 
   private String name;
+
+  @Size(max = 500)
+  private String description;
 
   private boolean hasDescendant;
 }

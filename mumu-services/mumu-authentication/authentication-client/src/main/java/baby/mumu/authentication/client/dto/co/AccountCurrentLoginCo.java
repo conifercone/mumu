@@ -123,6 +123,8 @@ public class AccountCurrentLoginCo extends BaseClientObject {
      */
     private String name;
 
+    private String description;
+
     /**
      * 角色权限
      */
@@ -146,6 +148,8 @@ public class AccountCurrentLoginCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    private String description;
   }
 
   @Data

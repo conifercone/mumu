@@ -169,6 +169,8 @@ public class AccountFindAllCo extends BaseClientObject {
 
     private String code;
 
+    private String description;
+
     private List<AccountFindAllPermissionCo> permissions;
   }
 
@@ -189,5 +191,7 @@ public class AccountFindAllCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    private String description;
   }
 }

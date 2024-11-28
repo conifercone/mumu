@@ -36,6 +36,9 @@ public class PermissionArchivedFindAllCmd {
   @Size(max = 200, message = "{permission.name.validation.size}")
   private String name;
 
+  @Size(max = 500)
+  private String description;
+
   @Min(value = 1, message = "{current.validation.min.size}")
   private Integer current = 1;
 

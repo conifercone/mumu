@@ -56,4 +56,11 @@ public class PermissionArchivedDo extends JpaBasisArchivableDataObject {
   @Column(name = "name", nullable = false, length = 200)
   private String name;
 
+  /**
+   * 权限描述
+   */
+  @Size(max = 500)
+  @ColumnDefault("''")
+  @Column(name = "description", nullable = false, length = 500)
+  private String description;
 }

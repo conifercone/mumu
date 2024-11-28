@@ -26,6 +26,7 @@ import java.io.Serial;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 /**
@@ -66,4 +67,12 @@ public class PermissionDo extends JpaBasisArchivableDataObject {
   @Size(max = 200, message = "{permission.name.validation.size}")
   @Column(name = "name", nullable = false, length = 200)
   private String name;
+
+  /**
+   * 权限描述
+   */
+  @Size(max = 500)
+  @ColumnDefault("''")
+  @Column(name = "description", nullable = false, length = 500)
+  private String description;
 }

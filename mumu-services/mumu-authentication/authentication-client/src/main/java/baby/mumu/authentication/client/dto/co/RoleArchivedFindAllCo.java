@@ -42,6 +42,8 @@ public class RoleArchivedFindAllCo extends BaseClientObject {
 
   private String code;
 
+  private String description;
+
   private List<RoleArchivedFindAllPermissionCo> permissions;
 
   /**
@@ -66,6 +68,8 @@ public class RoleArchivedFindAllCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    private String description;
 
     /**
      * 有后代权限

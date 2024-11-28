@@ -168,6 +168,8 @@ public class AccountFindAllSliceCo extends BaseClientObject {
 
     private String code;
 
+    private String description;
+
     private List<AccountFindAllPermissionCo> permissions;
   }
 
@@ -188,5 +190,7 @@ public class AccountFindAllSliceCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    private String description;
   }
 }

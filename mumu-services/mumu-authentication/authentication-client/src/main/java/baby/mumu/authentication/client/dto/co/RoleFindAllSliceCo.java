@@ -43,6 +43,8 @@ public class RoleFindAllSliceCo extends BaseClientObject {
 
   private String code;
 
+  private String description;
+
   private List<RoleFindAllSlicePermissionCo> permissions;
 
   /**
@@ -67,6 +69,8 @@ public class RoleFindAllSliceCo extends BaseClientObject {
      * 权限名称
      */
     private String name;
+
+    private String description;
 
     /**
      * 有后代权限

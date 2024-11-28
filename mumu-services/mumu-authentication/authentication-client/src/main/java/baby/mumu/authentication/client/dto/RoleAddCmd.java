@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 
@@ -35,6 +36,9 @@ public class RoleAddCmd {
 
   @NotBlank
   private String code;
+
+  @Size(max = 500)
+  private String description;
 
   private List<Long> permissionIds;
 }
