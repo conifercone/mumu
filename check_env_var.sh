@@ -6,8 +6,8 @@ ENV_VARS=("mumu_signing_key_id" "mumu_signing_key" "mumu_signing_password" "cons
 # 遍历环境变量集合
 for VAR in "${ENV_VARS[@]}"; do
     if [ -z "${!VAR}" ]; then
-        echo "错误: 环境变量 '$VAR' 不存在。"
+        echo "Error: Environment variable '$VAR' does not exist."
     else
-        echo "环境变量 '$VAR' 存在，值为: ${!VAR}"
+        echo "The environment variable '$VAR' exists and the value is: ${!VAR}"
     fi
 done
