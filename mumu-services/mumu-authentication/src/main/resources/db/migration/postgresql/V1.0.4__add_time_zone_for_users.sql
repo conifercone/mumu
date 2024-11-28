@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- users新增列
 -- 时区
 ALTER TABLE users

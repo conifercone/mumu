@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 comment on column authorities.id is '唯一主键';
 comment on column authorities.code is '权限编码';
 comment on column authorities.name is '权限名称';

@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 create table authorities
 (
     code              varchar(50) not null,

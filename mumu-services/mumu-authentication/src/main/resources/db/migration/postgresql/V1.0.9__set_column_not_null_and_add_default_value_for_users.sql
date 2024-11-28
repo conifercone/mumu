@@ -1,5 +1,6 @@
 -- @formatter:off
 -- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- users credentials_non_expired字段设置为NOT NULL,添加false为默认值
 ALTER TABLE users
     ALTER COLUMN credentials_non_expired SET DEFAULT false;

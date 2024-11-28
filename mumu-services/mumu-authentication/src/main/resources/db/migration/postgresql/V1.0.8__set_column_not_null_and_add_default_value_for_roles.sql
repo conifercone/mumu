@@ -1,6 +1,6 @@
 -- @formatter:off
--- noinspection SqlResolveForFile @ column/"authorities"
 -- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- roles name字段设置为NOT NULL,添加空字符串为默认值
 insert into roles(id, name, code, authorities, creation_time, founder, modifier, modification_time)
 VALUES (0, '游客', 'tourists', '{}', '2024-03-08 06:47:49.970747+00:00',0 , 0,

@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- 语言偏好枚举
 CREATE TYPE language AS ENUM (
     'ZH',

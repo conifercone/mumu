@@ -1,6 +1,5 @@
--- noinspection SqlSignatureForFile @ routine/"move_archived_records"
-
 -- @formatter:off
+-- noinspection SqlSignatureForFile @ routine/"move_archived_records"
 -- noinspection SqlConstantExpressionForFile
 -- noinspection SqlResolveForFile
 -- 添加归档表及触发器
