@@ -32,8 +32,6 @@ spring:
         profile-separator: '-'
         format: YAML
         data-key: ${spring.application.name}
-        watch:
-          enabled: false
         prefixes: mumu
         acl-token: ${consul_token}
       discovery:
