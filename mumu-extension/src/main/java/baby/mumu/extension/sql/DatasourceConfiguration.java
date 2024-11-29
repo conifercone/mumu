@@ -85,6 +85,11 @@ public class DatasourceConfiguration {
     return new DatasourceFilterChainImpl(dataSourceFilters);
   }
 
+  /**
+   * 自定义JPA创建人修改人自动注入实例
+   *
+   * @return JpaAuditorAware
+   */
   @Bean(name = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
   public MuMuJpaAuditorAware mumuJpaAuditorAware() {
     return new MuMuJpaAuditorAware();
