@@ -57,8 +57,10 @@ public interface PermissionPathsRepository extends
    *
    * @return 根权限
    */
-  @Query("select a from PermissionPathsDo a where a.id.depth = 0 and not exists "
-    + "(select 1 from PermissionPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)")
+  @Query("""
+      select a from PermissionPathsDo a where a.id.depth = 0 and not exists
+         (select 1 from PermissionPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
+    """)
   Page<PermissionPathsDo> findRootPermissions(Pageable pageable);
 
   /**
@@ -94,18 +96,20 @@ public interface PermissionPathsRepository extends
    * 删除所有不可达节点
    */
   @Modifying
-  @Query("DELETE FROM PermissionPathsDo ap1 " +
-    "WHERE ap1.id.depth > 1 " +
-    "AND NOT EXISTS (" +
-    "   SELECT 1 " +
-    "   FROM PermissionPathsDo ap2 " +
-    "   JOIN PermissionPathsDo ap3 " +
-    "       ON ap2.descendant.id = ap3.ancestor.id " +  // ap2 的后代是 ap3 的祖先
-    "   WHERE ap2.ancestor.id = ap1.ancestor.id " +  // 同一个祖先
-    "   AND ap3.descendant.id = ap1.descendant.id " +  // 同一个后代
-    "   AND ap2.id.depth = 1 " +
-    "   AND ap3.id.depth = 1 " +
-    ") " +
-    "AND ap1.ancestor.id != ap1.descendant.id")
+  @Query("""
+    DELETE FROM PermissionPathsDo ap1
+    WHERE ap1.id.depth > 1
+    AND NOT EXISTS (
+        SELECT 1
+        FROM PermissionPathsDo ap2
+        JOIN PermissionPathsDo ap3
+            ON ap2.descendant.id = ap3.ancestor.id
+        WHERE ap2.ancestor.id = ap1.ancestor.id
+        AND ap3.descendant.id = ap1.descendant.id
+        AND ap2.id.depth = 1
+        AND ap3.id.depth = 1
+    )
+    AND ap1.ancestor.id != ap1.descendant.id
+    """)
   void deleteUnreachableData();
 }
