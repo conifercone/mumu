@@ -45,7 +45,7 @@ protobufBomVersion = '4.28.3'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = 'latest.release'
-kotlinPluginVersion = '2.0.21'
+kotlinPluginVersion = '2.1.0'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
