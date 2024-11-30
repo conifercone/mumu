@@ -150,7 +150,6 @@ object SecurityContextUtil {
                 null
             }
 
-    @Suppress("unused")
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
     val tokenValue: Optional<String?>
