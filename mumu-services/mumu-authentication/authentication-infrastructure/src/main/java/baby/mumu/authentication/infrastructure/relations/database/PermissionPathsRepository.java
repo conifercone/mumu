@@ -46,11 +46,11 @@ public interface PermissionPathsRepository extends
   /**
    * 根据祖先ID和后代ID删除所有关系
    *
-   * @param authorityId 祖先ID
+   * @param permissionId 祖先ID
    */
   @Modifying
-  @Query("delete from PermissionPathsDo a where a.descendant.id=:authorityId or a.ancestor.id=:authorityId")
-  void deleteAllPathsByPermissionId(@Param("authorityId") Long authorityId);
+  @Query("delete from PermissionPathsDo a where a.descendant.id=:permissionId or a.ancestor.id=:permissionId")
+  void deleteAllPathsByPermissionId(@Param("permissionId") Long permissionId);
 
   /**
    * 获取所有根权限
