@@ -57,6 +57,8 @@ public class PermissionRedisDo extends JpaRedisBasisArchivableDataObject {
    */
   private String name;
 
+  private String description;
+
   /**
    * 有后代权限
    */

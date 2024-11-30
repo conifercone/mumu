@@ -57,6 +57,8 @@ public class RoleRedisDo extends JpaRedisBasisArchivableDataObject {
    */
   private String name;
 
+  private String description;
+
   /**
    * 存活时间
    * <p>低等级别变化数据：默认缓存时间为6小时</p>
