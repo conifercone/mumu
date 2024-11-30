@@ -108,7 +108,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       } finally {
         TraceIdFilter.removeTraceId();
       }
-      List<String> authorities = jwt.getClaimAsStringList(TokenClaimsEnum.AUTHORITIES.name());
+      List<String> authorities = jwt.getClaimAsStringList(
+        TokenClaimsEnum.AUTHORITIES.getClaimName());
       if (SecurityContextHolder.getContext().getAuthentication() == null) {
         JwtAuthenticationToken authenticationToken =
           new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->

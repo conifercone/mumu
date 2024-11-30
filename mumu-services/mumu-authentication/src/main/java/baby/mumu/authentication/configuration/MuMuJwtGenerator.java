@@ -229,7 +229,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Instant start = Instant.now();
     Instant jwtExpiresAt = jwt.getExpiresAt();
     String authorizationGrantType = String.valueOf(
-      jwt.getClaims().get(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name()));
+      jwt.getClaims().get(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName()));
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
@@ -259,7 +259,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
       OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
       oidcIdTokenRedisDo.setId(
-        Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+        Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
       oidcIdTokenRedisDo.setTokenValue(tokenValue);
       oidcIdTokenRedisDo.setTtl(between.toSeconds());
       oidcIdTokenRepository.save(oidcIdTokenRedisDo);

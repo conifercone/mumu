@@ -60,8 +60,9 @@ object SecurityContextUtil {
                         }
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.name)) {
-                            return@map claims[TokenClaimsEnum.ACCOUNT_ID.name].toString().toLong()
+                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.claimName)) {
+                            return@map claims[TokenClaimsEnum.ACCOUNT_ID.claimName].toString()
+                                .toLong()
                         }
                     }
                 }
@@ -87,8 +88,8 @@ object SecurityContextUtil {
                         }
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.name)) {
-                            return@map claims[TokenClaimsEnum.ACCOUNT_NAME.name].toString()
+                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.claimName)) {
+                            return@map claims[TokenClaimsEnum.ACCOUNT_NAME.claimName].toString()
                         }
                     }
                 }
@@ -114,8 +115,8 @@ object SecurityContextUtil {
                         }
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.TIMEZONE.name)) {
-                            return@map claims[TokenClaimsEnum.TIMEZONE.name].toString()
+                        if (claims.containsKey(TokenClaimsEnum.TIMEZONE.claimName)) {
+                            return@map claims[TokenClaimsEnum.TIMEZONE.claimName].toString()
                         }
                     }
                 }
@@ -141,8 +142,8 @@ object SecurityContextUtil {
                         }
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.LANGUAGE.name)) {
-                            return@map LanguageEnum.valueOf(claims[TokenClaimsEnum.LANGUAGE.name].toString())
+                        if (claims.containsKey(TokenClaimsEnum.LANGUAGE.claimName)) {
+                            return@map LanguageEnum.valueOf(claims[TokenClaimsEnum.LANGUAGE.claimName].toString())
                         }
                     }
                 }

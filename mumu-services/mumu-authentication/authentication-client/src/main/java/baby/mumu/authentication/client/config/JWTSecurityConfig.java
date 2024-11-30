@@ -111,7 +111,7 @@ public class JWTSecurityConfig {
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     MuMuJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new MuMuJwtGrantedAuthoritiesConverter();
-    grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.name());
+    grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.getClaimName());
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;

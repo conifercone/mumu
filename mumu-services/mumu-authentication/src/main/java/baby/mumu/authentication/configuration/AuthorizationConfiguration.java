@@ -373,23 +373,24 @@ public class AuthorizationConfiguration {
         boolean isPasswordType = OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
           .equals(originAuthorizationGrantTypeValue);
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), isPasswordType ? authoritySet
+        claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), isPasswordType ? authoritySet
           : getFullScopes(roleRepository, roleConvertor, permissionRepository, permissionConvertor,
             scopes));
-        claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
-        claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
-        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
+        claims.claim(TokenClaimsEnum.ACCOUNT_NAME.getClaimName(), account.getUsername());
+        claims.claim(TokenClaimsEnum.ACCOUNT_ID.getClaimName(), account.getId());
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName(),
           originAuthorizationGrantTypeValue);
         if (StringUtils.isNotBlank(account.getTimezone())) {
-          claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
+          claims.claim(TokenClaimsEnum.TIMEZONE.getClaimName(), account.getTimezone());
         }
         Optional.ofNullable(account.getLanguage())
           .ifPresent(
-            languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
+            languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.getClaimName(),
+              languageEnum.name()));
       } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(
         context.getAuthorizationGrantType())) {
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName(),
           context.getAuthorizationGrantType().getValue());
         Set<String> authoritySet = Optional.ofNullable(
             ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
@@ -399,7 +400,7 @@ public class AuthorizationConfiguration {
           .map(scopes -> getFullScopes(roleRepository, roleConvertor, permissionRepository,
             permissionConvertor, scopes))
           .orElse(Collections.emptySet());
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
+        claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), authoritySet);
       }
     };
   }
