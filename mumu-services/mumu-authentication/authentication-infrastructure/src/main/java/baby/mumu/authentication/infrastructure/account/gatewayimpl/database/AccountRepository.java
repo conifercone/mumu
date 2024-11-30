@@ -89,13 +89,13 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("""
-      select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
-          where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
-          and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
-          and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
-          and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
-          and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
-      """)
+    select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
+        where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
+        and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
+        and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
+        and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
+        and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
+    """)
   Slice<AccountDo> findAllSlice(@Param("accountDo") AccountDo accountDo,
     @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 
@@ -108,13 +108,13 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("""
-      select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
-          where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
-          and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
-          and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
-          and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
-          and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
-      """)
+    select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
+        where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
+        and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
+        and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
+        and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
+        and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
+    """)
   Page<AccountDo> findAllPage(@Param("accountDo") AccountDo accountDo,
     @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 }

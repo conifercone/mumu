@@ -61,7 +61,7 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * 切片分页查询已归档的权限（不查询总数）
    *
    * @param permissionArchivedDo 查询条件
-   * @param pageable            分页条件
+   * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
@@ -77,7 +77,7 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * 分页查询已归档的权限（查询总数）
    *
    * @param permissionArchivedDo 查询条件
-   * @param pageable            分页条件
+   * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
