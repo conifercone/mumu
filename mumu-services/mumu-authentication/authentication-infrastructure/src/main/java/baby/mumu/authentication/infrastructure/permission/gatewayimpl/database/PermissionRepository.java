@@ -62,7 +62,7 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * 切片分页查询权限（不查询总数）
    *
    * @param permissionDo 查询条件
-   * @param pageable    分页条件
+   * @param pageable     分页条件
    * @return 查询结果
    */
   @Query(
@@ -78,15 +78,15 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * 分页查询权限（查询总数）
    *
    * @param permissionDo 查询条件
-   * @param pageable    分页条件
+   * @param pageable     分页条件
    * @return 查询结果
    */
   @Query(
     """
-        select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
-              and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
-              and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
-        """)
+      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+            and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
+            and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
+      """)
   Page<PermissionDo> findAllPage(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
 
