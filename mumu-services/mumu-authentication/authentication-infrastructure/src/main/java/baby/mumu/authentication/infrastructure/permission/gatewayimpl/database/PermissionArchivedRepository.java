@@ -65,9 +65,11 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id}) "
-      + "and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%) "
-      + "and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
+            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
+            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      """)
   Slice<PermissionArchivedDo> findAllSlice(
     @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
 
@@ -79,9 +81,11 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id}) "
-      + "and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%) "
-      + "and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
+            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
+            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      """)
   Page<PermissionArchivedDo> findAllPage(
     @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
 }

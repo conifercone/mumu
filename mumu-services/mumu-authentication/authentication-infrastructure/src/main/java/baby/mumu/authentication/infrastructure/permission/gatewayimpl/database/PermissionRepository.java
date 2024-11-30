@@ -66,9 +66,11 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id}) "
-      + "and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%) "
-      + "and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+            and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
+            and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
+      """)
   Slice<PermissionDo> findAllSlice(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
 
@@ -80,9 +82,11 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id}) "
-      + "and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%) "
-      + "and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc")
+    """
+        select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+              and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
+              and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
+        """)
   Page<PermissionDo> findAllPage(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
 

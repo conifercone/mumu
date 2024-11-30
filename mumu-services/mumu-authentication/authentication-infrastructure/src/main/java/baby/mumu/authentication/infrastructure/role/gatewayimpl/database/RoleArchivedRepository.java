@@ -62,11 +62,13 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
    * @return 查询结果
    */
   @Query(
-    "select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId"
-      + " where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id}) "
-      + "and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%) "
-      + "and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds}) "
-      + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
+    """
+        select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+              where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
+              and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
+              and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
+              and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
+        """)
   Slice<RoleArchivedDo> findAllSlice(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
@@ -79,11 +81,13 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
    * @return 查询结果
    */
   @Query(
-    "select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId"
-      + " where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id}) "
-      + "and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%) "
-      + "and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds}) "
-      + "and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc")
+    """
+        select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+              where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
+              and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
+              and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
+              and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
+        """)
   Page<RoleArchivedDo> findAllPage(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 }
