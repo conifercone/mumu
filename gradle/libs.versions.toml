@@ -39,7 +39,7 @@ progressbarVersion = '0.10.1'
 resilience4jVersion = '2.2.0'
 springSecurityRsaVersion = '1.1.5'
 # bom version
-grpcBomVersion = '1.68.1'
+grpcBomVersion = '1.68.2'
 guavaBomVersion = '33.3.1-jre'
 protobufBomVersion = '4.28.3'
 # plugin version
