@@ -97,19 +97,19 @@ public interface PermissionPathsRepository extends
    */
   @Modifying
   @Query("""
-    DELETE FROM PermissionPathsDo ap1
-    WHERE ap1.id.depth > 1
+    DELETE FROM PermissionPathsDo pp1
+    WHERE pp1.id.depth > 1
     AND NOT EXISTS (
         SELECT 1
-        FROM PermissionPathsDo ap2
-        JOIN PermissionPathsDo ap3
-            ON ap2.descendant.id = ap3.ancestor.id
-        WHERE ap2.ancestor.id = ap1.ancestor.id
-        AND ap3.descendant.id = ap1.descendant.id
-        AND ap2.id.depth = 1
-        AND ap3.id.depth = 1
+        FROM PermissionPathsDo pp2
+        JOIN PermissionPathsDo pp3
+            ON pp2.descendant.id = pp3.ancestor.id
+        WHERE pp2.ancestor.id = pp1.ancestor.id
+        AND pp3.descendant.id = pp1.descendant.id
+        AND pp2.id.depth = 1
+        AND pp3.id.depth = 1
     )
-    AND ap1.ancestor.id != ap1.descendant.id
+    AND pp1.ancestor.id != pp1.descendant.id
     """)
   void deleteUnreachableData();
 }
