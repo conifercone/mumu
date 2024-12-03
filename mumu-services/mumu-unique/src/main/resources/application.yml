@@ -15,7 +15,7 @@
 #
 
 server:
-  port: ${port:31300}
+  port: ${port:0}
   shutdown: graceful
 spring:
   application:
@@ -45,3 +45,5 @@ spring:
         heartbeat:
           enabled: true
           use-actuator-health: false
+        tags:
+          - "mumu"

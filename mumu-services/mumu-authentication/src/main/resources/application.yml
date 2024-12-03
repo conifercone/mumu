@@ -15,7 +15,7 @@
 #
 
 server:
-  port: ${port:31100}
+  port: ${port:0}
   shutdown: graceful
 spring:
   application:
@@ -45,5 +45,7 @@ spring:
         heartbeat:
           enabled: true
           use-actuator-health: false
+        tags:
+          - "mumu"
     refresh:
       never-refreshable: com.p6spy.engine.spy.P6DataSource
