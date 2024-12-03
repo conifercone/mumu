@@ -58,6 +58,16 @@ public class AccountCurrentLoginCo extends BaseClientObject {
 
   private LocalDate birthday;
 
+  /**
+   * 个性签名
+   */
+  private String bio;
+
+  /**
+   * 昵称
+   */
+  private String nickName;
+
   private int age;
 
   private List<AccountRoleCurrentLoginQueryCo> roles;

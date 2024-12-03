@@ -78,6 +78,12 @@ public class AccountRegisterCmd {
   @NotNull(message = "{account.birthday.validation.not.null}")
   private LocalDate birthday;
 
+  @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String bio;
+
+  @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String nickName;
+
   @Schema(description = "地址集合", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<AccountAddressRegisterCmd> addresses;
 

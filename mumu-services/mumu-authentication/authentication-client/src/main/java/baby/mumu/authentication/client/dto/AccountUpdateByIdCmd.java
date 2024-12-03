@@ -65,6 +65,12 @@ public class AccountUpdateByIdCmd {
   @Schema(description = "出生日期", requiredMode = RequiredMode.NOT_REQUIRED)
   private LocalDate birthday;
 
+  @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String bio;
+
+  @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String nickName;
+
   @Schema(description = "地址", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<AccountAddressUpdateByIdCmd> addresses;
 

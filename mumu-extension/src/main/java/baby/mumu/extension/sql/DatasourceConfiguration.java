@@ -27,13 +27,14 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Role;
 
 /**
  * 数据源配置类
@@ -52,14 +53,15 @@ public class DatasourceConfiguration {
    * @return 代表P6spyWrapperDataSourceFilter的DataSourceFilter
    */
   @Bean
-  @Order(1000)
   @ConditionalOnClass(P6DataSource.class)
+  @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
   public DataSourceFilter p6spyWrapperDataSourceFilter() {
     return new P6spyDataSourceFilter();
   }
 
   @Bean
-  public BeanPostProcessor dataSourceWrapperProcessor(DatasourceFilterChain dataSourceFilterChain,
+  public static BeanPostProcessor dataSourceWrapperProcessor(
+    DatasourceFilterChain dataSourceFilterChain,
     ExtensionProperties extensionProperties) {
     return new BeanPostProcessor() {
       @Override
@@ -81,6 +83,7 @@ public class DatasourceConfiguration {
    * @return 代表包含指定DataSourceFilter的FilterChain的实例
    */
   @Bean
+  @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
   public DatasourceFilterChain dataSourceFilterChain(List<DataSourceFilter> dataSourceFilters) {
     return new DatasourceFilterChainImpl(dataSourceFilters);
   }

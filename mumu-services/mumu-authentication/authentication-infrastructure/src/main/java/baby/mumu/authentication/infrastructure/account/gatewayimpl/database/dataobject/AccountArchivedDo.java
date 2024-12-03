@@ -103,4 +103,18 @@ public class AccountArchivedDo extends JpaBasisArchivableDataObject {
   @ColumnDefault("'1970-01-01'::date")
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
+
+  /**
+   * 个性签名
+   */
+  @Size(max = 500)
+  @Column(name = "bio", length = 500, nullable = false)
+  private String bio;
+
+  /**
+   * 昵称
+   */
+  @Size(max = 100)
+  @Column(name = "nick_name", length = 100, nullable = false)
+  private String nickName;
 }

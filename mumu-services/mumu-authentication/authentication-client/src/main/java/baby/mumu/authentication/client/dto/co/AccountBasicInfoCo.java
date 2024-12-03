@@ -103,6 +103,16 @@ public class AccountBasicInfoCo extends BaseClientObject {
   private LocalDate birthday;
 
   /**
+   * 个性签名
+   */
+  private String bio;
+
+  /**
+   * 昵称
+   */
+  private String nickName;
+
+  /**
    * 地址
    */
   private List<AccountAddressBasicInfoDo> addresses;
