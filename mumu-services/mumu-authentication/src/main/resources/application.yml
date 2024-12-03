@@ -38,7 +38,6 @@ spring:
         register: true
         instance-id: ${spring.application.name}
         service-name: ${spring.application.name}
-        port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         acl-token: ${consul_token}
