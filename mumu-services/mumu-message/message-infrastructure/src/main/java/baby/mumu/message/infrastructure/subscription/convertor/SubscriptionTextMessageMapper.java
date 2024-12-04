@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.subscription.convertor;
 
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
@@ -25,9 +25,7 @@ import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataob
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -39,7 +37,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface SubscriptionTextMessageMapper {
+public interface SubscriptionTextMessageMapper extends ClientObjectMapper {
 
   SubscriptionTextMessageMapper INSTANCE = Mappers.getMapper(SubscriptionTextMessageMapper.class);
 
@@ -72,16 +70,4 @@ public interface SubscriptionTextMessageMapper {
   @API(status = Status.STABLE, since = "1.0.4")
   SubscriptionTextMessageDo toDataObject(
     SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo);
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget SubscriptionTextMessageFindAllYouSendCo subscriptionTextMessageFindAllYouSendCo) {
-    CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllYouSendCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget SubscriptionTextMessageFindAllWithSomeOneCo subscriptionTextMessageFindAllWithSomeOneCo) {
-    CommonUtil.convertToAccountZone(subscriptionTextMessageFindAllWithSomeOneCo);
-  }
 }

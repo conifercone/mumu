@@ -45,14 +45,11 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.BaseMapper;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -66,7 +63,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper extends GrpcMapper {
+public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
@@ -169,32 +166,5 @@ public interface AccountMapper extends GrpcMapper {
   AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcCo(
     AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
 
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget AccountCurrentLoginCo accountCurrentLoginCo) {
-    CommonUtil.convertToAccountZone(accountCurrentLoginCo);
-  }
 
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget AccountBasicInfoCo accountBasicInfoCo) {
-    CommonUtil.convertToAccountZone(accountBasicInfoCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget AccountFindAllCo accountFindAllCo) {
-    CommonUtil.convertToAccountZone(accountFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget AccountFindAllSliceCo accountFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(accountFindAllSliceCo);
-  }
-
-  default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
-    return Optional.ofNullable(offsetDateTime)
-      .map(OffsetDateTime::toLocalDateTime).orElse(null);
-  }
 }

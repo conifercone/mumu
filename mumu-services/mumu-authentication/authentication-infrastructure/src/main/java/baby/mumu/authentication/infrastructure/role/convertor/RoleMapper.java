@@ -37,11 +37,10 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -55,7 +54,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RoleMapper extends GrpcMapper {
+public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
@@ -135,44 +134,4 @@ public interface RoleMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdGrpcCo toRoleFindByIdGrpcCo(
     RoleFindByIdCo roleFindByIdCo);
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
-    CommonUtil.convertToAccountZone(roleFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget RoleFindAllSliceCo roleFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(roleFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(roleArchivedFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
-    CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleFindByIdCo roleFindByIdCo) {
-    CommonUtil.convertToAccountZone(roleFindByIdCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleFindRootCo roleFindRootCo) {
-    CommonUtil.convertToAccountZone(roleFindRootCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleFindDirectCo roleFindDirectCo) {
-    CommonUtil.convertToAccountZone(roleFindDirectCo);
-  }
 }

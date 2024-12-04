@@ -35,11 +35,10 @@ import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionArchivedDo;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -53,7 +52,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface PermissionMapper extends GrpcMapper {
+public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
 
   PermissionMapper INSTANCE = Mappers.getMapper(PermissionMapper.class);
 
@@ -131,38 +130,4 @@ public interface PermissionMapper extends GrpcMapper {
 
   @API(status = Status.STABLE, since = "2.3.0")
   PermissionFindDirectCo toPermissionFindDirectCo(Permission permission);
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindByIdCo permissionFindByIdCo) {
-    CommonUtil.convertToAccountZone(permissionFindByIdCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionFindDirectCo permissionFindDirectCo) {
-    CommonUtil.convertToAccountZone(permissionFindDirectCo);
-  }
-
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindRootCo permissionFindRootCo) {
-    CommonUtil.convertToAccountZone(permissionFindRootCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindAllCo permissionFindAllCo) {
-    CommonUtil.convertToAccountZone(permissionFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionFindAllSliceCo permissionFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(permissionFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionArchivedFindAllSliceCo permissionArchivedFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(permissionArchivedFindAllSliceCo);
-  }
 }
