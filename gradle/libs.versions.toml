@@ -1,6 +1,6 @@
 [versions]
 springbootVersion = "3.4.0"
-springCloudVersion = "2024.0.0-RC1"
+springCloudVersion = "2024.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '26.0.1'
