@@ -19,4 +19,4 @@
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-package baby.mumu.basis.client.dto.co;
+package baby.mumu.basis.co;

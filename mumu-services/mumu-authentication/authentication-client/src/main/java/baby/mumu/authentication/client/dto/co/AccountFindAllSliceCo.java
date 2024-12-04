@@ -16,7 +16,7 @@
 package baby.mumu.authentication.client.dto.co;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.co.BaseClientObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import jakarta.validation.constraints.Size;

@@ -16,7 +16,7 @@
 package baby.mumu.log.client.dto.co;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.co.BaseClientObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serial;
 import java.time.LocalDateTime;

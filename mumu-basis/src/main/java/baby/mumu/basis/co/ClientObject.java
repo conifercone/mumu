@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.client.dto.co;
+package baby.mumu.basis.co;
 
 import java.io.Serializable;
 

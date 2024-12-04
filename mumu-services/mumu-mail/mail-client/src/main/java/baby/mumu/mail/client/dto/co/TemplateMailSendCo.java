@@ -15,7 +15,7 @@
  */
 package baby.mumu.mail.client.dto.co;
 
-import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.co.BaseClientObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
 import java.util.Map;

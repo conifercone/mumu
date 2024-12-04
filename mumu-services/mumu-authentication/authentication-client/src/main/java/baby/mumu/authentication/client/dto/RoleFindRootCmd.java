@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.co.BaseClientObject;
 import jakarta.validation.constraints.Min;
 import java.io.Serial;
 import lombok.Data;

@@ -16,7 +16,7 @@
 package baby.mumu.unique.client.dto.co;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.client.dto.co.BaseClientObject;
+import baby.mumu.basis.co.BaseClientObject;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

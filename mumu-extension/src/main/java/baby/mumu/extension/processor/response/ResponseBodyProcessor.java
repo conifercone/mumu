@@ -15,7 +15,7 @@
  */
 package baby.mumu.extension.processor.response;
 
-import baby.mumu.basis.client.dto.co.ClientObject;
+import baby.mumu.basis.co.ClientObject;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResponseCode;

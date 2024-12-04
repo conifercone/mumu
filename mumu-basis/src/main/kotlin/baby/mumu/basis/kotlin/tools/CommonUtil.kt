@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.kotlin.tools
 
-import baby.mumu.basis.client.dto.co.BaseClientObject
+import baby.mumu.basis.co.BaseClientObject
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
