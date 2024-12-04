@@ -16,6 +16,7 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject;
 
 import baby.mumu.basis.dataobject.jpa.JpaRedisBasisArchivableDataObject;
+import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import com.redis.om.spring.annotations.Document;
@@ -23,7 +24,6 @@ import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
@@ -136,8 +136,8 @@ public class AccountRedisDo extends JpaRedisBasisArchivableDataObject {
    * 存活时间
    * <p>中等级别变化数据：默认缓存时长为1小时</p>
    */
-  @TimeToLive(unit = TimeUnit.HOURS)
-  private Long ttl = 1L;
+  @TimeToLive
+  private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 
   @Data
   public static class AccountAddressRedisDo {

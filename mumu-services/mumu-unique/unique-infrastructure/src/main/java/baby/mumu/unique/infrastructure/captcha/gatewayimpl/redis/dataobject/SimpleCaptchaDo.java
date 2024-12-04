@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject;
 
+import baby.mumu.basis.enums.CacheLevelEnum;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import com.redis.om.spring.annotations.TextIndexed;
@@ -46,5 +47,5 @@ public class SimpleCaptchaDo {
    * 存活时间
    */
   @TimeToLive
-  private Long ttl;
+  private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 }

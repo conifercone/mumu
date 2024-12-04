@@ -16,10 +16,10 @@
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject;
 
 import baby.mumu.basis.dataobject.jpa.JpaRedisBasisArchivableDataObject;
+import baby.mumu.basis.enums.CacheLevelEnum;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
-import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
@@ -63,6 +63,6 @@ public class RoleRedisDo extends JpaRedisBasisArchivableDataObject {
    * 存活时间
    * <p>低等级别变化数据：默认缓存时间为6小时</p>
    */
-  @TimeToLive(unit = TimeUnit.HOURS)
-  private Long ttl = 6L;
+  @TimeToLive
+  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
 }
