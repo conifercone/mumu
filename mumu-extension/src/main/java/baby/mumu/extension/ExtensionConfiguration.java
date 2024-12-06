@@ -29,6 +29,7 @@ import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
 import io.micrometer.observation.ObservationPredicate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
 public class ExtensionConfiguration {
 
   @Bean
+  @ConditionalOnClass(ObservationPredicate.class)
   ObservationPredicate noActuatorServerObservations() {
     return (name, context) -> {
       if (name.equals("http.server.requests")
