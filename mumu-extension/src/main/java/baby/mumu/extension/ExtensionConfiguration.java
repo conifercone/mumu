@@ -28,9 +28,12 @@ import baby.mumu.extension.processor.grpc.GrpcExceptionAdvice;
 import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
+import io.micrometer.observation.ObservationPredicate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.server.observation.ServerRequestObservationContext;
 
 /**
  * 拓展模块配置
@@ -47,4 +50,15 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 
+  @Bean
+  ObservationPredicate noActuatorServerObservations() {
+    return (name, context) -> {
+      if (name.equals("http.server.requests")
+        && context instanceof ServerRequestObservationContext serverContext) {
+        return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
+      } else {
+        return true;
+      }
+    };
+  }
 }
