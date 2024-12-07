@@ -27,8 +27,6 @@ import lombok.Data;
 @Data
 public class PermissionAddCmd {
 
-  private Long id;
-
   @Size(max = 50, message = "{permission.code.validation.size}")
   private String code;
 

@@ -24,7 +24,6 @@ import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -42,13 +41,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubscriptionTextMessageConvertor {
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
-  public SubscriptionTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
+  public SubscriptionTextMessageConvertor(
     ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
@@ -60,12 +57,6 @@ public class SubscriptionTextMessageConvertor {
       .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
         SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
         entity.setSenderId(senderAccountId);
-        Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
-        }, () -> {
-          Long id = primaryKeyGrpcService.snowflake();
-          entity.setId(id);
-          res.setId(id);
-        });
         return entity;
       }));
   }

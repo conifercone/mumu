@@ -15,14 +15,10 @@
  */
 package baby.mumu.file.client.api;
 
-import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import java.time.Duration;
 import java.util.Optional;
-import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -60,23 +56,7 @@ class FileGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    //noinspection DuplicatedCode
-    RetryConfig config = RetryConfig.custom()
-      .maxAttempts(5) // 最大尝试 5 次
-      .waitDuration(Duration.ofSeconds(2)) // 每次重试间隔 2 秒
-      .retryOnResult(result -> !(Boolean) result)
-      .build();
-
-    Retry retry = Retry.of(GRPC_FILE, config);
-
-    Supplier<Boolean> retryableSupplier = Retry.decorateSupplier(retry, () ->
-      !discoveryClient.getInstances(GRPC_FILE).isEmpty()
-    );
-    try {
-      return retryableSupplier.get();
-    } catch (Exception e) {
-      return false;
-    }
+    return !discoveryClient.getInstances(GRPC_FILE).isEmpty();
   }
 
 }

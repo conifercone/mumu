@@ -29,7 +29,6 @@ import baby.mumu.message.infrastructure.config.MessageProperties;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,19 +51,16 @@ import org.springframework.stereotype.Component;
 public class BroadcastTextMessageConvertor {
 
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
   private final SimpleTextTranslation simpleTextTranslation;
   private final BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository;
   private final BroadcastTextMessageRepository broadcastTextMessageRepository;
 
   @Autowired
-  public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-    MessageProperties messageProperties,
+  public BroadcastTextMessageConvertor(MessageProperties messageProperties,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslations,
     BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository,
     BroadcastTextMessageRepository broadcastTextMessageRepository) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
     this.broadcastTextMessageReceiverRepository = broadcastTextMessageReceiverRepository;
@@ -92,12 +88,6 @@ public class BroadcastTextMessageConvertor {
               entity.setUnreadReceiverIds(receiverIds);
               entity.setUnreadQuantity((long) receiverIds.size());
             });
-        Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
-        }, () -> {
-          Long id = primaryKeyGrpcService.snowflake();
-          entity.setId(id);
-          res.setId(id);
-        });
         return entity;
       }));
   }

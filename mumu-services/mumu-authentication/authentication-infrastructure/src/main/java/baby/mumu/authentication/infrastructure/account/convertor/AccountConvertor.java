@@ -57,7 +57,6 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject
 import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +83,6 @@ public class AccountConvertor {
   private final RoleConvertor roleConvertor;
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final AccountArchivedRepository accountArchivedRepository;
   private final AccountAddressRepository accountAddressRepository;
   private final AccountRoleRepository accountRoleRepository;
@@ -95,7 +93,7 @@ public class AccountConvertor {
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
-    RoleRepository roleRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+    RoleRepository roleRepository,
     AccountArchivedRepository accountArchivedRepository,
     AccountAddressRepository accountAddressRepository,
     AccountRoleRepository accountRoleRepository,
@@ -106,7 +104,6 @@ public class AccountConvertor {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.accountArchivedRepository = accountArchivedRepository;
     this.accountAddressRepository = accountAddressRepository;
     this.accountRoleRepository = accountRoleRepository;
@@ -299,32 +296,18 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountRegisterCmd accountRegisterCmd) {
     return Optional.ofNullable(accountRegisterCmd).map(accountRegisterCmdNotNull -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
-      Optional.ofNullable(account.getId()).ifPresentOrElse(id -> {
-        if (id == 0) {
-          throw new MuMuException(ResponseCode.ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0);
-        }
-      }, () -> account.setId(primaryKeyGrpcService.snowflake()));
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterCmdNotNull.getRoleCodes())
         .orElse(new ArrayList<>()));
       Optional.ofNullable(account.getAddresses())
         .filter(CollectionUtils::isNotEmpty)
-        .ifPresent(accountAddresses -> accountAddresses.forEach(accountAddress -> {
-          accountAddress.setUserId(account.getId());
-          if (accountAddress.getId() == null) {
-            accountAddress.setId(primaryKeyGrpcService.snowflake());
-          }
-        }));
+        .ifPresent(accountAddresses -> accountAddresses.forEach(
+          accountAddress -> accountAddress.setUserId(account.getId())));
       Optional.ofNullable(account.getSystemSettings())
         .ifPresentOrElse(
-          accountSystemSettings -> accountSystemSettings.forEach(accountSystemSettingsItem -> {
-            accountSystemSettingsItem.setUserId(account.getId());
-            if (accountSystemSettingsItem.getId() == null) {
-              accountSystemSettingsItem.setId(
-                String.valueOf(primaryKeyGrpcService.snowflake()));
-            }
-          }), () -> account.setSystemSettings(Collections.singletonList(
+          accountSystemSettings -> accountSystemSettings.forEach(
+            accountSystemSettingsItem -> accountSystemSettingsItem.setUserId(account.getId())),
+          () -> account.setSystemSettings(Collections.singletonList(
             AccountSystemSettings.builder()
-              .id(String.valueOf(primaryKeyGrpcService.snowflake()))
               .userId(
                 account.getId()).enabled(true).profile(
                 AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
@@ -333,7 +316,6 @@ public class AccountConvertor {
               .enabled(true)
               .build()))
         );
-      accountRegisterCmdNotNull.setId(account.getId());
       return account;
     });
   }
@@ -435,14 +417,7 @@ public class AccountConvertor {
   public Optional<AccountSystemSettings> toAccountSystemSettings(
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
     return Optional.ofNullable(accountAddSystemSettingsCmd)
-      .map(accountAddSystemSettingsCmdNotNull -> {
-        AccountSystemSettings accountSystemSettings = AccountMapper.INSTANCE.toAccountSystemSettings(
-          accountAddSystemSettingsCmdNotNull);
-        if (StringUtils.isBlank(accountSystemSettings.getId())) {
-          accountSystemSettings.setId(String.valueOf(primaryKeyGrpcService.snowflake()));
-        }
-        return accountSystemSettings;
-      });
+      .map(AccountMapper.INSTANCE::toAccountSystemSettings);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
@@ -485,14 +460,8 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<AccountAddress> toEntity(
     AccountAddAddressCmd accountAddAddressCmd) {
-    return Optional.ofNullable(accountAddAddressCmd).map(accountAddAddressCmdNonNull -> {
-      AccountAddress instanceEntity = AccountMapper.INSTANCE.toAccountAddress(accountAddAddressCmd);
-      if (instanceEntity.getId() == null) {
-        instanceEntity.setId(primaryKeyGrpcService.snowflake());
-        accountAddAddressCmdNonNull.setId(instanceEntity.getId());
-      }
-      return instanceEntity;
-    });
+    return Optional.ofNullable(accountAddAddressCmd).map(
+      AccountMapper.INSTANCE::toAccountAddress);
   }
 
   @API(status = Status.STABLE, since = "2.1.0")

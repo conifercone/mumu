@@ -19,6 +19,7 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -57,6 +58,7 @@ public class AccountDo extends JpaBasisArchivableDataObject {
    * 账户id
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 

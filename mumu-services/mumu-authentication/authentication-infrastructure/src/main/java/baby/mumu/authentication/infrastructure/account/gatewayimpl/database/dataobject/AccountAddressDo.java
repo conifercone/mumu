@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dat
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisDefaultDataObject;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -51,6 +52,7 @@ public class AccountAddressDo extends JpaBasisDefaultDataObject {
    * 唯一主键
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 

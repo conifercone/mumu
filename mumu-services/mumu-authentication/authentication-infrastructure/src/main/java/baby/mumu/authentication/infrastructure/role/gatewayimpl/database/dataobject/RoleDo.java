@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataob
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -50,6 +51,7 @@ public class RoleDo extends JpaBasisArchivableDataObject {
    * 角色id
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 

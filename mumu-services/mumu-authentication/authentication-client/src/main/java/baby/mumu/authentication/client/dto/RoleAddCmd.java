@@ -29,8 +29,6 @@ import lombok.Data;
 @Data
 public class RoleAddCmd {
 
-  private Long id;
-
   @NotBlank
   private String name;
 

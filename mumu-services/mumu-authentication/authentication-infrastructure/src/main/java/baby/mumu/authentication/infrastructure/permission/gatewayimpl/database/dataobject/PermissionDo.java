@@ -16,6 +16,7 @@
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject;
 
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -50,6 +51,7 @@ public class PermissionDo extends JpaBasisArchivableDataObject {
    * 权限id
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 

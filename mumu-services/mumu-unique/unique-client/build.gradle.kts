@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.yitter.idgenerator)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.resilience4j.retry)
+    implementation(libs.hibernate.core)
 }
 
 protobuf {

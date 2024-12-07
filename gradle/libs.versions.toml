@@ -251,6 +251,8 @@ spring-data-redis = { module = "org.springframework.data:spring-data-redis" }
 resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry", version.ref = "resilience4jVersion" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-rsa
 spring-security-rsa = { module = "org.springframework.security:spring-security-rsa", version.ref = "springSecurityRsaVersion" }
+# https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+hibernate-core = { module = "org.hibernate.orm:hibernate-core" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

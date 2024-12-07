@@ -41,9 +41,6 @@ import lombok.Data;
 @Schema(description = "账户注册指令")
 public class AccountRegisterCmd {
 
-  @Schema(description = "账户ID", requiredMode = RequiredMode.NOT_REQUIRED)
-  private Long id;
-
   @Schema(description = "用户名", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.username.validation.not.blank}")
   private String username;
@@ -99,12 +96,6 @@ public class AccountRegisterCmd {
   public static class AccountAddressRegisterCmd {
 
     /**
-     * 唯一主键
-     */
-    @Schema(description = "账户地址ID", requiredMode = RequiredMode.NOT_REQUIRED)
-    private Long id;
-
-    /**
      * 街道地址，包含门牌号和街道信息
      */
     @Size(max = 255)
@@ -143,12 +134,6 @@ public class AccountRegisterCmd {
   @Data
   @Builder
   public static class AccountSystemSettingsRegisterCmd {
-
-    /**
-     * 唯一主键
-     */
-    @Schema(description = "账户系统设置ID", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String id;
 
     /**
      * 系统设置标识

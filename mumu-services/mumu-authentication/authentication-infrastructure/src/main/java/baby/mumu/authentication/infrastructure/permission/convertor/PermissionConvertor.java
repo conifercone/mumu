@@ -41,7 +41,6 @@ import baby.mumu.authentication.infrastructure.relations.database.PermissionPath
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -61,19 +60,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionConvertor {
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final PermissionRepository permissionRepository;
   private final SimpleTextTranslation simpleTextTranslation;
   private final PermissionArchivedRepository permissionArchivedRepository;
   private final PermissionPathsRepository permissionPathsRepository;
 
   @Autowired
-  public PermissionConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-    PermissionRepository permissionRepository,
+  public PermissionConvertor(PermissionRepository permissionRepository,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     PermissionArchivedRepository permissionArchivedRepository,
     PermissionPathsRepository permissionPathsRepository) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.permissionRepository = permissionRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.permissionArchivedRepository = permissionArchivedRepository;
@@ -103,14 +99,8 @@ public class PermissionConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Permission> toEntity(PermissionAddCmd permissionAddCmd) {
-    return Optional.ofNullable(permissionAddCmd).map(permissionAddCmdNotNull -> {
-      Permission permission = PermissionMapper.INSTANCE.toEntity(permissionAddCmdNotNull);
-      if (permission.getId() == null) {
-        permission.setId(primaryKeyGrpcService.snowflake());
-        permissionAddCmdNotNull.setId(permission.getId());
-      }
-      return permission;
-    });
+    return Optional.ofNullable(permissionAddCmd)
+      .map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")

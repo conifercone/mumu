@@ -54,7 +54,6 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +80,6 @@ public class RoleConvertor {
   private final PermissionConvertor permissionConvertor;
   private final RoleRepository roleRepository;
   private final PermissionRepository permissionRepository;
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final SimpleTextTranslation simpleTextTranslation;
   private final RoleArchivedRepository roleArchivedRepository;
   private final RolePermissionRepository rolePermissionRepository;
@@ -92,7 +90,7 @@ public class RoleConvertor {
 
   @Autowired
   public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
-    PermissionRepository permissionRepository, PrimaryKeyGrpcService primaryKeyGrpcService,
+    PermissionRepository permissionRepository,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     RoleArchivedRepository roleArchivedRepository,
     RolePermissionRepository rolePermissionRepository,
@@ -102,7 +100,6 @@ public class RoleConvertor {
     this.permissionConvertor = permissionConvertor;
     this.roleRepository = roleRepository;
     this.permissionRepository = permissionRepository;
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.roleArchivedRepository = roleArchivedRepository;
     this.rolePermissionRepository = rolePermissionRepository;
@@ -216,10 +213,6 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleAddCmd roleAddCmd) {
     return Optional.ofNullable(roleAddCmd).map(roleAddCmdNotNull -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleAddCmdNotNull);
-      if (role.getId() == null) {
-        role.setId(primaryKeyGrpcService.snowflake());
-        roleAddCmdNotNull.setId(role.getId());
-      }
       Optional.ofNullable(roleAddCmdNotNull.getPermissionIds())
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(permissionIds -> setAuthorities(role, permissionIds));

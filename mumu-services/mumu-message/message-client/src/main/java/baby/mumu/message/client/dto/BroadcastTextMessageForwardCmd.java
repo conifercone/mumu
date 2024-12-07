@@ -29,8 +29,6 @@ import lombok.Data;
 @Data
 public class BroadcastTextMessageForwardCmd {
 
-  private Long id;
-
   private Collection<Long> receiverIds;
 
   @NotBlank(message = "{text.message.validation.not.blank}")

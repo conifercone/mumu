@@ -17,6 +17,7 @@ package baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobje
 
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.MessageStatusEnum;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -50,6 +51,7 @@ public class BroadcastTextMessageDo extends JpaBasisArchivableDataObject {
   private static final long serialVersionUID = 8259321227756175071L;
 
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 
