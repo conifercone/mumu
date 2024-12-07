@@ -38,7 +38,7 @@ public interface SimpleTextTranslation {
     return Optional.ofNullable(text).filter(StringUtils::isNotBlank)
       .flatMap(res -> SecurityContextUtil.getLoginAccountLanguage()).map(languageEnum -> {
         try {
-          return this.translate(text, languageEnum.name().toLowerCase());
+          return this.translate(text, languageEnum.getCode());
         } catch (Exception e) {
           return text;
         }

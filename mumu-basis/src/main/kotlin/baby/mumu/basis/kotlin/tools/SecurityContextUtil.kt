@@ -143,7 +143,7 @@ object SecurityContextUtil {
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
                         if (claims.containsKey(TokenClaimsEnum.LANGUAGE.claimName)) {
-                            return@map LanguageEnum.valueOf(claims[TokenClaimsEnum.LANGUAGE.claimName].toString())
+                            return@map LanguageEnum.fromCode(claims[TokenClaimsEnum.LANGUAGE.claimName].toString())
                         }
                     }
                 }

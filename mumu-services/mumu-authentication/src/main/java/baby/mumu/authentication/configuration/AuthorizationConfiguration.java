@@ -386,7 +386,7 @@ public class AuthorizationConfiguration {
         Optional.ofNullable(account.getLanguage())
           .ifPresent(
             languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.getClaimName(),
-              languageEnum.name()));
+              languageEnum.getCode()));
       } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(
         context.getAuthorizationGrantType())) {
         JwtClaimsSet.Builder claims = context.getClaims();

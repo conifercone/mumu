@@ -146,7 +146,7 @@ public enum ResponseCode implements BaseResponse {
     return SpringContextUtil.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
         SecurityContextUtil.getLoginAccountLanguage()
-          .map(languageEnum -> Locale.of(languageEnum.name()))
+          .map(languageEnum -> Locale.of(languageEnum.getCode()))
           .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }
 }
