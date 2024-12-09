@@ -21,7 +21,6 @@ import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
 import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,8 +57,6 @@ public class StreamFileController {
 
   private final StreamFileService streamFileService;
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
-
   @Autowired
   public StreamFileController(StreamFileService streamFileService) {
     this.streamFileService = streamFileService;
@@ -70,10 +67,8 @@ public class StreamFileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void syncUpload(@RequestParam("streamFileSyncUploadCmd") String streamFileSyncUploadCmd,
+  public void syncUpload(@ModelAttribute StreamFileSyncUploadCmd fileUploadCmd,
     @RequestParam("file") MultipartFile file) throws IOException {
-    StreamFileSyncUploadCmd fileUploadCmd = objectMapper.readValue(streamFileSyncUploadCmd,
-      StreamFileSyncUploadCmd.class);
     fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
     fileUploadCmd.setOriginName(file.getOriginalFilename());
     fileUploadCmd.setSize(file.getSize());
