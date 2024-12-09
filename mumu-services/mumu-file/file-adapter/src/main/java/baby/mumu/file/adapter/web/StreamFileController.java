@@ -16,6 +16,7 @@
 package baby.mumu.file.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.kotlin.tools.FileDownloadUtil;
 import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.dto.StreamFileDownloadCmd;
 import baby.mumu.file.client.dto.StreamFileRemoveCmd;
@@ -85,17 +86,13 @@ public class StreamFileController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public void download(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd,
-    HttpServletResponse response)
-    throws IOException {
+    HttpServletResponse response) {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
-    response.setHeader("Content-Disposition",
-      "attachment;filename=" + (ObjectUtils.isEmpty(
+    FileDownloadUtil.download(response, ObjectUtils.isEmpty(
         streamFileDownloadCmd.getRename())
         ? streamFileDownloadCmd.getName()
-        : streamFileDownloadCmd.getRename()));
-    response.setContentType("application/force-download");
-    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    IOUtils.copy(streamFileService.download(streamFileDownloadCmd), response.getOutputStream());
+        : streamFileDownloadCmd.getRename(), streamFileService.download(streamFileDownloadCmd),
+      "application/force-download");
   }
 
   @Operation(summary = "获取字符串格式的文件内容")
