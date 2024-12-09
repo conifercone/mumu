@@ -217,7 +217,7 @@ public class PermissionController {
   @GetMapping("/downloadAll")
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void deletePath(HttpServletResponse response) {
+  public void downloadAll(HttpServletResponse response) {
     permissionService.downloadAll(response);
   }
 }
