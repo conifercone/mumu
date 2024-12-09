@@ -35,6 +35,7 @@ import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -210,5 +211,13 @@ public class PermissionController {
   public void deletePath(@PathVariable(value = "ancestorId") Long ancestorId,
     @PathVariable(value = "descendantId") Long descendantId) {
     permissionService.deletePath(ancestorId, descendantId);
+  }
+
+  @Operation(summary = "下载所有权限数据")
+  @GetMapping("/downloadAll")
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public void deletePath(HttpServletResponse response) {
+    permissionService.downloadAll(response);
   }
 }

@@ -22,6 +22,7 @@ dependencies {
     api(libs.spring.boot.starter.oauth2.resource.server)
     api(libs.protobuf.java)
     implementation(libs.micrometer.tracing)
+    implementation(libs.opencsv)
 }
 
 protobuf {

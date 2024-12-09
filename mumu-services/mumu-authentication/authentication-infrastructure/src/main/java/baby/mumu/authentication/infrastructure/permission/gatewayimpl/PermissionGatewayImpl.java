@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -344,5 +345,12 @@ public class PermissionGatewayImpl implements PermissionGateway {
       .flatMap(permissionRepository::findByCode)
       .map(PermissionDo::getId)
       .ifPresent(this::deleteById);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Stream<Permission> findAll() {
+    return permissionRepository.findAll()
+      .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream());
   }
 }

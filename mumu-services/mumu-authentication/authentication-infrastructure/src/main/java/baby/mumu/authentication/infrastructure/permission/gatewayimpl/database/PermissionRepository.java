@@ -17,17 +17,22 @@ package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database;
 
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import jakarta.persistence.QueryHint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.hibernate.jpa.HibernateHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
+
 
 /**
  * 权限基本信息
@@ -94,4 +99,8 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
   List<PermissionDo> findAllByCodeIn(List<String> codes);
 
   Optional<PermissionDo> findByCode(String code);
+
+  @QueryHints(value = @QueryHint(name = HibernateHints.HINT_FETCH_SIZE, value = "50"))
+  @Query(value = "select p from PermissionDo p")
+  Stream<PermissionDo> findAll();
 }

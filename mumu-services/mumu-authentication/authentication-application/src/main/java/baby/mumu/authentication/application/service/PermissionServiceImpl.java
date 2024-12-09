@@ -23,6 +23,7 @@ import baby.mumu.authentication.application.permission.executor.PermissionArchiv
 import baby.mumu.authentication.application.permission.executor.PermissionDeleteByCodeCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionDeleteByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionDeletePathCmdExe;
+import baby.mumu.authentication.application.permission.executor.PermissionDownloadAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindAllSliceCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindByIdCmdExe;
@@ -63,6 +64,7 @@ import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -99,6 +101,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   private final PermissionFindDirectCmdExe permissionFindDirectCmdExe;
   private final PermissionDeletePathCmdExe permissionDeletePathCmdExe;
   private final PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe;
+  private final PermissionDownloadAllCmdExe permissionDownloadAllCmdExe;
 
   @Autowired
   public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -116,7 +119,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     PermissionFindRootCmdExe permissionFindRootCmdExe,
     PermissionFindDirectCmdExe permissionFindDirectCmdExe,
     PermissionDeletePathCmdExe permissionDeletePathCmdExe,
-    PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe) {
+    PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe,
+    PermissionDownloadAllCmdExe permissionDownloadAllCmdExe) {
     this.permissionAddCmdExe = permissionAddCmdExe;
     this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
     this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -133,6 +137,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     this.permissionFindDirectCmdExe = permissionFindDirectCmdExe;
     this.permissionDeletePathCmdExe = permissionDeletePathCmdExe;
     this.permissionDeleteByCodeCmdExe = permissionDeleteByCodeCmdExe;
+    this.permissionDownloadAllCmdExe = permissionDownloadAllCmdExe;
   }
 
   @Override
@@ -263,5 +268,11 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   @Transactional(rollbackFor = Exception.class)
   public void deletePath(Long ancestorId, Long descendantId) {
     permissionDeletePathCmdExe.execute(ancestorId, descendantId);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public void downloadAll(HttpServletResponse response) {
+    permissionDownloadAllCmdExe.execute(response);
   }
 }

@@ -26,6 +26,7 @@ import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
 import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
 import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionDownloadAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
@@ -296,5 +297,13 @@ public class PermissionConvertor {
     Permission permission) {
     return Optional.ofNullable(permission)
       .map(PermissionMapper.INSTANCE::toPermissionFindDirectCo);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<PermissionDownloadAllCo> toPermissionDownloadAllCo(
+    Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionDownloadAllCo);
   }
 }

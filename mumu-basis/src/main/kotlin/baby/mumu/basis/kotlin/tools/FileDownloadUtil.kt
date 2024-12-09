@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2024-2024, the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.util.stream.Stream
 
 
 /**
@@ -113,8 +114,7 @@ object FileDownloadUtil {
     fun <T : Any> downloadCSV(
         response: HttpServletResponse,
         fileName: String,
-        headers: Array<String>,
-        data: List<T>
+        data: Stream<T>
     ) {
         try {
             // 设置响应头
@@ -122,20 +122,11 @@ object FileDownloadUtil {
             response.characterEncoding = StandardCharsets.UTF_8.name()
             response.setHeader(
                 "Content-Disposition",
-                "attachment; filename*=UTF-8''${encodeFileName(fileName)}"
+                "attachment; filename=${encodeFileName(fileName)}"
             )
 
             // 使用 OpenCSV 写入 CSV 内容
             OutputStreamWriter(response.outputStream, StandardCharsets.UTF_8).use { writer ->
-                val csvWriter = CSVWriter(
-                    writer,
-                    CSVWriter.DEFAULT_SEPARATOR,
-                    CSVWriter.NO_QUOTE_CHARACTER,
-                    CSVWriter.NO_ESCAPE_CHARACTER,
-                    CSVWriter.DEFAULT_LINE_END
-                )
-                csvWriter.writeNext(headers) // 写入标题行
-
                 val beanToCsv = StatefulBeanToCsvBuilder<T>(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withOrderedResults(true)

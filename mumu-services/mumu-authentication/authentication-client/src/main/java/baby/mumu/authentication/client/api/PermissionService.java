@@ -31,6 +31,7 @@ import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -157,4 +158,6 @@ public interface PermissionService {
    * @param descendantId 后代ID
    */
   void deletePath(Long ancestorId, Long descendantId);
+
+  void downloadAll(HttpServletResponse response);
 }

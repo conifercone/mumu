@@ -17,6 +17,7 @@ package baby.mumu.authentication.domain.permission.gateway;
 
 import baby.mumu.authentication.domain.permission.Permission;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -152,4 +153,6 @@ public interface PermissionGateway {
    * @param code 权限编码
    */
   void deleteByCode(String code);
+
+  Stream<Permission> findAll();
 }
