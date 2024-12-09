@@ -87,7 +87,6 @@ public class AccountControllerTest {
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
     accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcCo.getId().getValue());
     accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcCo.getTarget().getValue());
-    accountRegisterCmd.setId(31241232131L);
     accountRegisterCmd.setUsername("test1");
     accountRegisterCmd.setPassword("test1");
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));

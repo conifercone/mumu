@@ -65,7 +65,6 @@ public class RoleControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
-    roleAddCmd.setId(451235432L);
     roleAddCmd.setName("测试角色");
     roleAddCmd.setCode("test_code");
     roleAddCmd.setPermissionIds(Arrays.asList(1L, 2L));

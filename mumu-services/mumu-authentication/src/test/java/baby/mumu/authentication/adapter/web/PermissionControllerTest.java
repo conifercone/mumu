@@ -64,7 +64,6 @@ public class PermissionControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     PermissionAddCmd permissionAddCmd = new PermissionAddCmd();
-    permissionAddCmd.setId(412354321321L);
     permissionAddCmd.setCode("test_code");
     permissionAddCmd.setName("test_name");
     mockMvc.perform(MockMvcRequestBuilders
