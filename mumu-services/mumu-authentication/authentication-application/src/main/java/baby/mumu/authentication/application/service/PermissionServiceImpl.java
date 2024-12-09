@@ -20,6 +20,7 @@ import baby.mumu.authentication.application.permission.executor.PermissionAddCmd
 import baby.mumu.authentication.application.permission.executor.PermissionArchiveByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionArchivedFindAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionArchivedFindAllSliceCmdExe;
+import baby.mumu.authentication.application.permission.executor.PermissionDeleteByCodeCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionDeleteByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionDeletePathCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindAllCmdExe;
@@ -97,6 +98,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   private final PermissionFindRootCmdExe permissionFindRootCmdExe;
   private final PermissionFindDirectCmdExe permissionFindDirectCmdExe;
   private final PermissionDeletePathCmdExe permissionDeletePathCmdExe;
+  private final PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe;
 
   @Autowired
   public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -113,7 +115,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     PermissionAddAncestorCmdExe permissionAddAncestorCmdExe,
     PermissionFindRootCmdExe permissionFindRootCmdExe,
     PermissionFindDirectCmdExe permissionFindDirectCmdExe,
-    PermissionDeletePathCmdExe permissionDeletePathCmdExe) {
+    PermissionDeletePathCmdExe permissionDeletePathCmdExe,
+    PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe) {
     this.permissionAddCmdExe = permissionAddCmdExe;
     this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
     this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -129,6 +132,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     this.permissionFindRootCmdExe = permissionFindRootCmdExe;
     this.permissionFindDirectCmdExe = permissionFindDirectCmdExe;
     this.permissionDeletePathCmdExe = permissionDeletePathCmdExe;
+    this.permissionDeleteByCodeCmdExe = permissionDeleteByCodeCmdExe;
   }
 
   @Override
@@ -141,6 +145,12 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(Long id) {
     permissionDeleteByIdCmdExe.execute(id);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteByCode(String code) {
+    permissionDeleteByCodeCmdExe.execute(code);
   }
 
   @Override

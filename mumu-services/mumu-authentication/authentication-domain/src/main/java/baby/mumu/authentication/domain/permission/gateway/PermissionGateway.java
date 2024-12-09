@@ -53,8 +53,8 @@ public interface PermissionGateway {
    * 分页查询权限
    *
    * @param permission 查询条件
-   * @param current   页码
-   * @param pageSize  每页数量
+   * @param current    页码
+   * @param pageSize   每页数量
    * @return 查询结果
    */
   Page<Permission> findAll(Permission permission, int current, int pageSize);
@@ -63,8 +63,8 @@ public interface PermissionGateway {
    * 切片分页查询权限（不查询总数）
    *
    * @param permission 查询条件
-   * @param current   页码
-   * @param pageSize  当前页数量
+   * @param current    页码
+   * @param pageSize   当前页数量
    * @return 查询结果
    */
   Slice<Permission> findAllSlice(Permission permission, int current, int pageSize);
@@ -73,8 +73,8 @@ public interface PermissionGateway {
    * 切片分页查询已归档的权限（不查询总数）
    *
    * @param permission 查询条件
-   * @param current   页码
-   * @param pageSize  当前页数量
+   * @param current    页码
+   * @param pageSize   当前页数量
    * @return 查询结果
    */
   Slice<Permission> findArchivedAllSlice(Permission permission, int current, int pageSize);
@@ -83,8 +83,8 @@ public interface PermissionGateway {
    * 分页查询已归档的权限
    *
    * @param permission 查询条件
-   * @param current   页码
-   * @param pageSize  每页数量
+   * @param current    页码
+   * @param pageSize   每页数量
    * @return 查询结果
    */
   Page<Permission> findArchivedAll(Permission permission, int current, int pageSize);
@@ -145,4 +145,11 @@ public interface PermissionGateway {
    * @param descendantId 后代权限ID
    */
   void deletePath(Long ancestorId, Long descendantId);
+
+  /**
+   * 根据编码删除权限
+   *
+   * @param code 权限编码
+   */
+  void deleteByCode(String code);
 }

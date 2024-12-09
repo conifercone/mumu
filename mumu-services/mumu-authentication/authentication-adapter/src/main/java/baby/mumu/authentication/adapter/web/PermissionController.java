@@ -88,6 +88,15 @@ public class PermissionController {
     permissionService.deleteById(id);
   }
 
+  @Operation(summary = "根据编码删除权限")
+  @DeleteMapping("/deleteByCode/{code}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public void deleteByCode(@PathVariable(value = "code") String code) {
+    permissionService.deleteByCode(code);
+  }
+
   @Operation(summary = "修改权限")
   @PutMapping("/updateById")
   @ResponseBody

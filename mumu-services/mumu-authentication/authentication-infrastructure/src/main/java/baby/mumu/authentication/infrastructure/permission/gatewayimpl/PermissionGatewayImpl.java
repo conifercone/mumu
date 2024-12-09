@@ -334,4 +334,15 @@ public class PermissionGatewayImpl implements PermissionGateway {
     permissionRedisRepository.deleteById(ancestorId);
     permissionRedisRepository.deleteById(descendantId);
   }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.4.0")
+  @DangerousOperation("根据Code删除Code为%0的权限数据")
+  public void deleteByCode(String code) {
+    Optional.ofNullable(code)
+      .flatMap(permissionRepository::findByCode)
+      .map(PermissionDo::getId)
+      .ifPresent(this::deleteById);
+  }
 }

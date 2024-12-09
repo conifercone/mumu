@@ -57,6 +57,13 @@ public interface PermissionService {
   void deleteById(Long id);
 
   /**
+   * 根据code删除权限
+   *
+   * @param code 权限编码
+   */
+  void deleteByCode(String code);
+
+  /**
    * 根据id更新权限
    *
    * @param permissionUpdateCmd 权限更新指令

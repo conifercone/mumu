@@ -20,6 +20,7 @@ import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -91,4 +92,6 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
     Pageable pageable);
 
   List<PermissionDo> findAllByCodeIn(List<String> codes);
+
+  Optional<PermissionDo> findByCode(String code);
 }
