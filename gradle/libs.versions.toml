@@ -42,7 +42,7 @@ opencsvVersion = '5.9'
 # bom version
 grpcBomVersion = '1.68.2'
 guavaBomVersion = '33.3.1-jre'
-protobufBomVersion = '4.29.0'
+protobufBomVersion = '4.29.1'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = '8.11'
