@@ -57,6 +57,13 @@ public interface RoleService {
   void deleteById(Long id);
 
   /**
+   * 根据code删除角色
+   *
+   * @param code 角色code
+   */
+  void deleteByCode(String code);
+
+  /**
    * 根据id更新角色
    *
    * @param roleUpdateCmd 根据id更新角色指令

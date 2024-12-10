@@ -156,6 +156,15 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.4.0")
+  @DangerousOperation("删除code为%0的角色")
+  public void deleteByCode(String code) {
+    Optional.ofNullable(code).flatMap(roleRepository::findByCode).map(RoleDo::getId)
+      .ifPresent(this::deleteById);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Role role) {
     Optional.ofNullable(role).ifPresent(roleDomain -> {

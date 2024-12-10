@@ -88,6 +88,15 @@ public class RoleController {
     roleService.deleteById(id);
   }
 
+  @Operation(summary = "根据code删除角色")
+  @DeleteMapping("/deleteByCode/{code}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public void deleteByCode(@PathVariable(value = "code") String code) {
+    roleService.deleteByCode(code);
+  }
+
   @Operation(summary = "更新角色")
   @PutMapping("/updateById")
   @ResponseBody

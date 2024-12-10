@@ -20,6 +20,7 @@ import baby.mumu.authentication.application.role.executor.RoleAddCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleArchivedFindAllSliceCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleDeleteByCodeCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeletePathCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllCmdExe;
@@ -97,6 +98,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleFindRootCmdExe roleFindRootCmdExe;
   private final RoleFindDirectCmdExe roleFindDirectCmdExe;
   private final RoleDeletePathCmdExe roleDeletePathCmdExe;
+  private final RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
@@ -108,7 +110,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor,
     RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddAncestorCmdExe roleAddAncestorCmdExe,
     RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
-    RoleDeletePathCmdExe roleDeletePathCmdExe) {
+    RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
@@ -124,6 +126,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     this.roleFindRootCmdExe = roleFindRootCmdExe;
     this.roleFindDirectCmdExe = roleFindDirectCmdExe;
     this.roleDeletePathCmdExe = roleDeletePathCmdExe;
+    this.roleDeleteByCodeCmdExe = roleDeleteByCodeCmdExe;
   }
 
   @Override
@@ -136,6 +139,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Transactional(rollbackFor = Exception.class)
   public void deleteById(Long id) {
     roleDeleteByIdCmdExe.execute(id);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteByCode(String code) {
+    roleDeleteByCodeCmdExe.execute(code);
   }
 
   @Override

@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -98,4 +99,6 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
     """)
   Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
+
+  Optional<RoleDo> findByCode(String code);
 }
