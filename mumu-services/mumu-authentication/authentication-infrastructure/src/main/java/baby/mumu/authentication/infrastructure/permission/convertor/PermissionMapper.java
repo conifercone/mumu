@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionDownloadAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
@@ -92,6 +93,9 @@ public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   PermissionFindByIdCo toFindByIdCo(Permission permission);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  PermissionFindByCodeCo toFindByCodeCo(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
   PermissionFindAllCo toFindAllCo(Permission permission);

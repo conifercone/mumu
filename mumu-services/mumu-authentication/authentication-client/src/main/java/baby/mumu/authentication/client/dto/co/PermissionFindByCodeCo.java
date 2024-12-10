@@ -13,20 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis;
+package baby.mumu.authentication.client.dto.co;
 
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
-import com.redis.om.spring.repository.RedisDocumentRepository;
-import java.util.Optional;
+import baby.mumu.basis.co.BaseClientObject;
+import jakarta.validation.constraints.Size;
+import java.io.Serial;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 权限缓存
+ * 根据code查询权限客户端对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
-public interface PermissionRedisRepository extends
-  RedisDocumentRepository<PermissionRedisDo, Long> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PermissionFindByCodeCo extends BaseClientObject {
 
-  Optional<PermissionRedisDo> findByCode(String code);
+  @Serial
+  private static final long serialVersionUID = -6426137725606848297L;
+
+  private Long id;
+
+  private String code;
+
+  private String name;
+
+  @Size(max = 500)
+  private String description;
+
+  private boolean hasDescendant;
 }

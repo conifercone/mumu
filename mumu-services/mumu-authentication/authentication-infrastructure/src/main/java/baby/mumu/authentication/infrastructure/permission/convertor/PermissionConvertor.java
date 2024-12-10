@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionDownloadAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
@@ -188,6 +189,18 @@ public class PermissionConvertor {
               permissionFindByIdCo.getName()))
           .ifPresent(permissionFindByIdCo::setName);
         return permissionFindByIdCo;
+      });
+  }
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<PermissionFindByCodeCo> toFindByCodeCo(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByCodeCo)
+      .map(permissionFindByCodeCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              permissionFindByCodeCo.getName()))
+          .ifPresent(permissionFindByCodeCo::setName);
+        return permissionFindByCodeCo;
       });
   }
 

@@ -155,4 +155,6 @@ public interface PermissionGateway {
   void deleteByCode(String code);
 
   Stream<Permission> downloadAll();
+
+  Optional<Permission> findByCode(String code);
 }

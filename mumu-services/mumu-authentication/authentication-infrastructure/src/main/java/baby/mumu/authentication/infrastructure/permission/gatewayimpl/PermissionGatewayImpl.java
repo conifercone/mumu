@@ -354,4 +354,16 @@ public class PermissionGatewayImpl implements PermissionGateway {
       .flatMap(
         permissionDo -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionDo).stream());
   }
+
+  @Override
+  public Optional<Permission> findByCode(String code) {
+    return Optional.ofNullable(code).flatMap(permissionRedisRepository::findByCode).flatMap(
+      permissionConvertor::toEntity).or(() -> {
+      Optional<Permission> permission = permissionRepository.findByCode(code)
+        .flatMap(permissionConvertor::toEntity);
+      permission.flatMap(permissionConvertor::toPermissionRedisDo)
+        .ifPresent(permissionRedisRepository::save);
+      return permission;
+    });
+  }
 }

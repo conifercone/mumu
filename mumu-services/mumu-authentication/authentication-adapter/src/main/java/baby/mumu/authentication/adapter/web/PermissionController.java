@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
@@ -154,6 +155,15 @@ public class PermissionController {
   @API(status = Status.STABLE, since = "1.0.0")
   public PermissionFindByIdCo findById(@PathVariable(value = "id") Long id) {
     return permissionService.findById(id);
+  }
+
+  @Operation(summary = "根据code查询权限")
+  @GetMapping("/findByCode/{code}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.4.0")
+  public PermissionFindByCodeCo findByCode(@PathVariable(value = "code") String code) {
+    return permissionService.findByCode(code);
   }
 
   @Operation(summary = "根据id归档权限")

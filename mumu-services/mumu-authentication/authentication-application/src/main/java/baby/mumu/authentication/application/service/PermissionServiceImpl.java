@@ -26,6 +26,7 @@ import baby.mumu.authentication.application.permission.executor.PermissionDelete
 import baby.mumu.authentication.application.permission.executor.PermissionDownloadAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindAllSliceCmdExe;
+import baby.mumu.authentication.application.permission.executor.PermissionFindByCodeCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindDirectCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindRootCmdExe;
@@ -51,6 +52,7 @@ import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
@@ -102,6 +104,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   private final PermissionDeletePathCmdExe permissionDeletePathCmdExe;
   private final PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe;
   private final PermissionDownloadAllCmdExe permissionDownloadAllCmdExe;
+  private final PermissionFindByCodeCmdExe permissionFindByCodeCmdExe;
 
   @Autowired
   public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -120,7 +123,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     PermissionFindDirectCmdExe permissionFindDirectCmdExe,
     PermissionDeletePathCmdExe permissionDeletePathCmdExe,
     PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe,
-    PermissionDownloadAllCmdExe permissionDownloadAllCmdExe) {
+    PermissionDownloadAllCmdExe permissionDownloadAllCmdExe,
+    PermissionFindByCodeCmdExe permissionFindByCodeCmdExe) {
     this.permissionAddCmdExe = permissionAddCmdExe;
     this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
     this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -138,6 +142,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     this.permissionDeletePathCmdExe = permissionDeletePathCmdExe;
     this.permissionDeleteByCodeCmdExe = permissionDeleteByCodeCmdExe;
     this.permissionDownloadAllCmdExe = permissionDownloadAllCmdExe;
+    this.permissionFindByCodeCmdExe = permissionFindByCodeCmdExe;
   }
 
   @Override
@@ -191,6 +196,11 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   @Override
   public PermissionFindByIdCo findById(Long id) {
     return permissionFindByIdCmdExe.execute(id);
+  }
+
+  @Override
+  public PermissionFindByCodeCo findByCode(String code) {
+    return permissionFindByCodeCmdExe.execute(code);
   }
 
   @Override

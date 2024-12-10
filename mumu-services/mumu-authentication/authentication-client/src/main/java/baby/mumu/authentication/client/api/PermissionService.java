@@ -28,6 +28,7 @@ import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
 import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
@@ -112,6 +113,14 @@ public interface PermissionService {
    * @return 查询结果
    */
   PermissionFindByIdCo findById(Long id);
+
+  /**
+   * 根据code查询权限
+   *
+   * @param code 权限编码
+   * @return 查询结果
+   */
+  PermissionFindByCodeCo findByCode(String code);
 
   /**
    * 根据id归档权限
