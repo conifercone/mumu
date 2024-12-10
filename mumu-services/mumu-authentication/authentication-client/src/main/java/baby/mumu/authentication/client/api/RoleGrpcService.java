@@ -20,12 +20,12 @@ import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
 import baby.mumu.basis.exception.MuMuException;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Int64Value;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -84,7 +84,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
-  public RoleFindByIdGrpcCo findById(RoleId roleId,
+  public RoleFindByIdGrpcCo findById(Int64Value roleId,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -97,7 +97,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
 
   @API(status = Status.STABLE, since = "2.4.0")
   public ListenableFuture<RoleFindByIdGrpcCo> syncFindById(
-    RoleId roleId,
+    Int64Value roleId,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -126,7 +126,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private RoleFindByIdGrpcCo findByIdFromGrpc(
-    RoleId roleId,
+    Int64Value roleId,
     CallCredentials callCredentials) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
     return roleServiceBlockingStub.withCallCredentials(callCredentials)
@@ -134,7 +134,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   private @NotNull ListenableFuture<RoleFindByIdGrpcCo> syncFindByIdFromGrpc(
-    RoleId roleId,
+    Int64Value roleId,
     CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
       channel);

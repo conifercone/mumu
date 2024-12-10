@@ -8,26 +8,24 @@ option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
   rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
-  rpc findById (RoleId) returns (RoleFindByIdGrpcCo);
+  rpc findById (google.protobuf.Int64Value) returns (RoleFindByIdGrpcCo);
 }
 
 message RoleFindAllGrpcCmd {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  google.protobuf.Int32Value current = 4;
-  google.protobuf.Int32Value page_size = 5;
-}
-
-message RoleId {
-  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.Int32Value current = 5;
+  google.protobuf.Int32Value page_size = 6;
 }
 
 message RoleFindByIdGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  bool hasDescendant = 4;
+  google.protobuf.StringValue description = 4;
+  bool hasDescendant = 5;
 }
 
 message RoleFindAllGrpcCo {
@@ -35,13 +33,15 @@ message RoleFindAllGrpcCo {
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
   repeated RoleFindAllPermissionGrpcCo permissions = 4;
-  bool hasDescendant = 5;
+  google.protobuf.StringValue description = 5;
+  bool hasDescendant = 6;
 }
 
 message RoleFindAllPermissionGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
   bool hasDescendant = 5;
 }
 

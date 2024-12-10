@@ -35,7 +35,6 @@ import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
 import baby.mumu.authentication.client.dto.RoleAddCmd;
@@ -191,8 +190,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  public void findById(RoleId request, StreamObserver<RoleFindByIdGrpcCo> responseObserver) {
-    Optional.ofNullable(request).filter(RoleId::hasId).map(RoleId::getId).map(Int64Value::getValue)
+  public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcCo> responseObserver) {
+    Optional.ofNullable(request).filter(Int64Value::isInitialized).map(Int64Value::getValue)
       .map(
         roleFindByIdCmdExe::execute).flatMap(roleConvertor::toRoleFindByIdGrpcCo)
       .ifPresentOrElse((roleFindByIdGrpcCo) -> {

@@ -20,7 +20,6 @@ import baby.mumu.authentication.client.api.RoleGrpcService;
 import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleId;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -114,7 +113,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleGrpcService.findById(
-      RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
+      Int64Value.of(0L),
       callCredentials);
     logger.info("RoleFindByIdGrpcCo: {}", roleFindByIdGrpcCo);
     Assertions.assertNotNull(roleFindByIdGrpcCo);
@@ -127,7 +126,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<RoleFindByIdGrpcCo> roleFindByIdGrpcCoListenableFuture = roleGrpcService.syncFindById(
-      RoleId.newBuilder().setId(Int64Value.of(0L)).build(),
+      Int64Value.of(0L),
       callCredentials);
     roleFindByIdGrpcCoListenableFuture.addListener(() -> {
       try {

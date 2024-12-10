@@ -15,20 +15,25 @@ message PermissionFindAllGrpcCmd {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  google.protobuf.Int32Value current = 4;
-  google.protobuf.Int32Value page_size = 5;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.Int32Value current = 5;
+  google.protobuf.Int32Value page_size = 6;
 }
 
 message PermissionFindAllGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
+  bool hasDescendant = 5;
 }
 
 message PermissionFindByIdGrpcCo {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
+  bool hasDescendant = 5;
 }
 
 message PageOfPermissionFindAllGrpcCo {
