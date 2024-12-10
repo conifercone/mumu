@@ -15,28 +15,12 @@
  */
 package baby.mumu.authentication.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.zalando.jackson.datatype.money.MoneyModule;
-
 /**
- * jackson配置
+ * jackson BigDecimal mixin
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.0.0
+ * @since 2.4.0
  */
-@Configuration
-public class JacksonConfiguration {
+public abstract class BigDecimalMixin {
 
-  @Bean
-  public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.registerModule(new MoneyModule());
-    return objectMapper;
-  }
 }

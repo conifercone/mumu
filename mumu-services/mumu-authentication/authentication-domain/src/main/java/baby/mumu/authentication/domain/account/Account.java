@@ -43,6 +43,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.javamoney.moneta.Money;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -157,6 +158,11 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 昵称
    */
   private String nickName;
+
+  /**
+   * 余额
+   */
+  private Money balance;
 
   /**
    * 地址

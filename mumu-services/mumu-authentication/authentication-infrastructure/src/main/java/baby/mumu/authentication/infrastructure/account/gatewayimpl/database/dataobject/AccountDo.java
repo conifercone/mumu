@@ -20,6 +20,8 @@ import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.unique.client.config.SnowflakeIdGenerator;
+import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,7 +36,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
+import org.javamoney.moneta.Money;
 
 /**
  * 用户基本信息数据对象
@@ -166,4 +170,18 @@ public class AccountDo extends JpaBasisArchivableDataObject {
   @Size(max = 100)
   @Column(name = "nick_name", length = 100, nullable = false)
   private String nickName;
+
+  /**
+   * 余额
+   */
+  @AttributeOverride(
+    name = "amount",
+    column = @Column(name = "balance")
+  )
+  @AttributeOverride(
+    name = "currency",
+    column = @Column(name = "balance_currency")
+  )
+  @CompositeType(MonetaryAmountType.class)
+  private Money balance;
 }

@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.javamoney.moneta.Money;
 
 /**
  * 查询当前登录账户信息客户端对象
@@ -69,6 +70,11 @@ public class AccountCurrentLoginCo extends BaseClientObject {
   private String nickName;
 
   private int age;
+
+  /**
+   * 余额
+   */
+  private Money balance;
 
   private List<AccountRoleCurrentLoginQueryCo> roles;
 

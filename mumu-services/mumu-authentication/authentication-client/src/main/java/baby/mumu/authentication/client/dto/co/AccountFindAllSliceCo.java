@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.javamoney.moneta.Money;
 
 /**
  * 账户分页查询客户端对象（不查询总数）
@@ -119,6 +120,11 @@ public class AccountFindAllSliceCo extends BaseClientObject {
    * 昵称
    */
   private String nickName;
+
+  /**
+   * 余额
+   */
+  private Money balance;
 
   /**
    * 地址

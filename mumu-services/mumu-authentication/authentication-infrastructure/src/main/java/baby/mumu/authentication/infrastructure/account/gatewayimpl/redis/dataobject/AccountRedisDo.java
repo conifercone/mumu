@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.javamoney.moneta.Money;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -126,6 +127,11 @@ public class AccountRedisDo extends JpaRedisBasisArchivableDataObject {
    * 昵称
    */
   private String nickName;
+
+  /**
+   * 余额
+   */
+  private Money balance;
 
   /**
    * 地址

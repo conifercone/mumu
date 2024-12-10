@@ -44,6 +44,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import java.math.BigDecimal;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -87,6 +88,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService.OAuth2AuthorizationParametersMapper;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -108,6 +110,7 @@ import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.zalando.jackson.datatype.money.MoneyModule;
 
 /**
  * 授权配置
@@ -261,9 +264,15 @@ public class AuthorizationConfiguration {
     objectMapper.registerModules(new CoreJackson2Module());
     objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
     objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+    objectMapper.registerModule(new MoneyModule());
     objectMapper.addMixIn(Long.class, LongMixin.class);
+    objectMapper.addMixIn(BigDecimal.class, BigDecimalMixin.class);
     rowMapper.setObjectMapper(objectMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
+    OAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new OAuth2AuthorizationParametersMapper();
+    oAuth2AuthorizationParametersMapper.setObjectMapper(objectMapper);
+    jdbcOAuth2AuthorizationService.setAuthorizationParametersMapper(
+      oAuth2AuthorizationParametersMapper);
     return jdbcOAuth2AuthorizationService;
   }
 

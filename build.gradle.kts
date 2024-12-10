@@ -223,6 +223,8 @@ subprojects {
         implementation(rootProject.libs.kotlin.reflect)
         implementation(rootProject.libs.progressbar)
         implementation(rootProject.libs.swagger.annotations.jakarta)
+        implementation(rootProject.libs.moneta)
+        implementation(rootProject.libs.jackson.datatype.money)
         testImplementation(rootProject.libs.junit.jupiter)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
         implementation(rootProject.libs.mapstruct)
