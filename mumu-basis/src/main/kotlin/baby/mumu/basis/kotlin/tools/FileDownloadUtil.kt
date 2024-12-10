@@ -26,6 +26,7 @@ import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.StructuredTaskScope
 import java.util.stream.Stream
 
 
@@ -131,7 +132,19 @@ object FileDownloadUtil {
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withOrderedResults(true)
                     .build()
-                beanToCsv.write(data) // 写入数据
+                // 使用虚拟线程处理数据
+                val scope = StructuredTaskScope.ShutdownOnFailure()
+                var index = 0
+                data.forEach { record ->
+                    if (index == 0) {
+                        beanToCsv.write(record)
+                        index = 1
+                    } else {
+                        scope.fork { beanToCsv.write(record) } // 每条记录在虚拟线程中处理
+                    }
+                }
+                scope.join() // 等待所有虚拟线程完成
+                scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
             throw MuMuException(ResponseCode.FAILED_TO_EXPORT_CSV_FILE)

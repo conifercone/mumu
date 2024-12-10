@@ -84,6 +84,13 @@ public class PermissionConvertor {
       PermissionMapper.INSTANCE::toEntity).flatMap(this::hasDescendant);
   }
 
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionDo permissionDo) {
+    return Optional.ofNullable(permissionDo).map(
+      PermissionMapper.INSTANCE::toEntity);
+  }
+
   private Optional<Permission> hasDescendant(Permission permission) {
     return Optional.ofNullable(permission).map(permissionNotNull -> {
       permissionNotNull.setHasDescendant(

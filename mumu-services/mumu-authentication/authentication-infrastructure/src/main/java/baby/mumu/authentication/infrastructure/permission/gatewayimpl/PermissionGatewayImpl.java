@@ -349,8 +349,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
   @Override
   @Transactional(readOnly = true)
-  public Stream<Permission> findAll() {
+  public Stream<Permission> downloadAll() {
     return permissionRepository.findAll()
-      .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream());
+      .flatMap(
+        permissionDo -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionDo).stream());
   }
 }

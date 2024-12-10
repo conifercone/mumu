@@ -45,7 +45,7 @@ public class PermissionDownloadAllCmdExe {
 
   public void execute(HttpServletResponse response) {
     FileDownloadUtil.downloadCSV(response, "permissions.csv",
-      permissionGateway.findAll()
+      permissionGateway.downloadAll()
         .flatMap(permission -> permissionConvertor.toPermissionDownloadAllCo(permission).stream()));
   }
 }
