@@ -16,7 +16,7 @@ zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.9.0"
 curatorRecipesVersion = "5.7.1"
-flywayVersion = "11.0.0"
+flywayVersion = "11.0.1"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.14'
@@ -42,7 +42,7 @@ opencsvVersion = '5.9'
 # bom version
 grpcBomVersion = '1.68.2'
 guavaBomVersion = '33.3.1-jre'
-protobufBomVersion = '4.29.0'
+protobufBomVersion = '4.29.1'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = '8.11'
