@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.base.Strings;
 import java.io.IOException;
+import java.io.Serial;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,8 +33,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class StringSanitizerModule extends SimpleModule {
 
+  @Serial
+  private static final long serialVersionUID = -8746350422998765852L;
+
   public StringSanitizerModule() {
     addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
+      @Serial
+      private static final long serialVersionUID = -3447488199252754578L;
+
       @Override
       public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
         throws IOException {
