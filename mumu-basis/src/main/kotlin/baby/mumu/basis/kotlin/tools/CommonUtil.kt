@@ -16,6 +16,8 @@
 package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.co.BaseClientObject
+import baby.mumu.basis.exception.MuMuException
+import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
@@ -224,5 +226,17 @@ object CommonUtil {
             stringBuilder.append(CHARACTERS[RANDOM.nextInt(CHARACTERS.length)])
         }
         return stringBuilder.toString()
+    }
+
+    @API(status = API.Status.STABLE, since = "2.4.0")
+    @JvmStatic
+    fun validateTimezone(timezone: String) {
+        if (timezone.isNotBlank()) {
+            try {
+                ZoneId.of(timezone)
+            } catch (e: Exception) {
+                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE)
+            }
+        }
     }
 }

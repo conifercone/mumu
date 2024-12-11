@@ -36,6 +36,7 @@ import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
@@ -45,7 +46,6 @@ import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -142,14 +142,7 @@ public class AccountGatewayImpl implements AccountGateway {
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
-      if (StringUtils.isNotBlank(dataObject.getTimezone())) {
-        try {
-          //noinspection ResultOfMethodCallIgnored
-          ZoneId.of(dataObject.getTimezone());
-        } catch (Exception e) {
-          throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
-        }
-      }
+      CommonUtil.validateTimezone(dataObject.getTimezone());
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
       if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
