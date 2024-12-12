@@ -41,6 +41,7 @@ springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.9'
 monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
+droolsVersion = "10.0.0"
 # bom version
 grpcBomVersion = '1.68.2'
 guavaBomVersion = '33.3.1-jre'
@@ -262,10 +263,23 @@ opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsvVersion" }
 moneta = { module = "org.javamoney:moneta", version.ref = "monetaVersion" }
 # https://mvnrepository.com/artifact/org.zalando/jackson-datatype-money
 jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version.ref = "jacksonDatatypeMoneyVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-core
+drools-core = { module = "org.drools:drools-core", version.ref = "droolsVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-compiler
+drools-compiler = { module = "org.drools:drools-compiler", version.ref = "droolsVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-mvel
+drools-mvel = { module = "org.drools:drools-mvel", version.ref = "droolsVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-decisiontables
+drools-decisiontables = { module = "org.drools:drools-decisiontables", version.ref = "droolsVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-ruleunits-engine
+drools-ruleunits-engine = { module = "org.drools:drools-ruleunits-engine", version.ref = "droolsVersion" }
+# https://mvnrepository.com/artifact/org.drools/drools-model-compiler
+drools-model-compiler = { module = "org.drools:drools-model-compiler", version.ref = "droolsVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
 micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
+drools = ["drools-core", "drools-compiler", "drools-mvel", "drools-decisiontables", "drools-ruleunits-engine", "drools-model-compiler"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
