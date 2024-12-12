@@ -51,7 +51,6 @@ allprojects {
         if (versionString.contains("-")) "$versionString-$gitHash" else versionString
 
     repositories {
-        maven("https://maven.aliyun.com/repository/public")
         mavenCentral()
         maven("https://repo.spring.io/milestone")
     }
@@ -66,6 +65,7 @@ allprojects {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         exclude(group = "ch.qos.logback", module = "logback-classic")
         exclude(group = "ch.qos.logback", module = "logback-core")
+        exclude(group = "pull-parser", module = "pull-parser")
     }
 
 }

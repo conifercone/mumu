@@ -1,0 +1,41 @@
+package baby.mumu.authentication.infrastructure.account.units;
+unit AccountDigitalPreferenceUnit;
+
+import baby.mumu.authentication.domain.account.Account;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
+
+// 未知
+rule "Unknown"
+    when
+      $account : /accounts[ age <18 ]
+    then
+      $account.setDigitalPreference(DigitalPreferenceEnum.UNKNOWN);
+      update($account);
+end
+
+// 数字原住民
+rule "Digital Native"
+    when
+      $account : /accounts[ age >= 18 && age <=34 ]
+    then
+      $account.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_NATIVE);
+      update($account);
+end
+
+// 数字移民
+rule "Digital Immigrant"
+    when
+      $account : /accounts[ age >= 35 && age <=54 ]
+    then
+      $account.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_IMMIGRANT);
+      update($account);
+end
+
+// 传统用户
+rule "Traditional User"
+    when
+      $account : /accounts[ age >= 55 ]
+    then
+      $account.setDigitalPreference(DigitalPreferenceEnum.TRADITIONAL_USER);
+      update($account);
+end

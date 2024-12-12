@@ -42,6 +42,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.data
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
+import baby.mumu.authentication.infrastructure.account.units.AccountDigitalPreferenceUnit;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDo;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleDoId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
@@ -66,6 +67,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.drools.ruleunits.api.RuleUnitInstance;
+import org.drools.ruleunits.api.RuleUnitProvider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,19 +119,21 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountDo accountDo) {
-    return Optional.ofNullable(accountDo).map(accountDataObject -> {
+    return Optional.ofNullable(accountDo).flatMap(accountDataObject -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
       setRolesWithIds(account, getRoleIds(accountDataObject.getId()));
-      account.setAddresses(
-        accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
-          AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
-      account.setSystemSettings(
-        accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-          .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-            accountSystemSettingsMongodbDo).stream())
-          .collect(Collectors.toList()));
-      return account;
+      return getBasicInfoAccount(accountDataObject, account);
     });
+  }
+
+  private void setDigitalPreference(Account account) {
+    AccountDigitalPreferenceUnit ruleUnit = new AccountDigitalPreferenceUnit();
+    ruleUnit.getAccounts().add(account);
+    // 加载规则单元并执行规则
+    try (RuleUnitInstance<AccountDigitalPreferenceUnit> instance =
+      RuleUnitProvider.get().createRuleUnitInstance(ruleUnit)) {
+      instance.fire();
+    }
   }
 
   private void setRolesWithIds(Account account, List<Long> roleIds) {
@@ -238,17 +243,26 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toBasicInfoEntity(AccountDo accountDo) {
-    return Optional.ofNullable(accountDo).map(accountDataObject -> {
+    return Optional.ofNullable(accountDo).flatMap(accountDataObject -> {
       Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
-      account.setAddresses(
+      return getBasicInfoAccount(accountDataObject, account);
+    });
+  }
+
+  @NotNull
+  private Optional<Account> getBasicInfoAccount(@NotNull AccountDo accountDataObject,
+    Account account) {
+    return Optional.ofNullable(account).map(accountNotNull -> {
+      accountNotNull.setAddresses(
         accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
-      account.setSystemSettings(
+      accountNotNull.setSystemSettings(
         accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
           .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
             accountSystemSettingsMongodbDo).stream())
           .collect(Collectors.toList()));
-      return account;
+      setDigitalPreference(accountNotNull);
+      return accountNotNull;
     });
   }
 
@@ -263,6 +277,7 @@ public class AccountConvertor {
             .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
               accountSystemSettingsMongodbDo).stream())
             .collect(Collectors.toList()));
+        setDigitalPreference(account);
         return account;
       });
   }

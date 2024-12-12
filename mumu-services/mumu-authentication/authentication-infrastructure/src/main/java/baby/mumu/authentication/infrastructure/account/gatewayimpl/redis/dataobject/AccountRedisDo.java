@@ -17,6 +17,7 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataob
 
 import baby.mumu.basis.dataobject.jpa.JpaRedisBasisArchivableDataObject;
 import baby.mumu.basis.enums.CacheLevelEnum;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import com.redis.om.spring.annotations.Document;
@@ -132,6 +133,11 @@ public class AccountRedisDo extends JpaRedisBasisArchivableDataObject {
    * 余额
    */
   private Money balance;
+
+  /**
+   * 数字偏好
+   */
+  private DigitalPreferenceEnum digitalPreference;
 
   /**
    * 地址

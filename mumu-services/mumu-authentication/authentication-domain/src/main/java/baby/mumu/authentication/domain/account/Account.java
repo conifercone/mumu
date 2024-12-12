@@ -20,6 +20,7 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -163,6 +164,11 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 余额
    */
   private Money balance;
+
+  /**
+   * 数字偏好
+   */
+  private DigitalPreferenceEnum digitalPreference;
 
   /**
    * 地址

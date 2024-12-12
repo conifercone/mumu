@@ -269,8 +269,6 @@ drools-core = { module = "org.drools:drools-core", version.ref = "droolsVersion"
 drools-compiler = { module = "org.drools:drools-compiler", version.ref = "droolsVersion" }
 # https://mvnrepository.com/artifact/org.drools/drools-mvel
 drools-mvel = { module = "org.drools:drools-mvel", version.ref = "droolsVersion" }
-# https://mvnrepository.com/artifact/org.drools/drools-decisiontables
-drools-decisiontables = { module = "org.drools:drools-decisiontables", version.ref = "droolsVersion" }
 # https://mvnrepository.com/artifact/org.drools/drools-ruleunits-engine
 drools-ruleunits-engine = { module = "org.drools:drools-ruleunits-engine", version.ref = "droolsVersion" }
 # https://mvnrepository.com/artifact/org.drools/drools-model-compiler
@@ -279,7 +277,7 @@ drools-model-compiler = { module = "org.drools:drools-model-compiler", version.r
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
 micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
-drools = ["drools-core", "drools-compiler", "drools-mvel", "drools-decisiontables", "drools-ruleunits-engine", "drools-model-compiler"]
+drools = ["drools-core", "drools-compiler", "drools-mvel", "drools-ruleunits-engine", "drools-model-compiler"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
