@@ -7,7 +7,7 @@ import baby.mumu.basis.enums.DigitalPreferenceEnum;
 // 未知
 rule "Unknown"
     when
-      $account : /accounts[ age <18 ]
+      $account : /accounts[ age < 18 ]
     then
       $account.setDigitalPreference(DigitalPreferenceEnum.UNKNOWN);
       update($account);
