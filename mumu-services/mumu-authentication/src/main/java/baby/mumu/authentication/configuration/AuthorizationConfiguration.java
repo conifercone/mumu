@@ -38,6 +38,8 @@ import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties.Rsa;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -265,6 +267,9 @@ public class AuthorizationConfiguration {
     objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
     objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
     objectMapper.registerModule(new MoneyModule());
+    SimpleModule simpleModule = new SimpleModule();
+    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+    objectMapper.registerModule(simpleModule);
     objectMapper.addMixIn(Long.class, LongMixin.class);
     objectMapper.addMixIn(BigDecimal.class, BigDecimalMixin.class);
     rowMapper.setObjectMapper(objectMapper);
