@@ -15,9 +15,7 @@
  */
 package baby.mumu.authentication.client.cmds;
 
-import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Min;
-import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,12 +26,8 @@ import lombok.EqualsAndHashCode;
  * @since 2.3.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class PermissionFindRootCmd extends BaseDataTransferObject {
-
-
-  @Serial
-  private static final long serialVersionUID = -1737514412145335120L;
+@EqualsAndHashCode
+public class PermissionFindRootCmd {
 
   @Min(value = 1, message = "{current.validation.min.size}")
   private Integer current = 1;

@@ -15,10 +15,8 @@
  */
 package baby.mumu.authentication.client.cmds;
 
-import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,12 +27,8 @@ import lombok.EqualsAndHashCode;
  * @since 2.4.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class RoleFindDirectCmd extends BaseDataTransferObject {
-
-
-  @Serial
-  private static final long serialVersionUID = 5485655426740348552L;
+@EqualsAndHashCode
+public class RoleFindDirectCmd {
 
   @NotNull
   private Long ancestorId;
