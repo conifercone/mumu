@@ -16,23 +16,23 @@
 package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.PermissionService;
-import baby.mumu.authentication.client.dto.PermissionAddAncestorCmd;
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindDirectCmd;
-import baby.mumu.authentication.client.dto.PermissionFindRootCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.cmds.PermissionAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindDirectCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindRootCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -113,7 +113,7 @@ public class PermissionController {
   @ResponseBody
   @API(status = Status.STABLE, since = "1.0.0")
   @RateLimiter
-  public Page<PermissionFindAllCo> findAll(
+  public Page<PermissionFindAllDTO> findAll(
     @ModelAttribute @Valid PermissionFindAllCmd permissionFindAllCmd) {
     return permissionService.findAll(permissionFindAllCmd);
   }
@@ -123,7 +123,7 @@ public class PermissionController {
   @ResponseBody
   @API(status = Status.STABLE, since = "2.2.0")
   @RateLimiter
-  public Slice<PermissionFindAllSliceCo> findAllSlice(
+  public Slice<PermissionFindAllSliceDTO> findAllSlice(
     @ModelAttribute @Valid PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
     return permissionService.findAllSlice(permissionFindAllSliceCmd);
   }
@@ -133,7 +133,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public Page<PermissionArchivedFindAllCo> findArchivedAll(
+  public Page<PermissionArchivedFindAllDTO> findArchivedAll(
     @ModelAttribute @Valid PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
     return permissionService.findArchivedAll(permissionArchivedFindAllCmd);
   }
@@ -143,7 +143,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<PermissionArchivedFindAllSliceCo> findArchivedAllSlice(
+  public Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
     @ModelAttribute @Valid PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
     return permissionService.findArchivedAllSlice(permissionArchivedFindAllSliceCmd);
   }
@@ -153,7 +153,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public PermissionFindByIdCo findById(@PathVariable(value = "id") Long id) {
+  public PermissionFindByIdDTO findById(@PathVariable(value = "id") Long id) {
     return permissionService.findById(id);
   }
 
@@ -162,7 +162,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public PermissionFindByCodeCo findByCode(@PathVariable(value = "code") String code) {
+  public PermissionFindByCodeDTO findByCode(@PathVariable(value = "code") String code) {
     return permissionService.findByCode(code);
   }
 
@@ -198,7 +198,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public Page<PermissionFindRootCo> findRoot(
+  public Page<PermissionFindRootDTO> findRoot(
     @ModelAttribute PermissionFindRootCmd permissionFindRootCmd) {
     return permissionService.findRootPermissions(permissionFindRootCmd);
   }
@@ -208,7 +208,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public Page<PermissionFindDirectCo> findDirect(
+  public Page<PermissionFindDirectDTO> findDirect(
     @ModelAttribute PermissionFindDirectCmd permissionFindDirectCmd) {
     return permissionService.findDirectPermissions(permissionFindDirectCmd);
   }

@@ -7,7 +7,7 @@ option java_package = "baby.mumu.unique.client.api.grpc";
 option java_outer_classname = "CaptchaServiceProto";
 
 service CaptchaService {
-  rpc generateSimpleCaptcha (SimpleCaptchaGeneratedGrpcCmd) returns (SimpleCaptchaGeneratedGrpcCo);
+  rpc generateSimpleCaptcha (SimpleCaptchaGeneratedGrpcCmd) returns (SimpleCaptchaGeneratedGrpcDTO);
   rpc verifySimpleCaptcha (SimpleCaptchaVerifyGrpcCmd) returns (SimpleCaptchaVerifyGrpcResult);
 }
 
@@ -16,7 +16,7 @@ message SimpleCaptchaGeneratedGrpcCmd {
   google.protobuf.Int64Value ttl = 2;
   google.protobuf.Int32Value length = 3;
 }
-message SimpleCaptchaGeneratedGrpcCo {
+message SimpleCaptchaGeneratedGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue target = 2;
   google.protobuf.Int64Value ttl = 3;

@@ -11,10 +11,6 @@ service TemplateMailService {
 }
 
 message TemplateMailSendGrpcCmd {
-  TemplateMailSendGrpcCo templateMailSendGrpcCo = 1;
-}
-
-message TemplateMailSendGrpcCo {
   google.protobuf.StringValue address = 1;
   google.protobuf.StringValue name = 2;
   google.protobuf.StringValue from = 3;

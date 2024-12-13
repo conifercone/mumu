@@ -17,9 +17,9 @@ package baby.mumu.authentication.client.grpc;
 
 import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.RoleGrpcService;
-import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -71,12 +71,12 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
 
-    PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
+    PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    logger.info("PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
-    Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
-    Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+    logger.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+    Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
+    Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
   }
 
   @Test
@@ -88,15 +88,15 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<PageOfRoleFindAllGrpcCo> pageOfRoleFindAllGrpcCoListenableFuture = roleGrpcService.syncFindAll(
+    ListenableFuture<PageOfRoleFindAllGrpcDTO> pageOfRoleFindAllGrpcDTOListenableFuture = roleGrpcService.syncFindAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    pageOfRoleFindAllGrpcCoListenableFuture.addListener(() -> {
+    pageOfRoleFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
-        PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = pageOfRoleFindAllGrpcCoListenableFuture.get();
-        logger.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
-        Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
-        Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+        PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = pageOfRoleFindAllGrpcDTOListenableFuture.get();
+        logger.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+        Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
+        Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -112,11 +112,11 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleGrpcService.findById(
+    RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleGrpcService.findById(
       Int64Value.of(0L),
       callCredentials);
-    logger.info("RoleFindByIdGrpcCo: {}", roleFindByIdGrpcCo);
-    Assertions.assertNotNull(roleFindByIdGrpcCo);
+    logger.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+    Assertions.assertNotNull(roleFindByIdGrpcDTO);
   }
 
   @Test
@@ -125,14 +125,14 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<RoleFindByIdGrpcCo> roleFindByIdGrpcCoListenableFuture = roleGrpcService.syncFindById(
+    ListenableFuture<RoleFindByIdGrpcDTO> roleFindByIdGrpcDTOListenableFuture = roleGrpcService.syncFindById(
       Int64Value.of(0L),
       callCredentials);
-    roleFindByIdGrpcCoListenableFuture.addListener(() -> {
+    roleFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
-        RoleFindByIdGrpcCo roleFindByIdGrpcCo = roleFindByIdGrpcCoListenableFuture.get();
-        logger.info("Sync RoleFindByIdGrpcCo: {}", roleFindByIdGrpcCo);
-        Assertions.assertNotNull(roleFindByIdGrpcCo);
+        RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleFindByIdGrpcDTOListenableFuture.get();
+        logger.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+        Assertions.assertNotNull(roleFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

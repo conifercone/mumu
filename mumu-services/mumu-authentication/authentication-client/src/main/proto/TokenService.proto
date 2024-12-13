@@ -5,13 +5,13 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "TokenServiceProto";
 
 service TokenService {
-  rpc validity (TokenValidityGrpcCmd) returns (TokenValidityGrpcCo);
+  rpc validity (TokenValidityGrpcCmd) returns (TokenValidityGrpcDTO);
 }
 
 message TokenValidityGrpcCmd {
   string token = 1;
 }
 
-message TokenValidityGrpcCo {
+message TokenValidityGrpcDTO {
   bool validity = 1;
 }

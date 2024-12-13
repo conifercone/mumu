@@ -16,21 +16,21 @@
 package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
-import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
-import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -264,8 +264,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<RoleFindAllCo> toFindAllCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllCo).map(roleFindAllCo -> {
+  public Optional<RoleFindAllDTO> toFindAllDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllDTO).map(roleFindAllCo -> {
       Optional.ofNullable(simpleTextTranslation).flatMap(
           simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
             roleFindAllCo.getName()))
@@ -275,8 +275,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleFindAllSliceCo> toFindAllSliceCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllSliceCo)
+  public Optional<RoleFindAllSliceDTO> toFindAllSliceDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllSliceDTO)
       .map(roleFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -319,8 +319,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleArchivedFindAllCo> toArchivedFindAllCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllCo)
+  public Optional<RoleArchivedFindAllDTO> toArchivedFindAllDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllDTO)
       .map(roleArchivedFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -331,8 +331,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleArchivedFindAllSliceCo> toArchivedFindAllSliceCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllSliceCo)
+  public Optional<RoleArchivedFindAllSliceDTO> toArchivedFindAllSliceDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllSliceDTO)
       .map(roleArchivedFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -398,38 +398,38 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleFindAllGrpcCo> toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo) {
-    return Optional.ofNullable(roleFindAllCo).map(RoleMapper.INSTANCE::toRoleFindAllGrpcCo)
+  public Optional<RoleFindAllGrpcDTO> toRoleFindAllGrpcDTO(RoleFindAllDTO roleFindAllDTO) {
+    return Optional.ofNullable(roleFindAllDTO).map(RoleMapper.INSTANCE::toRoleFindAllGrpcDTO)
       .map(roleFindAllGrpcCo ->
         roleFindAllGrpcCo.toBuilder().addAllPermissions(
-          Optional.ofNullable(roleFindAllCo.getPermissions()).map(
+          Optional.ofNullable(roleFindAllDTO.getPermissions()).map(
             permissions -> permissions.stream()
-              .map(RoleMapper.INSTANCE::toRoleFindAllPermissionGrpcCo)
+              .map(RoleMapper.INSTANCE::toRoleFindAllPermissionGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
       );
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<RoleFindByIdCo> toRoleFindByIdCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdCo);
+  public Optional<RoleFindByIdDTO> toRoleFindByIdDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<RoleFindRootCo> toRoleFindRootCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindRootCo);
+  public Optional<RoleFindRootDTO> toRoleFindRootDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindRootDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<RoleFindDirectCo> toRoleFindDirectCo(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectCo);
+  public Optional<RoleFindDirectDTO> toRoleFindDirectDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<RoleFindByIdGrpcCo> toRoleFindByIdGrpcCo(RoleFindByIdCo roleFindByIdCo) {
-    return Optional.ofNullable(roleFindByIdCo).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcCo);
+  public Optional<RoleFindByIdGrpcDTO> toRoleFindByIdGrpcDTO(RoleFindByIdDTO roleFindByIdDTO) {
+    return Optional.ofNullable(roleFindByIdDTO).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcDTO);
   }
 }

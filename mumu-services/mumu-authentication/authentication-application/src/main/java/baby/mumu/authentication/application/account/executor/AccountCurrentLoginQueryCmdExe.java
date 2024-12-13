@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.exception.MuMuException;
@@ -44,9 +44,9 @@ public class AccountCurrentLoginQueryCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public AccountCurrentLoginCo execute() {
+  public AccountCurrentLoginDTO execute() {
     return accountGateway.queryCurrentLoginAccount()
-      .flatMap(accountConvertor::toCurrentLoginQueryCo)
+      .flatMap(accountConvertor::toCurrentLoginQueryDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

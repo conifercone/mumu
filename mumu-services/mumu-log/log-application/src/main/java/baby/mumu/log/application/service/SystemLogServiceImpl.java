@@ -24,10 +24,10 @@ import baby.mumu.log.application.system.executor.SystemLogSubmitCmdExe;
 import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
-import baby.mumu.log.client.dto.SystemLogSubmitCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.cmds.SystemLogSaveCmd;
+import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
@@ -74,7 +74,7 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   }
 
   @Override
-  public Page<SystemLogFindAllCo> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
+  public Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogFindAllCmdExe.execute(systemLogFindAllCmd);
   }
 

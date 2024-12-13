@@ -19,8 +19,8 @@ import baby.mumu.authentication.application.token.executor.TokenValidityCmdExe;
 import baby.mumu.authentication.client.api.TokenService;
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
-import baby.mumu.authentication.client.dto.TokenValidityCmd;
+import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcDTO;
+import baby.mumu.authentication.client.cmds.TokenValidityCmd;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
@@ -59,11 +59,11 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void validity(@NotNull TokenValidityGrpcCmd request,
-    StreamObserver<TokenValidityGrpcCo> responseObserver) {
+    StreamObserver<TokenValidityGrpcDTO> responseObserver) {
     TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
     tokenValidityCmd.setToken(request.getToken());
     responseObserver.onNext(
-      TokenValidityGrpcCo.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
+      TokenValidityGrpcDTO.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
         .build());
     responseObserver.onCompleted();
   }

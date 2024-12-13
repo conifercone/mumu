@@ -15,7 +15,7 @@
  */
 package baby.mumu.extension.processor.response;
 
-import baby.mumu.basis.co.ClientObject;
+import baby.mumu.basis.dto.DataTransferObject;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResponseCode;
@@ -219,7 +219,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
           throw new MuMuException(ResponseCode.DATA_CONVERSION_FAILED);
         }
       }
-      case ClientObject clientObject -> ResponseWrapper.success(clientObject);
+      case DataTransferObject dataTransferObject -> ResponseWrapper.success(dataTransferObject);
       case Page<?> page -> ResponseWrapper.success(page);
       case Slice<?> slice -> ResponseWrapper.success(slice);
       case null -> ResponseWrapper.success();

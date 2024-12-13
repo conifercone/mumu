@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
+import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
@@ -49,15 +49,15 @@ public class AccountFindAllSliceCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public Slice<AccountFindAllSliceCo> execute(
+  public Slice<AccountFindAllSliceDTO> execute(
     @NotNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
     Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
     Slice<Account> accounts = accountGateway.findAllSlice(account,
       accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
-    List<AccountFindAllSliceCo> accountFindAllSliceCos = accounts.getContent().stream()
-      .map(accountConvertor::toFindAllSliceCo)
+    List<AccountFindAllSliceDTO> accountFindAllSliceDTOS = accounts.getContent().stream()
+      .map(accountConvertor::toFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new SliceImpl<>(accountFindAllSliceCos, accounts.getPageable(),
+    return new SliceImpl<>(accountFindAllSliceDTOS, accounts.getPageable(),
       accounts.hasNext());
   }
 }

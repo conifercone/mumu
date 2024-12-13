@@ -23,10 +23,8 @@ import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.mail.application.template.executor.TemplateMailSendCmdExe;
 import baby.mumu.mail.client.api.TemplateMailService;
 import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
-import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCo;
 import baby.mumu.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServiceImplBase;
-import baby.mumu.mail.client.dto.TemplateMailSendCmd;
-import baby.mumu.mail.client.dto.co.TemplateMailSendCo;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Empty;
@@ -67,43 +65,39 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     templateMailSendCmdExe.execute(templateMailSendCmd);
   }
 
-  private @NotNull TemplateMailSendCo getTemplateMailSendCo(
+  private @NotNull TemplateMailSendCmd getTemplateMailSendCmd(
     @NotNull TemplateMailSendGrpcCmd request) {
-    TemplateMailSendCo templateMailSendCo = new TemplateMailSendCo();
-    TemplateMailSendGrpcCo templateMailSendGrpcCo = request.getTemplateMailSendGrpcCo();
-    templateMailSendCo.setTo(
-      templateMailSendGrpcCo.hasTo() ? templateMailSendGrpcCo.getTo().getValue() : null);
-    templateMailSendCo.setName(
-      templateMailSendGrpcCo.hasName() ? templateMailSendGrpcCo.getName().getValue() : null);
-    templateMailSendCo.setFrom(
-      templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : username);
-    templateMailSendCo.setAddress(
-      templateMailSendGrpcCo.hasAddress() ? templateMailSendGrpcCo.getAddress().getValue()
+    TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
+    templateMailSendCmd.setTo(
+      request.hasTo() ? request.getTo().getValue() : null);
+    templateMailSendCmd.setName(
+      request.hasName() ? request.getName().getValue() : null);
+    templateMailSendCmd.setFrom(
+      request.hasFrom() ? request.getFrom().getValue() : username);
+    templateMailSendCmd.setAddress(
+      request.hasAddress() ? request.getAddress().getValue()
         : null);
-    templateMailSendCo.setSubject(
-      templateMailSendGrpcCo.hasSubject() ? templateMailSendGrpcCo.getSubject().getValue()
+    templateMailSendCmd.setSubject(
+      request.hasSubject() ? request.getSubject().getValue()
         : null);
     try {
       //noinspection unchecked
-      templateMailSendCo.setData(
-        templateMailSendGrpcCo.hasData() ? (Map<String, Object>) objectMapper.readValue(
-          templateMailSendGrpcCo.getData().getValue(),
+      templateMailSendCmd.setData(
+        request.hasData() ? (Map<String, Object>) objectMapper.readValue(
+          request.getData().getValue(),
           Map.class) : null);
     } catch (JsonProcessingException e) {
       throw new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR);
     }
-    return templateMailSendCo;
+    return templateMailSendCmd;
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void sendMail(TemplateMailSendGrpcCmd request, StreamObserver<Empty> responseObserver) {
-    TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
-    TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(
-      request);
-    templateMailSendCmd.setTemplateMailSendCo(templateMailSendCo);
-    templateMailSendCmdExe.execute(templateMailSendCmd);
-
+  public void sendMail(TemplateMailSendGrpcCmd request,
+    @NotNull StreamObserver<Empty> responseObserver) {
+    templateMailSendCmdExe.execute(getTemplateMailSendCmd(
+      request));
     responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }

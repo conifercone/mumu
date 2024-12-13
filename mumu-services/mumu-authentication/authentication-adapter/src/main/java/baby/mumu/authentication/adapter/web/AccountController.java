@@ -16,22 +16,22 @@
 package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.AccountService;
-import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
-import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
-import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
+import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
+import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
+import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
+import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -126,7 +126,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountCurrentLoginCo queryCurrentLoginAccount() {
+  public AccountCurrentLoginDTO queryCurrentLoginAccount() {
     return accountService.queryCurrentLoginAccount();
   }
 
@@ -135,7 +135,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public AccountOnlineStatisticsCo onlineAccounts() {
+  public AccountOnlineStatisticsDTO onlineAccounts() {
     return accountService.onlineAccounts();
   }
 
@@ -243,7 +243,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public AccountBasicInfoCo getAccountBasicInfoById(
+  public AccountBasicInfoDTO getAccountBasicInfoById(
     @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
     return accountService.getAccountBasicInfoById(id);
   }
@@ -263,7 +263,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Page<AccountFindAllCo> findAll(
+  public Page<AccountFindAllDTO> findAll(
     @ModelAttribute @Valid AccountFindAllCmd accountFindAllCmd) {
     return accountService.findAll(accountFindAllCmd);
   }
@@ -273,7 +273,7 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<AccountFindAllSliceCo> findAllSlice(
+  public Slice<AccountFindAllSliceDTO> findAllSlice(
     @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }

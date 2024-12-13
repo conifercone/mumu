@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.basis.exception.MuMuException;
@@ -44,9 +44,9 @@ public class RoleFindByIdCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public RoleFindByIdCo execute(Long roleId) {
+  public RoleFindByIdDTO execute(Long roleId) {
     return Optional.ofNullable(roleId).flatMap(roleGateway::findById)
-      .flatMap(roleConvertor::toRoleFindByIdCo).orElseThrow(() -> new MuMuException(
+      .flatMap(roleConvertor::toRoleFindByIdDTO).orElseThrow(() -> new MuMuException(
         ResponseCode.ROLE_DOES_NOT_EXIST));
   }
 }

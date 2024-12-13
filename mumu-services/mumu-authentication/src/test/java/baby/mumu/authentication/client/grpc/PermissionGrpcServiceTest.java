@@ -17,10 +17,10 @@ package baby.mumu.authentication.client.grpc;
 
 import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.PermissionGrpcService;
-import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcDTO;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -71,14 +71,14 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    PageOfPermissionFindAllGrpcCo pageOfPermissionFindAllGrpcCo = permissionGrpcService.findAll(
+    PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = permissionGrpcService.findAll(
       permissionFindAllGrpcCmd,
       callCredentials);
-    logger.info("PageOfPermissionFindAllGrpcCo: {}", pageOfPermissionFindAllGrpcCo);
-    pageOfPermissionFindAllGrpcCo.getContentList().stream().map(PermissionFindAllGrpcCo::getName)
+    logger.info("PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+    pageOfPermissionFindAllGrpcDTO.getContentList().stream().map(PermissionFindAllGrpcDTO::getName)
       .map(StringValue::getValue).forEach(logger::info);
-    Assertions.assertNotNull(pageOfPermissionFindAllGrpcCo);
-    Assertions.assertFalse(pageOfPermissionFindAllGrpcCo.getContentList().isEmpty());
+    Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
+    Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
   }
 
   @Test
@@ -90,15 +90,15 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<PageOfPermissionFindAllGrpcCo> pageOfPermissionFindAllGrpcCoListenableFuture = permissionGrpcService.syncFindAll(
+    ListenableFuture<PageOfPermissionFindAllGrpcDTO> pageOfPermissionFindAllGrpcDTOListenableFuture = permissionGrpcService.syncFindAll(
       permissionFindAllGrpcCmd,
       callCredentials);
-    pageOfPermissionFindAllGrpcCoListenableFuture.addListener(() -> {
+    pageOfPermissionFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
-        PageOfPermissionFindAllGrpcCo pageOfPermissionFindAllGrpcCo = pageOfPermissionFindAllGrpcCoListenableFuture.get();
-        logger.info("Sync PageOfPermissionFindAllGrpcCo: {}", pageOfPermissionFindAllGrpcCo);
-        Assertions.assertNotNull(pageOfPermissionFindAllGrpcCo);
-        Assertions.assertFalse(pageOfPermissionFindAllGrpcCo.getContentList().isEmpty());
+        PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = pageOfPermissionFindAllGrpcDTOListenableFuture.get();
+        logger.info("Sync PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+        Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
+        Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);
@@ -113,11 +113,11 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    PermissionFindByIdGrpcCo permissionFindByIdGrpcCo = permissionGrpcService.findById(
+    PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionGrpcService.findById(
       Int64Value.of(1),
       callCredentials);
-    logger.info("PermissionFindByIdGrpcCo: {}", permissionFindByIdGrpcCo);
-    Assertions.assertNotNull(permissionFindByIdGrpcCo);
+    logger.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+    Assertions.assertNotNull(permissionFindByIdGrpcDTO);
   }
 
   @Test
@@ -126,14 +126,14 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<PermissionFindByIdGrpcCo> permissionFindByIdGrpcCoListenableFuture = permissionGrpcService.syncFindById(
+    ListenableFuture<PermissionFindByIdGrpcDTO> permissionFindByIdGrpcDTOListenableFuture = permissionGrpcService.syncFindById(
       Int64Value.of(1),
       callCredentials);
-    permissionFindByIdGrpcCoListenableFuture.addListener(() -> {
+    permissionFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
-        PermissionFindByIdGrpcCo permissionFindByIdGrpcCo = permissionFindByIdGrpcCoListenableFuture.get();
-        logger.info("Sync PermissionFindByIdGrpcCo: {}", permissionFindByIdGrpcCo);
-        Assertions.assertNotNull(permissionFindByIdGrpcCo);
+        PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionFindByIdGrpcDTOListenableFuture.get();
+        logger.info("Sync PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+        Assertions.assertNotNull(permissionFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

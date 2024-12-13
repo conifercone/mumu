@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +38,10 @@ public class AccountOnlineStatisticsCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public AccountOnlineStatisticsCo execute() {
+  public AccountOnlineStatisticsDTO execute() {
     long onlineAccounts = accountGateway.onlineAccounts();
-    AccountOnlineStatisticsCo accountOnlineStatisticsCo = new AccountOnlineStatisticsCo();
-    accountOnlineStatisticsCo.setOnlineCapacity(onlineAccounts);
-    return accountOnlineStatisticsCo;
+    AccountOnlineStatisticsDTO accountOnlineStatisticsDTO = new AccountOnlineStatisticsDTO();
+    accountOnlineStatisticsDTO.setOnlineCapacity(onlineAccounts);
+    return accountOnlineStatisticsDTO;
   }
 }

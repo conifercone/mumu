@@ -20,7 +20,6 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.mail.AuthenticationRequired;
 import baby.mumu.mail.client.api.TemplateMailGrpcService;
 import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
-import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCo;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
@@ -68,15 +67,12 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
                   ]
               }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-      .setTemplateMailSendGrpcCo(
-        TemplateMailSendGrpcCo.newBuilder()
-          .setName(StringValue.of("template/verification_code.html"))
-          .setAddress(StringValue.of("mail"))
-          .setFrom(StringValue.of("conifercone@163.com"))
-          .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-          .setSubject(StringValue.of("验证码"))
-          .setData(StringValue.of(data))
-          .build())
+      .setName(StringValue.of("template/verification_code.html"))
+      .setAddress(StringValue.of("mail"))
+      .setFrom(StringValue.of("conifercone@163.com"))
+      .setTo(StringValue.of("kaiyu.shan@outlook.com"))
+      .setSubject(StringValue.of("验证码"))
+      .setData(StringValue.of(data))
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
@@ -100,15 +96,12 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
                   ]
               }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-      .setTemplateMailSendGrpcCo(
-        TemplateMailSendGrpcCo.newBuilder()
-          .setName(StringValue.of("template/verification_code.html"))
-          .setAddress(StringValue.of("mail"))
-          .setFrom(StringValue.of("conifercone@163.com"))
-          .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-          .setSubject(StringValue.of("验证码"))
-          .setData(StringValue.of(data))
-          .build())
+      .setName(StringValue.of("template/verification_code.html"))
+      .setAddress(StringValue.of("mail"))
+      .setFrom(StringValue.of("conifercone@163.com"))
+      .setTo(StringValue.of("kaiyu.shan@outlook.com"))
+      .setSubject(StringValue.of("验证码"))
+      .setData(StringValue.of(data))
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(

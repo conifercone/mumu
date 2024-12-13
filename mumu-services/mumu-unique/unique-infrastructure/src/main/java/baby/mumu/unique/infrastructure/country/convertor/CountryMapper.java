@@ -15,13 +15,13 @@
  */
 package baby.mumu.unique.infrastructure.country.convertor;
 
-import baby.mumu.unique.client.dto.co.CountryGetAllCo;
-import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateCitiesByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
-import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
+import baby.mumu.unique.client.dto.CountryGetAllDTO;
+import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdDTO;
+import baby.mumu.unique.client.dto.CountryGetCityByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
+import baby.mumu.unique.client.dto.CountryStateCityGetAllDTO;
 import baby.mumu.unique.domain.country.City;
 import baby.mumu.unique.domain.country.Country;
 import baby.mumu.unique.domain.country.State;
@@ -44,23 +44,23 @@ public interface CountryMapper {
   CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryStateCityGetAllCo toCountryStateCityGetAllCo(Country country);
+  CountryStateCityGetAllDTO toCountryStateCityGetAllDTO(Country country);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStatesByCountryIdCo toCountryGetStatesByCountryIdCo(State state);
+  CountryGetStatesByCountryIdDTO toCountryGetStatesByCountryIdDTO(State state);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetCitiesByStateIdCo toCountryGetCitiesByStateIdCo(City city);
+  CountryGetCitiesByStateIdDTO toCountryGetCitiesByStateIdDTO(City city);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStateByIdCo toCountryGetStateByIdCo(State state);
+  CountryGetStateByIdDTO toCountryGetStateByIdDTO(State state);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStateCitiesByIdCo toCountryGetStateCitiesByIdCo(State state);
+  CountryGetStateCitiesByIdDTO toCountryGetStateCitiesByIdDTO(State state);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetCityByIdCo toCountryGetCityByIdCo(City city);
+  CountryGetCityByIdDTO toCountryGetCityByIdDTO(City city);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetAllCo toCountryGetAllCo(Country country);
+  CountryGetAllDTO toCountryGetAllDTO(Country country);
 }

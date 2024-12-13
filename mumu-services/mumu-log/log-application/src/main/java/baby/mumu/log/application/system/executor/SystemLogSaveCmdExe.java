@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.application.system.executor;
 
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
+import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import java.util.Optional;

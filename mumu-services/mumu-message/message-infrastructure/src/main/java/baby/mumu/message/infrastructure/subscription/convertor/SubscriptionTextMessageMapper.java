@@ -16,10 +16,10 @@
 package baby.mumu.message.infrastructure.subscription.convertor;
 
 import baby.mumu.basis.mappers.ClientObjectMapper;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
@@ -56,11 +56,11 @@ public interface SubscriptionTextMessageMapper extends ClientObjectMapper {
     SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  SubscriptionTextMessageFindAllYouSendCo toFindAllYouSendCo(
+  SubscriptionTextMessageFindAllYouSendDTO toFindAllYouSendDTO(
     SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  SubscriptionTextMessageFindAllWithSomeOneCo toFindAllWithSomeOne(
+  SubscriptionTextMessageFindAllWithSomeOneDTO toFindAllWithSomeOne(
     SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.4")

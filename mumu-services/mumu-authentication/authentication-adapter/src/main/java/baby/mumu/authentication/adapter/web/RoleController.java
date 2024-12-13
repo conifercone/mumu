@@ -16,22 +16,22 @@
 package baby.mumu.authentication.adapter.web;
 
 import baby.mumu.authentication.client.api.RoleService;
-import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
-import baby.mumu.authentication.client.dto.RoleFindRootCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
-import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
-import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
+import baby.mumu.authentication.client.cmds.RoleAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindDirectCmd;
+import baby.mumu.authentication.client.cmds.RoleFindRootCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -111,7 +111,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<RoleFindAllCo> findAll(@ModelAttribute @Valid RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllDTO> findAll(@ModelAttribute @Valid RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
   }
 
@@ -120,7 +120,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<RoleFindAllSliceCo> findAllSlice(
+  public Slice<RoleFindAllSliceDTO> findAllSlice(
     @ModelAttribute @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleService.findAllSlice(roleFindAllSliceCmd);
   }
@@ -130,7 +130,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Page<RoleArchivedFindAllCo> findArchivedAll(
+  public Page<RoleArchivedFindAllDTO> findArchivedAll(
     @ModelAttribute @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleService.findArchivedAll(roleArchivedFindAllCmd);
   }
@@ -140,7 +140,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
-  public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+  public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
     @ModelAttribute @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
   }
@@ -177,7 +177,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public Page<RoleFindRootCo> findRoot(
+  public Page<RoleFindRootDTO> findRoot(
     @ModelAttribute RoleFindRootCmd roleFindRootCmd) {
     return roleService.findRootRoles(roleFindRootCmd);
   }
@@ -187,7 +187,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public Page<RoleFindDirectCo> findDirect(
+  public Page<RoleFindDirectDTO> findDirect(
     @ModelAttribute RoleFindDirectCmd roleFindDirectCmd) {
     return roleService.findDirectRoles(roleFindDirectCmd);
   }
@@ -207,7 +207,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public RoleFindByIdCo findById(@PathVariable(value = "id") Long id) {
+  public RoleFindByIdDTO findById(@PathVariable(value = "id") Long id) {
     return roleService.findById(id);
   }
 }

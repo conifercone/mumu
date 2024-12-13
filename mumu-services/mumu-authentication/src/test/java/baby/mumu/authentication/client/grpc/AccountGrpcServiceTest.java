@@ -17,7 +17,7 @@ package baby.mumu.authentication.client.grpc;
 
 import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.AccountGrpcService;
-import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -63,10 +63,10 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc, "admin", "admin").orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    AccountCurrentLoginGrpcCo accountCurrentLoginGrpcCo = accountGrpcService.queryCurrentLoginAccount(
+    AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount(
       callCredentials);
-    Assertions.assertNotNull(accountCurrentLoginGrpcCo);
-    logger.info("AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
+    Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
+    logger.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
   }
 
   @Test
@@ -75,13 +75,13 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc, "admin", "admin").orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<AccountCurrentLoginGrpcCo> accountCurrentLoginGrpcCoListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
+    ListenableFuture<AccountCurrentLoginGrpcDTO> accountCurrentLoginGrpcDTOListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
       callCredentials);
-    accountCurrentLoginGrpcCoListenableFuture.addListener(() -> {
+    accountCurrentLoginGrpcDTOListenableFuture.addListener(() -> {
       try {
-        AccountCurrentLoginGrpcCo accountCurrentLoginGrpcCo = accountCurrentLoginGrpcCoListenableFuture.get();
-        Assertions.assertNotNull(accountCurrentLoginGrpcCo);
-        logger.info("Sync AccountCurrentLoginGrpcCo:{}", accountCurrentLoginGrpcCo);
+        AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountCurrentLoginGrpcDTOListenableFuture.get();
+        Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
+        logger.info("Sync AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

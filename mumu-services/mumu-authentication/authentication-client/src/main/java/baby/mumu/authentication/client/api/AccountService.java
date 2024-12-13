@@ -15,22 +15,22 @@
  */
 package baby.mumu.authentication.client.api;
 
-import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
-import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountChangePasswordCmd;
-import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
-import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.AccountOnlineStatisticsCo;
+import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
+import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
+import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
+import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
+import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -80,14 +80,14 @@ public interface AccountService {
    *
    * @return 当前登录账户信息
    */
-  AccountCurrentLoginCo queryCurrentLoginAccount();
+  AccountCurrentLoginDTO queryCurrentLoginAccount();
 
   /**
    * 查询当前在线账户数量
    *
    * @return 在线账户数量
    */
-  AccountOnlineStatisticsCo onlineAccounts();
+  AccountOnlineStatisticsDTO onlineAccounts();
 
   /**
    * 重置密码
@@ -148,7 +148,7 @@ public interface AccountService {
    *
    * @param id 账户id
    */
-  AccountBasicInfoCo getAccountBasicInfoById(Long id);
+  AccountBasicInfoDTO getAccountBasicInfoById(Long id);
 
   /**
    * 通过id从归档中恢复
@@ -178,7 +178,7 @@ public interface AccountService {
    * @param accountFindAllCmd 分页查询账户指令
    * @return 查询结果
    */
-  Page<AccountFindAllCo> findAll(AccountFindAllCmd accountFindAllCmd);
+  Page<AccountFindAllDTO> findAll(AccountFindAllCmd accountFindAllCmd);
 
   /**
    * 分页查询账户（不查询总数）
@@ -186,5 +186,5 @@ public interface AccountService {
    * @param accountFindAllSliceCmd 分页查询账户指令
    * @return 查询结果
    */
-  Slice<AccountFindAllSliceCo> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd);
+  Slice<AccountFindAllSliceDTO> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd);
 }

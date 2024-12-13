@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.application.country.executor;
 
-import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
+import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
 import baby.mumu.unique.domain.country.gateway.CountryGateway;
 import baby.mumu.unique.infrastructure.country.convertor.CountryConvertor;
 import java.util.ArrayList;
@@ -45,12 +45,12 @@ public class CountryGetStatesByCountryIdCmdExe {
     this.countryConvertor = countryConvertor;
   }
 
-  public List<CountryGetStatesByCountryIdCo> execute(
+  public List<CountryGetStatesByCountryIdDTO> execute(
     Long id) {
     Assert.notNull(id, "id cannot be null");
     return Optional.of(id)
       .map(countryId -> countryGateway.getStatesByCountryId(countryId).stream()
-        .map(state -> countryConvertor.toCountryGetStatesByCountryIdCo(state).orElse(null))
+        .map(state -> countryConvertor.toCountryGetStatesByCountryIdDTO(state).orElse(null))
         .filter(
           Objects::nonNull).toList()).orElse(new ArrayList<>());
   }

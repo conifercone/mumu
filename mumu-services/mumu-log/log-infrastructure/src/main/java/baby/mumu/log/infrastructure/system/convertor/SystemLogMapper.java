@@ -16,10 +16,10 @@
 package baby.mumu.log.infrastructure.system.convertor;
 
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
-import baby.mumu.log.client.dto.SystemLogSubmitCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.cmds.SystemLogSaveCmd;
+import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
 import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
@@ -60,7 +60,7 @@ public interface SystemLogMapper {
   SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogFindAllCo toFindAllCo(SystemLog systemLog);
+  SystemLogFindAllDTO toFindAllDTO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaDo systemLogKafkaDo);

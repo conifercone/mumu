@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.kotlin.tools
 
-import baby.mumu.basis.co.BaseClientObject
+import baby.mumu.basis.dto.BaseDataTransferObject
 import baby.mumu.basis.exception.MuMuException
 import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
@@ -153,14 +153,14 @@ object CommonUtil {
     /**
      * 转换为账户时区
      *
-     * @param baseClientObject 客户端对象
+     * @param baseDataTransferObject 基础数据传输对象
      */
     @API(status = API.Status.STABLE, since = "1.0.3")
     @JvmStatic
     fun convertToAccountZone(
-        baseClientObject: BaseClientObject
+        baseDataTransferObject: BaseDataTransferObject
     ) {
-        Optional.ofNullable(baseClientObject).ifPresent { baseCo ->
+        Optional.ofNullable(baseDataTransferObject).ifPresent { baseCo ->
             SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
                 val targetZoneId = ZoneId.of(timezone)
                 Optional.ofNullable(baseCo.creationTime).ifPresent {

@@ -25,12 +25,12 @@ import baby.mumu.log.application.operation.executor.OperationLogSubmitCmdExe;
 import baby.mumu.log.client.api.OperationLogService;
 import baby.mumu.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.OperationLogQryCmd;
-import baby.mumu.log.client.dto.OperationLogSaveCmd;
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.cmds.OperationLogQryCmd;
+import baby.mumu.log.client.cmds.OperationLogSaveCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
@@ -101,14 +101,14 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   }
 
   @Override
-  public OperationLogQryCo findOperationLogById(String id) {
+  public OperationLogQryDTO findOperationLogById(String id) {
     OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
     operationLogQryCmd.setId(id);
     return operationLogQryCmdExe.execute(operationLogQryCmd);
   }
 
   @Override
-  public Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
+  public Page<OperationLogFindAllDTO> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
   }
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 
 /**
  * 二维码service

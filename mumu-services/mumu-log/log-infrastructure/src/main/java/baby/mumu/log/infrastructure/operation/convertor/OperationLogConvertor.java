@@ -16,11 +16,11 @@
 package baby.mumu.log.infrastructure.operation.convertor;
 
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.OperationLogSaveCmd;
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.cmds.OperationLogSaveCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
 import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
@@ -111,8 +111,8 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogFindAllCo> toFindAllCo(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllCo);
+  public Optional<OperationLogFindAllDTO> toFindAllDTO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllDTO);
   }
 
   @Contract("_ -> new")
@@ -132,9 +132,9 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<OperationLogQryCo> toQryCo(
+  public Optional<OperationLogQryDTO> toQryDTO(
     OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
-      .map(OperationLogMapper.INSTANCE::toQryCo);
+      .map(OperationLogMapper.INSTANCE::toQryDTO);
   }
 }

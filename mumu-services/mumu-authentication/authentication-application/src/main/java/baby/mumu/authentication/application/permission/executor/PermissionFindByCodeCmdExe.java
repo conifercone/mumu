@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
 import baby.mumu.basis.exception.MuMuException;
@@ -45,10 +45,10 @@ public class PermissionFindByCodeCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public PermissionFindByCodeCo execute(String code) {
+  public PermissionFindByCodeDTO execute(String code) {
     return Optional.ofNullable(code)
       .flatMap(permissionGateway::findByCode).flatMap(
-        permissionConvertor::toFindByCodeCo)
+        permissionConvertor::toFindByCodeDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
   }
 }

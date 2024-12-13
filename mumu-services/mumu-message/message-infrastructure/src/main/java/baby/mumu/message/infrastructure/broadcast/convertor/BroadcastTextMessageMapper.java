@@ -16,9 +16,9 @@
 package baby.mumu.message.infrastructure.broadcast.convertor;
 
 import baby.mumu.basis.mappers.ClientObjectMapper;
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
@@ -62,6 +62,6 @@ public interface BroadcastTextMessageMapper extends ClientObjectMapper {
     BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  BroadcastTextMessageFindAllYouSendCo toFindAllYouSendCo(
+  BroadcastTextMessageFindAllYouSendDTO toFindAllYouSendDTO(
     BroadcastTextMessage broadcastTextMessage);
 }

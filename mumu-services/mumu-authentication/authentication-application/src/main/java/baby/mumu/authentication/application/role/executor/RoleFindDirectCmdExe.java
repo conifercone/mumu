@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
-import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
+import baby.mumu.authentication.client.cmds.RoleFindDirectCmd;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -49,15 +49,15 @@ public class RoleFindDirectCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public Page<RoleFindDirectCo> execute(RoleFindDirectCmd roleFindDirectCmd) {
+  public Page<RoleFindDirectDTO> execute(RoleFindDirectCmd roleFindDirectCmd) {
     return Optional.ofNullable(roleFindDirectCmd).map(roleFindDirectCmdNotNull -> {
       Page<Role> roles = roleGateway.findDirectRoles(
         roleFindDirectCmd.getAncestorId(),
         roleFindDirectCmdNotNull.getCurrent(), roleFindDirectCmdNotNull.getPageSize());
-      List<RoleFindDirectCo> roleFindDirectCos = roles.getContent().stream()
-        .map(roleConvertor::toRoleFindDirectCo)
+      List<RoleFindDirectDTO> roleFindDirectDTOS = roles.getContent().stream()
+        .map(roleConvertor::toRoleFindDirectDTO)
         .filter(Optional::isPresent).map(Optional::get).toList();
-      return new PageImpl<>(roleFindDirectCos, roles.getPageable(),
+      return new PageImpl<>(roleFindDirectDTOS, roles.getPageable(),
         roles.getTotalElements());
     }).orElse(new PageImpl<>(new ArrayList<>()));
   }

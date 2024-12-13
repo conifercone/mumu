@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.client.api;
 
-import baby.mumu.authentication.client.dto.TokenValidityCmd;
+import baby.mumu.authentication.client.cmds.TokenValidityCmd;
 
 /**
  * token service

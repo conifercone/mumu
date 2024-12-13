@@ -17,7 +17,7 @@ package baby.mumu.mail.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.mail.client.api.TemplateMailService;
-import baby.mumu.mail.client.dto.TemplateMailSendCmd;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;

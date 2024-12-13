@@ -15,7 +15,7 @@
  */
 package baby.mumu.file.application.streamfile.executor;
 
-import baby.mumu.file.client.dto.StreamFileRemoveCmd;
+import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import java.util.Optional;

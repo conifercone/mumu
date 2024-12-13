@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;

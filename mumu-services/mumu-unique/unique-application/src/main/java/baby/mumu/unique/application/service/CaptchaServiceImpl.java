@@ -23,13 +23,13 @@ import baby.mumu.unique.application.captcha.executor.SimpleCaptchaVerifyCmdExe;
 import baby.mumu.unique.client.api.CaptchaService;
 import baby.mumu.unique.client.api.grpc.CaptchaServiceGrpc.CaptchaServiceImplBase;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo.Builder;
+import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
+import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO.Builder;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
@@ -65,7 +65,7 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   }
 
   @Override
-  public SimpleCaptchaGeneratedCo generateSimpleCaptcha(
+  public SimpleCaptchaGeneratedDTO generateSimpleCaptcha(
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return simpleCaptchaGeneratedCmdExe.execute(simpleCaptchaGeneratedCmd);
   }
@@ -78,7 +78,7 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void generateSimpleCaptcha(SimpleCaptchaGeneratedGrpcCmd request,
-    StreamObserver<SimpleCaptchaGeneratedGrpcCo> responseObserver) {
+    StreamObserver<SimpleCaptchaGeneratedGrpcDTO> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
     simpleCaptchaGeneratedCmd.setId(
       request.hasId() ? request.getId().getValue()
@@ -89,8 +89,8 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
     simpleCaptchaGeneratedCmd.setLength(
       request.hasLength() ? request.getLength()
         .getValue() : null);
-    Builder builder = SimpleCaptchaGeneratedGrpcCo.newBuilder();
-    SimpleCaptchaGeneratedCo captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
+    Builder builder = SimpleCaptchaGeneratedGrpcDTO.newBuilder();
+    SimpleCaptchaGeneratedDTO captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
       simpleCaptchaGeneratedCmd);
     if (captchaGeneratedCo != null) {
       builder.setId(Int64Value.of(captchaGeneratedCo.getId()))

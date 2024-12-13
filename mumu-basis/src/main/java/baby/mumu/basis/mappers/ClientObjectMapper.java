@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.mappers;
 
-import baby.mumu.basis.co.BaseClientObject;
+import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.kotlin.tools.CommonUtil;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.MappingTarget;
@@ -29,7 +29,7 @@ import org.mapstruct.MappingTarget;
 public interface ClientObjectMapper {
 
   @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget BaseClientObject baseClientObject) {
+  default void convertToAccountTimezone(@MappingTarget BaseDataTransferObject baseClientObject) {
     CommonUtil.convertToAccountZone(baseClientObject);
   }
 }

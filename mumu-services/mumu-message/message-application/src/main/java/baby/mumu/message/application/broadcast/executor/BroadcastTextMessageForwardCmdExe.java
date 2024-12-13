@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.application.broadcast.executor;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
 import java.util.Optional;

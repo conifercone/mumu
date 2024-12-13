@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountPasswordVerifyCmd;
+import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;

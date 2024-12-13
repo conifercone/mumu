@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.mapstruct;
 
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionMapper;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;

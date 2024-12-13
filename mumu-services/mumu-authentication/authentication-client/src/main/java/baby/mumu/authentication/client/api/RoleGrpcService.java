@@ -17,9 +17,9 @@ package baby.mumu.authentication.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
@@ -59,7 +59,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public PageOfRoleFindAllGrpcCo findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
+  public PageOfRoleFindAllGrpcDTO findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -71,7 +71,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAll(
+  public ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAll(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
@@ -84,7 +84,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
-  public RoleFindByIdGrpcCo findById(Int64Value roleId,
+  public RoleFindByIdGrpcDTO findById(Int64Value roleId,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -96,7 +96,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
-  public ListenableFuture<RoleFindByIdGrpcCo> syncFindById(
+  public ListenableFuture<RoleFindByIdGrpcDTO> syncFindById(
     Int64Value roleId,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
@@ -108,7 +108,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private PageOfRoleFindAllGrpcCo findAllFromGrpc(
+  private PageOfRoleFindAllGrpcDTO findAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     CallCredentials callCredentials) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
@@ -116,7 +116,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       .findAll(roleFindAllGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<PageOfRoleFindAllGrpcCo> syncFindAllFromGrpc(
+  private @NotNull ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
@@ -125,7 +125,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       .findAll(roleFindAllGrpcCmd);
   }
 
-  private RoleFindByIdGrpcCo findByIdFromGrpc(
+  private RoleFindByIdGrpcDTO findByIdFromGrpc(
     Int64Value roleId,
     CallCredentials callCredentials) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
@@ -133,7 +133,7 @@ public class RoleGrpcService extends AuthenticationGrpcService implements Dispos
       .findById(roleId);
   }
 
-  private @NotNull ListenableFuture<RoleFindByIdGrpcCo> syncFindByIdFromGrpc(
+  private @NotNull ListenableFuture<RoleFindByIdGrpcDTO> syncFindByIdFromGrpc(
     Int64Value roleId,
     CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(

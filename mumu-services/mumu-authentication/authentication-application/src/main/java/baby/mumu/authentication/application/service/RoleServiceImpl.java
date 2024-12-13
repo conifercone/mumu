@@ -31,28 +31,28 @@ import baby.mumu.authentication.application.role.executor.RoleFindRootCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleUpdateCmdExe;
 import baby.mumu.authentication.client.api.RoleService;
-import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo.Builder;
+import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcDTO.Builder;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
-import baby.mumu.authentication.client.dto.RoleAddAncestorCmd;
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindDirectCmd;
-import baby.mumu.authentication.client.dto.RoleFindRootCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindByIdCo;
-import baby.mumu.authentication.client.dto.co.RoleFindDirectCo;
-import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
+import baby.mumu.authentication.client.cmds.RoleAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindDirectCmd;
+import baby.mumu.authentication.client.cmds.RoleFindRootCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
@@ -155,24 +155,24 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllDTO> findAll(RoleFindAllCmd roleFindAllCmd) {
     return roleFindAllCmdExe.execute(roleFindAllCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd) {
+  public Slice<RoleFindAllSliceDTO> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleFindAllSliceCmdExe.execute(roleFindAllSliceCmd);
   }
 
   @Override
-  public Page<RoleArchivedFindAllCo> findArchivedAll(
+  public Page<RoleArchivedFindAllDTO> findArchivedAll(
     RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleArchivedFindAllCmdExe.execute(roleArchivedFindAllCmd);
   }
 
   @Override
-  public Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+  public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
     RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleArchivedFindAllSliceCmdExe.execute(roleArchivedFindAllSliceCmd);
   }
@@ -180,31 +180,31 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(RoleFindAllGrpcCmd request,
-    StreamObserver<PageOfRoleFindAllGrpcCo> responseObserver) {
+    StreamObserver<PageOfRoleFindAllGrpcDTO> responseObserver) {
     roleConvertor.toRoleFindAllCmd(request).ifPresentOrElse(roleFindAllCmdNotNull -> {
-      Builder builder = PageOfRoleFindAllGrpcCo.newBuilder();
-      Page<RoleFindAllCo> roleFindAllCos = roleFindAllCmdExe.execute(
+      Builder builder = PageOfRoleFindAllGrpcDTO.newBuilder();
+      Page<RoleFindAllDTO> roleFindAllCos = roleFindAllCmdExe.execute(
         roleFindAllCmdNotNull);
-      List<RoleFindAllGrpcCo> findAllGrpcCos = roleFindAllCos.getContent().stream()
-        .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcCo(roleFindAllCo).stream())
+      List<RoleFindAllGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
+        .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcDTO(roleFindAllCo).stream())
         .toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());
       responseObserver.onNext(builder.build());
       responseObserver.onCompleted();
     }, () -> {
-      responseObserver.onNext(PageOfRoleFindAllGrpcCo.getDefaultInstance());
+      responseObserver.onNext(PageOfRoleFindAllGrpcDTO.getDefaultInstance());
       responseObserver.onCompleted();
     });
   }
 
   @Override
-  public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcCo> responseObserver) {
+  public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcDTO> responseObserver) {
     Optional.ofNullable(request).filter(Int64Value::isInitialized).map(Int64Value::getValue)
       .map(
-        roleFindByIdCmdExe::execute).flatMap(roleConvertor::toRoleFindByIdGrpcCo)
-      .ifPresentOrElse((roleFindByIdGrpcCo) -> {
-        responseObserver.onNext(roleFindByIdGrpcCo);
+        roleFindByIdCmdExe::execute).flatMap(roleConvertor::toRoleFindByIdGrpcDTO)
+      .ifPresentOrElse((roleFindByIdGrpcDTO) -> {
+        responseObserver.onNext(roleFindByIdGrpcDTO);
         responseObserver.onCompleted();
       }, () -> {
         throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST);
@@ -230,12 +230,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  public Page<RoleFindRootCo> findRootRoles(RoleFindRootCmd roleFindRootCmd) {
+  public Page<RoleFindRootDTO> findRootRoles(RoleFindRootCmd roleFindRootCmd) {
     return roleFindRootCmdExe.execute(roleFindRootCmd);
   }
 
   @Override
-  public Page<RoleFindDirectCo> findDirectRoles(RoleFindDirectCmd roleFindDirectCmd) {
+  public Page<RoleFindDirectDTO> findDirectRoles(RoleFindDirectCmd roleFindDirectCmd) {
     return roleFindDirectCmdExe.execute(roleFindDirectCmd);
   }
 
@@ -246,7 +246,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   }
 
   @Override
-  public RoleFindByIdCo findById(Long id) {
+  public RoleFindByIdDTO findById(Long id) {
     return roleFindByIdCmdExe.execute(id);
   }
 }

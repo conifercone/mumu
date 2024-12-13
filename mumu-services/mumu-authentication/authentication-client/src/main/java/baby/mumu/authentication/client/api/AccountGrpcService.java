@@ -17,7 +17,7 @@ package baby.mumu.authentication.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
@@ -57,7 +57,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public AccountCurrentLoginGrpcCo queryCurrentLoginAccount(
+  public AccountCurrentLoginGrpcDTO queryCurrentLoginAccount(
     CallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -69,7 +69,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccount(
+  public ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccount(
     CallCredentials authCallCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -80,7 +80,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private AccountCurrentLoginGrpcCo queryCurrentLoginAccountFromGrpc(
+  private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc(
     CallCredentials authCallCredentials) {
     AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
       channel);
@@ -88,7 +88,7 @@ public class AccountGrpcService extends AuthenticationGrpcService implements Dis
       .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 
-  private @NotNull ListenableFuture<AccountCurrentLoginGrpcCo> syncQueryCurrentLoginAccountFromGrpc(
+  private @NotNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc(
     CallCredentials authCallCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
       channel);

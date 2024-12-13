@@ -15,9 +15,9 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 
 /**
  * 验证码service
@@ -27,7 +27,7 @@ import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
  */
 public interface CaptchaService {
 
-  SimpleCaptchaGeneratedCo generateSimpleCaptcha(
+  SimpleCaptchaGeneratedDTO generateSimpleCaptcha(
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
 
   boolean verifySimpleCaptcha(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);

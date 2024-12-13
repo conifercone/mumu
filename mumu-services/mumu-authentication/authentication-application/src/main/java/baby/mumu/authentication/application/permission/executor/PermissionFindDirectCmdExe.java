@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionFindDirectCmd;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
+import baby.mumu.authentication.client.cmds.PermissionFindDirectCmd;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -49,15 +49,15 @@ public class PermissionFindDirectCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public Page<PermissionFindDirectCo> execute(PermissionFindDirectCmd permissionFindDirectCmd) {
+  public Page<PermissionFindDirectDTO> execute(PermissionFindDirectCmd permissionFindDirectCmd) {
     return Optional.ofNullable(permissionFindDirectCmd).map(permissionFindDirectCmdNotNull -> {
       Page<Permission> permissions = permissionGateway.findDirectPermissions(
         permissionFindDirectCmd.getAncestorId(),
         permissionFindDirectCmdNotNull.getCurrent(), permissionFindDirectCmdNotNull.getPageSize());
-      List<PermissionFindDirectCo> permissionFindDirectCos = permissions.getContent().stream()
-        .map(permissionConvertor::toPermissionFindDirectCo)
+      List<PermissionFindDirectDTO> permissionFindDirectDTOS = permissions.getContent().stream()
+        .map(permissionConvertor::toPermissionFindDirectDTO)
         .filter(Optional::isPresent).map(Optional::get).toList();
-      return new PageImpl<>(permissionFindDirectCos, permissions.getPageable(),
+      return new PageImpl<>(permissionFindDirectDTOS, permissions.getPageable(),
         permissions.getTotalElements());
     }).orElse(new PageImpl<>(new ArrayList<>()));
   }

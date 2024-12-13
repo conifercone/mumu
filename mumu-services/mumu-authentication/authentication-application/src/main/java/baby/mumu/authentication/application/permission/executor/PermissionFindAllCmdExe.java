@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -49,16 +49,16 @@ public class PermissionFindAllCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public Page<PermissionFindAllCo> execute(PermissionFindAllCmd permissionFindAllCmd) {
+  public Page<PermissionFindAllDTO> execute(PermissionFindAllCmd permissionFindAllCmd) {
     Assert.notNull(permissionFindAllCmd, "PermissionFindAllCmd cannot be null");
     Permission permission = permissionConvertor.toEntity(permissionFindAllCmd)
       .orElseGet(Permission::new);
     Page<Permission> permissions = permissionGateway.findAll(permission,
       permissionFindAllCmd.getCurrent(), permissionFindAllCmd.getPageSize());
-    List<PermissionFindAllCo> permissionFindAllCoList = permissions.getContent().stream()
-      .map(permissionConvertor::toFindAllCo)
+    List<PermissionFindAllDTO> permissionFindAllDTOList = permissions.getContent().stream()
+      .map(permissionConvertor::toFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(permissionFindAllCoList, permissions.getPageable(),
+    return new PageImpl<>(permissionFindAllDTOList, permissions.getPageable(),
       permissions.getTotalElements());
   }
 }

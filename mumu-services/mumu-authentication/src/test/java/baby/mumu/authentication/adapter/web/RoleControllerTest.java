@@ -18,9 +18,9 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;

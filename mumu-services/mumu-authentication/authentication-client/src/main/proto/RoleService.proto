@@ -7,8 +7,8 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "RoleServiceProto";
 
 service RoleService {
-  rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcCo);
-  rpc findById (google.protobuf.Int64Value) returns (RoleFindByIdGrpcCo);
+  rpc findAll (RoleFindAllGrpcCmd) returns (PageOfRoleFindAllGrpcDTO);
+  rpc findById (google.protobuf.Int64Value) returns (RoleFindByIdGrpcDTO);
 }
 
 message RoleFindAllGrpcCmd {
@@ -20,7 +20,7 @@ message RoleFindAllGrpcCmd {
   google.protobuf.Int32Value page_size = 6;
 }
 
-message RoleFindByIdGrpcCo {
+message RoleFindByIdGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
@@ -28,16 +28,16 @@ message RoleFindByIdGrpcCo {
   bool hasDescendant = 5;
 }
 
-message RoleFindAllGrpcCo {
+message RoleFindAllGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  repeated RoleFindAllPermissionGrpcCo permissions = 4;
+  repeated RoleFindAllPermissionGrpcDTO permissions = 4;
   google.protobuf.StringValue description = 5;
   bool hasDescendant = 6;
 }
 
-message RoleFindAllPermissionGrpcCo {
+message RoleFindAllPermissionGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
@@ -45,7 +45,7 @@ message RoleFindAllPermissionGrpcCo {
   bool hasDescendant = 5;
 }
 
-message PageOfRoleFindAllGrpcCo {
-  repeated RoleFindAllGrpcCo content = 1;
+message PageOfRoleFindAllGrpcDTO {
+  repeated RoleFindAllGrpcDTO content = 1;
   int32 total_pages = 2;
 }

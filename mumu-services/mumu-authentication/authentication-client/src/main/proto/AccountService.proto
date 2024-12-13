@@ -8,10 +8,10 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "AccountServiceProto";
 
 service AccountService {
-  rpc queryCurrentLoginAccount(google.protobuf.Empty) returns (AccountCurrentLoginGrpcCo);
+  rpc queryCurrentLoginAccount(google.protobuf.Empty) returns (AccountCurrentLoginGrpcDTO);
 }
 
-message AccountCurrentLoginGrpcCo{
+message AccountCurrentLoginGrpcDTO{
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue username = 2;
   google.protobuf.StringValue avatarUrl = 3;

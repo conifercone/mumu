@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.co.PrimaryKeySnowflakeCo;
+import baby.mumu.unique.client.dto.PrimaryKeySnowflakeDTO;
 
 /**
  * 主键
@@ -25,5 +25,5 @@ import baby.mumu.unique.client.dto.co.PrimaryKeySnowflakeCo;
  */
 public interface PrimaryKeyService {
 
-  PrimaryKeySnowflakeCo snowflake();
+  PrimaryKeySnowflakeDTO snowflake();
 }

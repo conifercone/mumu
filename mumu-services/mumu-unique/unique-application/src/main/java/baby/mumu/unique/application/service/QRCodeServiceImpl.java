@@ -17,7 +17,7 @@ package baby.mumu.unique.application.service;
 
 import baby.mumu.unique.application.qrcode.executor.QRCodeGenerateCmdExe;
 import baby.mumu.unique.client.api.QRCodeService;
-import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.stereotype.Service;
 

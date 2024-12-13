@@ -17,9 +17,9 @@ package baby.mumu.file.infrastructure.streamfile.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
-import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
+import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
+import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
+import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
 import org.apiguardian.api.API;

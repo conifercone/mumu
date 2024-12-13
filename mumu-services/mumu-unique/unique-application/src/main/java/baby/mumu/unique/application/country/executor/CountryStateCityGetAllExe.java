@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.application.country.executor;
 
-import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
+import baby.mumu.unique.client.dto.CountryStateCityGetAllDTO;
 import baby.mumu.unique.domain.country.gateway.CountryGateway;
 import baby.mumu.unique.infrastructure.country.convertor.CountryConvertor;
 import java.util.List;
@@ -42,9 +42,9 @@ public class CountryStateCityGetAllExe {
     this.countryConvertor = countryConvertor;
   }
 
-  public List<CountryStateCityGetAllCo> execute() {
+  public List<CountryStateCityGetAllDTO> execute() {
     return countryGateway.getCountryStateCity().stream()
-      .map(country -> countryConvertor.toCountryStateCityGetAllCo(country).orElse(null)).filter(
+      .map(country -> countryConvertor.toCountryStateCityGetAllDTO(country).orElse(null)).filter(
         Objects::nonNull).toList();
   }
 }

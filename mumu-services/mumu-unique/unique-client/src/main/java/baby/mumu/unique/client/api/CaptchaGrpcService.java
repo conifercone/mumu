@@ -22,7 +22,7 @@ import baby.mumu.unique.client.api.grpc.CaptchaServiceGrpc;
 import baby.mumu.unique.client.api.grpc.CaptchaServiceGrpc.CaptchaServiceBlockingStub;
 import baby.mumu.unique.client.api.grpc.CaptchaServiceGrpc.CaptchaServiceFutureStub;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCo;
+import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -58,7 +58,7 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
     Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
-  public SimpleCaptchaGeneratedGrpcCo generateSimpleCaptcha(
+  public SimpleCaptchaGeneratedGrpcDTO generateSimpleCaptcha(
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -69,7 +69,7 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  public ListenableFuture<SimpleCaptchaGeneratedGrpcCo> syncGenerateSimpleCaptcha(
+  public ListenableFuture<SimpleCaptchaGeneratedGrpcDTO> syncGenerateSimpleCaptcha(
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -102,14 +102,14 @@ public class CaptchaGrpcService extends UniqueGrpcService implements DisposableB
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private @Nullable SimpleCaptchaGeneratedGrpcCo generateSimpleCaptchaFromGrpc(
+  private @Nullable SimpleCaptchaGeneratedGrpcDTO generateSimpleCaptchaFromGrpc(
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
     CaptchaServiceBlockingStub captchaServiceBlockingStub = CaptchaServiceGrpc.newBlockingStub(
       channel);
     return captchaServiceBlockingStub.generateSimpleCaptcha(simpleCaptchaGeneratedGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<SimpleCaptchaGeneratedGrpcCo> syncGenerateSimpleCaptchaFromGrpc(
+  private @NotNull ListenableFuture<SimpleCaptchaGeneratedGrpcDTO> syncGenerateSimpleCaptchaFromGrpc(
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd) {
     CaptchaServiceFutureStub captchaServiceFutureStub = CaptchaServiceGrpc.newFutureStub(
       channel);

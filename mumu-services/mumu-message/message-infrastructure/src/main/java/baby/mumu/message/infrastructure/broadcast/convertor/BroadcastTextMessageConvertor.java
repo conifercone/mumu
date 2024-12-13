@@ -18,9 +18,9 @@ package baby.mumu.message.infrastructure.broadcast.convertor;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
@@ -158,10 +158,10 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
+  public Optional<BroadcastTextMessageFindAllYouSendDTO> toFindAllYouSendDTO(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendDTO)
       .map(broadcastTextMessageFindAllYouSendCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(

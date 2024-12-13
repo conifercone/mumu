@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;

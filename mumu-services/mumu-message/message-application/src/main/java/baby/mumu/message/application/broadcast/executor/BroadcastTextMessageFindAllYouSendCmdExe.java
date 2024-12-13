@@ -15,8 +15,8 @@
  */
 package baby.mumu.message.application.broadcast.executor;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
@@ -49,7 +49,7 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
     this.broadcastTextMessageConvertor = broadcastTextMessageConvertor;
   }
 
-  public Page<BroadcastTextMessageFindAllYouSendCo> execute(
+  public Page<BroadcastTextMessageFindAllYouSendDTO> execute(
     @NotNull BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     Assert.notNull(broadcastTextMessageFindAllYouSendCmd,
       "BroadcastTextMessageFindAllYouSendCmd cannot null");
@@ -58,11 +58,11 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
         .orElse(null),
       broadcastTextMessageFindAllYouSendCmd.getCurrent(),
       broadcastTextMessageFindAllYouSendCmd.getPageSize());
-    List<BroadcastTextMessageFindAllYouSendCo> broadcastTextMessageFindAllYouSendCos = allYouSend.getContent()
+    List<BroadcastTextMessageFindAllYouSendDTO> broadcastTextMessageFindAllYouSendDTOS = allYouSend.getContent()
       .stream()
-      .map(broadcastTextMessageConvertor::toFindAllYouSendCo)
+      .map(broadcastTextMessageConvertor::toFindAllYouSendDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(broadcastTextMessageFindAllYouSendCos, allYouSend.getPageable(),
+    return new PageImpl<>(broadcastTextMessageFindAllYouSendDTOS, allYouSend.getPageable(),
       allYouSend.getTotalElements());
   }
 }

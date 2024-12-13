@@ -33,29 +33,29 @@ import baby.mumu.authentication.application.permission.executor.PermissionFindRo
 import baby.mumu.authentication.application.permission.executor.PermissionRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionUpdateCmdExe;
 import baby.mumu.authentication.client.api.PermissionService;
-import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcCo.Builder;
+import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcDTO.Builder;
 import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
-import baby.mumu.authentication.client.dto.PermissionAddAncestorCmd;
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindDirectCmd;
-import baby.mumu.authentication.client.dto.PermissionFindRootCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByCodeCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.cmds.PermissionAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindDirectCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindRootCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
@@ -170,50 +170,50 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   }
 
   @Override
-  public Page<PermissionFindAllCo> findAll(
+  public Page<PermissionFindAllDTO> findAll(
     PermissionFindAllCmd permissionFindAllCmd) {
     return permissionFindAllCmdExe.execute(permissionFindAllCmd);
   }
 
   @Override
-  public Slice<PermissionFindAllSliceCo> findAllSlice(
+  public Slice<PermissionFindAllSliceDTO> findAllSlice(
     PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
     return permissionFindAllSliceCmdExe.execute(permissionFindAllSliceCmd);
   }
 
   @Override
-  public Page<PermissionArchivedFindAllCo> findArchivedAll(
+  public Page<PermissionArchivedFindAllDTO> findArchivedAll(
     PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
     return permissionArchivedFindAllCmdExe.execute(permissionArchivedFindAllCmd);
   }
 
   @Override
-  public Slice<PermissionArchivedFindAllSliceCo> findArchivedAllSlice(
+  public Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
     PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
     return permissionArchivedFindAllSliceCmdExe.execute(permissionArchivedFindAllSliceCmd);
   }
 
   @Override
-  public PermissionFindByIdCo findById(Long id) {
+  public PermissionFindByIdDTO findById(Long id) {
     return permissionFindByIdCmdExe.execute(id);
   }
 
   @Override
-  public PermissionFindByCodeCo findByCode(String code) {
+  public PermissionFindByCodeDTO findByCode(String code) {
     return permissionFindByCodeCmdExe.execute(code);
   }
 
   @Override
   public void findById(Int64Value request,
-    StreamObserver<PermissionFindByIdGrpcCo> responseObserver) {
+    StreamObserver<PermissionFindByIdGrpcDTO> responseObserver) {
     Runnable runnable = () -> {
       throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
     };
     Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
-      (id) -> permissionConvertor.toPermissionFindByIdGrpcCo(
+      (id) -> permissionConvertor.toPermissionFindByIdGrpcDTO(
           permissionFindByIdCmdExe.execute(id.getValue()))
-        .ifPresentOrElse((permissionFindByIdGrpcCo) -> {
-          responseObserver.onNext(permissionFindByIdGrpcCo);
+        .ifPresentOrElse((permissionFindByIdGrpcDTO) -> {
+          responseObserver.onNext(permissionFindByIdGrpcDTO);
           responseObserver.onCompleted();
         }, runnable), runnable);
   }
@@ -221,15 +221,15 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void findAll(PermissionFindAllGrpcCmd request,
-    StreamObserver<PageOfPermissionFindAllGrpcCo> responseObserver) {
+    StreamObserver<PageOfPermissionFindAllGrpcDTO> responseObserver) {
     permissionConvertor.toPermissionFindAllCmd(request)
       .ifPresentOrElse((permissionFindAllCmdNotNull) -> {
-        Builder builder = PageOfPermissionFindAllGrpcCo.newBuilder();
-        Page<PermissionFindAllCo> permissionFindAllCos = permissionFindAllCmdExe.execute(
+        Builder builder = PageOfPermissionFindAllGrpcDTO.newBuilder();
+        Page<PermissionFindAllDTO> permissionFindAllCos = permissionFindAllCmdExe.execute(
           permissionFindAllCmdNotNull);
-        List<PermissionFindAllGrpcCo> findAllGrpcCos = permissionFindAllCos.getContent().stream()
+        List<PermissionFindAllGrpcDTO> findAllGrpcCos = permissionFindAllCos.getContent().stream()
           .flatMap(
-            permissionFindAllCo -> permissionConvertor.toPermissionFindAllGrpcCo(
+            permissionFindAllCo -> permissionConvertor.toPermissionFindAllGrpcDTO(
                 permissionFindAllCo)
               .stream()).toList();
         builder.addAllContent(findAllGrpcCos);
@@ -237,7 +237,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         responseObserver.onNext(builder.build());
         responseObserver.onCompleted();
       }, () -> {
-        responseObserver.onNext(PageOfPermissionFindAllGrpcCo.getDefaultInstance());
+        responseObserver.onNext(PageOfPermissionFindAllGrpcDTO.getDefaultInstance());
         responseObserver.onCompleted();
       });
 
@@ -263,13 +263,13 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   }
 
   @Override
-  public Page<PermissionFindRootCo> findRootPermissions(
+  public Page<PermissionFindRootDTO> findRootPermissions(
     PermissionFindRootCmd permissionFindRootCmd) {
     return permissionFindRootCmdExe.execute(permissionFindRootCmd);
   }
 
   @Override
-  public Page<PermissionFindDirectCo> findDirectPermissions(
+  public Page<PermissionFindDirectDTO> findDirectPermissions(
     PermissionFindDirectCmd permissionFindDirectCmd) {
     return permissionFindDirectCmdExe.execute(permissionFindDirectCmd);
   }

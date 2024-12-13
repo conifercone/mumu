@@ -17,7 +17,7 @@ package baby.mumu.unique.application.service;
 
 import baby.mumu.unique.application.barcode.executor.BarCodeGenerateCmdExe;
 import baby.mumu.unique.client.api.BarCodeService;
-import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.BarCodeGenerateCmd;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.stereotype.Service;
 

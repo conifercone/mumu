@@ -15,10 +15,10 @@
  */
 package baby.mumu.log.client.api;
 
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
-import baby.mumu.log.client.dto.SystemLogSubmitCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.cmds.SystemLogSaveCmd;
+import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -49,5 +49,5 @@ public interface SystemLogService {
    * @param systemLogFindAllCmd 分页查询系统日志指令
    * @return 查询结果
    */
-  Page<SystemLogFindAllCo> findAll(SystemLogFindAllCmd systemLogFindAllCmd);
+  Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd);
 }

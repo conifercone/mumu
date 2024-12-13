@@ -18,9 +18,9 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

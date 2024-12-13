@@ -15,20 +15,20 @@
  */
 package baby.mumu.authentication.infrastructure.account.convertor;
 
-import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
-import baby.mumu.authentication.client.dto.AccountAddAddressCmd;
-import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllCmd;
-import baby.mumu.authentication.client.dto.AccountFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.AccountModifySystemSettingsBySettingsIdCmd;
-import baby.mumu.authentication.client.dto.AccountRegisterCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateByIdCmd;
-import baby.mumu.authentication.client.dto.AccountUpdateRoleCmd;
-import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
-import baby.mumu.authentication.client.dto.co.AccountCurrentLoginCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllCo;
-import baby.mumu.authentication.client.dto.co.AccountFindAllSliceCo;
+import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
+import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
+import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
+import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
+import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllDTO;
+import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
@@ -385,15 +385,15 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AccountCurrentLoginCo> toCurrentLoginQueryCo(
+  public Optional<AccountCurrentLoginDTO> toCurrentLoginQueryDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryCo);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountBasicInfoCo> toBasicInfoCo(
+  public Optional<AccountBasicInfoDTO> toBasicInfoDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toBasicInfoCo);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toBasicInfoDTO);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
@@ -494,15 +494,15 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountFindAllCo> toFindAllCo(
+  public Optional<AccountFindAllDTO> toFindAllDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllCo);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountFindAllSliceCo> toFindAllSliceCo(
+  public Optional<AccountFindAllSliceDTO> toFindAllSliceDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllSliceCo);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllSliceDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
@@ -528,29 +528,29 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountCurrentLoginGrpcCo> toAccountCurrentLoginGrpcCo(
-    AccountCurrentLoginCo accountCurrentLoginCo) {
-    return Optional.ofNullable(accountCurrentLoginCo)
-      .map(AccountMapper.INSTANCE::toAccountCurrentLoginGrpcCo)
-      .map(accountCurrentLoginGrpcCo -> accountCurrentLoginGrpcCo.toBuilder()
-        .addAllRoles(Optional.ofNullable(accountCurrentLoginCo.getRoles())
+  public Optional<AccountCurrentLoginGrpcDTO> toAccountCurrentLoginGrpcDTO(
+    AccountCurrentLoginDTO accountCurrentLoginDTO) {
+    return Optional.ofNullable(accountCurrentLoginDTO)
+      .map(AccountMapper.INSTANCE::toAccountCurrentLoginGrpcDTO)
+      .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
+        .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
           .map(roles -> roles.stream().map(role -> {
-            AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcCo(
+            AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
               role);
             return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(
                 accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
-                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcCo)
+                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
-        .addAllAddresses(Optional.ofNullable(accountCurrentLoginCo.getAddresses())
+        .addAllAddresses(Optional.ofNullable(accountCurrentLoginDTO.getAddresses())
           .map(accountAddressCurrentLoginQueryCos -> accountAddressCurrentLoginQueryCos.stream()
-            .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcCo)
+            .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
             .collect(Collectors.toList())).orElse(new ArrayList<>()))
-        .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginCo.getSystemSettings())
+        .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginDTO.getSystemSettings())
           .map(
             accountSystemSettingsCurrentLoginQueryCos -> accountSystemSettingsCurrentLoginQueryCos.stream()
-              .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcCo)
+              .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
   }
 }

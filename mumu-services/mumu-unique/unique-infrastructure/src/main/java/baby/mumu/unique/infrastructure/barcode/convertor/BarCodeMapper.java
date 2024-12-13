@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.barcode.convertor;
 
-import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.BarCodeGenerateCmd;
 import baby.mumu.unique.domain.barcode.BarCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

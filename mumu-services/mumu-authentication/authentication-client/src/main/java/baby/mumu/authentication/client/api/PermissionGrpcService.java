@@ -17,9 +17,9 @@ package baby.mumu.authentication.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.PermissionServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.PermissionServiceGrpc.PermissionServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.PermissionServiceGrpc.PermissionServiceFutureStub;
@@ -60,7 +60,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public PageOfPermissionFindAllGrpcCo findAll(PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
+  public PageOfPermissionFindAllGrpcDTO findAll(PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -72,7 +72,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public ListenableFuture<PageOfPermissionFindAllGrpcCo> syncFindAll(
+  public ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAll(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
@@ -85,7 +85,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
-  public PermissionFindByIdGrpcCo findById(Int64Value id,
+  public PermissionFindByIdGrpcDTO findById(Int64Value id,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
@@ -97,7 +97,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
-  public ListenableFuture<PermissionFindByIdGrpcCo> syncFindById(
+  public ListenableFuture<PermissionFindByIdGrpcDTO> syncFindById(
     Int64Value id,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
@@ -109,7 +109,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private PageOfPermissionFindAllGrpcCo findAllFromGrpc(
+  private PageOfPermissionFindAllGrpcDTO findAllFromGrpc(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
     CallCredentials callCredentials) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
@@ -118,7 +118,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
       .findAll(permissionFindAllGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<PageOfPermissionFindAllGrpcCo> syncFindAllFromGrpc(
+  private @NotNull ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAllFromGrpc(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
     CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
@@ -127,7 +127,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
       .findAll(permissionFindAllGrpcCmd);
   }
 
-  private PermissionFindByIdGrpcCo findByIdFromGrpc(
+  private PermissionFindByIdGrpcDTO findByIdFromGrpc(
     Int64Value id,
     CallCredentials callCredentials) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
@@ -136,7 +136,7 @@ public class PermissionGrpcService extends AuthenticationGrpcService implements
       .findById(id);
   }
 
-  private @NotNull ListenableFuture<PermissionFindByIdGrpcCo> syncFindByIdFromGrpc(
+  private @NotNull ListenableFuture<PermissionFindByIdGrpcDTO> syncFindByIdFromGrpc(
     Int64Value id,
     CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(

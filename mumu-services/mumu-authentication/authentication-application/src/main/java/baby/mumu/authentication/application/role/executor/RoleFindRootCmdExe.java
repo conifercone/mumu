@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleFindRootCmd;
-import baby.mumu.authentication.client.dto.co.RoleFindRootCo;
+import baby.mumu.authentication.client.cmds.RoleFindRootCmd;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -49,14 +49,14 @@ public class RoleFindRootCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public Page<RoleFindRootCo> execute(RoleFindRootCmd roleFindRootCmd) {
+  public Page<RoleFindRootDTO> execute(RoleFindRootCmd roleFindRootCmd) {
     return Optional.ofNullable(roleFindRootCmd).map(roleFindRootCmdNotNull -> {
       Page<Role> roles = roleGateway.findRootRoles(
         roleFindRootCmdNotNull.getCurrent(), roleFindRootCmdNotNull.getPageSize());
-      List<RoleFindRootCo> roleFindRootCos = roles.getContent().stream()
-        .map(roleConvertor::toRoleFindRootCo)
+      List<RoleFindRootDTO> roleFindRootDTOS = roles.getContent().stream()
+        .map(roleConvertor::toRoleFindRootDTO)
         .filter(Optional::isPresent).map(Optional::get).toList();
-      return new PageImpl<>(roleFindRootCos, roles.getPageable(),
+      return new PageImpl<>(roleFindRootDTOS, roles.getPageable(),
         roles.getTotalElements());
     }).orElse(new PageImpl<>(new ArrayList<>()));
   }

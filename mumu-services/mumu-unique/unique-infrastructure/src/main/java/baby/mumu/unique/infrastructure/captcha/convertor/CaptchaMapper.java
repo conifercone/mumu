@@ -17,9 +17,9 @@ package baby.mumu.unique.infrastructure.captcha.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import org.apiguardian.api.API;
@@ -50,7 +50,7 @@ public interface CaptchaMapper extends GrpcMapper {
   SimpleCaptcha toEntity(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptchaGeneratedCo toSimpleCaptchaGeneratedCo(SimpleCaptcha simpleCaptcha);
+  SimpleCaptchaGeneratedDTO toSimpleCaptchaGeneratedDTO(SimpleCaptcha simpleCaptcha);
 
   @API(status = Status.STABLE, since = "2.2.0")
   SimpleCaptchaVerifyCmd toSimpleCaptchaVerifyCmd(
