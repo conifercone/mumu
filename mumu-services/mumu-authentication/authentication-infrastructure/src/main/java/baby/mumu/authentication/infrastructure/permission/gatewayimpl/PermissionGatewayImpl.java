@@ -358,12 +358,12 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @Override
   public Optional<Permission> findByCode(String code) {
     return Optional.ofNullable(code).flatMap(permissionRedisRepository::findByCode).flatMap(
-      permissionConvertor::toEntity).or(() -> {
-      Optional<Permission> permission = permissionRepository.findByCode(code)
-        .flatMap(permissionConvertor::toEntity);
-      permission.flatMap(permissionConvertor::toPermissionRedisDo)
-        .ifPresent(permissionRedisRepository::save);
-      return permission;
-    });
+      permissionConvertor::toEntity).or(() -> permissionRepository.findByCode(code)
+      .flatMap(permissionConvertor::toEntity)
+      .map(entity -> {
+        permissionConvertor.toPermissionRedisDo(entity)
+          .ifPresent(permissionRedisRepository::save);
+        return entity;
+      }));
   }
 }
