@@ -154,7 +154,18 @@ public interface PermissionGateway {
    */
   void deleteByCode(String code);
 
+  /**
+   * 获取所有权限
+   *
+   * @return 权限流
+   */
   Stream<Permission> findAll();
 
+  /**
+   * 根据code查询权限
+   *
+   * @param code 权限编码
+   * @return 权限
+   */
   Optional<Permission> findByCode(String code);
 }
