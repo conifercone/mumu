@@ -46,19 +46,21 @@ public interface PermissionPathsRepository extends
   /**
    * 根据祖先ID和后代ID删除所有关系
    *
-   * @param authorityId 祖先ID
+   * @param permissionId 祖先ID
    */
   @Modifying
-  @Query("delete from PermissionPathsDo a where a.descendant.id=:authorityId or a.ancestor.id=:authorityId")
-  void deleteAllPathsByPermissionId(@Param("authorityId") Long authorityId);
+  @Query("delete from PermissionPathsDo a where a.descendant.id=:permissionId or a.ancestor.id=:permissionId")
+  void deleteAllPathsByPermissionId(@Param("permissionId") Long permissionId);
 
   /**
    * 获取所有根权限
    *
    * @return 根权限
    */
-  @Query("select a from PermissionPathsDo a where a.id.depth = 0 and not exists "
-    + "(select 1 from PermissionPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)")
+  @Query("""
+      select a from PermissionPathsDo a where a.id.depth = 0 and not exists
+         (select 1 from PermissionPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
+    """)
   Page<PermissionPathsDo> findRootPermissions(Pageable pageable);
 
   /**
@@ -94,18 +96,20 @@ public interface PermissionPathsRepository extends
    * 删除所有不可达节点
    */
   @Modifying
-  @Query("DELETE FROM PermissionPathsDo ap1 " +
-    "WHERE ap1.id.depth > 1 " +
-    "AND NOT EXISTS (" +
-    "   SELECT 1 " +
-    "   FROM PermissionPathsDo ap2 " +
-    "   JOIN PermissionPathsDo ap3 " +
-    "       ON ap2.descendant.id = ap3.ancestor.id " +  // ap2 的后代是 ap3 的祖先
-    "   WHERE ap2.ancestor.id = ap1.ancestor.id " +  // 同一个祖先
-    "   AND ap3.descendant.id = ap1.descendant.id " +  // 同一个后代
-    "   AND ap2.id.depth = 1 " +
-    "   AND ap3.id.depth = 1 " +
-    ") " +
-    "AND ap1.ancestor.id != ap1.descendant.id")
+  @Query("""
+    DELETE FROM PermissionPathsDo pp1
+    WHERE pp1.id.depth > 1
+    AND NOT EXISTS (
+        SELECT 1
+        FROM PermissionPathsDo pp2
+        JOIN PermissionPathsDo pp3
+            ON pp2.descendant.id = pp3.ancestor.id
+        WHERE pp2.ancestor.id = pp1.ancestor.id
+        AND pp3.descendant.id = pp1.descendant.id
+        AND pp2.id.depth = 1
+        AND pp3.id.depth = 1
+    )
+    AND pp1.ancestor.id != pp1.descendant.id
+    """)
   void deleteUnreachableData();
 }

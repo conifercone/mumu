@@ -28,12 +28,11 @@ import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTem
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
 import com.google.common.base.Charsets;
 import com.google.protobuf.StringValue;
+import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
-import java.nio.ByteBuffer;
 import java.util.Optional;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.lognet.springboot.grpc.security.AuthHeader;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -71,12 +70,9 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         .setName(StringValue.of(templateMailDomain.getName()))
         .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
         .build();
-      byte[] bytes = SecurityContextUtil.getTokenValue().orElseThrow(
-        () -> new MuMuException(ResponseCode.UNAUTHORIZED)).getBytes();
-      AuthCallCredentials callCredentials = new AuthCallCredentials(
-        AuthHeader.builder().bearer().tokenSupplier(
-          () -> ByteBuffer.wrap(bytes))
-      );
+      CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+        () -> SecurityContextUtil.getTokenValue().orElseThrow(
+          () -> new MuMuException(ResponseCode.UNAUTHORIZED)));
       try {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
           streamFileDownloadGrpcCmd,

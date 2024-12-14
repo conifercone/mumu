@@ -15,13 +15,10 @@
  */
 package baby.mumu.log.client.api;
 
-import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -49,8 +46,6 @@ class LogGrpcService {
     //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       serviceInstance -> {
-        NameResolverRegistry.getDefaultRegistry()
-          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
             "discovery-client://" + GRPC_LOG)
           .defaultLoadBalancingPolicy("round_robin")
@@ -61,7 +56,7 @@ class LogGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_LOG));
+    return !discoveryClient.getInstances(GRPC_LOG).isEmpty();
   }
 
 }

@@ -17,15 +17,22 @@ package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database;
 
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import jakarta.persistence.QueryHint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.hibernate.jpa.HibernateHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
+
 
 /**
  * 权限基本信息
@@ -61,13 +68,15 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * 切片分页查询权限（不查询总数）
    *
    * @param permissionDo 查询条件
-   * @param pageable    分页条件
+   * @param pageable     分页条件
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id}) "
-      + "and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%) "
-      + "and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+            and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
+            and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
+      """)
   Slice<PermissionDo> findAllSlice(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
 
@@ -75,13 +84,23 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    * 分页查询权限（查询总数）
    *
    * @param permissionDo 查询条件
-   * @param pageable    分页条件
+   * @param pageable     分页条件
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id}) "
-      + "and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%) "
-      + "and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+            and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
+            and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
+      """)
   Page<PermissionDo> findAllPage(@Param("permissionDo") PermissionDo permissionDo,
     Pageable pageable);
+
+  List<PermissionDo> findAllByCodeIn(List<String> codes);
+
+  Optional<PermissionDo> findByCode(String code);
+
+  @QueryHints(value = @QueryHint(name = HibernateHints.HINT_FETCH_SIZE, value = "50"))
+  @Query(value = "select p from PermissionDo p")
+  Stream<PermissionDo> findAll();
 }

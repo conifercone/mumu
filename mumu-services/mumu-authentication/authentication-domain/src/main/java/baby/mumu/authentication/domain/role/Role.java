@@ -67,6 +67,11 @@ public class Role extends BasisDomainModel {
   private String name;
 
   /**
+   * 描述
+   */
+  private String description;
+
+  /**
    * 角色权限
    */
   private List<Permission> permissions;
@@ -76,5 +81,10 @@ public class Role extends BasisDomainModel {
    */
   @Builder.Default
   private transient List<Permission> descendantPermissions = new ArrayList<>();
+
+  /**
+   * 有后代角色
+   */
+  private boolean hasDescendant;
 
 }

@@ -31,12 +31,12 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.Account
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
@@ -46,7 +46,6 @@ import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -85,8 +84,7 @@ import org.springframework.util.Assert;
 public class AccountGatewayImpl implements AccountGateway {
 
   private final AccountRepository accountRepository;
-  private final TokenRepository tokenRepository;
-  private final RefreshTokenRepository refreshTokenRepository;
+  private final PasswordTokenRepository passwordTokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final OperationLogGrpcService operationLogGrpcService;
   private final DistributedLock distributedLock;
@@ -103,8 +101,8 @@ public class AccountGatewayImpl implements AccountGateway {
   private final AccountRoleRedisRepository accountRoleRedisRepository;
 
   @Autowired
-  public AccountGatewayImpl(AccountRepository accountRepository, TokenRepository tokenRepository,
-    RefreshTokenRepository refreshTokenRepository,
+  public AccountGatewayImpl(AccountRepository accountRepository,
+    PasswordTokenRepository passwordTokenRepository,
     PasswordEncoder passwordEncoder,
     OperationLogGrpcService operationLogGrpcService,
     ObjectProvider<DistributedLock> distributedLockObjectProvider,
@@ -118,8 +116,7 @@ public class AccountGatewayImpl implements AccountGateway {
     ApplicationEventPublisher applicationEventPublisher,
     AccountRoleRedisRepository accountRoleRedisRepository) {
     this.accountRepository = accountRepository;
-    this.tokenRepository = tokenRepository;
-    this.refreshTokenRepository = refreshTokenRepository;
+    this.passwordTokenRepository = passwordTokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -145,14 +142,7 @@ public class AccountGatewayImpl implements AccountGateway {
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())).ifPresentOrElse(dataObject -> {
-      if (StringUtils.isNotBlank(dataObject.getTimezone())) {
-        try {
-          //noinspection ResultOfMethodCallIgnored
-          ZoneId.of(dataObject.getTimezone());
-        } catch (Exception e) {
-          throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
-        }
-      }
+      CommonUtil.validateTimezone(dataObject.getTimezone());
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
       if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
@@ -259,8 +249,7 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.findById(id).ifPresentOrElse((accountDo) -> {
       accountDo.setEnabled(false);
       accountRepository.merge(accountDo);
-      tokenRepository.deleteById(id);
-      refreshTokenRepository.deleteById(id);
+      passwordTokenRepository.deleteById(id);
       accountRedisRepository.deleteById(id);
       accountRoleRedisRepository.deleteById(id);
     }, () -> {
@@ -286,7 +275,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
-    return refreshTokenRepository.count();
+    return passwordTokenRepository.count();
   }
 
   @Override
@@ -314,8 +303,7 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
       accountRepository.deleteById(accountId);
       accountAddressRepository.deleteByUserId(accountId);
-      tokenRepository.deleteById(accountId);
-      refreshTokenRepository.deleteById(accountId);
+      passwordTokenRepository.deleteById(accountId);
       accountRoleRepository.deleteByAccountId(accountId);
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);
@@ -480,8 +468,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
     SecurityContextUtil.getLoginAccountId().ifPresent(accountId -> {
-      tokenRepository.deleteById(accountId);
-      refreshTokenRepository.deleteById(accountId);
+      passwordTokenRepository.deleteById(accountId);
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);
@@ -501,16 +488,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @DangerousOperation("强制ID为%0的用户下线")
   public void offline(Long id) {
     Optional.ofNullable(id).ifPresent(accountId -> {
-      tokenRepository.findById(accountId)
-        .ifPresentOrElse(
+      passwordTokenRepository.findById(accountId)
+        .ifPresent(
           tokenRedisDo -> applicationEventPublisher.publishEvent(new OfflineSuccessEvent(
-            this, tokenRedisDo.getTokenValue())),
-          () -> refreshTokenRepository.findById(accountId).ifPresent(
-            refreshTokenRedisDo -> applicationEventPublisher.publishEvent(
-              new OfflineSuccessEvent(
-                this, refreshTokenRedisDo.getRefreshTokenValue()))));
-      tokenRepository.deleteById(accountId);
-      refreshTokenRepository.deleteById(accountId);
+            this, tokenRedisDo.getTokenValue())));
+      passwordTokenRepository.deleteById(accountId);
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);

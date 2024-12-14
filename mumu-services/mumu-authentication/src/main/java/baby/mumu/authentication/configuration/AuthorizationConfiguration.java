@@ -16,39 +16,41 @@
 package baby.mumu.authentication.configuration;
 
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import baby.mumu.authentication.application.service.AccountUserDetailService;
-import baby.mumu.authentication.client.config.MuMuAuthenticationEntryPoint;
-import baby.mumu.authentication.client.config.ResourceServerProperties;
-import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
+import baby.mumu.authentication.domain.permission.Permission;
+import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
-import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
-import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
+import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.Oauth2AuthenticationRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.RefreshTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
 import baby.mumu.basis.constants.CommonConstants;
+import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties.Rsa;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import java.math.BigDecimal;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,6 +60,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -69,12 +72,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -89,6 +90,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService.OAuth2AuthorizationParametersMapper;
+import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
@@ -102,14 +105,14 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.util.Assert;
+import org.zalando.jackson.datatype.money.MoneyModule;
 
 /**
  * 授权配置
@@ -119,6 +122,7 @@ import org.springframework.util.Assert;
  */
 @Configuration
 @EnableConfigurationProperties(ExtensionProperties.class)
+@EnableWebSecurity
 public class AuthorizationConfiguration {
 
   /**
@@ -137,83 +141,49 @@ public class AuthorizationConfiguration {
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
     MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
-    ResourceServerProperties resourceServerProperties, UserDetailsService userDetailsService,
-    PasswordEncoder passwordEncoder)
+    UserDetailsService userDetailsService,
+    PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings)
     throws Exception {
-    //noinspection DuplicatedCode
-    ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
-    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
-      for (Policy policy : resourceServerProperties.getPolicies()) {
-        if (policy.isPermitAll()) {
-          csrfIgnoreUrls.add(policy.getMatcher());
-        }
-        http.authorizeHttpRequests((authorize) -> {
-            AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
-              .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
-                policy.getMatcher());
-            if (StringUtils.isNotBlank(policy.getRole())) {
-              authorizedUrl.hasRole(policy.getRole());
-            } else if (StringUtils.isNotBlank(policy.getAuthority())) {
-              Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
-                "Permission configuration cannot be empty and cannot start with SCOPE_");
-              authorizedUrl.hasAuthority(
-                CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
-            } else if (policy.isPermitAll()) {
-              authorizedUrl.permitAll();
-            }
-          }
-        );
-      }
-    }
-    OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).clientAuthentication(
-        oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
-          mumuAuthenticationFailureHandler))
-      //设置自定义密码模式
-      .tokenEndpoint(tokenEndpoint ->
-        tokenEndpoint
-          .errorResponseHandler(mumuAuthenticationFailureHandler)
-          .accessTokenRequestConverter(
-            new PasswordGrantAuthenticationConverter())
-          .authenticationProvider(
-            new PasswordGrantAuthenticationProvider(
-              authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
-      .oidc(oidc -> oidc.userInfoEndpoint(
-        userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
-          oidcUserInfoAuthenticationContext -> {
-            OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("accessToken", accessToken);
-            claims.put("sub",
-              oidcUserInfoAuthenticationContext.getAuthorization()
-                .getPrincipalName());
-            return new OidcUserInfo(claims);
-          })));
+    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+      OAuth2AuthorizationServerConfigurer.authorizationServer();
 
-    // Redirect to the login page when not authenticated from the
-    // authorization endpoint
-    http.exceptionHandling((exceptions) -> exceptions
+    http
+      .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
+      .with(authorizationServerConfigurer, (authorizationServer) ->
+        authorizationServer
+          .authorizationServerSettings(authorizationServerSettings)
+          .clientAuthentication(
+            oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
+              mumuAuthenticationFailureHandler))
+          //设置自定义密码模式
+          .tokenEndpoint(tokenEndpoint ->
+            tokenEndpoint
+              .errorResponseHandler(mumuAuthenticationFailureHandler)
+              .accessTokenRequestConverter(
+                new PasswordGrantAuthenticationConverter())
+              .authenticationProvider(
+                new PasswordGrantAuthenticationProvider(
+                  authorizationService, tokenGenerator, userDetailsService, passwordEncoder)))
+          .oidc(oidc -> oidc.userInfoEndpoint(
+            userInfoEndpoint -> userInfoEndpoint.userInfoMapper(
+              oidcUserInfoAuthenticationContext -> {
+                OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("accessToken", accessToken);
+                claims.put("sub",
+                  oidcUserInfoAuthenticationContext.getAuthorization()
+                    .getPrincipalName());
+                return new OidcUserInfo(claims);
+              })))
+      ).authorizeHttpRequests((authorize) ->
+        authorize.anyRequest().authenticated()
+      ).exceptionHandling((exceptions) -> exceptions
         .defaultAuthenticationEntryPointFor(
-          new MuMuAuthenticationEntryPoint(
-            resourceServerProperties
-          ),
+          new LoginUrlAuthenticationEntryPoint("/login"),
           new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-        ).authenticationEntryPoint(
-          new MuMuAuthenticationEntryPoint(resourceServerProperties
-          ))
-      )
-      // Accept access tokens for User Info and/or Client Registration
-      .oauth2ResourceServer((resourceServer) -> resourceServer
-        .jwt(withDefaults())
-        .authenticationEntryPoint(
-          new MuMuAuthenticationEntryPoint(
-            resourceServerProperties
-          )));
-    http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-      .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-      .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
-
-    return http.cors(Customizer.withDefaults()).build();
+        )
+      );
+    return http.build();
   }
 
   /**
@@ -222,18 +192,18 @@ public class AuthorizationConfiguration {
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
     OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
-    TokenRepository tokenRepository,
+    PasswordTokenRepository passwordTokenRepository,
     OidcIdTokenRepository oidcIdTokenRepository,
     ClientTokenRepository clientTokenRepository,
-    RefreshTokenRepository refreshTokenRepository) {
+    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
     MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
-    jwtGenerator.setTokenRepository(tokenRepository);
+    jwtGenerator.setPasswordTokenRepository(passwordTokenRepository);
     jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
     jwtGenerator.setClientTokenRepository(clientTokenRepository);
+    jwtGenerator.setAuthorizeCodeTokenRepository(authorizeCodeTokenRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
-    refreshTokenGenerator.setRefreshTokenRepository(refreshTokenRepository);
     return new DelegatingOAuth2TokenGenerator(
       jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
   }
@@ -296,9 +266,18 @@ public class AuthorizationConfiguration {
     objectMapper.registerModules(new CoreJackson2Module());
     objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
     objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+    objectMapper.registerModule(new MoneyModule());
+    SimpleModule simpleModule = new SimpleModule();
+    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+    objectMapper.registerModule(simpleModule);
     objectMapper.addMixIn(Long.class, LongMixin.class);
+    objectMapper.addMixIn(BigDecimal.class, BigDecimalMixin.class);
     rowMapper.setObjectMapper(objectMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
+    OAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new OAuth2AuthorizationParametersMapper();
+    oAuth2AuthorizationParametersMapper.setObjectMapper(objectMapper);
+    jdbcOAuth2AuthorizationService.setAuthorizationParametersMapper(
+      oAuth2AuthorizationParametersMapper);
     return jdbcOAuth2AuthorizationService;
   }
 
@@ -386,7 +365,9 @@ public class AuthorizationConfiguration {
    */
   @Bean
   public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-    RolePermissionRepository rolePermissionRepository) {
+    RoleConvertor roleConvertor, PermissionRepository permissionRepository,
+    PermissionConvertor permissionConvertor,
+    Oauth2AuthenticationRepository oauth2AuthenticationRepository) {
     return context -> {
       // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
@@ -401,53 +382,96 @@ public class AuthorizationConfiguration {
           .map(GrantedAuthority::getAuthority)
           // 去重
           .collect(Collectors.toSet());
-        // 合并scope与用户信息
-        authoritySet.addAll(scopes);
+        String originAuthorizationGrantTypeValue = getOriginAuthorizationGrantTypeValue(
+          oauth2AuthenticationRepository, context);
+        boolean isPasswordType = OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
+          .equals(originAuthorizationGrantTypeValue);
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
-        claims.claim(TokenClaimsEnum.ACCOUNT_NAME.name(), account.getUsername());
-        claims.claim(TokenClaimsEnum.ACCOUNT_ID.name(), account.getId());
-        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
-          context.getAuthorizationGrantType().getValue());
+        claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), isPasswordType ? authoritySet
+          : getFullScopes(roleRepository, roleConvertor, permissionRepository, permissionConvertor,
+            scopes));
+        claims.claim(TokenClaimsEnum.ACCOUNT_NAME.getClaimName(), account.getUsername());
+        claims.claim(TokenClaimsEnum.ACCOUNT_ID.getClaimName(), account.getId());
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName(),
+          originAuthorizationGrantTypeValue);
         if (StringUtils.isNotBlank(account.getTimezone())) {
-          claims.claim(TokenClaimsEnum.TIMEZONE.name(), account.getTimezone());
+          claims.claim(TokenClaimsEnum.TIMEZONE.getClaimName(), account.getTimezone());
         }
         Optional.ofNullable(account.getLanguage())
           .ifPresent(
-            languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.name(), languageEnum.name()));
+            languageEnum -> claims.claim(TokenClaimsEnum.LANGUAGE.getClaimName(),
+              languageEnum.getCode()));
       } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(
         context.getAuthorizationGrantType())) {
         JwtClaimsSet.Builder claims = context.getClaims();
-        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name(),
+        claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName(),
           context.getAuthorizationGrantType().getValue());
         Set<String> authoritySet = Optional.ofNullable(
             ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
               .getPrincipal()).getRegisteredClient()
           )
           .map(RegisteredClient::getScopes)
-          .map(scopes -> {
-            Set<String> roles = scopes.stream()
-              .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
-              .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
-              .collect(Collectors.toSet());
-            Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
-              .stream()
-              .flatMap(
-                opt -> rolePermissionRepository.findByRoleId(
-                    opt.getId()).stream()
-                  .map(RolePermissionDo::getPermission))
-              .collect(Collectors.toMap(PermissionDo::getId, authorityDo -> authorityDo,
-                (existing, replacement) -> existing))
-              .values()
-              .stream().map(PermissionDo::getCode)
-              .collect(Collectors.toSet());
-            authorityCodesFromRoles.addAll(scopes);
-            return authorityCodesFromRoles;
-          })
+          .map(scopes -> getFullScopes(roleRepository, roleConvertor, permissionRepository,
+            permissionConvertor, scopes))
           .orElse(Collections.emptySet());
-        claims.claim(TokenClaimsEnum.AUTHORITIES.name(), authoritySet);
+        claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), authoritySet);
       }
     };
+  }
+
+  private static String getOriginAuthorizationGrantTypeValue(
+    Oauth2AuthenticationRepository oauth2AuthenticationRepository,
+    @NotNull OAuth2TokenContext context) {
+    //noinspection DuplicatedCode
+    if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
+      OAuth2Authorization authorization = context.getAuthorization();
+      if (authorization != null && authorization.getRefreshToken() != null) {
+        // 获取刷新令牌信息
+        return oauth2AuthenticationRepository.findByRefreshTokenValue(
+          authorization.getRefreshToken().getToken().getTokenValue()).map(
+          Oauth2AuthorizationDo::getAuthorizationGrantType).orElse("");
+      }
+    }
+    return context.getAuthorizationGrantType().getValue();
+  }
+
+  private static @NotNull Set<String> getFullScopes(@NotNull RoleRepository roleRepository,
+    RoleConvertor roleConvertor, @NotNull PermissionRepository permissionRepository,
+    PermissionConvertor permissionConvertor, @NotNull Set<String> scopes) {
+    Set<String> roles = scopes.stream()
+      .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
+      .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
+      .collect(Collectors.toSet());
+    Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
+      .stream().flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+      .flatMap(role -> Stream.concat(
+        role.getPermissions() != null
+          ? role.getPermissions().stream()
+          : Stream.empty(),
+        role.getDescendantPermissions() != null
+          ? role.getDescendantPermissions().stream()
+          : Stream.empty()
+      )).map(Permission::getCode).collect(Collectors.toSet());
+    List<String> permissionCodes = scopes.stream()
+      .filter(scope -> !scope.startsWith(CommonConstants.ROLE_PREFIX))
+      .distinct()
+      .collect(Collectors.toList());
+    List<Permission> permissions = permissionRepository.findAllByCodeIn(permissionCodes)
+      .stream()
+      .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
+      .toList();
+    List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
+      .map(Permission::getId)
+      .collect(Collectors.toList());
+    List<PermissionDo> descendantPermissions = permissionRepository.findAllById(
+      descendantIds);
+    Collection<String> allPermissionCodes = CollectionUtils.union(
+      permissions.stream().map(Permission::getCode).collect(Collectors.toSet()),
+      descendantPermissions.stream().map(PermissionDo::getCode)
+        .collect(Collectors.toSet()));
+    authorityCodesFromRoles.addAll(scopes);
+    authorityCodesFromRoles.addAll(allPermissionCodes);
+    return authorityCodesFromRoles;
   }
 
   @Bean

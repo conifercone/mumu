@@ -15,7 +15,7 @@
 #
 
 server:
-  port: ${port:31100}
+  port: ${port:0}
   shutdown: graceful
 spring:
   application:
@@ -32,16 +32,19 @@ spring:
         profile-separator: '-'
         format: YAML
         data-key: ${spring.application.name}
-        watch:
-          enabled: true
-          delay: 1000
         prefixes: mumu
         acl-token: ${consul_token}
       discovery:
         register: true
         instance-id: ${spring.application.name}
         service-name: ${spring.application.name}
-        port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         acl-token: ${consul_token}
+        heartbeat:
+          enabled: true
+          use-actuator-health: false
+        tags:
+          - "mumu"
+    refresh:
+      never-refreshable: com.p6spy.engine.spy.P6DataSource

@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.BarCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.BarCodeGenerateCmd;
 
 /**
  * 条形码service

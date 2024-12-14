@@ -11,4 +11,5 @@ dependencies {
     implementation(libs.grpc.api)
     implementation(libs.micrometer.tracing)
     implementation(libs.protobuf.java)
+    implementation(libs.opencsv)
 }

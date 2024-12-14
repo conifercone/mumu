@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -49,18 +49,18 @@ public class PermissionArchivedFindAllCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public Page<PermissionArchivedFindAllCo> execute(
+  public Page<PermissionArchivedFindAllDTO> execute(
     PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
     Assert.notNull(permissionArchivedFindAllCmd, "PermissionArchivedFindAllCmd cannot be null");
     Permission permission = permissionConvertor.toEntity(permissionArchivedFindAllCmd)
       .orElseGet(Permission::new);
     Page<Permission> permissions = permissionGateway.findArchivedAll(permission,
       permissionArchivedFindAllCmd.getCurrent(), permissionArchivedFindAllCmd.getPageSize());
-    List<PermissionArchivedFindAllCo> permissionArchivedFindAllCoList = permissions.getContent()
+    List<PermissionArchivedFindAllDTO> permissionArchivedFindAllDTOList = permissions.getContent()
       .stream()
-      .map(permissionConvertor::toArchivedFindAllCo)
+      .map(permissionConvertor::toArchivedFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(permissionArchivedFindAllCoList, permissions.getPageable(),
+    return new PageImpl<>(permissionArchivedFindAllDTOList, permissions.getPageable(),
       permissions.getTotalElements());
   }
 }

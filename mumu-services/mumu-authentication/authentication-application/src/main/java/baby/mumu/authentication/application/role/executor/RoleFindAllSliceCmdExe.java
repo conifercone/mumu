@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.role.executor;
 
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -48,14 +48,14 @@ public class RoleFindAllSliceCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public Slice<RoleFindAllSliceCo> execute(@NotNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
+  public Slice<RoleFindAllSliceDTO> execute(@NotNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
     Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
     Slice<Role> roles = roleGateway.findAllSlice(role,
       roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
-    List<RoleFindAllSliceCo> roleFindAllSliceCos = roles.getContent().stream()
-      .map(roleConvertor::toFindAllSliceCo)
+    List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
+      .map(roleConvertor::toFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new SliceImpl<>(roleFindAllSliceCos, roles.getPageable(),
+    return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
       roles.hasNext());
   }
 }

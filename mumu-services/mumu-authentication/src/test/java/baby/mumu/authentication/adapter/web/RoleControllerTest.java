@@ -18,9 +18,9 @@ package baby.mumu.authentication.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
-  "mumu.extension.global.digital-signature.enabled=false"
+  "mumu.extension.global.digital-signature.enabled=false",
+  "mumu.extension.idempotent.request-id.enabled=false"
 })
 public class RoleControllerTest {
 
@@ -64,7 +65,6 @@ public class RoleControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void add() throws Exception {
     RoleAddCmd roleAddCmd = new RoleAddCmd();
-    roleAddCmd.setId(451235432L);
     roleAddCmd.setName("测试角色");
     roleAddCmd.setCode("test_code");
     roleAddCmd.setPermissionIds(Arrays.asList(1L, 2L));

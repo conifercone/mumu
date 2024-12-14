@@ -17,9 +17,12 @@ package baby.mumu.log.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.zalando.jackson.datatype.money.MoneyModule;
 
 /**
  * jackson配置
@@ -36,6 +39,10 @@ public class JacksonConfiguration {
     objectMapper.registerModule(stringSanitizerModule);
     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.registerModule(new MoneyModule().withQuotedDecimalNumbers());
+    SimpleModule simpleModule = new SimpleModule();
+    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+    objectMapper.registerModule(simpleModule);
     return objectMapper;
   }
 }

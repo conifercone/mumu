@@ -15,7 +15,7 @@
  */
 package baby.mumu.mail.client.api;
 
-import baby.mumu.mail.client.dto.TemplateMailSendCmd;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 
 /**
  * 模板邮件service

@@ -17,7 +17,7 @@ package baby.mumu.file.application.streamfile.executor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.file.client.dto.StreamFileDownloadCmd;
+import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import java.io.InputStream;

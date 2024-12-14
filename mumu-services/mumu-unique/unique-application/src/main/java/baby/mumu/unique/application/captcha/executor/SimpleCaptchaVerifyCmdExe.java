@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.application.captcha.executor;
 
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import java.util.Optional;

@@ -18,9 +18,9 @@ package baby.mumu.message.infrastructure.broadcast.convertor;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
@@ -29,7 +29,6 @@ import baby.mumu.message.infrastructure.config.MessageProperties;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,19 +51,16 @@ import org.springframework.stereotype.Component;
 public class BroadcastTextMessageConvertor {
 
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final MessageProperties messageProperties;
   private final SimpleTextTranslation simpleTextTranslation;
   private final BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository;
   private final BroadcastTextMessageRepository broadcastTextMessageRepository;
 
   @Autowired
-  public BroadcastTextMessageConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-    MessageProperties messageProperties,
+  public BroadcastTextMessageConvertor(MessageProperties messageProperties,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslations,
     BroadcastTextMessageReceiverRepository broadcastTextMessageReceiverRepository,
     BroadcastTextMessageRepository broadcastTextMessageRepository) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.messageProperties = messageProperties;
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
     this.broadcastTextMessageReceiverRepository = broadcastTextMessageReceiverRepository;
@@ -92,12 +88,6 @@ public class BroadcastTextMessageConvertor {
               entity.setUnreadReceiverIds(receiverIds);
               entity.setUnreadQuantity((long) receiverIds.size());
             });
-        Optional.ofNullable(entity.getId()).ifPresentOrElse(id -> {
-        }, () -> {
-          Long id = primaryKeyGrpcService.snowflake();
-          entity.setId(id);
-          res.setId(id);
-        });
         return entity;
       }));
   }
@@ -168,10 +158,10 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<BroadcastTextMessageFindAllYouSendCo> toFindAllYouSendCo(
+  public Optional<BroadcastTextMessageFindAllYouSendDTO> toFindAllYouSendDTO(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendCo)
+      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendDTO)
       .map(broadcastTextMessageFindAllYouSendCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(

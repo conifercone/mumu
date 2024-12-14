@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.configuration;
 
+import baby.mumu.basis.condition.ConditionalExecutor;
 import baby.mumu.basis.response.ResponseCode;
 import java.security.Principal;
 import java.util.HashMap;
@@ -221,36 +222,23 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
    * @param password    密码
    */
   private void verifyAccountInformation(@NotNull UserDetails userDetails, String password) {
-    if (!userDetails.isEnabled()) {
-      ResponseCode accountDisabled = ResponseCode.ACCOUNT_DISABLED;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountDisabled.getCode(),
-          accountDisabled.getMessage(), StringUtils.EMPTY));
-    }
-    if (!userDetails.isAccountNonLocked()) {
-      ResponseCode accountLocked = ResponseCode.ACCOUNT_LOCKED;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountLocked.getCode(),
-          accountLocked.getMessage(), StringUtils.EMPTY));
-    }
-    if (!userDetails.isAccountNonExpired()) {
-      ResponseCode accountHasExpired = ResponseCode.ACCOUNT_HAS_EXPIRED;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountHasExpired.getCode(),
-          accountHasExpired.getMessage(), StringUtils.EMPTY));
-    }
-    if (!userDetails.isCredentialsNonExpired()) {
-      ResponseCode passwordExpired = ResponseCode.PASSWORD_EXPIRED;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(passwordExpired.getCode(),
-          passwordExpired.getMessage(), StringUtils.EMPTY));
-    }
-    if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-      ResponseCode accountPasswordIsIncorrect = ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountPasswordIsIncorrect.getCode(),
-          accountPasswordIsIncorrect.getMessage(), StringUtils.EMPTY));
-    }
+    checkCondition(!userDetails.isEnabled(), ResponseCode.ACCOUNT_DISABLED);
+    checkCondition(!userDetails.isAccountNonLocked(), ResponseCode.ACCOUNT_LOCKED);
+    checkCondition(!userDetails.isAccountNonExpired(), ResponseCode.ACCOUNT_HAS_EXPIRED);
+    checkCondition(!userDetails.isCredentialsNonExpired(), ResponseCode.PASSWORD_EXPIRED);
+    checkCondition(!passwordEncoder.matches(password, userDetails.getPassword()),
+      ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
+  }
+
+  private void checkCondition(boolean condition, ResponseCode responseCode) {
+    ConditionalExecutor.of(() -> condition)
+      .ifTrue(() -> throwAuthenticationException(responseCode));
+  }
+
+  private void throwAuthenticationException(@NotNull ResponseCode responseCode) {
+    OAuth2Error error = new OAuth2Error(responseCode.getCode(), responseCode.getMessage(),
+      StringUtils.EMPTY);
+    throw new OAuth2AuthenticationException(error);
   }
 
   @NotNull

@@ -19,7 +19,7 @@ import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.QRCodeService;
-import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -15,8 +15,8 @@
  */
 package baby.mumu.log.application.operation.executor;
 
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
@@ -48,7 +48,7 @@ public class OperationLogFindAllCmdExe {
     this.operationLogConvertor = operationLogConvertor;
   }
 
-  public Page<OperationLogFindAllCo> execute(
+  public Page<OperationLogFindAllDTO> execute(
     @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
     OperationLog operationLog = operationLogConvertor.toEntity(operationLogFindAllCmd)
@@ -57,11 +57,11 @@ public class OperationLogFindAllCmdExe {
       operationLog,
       operationLogFindAllCmd.getCurrent(),
       operationLogFindAllCmd.getPageSize());
-    List<OperationLogFindAllCo> operationLogFindAllCos = operationLogs.getContent().stream()
-      .map(operationLogConvertor::toFindAllCo).filter(Optional::isPresent)
+    List<OperationLogFindAllDTO> operationLogFindAllDTOS = operationLogs.getContent().stream()
+      .map(operationLogConvertor::toFindAllDTO).filter(Optional::isPresent)
       .map(Optional::get)
       .toList();
-    return new PageImpl<>(operationLogFindAllCos, operationLogs.getPageable(),
+    return new PageImpl<>(operationLogFindAllDTOS, operationLogs.getPageable(),
       operationLogs.getTotalElements());
   }
 

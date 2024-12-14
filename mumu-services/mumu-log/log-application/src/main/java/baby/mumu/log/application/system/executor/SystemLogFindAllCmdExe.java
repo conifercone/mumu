@@ -15,8 +15,8 @@
  */
 package baby.mumu.log.application.system.executor;
 
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
@@ -48,7 +48,7 @@ public class SystemLogFindAllCmdExe {
     this.systemLogConvertor = systemLogConvertor;
   }
 
-  public Page<SystemLogFindAllCo> execute(
+  public Page<SystemLogFindAllDTO> execute(
     @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
     SystemLog systemLog = systemLogConvertor.toEntity(systemLogFindAllCmd)
@@ -57,10 +57,10 @@ public class SystemLogFindAllCmdExe {
       systemLog,
       systemLogFindAllCmd.getCurrent(),
       systemLogFindAllCmd.getPageSize());
-    List<SystemLogFindAllCo> systemLogFindAllCos = systemLogs.getContent().stream()
-      .map(systemLogConvertor::toFindAllCo).filter(Optional::isPresent).map(Optional::get)
+    List<SystemLogFindAllDTO> systemLogFindAllDTOS = systemLogs.getContent().stream()
+      .map(systemLogConvertor::toFindAllDTO).filter(Optional::isPresent).map(Optional::get)
       .toList();
-    return new PageImpl<>(systemLogFindAllCos, systemLogs.getPageable(),
+    return new PageImpl<>(systemLogFindAllDTOS, systemLogs.getPageable(),
       systemLogs.getTotalElements());
   }
 

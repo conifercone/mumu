@@ -15,9 +15,9 @@
  */
 package baby.mumu.message.client.api;
 
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.data.domain.Page;
@@ -61,7 +61,7 @@ public interface BroadcastTextMessageService {
    * @param broadcastTextMessageFindAllYouSendCmd 文本广播消息查询所有当前用户发送消息指令
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+  Page<BroadcastTextMessageFindAllYouSendDTO> findAllYouSend(
     BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   /**

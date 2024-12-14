@@ -15,7 +15,7 @@
  */
 package baby.mumu.mail.infrastructure.template.convertor;
 
-import baby.mumu.mail.client.dto.co.TemplateMailSendCo;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
 import java.util.Optional;
@@ -42,8 +42,8 @@ public class TemplateMailConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<TemplateMail> toEntity(TemplateMailSendCo templateMailSendCo) {
-    return Optional.ofNullable(templateMailSendCo)
+  public Optional<TemplateMail> toEntity(TemplateMailSendCmd templateMailSendCmd) {
+    return Optional.ofNullable(templateMailSendCmd)
       .map(TemplateMailMapper.INSTANCE::toEntity);
   }
 }

@@ -17,10 +17,10 @@ package baby.mumu.log.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.log.client.api.OperationLogService;
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -69,7 +69,7 @@ public class OperationLogController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public OperationLogQryCo findOperationLogById(@RequestParam(value = "id") String id) {
+  public OperationLogQryDTO findOperationLogById(@RequestParam(value = "id") String id) {
     return operationLogService.findOperationLogById(id);
   }
 
@@ -78,7 +78,7 @@ public class OperationLogController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<OperationLogFindAllCo> findAll(
+  public Page<OperationLogFindAllDTO> findAll(
     @ModelAttribute @Valid OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogService.findAll(operationLogFindAllCmd);
   }

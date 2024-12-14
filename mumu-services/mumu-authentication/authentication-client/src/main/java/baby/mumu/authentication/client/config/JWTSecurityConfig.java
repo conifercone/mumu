@@ -15,6 +15,8 @@
  */
 package baby.mumu.authentication.client.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
 import baby.mumu.basis.constants.CommonConstants;
@@ -31,6 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -48,6 +51,7 @@ import org.springframework.util.Assert;
  */
 @Configuration
 @EnableConfigurationProperties(ResourceServerProperties.class)
+@EnableWebSecurity
 public class JWTSecurityConfig {
 
   private final ResourceServerProperties resourceServerProperties;
@@ -90,10 +94,8 @@ public class JWTSecurityConfig {
         .authenticated());
     http.oauth2ResourceServer(
         resourceServerConfigurer -> resourceServerConfigurer.jwt(
-            jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-          .authenticationEntryPoint(
-            new MuMuAuthenticationEntryPoint(resourceServerProperties
-            )))
+          jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+      )
       .csrf(csrf -> csrf.csrfTokenRepository(
           CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
@@ -101,16 +103,23 @@ public class JWTSecurityConfig {
     http.addFilterBefore(
       new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
       UsernamePasswordAuthenticationFilter.class);
-    return http.cors(Customizer.withDefaults()).build();
+    http.exceptionHandling(exceptionHandling -> exceptionHandling
+      .accessDeniedHandler(mumuAccessDeniedHandler()));
+    return http.formLogin(withDefaults()).cors(Customizer.withDefaults()).build();
   }
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     MuMuJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new MuMuJwtGrantedAuthoritiesConverter();
-    grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.name());
+    grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.getClaimName());
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
+  }
+
+  @Bean
+  public MuMuAccessDeniedHandler mumuAccessDeniedHandler() {
+    return new MuMuAccessDeniedHandler();
   }
 
 }

@@ -17,21 +17,22 @@ package baby.mumu.authentication.client.grpc;
 
 import baby.mumu.authentication.AuthenticationRequired;
 import baby.mumu.authentication.client.api.RoleGrpcService;
-import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcCo;
+import baby.mumu.authentication.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
-import java.nio.ByteBuffer;
+import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
-import org.lognet.springboot.grpc.security.AuthHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 public class RoleGrpcServiceTest extends AuthenticationRequired {
@@ -66,17 +67,16 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
       .setName(StringValue.of("管理员"))
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
-    PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = roleGrpcService.findAll(
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+
+    PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    logger.info("PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
-    Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
-    Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+    logger.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+    Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
+    Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
   }
 
   @Test
@@ -85,20 +85,54 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindAllGrpcCmd roleFindAllGrpcCmd = RoleFindAllGrpcCmd.newBuilder()
       .setName(StringValue.of("管理员"))
       .build();
-    AuthCallCredentials callCredentials = new AuthCallCredentials(
-      AuthHeader.builder().bearer().tokenSupplier(
-        () -> ByteBuffer.wrap(getToken(mockMvc).orElseThrow(
-          () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)).getBytes()))
-    );
-    ListenableFuture<PageOfRoleFindAllGrpcCo> pageOfRoleFindAllGrpcCoListenableFuture = roleGrpcService.syncFindAll(
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+    ListenableFuture<PageOfRoleFindAllGrpcDTO> pageOfRoleFindAllGrpcDTOListenableFuture = roleGrpcService.syncFindAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    pageOfRoleFindAllGrpcCoListenableFuture.addListener(() -> {
+    pageOfRoleFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
-        PageOfRoleFindAllGrpcCo pageOfRoleFindAllGrpcCo = pageOfRoleFindAllGrpcCoListenableFuture.get();
-        logger.info("Sync PageOfRoleFindAllGrpcCo: {}", pageOfRoleFindAllGrpcCo);
-        Assertions.assertNotNull(pageOfRoleFindAllGrpcCo);
-        Assertions.assertFalse(pageOfRoleFindAllGrpcCo.getContentList().isEmpty());
+        PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = pageOfRoleFindAllGrpcDTOListenableFuture.get();
+        logger.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+        Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
+        Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
+        latch.countDown();
+      } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
+      }
+    }, MoreExecutors.directExecutor());
+    boolean completed = latch.await(3, TimeUnit.SECONDS);
+    Assertions.assertTrue(completed);
+  }
+
+
+  @Test
+  public void findById() {
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+    RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleGrpcService.findById(
+      Int64Value.of(0L),
+      callCredentials);
+    logger.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+    Assertions.assertNotNull(roleFindByIdGrpcDTO);
+  }
+
+  @Test
+  public void syncFindById() throws InterruptedException {
+    CountDownLatch latch = new CountDownLatch(1);
+    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+      () -> getToken(mockMvc).orElseThrow(
+        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+    ListenableFuture<RoleFindByIdGrpcDTO> roleFindByIdGrpcDTOListenableFuture = roleGrpcService.syncFindById(
+      Int64Value.of(0L),
+      callCredentials);
+    roleFindByIdGrpcDTOListenableFuture.addListener(() -> {
+      try {
+        RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleFindByIdGrpcDTOListenableFuture.get();
+        logger.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+        Assertions.assertNotNull(roleFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

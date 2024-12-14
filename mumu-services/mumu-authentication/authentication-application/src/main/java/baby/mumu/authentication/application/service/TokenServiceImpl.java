@@ -19,17 +19,16 @@ import baby.mumu.authentication.application.token.executor.TokenValidityCmdExe;
 import baby.mumu.authentication.client.api.TokenService;
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceImplBase;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
-import baby.mumu.authentication.client.dto.TokenValidityCmd;
+import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcDTO;
+import baby.mumu.authentication.client.cmds.TokenValidityCmd;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "TokenServiceImpl")
 public class TokenServiceImpl extends TokenServiceImplBase implements TokenService {
 
@@ -60,16 +59,12 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void validity(@NotNull TokenValidityGrpcCmd request,
-    StreamObserver<TokenValidityGrpcCo> responseObserver) {
+    StreamObserver<TokenValidityGrpcDTO> responseObserver) {
     TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
     tokenValidityCmd.setToken(request.getToken());
-    try {
-      responseObserver.onNext(
-        TokenValidityGrpcCo.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
-          .build());
-      responseObserver.onCompleted();
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
+    responseObserver.onNext(
+      TokenValidityGrpcDTO.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
+        .build());
+    responseObserver.onCompleted();
   }
 }

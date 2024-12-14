@@ -65,6 +65,12 @@ public class Permission extends BasisDomainModel implements GrantedAuthority {
   private String name;
 
   /**
+   * 描述
+   */
+  @Size(max = 500)
+  private String description;
+
+  /**
    * 有后代权限
    */
   private boolean hasDescendant;

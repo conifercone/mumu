@@ -15,7 +15,6 @@
  */
 package baby.mumu.message.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageArchiveByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageDeleteByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageFindAllWithSomeOneCmdExe;
@@ -25,14 +24,12 @@ import baby.mumu.message.application.subscription.executor.SubscriptionTextMessa
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import baby.mumu.message.application.subscription.executor.SubscriptionTextMessageUnreadByIdCmdExe;
 import baby.mumu.message.client.api.SubscriptionTextMessageService;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import io.micrometer.observation.annotation.Observed;
-import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -45,7 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.2
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "SubscriptionTextMessageServiceImpl")
 public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessageService {
 
@@ -105,7 +101,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   }
 
   @Override
-  public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+  public Page<SubscriptionTextMessageFindAllYouSendDTO> findAllYouSend(
     SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageFindAllYouSendCmdExe.execute(
       subscriptionTextMessageFindAllYouSendCmd);
@@ -126,7 +122,7 @@ public class SubscriptionTextMessageServiceImpl implements SubscriptionTextMessa
   }
 
   @Override
-  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
+  public Page<SubscriptionTextMessageFindAllWithSomeOneDTO> findAllMessageRecordWithSomeone(
     SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageFindAllWithSomeOneCmdExe.execute(
       subscriptionTextMessageFindAllWithSomeOneCmd);

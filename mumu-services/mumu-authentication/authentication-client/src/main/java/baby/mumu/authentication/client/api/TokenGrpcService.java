@@ -20,7 +20,7 @@ import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc;
 import baby.mumu.authentication.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCo;
+import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcDTO;
 import baby.mumu.basis.exception.MuMuException;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -54,7 +54,7 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public TokenValidityGrpcCo validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+  public TokenValidityGrpcDTO validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -64,7 +64,7 @@ public class TokenGrpcService extends AuthenticationGrpcService implements Dispo
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private @Nullable TokenValidityGrpcCo validityFromGrpc(
+  private @Nullable TokenValidityGrpcDTO validityFromGrpc(
     TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     TokenServiceBlockingStub tokenServiceBlockingStub = TokenServiceGrpc.newBlockingStub(channel);
     return tokenServiceBlockingStub.validity(tokenValidityGrpcCmd);

@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountAddSystemSettingsCmd;
+import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;

@@ -19,8 +19,11 @@ import baby.mumu.authentication.client.api.AccountGrpcService;
 import baby.mumu.authentication.client.api.PermissionGrpcService;
 import baby.mumu.authentication.client.api.RoleGrpcService;
 import baby.mumu.authentication.client.api.TokenGrpcService;
+import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
+import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +36,16 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class AuthenticationClientConfiguration {
+
+  @Bean
+  @ConditionalOnMissingBean
+  public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
+    DiscoveryClient discoveryClient) {
+    DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+      discoveryClient);
+    NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
+    return discoveryClientNameResolverProvider;
+  }
 
   @Bean
   public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,

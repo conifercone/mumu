@@ -22,13 +22,13 @@ import baby.mumu.unique.application.pk.executor.PrimaryKeySnowflakeGenerateExe;
 import baby.mumu.unique.client.api.PrimaryKeyService;
 import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceImplBase;
 import baby.mumu.unique.client.api.grpc.SnowflakeResult;
-import baby.mumu.unique.client.dto.co.PrimaryKeySnowflakeCo;
+import baby.mumu.unique.client.dto.PrimaryKeySnowflakeDTO;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "PrimaryKeyServiceImpl")
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 
@@ -51,10 +51,10 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
   }
 
   @Override
-  public PrimaryKeySnowflakeCo snowflake() {
-    PrimaryKeySnowflakeCo primaryKeySnowflakeCo = new PrimaryKeySnowflakeCo();
-    primaryKeySnowflakeCo.setId(primaryKeySnowflakeGenerateExe.execute());
-    return primaryKeySnowflakeCo;
+  public PrimaryKeySnowflakeDTO snowflake() {
+    PrimaryKeySnowflakeDTO primaryKeySnowflakeDTO = new PrimaryKeySnowflakeDTO();
+    primaryKeySnowflakeDTO.setId(primaryKeySnowflakeGenerateExe.execute());
+    return primaryKeySnowflakeDTO;
   }
 
   @Override

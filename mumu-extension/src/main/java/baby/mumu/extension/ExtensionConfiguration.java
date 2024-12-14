@@ -20,6 +20,7 @@ import baby.mumu.extension.cors.MuMuCorsConfiguration;
 import baby.mumu.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
+import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
 import baby.mumu.extension.nosql.MongodbConfiguration;
@@ -28,9 +29,13 @@ import baby.mumu.extension.processor.grpc.GrpcExceptionAdvice;
 import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
+import io.micrometer.observation.ObservationPredicate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.server.observation.ServerRequestObservationContext;
 
 /**
  * 拓展模块配置
@@ -43,8 +48,20 @@ import org.springframework.context.annotation.Import;
   ZookeeperConfiguration.class, MuMuCorsConfiguration.class, DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class,
-  FilterConfiguration.class, IdempotentConfiguration.class})
+  FilterConfiguration.class, IdempotentConfiguration.class, GsonConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 
+  @Bean
+  @ConditionalOnClass(ObservationPredicate.class)
+  ObservationPredicate noActuatorServerObservations() {
+    return (name, context) -> {
+      if (name.equals("http.server.requests")
+        && context instanceof ServerRequestObservationContext serverContext) {
+        return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
+      } else {
+        return true;
+      }
+    };
+  }
 }

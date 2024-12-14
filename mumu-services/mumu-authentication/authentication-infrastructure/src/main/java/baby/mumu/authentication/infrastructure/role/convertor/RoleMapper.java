@@ -16,28 +16,31 @@
 package baby.mumu.authentication.infrastructure.role.convertor;
 
 import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.RoleFindAllPermissionGrpcCo;
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo.RoleFindAllPermissionCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.RoleFindAllPermissionGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO.RoleFindAllPermissionCo;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -51,7 +54,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RoleMapper extends GrpcMapper {
+public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
@@ -83,16 +86,25 @@ public interface RoleMapper extends GrpcMapper {
   void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  RoleFindAllCo toFindAllCo(Role role);
+  RoleFindAllDTO toFindAllDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllSliceCo toFindAllSliceCo(Role role);
+  RoleFindAllSliceDTO toFindAllSliceDTO(Role role);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindByIdDTO toRoleFindByIdDTO(Role role);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindRootDTO toRoleFindRootDTO(Role role);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindDirectDTO toRoleFindDirectDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedFindAllCo toArchivedFindAllCo(Role role);
+  RoleArchivedFindAllDTO toArchivedFindAllDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedFindAllSliceCo toArchivedFindAllSliceCo(Role role);
+  RoleArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   RoleDo toDataObject(Role role);
@@ -113,31 +125,13 @@ public interface RoleMapper extends GrpcMapper {
   RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllGrpcCo toRoleFindAllGrpcCo(RoleFindAllCo roleFindAllCo);
+  RoleFindAllGrpcDTO toRoleFindAllGrpcDTO(RoleFindAllDTO roleFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllPermissionGrpcCo toRoleFindAllPermissionGrpcCo(
+  RoleFindAllPermissionGrpcDTO toRoleFindAllPermissionGrpcDTO(
     RoleFindAllPermissionCo roleFindAllPermissionCo);
 
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget RoleFindAllCo roleFindAllCo) {
-    CommonUtil.convertToAccountZone(roleFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget RoleFindAllSliceCo roleFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(roleFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleArchivedFindAllSliceCo roleArchivedFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(roleArchivedFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget RoleArchivedFindAllCo roleArchivedFindAllCo) {
-    CommonUtil.convertToAccountZone(roleArchivedFindAllCo);
-  }
+  @API(status = Status.STABLE, since = "2.4.0")
+  RoleFindByIdGrpcDTO toRoleFindByIdGrpcDTO(
+    RoleFindByIdDTO roleFindByIdDTO);
 }

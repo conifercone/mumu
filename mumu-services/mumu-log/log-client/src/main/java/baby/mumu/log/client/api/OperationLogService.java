@@ -15,11 +15,11 @@
  */
 package baby.mumu.log.client.api;
 
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.OperationLogSaveCmd;
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.cmds.OperationLogSaveCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -50,7 +50,7 @@ public interface OperationLogService {
    * @param id 操作日志id
    * @return 查询结果
    */
-  OperationLogQryCo findOperationLogById(String id);
+  OperationLogQryDTO findOperationLogById(String id);
 
   /**
    * 分页查询操作日志
@@ -58,5 +58,5 @@ public interface OperationLogService {
    * @param operationLogFindAllCmd 分页查询操作日志指令
    * @return 查询结果
    */
-  Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd);
+  Page<OperationLogFindAllDTO> findAll(OperationLogFindAllCmd operationLogFindAllCmd);
 }

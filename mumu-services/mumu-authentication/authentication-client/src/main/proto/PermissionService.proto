@@ -7,31 +7,36 @@ option java_package = "baby.mumu.authentication.client.api.grpc";
 option java_outer_classname = "PermissionServiceProto";
 
 service PermissionService {
-  rpc findAll (PermissionFindAllGrpcCmd) returns (PageOfPermissionFindAllGrpcCo);
-  rpc findById (google.protobuf.Int64Value) returns (PermissionFindByIdGrpcCo);
+  rpc findAll (PermissionFindAllGrpcCmd) returns (PageOfPermissionFindAllGrpcDTO);
+  rpc findById (google.protobuf.Int64Value) returns (PermissionFindByIdGrpcDTO);
 }
 
 message PermissionFindAllGrpcCmd {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  google.protobuf.Int32Value current = 4;
-  google.protobuf.Int32Value page_size = 5;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.Int32Value current = 5;
+  google.protobuf.Int32Value page_size = 6;
 }
 
-message PermissionFindAllGrpcCo {
+message PermissionFindAllGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
+  bool hasDescendant = 5;
 }
 
-message PermissionFindByIdGrpcCo {
+message PermissionFindByIdGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
+  bool hasDescendant = 5;
 }
 
-message PageOfPermissionFindAllGrpcCo {
-  repeated PermissionFindAllGrpcCo content = 1;
+message PageOfPermissionFindAllGrpcDTO {
+  repeated PermissionFindAllGrpcDTO content = 1;
   int32 total_pages = 2;
 }

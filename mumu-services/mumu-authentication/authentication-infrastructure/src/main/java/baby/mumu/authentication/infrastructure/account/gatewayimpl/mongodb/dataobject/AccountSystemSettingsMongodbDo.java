@@ -19,6 +19,7 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dataobject.jpa.JpaMongodbBasisDefaultDataObject;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
@@ -59,6 +60,7 @@ public class AccountSystemSettingsMongodbDo extends JpaMongodbBasisDefaultDataOb
   }
 
   @Id
+  @SnowflakeIdGenerator
   @NotBlank
   private String id;
 

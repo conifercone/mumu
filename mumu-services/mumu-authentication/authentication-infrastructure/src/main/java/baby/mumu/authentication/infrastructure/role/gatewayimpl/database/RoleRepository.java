@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -71,11 +72,13 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param pageable      分页条件
    * @return 查询结果
    */
-  @Query("select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId"
-    + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
-    + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
-    + "and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds}) "
-    + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+  @Query("""
+    select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+        where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id})
+        and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%)
+        and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
+        and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc
+    """)
   Slice<RoleDo> findAllSlice(@Param("roleDo") RoleDo roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
@@ -87,11 +90,15 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param pageable      分页条件
    * @return 查询结果
    */
-  @Query("select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId"
-    + " where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id}) "
-    + "and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%) "
-    + "and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds}) "
-    + "and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc")
+  @Query("""
+    select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+        where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id})
+        and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%)
+        and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
+        and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc
+    """)
   Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
+
+  Optional<RoleDo> findByCode(String code);
 }

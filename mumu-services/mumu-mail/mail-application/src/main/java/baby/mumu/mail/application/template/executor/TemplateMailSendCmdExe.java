@@ -15,14 +15,14 @@
  */
 package baby.mumu.mail.application.template.executor;
 
-import baby.mumu.mail.client.dto.TemplateMailSendCmd;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 模板邮件发送指令执行器
@@ -47,11 +47,12 @@ public class TemplateMailSendCmdExe {
   }
 
   public void execute(TemplateMailSendCmd templateMailSendCmd) {
-    Assert.notNull(templateMailSendCmd, "TemplateMailSendCmd cannot be null");
-    if (StringUtils.isBlank(templateMailSendCmd.getTemplateMailSendCo().getFrom())) {
-      templateMailSendCmd.getTemplateMailSendCo().setFrom(username);
-    }
-    templateMailConvertor.toEntity(templateMailSendCmd.getTemplateMailSendCo())
-      .ifPresent(templateMailGateway::sendMail);
+    Optional.ofNullable(templateMailSendCmd).ifPresent(templateMailSendCmdNotNull -> {
+      if (StringUtils.isBlank(templateMailSendCmd.getFrom())) {
+        templateMailSendCmd.setFrom(username);
+      }
+      templateMailConvertor.toEntity(templateMailSendCmd)
+        .ifPresent(templateMailGateway::sendMail);
+    });
   }
 }

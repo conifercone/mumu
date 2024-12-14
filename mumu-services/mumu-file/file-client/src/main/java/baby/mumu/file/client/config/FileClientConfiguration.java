@@ -15,9 +15,12 @@
  */
 package baby.mumu.file.client.config;
 
+import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import baby.mumu.file.client.api.StreamFileGrpcService;
+import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,16 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class FileClientConfiguration {
+
+  @Bean
+  @ConditionalOnMissingBean
+  public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
+    DiscoveryClient discoveryClient) {
+    DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+      discoveryClient);
+    NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
+    return discoveryClientNameResolverProvider;
+  }
 
   @Bean
   public StreamFileGrpcService streamFileGrpcService(DiscoveryClient discoveryClient,

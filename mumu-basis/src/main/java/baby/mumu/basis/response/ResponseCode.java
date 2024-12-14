@@ -34,6 +34,7 @@ public enum ResponseCode implements BaseResponse {
   SUCCESS(200),
   BAD_REQUEST(400),
   UNAUTHORIZED(401),
+  ACCESS_DENIED(403),
   NOT_FOUND(404),
   TOO_MANY_REQUESTS(429),
   INTERNAL_SERVER_ERROR(500),
@@ -106,7 +107,6 @@ public enum ResponseCode implements BaseResponse {
   ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE(6034),
   THE_ACCOUNT_ALREADY_HAS_AN_ADDRESS(6035),
   UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP(6036),
-  ACCOUNT_ID_IS_NOT_ALLOWED_TO_BE_0(6037),
   PERMISSION_DOES_NOT_EXIST(6038),
   OCR_RECOGNITION_FAILED(6039),
   TRANSLATION_FAILED(6040),
@@ -115,7 +115,11 @@ public enum ResponseCode implements BaseResponse {
   GEOGRAPHIC_DATA_LOADING_FAILED(6043),
   PERMISSION_CYCLE(6044),
   PERMISSION_PATH_ALREADY_EXISTS(6045),
-  DESCENDANT_PERMISSION_HAS_DESCENDANT_PERMISSION(6046);
+  DESCENDANT_PERMISSION_HAS_DESCENDANT_PERMISSION(6046),
+  ROLE_CYCLE(6047),
+  ROLE_PATH_ALREADY_EXISTS(6048),
+  DESCENDANT_ROLE_HAS_DESCENDANT_ROLE(6049),
+  FAILED_TO_EXPORT_CSV_FILE(6050);
   private final Integer code;
 
   ResponseCode(int code) {
@@ -142,7 +146,7 @@ public enum ResponseCode implements BaseResponse {
     return SpringContextUtil.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
         SecurityContextUtil.getLoginAccountLanguage()
-          .map(languageEnum -> Locale.of(languageEnum.name()))
+          .map(languageEnum -> Locale.of(languageEnum.getCode()))
           .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }
 }

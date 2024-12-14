@@ -61,13 +61,15 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * 切片分页查询已归档的权限（不查询总数）
    *
    * @param permissionArchivedDo 查询条件
-   * @param pageable            分页条件
+   * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id}) "
-      + "and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%) "
-      + "and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
+            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
+            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      """)
   Slice<PermissionArchivedDo> findAllSlice(
     @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
 
@@ -75,13 +77,15 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
    * 分页查询已归档的权限（查询总数）
    *
    * @param permissionArchivedDo 查询条件
-   * @param pageable            分页条件
+   * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
-    "select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id}) "
-      + "and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%) "
-      + "and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc")
+    """
+      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
+            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
+            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      """)
   Page<PermissionArchivedDo> findAllPage(
     @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
 }

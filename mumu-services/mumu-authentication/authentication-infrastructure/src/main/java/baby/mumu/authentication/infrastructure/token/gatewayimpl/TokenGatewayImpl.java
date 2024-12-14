@@ -16,8 +16,9 @@
 package baby.mumu.authentication.infrastructure.token.gatewayimpl;
 
 import baby.mumu.authentication.domain.token.gateway.TokenGateway;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.TokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
@@ -38,16 +39,19 @@ import org.springframework.stereotype.Component;
 @Observed(name = "TokenGatewayImpl")
 public class TokenGatewayImpl implements TokenGateway {
 
-  private final TokenRepository tokenRepository;
+  private final PasswordTokenRepository passwordTokenRepository;
   private final JwtDecoder jwtDecoder;
   private final ClientTokenRepository clientTokenRepository;
+  private final AuthorizeCodeTokenRepository authorizeCodeTokenRepository;
 
   @Autowired
-  public TokenGatewayImpl(TokenRepository tokenRepository, JwtDecoder jwtDecoder,
-    ClientTokenRepository clientTokenRepository) {
-    this.tokenRepository = tokenRepository;
+  public TokenGatewayImpl(PasswordTokenRepository passwordTokenRepository, JwtDecoder jwtDecoder,
+    ClientTokenRepository clientTokenRepository,
+    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
+    this.passwordTokenRepository = passwordTokenRepository;
     this.jwtDecoder = jwtDecoder;
     this.clientTokenRepository = clientTokenRepository;
+    this.authorizeCodeTokenRepository = authorizeCodeTokenRepository;
   }
 
   @Override
@@ -56,15 +60,18 @@ public class TokenGatewayImpl implements TokenGateway {
         try {
           Jwt jwt = jwtDecoder.decode(tokenValue);
           String claimAsString = jwt.getClaimAsString(
-            TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.name());
-          if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)
-            || AuthorizationGrantType.REFRESH_TOKEN.getValue().equals(claimAsString)) {
-            return tokenRepository.existsById(
-              Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.name())));
+            TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName());
+          if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
+            return passwordTokenRepository.existsById(
+              Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
           } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
             return clientTokenRepository.existsById(jwt.getClaimAsString("sub"));
+          } else if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(claimAsString)) {
+            return authorizeCodeTokenRepository.existsById(
+              Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
+
           }
-          return false;
+          return true;
         } catch (Exception ignore) {
           return false;
         }

@@ -16,6 +16,7 @@
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject;
 
 import baby.mumu.basis.dataobject.jpa.JpaBasisArchivableDataObject;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,6 +27,7 @@ import java.io.Serial;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 /**
@@ -49,6 +51,7 @@ public class PermissionDo extends JpaBasisArchivableDataObject {
    * 权限id
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 
@@ -66,4 +69,12 @@ public class PermissionDo extends JpaBasisArchivableDataObject {
   @Size(max = 200, message = "{permission.name.validation.size}")
   @Column(name = "name", nullable = false, length = 200)
   private String name;
+
+  /**
+   * 权限描述
+   */
+  @Size(max = 500)
+  @ColumnDefault("''")
+  @Column(name = "description", nullable = false, length = 500)
+  private String description;
 }

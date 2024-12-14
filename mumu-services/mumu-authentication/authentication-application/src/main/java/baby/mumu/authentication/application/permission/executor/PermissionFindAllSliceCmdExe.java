@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -49,17 +49,18 @@ public class PermissionFindAllSliceCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public Slice<PermissionFindAllSliceCo> execute(
+  public Slice<PermissionFindAllSliceDTO> execute(
     PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
     Assert.notNull(permissionFindAllSliceCmd, "PermissionFindAllSliceCmd cannot be null");
     Permission permission = permissionConvertor.toEntity(permissionFindAllSliceCmd)
       .orElseGet(Permission::new);
     Slice<Permission> permissions = permissionGateway.findAllSlice(permission,
       permissionFindAllSliceCmd.getCurrent(), permissionFindAllSliceCmd.getPageSize());
-    List<PermissionFindAllSliceCo> permissionFindAllSliceCoList = permissions.getContent().stream()
-      .map(permissionConvertor::toFindAllSliceCo)
+    List<PermissionFindAllSliceDTO> permissionFindAllSliceDTOList = permissions.getContent()
+      .stream()
+      .map(permissionConvertor::toFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new SliceImpl<>(permissionFindAllSliceCoList, permissions.getPageable(),
+    return new SliceImpl<>(permissionFindAllSliceDTOList, permissions.getPageable(),
       permissions.hasNext());
   }
 }

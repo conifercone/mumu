@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.token.executor;
 
-import baby.mumu.authentication.client.dto.TokenValidityCmd;
+import baby.mumu.authentication.client.cmds.TokenValidityCmd;
 import baby.mumu.authentication.domain.token.gateway.TokenGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;

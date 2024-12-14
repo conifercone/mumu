@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.application.permission.executor;
 
-import baby.mumu.authentication.client.dto.PermissionFindRootCmd;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.cmds.PermissionFindRootCmd;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
@@ -49,14 +49,14 @@ public class PermissionFindRootCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public Page<PermissionFindRootCo> execute(PermissionFindRootCmd permissionFindRootCmd) {
+  public Page<PermissionFindRootDTO> execute(PermissionFindRootCmd permissionFindRootCmd) {
     return Optional.ofNullable(permissionFindRootCmd).map(permissionFindRootCmdNotNull -> {
       Page<Permission> permissions = permissionGateway.findRootPermissions(
         permissionFindRootCmdNotNull.getCurrent(), permissionFindRootCmdNotNull.getPageSize());
-      List<PermissionFindRootCo> permissionFindRootCos = permissions.getContent().stream()
-        .map(permissionConvertor::toPermissionFindRootCo)
+      List<PermissionFindRootDTO> permissionFindRootDTOS = permissions.getContent().stream()
+        .map(permissionConvertor::toPermissionFindRootDTO)
         .filter(Optional::isPresent).map(Optional::get).toList();
-      return new PageImpl<>(permissionFindRootCos, permissions.getPageable(),
+      return new PageImpl<>(permissionFindRootDTOS, permissions.getPageable(),
         permissions.getTotalElements());
     }).orElse(new PageImpl<>(new ArrayList<>()));
   }

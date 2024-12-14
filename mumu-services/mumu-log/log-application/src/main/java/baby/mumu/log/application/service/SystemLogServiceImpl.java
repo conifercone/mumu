@@ -24,16 +24,15 @@ import baby.mumu.log.application.system.executor.SystemLogSubmitCmdExe;
 import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.SystemLogSaveCmd;
-import baby.mumu.log.client.dto.SystemLogSubmitCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.cmds.SystemLogSaveCmd;
+import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
-import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
   private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
@@ -75,7 +74,7 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   }
 
   @Override
-  public Page<SystemLogFindAllCo> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
+  public Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogFindAllCmdExe.execute(systemLogFindAllCmd);
   }
 
@@ -84,13 +83,9 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
   public void submit(SystemLogSubmitGrpcCmd request,
     StreamObserver<Empty> responseObserver) {
     systemLogConvertor.toSystemLogSubmitCmd(request).ifPresentOrElse((systemLogSubmitCmd) -> {
-      try {
-        systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
-      } catch (Exception e) {
-        throw new GRpcRuntimeExceptionWrapper(e);
-      }
+      systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
+      responseObserver.onNext(Empty.getDefaultInstance());
+      responseObserver.onCompleted();
     }, () -> {
       responseObserver.onNext(Empty.getDefaultInstance());
       responseObserver.onCompleted();

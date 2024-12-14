@@ -15,13 +15,13 @@
  */
 package baby.mumu.unique.client.api;
 
-import baby.mumu.unique.client.dto.co.CountryGetAllCo;
-import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateCitiesByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
-import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
+import baby.mumu.unique.client.dto.CountryGetAllDTO;
+import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdDTO;
+import baby.mumu.unique.client.dto.CountryGetCityByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
+import baby.mumu.unique.client.dto.CountryStateCityGetAllDTO;
 import java.util.List;
 
 /**
@@ -32,17 +32,17 @@ import java.util.List;
  */
 public interface CountryService {
 
-  List<CountryStateCityGetAllCo> getCountryStateCity();
+  List<CountryStateCityGetAllDTO> getCountryStateCity();
 
-  List<CountryGetAllCo> getCountries();
+  List<CountryGetAllDTO> getCountries();
 
-  List<CountryGetStatesByCountryIdCo> getStatesByCountryId(Long id);
+  List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(Long id);
 
-  List<CountryGetCitiesByStateIdCo> getCitiesByStateId(Long id);
+  List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(Long id);
 
-  CountryGetStateByIdCo getStateById(Long id);
+  CountryGetStateByIdDTO getStateById(Long id);
 
-  CountryGetStateCitiesByIdCo getStateCitiesById(Long id);
+  CountryGetStateCitiesByIdDTO getStateCitiesById(Long id);
 
-  CountryGetCityByIdCo getCityById(Long id);
+  CountryGetCityByIdDTO getCityById(Long id);
 }

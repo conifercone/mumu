@@ -16,7 +16,7 @@
 package baby.mumu.authentication.application.account.executor;
 
 import baby.mumu.authentication.application.CaptchaVerify;
-import baby.mumu.authentication.client.dto.AccountDeleteCurrentCmd;
+import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import io.micrometer.observation.annotation.Observed;

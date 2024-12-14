@@ -20,6 +20,7 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,6 +44,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.javamoney.moneta.Money;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -107,6 +110,12 @@ public class Account extends BasisDomainModel implements UserDetails {
   private List<Role> roles;
 
   /**
+   * 账户角色后代
+   */
+  @Builder.Default
+  private transient List<Role> descendantRoles = new ArrayList<>();
+
+  /**
    * 头像地址
    */
   private String avatarUrl;
@@ -142,6 +151,26 @@ public class Account extends BasisDomainModel implements UserDetails {
   private LocalDate birthday;
 
   /**
+   * 个性签名
+   */
+  private String bio;
+
+  /**
+   * 昵称
+   */
+  private String nickName;
+
+  /**
+   * 余额
+   */
+  private Money balance;
+
+  /**
+   * 数字偏好
+   */
+  private DigitalPreferenceEnum digitalPreference;
+
+  /**
    * 地址
    */
   private List<AccountAddress> addresses;
@@ -154,9 +183,10 @@ public class Account extends BasisDomainModel implements UserDetails {
   @Override
   @JsonIgnore
   public Collection<Permission> getAuthorities() {
-    return Optional.ofNullable(this.roles)
-      .orElse(Collections.emptyList())
-      .stream()
+    return Stream.concat(
+        Optional.ofNullable(this.roles).orElse(Collections.emptyList()).stream(),
+        this.descendantRoles.stream()
+      )
       .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
       .values()
       .stream()

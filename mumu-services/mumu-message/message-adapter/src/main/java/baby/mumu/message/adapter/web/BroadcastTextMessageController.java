@@ -17,9 +17,9 @@ package baby.mumu.message.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.message.client.api.BroadcastTextMessageService;
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -90,7 +90,7 @@ public class BroadcastTextMessageController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+  public Page<BroadcastTextMessageFindAllYouSendDTO> findAllYouSend(
     @ModelAttribute @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageService.findAllYouSend(broadcastTextMessageFindAllYouSendCmd);
   }

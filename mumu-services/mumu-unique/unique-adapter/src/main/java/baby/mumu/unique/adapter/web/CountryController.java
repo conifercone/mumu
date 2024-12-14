@@ -18,13 +18,13 @@ package baby.mumu.unique.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.CountryService;
-import baby.mumu.unique.client.dto.co.CountryGetAllCo;
-import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateCitiesByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
-import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
+import baby.mumu.unique.client.dto.CountryGetAllDTO;
+import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdDTO;
+import baby.mumu.unique.client.dto.CountryGetCityByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
+import baby.mumu.unique.client.dto.CountryStateCityGetAllDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -60,7 +60,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<List<CountryStateCityGetAllCo>> getCountryStateCity() {
+  public ResponseWrapper<List<CountryStateCityGetAllDTO>> getCountryStateCity() {
     return ResponseWrapper.success(countryService.getCountryStateCity());
   }
 
@@ -69,7 +69,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<List<CountryGetAllCo>> getCountries() {
+  public ResponseWrapper<List<CountryGetAllDTO>> getCountries() {
     return ResponseWrapper.success(countryService.getCountries());
   }
 
@@ -78,7 +78,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<List<CountryGetStatesByCountryIdCo>> getStatesByCountryId(
+  public ResponseWrapper<List<CountryGetStatesByCountryIdDTO>> getStatesByCountryId(
     @PathVariable(value = "id")
     Long id) {
     return ResponseWrapper.success(
@@ -90,7 +90,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<List<CountryGetCitiesByStateIdCo>> getCitiesByStateId(
+  public ResponseWrapper<List<CountryGetCitiesByStateIdDTO>> getCitiesByStateId(
     @PathVariable(value = "id")
     Long id) {
     return ResponseWrapper.success(countryService.getCitiesByStateId(id));
@@ -101,7 +101,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<CountryGetStateByIdCo> getStateById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetStateByIdDTO> getStateById(@PathVariable(value = "id")
   Long id) {
     return ResponseWrapper.success(countryService.getStateById(id));
   }
@@ -111,7 +111,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<CountryGetStateCitiesByIdCo> getStateCitiesById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetStateCitiesByIdDTO> getStateCitiesById(
+    @PathVariable(value = "id")
   Long id) {
     return ResponseWrapper.success(countryService.getStateCitiesById(id));
   }
@@ -121,7 +122,7 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<CountryGetCityByIdCo> getCityById(@PathVariable(value = "id")
+  public ResponseWrapper<CountryGetCityByIdDTO> getCityById(@PathVariable(value = "id")
   Long id) {
     return ResponseWrapper.success(countryService.getCityById(id));
   }

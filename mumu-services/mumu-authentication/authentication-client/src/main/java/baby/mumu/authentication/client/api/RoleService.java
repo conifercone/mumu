@@ -15,16 +15,22 @@
  */
 package baby.mumu.authentication.client.api;
 
-import baby.mumu.authentication.client.dto.RoleAddCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllCmd;
-import baby.mumu.authentication.client.dto.RoleFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.RoleUpdateCmd;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllCo;
-import baby.mumu.authentication.client.dto.co.RoleFindAllSliceCo;
+import baby.mumu.authentication.client.cmds.RoleAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.RoleAddCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllCmd;
+import baby.mumu.authentication.client.cmds.RoleFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.RoleFindDirectCmd;
+import baby.mumu.authentication.client.cmds.RoleFindRootCmd;
+import baby.mumu.authentication.client.cmds.RoleUpdateCmd;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllDTO;
+import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
+import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
+import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -51,6 +57,13 @@ public interface RoleService {
   void deleteById(Long id);
 
   /**
+   * 根据code删除角色
+   *
+   * @param code 角色code
+   */
+  void deleteByCode(String code);
+
+  /**
    * 根据id更新角色
    *
    * @param roleUpdateCmd 根据id更新角色指令
@@ -63,7 +76,7 @@ public interface RoleService {
    * @param roleFindAllCmd 分页查询角色指令
    * @return 查询结果
    */
-  Page<RoleFindAllCo> findAll(RoleFindAllCmd roleFindAllCmd);
+  Page<RoleFindAllDTO> findAll(RoleFindAllCmd roleFindAllCmd);
 
   /**
    * 分页查询角色（不查询总数）
@@ -71,7 +84,7 @@ public interface RoleService {
    * @param roleFindAllSliceCmd 分页查询角色指令
    * @return 查询结果
    */
-  Slice<RoleFindAllSliceCo> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd);
+  Slice<RoleFindAllSliceDTO> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd);
 
   /**
    * 分页查询已归档角色
@@ -79,7 +92,7 @@ public interface RoleService {
    * @param roleArchivedFindAllCmd 分页查询已归档角色指令
    * @return 查询结果
    */
-  Page<RoleArchivedFindAllCo> findArchivedAll(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
+  Page<RoleArchivedFindAllDTO> findArchivedAll(RoleArchivedFindAllCmd roleArchivedFindAllCmd);
 
   /**
    * 分页查询已归档角色（不查询总数）
@@ -87,7 +100,7 @@ public interface RoleService {
    * @param roleArchivedFindAllSliceCmd 分页查询已归档角色指令
    * @return 查询结果
    */
-  Slice<RoleArchivedFindAllSliceCo> findArchivedAllSlice(
+  Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
     RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   /**
@@ -104,4 +117,43 @@ public interface RoleService {
    */
   void recoverFromArchiveById(
     Long id);
+
+  /**
+   * 添加祖先角色
+   *
+   * @param roleAddAncestorCmd 添加祖先角色指令
+   */
+  void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd);
+
+  /**
+   * 获取所有根角色
+   *
+   * @return 根角色
+   */
+  Page<RoleFindRootDTO> findRootRoles(RoleFindRootCmd roleFindRootCmd);
+
+
+  /**
+   * 获取直系后代角色
+   *
+   * @return 直系后代角色
+   */
+  Page<RoleFindDirectDTO> findDirectRoles(
+    RoleFindDirectCmd roleFindDirectCmd);
+
+  /**
+   * 删除角色路径
+   *
+   * @param ancestorId   祖先ID
+   * @param descendantId 后代ID
+   */
+  void deletePath(Long ancestorId, Long descendantId);
+
+  /**
+   * 根据角色ID查询指定角色信息
+   *
+   * @param id 角色ID
+   * @return 角色信息
+   */
+  RoleFindByIdDTO findById(Long id);
 }

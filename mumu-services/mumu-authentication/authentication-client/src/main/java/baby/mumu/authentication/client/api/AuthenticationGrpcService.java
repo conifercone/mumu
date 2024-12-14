@@ -15,13 +15,10 @@
  */
 package baby.mumu.authentication.client.api;
 
-import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -34,7 +31,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class AuthenticationGrpcService {
 
-  public static final String GRPC_AUTHENTICATION = "grpc-authentication";
+  public static final String GRPC_AUTHENTICATION = "authentication";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -49,8 +46,6 @@ class AuthenticationGrpcService {
     //noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       serviceInstance -> {
-        NameResolverRegistry.getDefaultRegistry()
-          .register(new DiscoveryClientNameResolverProvider(discoveryClient));
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
             "discovery-client://" + GRPC_AUTHENTICATION)
           .defaultLoadBalancingPolicy("round_robin")
@@ -61,6 +56,6 @@ class AuthenticationGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return CollectionUtils.isNotEmpty(discoveryClient.getInstances(GRPC_AUTHENTICATION));
+    return !discoveryClient.getInstances(GRPC_AUTHENTICATION).isEmpty();
   }
 }

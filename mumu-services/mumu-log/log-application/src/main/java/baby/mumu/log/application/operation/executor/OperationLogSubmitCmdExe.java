@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.application.operation.executor;
 
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import java.util.Optional;

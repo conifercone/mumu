@@ -15,9 +15,9 @@
  */
 package baby.mumu.file.client.api;
 
-import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
+import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
+import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
+import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import java.io.InputStream;
 
 /**

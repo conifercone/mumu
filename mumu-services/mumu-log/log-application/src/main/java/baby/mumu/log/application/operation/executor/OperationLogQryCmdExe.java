@@ -15,8 +15,8 @@
  */
 package baby.mumu.log.application.operation.executor;
 
-import baby.mumu.log.client.dto.OperationLogQryCmd;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogQryCmd;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import java.util.Optional;
@@ -42,9 +42,9 @@ public class OperationLogQryCmdExe {
     this.operationLogConvertor = operationLogConvertor;
   }
 
-  public OperationLogQryCo execute(OperationLogQryCmd operationLogQryCmd) {
+  public OperationLogQryDTO execute(OperationLogQryCmd operationLogQryCmd) {
     return Optional.ofNullable(operationLogQryCmd).map(OperationLogQryCmd::getId)
-      .flatMap(operationLogGateway::findOperationLogById).flatMap(operationLogConvertor::toQryCo)
+      .flatMap(operationLogGateway::findOperationLogById).flatMap(operationLogConvertor::toQryDTO)
       .orElse(null);
   }
 }

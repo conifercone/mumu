@@ -20,9 +20,7 @@ dependencies {
     implementation(libs.bundles.micrometer)
     implementation(libs.grpc.spring.boot.starter)
     implementation(libs.spring.boot.starter.data.mongodb)
-    testImplementation(libs.spring.boot.starter.test) {
-        exclude(group = "org.skyscreamer", module = "jsonassert")
-    }
+    testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.jasypt)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.grpc.client.spring.boot.starter)
@@ -35,6 +33,7 @@ dependencies {
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
+    implementation(libs.spring.security.rsa)
 }
 
 buildscript {

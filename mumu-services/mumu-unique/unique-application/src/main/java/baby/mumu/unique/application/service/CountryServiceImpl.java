@@ -15,7 +15,6 @@
  */
 package baby.mumu.unique.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.unique.application.country.executor.CountryGetAllExe;
 import baby.mumu.unique.application.country.executor.CountryGetCitiesByStateIdCmdExe;
 import baby.mumu.unique.application.country.executor.CountryGetCityByIdCmdExe;
@@ -24,17 +23,15 @@ import baby.mumu.unique.application.country.executor.CountryGetStateCitiesByIdCm
 import baby.mumu.unique.application.country.executor.CountryGetStatesByCountryIdCmdExe;
 import baby.mumu.unique.application.country.executor.CountryStateCityGetAllExe;
 import baby.mumu.unique.client.api.CountryService;
-import baby.mumu.unique.client.dto.co.CountryGetAllCo;
-import baby.mumu.unique.client.dto.co.CountryGetCitiesByStateIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetCityByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStateCitiesByIdCo;
-import baby.mumu.unique.client.dto.co.CountryGetStatesByCountryIdCo;
-import baby.mumu.unique.client.dto.co.CountryStateCityGetAllCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import baby.mumu.unique.client.dto.CountryGetAllDTO;
+import baby.mumu.unique.client.dto.CountryGetCitiesByStateIdDTO;
+import baby.mumu.unique.client.dto.CountryGetCityByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStateCitiesByIdDTO;
+import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
+import baby.mumu.unique.client.dto.CountryStateCityGetAllDTO;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +42,6 @@ import org.springframework.stereotype.Service;
  * @since 2.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "CountryServiceImpl")
 public class CountryServiceImpl implements CountryService {
 
@@ -75,40 +71,40 @@ public class CountryServiceImpl implements CountryService {
   }
 
   @Override
-  public List<CountryStateCityGetAllCo> getCountryStateCity() {
+  public List<CountryStateCityGetAllDTO> getCountryStateCity() {
     return countryStateCityGetAllExe.execute();
   }
 
   @Override
-  public List<CountryGetAllCo> getCountries() {
+  public List<CountryGetAllDTO> getCountries() {
     return countryGetAllExe.execute();
   }
 
   @Override
-  public List<CountryGetStatesByCountryIdCo> getStatesByCountryId(
+  public List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(
     Long id) {
     return countryGetStatesByCountryIdCmdExe.execute(id);
   }
 
   @Override
-  public List<CountryGetCitiesByStateIdCo> getCitiesByStateId(
+  public List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(
     Long id) {
     return countryGetCitiesByStateIdCmdExe.execute(id);
   }
 
   @Override
-  public CountryGetStateByIdCo getStateById(Long id) {
+  public CountryGetStateByIdDTO getStateById(Long id) {
     return countryGetStateByIdCmdExe.execute(id);
   }
 
   @Override
-  public CountryGetStateCitiesByIdCo getStateCitiesById(
+  public CountryGetStateCitiesByIdDTO getStateCitiesById(
     Long id) {
     return countryGetStateCitiesByIdCmdExe.execute(id);
   }
 
   @Override
-  public CountryGetCityByIdCo getCityById(Long id) {
+  public CountryGetCityByIdDTO getCityById(Long id) {
     return countryGetCityByIdCmdExe.execute(id);
   }
 }

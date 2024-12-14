@@ -17,9 +17,9 @@ package baby.mumu.log.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.log.client.api.SystemLogService;
-import baby.mumu.log.client.dto.SystemLogFindAllCmd;
-import baby.mumu.log.client.dto.SystemLogSubmitCmd;
-import baby.mumu.log.client.dto.co.SystemLogFindAllCo;
+import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
+import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
+import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -67,7 +67,7 @@ public class SystemLogController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<SystemLogFindAllCo> findAll(
+  public Page<SystemLogFindAllDTO> findAll(
     @ModelAttribute @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogService.findAll(systemLogFindAllCmd);
   }

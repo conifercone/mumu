@@ -24,13 +24,13 @@ import baby.mumu.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServic
 import baby.mumu.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.security.AuthCallCredentials;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -59,7 +59,7 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   @API(status = Status.STABLE, since = "1.0.1")
   public Empty sendMail(TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -72,7 +72,7 @@ public class TemplateMailGrpcService extends MailGrpcService implements
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<Empty> syncSendMail(
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
@@ -85,7 +85,7 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   private Empty sendMailFromGrpc(
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     TemplateMailServiceBlockingStub templateMailServiceBlockingStub = TemplateMailServiceGrpc.newBlockingStub(
       channel);
     return templateMailServiceBlockingStub.withCallCredentials(callCredentials)
@@ -94,7 +94,7 @@ public class TemplateMailGrpcService extends MailGrpcService implements
 
   private @NotNull ListenableFuture<Empty> syncSendMailFromGrpc(
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd,
-    AuthCallCredentials callCredentials) {
+    CallCredentials callCredentials) {
     TemplateMailServiceFutureStub templateMailServiceFutureStub = TemplateMailServiceGrpc.newFutureStub(
       channel);
     return templateMailServiceFutureStub.withCallCredentials(callCredentials)

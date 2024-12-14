@@ -17,7 +17,6 @@ package baby.mumu.file.configuration;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.ObservationRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
@@ -37,12 +36,6 @@ public class MicrometerConfiguration {
   public ObservationGrpcClientInterceptor observationGrpcClientInterceptor(
     ObservationRegistry observationRegistry) {
     return new ObservationGrpcClientInterceptor(observationRegistry);
-  }
-
-  @Bean
-  public ObservationGrpcServerInterceptor observationGrpcServerInterceptor(
-    ObservationRegistry observationRegistry) {
-    return new ObservationGrpcServerInterceptor(observationRegistry);
   }
 
   @Bean

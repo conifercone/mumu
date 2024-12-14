@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.qrcode.convertor;
 
-import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;

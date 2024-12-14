@@ -16,9 +16,9 @@
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import java.util.Optional;
@@ -59,10 +59,10 @@ public class CaptchaConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<SimpleCaptchaGeneratedCo> toSimpleCaptchaGeneratedCo(
+  public Optional<SimpleCaptchaGeneratedDTO> toSimpleCaptchaGeneratedDTO(
     SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha)
-      .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedCo);
+      .map(CaptchaMapper.INSTANCE::toSimpleCaptchaGeneratedDTO);
   }
 
   @Contract("_ -> new")

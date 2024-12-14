@@ -85,8 +85,8 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         case INVALID_GRANT -> exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
         case INVALID_SCOPE -> exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
         default -> {
-          ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
           operationFailLog(errorCode, error.getDescription(), IpUtil.getIpAddr(request));
+          ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
         }
       }
     }
@@ -103,10 +103,10 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
   private void exceptionResponse(HttpServletResponse response, @NotNull ResponseCode responseCode,
     HttpServletRequest request)
     throws IOException {
-    ResponseWrapper.exceptionResponse(response,
-      responseCode);
     operationFailLog(responseCode.getCode(),
       responseCode.getMessage(), IpUtil.getIpAddr(request));
+    ResponseWrapper.exceptionResponse(response,
+      responseCode);
   }
 
   /**

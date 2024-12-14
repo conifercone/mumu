@@ -16,6 +16,8 @@
 package baby.mumu.file.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.file.application.streamfile.executor.StreamFileDownloadCmdExe;
@@ -26,9 +28,9 @@ import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import baby.mumu.file.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceImplBase;
-import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
+import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
+import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
+import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
@@ -37,9 +39,8 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "StreamFileServiceImpl")
 public class StreamFileServiceImpl extends StreamFileServiceImplBase implements StreamFileService {
 
@@ -104,7 +105,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
         StreamFileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
       responseObserver.onCompleted();
     } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
+      throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
     }
   }
 

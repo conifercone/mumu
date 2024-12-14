@@ -15,8 +15,8 @@
  */
 package baby.mumu.message.application.subscription.executor;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
@@ -49,7 +49,7 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
-  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> execute(
+  public Page<SubscriptionTextMessageFindAllWithSomeOneDTO> execute(
     @NotNull SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     Assert.notNull(subscriptionTextMessageFindAllWithSomeOneCmd,
       "SubscriptionTextMessageFindAllWithSomeOneCmd cannot null");
@@ -57,11 +57,11 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
       subscriptionTextMessageFindAllWithSomeOneCmd.getCurrent(),
       subscriptionTextMessageFindAllWithSomeOneCmd.getPageSize(),
       subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
-    List<SubscriptionTextMessageFindAllWithSomeOneCo> subscriptionTextMessageFindAllWithSomeOneCos = allMessageRecordWithSomeone.getContent()
+    List<SubscriptionTextMessageFindAllWithSomeOneDTO> subscriptionTextMessageFindAllWithSomeOneDTOS = allMessageRecordWithSomeone.getContent()
       .stream()
       .map(subscriptionTextMessageConvertor::toFindAllWithSomeOne)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(subscriptionTextMessageFindAllWithSomeOneCos,
+    return new PageImpl<>(subscriptionTextMessageFindAllWithSomeOneDTOS,
       allMessageRecordWithSomeone.getPageable(),
       allMessageRecordWithSomeone.getTotalElements());
   }

@@ -15,22 +15,24 @@
  */
 package baby.mumu.authentication.client.api;
 
-import baby.mumu.authentication.client.dto.PermissionAddAncestorCmd;
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindDirectCmd;
-import baby.mumu.authentication.client.dto.PermissionFindRootCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.cmds.PermissionAddAncestorCmd;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindDirectCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindRootCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -57,6 +59,13 @@ public interface PermissionService {
   void deleteById(Long id);
 
   /**
+   * 根据code删除权限
+   *
+   * @param code 权限编码
+   */
+  void deleteByCode(String code);
+
+  /**
    * 根据id更新权限
    *
    * @param permissionUpdateCmd 权限更新指令
@@ -69,7 +78,7 @@ public interface PermissionService {
    * @param permissionFindAllCmd 分页查询权限指令
    * @return 查询结果
    */
-  Page<PermissionFindAllCo> findAll(PermissionFindAllCmd permissionFindAllCmd);
+  Page<PermissionFindAllDTO> findAll(PermissionFindAllCmd permissionFindAllCmd);
 
   /**
    * 分页查询权限（不查询总数）
@@ -77,7 +86,8 @@ public interface PermissionService {
    * @param permissionFindAllSliceCmd 分页查询权限指令
    * @return 查询结果
    */
-  Slice<PermissionFindAllSliceCo> findAllSlice(PermissionFindAllSliceCmd permissionFindAllSliceCmd);
+  Slice<PermissionFindAllSliceDTO> findAllSlice(
+    PermissionFindAllSliceCmd permissionFindAllSliceCmd);
 
   /**
    * 分页查询已归档权限
@@ -85,7 +95,7 @@ public interface PermissionService {
    * @param permissionArchivedFindAllCmd 分页查询已归档权限指令
    * @return 查询结果
    */
-  Page<PermissionArchivedFindAllCo> findArchivedAll(
+  Page<PermissionArchivedFindAllDTO> findArchivedAll(
     PermissionArchivedFindAllCmd permissionArchivedFindAllCmd);
 
   /**
@@ -94,7 +104,7 @@ public interface PermissionService {
    * @param permissionArchivedFindAllSliceCmd 分页查询权限指令
    * @return 查询结果
    */
-  Slice<PermissionArchivedFindAllSliceCo> findArchivedAllSlice(
+  Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
     PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd);
 
   /**
@@ -103,7 +113,15 @@ public interface PermissionService {
    * @param id 权限ID
    * @return 查询结果
    */
-  PermissionFindByIdCo findById(Long id);
+  PermissionFindByIdDTO findById(Long id);
+
+  /**
+   * 根据code查询权限
+   *
+   * @param code 权限编码
+   * @return 查询结果
+   */
+  PermissionFindByCodeDTO findByCode(String code);
 
   /**
    * 根据id归档权限
@@ -132,7 +150,7 @@ public interface PermissionService {
    *
    * @return 根权限
    */
-  Page<PermissionFindRootCo> findRootPermissions(PermissionFindRootCmd permissionFindRootCmd);
+  Page<PermissionFindRootDTO> findRootPermissions(PermissionFindRootCmd permissionFindRootCmd);
 
 
   /**
@@ -140,7 +158,7 @@ public interface PermissionService {
    *
    * @return 直系后代权限
    */
-  Page<PermissionFindDirectCo> findDirectPermissions(
+  Page<PermissionFindDirectDTO> findDirectPermissions(
     PermissionFindDirectCmd permissionFindDirectCmd);
 
   /**
@@ -150,4 +168,6 @@ public interface PermissionService {
    * @param descendantId 后代ID
    */
   void deletePath(Long ancestorId, Long descendantId);
+
+  void downloadAll(HttpServletResponse response);
 }

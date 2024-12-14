@@ -15,7 +15,9 @@
  */
 package baby.mumu.basis.kotlin.tools
 
-import baby.mumu.basis.client.dto.co.BaseClientObject
+import baby.mumu.basis.dto.BaseDataTransferObject
+import baby.mumu.basis.exception.MuMuException
+import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
 import java.security.SecureRandom
 import java.time.LocalDateTime
@@ -151,14 +153,14 @@ object CommonUtil {
     /**
      * 转换为账户时区
      *
-     * @param baseClientObject 客户端对象
+     * @param baseDataTransferObject 基础数据传输对象
      */
     @API(status = API.Status.STABLE, since = "1.0.3")
     @JvmStatic
     fun convertToAccountZone(
-        baseClientObject: BaseClientObject
+        baseDataTransferObject: BaseDataTransferObject
     ) {
-        Optional.ofNullable(baseClientObject).ifPresent { baseCo ->
+        Optional.ofNullable(baseDataTransferObject).ifPresent { baseCo ->
             SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
                 val targetZoneId = ZoneId.of(timezone)
                 Optional.ofNullable(baseCo.creationTime).ifPresent {
@@ -224,5 +226,17 @@ object CommonUtil {
             stringBuilder.append(CHARACTERS[RANDOM.nextInt(CHARACTERS.length)])
         }
         return stringBuilder.toString()
+    }
+
+    @API(status = API.Status.STABLE, since = "2.4.0")
+    @JvmStatic
+    fun validateTimezone(timezone: String) {
+        if (timezone.isNotBlank()) {
+            try {
+                ZoneId.of(timezone)
+            } catch (e: Exception) {
+                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE)
+            }
+        }
     }
 }

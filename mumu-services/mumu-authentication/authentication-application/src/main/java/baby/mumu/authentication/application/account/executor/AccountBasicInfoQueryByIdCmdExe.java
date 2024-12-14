@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.co.AccountBasicInfoCo;
+import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.exception.MuMuException;
@@ -45,10 +45,10 @@ public class AccountBasicInfoQueryByIdCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public AccountBasicInfoCo execute(Long id) {
+  public AccountBasicInfoDTO execute(Long id) {
     return Optional.ofNullable(id)
       .flatMap(accountGateway::getAccountBasicInfoById)
-      .flatMap(accountConvertor::toBasicInfoCo)
+      .flatMap(accountConvertor::toBasicInfoDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

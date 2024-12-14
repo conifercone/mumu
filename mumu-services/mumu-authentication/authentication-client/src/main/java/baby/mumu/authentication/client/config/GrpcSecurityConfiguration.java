@@ -19,16 +19,29 @@ import baby.mumu.basis.constants.CommonConstants;
 import io.grpc.MethodDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import net.devh.boot.grpc.server.security.authentication.BearerAuthenticationReader;
+import net.devh.boot.grpc.server.security.authentication.CompositeGrpcAuthenticationReader;
+import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
+import net.devh.boot.grpc.server.security.check.AccessPredicate;
+import net.devh.boot.grpc.server.security.check.AccessPredicateVoter;
+import net.devh.boot.grpc.server.security.check.GrpcSecurityMetadataSource;
+import net.devh.boot.grpc.server.security.check.ManualGrpcSecurityMetadataSource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.security.GrpcSecurity;
-import org.lognet.springboot.grpc.security.GrpcSecurityConfigurerAdapter;
-import org.lognet.springboot.grpc.security.GrpcServiceAuthorizationConfigurer.AuthorizedMethod;
-import org.lognet.springboot.grpc.security.GrpcServiceAuthorizationConfigurer.Registry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.util.Assert;
@@ -40,7 +53,7 @@ import org.springframework.util.Assert;
  * @since 1.0.0
  */
 @Configuration
-public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
+public class GrpcSecurityConfiguration {
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final ResourceServerProperties resourceServerProperties;
@@ -56,9 +69,24 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
     this.resourceServerProperties = resourceServerProperties;
   }
 
-  @Override
-  public void configure(@NotNull GrpcSecurity builder) throws Exception {
-    Registry authorizeRequests = builder.authorizeRequests();
+  @Bean
+  AuthenticationManager authenticationManager() {
+    final List<AuthenticationProvider> providers = new ArrayList<>();
+    providers.add(jwtAuthenticationProvider);
+    return new ProviderManager(providers);
+  }
+
+  @Bean
+  GrpcAuthenticationReader authenticationReader() {
+    final List<GrpcAuthenticationReader> readers = new ArrayList<>();
+    readers.add(new BearerAuthenticationReader(
+      BearerTokenAuthenticationToken::new));
+    return new CompositeGrpcAuthenticationReader(readers);
+  }
+
+  @Bean
+  GrpcSecurityMetadataSource grpcSecurityMetadataSource() {
+    final ManualGrpcSecurityMetadataSource source = new ManualGrpcSecurityMetadataSource();
     if (CollectionUtils.isNotEmpty(resourceServerProperties.getGrpcs())) {
       resourceServerProperties.getGrpcs()
         .forEach(grpc -> {
@@ -68,17 +96,21 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
                 Class<?> clazz = Class.forName(grpc.getServiceFullPath());
                 Method method = clazz.getDeclaredMethod(String.format(GRPC_GET_METHOD_TEMPLATE,
                   StringUtils.capitalize(grpcPolicy.getMethod())));
-                AuthorizedMethod methods = authorizeRequests.methods(
-                  (MethodDescriptor<?, ?>) method.invoke(null));
+                MethodDescriptor<?, ?> methods =
+                  (MethodDescriptor<?, ?>) method.invoke(null);
                 if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
-                  methods.hasAnyRole(grpcPolicy.getRole());
+                  source.set(methods, AccessPredicate.hasRole(grpcPolicy.getRole()));
                 } else if (StringUtils.isNotBlank(
                   grpcPolicy.getAuthority())) {
                   Assert.isTrue(
                     !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                     "Permission configuration cannot be empty and cannot start with SCOPE_");
-                  methods.hasAnyAuthority(
-                    CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()));
+                  source.set(methods, AccessPredicate.hasAuthority(new SimpleGrantedAuthority(
+                    CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()))));
+                } else if (grpcPolicy.isPermitAll()) {
+                  source.set(methods, AccessPredicate.permitAll());
+                } else {
+                  source.setDefault(AccessPredicate.denyAll());
                 }
               } catch (ClassNotFoundException | InvocationTargetException |
                        IllegalAccessException | NoSuchMethodException e) {
@@ -88,8 +120,14 @@ public class GrpcSecurityConfiguration extends GrpcSecurityConfigurerAdapter {
           }
         });
     }
-    authorizeRequests
-      .and()
-      .authenticationProvider(jwtAuthenticationProvider);
+    return source;
+  }
+
+  @Bean
+  @SuppressWarnings("deprecation")
+  AccessDecisionManager accessDecisionManager() {
+    final List<AccessDecisionVoter<?>> voters = new ArrayList<>();
+    voters.add(new AccessPredicateVoter());
+    return new UnanimousBased(voters);
   }
 }

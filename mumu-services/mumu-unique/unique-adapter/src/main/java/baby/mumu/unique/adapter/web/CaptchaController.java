@@ -18,9 +18,9 @@ package baby.mumu.unique.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.unique.client.api.CaptchaService;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.co.SimpleCaptchaGeneratedCo;
+import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
+import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
+import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -57,7 +57,7 @@ public class CaptchaController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public SimpleCaptchaGeneratedCo simple(
+  public SimpleCaptchaGeneratedDTO simple(
     @ModelAttribute SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
   }

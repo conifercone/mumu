@@ -1,4 +1,5 @@
 -- @formatter:off
+-- noinspection SqlResolveForFile
 -- noinspection SqlConstantExpressionForFile
 -- authorities name字段设置为NOT NULL,添加空字符串为默认值
 ALTER TABLE authorities

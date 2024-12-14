@@ -16,30 +16,31 @@
 package baby.mumu.authentication.infrastructure.permission.convertor;
 
 import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcCo;
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionDownloadAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionArchivedDo;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -53,7 +54,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface PermissionMapper extends GrpcMapper {
+public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
 
   PermissionMapper INSTANCE = Mappers.getMapper(PermissionMapper.class);
 
@@ -91,19 +92,22 @@ public interface PermissionMapper extends GrpcMapper {
   void toEntity(PermissionUpdateCmd permissionUpdateCmd, @MappingTarget Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionFindByIdCo toFindByIdCo(Permission permission);
+  PermissionFindByIdDTO toFindByIdDTO(Permission permission);
+
+  @API(status = Status.STABLE, since = "2.4.0")
+  PermissionFindByCodeDTO toFindByCodeDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionFindAllCo toFindAllCo(Permission permission);
+  PermissionFindAllDTO toFindAllDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionFindAllSliceCo toFindAllSliceCo(Permission permission);
+  PermissionFindAllSliceDTO toFindAllSliceDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  PermissionArchivedFindAllCo toArchivedFindAllCo(Permission permission);
+  PermissionArchivedFindAllDTO toArchivedFindAllDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionArchivedFindAllSliceCo toArchivedFindAllSliceCo(Permission permission);
+  PermissionArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
   PermissionDo toDataObject(Permission permission);
@@ -121,48 +125,18 @@ public interface PermissionMapper extends GrpcMapper {
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionFindAllGrpcCo toPermissionFindAllGrpcCo(PermissionFindAllCo permissionFindAllCo);
+  PermissionFindAllGrpcDTO toPermissionFindAllGrpcDTO(PermissionFindAllDTO permissionFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.3.0")
-  PermissionFindByIdGrpcCo toPermissionFindByIdGrpcCo(PermissionFindByIdCo permissionFindByIdCo);
+  PermissionFindByIdGrpcDTO toPermissionFindByIdGrpcDTO(
+    PermissionFindByIdDTO permissionFindByIdDTO);
 
   @API(status = Status.STABLE, since = "2.3.0")
-  PermissionFindRootCo toPermissionFindRootCo(Permission permission);
+  PermissionFindRootDTO toPermissionFindRootDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.3.0")
-  PermissionFindDirectCo toPermissionFindDirectCo(Permission permission);
+  PermissionFindDirectDTO toPermissionFindDirectDTO(Permission permission);
 
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindByIdCo permissionFindByIdCo) {
-    CommonUtil.convertToAccountZone(permissionFindByIdCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionFindDirectCo permissionFindDirectCo) {
-    CommonUtil.convertToAccountZone(permissionFindDirectCo);
-  }
-
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindRootCo permissionFindRootCo) {
-    CommonUtil.convertToAccountZone(permissionFindRootCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget PermissionFindAllCo permissionFindAllCo) {
-    CommonUtil.convertToAccountZone(permissionFindAllCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionFindAllSliceCo permissionFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(permissionFindAllSliceCo);
-  }
-
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget PermissionArchivedFindAllSliceCo permissionArchivedFindAllSliceCo) {
-    CommonUtil.convertToAccountZone(permissionArchivedFindAllSliceCo);
-  }
+  @API(status = Status.STABLE, since = "2.4.0")
+  PermissionDownloadAllDTO toPermissionDownloadAllDTO(Permission permission);
 }

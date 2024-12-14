@@ -253,13 +253,14 @@ public class MetamodelGenerator extends AbstractProcessor {
   private void generateBasicProjectInformation(String packageName, String entityName,
     Builder builder,
     @NotNull Metamodel annotation) {
+    String seeDoc = String.format(
+      SEE_S_S_LINK_S,
+      packageName, entityName, Metamodel.class.getName());
     if (annotation.projectVersion()) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", projectVersion)
-        .addJavadoc(String.format(
-          SEE_S_S_LINK_S,
-          packageName, entityName, Metamodel.class.getName()))
+        .addJavadoc(seeDoc)
         .build();
       builder.addField(fieldSpec);
     }
@@ -268,9 +269,7 @@ public class MetamodelGenerator extends AbstractProcessor {
           annotation.formattedProjectVersionFiledName())
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", String.format("(v%s)", projectVersion))
-        .addJavadoc(String.format(
-          SEE_S_S_LINK_S,
-          packageName, entityName, Metamodel.class.getName()))
+        .addJavadoc(seeDoc)
         .build();
       builder.addField(fieldSpec);
     }
@@ -278,9 +277,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectNameFiledName())
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", projectName)
-        .addJavadoc(String.format(
-          SEE_S_S_LINK_S,
-          packageName, entityName, Metamodel.class.getName()))
+        .addJavadoc(seeDoc)
         .build();
       builder.addField(fieldSpec);
     }

@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- 性别枚举
 CREATE TYPE sex AS ENUM (
     'MALE',

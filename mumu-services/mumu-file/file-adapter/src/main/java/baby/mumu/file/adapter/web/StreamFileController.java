@@ -16,11 +16,11 @@
 package baby.mumu.file.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.kotlin.tools.FileDownloadUtil;
 import baby.mumu.file.client.api.StreamFileService;
-import baby.mumu.file.client.dto.StreamFileDownloadCmd;
-import baby.mumu.file.client.dto.StreamFileRemoveCmd;
-import baby.mumu.file.client.dto.StreamFileSyncUploadCmd;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
+import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
+import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -57,8 +57,6 @@ public class StreamFileController {
 
   private final StreamFileService streamFileService;
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
-
   @Autowired
   public StreamFileController(StreamFileService streamFileService) {
     this.streamFileService = streamFileService;
@@ -69,10 +67,8 @@ public class StreamFileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void syncUpload(@RequestParam("streamFileSyncUploadCmd") String streamFileSyncUploadCmd,
+  public void syncUpload(@ModelAttribute StreamFileSyncUploadCmd fileUploadCmd,
     @RequestParam("file") MultipartFile file) throws IOException {
-    StreamFileSyncUploadCmd fileUploadCmd = objectMapper.readValue(streamFileSyncUploadCmd,
-      StreamFileSyncUploadCmd.class);
     fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
     fileUploadCmd.setOriginName(file.getOriginalFilename());
     fileUploadCmd.setSize(file.getSize());
@@ -85,17 +81,13 @@ public class StreamFileController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public void download(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd,
-    HttpServletResponse response)
-    throws IOException {
+    HttpServletResponse response) {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
-    response.setHeader("Content-Disposition",
-      "attachment;filename=" + (ObjectUtils.isEmpty(
+    FileDownloadUtil.download(response, ObjectUtils.isEmpty(
         streamFileDownloadCmd.getRename())
         ? streamFileDownloadCmd.getName()
-        : streamFileDownloadCmd.getRename()));
-    response.setContentType("application/force-download");
-    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    IOUtils.copy(streamFileService.download(streamFileDownloadCmd), response.getOutputStream());
+        : streamFileDownloadCmd.getRename(), streamFileService.download(streamFileDownloadCmd),
+      "application/force-download");
   }
 
   @Operation(summary = "获取字符串格式的文件内容")

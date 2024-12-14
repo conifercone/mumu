@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.application.qrcode.executor;
 
-import baby.mumu.unique.client.dto.QRCodeGenerateCmd;
+import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 import baby.mumu.unique.domain.qrcode.gateway.QRCodeGateway;
 import baby.mumu.unique.infrastructure.qrcode.convertor.QRCodeConvertor;
 import org.springframework.beans.factory.annotation.Autowired;

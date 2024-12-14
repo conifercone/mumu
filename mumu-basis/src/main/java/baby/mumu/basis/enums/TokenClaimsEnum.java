@@ -21,35 +21,47 @@ package baby.mumu.basis.enums;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
+@SuppressWarnings("LombokGetterMayBeUsed")
 public enum TokenClaimsEnum {
 
   /**
    * 权限
    */
-  AUTHORITIES,
+  AUTHORITIES("ats"),
 
   /**
    * 账户ID
    */
-  ACCOUNT_ID,
+  ACCOUNT_ID("aid"),
 
   /**
    * 账户名
    */
-  ACCOUNT_NAME,
+  ACCOUNT_NAME("ane"),
 
   /**
    * 时区
    */
-  TIMEZONE,
+  TIMEZONE("tz"),
 
   /**
    * 语言偏好
    */
-  LANGUAGE,
+  LANGUAGE("lang"),
 
   /**
    * 授权类型
    */
-  AUTHORIZATION_GRANT_TYPE
+  AUTHORIZATION_GRANT_TYPE("grant");
+
+
+  private final String claimName;
+
+  public String getClaimName() {
+    return claimName;
+  }
+
+  TokenClaimsEnum(String claimName) {
+    this.claimName = claimName;
+  }
 }

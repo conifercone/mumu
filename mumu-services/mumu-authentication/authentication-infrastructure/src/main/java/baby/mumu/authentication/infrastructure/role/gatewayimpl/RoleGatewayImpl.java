@@ -20,6 +20,9 @@ import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsDo;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsDoId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionDo;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisRepository;
@@ -39,6 +42,7 @@ import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apiguardian.api.API;
@@ -74,6 +78,7 @@ public class RoleGatewayImpl implements RoleGateway {
   private final RolePermissionRepository rolePermissionRepository;
   private final RoleRedisRepository roleRedisRepository;
   private final RolePermissionRedisRepository rolePermissionRedisRepository;
+  private final RolePathsRepository rolePathsRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
     ObjectProvider<DistributedLock> distributedLockObjectProvider,
@@ -82,7 +87,8 @@ public class RoleGatewayImpl implements RoleGateway {
     ExtensionProperties extensionProperties,
     RolePermissionRepository rolePermissionRepository,
     RoleRedisRepository roleRedisRepository,
-    RolePermissionRedisRepository rolePermissionRedisRepository) {
+    RolePermissionRedisRepository rolePermissionRedisRepository,
+    RolePathsRepository rolePathsRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.distributedLock = distributedLockObjectProvider.getIfAvailable();
@@ -93,6 +99,7 @@ public class RoleGatewayImpl implements RoleGateway {
     this.rolePermissionRepository = rolePermissionRepository;
     this.roleRedisRepository = roleRedisRepository;
     this.rolePermissionRedisRepository = rolePermissionRedisRepository;
+    this.rolePathsRepository = rolePathsRepository;
   }
 
   @Override
@@ -105,6 +112,8 @@ public class RoleGatewayImpl implements RoleGateway {
         && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
       .ifPresentOrElse(roleDo -> {
         roleRepository.persist(roleDo);
+        rolePathsRepository.persist(
+          new RolePathsDo(new RolePathsDoId(roleDo.getId(), roleDo.getId(), 0L), roleDo, roleDo));
         roleRedisRepository.deleteById(roleDo.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
@@ -138,10 +147,20 @@ public class RoleGatewayImpl implements RoleGateway {
       }
       rolePermissionRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
+      rolePathsRepository.deleteAllPathsByRoleId(roleId);
       roleArchivedRepository.deleteById(roleId);
       roleRedisRepository.deleteById(roleId);
       rolePermissionRedisRepository.deleteById(roleId);
     });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.4.0")
+  @DangerousOperation("删除code为%0的角色")
+  public void deleteByCode(String code) {
+    Optional.ofNullable(code).flatMap(roleRepository::findByCode).map(RoleDo::getId)
+      .ifPresent(this::deleteById);
   }
 
   @Override
@@ -268,6 +287,7 @@ public class RoleGatewayImpl implements RoleGateway {
       .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())
       .ifPresent(roleIdNotNull -> {
         roleArchivedRepository.deleteById(roleIdNotNull);
+        rolePathsRepository.deleteAllPathsByRoleId(roleIdNotNull);
         rolePermissionRepository.deleteByRoleId(roleIdNotNull);
         roleRedisRepository.deleteById(roleIdNotNull);
         rolePermissionRedisRepository.deleteById(roleIdNotNull);
@@ -285,5 +305,92 @@ public class RoleGatewayImpl implements RoleGateway {
         roleRedisRepository.deleteById(roleDo.getId());
         rolePermissionRedisRepository.deleteById(roleDo.getId());
       });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void addAncestor(Long descendantId, Long ancestorId) {
+    Optional<RoleDo> ancestorRoleDoOptional = roleRepository.findById(ancestorId);
+    Optional<RoleDo> descendantRoleDoOptional = roleRepository.findById(
+      descendantId);
+    if (ancestorRoleDoOptional.isPresent() && descendantRoleDoOptional.isPresent()) {
+      // 后代角色
+      RoleDo descendantRoleDo = descendantRoleDoOptional.get();
+      // 为节点添加从所有祖先到自身的路径
+      List<RolePathsDo> ancestorRoles = rolePathsRepository.findByDescendantId(
+        ancestorId);
+      // 成环检测
+      Set<Long> ancestorIds = ancestorRoles.stream()
+        .map(rolePathsDo -> rolePathsDo.getId().getAncestorId())
+        .collect(
+          Collectors.toSet());
+      if (ancestorIds.contains(descendantId)) {
+        throw new MuMuException(ResponseCode.ROLE_CYCLE);
+      }
+      if (rolePathsRepository.existsById(
+        new RolePathsDoId(ancestorId, descendantId, 1L))) {
+        throw new MuMuException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
+      }
+      List<RolePathsDo> rolePathsDos = ancestorRoles.stream()
+        .map(rolePathsDo -> new RolePathsDo(
+          new RolePathsDoId(rolePathsDo.getId().getAncestorId(), descendantId,
+            rolePathsDo.getId().getDepth() + 1),
+          rolePathsDo.getAncestor(), descendantRoleDo))
+        .filter(
+          rolePathsDo -> !rolePathsRepository.existsById(rolePathsDo.getId())
+        )
+        .collect(
+          Collectors.toList());
+      rolePathsRepository.persistAll(rolePathsDos);
+      roleRedisRepository.deleteById(ancestorId);
+      roleRedisRepository.deleteById(descendantId);
+    }
+  }
+
+  @Override
+  public Page<Role> findRootRoles(int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<RolePathsDo> repositoryAll = rolePathsRepository.findRootRoles(
+      pageRequest);
+    List<Role> roles = repositoryAll.getContent().stream().flatMap(
+        rolePathsDo -> findById(rolePathsDo.getId().getAncestorId()).stream())
+      .collect(Collectors.toList());
+    return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  public Page<Role> findDirectRoles(Long ancestorId, int current, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+    Page<RolePathsDo> repositoryAll = rolePathsRepository.findDirectRoles(
+      ancestorId,
+      pageRequest);
+    List<Role> roles = repositoryAll.getContent().stream().flatMap(
+        rolePathsDo -> findById(rolePathsDo.getId().getDescendantId()).stream())
+      .collect(Collectors.toList());
+    return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deletePath(Long ancestorId, Long descendantId) {
+    if (rolePathsRepository.existsDescendantRoles(descendantId)) {
+      throw new MuMuException(ResponseCode.DESCENDANT_ROLE_HAS_DESCENDANT_ROLE);
+    }
+    rolePathsRepository.deleteById(new RolePathsDoId(ancestorId, descendantId, 1L));
+    rolePathsRepository.deleteUnreachableData();
+    roleRedisRepository.deleteById(ancestorId);
+    roleRedisRepository.deleteById(descendantId);
+  }
+
+  @Override
+  public Optional<Role> findById(Long id) {
+    return Optional.ofNullable(id).flatMap(roleRedisRepository::findById).flatMap(
+      roleConvertor::toEntity).or(() -> {
+      Optional<Role> role = roleRepository.findById(id)
+        .flatMap(roleConvertor::toEntity);
+      role.flatMap(roleConvertor::toRoleRedisDo)
+        .ifPresent(roleRedisRepository::save);
+      return role;
+    });
   }
 }

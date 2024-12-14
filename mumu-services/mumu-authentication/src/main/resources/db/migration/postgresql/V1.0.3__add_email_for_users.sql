@@ -1,4 +1,6 @@
 -- @formatter:off
+-- noinspection SqlConstantExpressionForFile
+-- noinspection SqlResolveForFile
 -- users新增列
 -- 电子邮箱
 ALTER TABLE users

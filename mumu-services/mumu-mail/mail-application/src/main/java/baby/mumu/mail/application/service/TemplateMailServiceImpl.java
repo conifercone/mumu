@@ -23,10 +23,8 @@ import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.mail.application.template.executor.TemplateMailSendCmdExe;
 import baby.mumu.mail.client.api.TemplateMailService;
 import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
-import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCo;
 import baby.mumu.mail.client.api.grpc.TemplateMailServiceGrpc.TemplateMailServiceImplBase;
-import baby.mumu.mail.client.dto.TemplateMailSendCmd;
-import baby.mumu.mail.client.dto.co.TemplateMailSendCo;
+import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Empty;
@@ -34,9 +32,8 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Map;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,7 +45,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "TemplateMailServiceImpl")
 public class TemplateMailServiceImpl extends TemplateMailServiceImplBase implements
   TemplateMailService {
@@ -68,46 +65,39 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     templateMailSendCmdExe.execute(templateMailSendCmd);
   }
 
-  private @NotNull TemplateMailSendCo getTemplateMailSendCo(
+  private @NotNull TemplateMailSendCmd getTemplateMailSendCmd(
     @NotNull TemplateMailSendGrpcCmd request) {
-    TemplateMailSendCo templateMailSendCo = new TemplateMailSendCo();
-    TemplateMailSendGrpcCo templateMailSendGrpcCo = request.getTemplateMailSendGrpcCo();
-    templateMailSendCo.setTo(
-      templateMailSendGrpcCo.hasTo() ? templateMailSendGrpcCo.getTo().getValue() : null);
-    templateMailSendCo.setName(
-      templateMailSendGrpcCo.hasName() ? templateMailSendGrpcCo.getName().getValue() : null);
-    templateMailSendCo.setFrom(
-      templateMailSendGrpcCo.hasFrom() ? templateMailSendGrpcCo.getFrom().getValue() : username);
-    templateMailSendCo.setAddress(
-      templateMailSendGrpcCo.hasAddress() ? templateMailSendGrpcCo.getAddress().getValue()
+    TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
+    templateMailSendCmd.setTo(
+      request.hasTo() ? request.getTo().getValue() : null);
+    templateMailSendCmd.setName(
+      request.hasName() ? request.getName().getValue() : null);
+    templateMailSendCmd.setFrom(
+      request.hasFrom() ? request.getFrom().getValue() : username);
+    templateMailSendCmd.setAddress(
+      request.hasAddress() ? request.getAddress().getValue()
         : null);
-    templateMailSendCo.setSubject(
-      templateMailSendGrpcCo.hasSubject() ? templateMailSendGrpcCo.getSubject().getValue()
+    templateMailSendCmd.setSubject(
+      request.hasSubject() ? request.getSubject().getValue()
         : null);
     try {
       //noinspection unchecked
-      templateMailSendCo.setData(
-        templateMailSendGrpcCo.hasData() ? (Map<String, Object>) objectMapper.readValue(
-          templateMailSendGrpcCo.getData().getValue(),
+      templateMailSendCmd.setData(
+        request.hasData() ? (Map<String, Object>) objectMapper.readValue(
+          request.getData().getValue(),
           Map.class) : null);
     } catch (JsonProcessingException e) {
       throw new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR);
     }
-    return templateMailSendCo;
+    return templateMailSendCmd;
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void sendMail(TemplateMailSendGrpcCmd request, StreamObserver<Empty> responseObserver) {
-    TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
-    TemplateMailSendCo templateMailSendCo = getTemplateMailSendCo(
-      request);
-    templateMailSendCmd.setTemplateMailSendCo(templateMailSendCo);
-    try {
-      templateMailSendCmdExe.execute(templateMailSendCmd);
-    } catch (Exception e) {
-      throw new GRpcRuntimeExceptionWrapper(e);
-    }
+  public void sendMail(TemplateMailSendGrpcCmd request,
+    @NotNull StreamObserver<Empty> responseObserver) {
+    templateMailSendCmdExe.execute(getTemplateMailSendCmd(
+      request));
     responseObserver.onNext(Empty.newBuilder().build());
     responseObserver.onCompleted();
   }

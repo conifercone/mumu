@@ -16,21 +16,23 @@
 package baby.mumu.authentication.infrastructure.permission.convertor;
 
 import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcCo;
-import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcCo;
-import baby.mumu.authentication.client.dto.PermissionAddCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllCmd;
-import baby.mumu.authentication.client.dto.PermissionFindAllSliceCmd;
-import baby.mumu.authentication.client.dto.PermissionUpdateCmd;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionArchivedFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindAllSliceCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindByIdCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindDirectCo;
-import baby.mumu.authentication.client.dto.co.PermissionFindRootCo;
+import baby.mumu.authentication.client.api.grpc.PermissionFindAllGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.authentication.client.cmds.PermissionAddCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionArchivedFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllCmd;
+import baby.mumu.authentication.client.cmds.PermissionFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionArchivedFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionDownloadAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllDTO;
+import baby.mumu.authentication.client.dto.PermissionFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
+import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
+import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
+import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
@@ -41,7 +43,6 @@ import baby.mumu.authentication.infrastructure.relations.database.PermissionPath
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -61,19 +62,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionConvertor {
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final PermissionRepository permissionRepository;
   private final SimpleTextTranslation simpleTextTranslation;
   private final PermissionArchivedRepository permissionArchivedRepository;
   private final PermissionPathsRepository permissionPathsRepository;
 
   @Autowired
-  public PermissionConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-    PermissionRepository permissionRepository,
+  public PermissionConvertor(PermissionRepository permissionRepository,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     PermissionArchivedRepository permissionArchivedRepository,
     PermissionPathsRepository permissionPathsRepository) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.permissionRepository = permissionRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.permissionArchivedRepository = permissionArchivedRepository;
@@ -85,6 +83,13 @@ public class PermissionConvertor {
   public Optional<Permission> toEntity(PermissionDo permissionDo) {
     return Optional.ofNullable(permissionDo).map(
       PermissionMapper.INSTANCE::toEntity).flatMap(this::hasDescendant);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionDo permissionDo) {
+    return Optional.ofNullable(permissionDo).map(
+      PermissionMapper.INSTANCE::toEntity);
   }
 
   private Optional<Permission> hasDescendant(Permission permission) {
@@ -103,14 +108,8 @@ public class PermissionConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Permission> toEntity(PermissionAddCmd permissionAddCmd) {
-    return Optional.ofNullable(permissionAddCmd).map(permissionAddCmdNotNull -> {
-      Permission permission = PermissionMapper.INSTANCE.toEntity(permissionAddCmdNotNull);
-      if (permission.getId() == null) {
-        permission.setId(primaryKeyGrpcService.snowflake());
-        permissionAddCmdNotNull.setId(permission.getId());
-      }
-      return permission;
-    });
+    return Optional.ofNullable(permissionAddCmd)
+      .map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -182,8 +181,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionFindByIdCo> toFindByIdCo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByIdCo)
+  public Optional<PermissionFindByIdDTO> toFindByIdDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByIdDTO)
       .map(permissionFindByIdCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -193,9 +192,21 @@ public class PermissionConvertor {
       });
   }
 
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<PermissionFindByCodeDTO> toFindByCodeDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByCodeDTO)
+      .map(permissionFindByCodeCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              permissionFindByCodeCo.getName()))
+          .ifPresent(permissionFindByCodeCo::setName);
+        return permissionFindByCodeCo;
+      });
+  }
+
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionFindAllCo> toFindAllCo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllCo)
+  public Optional<PermissionFindAllDTO> toFindAllDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllDTO)
       .map(permissionFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -206,8 +217,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionFindAllSliceCo> toFindAllSliceCo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllSliceCo)
+  public Optional<PermissionFindAllSliceDTO> toFindAllSliceDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllSliceDTO)
       .map(permissionFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -218,8 +229,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<PermissionArchivedFindAllCo> toArchivedFindAllCo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllCo)
+  public Optional<PermissionArchivedFindAllDTO> toArchivedFindAllDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllDTO)
       .map(permissionArchivedFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -230,9 +241,9 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionArchivedFindAllSliceCo> toArchivedFindAllSliceCo(
+  public Optional<PermissionArchivedFindAllSliceDTO> toArchivedFindAllSliceDTO(
     Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllSliceCo)
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllSliceDTO)
       .map(permissionArchivedFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -278,33 +289,41 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionFindAllGrpcCo> toPermissionFindAllGrpcCo(
-    PermissionFindAllCo permissionFindAllCo) {
-    return Optional.ofNullable(permissionFindAllCo)
-      .map(PermissionMapper.INSTANCE::toPermissionFindAllGrpcCo);
+  public Optional<PermissionFindAllGrpcDTO> toPermissionFindAllGrpcDTO(
+    PermissionFindAllDTO permissionFindAllDTO) {
+    return Optional.ofNullable(permissionFindAllDTO)
+      .map(PermissionMapper.INSTANCE::toPermissionFindAllGrpcDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
-  public Optional<PermissionFindByIdGrpcCo> toPermissionFindByIdGrpcCo(
-    PermissionFindByIdCo permissionFindByIdCo) {
-    return Optional.ofNullable(permissionFindByIdCo)
-      .map(PermissionMapper.INSTANCE::toPermissionFindByIdGrpcCo);
+  public Optional<PermissionFindByIdGrpcDTO> toPermissionFindByIdGrpcDTO(
+    PermissionFindByIdDTO permissionFindByIdDTO) {
+    return Optional.ofNullable(permissionFindByIdDTO)
+      .map(PermissionMapper.INSTANCE::toPermissionFindByIdGrpcDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
-  public Optional<PermissionFindRootCo> toPermissionFindRootCo(
+  public Optional<PermissionFindRootDTO> toPermissionFindRootDTO(
     Permission permission) {
     return Optional.ofNullable(permission)
-      .map(PermissionMapper.INSTANCE::toPermissionFindRootCo);
+      .map(PermissionMapper.INSTANCE::toPermissionFindRootDTO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
-  public Optional<PermissionFindDirectCo> toPermissionFindDirectCo(
+  public Optional<PermissionFindDirectDTO> toPermissionFindDirectDTO(
     Permission permission) {
     return Optional.ofNullable(permission)
-      .map(PermissionMapper.INSTANCE::toPermissionFindDirectCo);
+      .map(PermissionMapper.INSTANCE::toPermissionFindDirectDTO);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.4.0")
+  public Optional<PermissionDownloadAllDTO> toPermissionDownloadAllDTO(
+    Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionDownloadAllDTO);
   }
 }

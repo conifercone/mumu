@@ -15,7 +15,6 @@
  */
 package baby.mumu.message.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageArchiveByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageDeleteByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageFindAllYouSendCmdExe;
@@ -23,12 +22,10 @@ import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageForw
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageReadByIdCmdExe;
 import baby.mumu.message.application.broadcast.executor.BroadcastTextMessageRecoverMsgFromArchiveByIdCmdExe;
 import baby.mumu.message.client.api.BroadcastTextMessageService;
-import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.BroadcastTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.BroadcastTextMessageFindAllYouSendCo;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
+import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
+import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import io.micrometer.observation.annotation.Observed;
-import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.2
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "BroadcastTextMessageServiceImpl")
 public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageService {
 
@@ -87,7 +83,7 @@ public class BroadcastTextMessageServiceImpl implements BroadcastTextMessageServ
   }
 
   @Override
-  public Page<BroadcastTextMessageFindAllYouSendCo> findAllYouSend(
+  public Page<BroadcastTextMessageFindAllYouSendDTO> findAllYouSend(
     BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageFindAllYouSendCmdExe.execute(broadcastTextMessageFindAllYouSendCmd);
   }

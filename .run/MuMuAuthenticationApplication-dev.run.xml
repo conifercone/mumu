@@ -7,7 +7,7 @@
     <option name="SPRING_BOOT_MAIN_CLASS"
       value="baby.mumu.authentication.MuMuAuthenticationApplication"/>
     <option name="VM_PARAMETERS"
-      value="-Dcom.sun.management.jmxremote.port=31101 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dlog4j2.disableJmx=true"/>
+      value="-Dcom.sun.management.jmxremote.port=31101 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
     <method v="2">
       <option name="Make" enabled="true"/>
     </method>

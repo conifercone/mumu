@@ -17,11 +17,11 @@ package baby.mumu.message.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.message.client.api.SubscriptionTextMessageService;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -101,7 +101,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+  public Page<SubscriptionTextMessageFindAllYouSendDTO> findAllYouSend(
     @ModelAttribute @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
   }
@@ -130,7 +130,7 @@ public class SubscriptionTextMessageController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
-  public Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllWithSomeOne(
+  public Page<SubscriptionTextMessageFindAllWithSomeOneDTO> findAllWithSomeOne(
     @ModelAttribute @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
       subscriptionTextMessageFindAllWithSomeOneCmd);

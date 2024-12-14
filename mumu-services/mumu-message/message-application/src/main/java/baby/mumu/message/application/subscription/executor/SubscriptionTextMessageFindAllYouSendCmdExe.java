@@ -15,8 +15,8 @@
  */
 package baby.mumu.message.application.subscription.executor;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
 import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
@@ -49,7 +49,7 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
     this.subscriptionTextMessageConvertor = subscriptionTextMessageConvertor;
   }
 
-  public Page<SubscriptionTextMessageFindAllYouSendCo> execute(
+  public Page<SubscriptionTextMessageFindAllYouSendDTO> execute(
     @NotNull SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     Assert.notNull(subscriptionTextMessageFindAllYouSendCmd,
       "SubscriptionTextMessageFindAllYouSendCmd cannot null");
@@ -58,11 +58,11 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
         .orElse(null),
       subscriptionTextMessageFindAllYouSendCmd.getCurrent(),
       subscriptionTextMessageFindAllYouSendCmd.getPageSize());
-    List<SubscriptionTextMessageFindAllYouSendCo> subscriptionTextMessageFindAllYouSendCos = allYouSend.getContent()
+    List<SubscriptionTextMessageFindAllYouSendDTO> subscriptionTextMessageFindAllYouSendDTOS = allYouSend.getContent()
       .stream()
-      .map(subscriptionTextMessageConvertor::toFindAllYouSendCo)
+      .map(subscriptionTextMessageConvertor::toFindAllYouSendDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(subscriptionTextMessageFindAllYouSendCos, allYouSend.getPageable(),
+    return new PageImpl<>(subscriptionTextMessageFindAllYouSendDTOS, allYouSend.getPageable(),
       allYouSend.getTotalElements());
   }
 }

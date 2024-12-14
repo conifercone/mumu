@@ -15,11 +15,11 @@
  */
 package baby.mumu.message.client.api;
 
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendCmd;
-import baby.mumu.message.client.dto.SubscriptionTextMessageForwardCmd;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllWithSomeOneCo;
-import baby.mumu.message.client.dto.co.SubscriptionTextMessageFindAllYouSendCo;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllWithSomeOneCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
+import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
+import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.data.domain.Page;
@@ -71,7 +71,7 @@ public interface SubscriptionTextMessageService {
    * @param subscriptionTextMessageFindAllYouSendCmd 文本订阅消息查询所有当前用户发送消息指令
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  Page<SubscriptionTextMessageFindAllYouSendCo> findAllYouSend(
+  Page<SubscriptionTextMessageFindAllYouSendDTO> findAllYouSend(
     SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   /**
@@ -98,6 +98,6 @@ public interface SubscriptionTextMessageService {
    * @return 查询结果
    */
   @API(status = Status.STABLE, since = "1.0.3")
-  Page<SubscriptionTextMessageFindAllWithSomeOneCo> findAllMessageRecordWithSomeone(
+  Page<SubscriptionTextMessageFindAllWithSomeOneDTO> findAllMessageRecordWithSomeone(
     SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd);
 }

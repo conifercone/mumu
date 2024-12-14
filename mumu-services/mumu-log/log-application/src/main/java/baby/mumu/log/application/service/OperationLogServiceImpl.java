@@ -25,20 +25,19 @@ import baby.mumu.log.application.operation.executor.OperationLogSubmitCmdExe;
 import baby.mumu.log.client.api.OperationLogService;
 import baby.mumu.log.client.api.grpc.OperationLogServiceGrpc.OperationLogServiceImplBase;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
-import baby.mumu.log.client.dto.OperationLogFindAllCmd;
-import baby.mumu.log.client.dto.OperationLogQryCmd;
-import baby.mumu.log.client.dto.OperationLogSaveCmd;
-import baby.mumu.log.client.dto.OperationLogSubmitCmd;
-import baby.mumu.log.client.dto.co.OperationLogFindAllCo;
-import baby.mumu.log.client.dto.co.OperationLogQryCo;
+import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
+import baby.mumu.log.client.cmds.OperationLogQryCmd;
+import baby.mumu.log.client.cmds.OperationLogSaveCmd;
+import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
+import baby.mumu.log.client.dto.OperationLogFindAllDTO;
+import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.lognet.springboot.grpc.GRpcService;
-import org.lognet.springboot.grpc.recovery.GRpcRuntimeExceptionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GRpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
   OperationLogService {
@@ -92,13 +91,9 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     @NotNull StreamObserver<Empty> responseObserver) {
     operationLogConvertor.toOperationLogSubmitCmd(request)
       .ifPresentOrElse((operationLogSubmitCmd) -> {
-        try {
-          operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-          responseObserver.onNext(Empty.getDefaultInstance());
-          responseObserver.onCompleted();
-        } catch (Exception e) {
-          throw new GRpcRuntimeExceptionWrapper(e);
-        }
+        operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
       }, () -> {
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
@@ -106,14 +101,14 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
   }
 
   @Override
-  public OperationLogQryCo findOperationLogById(String id) {
+  public OperationLogQryDTO findOperationLogById(String id) {
     OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
     operationLogQryCmd.setId(id);
     return operationLogQryCmdExe.execute(operationLogQryCmd);
   }
 
   @Override
-  public Page<OperationLogFindAllCo> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
+  public Page<OperationLogFindAllDTO> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
   }
 }

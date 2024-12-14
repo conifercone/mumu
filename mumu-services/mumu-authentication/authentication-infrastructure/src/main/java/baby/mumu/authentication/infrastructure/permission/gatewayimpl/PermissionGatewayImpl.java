@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -333,5 +334,36 @@ public class PermissionGatewayImpl implements PermissionGateway {
     permissionPathsRepository.deleteUnreachableData();
     permissionRedisRepository.deleteById(ancestorId);
     permissionRedisRepository.deleteById(descendantId);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.4.0")
+  @DangerousOperation("根据Code删除Code为%0的权限数据")
+  public void deleteByCode(String code) {
+    Optional.ofNullable(code)
+      .flatMap(permissionRepository::findByCode)
+      .map(PermissionDo::getId)
+      .ifPresent(this::deleteById);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Stream<Permission> downloadAll() {
+    return permissionRepository.findAll()
+      .flatMap(
+        permissionDo -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionDo).stream());
+  }
+
+  @Override
+  public Optional<Permission> findByCode(String code) {
+    return Optional.ofNullable(code).flatMap(permissionRedisRepository::findByCode).flatMap(
+      permissionConvertor::toEntity).or(() -> {
+      Optional<Permission> permission = permissionRepository.findByCode(code)
+        .flatMap(permissionConvertor::toEntity);
+      permission.flatMap(permissionConvertor::toPermissionRedisDo)
+        .ifPresent(permissionRedisRepository::save);
+      return permission;
+    });
   }
 }
