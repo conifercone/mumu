@@ -16,6 +16,66 @@
 
 ### ⚠️ 移除
 
+## [2.4.0] - 2024-12-14
+
+### ⭐ 新增
+
+- 账户领域模型新增数字偏好属性。
+- 集成规则引擎。
+- 新增时区校验通用方法。
+- 新增账户余额字段。
+- 新增根据code删除角色接口。
+- 新增根据code查询权限接口。
+- 新增下载所有权限内容接口。
+- 新增文件下载工具类。
+- 新增根据code删除权限接口。
+- 新增雪花算法ID生成器。
+- 新增自定义ObservationPredicate。
+- 新增缓存等级枚举类。
+- 账户新增个性签名和昵称属性。
+- 权限角色新增description字段。
+- 新增自定义AccessDeniedHandler。
+- 新增根据ID查询角色grpc接口。
+- 角色新增血缘关系。
+
+### 🕸️ 变更
+
+- 长整型序列化成字符串防止丢失精度。
+- 类名规范性修改。
+- 优化继承关系。
+- 优化grpc接口。
+- protobuf升级至4.29.1。
+- flyway升级至11.0.1。
+- 优化文件服务上传接口。
+- 优化文件服务下载接口。
+- 国际化默认翻译修改为英文。
+- 按照ISO 639-1标准修改LanguageEnum。
+- 优化依赖。
+- 精简包名。
+- SpringCloud升级至2024.0.0。
+- 服务端口和grpc端口修改为随机可用端口。
+- io.minio:minio升级至8.5.14。
+- grpc升级至1.68.2。
+- org.springdoc:springdoc-openapi-starter-webmvc-ui升级至2.7.0。
+- 精简claim中自定义key名称。
+- 修改lombok插件版本引用方式。
+- kotlin版本升级至2.1.0。
+- 利用文本块优化字符串。
+- 优化consul配置。
+- grpc spring boot框架更换成net.devh。
+- io.swagger.core.v3:swagger-annotations-jakarta升级至2.2.26。
+- SpringBoot升级至3.4.0。
+- org.jobrunr:jobrunr-spring-boot-3-starter升级至7.3.2。
+- commons-io:commons-io升级至2.18.0。
+- 修改TokenGatewayImpl#validity方法验证逻辑。
+- 重新梳理token缓存和校验逻辑。
+- gradle升级至8.11.1。
+- 优化token权限范围。
+
+### 🐞 修复
+
+- 修复授权码模式不可用。
+
 ## [2.3.0] - 2024-11-19
 
 ### ⭐ 新增
@@ -414,7 +474,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.3.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.4.0...develop
+[2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
