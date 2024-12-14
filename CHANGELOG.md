@@ -16,6 +16,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ Removed
 
+## [2.4.0] - 2024-12-14
+
+### ⭐ Added
+
+- Added numeric preference attributes to the account domain model.
+- Integrated rules engine.
+- Added a new general method for time zone verification.
+- Added account balance field.
+- Added interface to delete characters based on code.
+- Added a new interface for querying permissions based on code.
+- Added a new interface for downloading content with all permissions.
+- Added file download tool class.
+- Added a new interface to delete permissions based on code.
+- Added snowflake algorithm ID generator.
+- Added custom ObservationPredicate.
+- Added cache level enumeration class.
+- Added personalized signature and nickname attributes to the account.
+- Added description field to permission role.
+- Added custom AccessDeniedHandler.
+- Added grpc interface for querying roles based on ID.
+- Added blood relationship for characters.
+
+### 🕸️ Changed
+
+- Long integers are serialized into strings to prevent loss of precision.
+- Standard modification of class name.
+- Optimize inheritance relationship.
+- Optimize grpc interface.
+- protobuf upgraded to 4.29.1.
+- flyway upgraded to 11.0.1.
+- Optimize the file service upload interface.
+- Optimize the file service download interface.
+- The default translation for internationalization is changed to English.
+- Modify LanguageEnum according to ISO 639-1 standard.
+- Optimize dependencies.
+- Simplified package name.
+- SpringCloud is upgraded to 2024.0.0.
+- The service port and grpc port are modified to random available ports.
+- io.minio:minio upgraded to 8.5.14.
+- grpc upgraded to 1.68.2.
+- org.springdoc:springdoc-openapi-starter-webmvc-ui upgraded to 2.7.0.
+- Streamline the custom key name in claim.
+- Modify the lombok plug-in version reference method.
+- The kotlin version is upgraded to 2.1.0.
+- Optimize strings with text blocks.
+- Optimize consul configuration.
+- The grpc spring boot framework is replaced with net.devh.
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.26.
+- SpringBoot is upgraded to 3.4.0.
+- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.2.
+- commons-io: commons-io is upgraded to 2.18.0.
+- Modify the verification logic of TokenGatewayImpl#validity method.
+- Reorganize token caching and verification logic.
+- Gradle upgraded to 8.11.1.
+- Optimize the scope of token permissions.
+
+### 🐞 Fixed
+
+- Fixed the problem that the authorization code mode is not available.
+
 ## [2.3.0] - 2024-11-19
 
 ### ⭐ Added
@@ -430,7 +490,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.3.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.4.0...develop
+[2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
