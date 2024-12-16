@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication;
 
+import baby.mumu.basis.enums.OAuth2Enum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +56,7 @@ public class AuthenticationRequired {
           .param("username", username)
           .param("password", password)
           .param("scope", "message.read message.write openid")
-          .param("grant_type", "authorization_password")
+          .param("grant_type", OAuth2Enum.GRANT_TYPE_PASSWORD.getName())
           .header("Authorization",
             "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
           .header("X-Forwarded-For", "123.123.123.123")

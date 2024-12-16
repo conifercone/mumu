@@ -15,6 +15,7 @@
  */
 package baby.mumu.file;
 
+import baby.mumu.basis.enums.OAuth2Enum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class AuthenticationRequired {
     form.add("username", "admin");
     form.add("password", "admin");
     form.add("scope", "message.read message.write openid");
-    form.add("grant_type", "authorization_password");
+    form.add("grant_type", OAuth2Enum.GRANT_TYPE_PASSWORD.getName());
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
     headers.add("Authorization", "Basic Y2VudGF1ci1jbGllbnQ6Y2VudGF1cg==");
