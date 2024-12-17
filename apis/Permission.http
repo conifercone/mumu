@@ -1,0 +1,319 @@
+### 添加权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+POST {{authentication-service-url}}/permission/add
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "code": "test2"
+}
+
+### 根据id删除权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/permission/deleteById/620233337749509
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据code删除权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/permission/deleteByCode/test2
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 修改权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/permission/updateById
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "id": "622328036843525",
+  "name": "test_updated"
+}
+
+### 添加祖先权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/permission/addAncestor
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "descendantId": 4,
+  "ancestorId": 2
+}
+
+### 删除权限路径
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/permission/deletePath?descendantId=2&ancestorId=1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id归档权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/permission/archiveById/4
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id从归档恢复权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/permission/recoverFromArchiveById/4
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 查询权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findAll?current=1&pageSize=10&name=数据
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 下载所有权限数据
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/downloadAll
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 查询权限（不查询总数）
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findAllSlice?current=1&pageSize=10&name=数据
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id查询权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findById/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据code查询权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findByCode/test2
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 获取所有根权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findRoot?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 获取直系后代权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findDirect?current=1&pageSize=10&ancestorId=1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 查询已归档权限
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findArchivedAll?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 查询已归档权限 (不查询总数)
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/findArchivedAllSlice?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
