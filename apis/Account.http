@@ -72,7 +72,6 @@ Authorization: Bearer {{$auth.token("admin")}}
   "bio": "不想把这个世界交给无趣的人"
 }
 
-
 ### 分页获取账户（不查询总数）
 < {%
   import {generateHeaders} from "./utils"
@@ -206,3 +205,247 @@ Authorization: Bearer {{$auth.token("admin")}}
   "id": "601146283917317",
   "name": "默认系统设置"
 }
+
+### 禁用账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/disable/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 删除当前账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/account/deleteCurrent
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "captchaId": 2977796456448,
+  "captcha": "ZGYW"
+}
+
+### 重置密码
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/resetPassword/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 获取当前登录账户信息
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/currentLoginAccount
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 分页查询账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/findAll?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id查询账户基本信息
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/getAccountBasicInfoById/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id下线账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+POST {{authentication-service-url}}/account/offline/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 校验账户密码
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/verifyPassword?password=admin
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 修改账户密码
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/changePassword
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "originalPassword": "admin",
+  "newPassword": "admin"
+}
+
+### 获取在线账户数量等信息
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/onlineAccounts
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id归档账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/archiveById/3
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 根据id从归档中恢复账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/recoverFromArchiveById/3
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 退出登录
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+POST {{authentication-service-url}}/account/logout
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
