@@ -2,7 +2,7 @@
 
 export function generateHeaders(serviceUrl) {
   const requestIdString = $random.uuid
-  const timestampString = Date.now().toString()
+  const timestampString = $timestamp
   const requestPath = request.url.tryGetSubstituted().replace(serviceUrl, "");
   const requestBody = request.body.tryGetSubstituted() == null ? ''
       : request.body.tryGetSubstituted();

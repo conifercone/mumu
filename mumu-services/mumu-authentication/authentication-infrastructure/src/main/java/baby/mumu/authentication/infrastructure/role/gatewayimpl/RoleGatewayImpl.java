@@ -112,6 +112,7 @@ public class RoleGatewayImpl implements RoleGateway {
         && !roleArchivedRepository.existsByIdOrCode(roleDo.getId(), roleDo.getCode()))
       .ifPresentOrElse(roleDo -> {
         roleRepository.persist(roleDo);
+        Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(roleDo.getId()));
         rolePathsRepository.persist(
           new RolePathsDo(new RolePathsDoId(roleDo.getId(), roleDo.getId(), 0L), roleDo, roleDo));
         roleRedisRepository.deleteById(roleDo.getId());

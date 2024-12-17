@@ -145,6 +145,7 @@ public class AccountGatewayImpl implements AccountGateway {
       CommonUtil.validateTimezone(dataObject.getTimezone());
       dataObject.setPassword(passwordEncoder.encode(dataObject.getPassword()));
       accountRepository.persist(dataObject);
+      account.setId(dataObject.getId());
       if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
         accountSystemSettingsMongodbRepository.saveAll(account.getSystemSettings().stream().flatMap(
           accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbDo(
