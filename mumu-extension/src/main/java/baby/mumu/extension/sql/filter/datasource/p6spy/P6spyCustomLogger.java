@@ -15,20 +15,14 @@
  */
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.kotlin.tools.SpringContextUtil;
 import com.google.common.base.Strings;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-import de.vandermeer.asciitable.AsciiTable;
 import io.micrometer.tracing.Tracer;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentSkipListMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -45,10 +39,6 @@ import org.slf4j.MDC;
 public class P6spyCustomLogger extends FormattedLogger {
 
   private static final Logger logger = LoggerFactory.getLogger(P6spyCustomLogger.class);
-  public static final Long SQL_EXECUTION_TIME_THRESHOLD = 1000L;
-  private static final int MAX_LOG_SIZE = 10;
-  private final ConcurrentSkipListMap<Long, String> slowQueries = new ConcurrentSkipListMap<>(
-    (a, b) -> Long.compare(b, a));
 
   @Override
   public void logException(Exception e) {
@@ -64,7 +54,6 @@ public class P6spyCustomLogger extends FormattedLogger {
   public void logSQL(int connectionId, String now, long elapsed,
     Category category, String prepared, String sql, String url) {
     if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
-      slowSqlRecord(elapsed, sql);
       String lf = "\n";
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(lf).append("====>");
@@ -108,17 +97,6 @@ public class P6spyCustomLogger extends FormattedLogger {
     }
   }
 
-  private void slowSqlRecord(long elapsed, String sql) {
-    if (elapsed >= SQL_EXECUTION_TIME_THRESHOLD) {
-      if (!slowQueries.containsValue(sql)) {
-        slowQueries.put(elapsed, sql);
-      }
-      if (slowQueries.size() > MAX_LOG_SIZE) {
-        slowQueries.pollLastEntry();
-      }
-      logTopSQLs();
-    }
-  }
 
   @Override
   public boolean isCategoryEnabled(Category category) {
@@ -138,25 +116,4 @@ public class P6spyCustomLogger extends FormattedLogger {
     this.strategy = new P6spyCustomStrategy();
   }
 
-  private void logTopSQLs() {
-    AsciiTable at = new AsciiTable();
-    at.addRule();
-    at.addRow("", "", "", "", "", "", "", "");
-    at.addRule();
-    at.addRow("Execution time", null, null, null, null, null, null, "SQL");
-    for (Map.Entry<Long, String> entry : slowQueries.entrySet()) {
-      at.addRule();
-      String sql = entry.getValue().replaceAll("\\r?\\n", "");
-      at.addRow(entry.getKey().toString().concat("ms"), null, null, null, null, null, null, sql);
-    }
-    at.addRule();
-    Collection<String> renderAsCollection = at.renderAsCollection();
-    LinkedList<String> strings = new LinkedList<>(renderAsCollection);
-    strings.removeFirst();
-    strings.addFirst(CommonConstants.SLOW_SQL_TABLE_HEADER);
-    strings.remove(1);
-    strings.remove(1);
-    logger.info("Top SQLs exceeding {} ms:\n{}", SQL_EXECUTION_TIME_THRESHOLD,
-      String.join("\r\n", strings));
-  }
 }
