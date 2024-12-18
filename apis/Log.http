@@ -1,0 +1,106 @@
+### 系统日志提交
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("log-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+POST {{log-service-url}}/system/submit
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "content": "test",
+  "category": "test",
+  "success": "test",
+  "fail": "test"
+}
+
+### 分页查询所有系统日志
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("log-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{log-service-url}}/system/findAll?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 操作日志提交
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("log-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+POST {{log-service-url}}/operation/submit
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "content": "test",
+  "operator": "test",
+  "bizNo": "test",
+  "category": "test",
+  "detail": "test",
+  "success": "test",
+  "fail": "test"
+}
+
+### 根据日志ID获取操作日志
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("log-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{log-service-url}}/operation/findById/9e9fb032-23bd-4a89-a57d-bda8fe909e1c
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+### 分页查询所有操作日志
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("log-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{log-service-url}}/operation/findAll?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
