@@ -22,10 +22,8 @@ import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import io.micrometer.tracing.Tracer;
 import java.util.Optional;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 /**
  * 自定义appender
@@ -53,7 +51,7 @@ public class P6spyCustomLogger extends FormattedLogger {
   @Override
   public void logSQL(int connectionId, String now, long elapsed,
     Category category, String prepared, String sql, String url) {
-    if (!Strings.isNullOrEmpty(sql) && !sql.contains("jobrunr_")) {
+    if (!Strings.isNullOrEmpty(sql)) {
       String lf = "\n";
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(lf).append("====>");
@@ -65,17 +63,11 @@ public class P6spyCustomLogger extends FormattedLogger {
             applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
             tracer -> Optional.ofNullable(tracer.currentSpan())
               .map(span -> span.context().traceId())
-          ).orElse(null);
+          ).orElse("");
       } catch (Exception e) {
         traceId = "";
       }
-      if (Strings.isNullOrEmpty(traceId)) {
-        String uuid = String.valueOf(UUID.randomUUID());
-        stringBuilder.append(uuid);
-        MDC.put("trace-id", uuid);
-      } else {
-        stringBuilder.append(traceId);
-      }
+      stringBuilder.append(traceId);
       stringBuilder.append("]");
       String msg = strategy.formatMessage(connectionId, now, elapsed,
         category.toString(), prepared, sql, url);
