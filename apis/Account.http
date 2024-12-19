@@ -23,9 +23,9 @@ Accept: */*
     "admin"
   ],
   "avatarUrl": "https://github.com/users/conifercone",
-  "phone": "13021705689",
+  "phone": "{{$random.phoneNumber.phoneNumber}}",
   "sex": "MALE",
-  "email": "547913250@qq.com",
+  "email": "{{$random.email}}",
   "timezone": "Asia/Shanghai",
   "language": "EN",
   "birthday": "1995-08-02",

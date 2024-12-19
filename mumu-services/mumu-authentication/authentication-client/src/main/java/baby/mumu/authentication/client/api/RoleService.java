@@ -28,6 +28,7 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
@@ -156,4 +157,12 @@ public interface RoleService {
    * @return 角色信息
    */
   RoleFindByIdDTO findById(Long id);
+
+  /**
+   * 根据角色code查询指定角色信息
+   *
+   * @param code 角色code
+   * @return 角色信息
+   */
+  RoleFindByCodeDTO findByCode(String code);
 }

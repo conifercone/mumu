@@ -100,5 +100,11 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
   Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
+  /**
+   * 根据code查询角色
+   *
+   * @param code 角色code
+   * @return 角色信息
+   */
   Optional<RoleDo> findByCode(String code);
 }

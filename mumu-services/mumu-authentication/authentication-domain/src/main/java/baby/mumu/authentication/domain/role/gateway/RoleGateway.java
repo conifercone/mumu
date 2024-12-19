@@ -160,4 +160,12 @@ public interface RoleGateway {
    * @return 角色信息
    */
   Optional<Role> findById(Long id);
+
+  /**
+   * 根据code查询角色详情
+   *
+   * @param code 角色code
+   * @return 角色信息
+   */
+  Optional<Role> findByCode(String code);
 }

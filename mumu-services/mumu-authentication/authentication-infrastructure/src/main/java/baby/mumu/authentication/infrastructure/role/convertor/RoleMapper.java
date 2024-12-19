@@ -30,6 +30,7 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO.RoleFindAllPermissionCo;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
@@ -93,6 +94,9 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdDTO toRoleFindByIdDTO(Role role);
+
+  @API(status = Status.STABLE, since = "2.5.0")
+  RoleFindByCodeDTO toRoleFindByCodeDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindRootDTO toRoleFindRootDTO(Role role);

@@ -18,6 +18,7 @@ package baby.mumu.authentication.infrastructure.role.gatewayimpl.redis;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 角色基本信息缓存（不包含角色关联的权限信息）
@@ -29,4 +30,6 @@ public interface RoleRedisRepository extends
   RedisDocumentRepository<RoleRedisDo, Long> {
 
   List<RoleRedisDo> findByCodeIn(List<String> codes);
+
+  Optional<RoleRedisDo> findByCode(String code);
 }

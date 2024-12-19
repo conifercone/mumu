@@ -386,12 +386,20 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   public Optional<Role> findById(Long id) {
     return Optional.ofNullable(id).flatMap(roleRedisRepository::findById).flatMap(
-      roleConvertor::toEntity).or(() -> {
-      Optional<Role> role = roleRepository.findById(id)
-        .flatMap(roleConvertor::toEntity);
-      role.flatMap(roleConvertor::toRoleRedisDo)
-        .ifPresent(roleRedisRepository::save);
-      return role;
-    });
+      roleConvertor::toEntity).or(() -> roleRepository.findById(id)
+      .flatMap(roleConvertor::toEntity).map(entity -> {
+        roleConvertor.toRoleRedisDo(entity).ifPresent(roleRedisRepository::save);
+        return entity;
+      }));
+  }
+
+  @Override
+  public Optional<Role> findByCode(String code) {
+    return Optional.ofNullable(code).flatMap(roleRedisRepository::findByCode).flatMap(
+      roleConvertor::toEntity).or(() -> roleRepository.findByCode(code)
+      .flatMap(roleConvertor::toEntity).map(entity -> {
+        roleConvertor.toRoleRedisDo(entity).ifPresent(roleRedisRepository::save);
+        return entity;
+      }));
   }
 }

@@ -28,6 +28,7 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
@@ -413,6 +414,12 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindByIdDTO> toRoleFindByIdDTO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdDTO);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.5.0")
+  public Optional<RoleFindByCodeDTO> toRoleFindByCodeDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByCodeDTO);
   }
 
   @Contract("_ -> new")
