@@ -37,7 +37,6 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
-import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.List;
@@ -49,7 +48,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -69,7 +67,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleGatewayImpl implements RoleGateway {
 
   private final RoleRepository roleRepository;
-  private final DistributedLock distributedLock;
   private final AccountGateway accountGateway;
   private final RoleConvertor roleConvertor;
   private final RoleArchivedRepository roleArchivedRepository;
@@ -81,7 +78,6 @@ public class RoleGatewayImpl implements RoleGateway {
   private final RolePathsRepository rolePathsRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
-    ObjectProvider<DistributedLock> distributedLockObjectProvider,
     AccountGateway accountGateway, RoleConvertor roleConvertor,
     RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties,
@@ -91,7 +87,6 @@ public class RoleGatewayImpl implements RoleGateway {
     RolePathsRepository rolePathsRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
-    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.roleConvertor = roleConvertor;
     this.roleArchivedRepository = roleArchivedRepository;
     this.jobScheduler = jobScheduler;
@@ -169,17 +164,12 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Role role) {
     Optional.ofNullable(role).ifPresent(roleDomain -> {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-      try {
-        roleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
-        //删除权限关系数据重新添加
-        rolePermissionRepository.deleteByRoleId(roleDomain.getId());
-        saveRoleAuthorityRelationsData(roleDomain);
-        roleRedisRepository.deleteById(roleDomain.getId());
-        rolePermissionRedisRepository.deleteById(roleDomain.getId());
-      } finally {
-        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-      }
+      roleConvertor.toDataObject(roleDomain).ifPresent(roleRepository::merge);
+      //删除权限关系数据重新添加
+      rolePermissionRepository.deleteByRoleId(roleDomain.getId());
+      saveRoleAuthorityRelationsData(roleDomain);
+      roleRedisRepository.deleteById(roleDomain.getId());
+      rolePermissionRedisRepository.deleteById(roleDomain.getId());
     });
   }
 

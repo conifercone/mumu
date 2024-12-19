@@ -41,7 +41,6 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
-import baby.mumu.extension.distributed.lock.DistributedLock;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.micrometer.observation.annotation.Observed;
@@ -58,7 +57,6 @@ import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.NotNull;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -87,7 +85,6 @@ public class AccountGatewayImpl implements AccountGateway {
   private final PasswordTokenRepository passwordTokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final OperationLogGrpcService operationLogGrpcService;
-  private final DistributedLock distributedLock;
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
@@ -105,7 +102,6 @@ public class AccountGatewayImpl implements AccountGateway {
     PasswordTokenRepository passwordTokenRepository,
     PasswordEncoder passwordEncoder,
     OperationLogGrpcService operationLogGrpcService,
-    ObjectProvider<DistributedLock> distributedLockObjectProvider,
     ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
     AccountArchivedRepository accountArchivedRepository,
     AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
@@ -119,7 +115,6 @@ public class AccountGatewayImpl implements AccountGateway {
     this.passwordTokenRepository = passwordTokenRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
-    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
@@ -232,14 +227,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
     accountConvertor.toDataObject(account).ifPresent(accountDo -> {
-      Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-      try {
-        accountRoleRepository.deleteByAccountId(account.getId());
-        accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
-        accountRoleRedisRepository.deleteById(account.getId());
-      } finally {
-        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-      }
+      accountRoleRepository.deleteByAccountId(account.getId());
+      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
+      accountRoleRedisRepository.deleteById(account.getId());
     });
   }
 

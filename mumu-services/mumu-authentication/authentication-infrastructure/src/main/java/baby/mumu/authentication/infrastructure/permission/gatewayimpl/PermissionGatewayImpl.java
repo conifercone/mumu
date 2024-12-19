@@ -33,7 +33,6 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
-import baby.mumu.extension.distributed.lock.DistributedLock;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.List;
@@ -46,7 +45,6 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -68,7 +66,6 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
 
   private final PermissionRepository permissionRepository;
-  private final DistributedLock distributedLock;
   private final RoleGateway roleGateway;
   private final PermissionConvertor permissionConvertor;
   private final PermissionArchivedRepository permissionArchivedRepository;
@@ -79,7 +76,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
   @Autowired
   public PermissionGatewayImpl(PermissionRepository permissionRepository,
-    ObjectProvider<DistributedLock> distributedLockObjectProvider, RoleGateway roleGateway,
+    RoleGateway roleGateway,
     PermissionConvertor permissionConvertor,
     PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties, PermissionRedisRepository permissionRedisRepository,
@@ -87,7 +84,6 @@ public class PermissionGatewayImpl implements PermissionGateway {
     this.permissionRepository = permissionRepository;
     this.roleGateway = roleGateway;
     this.permissionConvertor = permissionConvertor;
-    this.distributedLock = distributedLockObjectProvider.getIfAvailable();
     this.permissionArchivedRepository = permissionArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
@@ -140,13 +136,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public void updateById(Permission permission) {
     Optional.ofNullable(permission).flatMap(permissionConvertor::toDataObject)
       .ifPresent(dataObject -> {
-        Optional.ofNullable(distributedLock).ifPresent(DistributedLock::lock);
-        try {
-          permissionRepository.merge(dataObject);
-          permissionRedisRepository.deleteById(dataObject.getId());
-        } finally {
-          Optional.ofNullable(distributedLock).ifPresent(DistributedLock::unlock);
-        }
+        permissionRepository.merge(dataObject);
+        permissionRedisRepository.deleteById(dataObject.getId());
       });
   }
 
