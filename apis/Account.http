@@ -49,6 +49,12 @@ Accept: */*
   "captcha": "U4BC"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据ID修改账户基本信息
 < {%
   import {generateHeaders} from "./utils"
@@ -72,6 +78,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "bio": "不想把这个世界交给无趣的人"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 分页获取账户（不查询总数）
 < {%
   import {generateHeaders} from "./utils"
@@ -89,6 +101,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 账户添加地址
 < {%
@@ -116,6 +134,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "postalCode": "250101"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 更新账户角色
 < {%
   import {generateHeaders} from "./utils"
@@ -141,6 +165,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   ]
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 重置当前账户系统设置
 < {%
   import {generateHeaders} from "./utils"
@@ -158,6 +188,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 当前账户添加系统设置
 < {%
@@ -183,6 +219,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "enabled": true
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 通过设置id修改系统设置
 < {%
   import {generateHeaders} from "./utils"
@@ -206,6 +248,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "name": "默认系统设置"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 禁用账户
 < {%
   import {generateHeaders} from "./utils"
@@ -223,6 +271,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 删除当前账户
 < {%
@@ -247,6 +301,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "captcha": "ZGYW"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 重置密码
 < {%
   import {generateHeaders} from "./utils"
@@ -264,6 +324,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 获取当前登录账户信息
 < {%
@@ -283,6 +349,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 分页查询账户
 < {%
   import {generateHeaders} from "./utils"
@@ -300,6 +372,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据id查询账户基本信息
 < {%
@@ -319,6 +397,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据id下线账户
 < {%
   import {generateHeaders} from "./utils"
@@ -337,6 +421,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 校验账户密码
 < {%
   import {generateHeaders} from "./utils"
@@ -354,6 +444,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 修改账户密码
 < {%
@@ -378,6 +474,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "newPassword": "admin"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 获取在线账户数量等信息
 < {%
   import {generateHeaders} from "./utils"
@@ -395,6 +497,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据id归档账户
 < {%
@@ -414,6 +522,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据id从归档中恢复账户
 < {%
   import {generateHeaders} from "./utils"
@@ -432,6 +546,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 退出登录
 < {%
   import {generateHeaders} from "./utils"
@@ -449,3 +569,9 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

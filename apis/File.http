@@ -33,6 +33,12 @@ Content-Type: application/json
 < ./assets/verification_code.html
 --WebAppBoundary--
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 流式文件下载
 < {%
   import {generateHeaders} from "./utils"
@@ -51,6 +57,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文件删除
 < {%
@@ -75,6 +87,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "name": "test2.log"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 流式文件获取字符串文件内容
 < {%
   import {generateHeaders} from "./utils"
@@ -93,3 +111,9 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

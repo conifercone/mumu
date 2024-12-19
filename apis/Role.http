@@ -25,6 +25,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   ]
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 更新角色
 < {%
   import {generateHeaders} from "./utils"
@@ -51,6 +57,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   ]
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 查询角色
 < {%
   import {generateHeaders} from "./utils"
@@ -68,6 +80,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 查询已归档角色
 < {%
@@ -87,6 +105,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 查询角色(不查询总数)
 < {%
   import {generateHeaders} from "./utils"
@@ -104,6 +128,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 查询已归档角色(不查询总数)
 < {%
@@ -123,6 +153,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据ID删除角色
 < {%
   import {generateHeaders} from "./utils"
@@ -140,6 +176,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据code删除角色
 < {%
@@ -159,6 +201,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据ID归档角色
 < {%
   import {generateHeaders} from "./utils"
@@ -177,6 +225,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据id从归档中恢复角色
 < {%
   import {generateHeaders} from "./utils"
@@ -194,6 +248,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 添加祖先角色
 < {%
@@ -218,6 +278,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "ancestorId": 2
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 获取所有根角色
 < {%
   import {generateHeaders} from "./utils"
@@ -235,6 +301,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 获取直系后代角色
 < {%
@@ -254,6 +326,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 删除角色路径
 < {%
   import {generateHeaders} from "./utils"
@@ -271,6 +349,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据id查询角色
 < {%
@@ -290,6 +374,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据code查询角色
 < {%
   import {generateHeaders} from "./utils"
@@ -307,3 +397,9 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

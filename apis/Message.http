@@ -21,6 +21,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "message": "hello!🎉"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本订阅消息根据ID已读
 < {%
   import {generateHeaders} from "./utils"
@@ -38,6 +44,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本订阅消息根据ID未读
 < {%
@@ -57,6 +69,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本订阅消息根据ID归档
 < {%
   import {generateHeaders} from "./utils"
@@ -74,6 +92,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本订阅消息根据ID从归档中恢复数据
 < {%
@@ -93,6 +117,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本订阅消息根据ID删除
 < {%
   import {generateHeaders} from "./utils"
@@ -110,6 +140,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本订阅消息查询所有当前用户发送消息
 < {%
@@ -129,6 +165,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本订阅消息查询所有和某人的消息记录
 < {%
   import {generateHeaders} from "./utils"
@@ -147,6 +189,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本广播消息转发
 < {%
@@ -173,6 +221,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "message": "hello!🎉"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本广播消息根据ID已读
 < {%
   import {generateHeaders} from "./utils"
@@ -190,6 +244,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本广播消息根据ID归档
 < {%
@@ -209,6 +269,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本广播消息根据ID从归档中恢复数据
 < {%
   import {generateHeaders} from "./utils"
@@ -226,6 +292,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 文本广播消息根据ID删除
 < {%
@@ -245,6 +317,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 文本广播消息查询所有当前用户发送消息
 < {%
   import {generateHeaders} from "./utils"
@@ -262,3 +340,9 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

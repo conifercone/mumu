@@ -23,6 +23,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "fail": "test"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 分页查询所有系统日志
 < {%
   import {generateHeaders} from "./utils"
@@ -40,6 +46,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 操作日志提交
 < {%
@@ -69,6 +81,12 @@ Authorization: Bearer {{$auth.token("admin")}}
   "fail": "test"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据日志ID获取操作日志
 < {%
   import {generateHeaders} from "./utils"
@@ -87,6 +105,12 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 分页查询所有操作日志
 < {%
   import {generateHeaders} from "./utils"
@@ -104,3 +128,9 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

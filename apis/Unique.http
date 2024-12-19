@@ -15,6 +15,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 获取简单验证码
 < {%
   import {generateHeaders} from "./utils"
@@ -31,6 +37,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 校验简单验证码正确性
 < {%
@@ -54,6 +66,12 @@ Accept: */*
   "source": "YZTG"
 }
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 获取可用时区列表
 < {%
   import {generateHeaders} from "./utils"
@@ -70,6 +88,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 获取当前服务器时间
 < {%
@@ -88,6 +112,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 生成二维码（返回Base64格式的图片数据链接）
 < {%
   import {generateHeaders} from "./utils"
@@ -104,6 +134,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 生成条形码（返回Base64格式的图片数据链接）
 < {%
@@ -123,6 +159,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 获取所有城市详细信息（包含省（州）、市信息）
 < {%
   import {generateHeaders} from "./utils"
@@ -139,6 +181,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 获取所有城市详细信息（不包含省（州）、市信息）
 < {%
@@ -157,6 +205,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据国家ID获取省或州信息
 < {%
   import {generateHeaders} from "./utils"
@@ -173,6 +227,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据省或州ID获取城市
 < {%
@@ -191,6 +251,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据省或州ID获取省或州
 < {%
   import {generateHeaders} from "./utils"
@@ -207,6 +273,12 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
 
 ### 根据省或州ID获取省或州(包含下级城市)
 < {%
@@ -225,6 +297,12 @@ X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
 
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 ### 根据城市id获取城市指令
 < {%
   import {generateHeaders} from "./utils"
@@ -241,3 +319,9 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
