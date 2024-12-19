@@ -47,6 +47,8 @@ public class ResourceServerProperties {
 
     private String authority;
 
+    private List<String> anyAuthority = new ArrayList<>();
+
     private String role;
 
     private boolean permitAll;
@@ -78,6 +80,8 @@ public class ResourceServerProperties {
     private String method;
 
     private String authority;
+
+    private List<String> anyAuthority = new ArrayList<>();
 
     private String role;
 
