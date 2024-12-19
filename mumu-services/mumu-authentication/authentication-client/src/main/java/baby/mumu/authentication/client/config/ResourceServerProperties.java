@@ -53,6 +53,7 @@ public class ResourceServerProperties {
 
     private boolean permitAll;
 
+    private boolean denyAll;
   }
 
   /**
@@ -86,5 +87,7 @@ public class ResourceServerProperties {
     private String role;
 
     private boolean permitAll;
+
+    private boolean denyAll;
   }
 }

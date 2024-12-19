@@ -96,6 +96,8 @@ public class JWTSecurityConfig {
                   .toArray(String[]::new));
             } else if (policy.isPermitAll()) {
               authorizedUrl.permitAll();
+            } else if (policy.isDenyAll()) {
+              authorizedUrl.denyAll();
             }
           }
         );

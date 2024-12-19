@@ -122,8 +122,8 @@ public class GrpcSecurityConfiguration {
                       .collect(Collectors.toSet())));
                 } else if (grpcPolicy.isPermitAll()) {
                   source.set(methods, AccessPredicate.permitAll());
-                } else {
-                  source.setDefault(AccessPredicate.denyAll());
+                } else if (grpcPolicy.isDenyAll()) {
+                  source.set(methods, AccessPredicate.denyAll());
                 }
               } catch (ClassNotFoundException | InvocationTargetException |
                        IllegalAccessException | NoSuchMethodException e) {
@@ -133,6 +133,7 @@ public class GrpcSecurityConfiguration {
           }
         });
     }
+    source.setDefault(AccessPredicate.authenticated());
     return source;
   }
 
