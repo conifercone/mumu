@@ -20,6 +20,8 @@ import baby.mumu.authentication.application.service.AccountUserDetailService;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.permission.Permission;
+import baby.mumu.authentication.infrastructure.client.convertor.ClientConvertor;
+import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.ClientRepository;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
@@ -56,6 +58,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -95,7 +98,6 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
-import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -231,20 +233,21 @@ public class AuthorizationConfiguration {
   /**
    * 客户端信息注册
    *
-   * @param jdbcTemplate jdbc模板
-   * @param properties   客户端属性
+   * @param properties 客户端属性
    * @return 客户端信息注册实例
    */
   @Bean
-  public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate,
-    OAuth2AuthorizationServerProperties properties, PasswordEncoder passwordEncoder) {
+  public RegisteredClientRepository registeredClientRepository(
+    OAuth2AuthorizationServerProperties properties, PasswordEncoder passwordEncoder,
+    ClientRepository clientRepository, ClientConvertor clientConvertor) {
     OAuth2AuthorizationServerPropertiesMapper oAuth2AuthorizationServerPropertiesMapper = new OAuth2AuthorizationServerPropertiesMapper(
       properties, passwordEncoder);
     List<RegisteredClient> registeredClients = oAuth2AuthorizationServerPropertiesMapper.asRegisteredClients();
-    JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(
-      jdbcTemplate);
-    registeredClients.forEach(jdbcRegisteredClientRepository::save);
-    return jdbcRegisteredClientRepository;
+    JpaRegisteredClientRepository jpaRegisteredClientRepository = new JpaRegisteredClientRepository(
+      clientRepository, clientConvertor);
+    registeredClients.stream().filter(Objects::nonNull)
+      .forEach(jpaRegisteredClientRepository::save);
+    return jpaRegisteredClientRepository;
   }
 
   /**
