@@ -214,7 +214,7 @@ public class AuthorizationConfiguration {
    * @return bCrypt密码加解密
    */
   @Bean
-  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
