@@ -101,6 +101,8 @@ public class GrpcSecurityConfiguration {
                   (MethodDescriptor<?, ?>) method.invoke(null);
                 if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
                   source.set(methods, AccessPredicate.hasRole(grpcPolicy.getRole()));
+                } else if (CollectionUtils.isNotEmpty(grpcPolicy.getAnyRole())) {
+                  source.set(methods, AccessPredicate.hasAnyRole(grpcPolicy.getAnyRole()));
                 } else if (StringUtils.isNotBlank(
                   grpcPolicy.getAuthority())) {
                   Assert.isTrue(

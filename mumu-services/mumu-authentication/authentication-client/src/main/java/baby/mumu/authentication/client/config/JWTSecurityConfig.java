@@ -78,6 +78,9 @@ public class JWTSecurityConfig {
                 policy.getMatcher());
             if (StringUtils.isNotBlank(policy.getRole())) {
               authorizedUrl.hasRole(policy.getRole());
+            } else if (CollectionUtils.isNotEmpty(policy.getAnyRole())) {
+              authorizedUrl.hasAnyRole(
+                policy.getAnyRole().stream().distinct().toArray(String[]::new));
             } else if (StringUtils.isNotBlank(policy.getAuthority())) {
               Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                 "Permission configuration cannot be empty and cannot start with SCOPE_");
