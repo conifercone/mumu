@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +27,9 @@ import java.util.Optional;
  * @since 2.2.0
  */
 public interface RoleRedisRepository extends
-  RedisDocumentRepository<RoleRedisDo, Long> {
+  RedisDocumentRepository<RoleRedisDO, Long> {
 
-  List<RoleRedisDo> findByCodeIn(List<String> codes);
+  List<RoleRedisDO> findByCodeIn(List<String> codes);
 
-  Optional<RoleRedisDo> findByCode(String code);
+  Optional<RoleRedisDO> findByCode(String code);
 }

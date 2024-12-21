@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.persistence.QueryHint;
 import jakarta.validation.constraints.NotNull;
@@ -41,8 +41,8 @@ import org.springframework.validation.annotation.Validated;
  * @since 1.0.0
  */
 @Validated
-public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Long>,
-  JpaSpecificationExecutor<PermissionDo> {
+public interface PermissionRepository extends BaseJpaRepository<PermissionDO, Long>,
+  JpaSpecificationExecutor<PermissionDO> {
 
   /**
    * 判断是否存在指定id和code的权限
@@ -73,11 +73,11 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    */
   @Query(
     """
-      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+      select a from PermissionDO a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
             and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
             and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
       """)
-  Slice<PermissionDo> findAllSlice(@Param("permissionDo") PermissionDo permissionDo,
+  Slice<PermissionDO> findAllSlice(@Param("permissionDo") PermissionDO permissionDo,
     Pageable pageable);
 
   /**
@@ -89,18 +89,18 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionDo, Lo
    */
   @Query(
     """
-      select a from PermissionDo a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
+      select a from PermissionDO a where (:#{#permissionDo.id} is null or a.id = :#{#permissionDo.id})
             and (:#{#permissionDo.name} is null or a.name like %:#{#permissionDo.name}%)
             and (:#{#permissionDo.code} is null or a.code like %:#{#permissionDo.code}%) order by a.creationTime desc
       """)
-  Page<PermissionDo> findAllPage(@Param("permissionDo") PermissionDo permissionDo,
+  Page<PermissionDO> findAllPage(@Param("permissionDo") PermissionDO permissionDo,
     Pageable pageable);
 
-  List<PermissionDo> findAllByCodeIn(List<String> codes);
+  List<PermissionDO> findAllByCodeIn(List<String> codes);
 
-  Optional<PermissionDo> findByCode(String code);
+  Optional<PermissionDO> findByCode(String code);
 
   @QueryHints(value = @QueryHint(name = HibernateHints.HINT_FETCH_SIZE, value = "50"))
-  @Query(value = "select p from PermissionDo p")
-  Stream<PermissionDo> findAll();
+  @Query(value = "select p from PermissionDO p")
+  Stream<PermissionDO> findAll();
 }

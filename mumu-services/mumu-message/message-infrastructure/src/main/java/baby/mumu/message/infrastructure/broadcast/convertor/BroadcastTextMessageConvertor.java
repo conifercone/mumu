@@ -23,11 +23,11 @@ import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDO;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDO;
 import baby.mumu.message.infrastructure.config.MessageProperties;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDO;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDOId;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,7 +94,7 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
-  public Optional<BroadcastTextMessageDo> toDataObject(
+  public Optional<BroadcastTextMessageDO> toDataObject(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
       .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
@@ -102,17 +102,17 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public List<BroadcastTextMessageReceiverDo> toBroadcastTextMessageSenderReceiverDos(
+  public List<BroadcastTextMessageReceiverDO> toBroadcastTextMessageSenderReceiverDos(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
       .flatMap(broadcastTextMessageNotNull ->
         Optional.ofNullable(broadcastTextMessageNotNull.getReceiverIds())
           .map(receiverIds -> receiverIds.stream().map(receiverId -> {
-            BroadcastTextMessageReceiverDo broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDo();
+            BroadcastTextMessageReceiverDO broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDO();
             broadcastTextMessageReceiverDo.setMessageStatus(
               broadcastTextMessageNotNull.getMessageStatus());
             broadcastTextMessageReceiverDo.setId(
-              BroadcastTextMessageReceiverDoId.builder()
+              BroadcastTextMessageReceiverDOId.builder()
                 .messageId(broadcastTextMessageNotNull.getId())
                 .receiverId(receiverId)
                 .build());
@@ -126,7 +126,7 @@ public class BroadcastTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-    BroadcastTextMessageDo broadcastTextMessageDo) {
+    BroadcastTextMessageDO broadcastTextMessageDo) {
     return Optional.ofNullable(broadcastTextMessageDo)
       .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
         broadcastTextMessage.setReceiverIds(
@@ -173,16 +173,16 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessageArchivedDo> toArchiveDo(
-    BroadcastTextMessageDo broadcastTextMessageDo) {
+  public Optional<BroadcastTextMessageArchivedDO> toArchiveDO(
+    BroadcastTextMessageDO broadcastTextMessageDo) {
     return Optional.ofNullable(broadcastTextMessageDo)
-      .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDo);
+      .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessageDo> toDataObject(
-    BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo) {
+  public Optional<BroadcastTextMessageDO> toDataObject(
+    BroadcastTextMessageArchivedDO broadcastTextMessageArchivedDo) {
     return Optional.ofNullable(broadcastTextMessageArchivedDo)
       .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
   }

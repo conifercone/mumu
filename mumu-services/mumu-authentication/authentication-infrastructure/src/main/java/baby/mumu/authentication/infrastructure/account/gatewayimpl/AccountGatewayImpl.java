@@ -24,8 +24,8 @@ import baby.mumu.authentication.infrastructure.account.convertor.AccountConverto
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
@@ -143,17 +143,17 @@ public class AccountGatewayImpl implements AccountGateway {
       account.setId(dataObject.getId());
       if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
         accountSystemSettingsMongodbRepository.saveAll(account.getSystemSettings().stream().flatMap(
-          accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbDo(
+          accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbDO(
             accountSystemSettings).stream()).collect(Collectors.toList()));
       }
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
           accountAddresses -> accountAddresses.stream()
-            .flatMap(accountAddress -> accountConvertor.toAccountAddressDo(accountAddress)
+            .flatMap(accountAddress -> accountConvertor.toAccountAddressDO(accountAddress)
               .stream())
             .collect(
               Collectors.toList())).filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddressRepository::persistAll);
-      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
+      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDOS(account));
       accountRedisRepository.deleteById(account.getId());
       accountRoleRedisRepository.deleteById(account.getId());
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
@@ -180,7 +180,7 @@ public class AccountGatewayImpl implements AccountGateway {
       .or(() -> {
         Optional<Account> account = accountRepository.findAccountDoByUsername(username)
           .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountRedisDo)
+        account.flatMap(accountConvertor::toAccountRedisDO)
           .ifPresent(accountRedisRepository::save);
         return account;
       });
@@ -193,7 +193,7 @@ public class AccountGatewayImpl implements AccountGateway {
     return accountRedisRepository.findByEmail(email).flatMap(accountConvertor::toEntity).or(() -> {
       Optional<Account> account = accountRepository.findAccountDoByEmail(email)
         .flatMap(accountConvertor::toEntity);
-      account.flatMap(accountConvertor::toAccountRedisDo).ifPresent(accountRedisRepository::save);
+      account.flatMap(accountConvertor::toAccountRedisDO).ifPresent(accountRedisRepository::save);
       return account;
     });
   }
@@ -208,11 +208,11 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresent(accountDo -> {
           Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
             .ifPresent(accountAddresses -> {
-              List<AccountAddressDo> accountAddressDos = accountAddresses.stream().flatMap(
-                  accountAddress -> accountConvertor.toAccountAddressDo(accountAddress)
+              List<AccountAddressDO> accountAddressDOS = accountAddresses.stream().flatMap(
+                  accountAddress -> accountConvertor.toAccountAddressDO(accountAddress)
                     .stream())
                 .collect(Collectors.toList());
-              accountAddressRepository.mergeAll(accountAddressDos);
+              accountAddressRepository.mergeAll(accountAddressDOS);
             });
           accountRepository.merge(accountDo);
           accountRedisRepository.deleteById(accountId);
@@ -228,7 +228,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void updateRoleById(Account account) {
     accountConvertor.toDataObject(account).ifPresent(accountDo -> {
       accountRoleRepository.deleteByAccountId(account.getId());
-      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDos(account));
+      accountRoleRepository.persistAll(accountConvertor.toAccountRoleDOS(account));
       accountRoleRedisRepository.deleteById(account.getId());
     });
   }
@@ -257,7 +257,7 @@ public class AccountGatewayImpl implements AccountGateway {
         Optional<Account> account = accountRepository.findById(
             SecurityContextUtil.getLoginAccountId().get())
           .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountRedisDo)
+        account.flatMap(accountConvertor::toAccountRedisDO)
           .ifPresent(accountRedisRepository::save);
         return account;
       });
@@ -330,15 +330,15 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(String originalPassword, String newPassword) {
     if (verifyPassword(originalPassword)) {
-      AccountDo newAccountDo = SecurityContextUtil.getLoginAccountId()
+      AccountDO newAccountDO = SecurityContextUtil.getLoginAccountId()
         .map(accountId -> accountRepository.findById(accountId)
           .stream()
           .peek(accountDo -> accountDo.setPassword(passwordEncoder.encode(newPassword)))
           .findAny().orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
         .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
-      accountRepository.merge(newAccountDo);
-      accountRedisRepository.deleteById(newAccountDo.getId());
-      accountRoleRedisRepository.deleteById(newAccountDo.getId());
+      accountRepository.merge(newAccountDO);
+      accountRedisRepository.deleteById(newAccountDO.getId());
+      accountRoleRedisRepository.deleteById(newAccountDO.getId());
     } else {
       throw new MuMuException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
@@ -350,7 +350,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void archiveById(Long id) {
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(accountRepository::findById)
-      .flatMap(accountConvertor::toArchivedDo).ifPresent(accountArchivedDo -> {
+      .flatMap(accountConvertor::toArchivedDO).ifPresent(accountArchivedDo -> {
         accountArchivedDo.setArchived(true);
         accountArchivedRepository.persist(accountArchivedDo);
         accountRepository.deleteById(accountArchivedDo.getId());
@@ -392,7 +392,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void addAddress(AccountAddress accountAddress) {
     SecurityContextUtil.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountAddress)
-        .flatMap(accountConvertor::toAccountAddressDo)
+        .flatMap(accountConvertor::toAccountAddressDO)
         .ifPresent(
           accountAddressDo -> accountRepository.findById(accountId).ifPresent(accountDo -> {
             accountAddressDo.setUserId(accountId);
@@ -409,7 +409,7 @@ public class AccountGatewayImpl implements AccountGateway {
       .flatMap(accountConvertor::toEntity).or(() -> {
         Optional<Account> account = accountRepository.findById(id)
           .flatMap(accountConvertor::toBasicInfoEntity);
-        account.flatMap(accountConvertor::toAccountRedisDo)
+        account.flatMap(accountConvertor::toAccountRedisDO)
           .ifPresent(accountRedisRepository::save);
         return account;
       });
@@ -435,7 +435,7 @@ public class AccountGatewayImpl implements AccountGateway {
         accountSystemSettings.getId()))
       .filter(accountSystemSettingsMongodbDo -> SecurityContextUtil.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbDo.getUserId()))
-      .flatMap(accountSystemSettingsMongodbDo -> accountConvertor.toAccountSystemSettingMongodbDo(
+      .flatMap(accountSystemSettingsMongodbDo -> accountConvertor.toAccountSystemSettingMongodbDO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
   }
 
@@ -444,7 +444,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
     SecurityContextUtil.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountSystemSettings)
-        .flatMap(accountConvertor::toAccountSystemSettingMongodbDo)
+        .flatMap(accountConvertor::toAccountSystemSettingMongodbDO)
         .filter(
           accountSystemSettingsMongodbDo -> !accountSystemSettingsMongodbRepository.existsByUserIdAndProfile(
             accountId, accountSystemSettingsMongodbDo.getProfile()))
@@ -500,8 +500,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Page<Account> findAll(Account account, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Page<AccountDo> accountDos = accountRepository.findAllPage(
-      accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
+    Page<AccountDO> accountDos = accountRepository.findAllPage(
+      accountConvertor.toDataObject(account).orElseGet(AccountDO::new),
       Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
           accountEntity.getRoles()))
         .map(roles -> roles.stream().map(Role::getId).collect(
@@ -515,8 +515,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Slice<AccountDo> accountDos = accountRepository.findAllSlice(
-      accountConvertor.toDataObject(account).orElseGet(AccountDo::new),
+    Slice<AccountDO> accountDos = accountRepository.findAllSlice(
+      accountConvertor.toDataObject(account).orElseGet(AccountDO::new),
       Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
           accountEntity.getRoles()))
         .map(roles -> roles.stream().map(Role::getId).collect(

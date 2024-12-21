@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,8 +35,8 @@ import org.springframework.data.repository.query.Param;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
-  JpaSpecificationExecutor<RoleDo> {
+public interface RoleRepository extends BaseJpaRepository<RoleDO, Long>,
+  JpaSpecificationExecutor<RoleDO> {
 
 
   /**
@@ -62,7 +62,7 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param codes code集合
    * @return 角色集合
    */
-  List<RoleDo> findByCodeIn(Collection<String> codes);
+  List<RoleDO> findByCodeIn(Collection<String> codes);
 
   /**
    * 切片分页查询角色（不查询总数）
@@ -73,13 +73,13 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 查询结果
    */
   @Query("""
-    select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+    select distinct r from RoleDO r left join RolePermissionDO ra on r.id =ra.id.roleId
         where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id})
         and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%)
         and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
         and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc
     """)
-  Slice<RoleDo> findAllSlice(@Param("roleDo") RoleDo roleDo,
+  Slice<RoleDO> findAllSlice(@Param("roleDo") RoleDO roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
   /**
@@ -91,13 +91,13 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @return 查询结果
    */
   @Query("""
-    select distinct r from RoleDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+    select distinct r from RoleDO r left join RolePermissionDO ra on r.id =ra.id.roleId
         where (:#{#roleDo.id} is null or r.id = :#{#roleDo.id})
         and (:#{#roleDo.name} is null or r.name like %:#{#roleDo.name}%)
         and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
         and (:#{#roleDo.code} is null or r.code like %:#{#roleDo.code}%) order by r.creationTime desc
     """)
-  Page<RoleDo> findAllPage(@Param("roleDo") RoleDo roleDo,
+  Page<RoleDO> findAllPage(@Param("roleDo") RoleDO roleDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
   /**
@@ -106,5 +106,5 @@ public interface RoleRepository extends BaseJpaRepository<RoleDo, Long>,
    * @param code 角色code
    * @return 角色信息
    */
-  Optional<RoleDo> findByCode(String code);
+  Optional<RoleDO> findByCode(String code);
 }

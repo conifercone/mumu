@@ -20,8 +20,8 @@ import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDO;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -45,21 +45,21 @@ public interface BroadcastTextMessageMapper extends ClientObjectMapper {
     BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  BroadcastTextMessageDo toDataObject(BroadcastTextMessage broadcastTextMessage);
+  BroadcastTextMessageDO toDataObject(BroadcastTextMessage broadcastTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  BroadcastTextMessage toEntity(BroadcastTextMessageDo broadcastTextMessageDo);
+  BroadcastTextMessage toEntity(BroadcastTextMessageDO broadcastTextMessageDo);
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(
     BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  BroadcastTextMessageArchivedDo toArchiveDo(BroadcastTextMessageDo broadcastTextMessageDo);
+  BroadcastTextMessageArchivedDO toArchiveDO(BroadcastTextMessageDO broadcastTextMessageDo);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  BroadcastTextMessageDo toDataObject(
-    BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo);
+  BroadcastTextMessageDO toDataObject(
+    BroadcastTextMessageArchivedDO broadcastTextMessageArchivedDo);
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessageFindAllYouSendDTO toFindAllYouSendDTO(

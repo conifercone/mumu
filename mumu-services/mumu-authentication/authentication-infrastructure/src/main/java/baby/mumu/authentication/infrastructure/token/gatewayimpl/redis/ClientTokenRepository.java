@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.2
  */
 public interface ClientTokenRepository extends
-  RedisDocumentRepository<ClientTokenRedisDo, String> {
+  RedisDocumentRepository<ClientTokenRedisDO, String> {
 
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,8 +33,8 @@ import org.springframework.data.repository.query.Param;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
-public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo, Long>,
-  JpaSpecificationExecutor<RoleArchivedDo> {
+public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDO, Long>,
+  JpaSpecificationExecutor<RoleArchivedDO> {
 
   /**
    * 根据id或code判断角色是否已存在
@@ -63,13 +63,13 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
    */
   @Query(
     """
-      select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+      select distinct r from RoleArchivedDO r left join RolePermissionDO ra on r.id =ra.id.roleId
             where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
             and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
             and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
       """)
-  Slice<RoleArchivedDo> findAllSlice(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
+  Slice<RoleArchivedDO> findAllSlice(@Param("roleArchivedDo") RoleArchivedDO roleArchivedDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
   /**
@@ -82,12 +82,12 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDo
    */
   @Query(
     """
-      select distinct r from RoleArchivedDo r left join RolePermissionDo ra on r.id =ra.id.roleId
+      select distinct r from RoleArchivedDO r left join RolePermissionDO ra on r.id =ra.id.roleId
             where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
             and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
             and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
       """)
-  Page<RoleArchivedDo> findAllPage(@Param("roleArchivedDo") RoleArchivedDo roleArchivedDo,
+  Page<RoleArchivedDO> findAllPage(@Param("roleArchivedDo") RoleArchivedDO roleArchivedDo,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 }

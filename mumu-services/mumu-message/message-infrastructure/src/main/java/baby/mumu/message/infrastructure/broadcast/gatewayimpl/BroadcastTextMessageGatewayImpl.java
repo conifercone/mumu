@@ -27,11 +27,11 @@ import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
 import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageArchivedRepository;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo_;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDO;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDO_;
 import baby.mumu.message.infrastructure.config.MessageProperties;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDO;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDOId;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
@@ -116,12 +116,12 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   public void readMsgById(Long id) {
     Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId()
       .flatMap(accountId -> broadcastTextMessageReceiverRepository.findById(
-        BroadcastTextMessageReceiverDoId.builder().messageId(msgId).receiverId(accountId)
-          .build())).ifPresent(broadcastTextMessageReceiverDo -> {
-        broadcastTextMessageReceiverDo.setMessageStatus(
+        BroadcastTextMessageReceiverDOId.builder().messageId(msgId).receiverId(accountId)
+          .build())).ifPresent(broadcastTextMessageReceiverDO -> {
+        broadcastTextMessageReceiverDO.setMessageStatus(
           MessageStatusEnum.READ);
-        broadcastTextMessageReceiverRepository.merge(broadcastTextMessageReceiverDo);
-        List<BroadcastTextMessageReceiverDo> messageSenderReceiverDos = broadcastTextMessageReceiverRepository.findByBroadcastTextMessageId(
+        broadcastTextMessageReceiverRepository.merge(broadcastTextMessageReceiverDO);
+        List<BroadcastTextMessageReceiverDO> messageSenderReceiverDos = broadcastTextMessageReceiverRepository.findByBroadcastTextMessageId(
             msgId).stream().filter(
             messageReceiverDo -> MessageStatusEnum.UNREAD.equals(
               messageReceiverDo.getMessageStatus()))
@@ -153,26 +153,26 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
     int current,
     int pageSize) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
-      Specification<BroadcastTextMessageDo> broadcastTextMessageDoSpecification = (root, query, cb) -> {
+      Specification<BroadcastTextMessageDO> broadcastTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         Optional.ofNullable(broadcastTextMessage).ifPresent(broadcastTextMessageEntity -> {
           Optional.ofNullable(broadcastTextMessageEntity.getMessage())
             .filter(StringUtils::isNotBlank)
             .ifPresent(
-              message -> predicateList.add(cb.like(root.get(BroadcastTextMessageDo_.message),
+              message -> predicateList.add(cb.like(root.get(BroadcastTextMessageDO_.message),
                 String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, message))));
           Optional.ofNullable(broadcastTextMessageEntity.getMessageStatus()).ifPresent(
             messageStatusEnum -> predicateList.add(
-              cb.equal(root.get(BroadcastTextMessageDo_.messageStatus), messageStatusEnum)));
+              cb.equal(root.get(BroadcastTextMessageDO_.messageStatus), messageStatusEnum)));
         });
-        predicateList.add(cb.equal(root.get(BroadcastTextMessageDo_.senderId), accountId));
+        predicateList.add(cb.equal(root.get(BroadcastTextMessageDO_.senderId), accountId));
         assert query != null;
-        return query.orderBy(cb.desc(root.get(BroadcastTextMessageDo_.creationTime)))
+        return query.orderBy(cb.desc(root.get(BroadcastTextMessageDO_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
       };
       PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-      Page<BroadcastTextMessageDo> repositoryAll = broadcastTextMessageRepository.findAll(
+      Page<BroadcastTextMessageDO> repositoryAll = broadcastTextMessageRepository.findAll(
         broadcastTextMessageDoSpecification,
         pageRequest);
       List<BroadcastTextMessage> broadcastTextMessages = repositoryAll.getContent().stream()
@@ -190,7 +190,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
           accountId)))
-      .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchiveDo(
+      .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchiveDO(
         broadcastTextMessageDo).ifPresent(broadcastTextMessageArchivedDo -> {
         broadcastTextMessageArchivedDo.setArchived(true);
         broadcastTextMessageRepository.delete(broadcastTextMessageDo);

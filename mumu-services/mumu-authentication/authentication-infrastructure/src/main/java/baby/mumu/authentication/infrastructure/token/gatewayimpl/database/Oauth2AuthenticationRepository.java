@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.4.0
  */
 public interface Oauth2AuthenticationRepository extends
-  BaseJpaRepository<Oauth2AuthorizationDo, String>,
-  JpaSpecificationExecutor<Oauth2AuthorizationDo> {
+  BaseJpaRepository<Oauth2AuthorizationDO, String>,
+  JpaSpecificationExecutor<Oauth2AuthorizationDO> {
 
-  Optional<Oauth2AuthorizationDo> findByRefreshTokenValue(String refreshTokenValue);
+  Optional<Oauth2AuthorizationDO> findByRefreshTokenValue(String refreshTokenValue);
 }

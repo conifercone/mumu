@@ -22,10 +22,10 @@ import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.Authorize
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.AuthorizeCodeTokenRedisDo;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDo;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDo;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.PasswordTokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.AuthorizeCodeTokenRedisDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.PasswordTokenRedisDO;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
@@ -233,7 +233,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
-        ClientTokenRedisDo tokenRedisDo = new ClientTokenRedisDo();
+        ClientTokenRedisDO tokenRedisDo = new ClientTokenRedisDO();
         tokenRedisDo.setId(jwt.getClaimAsString("sub"));
         tokenRedisDo.setClientTokenValue(tokenValue);
         tokenRedisDo.setTtl(between.toSeconds());
@@ -241,7 +241,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
       } else if (context.getPrincipal().getPrincipal() instanceof Account account) {
         if (AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
           // 缓存授权码模式token
-          AuthorizeCodeTokenRedisDo authorizeCodeTokenRedisDo = new AuthorizeCodeTokenRedisDo();
+          AuthorizeCodeTokenRedisDO authorizeCodeTokenRedisDo = new AuthorizeCodeTokenRedisDO();
           authorizeCodeTokenRedisDo.setId(account.getId());
           authorizeCodeTokenRedisDo.setTokenValue(tokenValue);
           authorizeCodeTokenRedisDo.setTtl(between.toSeconds());
@@ -249,7 +249,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
           .equals(authorizationGrantType)) {
           // 缓存密码模式token
-          PasswordTokenRedisDo passwordTokenRedisDo = new PasswordTokenRedisDo();
+          PasswordTokenRedisDO passwordTokenRedisDo = new PasswordTokenRedisDO();
           passwordTokenRedisDo.setId(account.getId());
           passwordTokenRedisDo.setTokenValue(tokenValue);
           passwordTokenRedisDo.setTtl(between.toSeconds());
@@ -257,7 +257,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         }
       }
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
-      OidcIdTokenRedisDo oidcIdTokenRedisDo = new OidcIdTokenRedisDo();
+      OidcIdTokenRedisDO oidcIdTokenRedisDo = new OidcIdTokenRedisDO();
       oidcIdTokenRedisDo.setId(
         Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
       oidcIdTokenRedisDo.setTokenValue(tokenValue);

@@ -18,7 +18,7 @@ package baby.mumu.authentication.mapstruct;
 import baby.mumu.authentication.client.cmds.PermissionUpdateCmd;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionMapper;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDO;
 import com.google.protobuf.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ public class PermissionMapperTest {
   @Test
   public void toEntity() {
     PermissionMapper instance = PermissionMapper.INSTANCE;
-    PermissionDo permissionDo = new PermissionDo();
+    PermissionDO permissionDo = new PermissionDO();
     permissionDo.setId(1L);
     permissionDo.setCode("test");
     permissionDo.setModifier(1L);

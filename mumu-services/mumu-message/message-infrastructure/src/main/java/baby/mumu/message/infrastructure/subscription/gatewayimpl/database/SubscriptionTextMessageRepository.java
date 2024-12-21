@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.subscription.gatewayimpl.database;
 
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
@@ -28,13 +28,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.2
  */
 public interface SubscriptionTextMessageRepository extends
-  BaseJpaRepository<SubscriptionTextMessageDo, Long>,
-  JpaSpecificationExecutor<SubscriptionTextMessageDo> {
+  BaseJpaRepository<SubscriptionTextMessageDO, Long>,
+  JpaSpecificationExecutor<SubscriptionTextMessageDO> {
 
-  Optional<SubscriptionTextMessageDo> findByIdAndReceiverId(@NotNull Long id,
+  Optional<SubscriptionTextMessageDO> findByIdAndReceiverId(@NotNull Long id,
     @NotNull Long receiverId);
 
-  Optional<SubscriptionTextMessageDo> findByIdAndSenderId(@NotNull Long id,
+  Optional<SubscriptionTextMessageDO> findByIdAndSenderId(@NotNull Long id,
     @NotNull Long senderId);
 
   void deleteByIdAndSenderId(@NotNull Long id, @NotNull Long senderId);

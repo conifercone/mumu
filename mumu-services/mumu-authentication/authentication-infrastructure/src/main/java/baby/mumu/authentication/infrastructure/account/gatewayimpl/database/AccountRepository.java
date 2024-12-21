@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,8 +34,8 @@ import org.springframework.data.repository.query.Param;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
-  JpaSpecificationExecutor<AccountDo> {
+public interface AccountRepository extends BaseJpaRepository<AccountDO, Long>,
+  JpaSpecificationExecutor<AccountDO> {
 
   /**
    * 根据用户名查询账户
@@ -43,7 +43,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @param username 用户名
    * @return 账户数据对象
    */
-  Optional<AccountDo> findAccountDoByUsername(String username);
+  Optional<AccountDO> findAccountDoByUsername(String username);
 
   /**
    * 根据邮箱查询账户
@@ -51,7 +51,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @param email 邮箱地址
    * @return 账户数据对象
    */
-  Optional<AccountDo> findAccountDoByEmail(String email);
+  Optional<AccountDO> findAccountDoByEmail(String email);
 
   /**
    * 根据id或者username或者email判断用户是否存在
@@ -89,14 +89,14 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("""
-    select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
+    select distinct r from AccountDO r left join AccountRoleDO ra on r.id =ra.id.roleId
         where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
         and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
         and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
         and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
         and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
     """)
-  Slice<AccountDo> findAllSlice(@Param("accountDo") AccountDo accountDo,
+  Slice<AccountDO> findAllSlice(@Param("accountDo") AccountDO accountDo,
     @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 
   /**
@@ -108,13 +108,13 @@ public interface AccountRepository extends BaseJpaRepository<AccountDo, Long>,
    * @return 查询结果
    */
   @Query("""
-    select distinct r from AccountDo r left join AccountRoleDo ra on r.id =ra.id.roleId
+    select distinct r from AccountDO r left join AccountRoleDO ra on r.id =ra.id.roleId
         where (:#{#accountDo.id} is null or r.id = :#{#accountDo.id})
         and (:#{#accountDo.username} is null or r.username like %:#{#accountDo.username}%)
         and (:#{#accountDo.phone} is null or r.phone like %:#{#accountDo.phone}%)
         and (:#{#roleIds} is null or ra.id.roleId in :#{#roleIds})
         and (:#{#accountDo.email} is null or r.email like %:#{#accountDo.email}%) order by r.creationTime desc
     """)
-  Page<AccountDo> findAllPage(@Param("accountDo") AccountDo accountDo,
+  Page<AccountDO> findAllPage(@Param("accountDo") AccountDO accountDo,
     @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 }

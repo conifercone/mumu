@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
-public interface AccountArchivedRepository extends BaseJpaRepository<AccountArchivedDo, Long>,
-  JpaSpecificationExecutor<AccountArchivedDo> {
+public interface AccountArchivedRepository extends BaseJpaRepository<AccountArchivedDO, Long>,
+  JpaSpecificationExecutor<AccountArchivedDO> {
 
   /**
    * 根据id或者username或者email判断用户是否存在

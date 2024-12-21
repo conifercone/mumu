@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -26,10 +26,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressDo, Long>,
-  JpaSpecificationExecutor<AccountAddressDo> {
+public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressDO, Long>,
+  JpaSpecificationExecutor<AccountAddressDO> {
 
   void deleteByUserId(Long userId);
 
-  List<AccountAddressDo> findByUserId(Long userId);
+  List<AccountAddressDO> findByUserId(Long userId);
 }
