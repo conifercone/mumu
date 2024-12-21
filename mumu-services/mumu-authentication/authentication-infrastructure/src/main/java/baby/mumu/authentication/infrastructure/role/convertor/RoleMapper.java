@@ -35,9 +35,9 @@ import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDO;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDO;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
@@ -60,7 +60,7 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Role toEntity(RoleDO roleDo);
+  Role toEntity(RolePO rolePO);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCmd roleAddCmd);
@@ -78,10 +78,10 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   Role toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleRedisDO roleRedisDo);
+  Role toEntity(RoleRedisPO roleRedisPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleRedisDO toRoleRedisDO(Role role);
+  RoleRedisPO toRoleRedisPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);
@@ -111,19 +111,19 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   RoleArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  RoleDO toDataObject(Role role);
+  RolePO toPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RoleArchivedDO toArchivedDO(RoleDO roleDo);
+  RoleArchivedPO toArchivedPO(RolePO rolePO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedDO toArchivedDO(Role role);
+  RoleArchivedPO toArchivedPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RoleDO toDataObject(RoleArchivedDO roleArchivedDo);
+  RolePO toPO(RoleArchivedPO roleArchivedPO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  Role toEntity(RoleArchivedDO roleArchivedDo);
+  Role toEntity(RoleArchivedPO roleArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);

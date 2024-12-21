@@ -29,20 +29,20 @@ import org.springframework.data.repository.query.Param;
  * @since 2.2.0
  */
 public interface BroadcastTextMessageReceiverRepository extends
-  BaseJpaRepository<BroadcastTextMessageReceiverDO, BroadcastTextMessageReceiverDOId>,
-  JpaSpecificationExecutor<BroadcastTextMessageReceiverDO> {
+  BaseJpaRepository<BroadcastTextMessageReceiverPO, BroadcastTextMessageReceiverPOId>,
+  JpaSpecificationExecutor<BroadcastTextMessageReceiverPO> {
 
-  List<BroadcastTextMessageReceiverDO> findByBroadcastTextMessageId(Long messageId);
+  List<BroadcastTextMessageReceiverPO> findByBroadcastTextMessageId(Long messageId);
 
-  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDO b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
+  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverPO b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
   List<Long> findReceiverIdsByMessageIdAndMessageStatus(
     @Param("messageId") Long messageId, @Param("messageStatus") MessageStatusEnum messageStatus);
 
-  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverDO b where b.id.messageId=:messageId")
+  @Query("select distinct b.id.receiverId from BroadcastTextMessageReceiverPO b where b.id.messageId=:messageId")
   List<Long> findReceiverIdsByMessageId(
     @Param("messageId") Long messageId);
 
-  @Query("select count(distinct b.id.receiverId) from BroadcastTextMessageReceiverDO b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
+  @Query("select count(distinct b.id.receiverId) from BroadcastTextMessageReceiverPO b where b.messageStatus=:messageStatus and b.id.messageId=:messageId")
   Long countByMessageIdAndMessageStatus(@Param("messageId") Long messageId,
     @Param("messageStatus") MessageStatusEnum messageStatus);
 

@@ -22,10 +22,10 @@ import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.Authorize
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.AuthorizeCodeTokenRedisDO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.ClientTokenRedisDO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.PasswordTokenRedisDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.AuthorizeCodeTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.ClientTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.OidcIdTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.PasswordTokenRedisPO;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
@@ -233,7 +233,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
-        ClientTokenRedisDO tokenRedisDo = new ClientTokenRedisDO();
+        ClientTokenRedisPO tokenRedisDo = new ClientTokenRedisPO();
         tokenRedisDo.setId(jwt.getClaimAsString("sub"));
         tokenRedisDo.setClientTokenValue(tokenValue);
         tokenRedisDo.setTtl(between.toSeconds());
@@ -241,28 +241,28 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
       } else if (context.getPrincipal().getPrincipal() instanceof Account account) {
         if (AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
           // 缓存授权码模式token
-          AuthorizeCodeTokenRedisDO authorizeCodeTokenRedisDo = new AuthorizeCodeTokenRedisDO();
-          authorizeCodeTokenRedisDo.setId(account.getId());
-          authorizeCodeTokenRedisDo.setTokenValue(tokenValue);
-          authorizeCodeTokenRedisDo.setTtl(between.toSeconds());
-          authorizeCodeTokenRepository.save(authorizeCodeTokenRedisDo);
+          AuthorizeCodeTokenRedisPO authorizeCodeTokenRedisPO = new AuthorizeCodeTokenRedisPO();
+          authorizeCodeTokenRedisPO.setId(account.getId());
+          authorizeCodeTokenRedisPO.setTokenValue(tokenValue);
+          authorizeCodeTokenRedisPO.setTtl(between.toSeconds());
+          authorizeCodeTokenRepository.save(authorizeCodeTokenRedisPO);
         } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
           .equals(authorizationGrantType)) {
           // 缓存密码模式token
-          PasswordTokenRedisDO passwordTokenRedisDo = new PasswordTokenRedisDO();
-          passwordTokenRedisDo.setId(account.getId());
-          passwordTokenRedisDo.setTokenValue(tokenValue);
-          passwordTokenRedisDo.setTtl(between.toSeconds());
-          passwordTokenRepository.save(passwordTokenRedisDo);
+          PasswordTokenRedisPO passwordTokenRedisPO = new PasswordTokenRedisPO();
+          passwordTokenRedisPO.setId(account.getId());
+          passwordTokenRedisPO.setTokenValue(tokenValue);
+          passwordTokenRedisPO.setTtl(between.toSeconds());
+          passwordTokenRepository.save(passwordTokenRedisPO);
         }
       }
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
-      OidcIdTokenRedisDO oidcIdTokenRedisDo = new OidcIdTokenRedisDO();
-      oidcIdTokenRedisDo.setId(
+      OidcIdTokenRedisPO oidcIdTokenRedisPO = new OidcIdTokenRedisPO();
+      oidcIdTokenRedisPO.setId(
         Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
-      oidcIdTokenRedisDo.setTokenValue(tokenValue);
-      oidcIdTokenRedisDo.setTtl(between.toSeconds());
-      oidcIdTokenRepository.save(oidcIdTokenRedisDo);
+      oidcIdTokenRedisPO.setTokenValue(tokenValue);
+      oidcIdTokenRedisPO.setTtl(between.toSeconds());
+      oidcIdTokenRepository.save(oidcIdTokenRedisPO);
     }
   }
 

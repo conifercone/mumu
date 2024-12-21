@@ -39,8 +39,8 @@ public class CaptchaConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
-    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toDataObject);
+  public Optional<SimpleCaptchaDo> toPO(SimpleCaptcha simpleCaptcha) {
+    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toPO);
   }
 
   @Contract("_ -> new")

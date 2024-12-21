@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.client.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.dataobject.ClientDO;
+import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.po.ClientPO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Optional;
 
@@ -25,7 +25,7 @@ import java.util.Optional;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.5.0
  */
-public interface ClientRepository extends BaseJpaRepository<ClientDO, String> {
+public interface ClientRepository extends BaseJpaRepository<ClientPO, String> {
 
-  Optional<ClientDO> findByClientId(String clientId);
+  Optional<ClientPO> findByClientId(String clientId);
 }

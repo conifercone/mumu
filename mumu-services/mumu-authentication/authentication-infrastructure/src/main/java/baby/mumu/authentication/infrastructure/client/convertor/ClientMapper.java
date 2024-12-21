@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.client.convertor;
 
 import baby.mumu.authentication.domain.client.Client;
-import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.dataobject.ClientDO;
+import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.po.ClientPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -37,10 +37,10 @@ public interface ClientMapper {
   ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
   @API(status = Status.STABLE, since = "2.5.0")
-  Client toEntity(ClientDO clientDo);
+  Client toEntity(ClientPO clientPO);
 
   @API(status = Status.STABLE, since = "2.5.0")
-  ClientDO toDataObject(Client client);
+  ClientPO toPO(Client client);
 
   @API(status = Status.STABLE, since = "2.5.0")
   void toEntity(Client clientSource, @MappingTarget Client clientTarget);

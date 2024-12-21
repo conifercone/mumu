@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.client.convertor;
 
 import baby.mumu.authentication.domain.client.Client;
-import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.dataobject.ClientDO;
+import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.po.ClientPO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -33,14 +33,14 @@ public class ClientConvertor {
 
   @API(status = Status.STABLE, since = "2.5.0")
   public Optional<Client> toEntity(
-    ClientDO clientDo) {
-    return Optional.ofNullable(clientDo).map(ClientMapper.INSTANCE::toEntity);
+    ClientPO clientPO) {
+    return Optional.ofNullable(clientPO).map(ClientMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.5.0")
-  public Optional<ClientDO> toDataObject(
+  public Optional<ClientPO> toPO(
     Client client) {
-    return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toDataObject);
+    return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toPO);
   }
 
   @API(status = Status.STABLE, since = "2.5.0")

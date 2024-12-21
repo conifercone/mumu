@@ -21,8 +21,8 @@ import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDO;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDO;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessageArchivedPO;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -46,10 +46,10 @@ public interface SubscriptionTextMessageMapper extends ClientObjectMapper {
     SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  SubscriptionTextMessageDO toDataObject(SubscriptionTextMessage subscriptionTextMessage);
+  SubscriptionTextMessagePO toPO(SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  SubscriptionTextMessage toEntity(SubscriptionTextMessageDO subscriptionTextMessageDo);
+  SubscriptionTextMessage toEntity(SubscriptionTextMessagePO subscriptionTextMessagePO);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessage toEntity(
@@ -64,10 +64,10 @@ public interface SubscriptionTextMessageMapper extends ClientObjectMapper {
     SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  SubscriptionTextMessageArchivedDO toArchiveDO(
-    SubscriptionTextMessageDO subscriptionTextMessageDo);
+  SubscriptionTextMessageArchivedPO toArchivePO(
+    SubscriptionTextMessagePO subscriptionTextMessagePO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  SubscriptionTextMessageDO toDataObject(
-    SubscriptionTextMessageArchivedDO subscriptionTextMessageArchivedDo);
+  SubscriptionTextMessagePO toPO(
+    SubscriptionTextMessageArchivedPO subscriptionTextMessageArchivedPO);
 }

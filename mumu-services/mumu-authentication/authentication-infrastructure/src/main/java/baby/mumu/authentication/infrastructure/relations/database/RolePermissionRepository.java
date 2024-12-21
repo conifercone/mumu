@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.1.0
  */
 public interface RolePermissionRepository extends
-  BaseJpaRepository<RolePermissionDO, RolePermissionDOId>,
-  JpaSpecificationExecutor<RolePermissionDO> {
+  BaseJpaRepository<RolePermissionPO, RolePermissionPOId>,
+  JpaSpecificationExecutor<RolePermissionPO> {
 
   /**
    * 根据权限ID查询角色权限关联关系
@@ -36,7 +36,7 @@ public interface RolePermissionRepository extends
    * @param permissionId 权限ID
    * @return 角色权限关联关系列表
    */
-  List<RolePermissionDO> findByPermissionId(@NotNull final Long permissionId);
+  List<RolePermissionPO> findByPermissionId(@NotNull final Long permissionId);
 
   /**
    * 根据角色ID删除角色权限关联关系
@@ -51,5 +51,5 @@ public interface RolePermissionRepository extends
    * @param roleId 角色ID
    * @return 角色权限关联关系列表
    */
-  List<RolePermissionDO> findByRoleId(@NotNull final Long roleId);
+  List<RolePermissionPO> findByRoleId(@NotNull final Long roleId);
 }

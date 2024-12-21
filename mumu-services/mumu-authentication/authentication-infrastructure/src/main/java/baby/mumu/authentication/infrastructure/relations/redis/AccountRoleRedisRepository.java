@@ -24,6 +24,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 2.2.0
  */
 public interface AccountRoleRedisRepository extends
-  RedisDocumentRepository<AccountRoleRedisDO, Long> {
+  RedisDocumentRepository<AccountRoleRedisPO, Long> {
 
 }

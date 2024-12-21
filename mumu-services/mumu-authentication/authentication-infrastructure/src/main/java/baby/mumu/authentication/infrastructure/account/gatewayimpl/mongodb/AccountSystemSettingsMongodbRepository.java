@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -28,9 +28,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @since 2.2.0
  */
 public interface AccountSystemSettingsMongodbRepository extends
-  MongoRepository<AccountSystemSettingsMongodbDO, String> {
+  MongoRepository<AccountSystemSettingsMongodbPO, String> {
 
-  List<AccountSystemSettingsMongodbDO> findByUserId(@NotNull Long userId);
+  List<AccountSystemSettingsMongodbPO> findByUserId(@NotNull Long userId);
 
   boolean existsByUserIdAndProfile(@NotNull Long userId, @NotBlank String profile);
 }

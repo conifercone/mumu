@@ -24,11 +24,11 @@ import baby.mumu.authentication.infrastructure.client.convertor.ClientConvertor;
 import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.ClientRepository;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.Oauth2AuthenticationRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
@@ -466,11 +466,11 @@ public class AuthorizationConfiguration {
     List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
       .map(Permission::getId)
       .collect(Collectors.toList());
-    List<PermissionDO> descendantPermissions = permissionRepository.findAllById(
+    List<PermissionPO> descendantPermissions = permissionRepository.findAllById(
       descendantIds);
     Collection<String> allPermissionCodes = CollectionUtils.union(
       permissions.stream().map(Permission::getCode).collect(Collectors.toSet()),
-      descendantPermissions.stream().map(PermissionDO::getCode)
+      descendantPermissions.stream().map(PermissionPO::getCode)
         .collect(Collectors.toSet()));
     authorityCodesFromRoles.addAll(scopes);
     authorityCodesFromRoles.addAll(allPermissionCodes);

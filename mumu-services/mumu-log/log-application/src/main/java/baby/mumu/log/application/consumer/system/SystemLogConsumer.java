@@ -18,7 +18,7 @@ package baby.mumu.log.application.consumer.system;
 import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.infrastructure.config.LogProperties;
 import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
-import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
+import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
@@ -51,8 +51,8 @@ public class SystemLogConsumer {
 
   @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
   public void handle(String systemLog) throws JsonProcessingException {
-    SystemLogKafkaDo systemLogKafkaDo = objectMapper.readValue(systemLog,
-      SystemLogKafkaDo.class);
+    SystemLogKafkaDO systemLogKafkaDo = objectMapper.readValue(systemLog,
+      SystemLogKafkaDO.class);
     systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaDo).ifPresent(systemLogService::save);
   }
 }

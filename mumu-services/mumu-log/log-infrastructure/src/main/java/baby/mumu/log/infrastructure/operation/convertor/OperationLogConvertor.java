@@ -22,8 +22,8 @@ import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDO;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
@@ -56,13 +56,13 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
+  public Optional<OperationLogKafkaDO> toKafkaDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaDataObject);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
+  public Optional<OperationLogEsDO> toEsDataObject(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsDataObject);
   }
 
@@ -91,7 +91,7 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
+  public Optional<OperationLog> toEntity(OperationLogEsDO operationLogEsDo) {
     return Optional.ofNullable(operationLogEsDo).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
@@ -125,7 +125,7 @@ public class OperationLogConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
-    OperationLogKafkaDo operationLogKafkaDo) {
+    OperationLogKafkaDO operationLogKafkaDo) {
     return Optional.ofNullable(operationLogKafkaDo)
       .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
   }

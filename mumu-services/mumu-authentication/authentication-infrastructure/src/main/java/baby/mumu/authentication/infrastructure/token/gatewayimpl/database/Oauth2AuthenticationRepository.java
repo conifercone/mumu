@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.dataobject.Oauth2AuthorizationDO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

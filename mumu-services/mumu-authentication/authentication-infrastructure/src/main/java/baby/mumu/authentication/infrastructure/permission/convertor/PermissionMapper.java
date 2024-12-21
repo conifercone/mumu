@@ -34,9 +34,9 @@ import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
 import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
 import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionArchivedDO;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDO;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
 import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
@@ -59,7 +59,7 @@ public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
   PermissionMapper INSTANCE = Mappers.getMapper(PermissionMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Permission toEntity(PermissionDO permissionDo);
+  Permission toEntity(PermissionPO permissionPO);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Permission toEntity(PermissionAddCmd permissionAddCmd);
@@ -71,16 +71,16 @@ public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
   Permission toEntity(PermissionFindAllSliceCmd permissionFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  Permission toEntity(PermissionArchivedDO permissionArchivedDo);
+  Permission toEntity(PermissionArchivedPO permissionArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Permission toEntity(PermissionRedisDO permissionRedisDo);
+  Permission toEntity(PermissionRedisPO permissionRedisPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionRedisDO toPermissionRedisDO(Permission permission);
+  PermissionRedisPO toPermissionRedisPO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionDO toDataObject(PermissionRedisDO permissionRedisDo);
+  PermissionPO toPO(PermissionRedisPO permissionRedisPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
   Permission toEntity(PermissionArchivedFindAllCmd permissionArchivedFindAllCmd);
@@ -110,16 +110,16 @@ public interface PermissionMapper extends GrpcMapper, ClientObjectMapper {
   PermissionArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionDO toDataObject(Permission permission);
+  PermissionPO toPO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  PermissionArchivedDO toArchivedDO(PermissionDO permissionDo);
+  PermissionArchivedPO toArchivedPO(PermissionPO permissionPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionArchivedDO toArchivedDO(Permission permission);
+  PermissionArchivedPO toArchivedPO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  PermissionDO toDataObject(PermissionArchivedDO permissionArchivedDo);
+  PermissionPO toPO(PermissionArchivedPO permissionArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);

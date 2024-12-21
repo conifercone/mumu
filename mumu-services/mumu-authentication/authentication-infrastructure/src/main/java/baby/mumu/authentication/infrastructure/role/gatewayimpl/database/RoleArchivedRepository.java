@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,8 +33,8 @@ import org.springframework.data.repository.query.Param;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
-public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDO, Long>,
-  JpaSpecificationExecutor<RoleArchivedDO> {
+public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedPO, Long>,
+  JpaSpecificationExecutor<RoleArchivedPO> {
 
   /**
    * 根据id或code判断角色是否已存在
@@ -56,38 +56,38 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedDO
   /**
    * 切片分页查询已归档的角色（不查询总数）
    *
-   * @param roleArchivedDo 查询条件
+   * @param roleArchivedPO 查询条件
    * @param permissionIds  权限ID集合
    * @param pageable       分页条件
    * @return 查询结果
    */
   @Query(
     """
-      select distinct r from RoleArchivedDO r left join RolePermissionDO ra on r.id =ra.id.roleId
-            where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
-            and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
+      select distinct r from RoleArchivedPO r left join RolePermissionPO ra on r.id =ra.id.roleId
+            where (:#{#roleArchivedPO.id} is null or r.id = :#{#roleArchivedPO.id})
+            and (:#{#roleArchivedPO.name} is null or r.name like %:#{#roleArchivedPO.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-            and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
+            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%) order by r.creationTime desc
       """)
-  Slice<RoleArchivedDO> findAllSlice(@Param("roleArchivedDo") RoleArchivedDO roleArchivedDo,
+  Slice<RoleArchivedPO> findAllSlice(@Param("roleArchivedPO") RoleArchivedPO roleArchivedPO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 
   /**
    * 分页查询已归档的角色（查询总数）
    *
-   * @param roleArchivedDo 查询条件
+   * @param roleArchivedPO 查询条件
    * @param permissionIds  权限ID集合
    * @param pageable       分页条件
    * @return 查询结果
    */
   @Query(
     """
-      select distinct r from RoleArchivedDO r left join RolePermissionDO ra on r.id =ra.id.roleId
-            where (:#{#roleArchivedDo.id} is null or r.id = :#{#roleArchivedDo.id})
-            and (:#{#roleArchivedDo.name} is null or r.name like %:#{#roleArchivedDo.name}%)
+      select distinct r from RoleArchivedPO r left join RolePermissionPO ra on r.id =ra.id.roleId
+            where (:#{#roleArchivedPO.id} is null or r.id = :#{#roleArchivedPO.id})
+            and (:#{#roleArchivedPO.name} is null or r.name like %:#{#roleArchivedPO.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-            and (:#{#roleArchivedDo.code} is null or r.code like %:#{#roleArchivedDo.code}%) order by r.creationTime desc
+            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%) order by r.creationTime desc
       """)
-  Page<RoleArchivedDO> findAllPage(@Param("roleArchivedDo") RoleArchivedDO roleArchivedDo,
+  Page<RoleArchivedPO> findAllPage(@Param("roleArchivedPO") RoleArchivedPO roleArchivedPO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
 }

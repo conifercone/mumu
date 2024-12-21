@@ -68,7 +68,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
         }
         Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new MuMuException(
           ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
-        return captchaConvertor.toDataObject(simpleCaptchaDomain);
+        return captchaConvertor.toPO(simpleCaptchaDomain);
       }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
     simpleCaptchaRepository.save(simpleCaptchaDo);
     return simpleCaptcha;

@@ -17,7 +17,7 @@ package baby.mumu.extension.nosql;
 
 import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_MONGODB_AUDITOR_AWARE;
 
-import baby.mumu.basis.dataobject.jpa.MuMuJpaMongodbAuditorAware;
+import baby.mumu.basis.po.jpa.MuMuJpaMongodbAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
