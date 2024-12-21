@@ -20,17 +20,17 @@ Authorization: Bearer {{$auth.token("admin")}}
 Content-Disposition: form-data; name="storageAddress"
 Content-Type: text/plain
 
-mail
+test
 --WebAppBoundary
 Content-Disposition: form-data; name="name"
 Content-Type: text/plain
 
-template/zh/verification_code
+test
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="verification_code.html"
+Content-Disposition: form-data; name="file"; filename="test.txt"
 Content-Type: application/json
 
-< ./assets/verification_code.html
+< ./assets/test.txt
 --WebAppBoundary--
 
 > {%
