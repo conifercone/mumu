@@ -92,7 +92,7 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  void toAccountSystemSettingMongodbDO(
+  void toAccountSystemSettingMongodbPO(
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOSource,
     @MappingTarget AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOTarget);
 

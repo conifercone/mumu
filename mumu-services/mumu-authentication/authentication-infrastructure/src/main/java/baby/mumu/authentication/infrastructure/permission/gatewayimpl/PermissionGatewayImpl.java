@@ -96,17 +96,17 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Permission permission) {
     Optional.ofNullable(permission).flatMap(permissionConvertor::toPO)
-      .filter(permissionDo -> !permissionRepository.existsByIdOrCode(permissionDo.getId(),
-        permissionDo.getCode()) && !permissionArchivedRepository.existsByIdOrCode(
-        permissionDo.getId(),
-        permissionDo.getCode()))
-      .ifPresentOrElse(permissionDo -> {
-        permissionRepository.persist(permissionDo);
+      .filter(permissionPO -> !permissionRepository.existsByIdOrCode(permissionPO.getId(),
+        permissionPO.getCode()) && !permissionArchivedRepository.existsByIdOrCode(
+        permissionPO.getId(),
+        permissionPO.getCode()))
+      .ifPresentOrElse(permissionPO -> {
+        permissionRepository.persist(permissionPO);
         permissionPathsRepository.persist(
           new PermissionPathsPO(
-            new PermissionPathsPOId(permissionDo.getId(), permissionDo.getId(), 0L),
-            permissionDo, permissionDo));
-        permissionRedisRepository.deleteById(permissionDo.getId());
+            new PermissionPathsPOId(permissionPO.getId(), permissionPO.getId(), 0L),
+            permissionPO, permissionPO));
+        permissionRedisRepository.deleteById(permissionPO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
       });
@@ -159,23 +159,23 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Permission> findAllSlice(Permission permission, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Slice<PermissionPO> permissionDoSlice = permissionRepository.findAllSlice(
+    Slice<PermissionPO> permissionPOSlice = permissionRepository.findAllSlice(
       permissionConvertor.toPO(permission).orElseGet(PermissionPO::new), pageRequest);
-    return new SliceImpl<>(permissionDoSlice.getContent().stream()
-      .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
-      .toList(), pageRequest, permissionDoSlice.hasNext());
+    return new SliceImpl<>(permissionPOSlice.getContent().stream()
+      .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream())
+      .toList(), pageRequest, permissionPOSlice.hasNext());
   }
 
   @Override
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<Permission> findArchivedAllSlice(Permission permission, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Slice<PermissionArchivedPO> permissionArchivedDos = permissionArchivedRepository.findAllSlice(
+    Slice<PermissionArchivedPO> permissionArchivedPOS = permissionArchivedRepository.findAllSlice(
       permissionConvertor.toArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
       pageRequest);
-    return new SliceImpl<>(permissionArchivedDos.getContent().stream()
-      .flatMap(permissionArchivedDo -> permissionConvertor.toEntity(permissionArchivedDo).stream())
-      .toList(), pageRequest, permissionArchivedDos.hasNext());
+    return new SliceImpl<>(permissionArchivedPOS.getContent().stream()
+      .flatMap(permissionArchivedPO -> permissionConvertor.toEntity(permissionArchivedPO).stream())
+      .toList(), pageRequest, permissionArchivedPOS.hasNext());
   }
 
   @Override
@@ -215,15 +215,15 @@ public class PermissionGatewayImpl implements PermissionGateway {
     }
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(permissionRepository::findById)
-      .flatMap(permissionConvertor::toArchivedPO).ifPresent(permissionArchivedDo -> {
-        permissionArchivedDo.setArchived(true);
-        permissionArchivedRepository.persist(permissionArchivedDo);
-        permissionRepository.deleteById(permissionArchivedDo.getId());
-        permissionRedisRepository.deleteById(permissionArchivedDo.getId());
+      .flatMap(permissionConvertor::toArchivedPO).ifPresent(permissionArchivedPO -> {
+        permissionArchivedPO.setArchived(true);
+        permissionArchivedRepository.persist(permissionArchivedPO);
+        permissionRepository.deleteById(permissionArchivedPO.getId());
+        permissionRedisRepository.deleteById(permissionArchivedPO.getId());
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(permissionArchivedDo.getId()));
+          () -> deleteArchivedDataJob(permissionArchivedPO.getId()));
       });
   }
 
@@ -244,29 +244,29 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
     Optional.ofNullable(id).flatMap(permissionArchivedRepository::findById)
-      .flatMap(permissionConvertor::toPO).ifPresent(permissionDo -> {
-        permissionDo.setArchived(false);
-        permissionArchivedRepository.deleteById(permissionDo.getId());
-        permissionRepository.persist(permissionDo);
-        permissionRedisRepository.deleteById(permissionDo.getId());
+      .flatMap(permissionConvertor::toPO).ifPresent(permissionPO -> {
+        permissionPO.setArchived(false);
+        permissionArchivedRepository.deleteById(permissionPO.getId());
+        permissionRepository.persist(permissionPO);
+        permissionRedisRepository.deleteById(permissionPO.getId());
       });
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addAncestor(Long descendantId, Long ancestorId) {
-    Optional<PermissionPO> ancestorPermissionDoOptional = permissionRepository.findById(ancestorId);
-    Optional<PermissionPO> descendantPermissionDoOptional = permissionRepository.findById(
+    Optional<PermissionPO> ancestorPermissionPOOptional = permissionRepository.findById(ancestorId);
+    Optional<PermissionPO> descendantPermissionPOOptional = permissionRepository.findById(
       descendantId);
-    if (ancestorPermissionDoOptional.isPresent() && descendantPermissionDoOptional.isPresent()) {
+    if (ancestorPermissionPOOptional.isPresent() && descendantPermissionPOOptional.isPresent()) {
       // 后代权限
-      PermissionPO descendantPermissionPO = descendantPermissionDoOptional.get();
+      PermissionPO descendantPermissionPO = descendantPermissionPOOptional.get();
       // 为节点添加从所有祖先到自身的路径
       List<PermissionPathsPO> ancestorAuthorities = permissionPathsRepository.findByDescendantId(
         ancestorId);
       // 成环检测
       Set<Long> ancestorIds = ancestorAuthorities.stream()
-        .map(permissionPathsDo -> permissionPathsDo.getId().getAncestorId())
+        .map(permissionPathsPO -> permissionPathsPO.getId().getAncestorId())
         .collect(
           Collectors.toSet());
       if (ancestorIds.contains(descendantId)) {
@@ -282,7 +282,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
             ancestorPermission.getId().getDepth() + 1),
           ancestorPermission.getAncestor(), descendantPermissionPO))
         .filter(
-          permissionPathsDo -> !permissionPathsRepository.existsById(permissionPathsDo.getId())
+          permissionPathsPO -> !permissionPathsRepository.existsById(permissionPathsPO.getId())
         )
         .collect(
           Collectors.toList());
@@ -298,7 +298,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionPathsPO> repositoryAll = permissionPathsRepository.findRootPermissions(
       pageRequest);
     List<Permission> authorities = repositoryAll.getContent().stream().flatMap(
-        permissionPathsDo -> findById(permissionPathsDo.getId().getAncestorId()).stream())
+        permissionPathsPO -> findById(permissionPathsPO.getId().getAncestorId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
@@ -310,7 +310,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
       ancestorId,
       pageRequest);
     List<Permission> authorities = repositoryAll.getContent().stream().flatMap(
-        permissionPathsDo -> findById(permissionPathsDo.getId().getDescendantId()).stream())
+        permissionPathsPO -> findById(permissionPathsPO.getId().getDescendantId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
@@ -343,7 +343,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public Stream<Permission> findAll() {
     return permissionRepository.findAll()
       .flatMap(
-        permissionDo -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionDo).stream());
+        permissionPO -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionPO).stream());
   }
 
   @Override

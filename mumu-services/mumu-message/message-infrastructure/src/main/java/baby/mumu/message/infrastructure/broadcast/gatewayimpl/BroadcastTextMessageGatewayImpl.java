@@ -95,9 +95,9 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
         messageProperties.getWebSocket().getAccountBroadcastChannelMap())
       .ifPresent(allOnlineAccountChannels -> broadcastTextMessageConvertor.toPO(
           broadcastTextMessage)
-        .ifPresent(broadcastTextMessageDo -> {
+        .ifPresent(broadcastTextMessagePO -> {
           if (CollectionUtils.isNotEmpty(broadcastTextMessage.getReceiverIds())) {
-            broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+            broadcastTextMessageRepository.persist(broadcastTextMessagePO);
             broadcastTextMessageReceiverRepository.mergeAll(
               broadcastTextMessageConvertor.toBroadcastTextMessageSenderReceiverDos(
                 broadcastTextMessage));
@@ -106,7 +106,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
                 .ifPresent(accountChannel -> accountChannel.writeAndFlush(
                   new TextWebSocketFrame(broadcastTextMessage.getMessage()))));
           } else {
-            broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+            broadcastTextMessageRepository.persist(broadcastTextMessagePO);
           }
         })));
   }
@@ -190,10 +190,10 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
           accountId)))
-      .ifPresent(broadcastTextMessageDo -> broadcastTextMessageConvertor.toArchivePO(
-        broadcastTextMessageDo).ifPresent(broadcastTextMessageArchivedDo -> {
+      .ifPresent(broadcastTextMessagePO -> broadcastTextMessageConvertor.toArchivePO(
+        broadcastTextMessagePO).ifPresent(broadcastTextMessageArchivedDo -> {
         broadcastTextMessageArchivedDo.setArchived(true);
-        broadcastTextMessageRepository.delete(broadcastTextMessageDo);
+        broadcastTextMessageRepository.delete(broadcastTextMessagePO);
         broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
@@ -221,10 +221,10 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
           accountId)))
       .flatMap(
         broadcastTextMessageConvertor::toPO)
-      .ifPresent(broadcastTextMessageDo -> {
-        broadcastTextMessageDo.setArchived(false);
-        broadcastTextMessageArchivedRepository.deleteById(broadcastTextMessageDo.getId());
-        broadcastTextMessageRepository.persist(broadcastTextMessageDo);
+      .ifPresent(broadcastTextMessagePO -> {
+        broadcastTextMessagePO.setArchived(false);
+        broadcastTextMessageArchivedRepository.deleteById(broadcastTextMessagePO.getId());
+        broadcastTextMessageRepository.persist(broadcastTextMessagePO);
       });
   }
 }

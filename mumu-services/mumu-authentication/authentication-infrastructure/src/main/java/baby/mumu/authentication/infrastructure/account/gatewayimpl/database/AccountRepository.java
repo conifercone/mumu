@@ -43,7 +43,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
    * @param username 用户名
    * @return 账户数据对象
    */
-  Optional<AccountPO> findAccountDoByUsername(String username);
+  Optional<AccountPO> findByUsername(String username);
 
   /**
    * 根据邮箱查询账户
@@ -51,7 +51,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
    * @param email 邮箱地址
    * @return 账户数据对象
    */
-  Optional<AccountPO> findAccountDoByEmail(String email);
+  Optional<AccountPO> findByEmail(String email);
 
   /**
    * 根据id或者username或者email判断用户是否存在

@@ -454,12 +454,12 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountSystemSettingsMongodbPO> resetAccountSystemSettingMongodbDo(
+  public Optional<AccountSystemSettingsMongodbPO> resetAccountSystemSettingMongodbPO(
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
     return Optional.ofNullable(accountSystemSettingsMongodbPO)
       .map(accountSystemSettingsMongodbDoTarget -> {
         // id，userId,profile,name,enabled,version属性不重置
-        AccountMapper.INSTANCE.toAccountSystemSettingMongodbDO(
+        AccountMapper.INSTANCE.toAccountSystemSettingMongodbPO(
           new AccountSystemSettingsMongodbPO(accountSystemSettingsMongodbDoTarget.getId(),
             accountSystemSettingsMongodbDoTarget.getUserId(),
             accountSystemSettingsMongodbDoTarget.getProfile(),
