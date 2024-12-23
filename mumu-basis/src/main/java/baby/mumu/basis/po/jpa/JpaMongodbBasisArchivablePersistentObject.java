@@ -27,6 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
+@SuppressWarnings("unused")
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 public class JpaMongodbBasisArchivablePersistentObject extends

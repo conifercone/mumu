@@ -84,14 +84,14 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg)
       .flatMap(subscriptionTextMessageConvertor::toPO)
-      .ifPresent(subscriptionMessageDo -> Optional.ofNullable(
+      .ifPresent(subscriptionTextMessagePO -> Optional.ofNullable(
           messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
-            .get(subscriptionMessageDo.getReceiverId()))
-        .flatMap(res -> Optional.ofNullable(res.get(subscriptionMessageDo.getSenderId())))
+            .get(subscriptionTextMessagePO.getReceiverId()))
+        .flatMap(res -> Optional.ofNullable(res.get(subscriptionTextMessagePO.getSenderId())))
         .ifPresentOrElse(channel -> {
-          subscriptionTextMessageRepository.persist(subscriptionMessageDo);
-          channel.writeAndFlush(new TextWebSocketFrame(subscriptionMessageDo.getMessage()));
-        }, () -> subscriptionTextMessageRepository.persist(subscriptionMessageDo)));
+          subscriptionTextMessageRepository.persist(subscriptionTextMessagePO);
+          channel.writeAndFlush(new TextWebSocketFrame(subscriptionTextMessagePO.getMessage()));
+        }, () -> subscriptionTextMessageRepository.persist(subscriptionTextMessagePO)));
   }
 
   @Override
@@ -99,8 +99,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void readMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
-      .filter(subscriptionTextMessageDo -> MessageStatusEnum.UNREAD.equals(
-        subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
+      .filter(subscriptionTextMessagePO -> MessageStatusEnum.UNREAD.equals(
+        subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
         subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.READ);
         subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
       });
@@ -111,8 +111,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void unreadMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
-      .filter(subscriptionTextMessageDo -> MessageStatusEnum.READ.equals(
-        subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
+      .filter(subscriptionTextMessagePO -> MessageStatusEnum.READ.equals(
+        subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
         subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.UNREAD);
         subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
       });
@@ -162,14 +162,14 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
       .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchivePO(
-        subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedDo -> {
-        subscriptionTextMessageArchivedDo.setArchived(true);
+        subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedPO -> {
+        subscriptionTextMessageArchivedPO.setArchived(true);
         subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
-        subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedDo);
+        subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedPO);
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(subscriptionTextMessageArchivedDo.getId()));
+          () -> deleteArchivedDataJob(subscriptionTextMessageArchivedPO.getId()));
       }));
   }
 
@@ -189,12 +189,12 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
         accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .ifPresent(
-        subscriptionTextMessageArchivedDo -> subscriptionTextMessageConvertor.toPO(
-            subscriptionTextMessageArchivedDo)
+        subscriptionTextMessageArchivedPO -> subscriptionTextMessageConvertor.toPO(
+            subscriptionTextMessageArchivedPO)
           .ifPresent(subscriptionTextMessageDo -> {
             subscriptionTextMessageDo.setArchived(false);
             subscriptionTextMessageArchivedRepository.delete(
-              subscriptionTextMessageArchivedDo);
+              subscriptionTextMessageArchivedPO);
             subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
           }));
   }
