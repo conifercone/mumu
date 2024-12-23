@@ -51,6 +51,7 @@ import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet.Builder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -234,7 +235,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
         ClientTokenRedisPO tokenRedisDo = new ClientTokenRedisPO();
-        tokenRedisDo.setId(jwt.getClaimAsString("sub"));
+        tokenRedisDo.setId(jwt.getClaimAsString(JwtClaimNames.SUB));
         tokenRedisDo.setClientTokenValue(tokenValue);
         tokenRedisDo.setTtl(between.toSeconds());
         clientTokenRepository.save(tokenRedisDo);

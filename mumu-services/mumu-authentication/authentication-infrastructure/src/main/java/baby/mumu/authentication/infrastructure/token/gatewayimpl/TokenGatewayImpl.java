@@ -26,6 +26,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
@@ -65,7 +66,7 @@ public class TokenGatewayImpl implements TokenGateway {
             return passwordTokenRepository.existsById(
               Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
           } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
-            return clientTokenRepository.existsById(jwt.getClaimAsString("sub"));
+            return clientTokenRepository.existsById(jwt.getClaimAsString(JwtClaimNames.SUB));
           } else if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(claimAsString)) {
             return authorizeCodeTokenRepository.existsById(
               Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));

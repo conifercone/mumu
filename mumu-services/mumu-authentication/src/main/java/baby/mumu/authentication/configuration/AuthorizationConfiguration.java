@@ -88,6 +88,7 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
@@ -172,7 +173,7 @@ public class AuthorizationConfiguration {
                 OAuth2AccessToken accessToken = oidcUserInfoAuthenticationContext.getAccessToken();
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("accessToken", accessToken);
-                claims.put("sub",
+                claims.put(JwtClaimNames.SUB,
                   oidcUserInfoAuthenticationContext.getAuthorization()
                     .getPrincipalName());
                 return new OidcUserInfo(claims);
