@@ -29,7 +29,8 @@ import org.mapstruct.MappingTarget;
 public interface ClientObjectMapper {
 
   @AfterMapping
-  default void convertToAccountTimezone(@MappingTarget BaseDataTransferObject baseClientObject) {
-    CommonUtil.convertToAccountZone(baseClientObject);
+  default void convertToAccountTimezone(
+    @MappingTarget BaseDataTransferObject baseDataTransferObject) {
+    CommonUtil.convertToAccountZone(baseDataTransferObject);
   }
 }

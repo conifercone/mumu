@@ -160,18 +160,19 @@ object CommonUtil {
     fun convertToAccountZone(
         baseDataTransferObject: BaseDataTransferObject
     ) {
-        Optional.ofNullable(baseDataTransferObject).ifPresent { baseCo ->
+        Optional.ofNullable(baseDataTransferObject).ifPresent { dataTransferObject ->
             SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
                 val targetZoneId = ZoneId.of(timezone)
-                Optional.ofNullable(baseCo.creationTime).ifPresent {
+                Optional.ofNullable(dataTransferObject.creationTime).ifPresent {
                     val creationTimeZonedDateTime =
-                        baseCo.creationTime.atZoneSameInstant(targetZoneId)
-                    baseCo.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
+                        dataTransferObject.creationTime.atZoneSameInstant(targetZoneId)
+                    dataTransferObject.creationTime = creationTimeZonedDateTime.toOffsetDateTime()
                 }
-                Optional.ofNullable(baseCo.modificationTime).ifPresent {
+                Optional.ofNullable(dataTransferObject.modificationTime).ifPresent {
                     val modificationTimeZonedDateTime =
-                        baseCo.modificationTime.atZoneSameInstant(targetZoneId)
-                    baseCo.modificationTime = modificationTimeZonedDateTime.toOffsetDateTime()
+                        dataTransferObject.modificationTime.atZoneSameInstant(targetZoneId)
+                    dataTransferObject.modificationTime =
+                        modificationTimeZonedDateTime.toOffsetDateTime()
                 }
             }
         }
