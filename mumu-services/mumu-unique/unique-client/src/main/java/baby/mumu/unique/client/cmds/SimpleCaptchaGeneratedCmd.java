@@ -27,11 +27,6 @@ import lombok.Data;
 public class SimpleCaptchaGeneratedCmd {
 
   /**
-   * 验证码id
-   */
-  private Long id;
-
-  /**
    * 有效期
    */
   private Long ttl;

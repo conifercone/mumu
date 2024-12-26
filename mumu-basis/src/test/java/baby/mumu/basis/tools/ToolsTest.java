@@ -15,7 +15,6 @@
  */
 package baby.mumu.basis.tools;
 
-import baby.mumu.basis.kotlin.tools.CommonUtil;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.Set;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,12 +35,6 @@ import org.junit.jupiter.api.Test;
  * @since 1.0.1
  */
 public class ToolsTest {
-
-  @Test
-  public void generateRandomString() {
-    String randomString = CommonUtil.generateRandomString(4);
-    Assertions.assertNotNull(randomString);
-  }
 
   @Test
   public void getAvailableZoneIds() {
@@ -94,5 +88,13 @@ public class ToolsTest {
         throw new RuntimeException(e);
       }
     });
+  }
+
+  @Test
+  public void randomString() {
+    String s = RandomStringUtils.secure().nextAlphabetic(4);
+    String s2 = RandomStringUtils.secure().nextAlphanumeric(4);
+    System.out.println(s);
+    System.out.println(s2);
   }
 }

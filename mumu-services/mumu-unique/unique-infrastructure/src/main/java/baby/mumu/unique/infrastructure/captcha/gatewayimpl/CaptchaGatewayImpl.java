@@ -16,7 +16,6 @@
 package baby.mumu.unique.infrastructure.captcha.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
@@ -25,7 +24,7 @@ import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.SimpleCaptchaRepository;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,18 +53,12 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
   public SimpleCaptcha generateSimpleCaptcha(SimpleCaptcha simpleCaptcha) {
     SimpleCaptchaDo simpleCaptchaDo = Optional.ofNullable(simpleCaptcha)
       .flatMap(simpleCaptchaDomain -> {
-        Optional.ofNullable(simpleCaptchaDomain.getId()).ifPresentOrElse(id -> {
-          if (simpleCaptchaRepository.existsById(id)) {
-            throw new MuMuException(ResponseCode.DATA_ALREADY_EXISTS);
-          }
-        }, () -> simpleCaptchaDomain.setId(primaryKeyGateway.snowflake()));
+        simpleCaptchaDomain.setId(primaryKeyGateway.snowflake());
         Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
           .orElseThrow(() -> new MuMuException(
             ResponseCode.SIMPLE_CAPTCHA_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
-        if (StringUtils.isBlank(simpleCaptchaDomain.getTarget())) {
-          simpleCaptchaDomain.setTarget(
-            CommonUtil.generateRandomString(simpleCaptchaDomain.getLength()));
-        }
+        simpleCaptchaDomain.setTarget(
+          RandomStringUtils.secure().nextAlphanumeric(simpleCaptchaDomain.getLength()));
         Optional.ofNullable(simpleCaptchaDomain.getTtl()).orElseThrow(() -> new MuMuException(
           ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
         return captchaConvertor.toPO(simpleCaptchaDomain);
