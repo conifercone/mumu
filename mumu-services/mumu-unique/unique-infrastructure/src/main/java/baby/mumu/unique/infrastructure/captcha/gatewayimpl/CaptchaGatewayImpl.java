@@ -78,7 +78,8 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
   public boolean verifySimpleCaptcha(SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).flatMap(
         simpleCaptchaDomain -> simpleCaptchaRepository.findById(simpleCaptchaDomain.getId()))
-      .map(simpleCaptchaDo -> simpleCaptchaDo.getTarget().equals(simpleCaptcha.getSource()))
+      .map(
+        simpleCaptchaDo -> simpleCaptchaDo.getTarget().equalsIgnoreCase(simpleCaptcha.getSource()))
       .orElse(false);
   }
 }
