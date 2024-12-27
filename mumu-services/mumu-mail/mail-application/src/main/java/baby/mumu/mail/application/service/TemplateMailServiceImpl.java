@@ -35,7 +35,7 @@ import java.util.Map;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,12 +52,13 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
 
   private final TemplateMailSendCmdExe templateMailSendCmdExe;
   private final ObjectMapper objectMapper = new ObjectMapper();
-  @Value("${spring.mail.username}")
-  private String username;
+  private final MailProperties mailProperties;
 
   @Autowired
-  public TemplateMailServiceImpl(TemplateMailSendCmdExe templateMailSendCmdExe) {
+  public TemplateMailServiceImpl(TemplateMailSendCmdExe templateMailSendCmdExe,
+    MailProperties mailProperties) {
     this.templateMailSendCmdExe = templateMailSendCmdExe;
+    this.mailProperties = mailProperties;
   }
 
   @Override
@@ -73,7 +74,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     templateMailSendCmd.setName(
       request.hasName() ? request.getName().getValue() : null);
     templateMailSendCmd.setFrom(
-      request.hasFrom() ? request.getFrom().getValue() : username);
+      request.hasFrom() ? request.getFrom().getValue() : mailProperties.getUsername());
     templateMailSendCmd.setAddress(
       request.hasAddress() ? request.getAddress().getValue()
         : null);
