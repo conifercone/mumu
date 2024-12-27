@@ -19,9 +19,11 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.spring.ApplicationProperties;
 import io.micrometer.tracing.Tracer;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,7 @@ import org.springframework.core.annotation.Order;
  * @since 1.0.0
  */
 @Configuration
+@EnableConfigurationProperties(ApplicationProperties.class)
 public class BasisConfiguration {
 
   @Bean
