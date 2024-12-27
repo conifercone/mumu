@@ -67,7 +67,6 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -357,9 +356,9 @@ public class AuthorizationConfiguration {
    * @return AuthorizationServer配置实例
    */
   @Bean
-  public AuthorizationServerSettings authorizationServerSettings(
-    @Value("${server.port}") Integer port) {
-    return AuthorizationServerSettings.builder().issuer("http://localhost:" + port).build();
+  public AuthorizationServerSettings authorizationServerSettings() {
+    return AuthorizationServerSettings.builder()
+      .issuer("http://localhost:9080/api/mumu/authentication").build();
   }
 
   /**
