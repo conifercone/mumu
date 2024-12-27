@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject;
+package baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
 import com.redis.om.spring.annotations.Document;
@@ -31,7 +31,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @Document(value = "simple-captcha")
-public class SimpleCaptchaDo {
+public class SimpleCaptchaPO {
 
   @Id
   @Indexed

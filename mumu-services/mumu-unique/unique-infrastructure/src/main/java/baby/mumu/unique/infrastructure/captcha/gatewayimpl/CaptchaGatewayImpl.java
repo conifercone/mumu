@@ -22,7 +22,7 @@ import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
 import baby.mumu.unique.domain.pk.gateway.PrimaryKeyGateway;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.SimpleCaptchaRepository;
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.po.SimpleCaptchaPO;
 import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
 
   @Override
   public SimpleCaptcha generateSimpleCaptcha(SimpleCaptcha simpleCaptcha) {
-    SimpleCaptchaDo simpleCaptchaDo = Optional.ofNullable(simpleCaptcha)
+    SimpleCaptchaPO simpleCaptchaPO = Optional.ofNullable(simpleCaptcha)
       .flatMap(simpleCaptchaDomain -> {
         simpleCaptchaDomain.setId(primaryKeyGateway.snowflake());
         Optional.ofNullable(simpleCaptchaDomain.getLength()).filter(length -> length > 0)
@@ -63,7 +63,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
           ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
         return captchaConvertor.toPO(simpleCaptchaDomain);
       }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
-    simpleCaptchaRepository.save(simpleCaptchaDo);
+    simpleCaptchaRepository.save(simpleCaptchaPO);
     return simpleCaptcha;
   }
 
@@ -72,7 +72,7 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
     return Optional.ofNullable(simpleCaptcha).flatMap(
         simpleCaptchaDomain -> simpleCaptchaRepository.findById(simpleCaptchaDomain.getId()))
       .map(
-        simpleCaptchaDo -> simpleCaptchaDo.getTarget().equalsIgnoreCase(simpleCaptcha.getSource()))
+        simpleCaptchaPO -> simpleCaptchaPO.getTarget().equalsIgnoreCase(simpleCaptcha.getSource()))
       .orElse(false);
   }
 }
