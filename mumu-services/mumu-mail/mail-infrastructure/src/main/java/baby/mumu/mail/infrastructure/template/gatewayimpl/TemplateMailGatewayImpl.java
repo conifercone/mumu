@@ -26,11 +26,11 @@ import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
-import com.google.common.base.Charsets;
 import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +86,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
             try {
               MimeMessage mimeMessage = javaMailSender.createMimeMessage();
               MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true,
-                Charsets.UTF_8.name());
+                StandardCharsets.UTF_8.name());
               mimeMessageHelper.setFrom(templateMailDomain.getFrom());
               mimeMessageHelper.setTo(templateMailDomain.getTo());
               mimeMessageHelper.setSubject(templateMailDomain.getSubject());
