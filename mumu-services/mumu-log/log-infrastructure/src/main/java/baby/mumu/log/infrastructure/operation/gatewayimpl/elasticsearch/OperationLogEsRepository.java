@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch;
 
-import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDO;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -25,6 +25,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * @since 1.0.0
  */
 public interface OperationLogEsRepository extends
-  ElasticsearchRepository<OperationLogEsDO, String> {
+  ElasticsearchRepository<OperationLogEsPO, String> {
 
 }

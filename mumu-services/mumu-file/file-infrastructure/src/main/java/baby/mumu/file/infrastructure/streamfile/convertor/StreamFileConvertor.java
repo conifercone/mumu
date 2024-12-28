@@ -22,7 +22,7 @@ import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
 import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
 import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po.StreamFileMinioPO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -85,10 +85,10 @@ public class StreamFileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<StreamFileMinioDo> toMinioDo(StreamFile streamFile) {
+  public Optional<StreamFileMinioPO> toMinioPO(StreamFile streamFile) {
     return Optional.ofNullable(streamFile)
       .map(file -> {
-        StreamFileMinioDo transform = StreamFileMapper.INSTANCE.toMinioDo(file);
+        StreamFileMinioPO transform = StreamFileMapper.INSTANCE.toMinioPO(file);
         try (InputStream streamFileContent = streamFile.getContent()) {
           if (streamFileContent != null) {
             transform.setContent(streamFileContent);

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject;
+package baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,13 +25,13 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * 系统日志数据对象
+ * 操作日志数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
-public class SystemLogKafkaDO {
+public class OperationLogKafkaPO {
 
   /**
    * 唯一标识
@@ -44,26 +44,41 @@ public class SystemLogKafkaDO {
   private String content;
 
   /**
-   * 系统日志的种类
+   * 操作日志的执行人
+   */
+  private String operator;
+
+  /**
+   * 操作日志绑定的业务对象标识
+   */
+  private String bizNo;
+
+  /**
+   * 操作日志的种类
    */
   private String category;
 
   /**
-   * 系统日志成功的文本模板
+   * 扩展参数，记录操作日志的修改详情
+   */
+  private String detail;
+
+  /**
+   * 操作日志成功的文本模板
    */
   private String success;
 
   /**
-   * 系统日志失败的文本模板
+   * 操作日志失败的文本模板
    */
   private String fail;
 
   /**
-   * 系统日志的记录时间
+   * 操作日志的操作时间
    */
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonSerialize(using = LocalDateTimeSerializer.class)
-  private LocalDateTime recordTime;
+  private LocalDateTime operatingTime;
 }

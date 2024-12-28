@@ -21,7 +21,7 @@ import baby.mumu.file.domain.stream.StreamFile;
 import baby.mumu.file.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.file.infrastructure.streamfile.convertor.StreamFileConvertor;
 import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.MinioStreamFileRepository;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po.StreamFileMinioPO;
 import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
 import java.util.Optional;
@@ -55,23 +55,23 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(StreamFile streamFile) {
-    StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-      .flatMap(streamFileConvertor::toMinioDo)
+    StreamFileMinioPO streamFileMinioPO = Optional.ofNullable(streamFile)
+      .flatMap(streamFileConvertor::toMinioPO)
       .filter(minioDo -> minioDo.getContent() != null && StringUtils.isNotBlank(
         minioDo.getName()))
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
-    if (StringUtils.isNotBlank(streamFileMinioDo.getStorageAddress())) {
-      minioStreamFileRepository.createStorageAddress(streamFileMinioDo.getStorageAddress());
+    if (StringUtils.isNotBlank(streamFileMinioPO.getStorageAddress())) {
+      minioStreamFileRepository.createStorageAddress(streamFileMinioPO.getStorageAddress());
     } else {
       throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
     }
-    minioStreamFileRepository.uploadFile(streamFileMinioDo);
+    minioStreamFileRepository.uploadFile(streamFileMinioPO);
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<InputStream> download(StreamFile streamFile) {
-    return Optional.ofNullable(streamFile).flatMap(streamFileConvertor::toMinioDo).filter(
+    return Optional.ofNullable(streamFile).flatMap(streamFileConvertor::toMinioPO).filter(
       file -> {
         if (ObjectUtils.isEmpty(file.getStorageAddress())) {
           throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
@@ -91,9 +91,9 @@ public class StreamFileGatewayImpl implements StreamFileGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(StreamFile streamFile) {
-    StreamFileMinioDo streamFileMinioDo = Optional.ofNullable(streamFile)
-      .flatMap(streamFileConvertor::toMinioDo).filter(minioStreamFileRepository::existed)
+    StreamFileMinioPO streamFileMinioPO = Optional.ofNullable(streamFile)
+      .flatMap(streamFileConvertor::toMinioPO).filter(minioStreamFileRepository::existed)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
-    minioStreamFileRepository.removeFile(streamFileMinioDo);
+    minioStreamFileRepository.removeFile(streamFileMinioPO);
   }
 }

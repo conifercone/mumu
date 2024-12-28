@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject;
+package baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.po;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
@@ -37,7 +37,7 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
 @Document(indexName = LogProperties.SYSTEM_LOG_ES_INDEX_NAME)
 @Data
 @Metamodel
-public class SystemLogEsDO {
+public class SystemLogEsPO {
 
   /**
    * 唯一标识

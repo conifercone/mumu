@@ -15,7 +15,7 @@
  */
 package baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch;
 
-import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDO;
+import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -24,6 +24,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public interface SystemLogEsRepository extends ElasticsearchRepository<SystemLogEsDO, String> {
+public interface SystemLogEsRepository extends ElasticsearchRepository<SystemLogEsPO, String> {
 
 }

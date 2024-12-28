@@ -21,8 +21,8 @@ import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
-import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDO;
-import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDO;
+import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
+import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -42,10 +42,10 @@ public interface SystemLogMapper {
   SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogKafkaDO toKafkaDataObject(SystemLog systemLog);
+  SystemLogKafkaPO toKafkaPO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogEsDO toEsDataObject(SystemLog systemLog);
+  SystemLogEsPO toEsPO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSubmitCmd systemLogSubmitCmd);
@@ -54,7 +54,7 @@ public interface SystemLogMapper {
   SystemLog toEntity(SystemLogSaveCmd systemLogSaveCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogEsDO systemLogEsDo);
+  SystemLog toEntity(SystemLogEsPO systemLogEsPO);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
@@ -63,7 +63,7 @@ public interface SystemLogMapper {
   SystemLogFindAllDTO toFindAllDTO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaDO systemLogKafkaDo);
+  SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaPO systemLogKafkaPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   SystemLogSubmitCmd toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd);

@@ -13,23 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject;
+package baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po;
 
 import baby.mumu.basis.annotations.Metamodel;
-import java.util.Map;
+import java.io.InputStream;
 import lombok.Data;
 
 /**
- * thymeleaf模板邮件数据对象
+ * 流式文件minio数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Data
 @Metamodel
-public class TemplateMailThymeleafDo {
+public class StreamFileMinioPO {
 
-  private String content;
+  /**
+   * 文件内容
+   */
+  private InputStream content;
 
-  private Map<String, Object> data;
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
+
+  /**
+   * 文件名
+   */
+  private String name;
+
+  /**
+   * 文件大小
+   */
+  private Long size;
 }

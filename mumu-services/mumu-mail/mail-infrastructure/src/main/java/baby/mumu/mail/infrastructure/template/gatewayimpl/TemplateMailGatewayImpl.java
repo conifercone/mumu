@@ -25,7 +25,7 @@ import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
+import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
@@ -77,7 +77,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
           streamFileDownloadGrpcCmd,
           callCredentials);
-        Optional<TemplateMailThymeleafDo> thymeleafDo = templateMailConvertor.toThymeleafDo(
+        Optional<TemplateMailThymeleafPO> thymeleafDo = templateMailConvertor.toThymeleafPO(
           templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
           thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()

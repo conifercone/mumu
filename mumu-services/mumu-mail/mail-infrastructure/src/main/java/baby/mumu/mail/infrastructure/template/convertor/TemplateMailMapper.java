@@ -17,7 +17,7 @@ package baby.mumu.mail.infrastructure.template.convertor;
 
 import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.TemplateMail;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
+import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -37,7 +37,7 @@ public interface TemplateMailMapper {
   TemplateMailMapper INSTANCE = Mappers.getMapper(TemplateMailMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  TemplateMailThymeleafDo toThymeleafDo(TemplateMail templateMail);
+  TemplateMailThymeleafPO toThymeleafPO(TemplateMail templateMail);
 
   @API(status = Status.STABLE, since = "1.0.1")
   TemplateMail toEntity(TemplateMailSendCmd templateMailSendCmd);
