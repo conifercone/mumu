@@ -3,15 +3,21 @@ root = true
 [*]
 end_of_line = lf
 charset = utf-8
+# 文件末尾强制添加换行
+insert_final_newline = true
 
 # Java 文件设置
 [*.java]
 # 以 2 个空格缩进
 indent_size = 2
 tab_width = 2
+# 自动移除行尾多余空格
+trim_trailing_whitespace = true
 
 # kotlin 文件设置
 [*.kt]
 # 以 4 个空格缩进
 indent_size = 4
 tab_width = 4
+# 自动移除行尾多余空格
+trim_trailing_whitespace = true
