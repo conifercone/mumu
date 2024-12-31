@@ -17,7 +17,7 @@ plugins {
     alias(libs.plugins.pmd)
 }
 
-
+// 安装git hook
 tasks.register<Copy>("installGitHooks") {
     group = "setup"
     description = "Copies git hooks to .git/hooks"
@@ -45,6 +45,8 @@ val gitHash = providers.exec {
 }.standardOutput.asText.get().trim()
 val suffixes = listOf("-alpha", "-beta", "-snapshot", "-dev", "-test", "-pre")
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
+
+@Suppress("SpellCheckingInspection")
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
 val formattedTime: String = now.format(formatter)
 fun endsWithAny(input: String, suffixes: List<String>): Boolean {
@@ -197,6 +199,7 @@ subprojects {
             from(rootProject.file("LICENSE"))
         }
         manifest {
+            @Suppress("SpellCheckingInspection")
             attributes(
                 "Implementation-Title" to archiveBaseName.get(),
                 "Implementation-Version" to archiveVersion.get(),
