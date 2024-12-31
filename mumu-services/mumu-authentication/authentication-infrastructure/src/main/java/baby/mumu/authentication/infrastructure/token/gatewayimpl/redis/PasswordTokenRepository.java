@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.PasswordTokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.PasswordTokenRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.0
  */
 public interface PasswordTokenRepository extends
-  RedisDocumentRepository<PasswordTokenRedisDo, Long> {
+  RedisDocumentRepository<PasswordTokenRedisPO, Long> {
 
 }

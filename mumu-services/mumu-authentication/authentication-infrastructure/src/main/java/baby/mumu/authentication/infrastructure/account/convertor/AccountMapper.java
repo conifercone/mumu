@@ -40,11 +40,11 @@ import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountAddressDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountArchivedDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.dataobject.AccountDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.dataobject.AccountSystemSettingsMongodbDo;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
@@ -68,33 +68,33 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Account toEntity(AccountDo accountDo);
+  Account toEntity(AccountPO accountPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Account toEntity(AccountRedisDo accountRedisDo);
+  Account toEntity(AccountRedisPO accountRedisPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toAccountAddress(AccountAddressDo accountAddressDo);
+  AccountAddress toAccountAddress(AccountAddressPO accountAddressPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressDo toAccountAddressDo(AccountAddress accountAddress);
+  AccountAddressPO toAccountAddressPO(AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountSystemSettingsMongodbDo toAccountSystemSettingMongodbDo(
+  AccountSystemSettingsMongodbPO toAccountSystemSettingMongodbPO(
     AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
-    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDo);
+    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  void toAccountSystemSettingMongodbDo(
-    AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoSource,
-    @MappingTarget AccountSystemSettingsMongodbDo accountSystemSettingsMongodbDoTarget);
+  void toAccountSystemSettingMongodbPO(
+    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOSource,
+    @MappingTarget AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOTarget);
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettings(
@@ -102,13 +102,13 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
     @MappingTarget AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRedisDo toAccountRedisDo(Account account);
+  AccountRedisPO toAccountRedisPO(Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCmd accountAddAddressCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  AccountDo toDataObject(Account account);
+  AccountPO toPO(Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Account toEntity(AccountRegisterCmd accountRegisterCmd);
@@ -129,10 +129,10 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
   AccountBasicInfoDTO toBasicInfoDTO(Account account);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  AccountArchivedDo toArchivedDo(AccountDo accountDo);
+  AccountArchivedPO toArchivedPO(AccountPO accountPO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  AccountDo toDataObject(AccountArchivedDo accountArchivedDo);
+  AccountPO toPO(AccountArchivedPO accountArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountFindAllDTO toFindAllDTO(Account account);

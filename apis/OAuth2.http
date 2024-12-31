@@ -1,0 +1,33 @@
+### 获取openid配置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/.well-known/openid-configuration
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+
+### 获取jwks配置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/oauth2/jwks
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*

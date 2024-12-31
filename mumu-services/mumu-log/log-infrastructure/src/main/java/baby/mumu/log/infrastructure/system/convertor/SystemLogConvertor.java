@@ -21,8 +21,8 @@ import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
-import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.dataobject.SystemLogEsDo;
-import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.dataobject.SystemLogKafkaDo;
+import baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
+import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
@@ -55,16 +55,16 @@ public class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogKafkaDo> toKafkaDataObject(SystemLog systemLog) {
+  public Optional<SystemLogKafkaPO> toKafkaPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toKafkaDataObject);
+      .map(SystemLogMapper.INSTANCE::toKafkaPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogEsDo> toEsDataObject(SystemLog systemLog) {
+  public Optional<SystemLogEsPO> toEsPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toEsDataObject);
+      .map(SystemLogMapper.INSTANCE::toEsPO);
   }
 
   @Contract("_ -> new")
@@ -90,8 +90,8 @@ public class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogEsDo systemLogEsDo) {
-    return Optional.ofNullable(systemLogEsDo)
+  public Optional<SystemLog> toEntity(SystemLogEsPO systemLogEsPO) {
+    return Optional.ofNullable(systemLogEsPO)
       .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
@@ -127,8 +127,8 @@ public class SystemLogConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<SystemLogSaveCmd> toSystemLogSaveCmd(
-    SystemLogKafkaDo systemLogKafkaDo) {
-    return Optional.ofNullable(systemLogKafkaDo)
+    SystemLogKafkaPO systemLogKafkaPO) {
+    return Optional.ofNullable(systemLogKafkaPO)
       .map(SystemLogMapper.INSTANCE::toSystemLogSaveCmd);
   }
 }

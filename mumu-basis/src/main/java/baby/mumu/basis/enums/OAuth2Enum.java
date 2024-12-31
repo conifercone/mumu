@@ -25,7 +25,7 @@ import lombok.Getter;
  */
 @Getter
 public enum OAuth2Enum {
-  GRANT_TYPE_PASSWORD("authorization_password", "密码模式");
+  GRANT_TYPE_PASSWORD("password", "密码模式");
 
   private final String name;
 

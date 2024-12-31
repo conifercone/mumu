@@ -1,0 +1,19 @@
+### 修改上游信息
+PATCH {{apisix}}/admin/upstreams/518532325332484812
+X-API-KEY: {{apisix-api-key}}
+Content-Type: application/json
+
+{
+  "discovery_type": "consul"
+}
+
+### 分页获取上游信息
+GET {{apisix}}/admin/upstreams?page=1&page_size=10
+X-API-KEY: {{apisix-api-key}}
+Content-Type: application/json
+
+### 分页获取路由信息
+GET {{apisix}}/admin/routes?page=1&page_size=10
+X-API-KEY: {{apisix-api-key}}
+Content-Type: application/json
+

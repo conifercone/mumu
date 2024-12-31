@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.OidcIdTokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.OidcIdTokenRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.0
  */
 public interface OidcIdTokenRepository extends
-  RedisDocumentRepository<OidcIdTokenRedisDo, Long> {
+  RedisDocumentRepository<OidcIdTokenRedisPO, Long> {
 
 }

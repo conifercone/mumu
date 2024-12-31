@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.dataobject.AuthorizeCodeTokenRedisDo;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.AuthorizeCodeTokenRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 2.4.0
  */
 public interface AuthorizeCodeTokenRepository extends
-  RedisDocumentRepository<AuthorizeCodeTokenRedisDo, Long> {
+  RedisDocumentRepository<AuthorizeCodeTokenRedisPO, Long> {
 
 }

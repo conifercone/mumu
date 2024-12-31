@@ -47,10 +47,15 @@ public class ResourceServerProperties {
 
     private String authority;
 
+    private List<String> anyAuthority = new ArrayList<>();
+
     private String role;
+
+    private List<String> anyRole = new ArrayList<>();
 
     private boolean permitAll;
 
+    private boolean denyAll;
   }
 
   /**
@@ -79,8 +84,14 @@ public class ResourceServerProperties {
 
     private String authority;
 
+    private List<String> anyAuthority = new ArrayList<>();
+
     private String role;
 
+    private List<String> anyRole = new ArrayList<>();
+
     private boolean permitAll;
+
+    private boolean denyAll;
   }
 }

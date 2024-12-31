@@ -18,7 +18,7 @@ package baby.mumu.log.application.consumer.operation;
 import baby.mumu.log.client.api.OperationLogService;
 import baby.mumu.log.infrastructure.config.LogProperties;
 import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
@@ -50,9 +50,9 @@ public class OperationLogConsumer {
 
   @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
   public void handle(String operationLog) throws JsonProcessingException {
-    OperationLogKafkaDo operationLogKafkaDo = objectMapper.readValue(operationLog,
-      OperationLogKafkaDo.class);
-    operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaDo)
+    OperationLogKafkaPO operationLogKafkaPO = objectMapper.readValue(operationLog,
+      OperationLogKafkaPO.class);
+    operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
       .ifPresent(operationLogService::save);
   }
 }

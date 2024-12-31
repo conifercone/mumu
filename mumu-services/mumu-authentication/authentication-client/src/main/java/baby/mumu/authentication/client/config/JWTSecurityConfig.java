@@ -23,6 +23,7 @@ import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.tracing.Tracer;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
@@ -77,13 +78,29 @@ public class JWTSecurityConfig {
                 policy.getMatcher());
             if (StringUtils.isNotBlank(policy.getRole())) {
               authorizedUrl.hasRole(policy.getRole());
+            } else if (CollectionUtils.isNotEmpty(policy.getAnyRole())) {
+              authorizedUrl.hasAnyRole(
+                policy.getAnyRole().stream().distinct().toArray(String[]::new));
             } else if (StringUtils.isNotBlank(policy.getAuthority())) {
               Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                 "Permission configuration cannot be empty and cannot start with SCOPE_");
               authorizedUrl.hasAuthority(
                 CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
+            } else if (CollectionUtils.isNotEmpty(policy.getAnyAuthority())) {
+              List<String> anyAuthority = policy.getAnyAuthority();
+              anyAuthority.stream().filter(
+                authority -> StringUtils.isBlank(authority) || authority.startsWith(
+                  CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(authority -> {
+                throw new IllegalArgumentException(
+                  "Permission configuration cannot be empty and cannot start with SCOPE_");
+              });
+              authorizedUrl.hasAnyAuthority(
+                anyAuthority.stream().distinct().map(CommonConstants.AUTHORITY_PREFIX::concat)
+                  .toArray(String[]::new));
             } else if (policy.isPermitAll()) {
               authorizedUrl.permitAll();
+            } else if (policy.isDenyAll()) {
+              authorizedUrl.denyAll();
             }
           }
         );

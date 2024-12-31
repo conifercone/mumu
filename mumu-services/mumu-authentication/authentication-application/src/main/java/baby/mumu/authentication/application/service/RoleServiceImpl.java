@@ -25,6 +25,7 @@ import baby.mumu.authentication.application.role.executor.RoleDeleteByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleDeletePathCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindAllSliceCmdExe;
+import baby.mumu.authentication.application.role.executor.RoleFindByCodeCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindByIdCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindDirectCmdExe;
 import baby.mumu.authentication.application.role.executor.RoleFindRootCmdExe;
@@ -50,6 +51,7 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
@@ -99,6 +101,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleFindDirectCmdExe roleFindDirectCmdExe;
   private final RoleDeletePathCmdExe roleDeletePathCmdExe;
   private final RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe;
+  private final RoleFindByCodeCmdExe roleFindByCodeCmdExe;
 
   @Autowired
   public RoleServiceImpl(RoleAddCmdExe roleAddCmdExe, RoleDeleteByIdCmdExe roleDeleteByIdCmdExe,
@@ -110,7 +113,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor,
     RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddAncestorCmdExe roleAddAncestorCmdExe,
     RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
-    RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe) {
+    RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe,
+    RoleFindByCodeCmdExe roleFindByCodeCmdExe) {
     this.roleAddCmdExe = roleAddCmdExe;
     this.roleDeleteByIdCmdExe = roleDeleteByIdCmdExe;
     this.roleUpdateCmdExe = roleUpdateCmdExe;
@@ -127,6 +131,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     this.roleFindDirectCmdExe = roleFindDirectCmdExe;
     this.roleDeletePathCmdExe = roleDeletePathCmdExe;
     this.roleDeleteByCodeCmdExe = roleDeleteByCodeCmdExe;
+    this.roleFindByCodeCmdExe = roleFindByCodeCmdExe;
   }
 
   @Override
@@ -248,5 +253,10 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   @Override
   public RoleFindByIdDTO findById(Long id) {
     return roleFindByIdCmdExe.execute(id);
+  }
+
+  @Override
+  public RoleFindByCodeDTO findByCode(String code) {
+    return roleFindByCodeCmdExe.execute(code);
   }
 }

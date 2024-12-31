@@ -36,9 +36,9 @@ import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionArchivedDo;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionDo;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
@@ -80,15 +80,15 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<Permission> toEntity(PermissionDo permissionDo) {
-    return Optional.ofNullable(permissionDo).map(
+  public Optional<Permission> toEntity(PermissionPO permissionPO) {
+    return Optional.ofNullable(permissionPO).map(
       PermissionMapper.INSTANCE::toEntity).flatMap(this::hasDescendant);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionDo permissionDo) {
-    return Optional.ofNullable(permissionDo).map(
+  public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionPO permissionPO) {
+    return Optional.ofNullable(permissionPO).map(
       PermissionMapper.INSTANCE::toEntity);
   }
 
@@ -102,8 +102,8 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionDo> toDataObject(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toDataObject);
+  public Optional<PermissionPO> toPO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPO);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -147,23 +147,23 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<Permission> toEntity(PermissionArchivedDo permissionArchivedDo) {
-    return Optional.ofNullable(permissionArchivedDo).map(PermissionMapper.INSTANCE::toEntity);
+  public Optional<Permission> toEntity(PermissionArchivedPO permissionArchivedPO) {
+    return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Permission> toEntity(PermissionRedisDo permissionRedisDo) {
-    return Optional.ofNullable(permissionRedisDo).map(PermissionMapper.INSTANCE::toEntity);
+  public Optional<Permission> toEntity(PermissionRedisPO permissionRedisPO) {
+    return Optional.ofNullable(permissionRedisPO).map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionRedisDo> toPermissionRedisDo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionRedisDo);
+  public Optional<PermissionRedisPO> toPermissionRedisPO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionRedisPO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionDo> toDataObject(PermissionRedisDo permissionRedisDo) {
-    return Optional.ofNullable(permissionRedisDo).map(PermissionMapper.INSTANCE::toDataObject);
+  public Optional<PermissionPO> toPO(PermissionRedisPO permissionRedisPO) {
+    return Optional.ofNullable(permissionRedisPO).map(PermissionMapper.INSTANCE::toPO);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
@@ -255,20 +255,20 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<PermissionArchivedDo> toArchivedDo(PermissionDo permissionDo) {
-    return Optional.ofNullable(permissionDo).map(PermissionMapper.INSTANCE::toArchivedDo);
+  public Optional<PermissionArchivedPO> toArchivedPO(PermissionPO permissionPO) {
+    return Optional.ofNullable(permissionPO).map(PermissionMapper.INSTANCE::toArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionArchivedDo> toArchivedDo(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedDo);
+  public Optional<PermissionArchivedPO> toArchivedPO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<PermissionDo> toDataObject(PermissionArchivedDo permissionArchivedDo) {
-    return Optional.ofNullable(permissionArchivedDo).map(PermissionMapper.INSTANCE::toDataObject);
+  public Optional<PermissionPO> toPO(PermissionArchivedPO permissionArchivedPO) {
+    return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toPO);
   }
 
   @Contract("_ -> new")

@@ -32,8 +32,8 @@ import org.springframework.data.repository.query.Param;
  * @since 2.3.0
  */
 public interface PermissionPathsRepository extends
-  BaseJpaRepository<PermissionPathsDo, PermissionPathsDoId>,
-  JpaSpecificationExecutor<PermissionPathsDo> {
+  BaseJpaRepository<PermissionPathsPO, PermissionPathsPOId>,
+  JpaSpecificationExecutor<PermissionPathsPO> {
 
   /**
    * 根据后代权限ID获取所有权限路径
@@ -41,7 +41,7 @@ public interface PermissionPathsRepository extends
    * @param descendantId 后代权限ID
    * @return 权限路径
    */
-  List<PermissionPathsDo> findByDescendantId(Long descendantId);
+  List<PermissionPathsPO> findByDescendantId(Long descendantId);
 
   /**
    * 根据祖先ID和后代ID删除所有关系
@@ -49,7 +49,7 @@ public interface PermissionPathsRepository extends
    * @param permissionId 祖先ID
    */
   @Modifying
-  @Query("delete from PermissionPathsDo a where a.descendant.id=:permissionId or a.ancestor.id=:permissionId")
+  @Query("delete from PermissionPathsPO a where a.descendant.id=:permissionId or a.ancestor.id=:permissionId")
   void deleteAllPathsByPermissionId(@Param("permissionId") Long permissionId);
 
   /**
@@ -58,10 +58,10 @@ public interface PermissionPathsRepository extends
    * @return 根权限
    */
   @Query("""
-      select a from PermissionPathsDo a where a.id.depth = 0 and not exists
-         (select 1 from PermissionPathsDo b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
+      select a from PermissionPathsPO a where a.id.depth = 0 and not exists
+         (select 1 from PermissionPathsPO b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
     """)
-  Page<PermissionPathsDo> findRootPermissions(Pageable pageable);
+  Page<PermissionPathsPO> findRootPermissions(Pageable pageable);
 
   /**
    * 获取直系后代权限
@@ -69,8 +69,8 @@ public interface PermissionPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 直系后代权限
    */
-  @Query("select a from PermissionPathsDo a where a.id.depth = 1 and a.ancestor.id = :ancestorId")
-  Page<PermissionPathsDo> findDirectPermissions(@Param("ancestorId") Long ancestorId,
+  @Query("select a from PermissionPathsPO a where a.id.depth = 1 and a.ancestor.id = :ancestorId")
+  Page<PermissionPathsPO> findDirectPermissions(@Param("ancestorId") Long ancestorId,
     Pageable pageable);
 
   /**
@@ -79,8 +79,8 @@ public interface PermissionPathsRepository extends
    * @param ancestorIds 祖先权限ID集合
    * @return 后代权限
    */
-  @Query("select a from PermissionPathsDo a where a.id.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
-  List<PermissionPathsDo> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
+  @Query("select a from PermissionPathsPO a where a.id.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
+  List<PermissionPathsPO> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
 
   /**
    * 是否存在后代权限
@@ -88,7 +88,7 @@ public interface PermissionPathsRepository extends
    * @param ancestorId 祖先权限ID
    * @return 是否存在
    */
-  @Query("SELECT COUNT(*) > 0 FROM PermissionPathsDo WHERE ancestor.id = :ancestorId AND id.depth = 1")
+  @Query("SELECT COUNT(*) > 0 FROM PermissionPathsPO WHERE ancestor.id = :ancestorId AND id.depth = 1")
   boolean existsDescendantPermissions(@Param("ancestorId") Long ancestorId);
 
 
@@ -97,12 +97,12 @@ public interface PermissionPathsRepository extends
    */
   @Modifying
   @Query("""
-    DELETE FROM PermissionPathsDo pp1
+    DELETE FROM PermissionPathsPO pp1
     WHERE pp1.id.depth > 1
     AND NOT EXISTS (
         SELECT 1
-        FROM PermissionPathsDo pp2
-        JOIN PermissionPathsDo pp3
+        FROM PermissionPathsPO pp2
+        JOIN PermissionPathsPO pp3
             ON pp2.descendant.id = pp3.ancestor.id
         WHERE pp2.ancestor.id = pp1.ancestor.id
         AND pp3.descendant.id = pp1.descendant.id

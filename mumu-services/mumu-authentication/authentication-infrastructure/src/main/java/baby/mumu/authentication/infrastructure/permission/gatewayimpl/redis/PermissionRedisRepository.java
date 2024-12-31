@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.dataobject.PermissionRedisDo;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import java.util.Optional;
  * @since 2.2.0
  */
 public interface PermissionRedisRepository extends
-  RedisDocumentRepository<PermissionRedisDo, Long> {
+  RedisDocumentRepository<PermissionRedisPO, Long> {
 
-  Optional<PermissionRedisDo> findByCode(String code);
+  Optional<PermissionRedisPO> findByCode(String code);
 }

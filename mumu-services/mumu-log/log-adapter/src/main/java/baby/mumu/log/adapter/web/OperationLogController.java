@@ -30,10 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,11 +65,11 @@ public class OperationLogController {
   }
 
   @Operation(summary = "根据日志ID获取操作日志")
-  @GetMapping("/findById")
+  @GetMapping("/findById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public OperationLogQryDTO findOperationLogById(@RequestParam(value = "id") String id) {
+  public OperationLogQryDTO findOperationLogById(@PathVariable(value = "id") String id) {
     return operationLogService.findOperationLogById(id);
   }
 

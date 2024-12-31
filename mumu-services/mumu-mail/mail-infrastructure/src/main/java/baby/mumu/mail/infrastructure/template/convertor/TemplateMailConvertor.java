@@ -17,7 +17,7 @@ package baby.mumu.mail.infrastructure.template.convertor;
 
 import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.TemplateMail;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.dataobject.TemplateMailThymeleafDo;
+import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -35,9 +35,9 @@ public class TemplateMailConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<TemplateMailThymeleafDo> toThymeleafDo(TemplateMail templateMail) {
+  public Optional<TemplateMailThymeleafPO> toThymeleafPO(TemplateMail templateMail) {
     return Optional.ofNullable(templateMail)
-      .map(TemplateMailMapper.INSTANCE::toThymeleafDo);
+      .map(TemplateMailMapper.INSTANCE::toThymeleafPO);
   }
 
   @Contract("_ -> new")

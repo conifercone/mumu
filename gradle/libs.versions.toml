@@ -1,12 +1,12 @@
 [versions]
-springbootVersion = "3.4.0"
+springbootVersion = "3.4.1"
 springCloudVersion = "2024.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '26.0.1'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.7.0'
-swagger3AnnotationsVersion = '2.2.26'
+swagger3AnnotationsVersion = '2.2.27'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '3.1.0.RELEASE'
@@ -16,13 +16,13 @@ zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.9.0"
 curatorRecipesVersion = "5.7.1"
-flywayVersion = "11.0.1"
+flywayVersion = "11.1.0"
 javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.14'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.18.0'
-commonsTextVersion = '1.12.0'
+commonsTextVersion = '1.13.0'
 jobrunrSpringBoot3StarterVersion = '7.3.2'
 alimtVersion = '1.3.1'
 deeplVersion = '1.7.0'
@@ -34,7 +34,7 @@ tess4jVersion = '5.13.0'
 javacvVersion = '1.5.11'
 aliyunOcrVersion = '3.1.2'
 bucket4jVersion = '8.14.0'
-commonsCollections4Version = '4.5.0-M2'
+commonsCollections4Version = '4.5.0-M3'
 progressbarVersion = '0.10.1'
 resilience4jVersion = '2.2.0'
 springSecurityRsaVersion = '1.1.5'
@@ -43,9 +43,9 @@ monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
 droolsVersion = "10.0.0"
 # bom version
-grpcBomVersion = '1.68.2'
-guavaBomVersion = '33.3.1-jre'
-protobufBomVersion = '4.29.1'
+grpcBomVersion = '1.69.0'
+guavaBomVersion = '33.4.0-jre'
+protobufBomVersion = '4.29.2'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = '8.11'

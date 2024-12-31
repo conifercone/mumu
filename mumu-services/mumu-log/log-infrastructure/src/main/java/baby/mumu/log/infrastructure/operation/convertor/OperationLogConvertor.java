@@ -22,8 +22,8 @@ import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
@@ -56,14 +56,14 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogKafkaDo> toKafkaDataObject(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaDataObject);
+  public Optional<OperationLogKafkaPO> toKafkaPO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogEsDo> toEsDataObject(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsDataObject);
+  public Optional<OperationLogEsPO> toEsPO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsPO);
   }
 
   @Contract("_ -> new")
@@ -91,8 +91,8 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogEsDo operationLogEsDo) {
-    return Optional.ofNullable(operationLogEsDo).map(OperationLogMapper.INSTANCE::toEntity);
+  public Optional<OperationLog> toEntity(OperationLogEsPO operationLogEsPO) {
+    return Optional.ofNullable(operationLogEsPO).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
   @Contract("_ -> new")
@@ -125,8 +125,8 @@ public class OperationLogConvertor {
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
-    OperationLogKafkaDo operationLogKafkaDo) {
-    return Optional.ofNullable(operationLogKafkaDo)
+    OperationLogKafkaPO operationLogKafkaPO) {
+    return Optional.ofNullable(operationLogKafkaPO)
       .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
   }
 

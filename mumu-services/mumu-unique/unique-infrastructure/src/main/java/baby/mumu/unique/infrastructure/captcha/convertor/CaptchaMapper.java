@@ -21,7 +21,7 @@ import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.po.SimpleCaptchaPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -41,7 +41,7 @@ public interface CaptchaMapper extends GrpcMapper {
   CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptchaDo toDataObject(SimpleCaptcha simpleCaptcha);
+  SimpleCaptchaPO toPO(SimpleCaptcha simpleCaptcha);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);

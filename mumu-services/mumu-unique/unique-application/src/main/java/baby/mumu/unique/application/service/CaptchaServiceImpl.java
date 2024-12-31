@@ -38,6 +38,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,12 +78,9 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void generateSimpleCaptcha(SimpleCaptchaGeneratedGrpcCmd request,
+  public void generateSimpleCaptcha(@NotNull SimpleCaptchaGeneratedGrpcCmd request,
     StreamObserver<SimpleCaptchaGeneratedGrpcDTO> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
-    simpleCaptchaGeneratedCmd.setId(
-      request.hasId() ? request.getId().getValue()
-        : null);
     simpleCaptchaGeneratedCmd.setTtl(
       request.hasTtl() ? request.getTtl().getValue()
         : null);

@@ -16,6 +16,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ Removed
 
+## [2.5.0] - 2024-12-31
+
+### ⭐ Added
+
+- Added parameter verification for verification code generation.
+- Add method comments.
+- Added anyRole configuration.
+- Added api documentation.
+- Added a new interface for character query based on code.
+- Permission verification can specify the permission range.
+
+### 🕸️ Changed
+
+- Modify the method name.
+- Modify response status value reference.
+- grpc upgraded to 1.69.0.
+- flyway upgraded to 11.1.0.
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.27.
+- org.apache.commons:commons-text upgraded to 1.13.0.
+- Gradle version upgraded to 8.12.
+- Optimize the sql log printing expansion function.
+- Optimize permission configuration.
+- Modify the passwordEncoder bean instance name and type.
+- Modify the creation time modification time default value.
+- Standard modification of class name.
+- Optimize code style configuration file.
+- Optimize gradle configuration.
+- Reconstruct verification code generation logic.
+- Replace deprecated code.
+
+### 🐞 Fixed
+
+- Fixed the problem of failure to add character account.
+
+### ⚠️ Removed
+
+- Remove useless functions.
+- Delete useless files.
+
 ## [2.4.0] - 2024-12-14
 
 ### ⭐ Added
@@ -490,7 +529,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.4.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.5.0...develop
+[2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0

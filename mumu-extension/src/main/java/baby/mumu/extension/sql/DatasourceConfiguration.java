@@ -16,7 +16,7 @@
 package baby.mumu.extension.sql;
 
 import baby.mumu.basis.constants.BeanNameConstants;
-import baby.mumu.basis.dataobject.jpa.MuMuJpaAuditorAware;
+import baby.mumu.basis.po.jpa.MuMuJpaAuditorAware;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.sql.filter.datasource.DataSourceFilter;
 import baby.mumu.extension.sql.filter.datasource.DatasourceFilterChain;

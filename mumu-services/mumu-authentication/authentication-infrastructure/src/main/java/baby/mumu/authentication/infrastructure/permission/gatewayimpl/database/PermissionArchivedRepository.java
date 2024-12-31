@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.database;
 
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.dataobject.PermissionArchivedDo;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,8 +34,8 @@ import org.springframework.validation.annotation.Validated;
  * @since 1.0.4
  */
 @Validated
-public interface PermissionArchivedRepository extends BaseJpaRepository<PermissionArchivedDo, Long>,
-  JpaSpecificationExecutor<PermissionArchivedDo> {
+public interface PermissionArchivedRepository extends BaseJpaRepository<PermissionArchivedPO, Long>,
+  JpaSpecificationExecutor<PermissionArchivedPO> {
 
   /**
    * 判断是否存在指定id和code的权限
@@ -60,32 +60,32 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
   /**
    * 切片分页查询已归档的权限（不查询总数）
    *
-   * @param permissionArchivedDo 查询条件
+   * @param permissionArchivedPO 查询条件
    * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
     """
-      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
-            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
-            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      select a from PermissionArchivedPO a where (:#{#permissionArchivedPO.id} is null or a.id = :#{#permissionArchivedPO.id})
+            and (:#{#permissionArchivedPO.name} is null or a.name like %:#{#permissionArchivedPO.name}%)
+            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%) order by a.creationTime desc
       """)
-  Slice<PermissionArchivedDo> findAllSlice(
-    @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
+  Slice<PermissionArchivedPO> findAllSlice(
+    @Param("permissionArchivedPO") PermissionArchivedPO permissionArchivedPO, Pageable pageable);
 
   /**
    * 分页查询已归档的权限（查询总数）
    *
-   * @param permissionArchivedDo 查询条件
+   * @param permissionArchivedPO 查询条件
    * @param pageable             分页条件
    * @return 查询结果
    */
   @Query(
     """
-      select a from PermissionArchivedDo a where (:#{#permissionArchivedDo.id} is null or a.id = :#{#permissionArchivedDo.id})
-            and (:#{#permissionArchivedDo.name} is null or a.name like %:#{#permissionArchivedDo.name}%)
-            and (:#{#permissionArchivedDo.code} is null or a.code like %:#{#permissionArchivedDo.code}%) order by a.creationTime desc
+      select a from PermissionArchivedPO a where (:#{#permissionArchivedPO.id} is null or a.id = :#{#permissionArchivedPO.id})
+            and (:#{#permissionArchivedPO.name} is null or a.name like %:#{#permissionArchivedPO.name}%)
+            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%) order by a.creationTime desc
       """)
-  Page<PermissionArchivedDo> findAllPage(
-    @Param("permissionArchivedDo") PermissionArchivedDo permissionArchivedDo, Pageable pageable);
+  Page<PermissionArchivedPO> findAllPage(
+    @Param("permissionArchivedPO") PermissionArchivedPO permissionArchivedPO, Pageable pageable);
 }

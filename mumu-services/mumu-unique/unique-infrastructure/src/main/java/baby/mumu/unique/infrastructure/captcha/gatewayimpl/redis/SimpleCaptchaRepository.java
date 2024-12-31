@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis;
 
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.po.SimpleCaptchaPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
@@ -25,6 +25,6 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 1.0.1
  */
 public interface SimpleCaptchaRepository extends
-  RedisDocumentRepository<SimpleCaptchaDo, Long> {
+  RedisDocumentRepository<SimpleCaptchaPO, Long> {
 
 }

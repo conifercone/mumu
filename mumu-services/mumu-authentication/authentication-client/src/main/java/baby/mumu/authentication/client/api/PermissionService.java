@@ -169,5 +169,10 @@ public interface PermissionService {
    */
   void deletePath(Long ancestorId, Long descendantId);
 
+  /**
+   * 下载所有权限数据
+   *
+   * @param response 响应
+   */
   void downloadAll(HttpServletResponse response);
 }

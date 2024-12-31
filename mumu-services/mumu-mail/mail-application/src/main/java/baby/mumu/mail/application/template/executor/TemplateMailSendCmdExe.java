@@ -21,7 +21,7 @@ import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,21 +35,20 @@ public class TemplateMailSendCmdExe {
 
   private final TemplateMailGateway templateMailGateway;
   private final TemplateMailConvertor templateMailConvertor;
-
-  @Value("${spring.mail.username}")
-  private String username;
+  private final MailProperties mailProperties;
 
   @Autowired
   public TemplateMailSendCmdExe(TemplateMailGateway templateMailGateway,
-    TemplateMailConvertor templateMailConvertor) {
+    TemplateMailConvertor templateMailConvertor, MailProperties mailProperties) {
     this.templateMailGateway = templateMailGateway;
     this.templateMailConvertor = templateMailConvertor;
+    this.mailProperties = mailProperties;
   }
 
   public void execute(TemplateMailSendCmd templateMailSendCmd) {
     Optional.ofNullable(templateMailSendCmd).ifPresent(templateMailSendCmdNotNull -> {
       if (StringUtils.isBlank(templateMailSendCmd.getFrom())) {
-        templateMailSendCmd.setFrom(username);
+        templateMailSendCmd.setFrom(mailProperties.getUsername());
       }
       templateMailConvertor.toEntity(templateMailSendCmd)
         .ifPresent(templateMailGateway::sendMail);

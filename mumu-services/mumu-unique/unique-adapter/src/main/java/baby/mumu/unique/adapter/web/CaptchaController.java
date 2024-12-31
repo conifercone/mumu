@@ -23,6 +23,7 @@ import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class CaptchaController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public SimpleCaptchaGeneratedDTO simple(
-    @ModelAttribute SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    @ModelAttribute @Valid SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
   }
 

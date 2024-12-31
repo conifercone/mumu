@@ -113,7 +113,7 @@ public class CountryController {
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<CountryGetStateCitiesByIdDTO> getStateCitiesById(
     @PathVariable(value = "id")
-  Long id) {
+    Long id) {
     return ResponseWrapper.success(countryService.getStateCitiesById(id));
   }
 

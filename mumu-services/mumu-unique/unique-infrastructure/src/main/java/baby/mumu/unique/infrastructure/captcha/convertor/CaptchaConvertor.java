@@ -20,7 +20,7 @@ import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.dataobject.SimpleCaptchaDo;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.redis.po.SimpleCaptchaPO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -39,8 +39,8 @@ public class CaptchaConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<SimpleCaptchaDo> toDataObject(SimpleCaptcha simpleCaptcha) {
-    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toDataObject);
+  public Optional<SimpleCaptchaPO> toPO(SimpleCaptcha simpleCaptcha) {
+    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toPO);
   }
 
   @Contract("_ -> new")

@@ -22,8 +22,8 @@ import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageArchivedDo;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessageArchivedPO;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -63,17 +63,17 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
-  public Optional<SubscriptionTextMessageDo> toDataObject(
+  public Optional<SubscriptionTextMessagePO> toPO(
     SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<SubscriptionTextMessage> toEntity(
-    SubscriptionTextMessageDo subscriptionTextMessageDo) {
-    return Optional.ofNullable(subscriptionTextMessageDo)
+    SubscriptionTextMessagePO subscriptionTextMessagePO) {
+    return Optional.ofNullable(subscriptionTextMessagePO)
       .map(SubscriptionTextMessageMapper.INSTANCE::toEntity);
   }
 
@@ -117,17 +117,17 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<SubscriptionTextMessageArchivedDo> toArchiveDo(
-    SubscriptionTextMessageDo subscriptionTextMessageDo) {
-    return Optional.ofNullable(subscriptionTextMessageDo)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toArchiveDo);
+  public Optional<SubscriptionTextMessageArchivedPO> toArchivePO(
+    SubscriptionTextMessagePO subscriptionTextMessagePO) {
+    return Optional.ofNullable(subscriptionTextMessagePO)
+      .map(SubscriptionTextMessageMapper.INSTANCE::toArchivePO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<SubscriptionTextMessageDo> toDataObject(
-    SubscriptionTextMessageArchivedDo subscriptionTextMessageArchivedDo) {
-    return Optional.ofNullable(subscriptionTextMessageArchivedDo)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toDataObject);
+  public Optional<SubscriptionTextMessagePO> toPO(
+    SubscriptionTextMessageArchivedPO subscriptionTextMessageArchivedPO) {
+    return Optional.ofNullable(subscriptionTextMessageArchivedPO)
+      .map(SubscriptionTextMessageMapper.INSTANCE::toPO);
   }
 }

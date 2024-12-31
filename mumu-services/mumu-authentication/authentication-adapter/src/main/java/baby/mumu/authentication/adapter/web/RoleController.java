@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
@@ -209,5 +210,14 @@ public class RoleController {
   @API(status = Status.STABLE, since = "2.4.0")
   public RoleFindByIdDTO findById(@PathVariable(value = "id") Long id) {
     return roleService.findById(id);
+  }
+
+  @Operation(summary = "根据code查询角色")
+  @GetMapping("/findByCode/{code}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.5.0")
+  public RoleFindByCodeDTO findByCode(@PathVariable(value = "code") String code) {
+    return roleService.findByCode(code);
   }
 }

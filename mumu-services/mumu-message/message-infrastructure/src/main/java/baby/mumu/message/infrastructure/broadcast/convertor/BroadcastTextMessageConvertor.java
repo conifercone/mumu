@@ -23,11 +23,11 @@ import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.BroadcastTextMessageRepository;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageDo;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessageArchivedPO;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessagePO;
 import baby.mumu.message.infrastructure.config.MessageProperties;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDo;
-import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverDoId;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverPO;
+import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverPOId;
 import baby.mumu.message.infrastructure.relations.database.BroadcastTextMessageReceiverRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,31 +94,31 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
-  public Optional<BroadcastTextMessageDo> toDataObject(
+  public Optional<BroadcastTextMessagePO> toPO(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-      .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+      .map(BroadcastTextMessageMapper.INSTANCE::toPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public List<BroadcastTextMessageReceiverDo> toBroadcastTextMessageSenderReceiverDos(
+  public List<BroadcastTextMessageReceiverPO> toBroadcastTextMessageSenderReceiverDos(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
       .flatMap(broadcastTextMessageNotNull ->
         Optional.ofNullable(broadcastTextMessageNotNull.getReceiverIds())
           .map(receiverIds -> receiverIds.stream().map(receiverId -> {
-            BroadcastTextMessageReceiverDo broadcastTextMessageReceiverDo = new BroadcastTextMessageReceiverDo();
-            broadcastTextMessageReceiverDo.setMessageStatus(
+            BroadcastTextMessageReceiverPO broadcastTextMessageReceiverPO = new BroadcastTextMessageReceiverPO();
+            broadcastTextMessageReceiverPO.setMessageStatus(
               broadcastTextMessageNotNull.getMessageStatus());
-            broadcastTextMessageReceiverDo.setId(
-              BroadcastTextMessageReceiverDoId.builder()
+            broadcastTextMessageReceiverPO.setId(
+              BroadcastTextMessageReceiverPOId.builder()
                 .messageId(broadcastTextMessageNotNull.getId())
                 .receiverId(receiverId)
                 .build());
             broadcastTextMessageRepository.findById(broadcastTextMessage.getId())
-              .ifPresent(broadcastTextMessageReceiverDo::setBroadcastTextMessage);
-            return broadcastTextMessageReceiverDo;
+              .ifPresent(broadcastTextMessageReceiverPO::setBroadcastTextMessage);
+            return broadcastTextMessageReceiverPO;
           }).collect(Collectors.toList()))
       ).orElse(new ArrayList<>());
   }
@@ -126,8 +126,8 @@ public class BroadcastTextMessageConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
   public Optional<BroadcastTextMessage> toEntity(
-    BroadcastTextMessageDo broadcastTextMessageDo) {
-    return Optional.ofNullable(broadcastTextMessageDo)
+    BroadcastTextMessagePO broadcastTextMessagePO) {
+    return Optional.ofNullable(broadcastTextMessagePO)
       .map(BroadcastTextMessageMapper.INSTANCE::toEntity).map(broadcastTextMessage -> {
         broadcastTextMessage.setReceiverIds(
           broadcastTextMessageReceiverRepository.findReceiverIdsByMessageId(
@@ -173,17 +173,17 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessageArchivedDo> toArchiveDo(
-    BroadcastTextMessageDo broadcastTextMessageDo) {
-    return Optional.ofNullable(broadcastTextMessageDo)
-      .map(BroadcastTextMessageMapper.INSTANCE::toArchiveDo);
+  public Optional<BroadcastTextMessageArchivedPO> toArchivePO(
+    BroadcastTextMessagePO broadcastTextMessagePO) {
+    return Optional.ofNullable(broadcastTextMessagePO)
+      .map(BroadcastTextMessageMapper.INSTANCE::toArchivePO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessageDo> toDataObject(
-    BroadcastTextMessageArchivedDo broadcastTextMessageArchivedDo) {
-    return Optional.ofNullable(broadcastTextMessageArchivedDo)
-      .map(BroadcastTextMessageMapper.INSTANCE::toDataObject);
+  public Optional<BroadcastTextMessagePO> toPO(
+    BroadcastTextMessageArchivedPO broadcastTextMessageArchivedPO) {
+    return Optional.ofNullable(broadcastTextMessageArchivedPO)
+      .map(BroadcastTextMessageMapper.INSTANCE::toPO);
   }
 }

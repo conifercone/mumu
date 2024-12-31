@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.devh.boot.grpc.server.security.authentication.BearerAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.CompositeGrpcAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
@@ -100,6 +101,8 @@ public class GrpcSecurityConfiguration {
                   (MethodDescriptor<?, ?>) method.invoke(null);
                 if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
                   source.set(methods, AccessPredicate.hasRole(grpcPolicy.getRole()));
+                } else if (CollectionUtils.isNotEmpty(grpcPolicy.getAnyRole())) {
+                  source.set(methods, AccessPredicate.hasAnyRole(grpcPolicy.getAnyRole()));
                 } else if (StringUtils.isNotBlank(
                   grpcPolicy.getAuthority())) {
                   Assert.isTrue(
@@ -107,10 +110,22 @@ public class GrpcSecurityConfiguration {
                     "Permission configuration cannot be empty and cannot start with SCOPE_");
                   source.set(methods, AccessPredicate.hasAuthority(new SimpleGrantedAuthority(
                     CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()))));
+                } else if (CollectionUtils.isNotEmpty(grpcPolicy.getAnyAuthority())) {
+                  List<String> anyAuthority = grpcPolicy.getAnyAuthority();
+                  anyAuthority.stream().filter(
+                    authority -> StringUtils.isBlank(authority) || authority.startsWith(
+                      CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(authority -> {
+                    throw new IllegalArgumentException(
+                      "Permission configuration cannot be empty and cannot start with SCOPE_");
+                  });
+                  source.set(methods, AccessPredicate.hasAnyAuthority(
+                    anyAuthority.stream().distinct().map(authority -> new SimpleGrantedAuthority(
+                        CommonConstants.AUTHORITY_PREFIX.concat(authority)))
+                      .collect(Collectors.toSet())));
                 } else if (grpcPolicy.isPermitAll()) {
                   source.set(methods, AccessPredicate.permitAll());
-                } else {
-                  source.setDefault(AccessPredicate.denyAll());
+                } else if (grpcPolicy.isDenyAll()) {
+                  source.set(methods, AccessPredicate.denyAll());
                 }
               } catch (ClassNotFoundException | InvocationTargetException |
                        IllegalAccessException | NoSuchMethodException e) {
@@ -120,6 +135,7 @@ public class GrpcSecurityConfiguration {
           }
         });
     }
+    source.setDefault(AccessPredicate.authenticated());
     return source;
   }
 

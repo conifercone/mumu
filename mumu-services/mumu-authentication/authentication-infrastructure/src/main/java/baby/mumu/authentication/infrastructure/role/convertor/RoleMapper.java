@@ -30,13 +30,14 @@ import baby.mumu.authentication.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO;
 import baby.mumu.authentication.client.dto.RoleFindAllDTO.RoleFindAllPermissionCo;
 import baby.mumu.authentication.client.dto.RoleFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.RoleFindByCodeDTO;
 import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleArchivedDo;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.dataobject.RoleDo;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.dataobject.RoleRedisDo;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.mappers.ClientObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
@@ -59,7 +60,7 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  Role toEntity(RoleDo roleDo);
+  Role toEntity(RolePO rolePO);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Role toEntity(RoleAddCmd roleAddCmd);
@@ -77,10 +78,10 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   Role toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleRedisDo roleRedisDo);
+  Role toEntity(RoleRedisPO roleRedisPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleRedisDo toRoleRedisDo(Role role);
+  RoleRedisPO toRoleRedisPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);
@@ -93,6 +94,9 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdDTO toRoleFindByIdDTO(Role role);
+
+  @API(status = Status.STABLE, since = "2.5.0")
+  RoleFindByCodeDTO toRoleFindByCodeDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindRootDTO toRoleFindRootDTO(Role role);
@@ -107,19 +111,19 @@ public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
   RoleArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  RoleDo toDataObject(Role role);
+  RolePO toPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RoleArchivedDo toArchivedDo(RoleDo roleDo);
+  RoleArchivedPO toArchivedPO(RolePO rolePO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedDo toArchivedDo(Role role);
+  RoleArchivedPO toArchivedPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RoleDo toDataObject(RoleArchivedDo roleArchivedDo);
+  RolePO toPO(RoleArchivedPO roleArchivedPO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  Role toEntity(RoleArchivedDo roleArchivedDo);
+  Role toEntity(RoleArchivedPO roleArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);

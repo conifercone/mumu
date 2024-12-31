@@ -17,7 +17,7 @@ package baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.dataobject.StreamFileMinioDo;
+import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po.StreamFileMinioPO;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
@@ -60,8 +60,8 @@ public class MinioStreamFileRepository {
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFileMinioDo streamFileMinioDo) {
-    Optional.ofNullable(streamFileMinioDo).ifPresent(minioDo -> {
+  public void uploadFile(StreamFileMinioPO streamFileMinioPO) {
+    Optional.ofNullable(streamFileMinioPO).ifPresent(minioDo -> {
       try (InputStream minioDoContent = minioDo.getContent()) {
         minioClient.putObject(
           PutObjectArgs.builder()
@@ -118,12 +118,12 @@ public class MinioStreamFileRepository {
   /**
    * 获取文件流
    *
-   * @param streamFileMinioDo 流式文件minio数据对象
+   * @param streamFileMinioPO 流式文件minio数据对象
    * @return 二进制流
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<InputStream> download(StreamFileMinioDo streamFileMinioDo) {
-    return Optional.ofNullable(streamFileMinioDo).map(minioDo -> {
+  public Optional<InputStream> download(StreamFileMinioPO streamFileMinioPO) {
+    return Optional.ofNullable(streamFileMinioPO).map(minioDo -> {
       try {
         return minioClient.getObject(
           GetObjectArgs.builder()
@@ -142,15 +142,15 @@ public class MinioStreamFileRepository {
   /**
    * 判断文件是否存在
    *
-   * @param streamFileMinioDo 流式文件minio数据对象
+   * @param streamFileMinioPO 流式文件minio数据对象
    * @return 是否存在
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public boolean existed(StreamFileMinioDo streamFileMinioDo) {
+  public boolean existed(StreamFileMinioPO streamFileMinioPO) {
     boolean exist = true;
     try {
-      minioClient.statObject(StatObjectArgs.builder().bucket(streamFileMinioDo.getStorageAddress())
-        .object(streamFileMinioDo.getName()).build());
+      minioClient.statObject(StatObjectArgs.builder().bucket(streamFileMinioPO.getStorageAddress())
+        .object(streamFileMinioPO.getName()).build());
     } catch (Exception e) {
       exist = false;
     }
@@ -160,11 +160,11 @@ public class MinioStreamFileRepository {
   /**
    * 删除文件
    *
-   * @param streamFileMinioDo 流式文件minio数据对象
+   * @param streamFileMinioPO 流式文件minio数据对象
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(StreamFileMinioDo streamFileMinioDo) {
-    Optional.ofNullable(streamFileMinioDo).ifPresent(streamFileMinioDomainObject -> {
+  public void removeFile(StreamFileMinioPO streamFileMinioPO) {
+    Optional.ofNullable(streamFileMinioPO).ifPresent(streamFileMinioDomainObject -> {
       try {
         minioClient.removeObject(
           RemoveObjectArgs.builder()

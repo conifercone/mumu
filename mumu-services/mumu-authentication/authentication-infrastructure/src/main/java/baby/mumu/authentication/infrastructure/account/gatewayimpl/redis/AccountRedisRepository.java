@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.dataobject.AccountRedisDo;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 import java.util.Optional;
 
@@ -26,9 +26,9 @@ import java.util.Optional;
  * @since 2.2.0
  */
 public interface AccountRedisRepository extends
-  RedisDocumentRepository<AccountRedisDo, Long> {
+  RedisDocumentRepository<AccountRedisPO, Long> {
 
-  Optional<AccountRedisDo> findByUsername(String username);
+  Optional<AccountRedisPO> findByUsername(String username);
 
-  Optional<AccountRedisDo> findByEmail(String email);
+  Optional<AccountRedisPO> findByEmail(String email);
 }

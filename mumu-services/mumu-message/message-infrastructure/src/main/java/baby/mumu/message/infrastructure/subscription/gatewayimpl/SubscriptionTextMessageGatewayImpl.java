@@ -28,8 +28,8 @@ import baby.mumu.message.infrastructure.config.MessageProperties;
 import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.SubscriptionTextMessageArchivedRepository;
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.SubscriptionTextMessageRepository;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo;
-import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.dataobject.SubscriptionTextMessageDo_;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO;
+import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO_;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import jakarta.persistence.criteria.Predicate;
 import java.time.Instant;
@@ -83,15 +83,15 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg)
-      .flatMap(subscriptionTextMessageConvertor::toDataObject)
-      .ifPresent(subscriptionMessageDo -> Optional.ofNullable(
+      .flatMap(subscriptionTextMessageConvertor::toPO)
+      .ifPresent(subscriptionTextMessagePO -> Optional.ofNullable(
           messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
-            .get(subscriptionMessageDo.getReceiverId()))
-        .flatMap(res -> Optional.ofNullable(res.get(subscriptionMessageDo.getSenderId())))
+            .get(subscriptionTextMessagePO.getReceiverId()))
+        .flatMap(res -> Optional.ofNullable(res.get(subscriptionTextMessagePO.getSenderId())))
         .ifPresentOrElse(channel -> {
-          subscriptionTextMessageRepository.persist(subscriptionMessageDo);
-          channel.writeAndFlush(new TextWebSocketFrame(subscriptionMessageDo.getMessage()));
-        }, () -> subscriptionTextMessageRepository.persist(subscriptionMessageDo)));
+          subscriptionTextMessageRepository.persist(subscriptionTextMessagePO);
+          channel.writeAndFlush(new TextWebSocketFrame(subscriptionTextMessagePO.getMessage()));
+        }, () -> subscriptionTextMessageRepository.persist(subscriptionTextMessagePO)));
   }
 
   @Override
@@ -99,8 +99,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void readMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
-      .filter(subscriptionTextMessageDo -> MessageStatusEnum.UNREAD.equals(
-        subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
+      .filter(subscriptionTextMessagePO -> MessageStatusEnum.UNREAD.equals(
+        subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
         subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.READ);
         subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
       });
@@ -111,8 +111,8 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public void unreadMsgById(Long id) {
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
-      .filter(subscriptionTextMessageDo -> MessageStatusEnum.READ.equals(
-        subscriptionTextMessageDo.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
+      .filter(subscriptionTextMessagePO -> MessageStatusEnum.READ.equals(
+        subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
         subscriptionTextMessageDo.setMessageStatus(MessageStatusEnum.UNREAD);
         subscriptionTextMessageRepository.merge(subscriptionTextMessageDo);
       });
@@ -133,21 +133,21 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public Page<SubscriptionTextMessage> findAllYouSend(
     SubscriptionTextMessage subscriptionTextMessage, int current, int pageSize) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
-      Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
+      Specification<SubscriptionTextMessagePO> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         Optional.ofNullable(subscriptionTextMessage).ifPresent(subscriptionTextMessageEntity -> {
           Optional.ofNullable(subscriptionTextMessageEntity.getMessage())
             .filter(StringUtils::isNotBlank)
             .ifPresent(
-              message -> predicateList.add(cb.like(root.get(SubscriptionTextMessageDo_.message),
+              message -> predicateList.add(cb.like(root.get(SubscriptionTextMessagePO_.message),
                 String.format(LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE, message))));
           Optional.ofNullable(subscriptionTextMessageEntity.getMessageStatus()).ifPresent(
             messageStatusEnum -> predicateList.add(
-              cb.equal(root.get(SubscriptionTextMessageDo_.messageStatus), messageStatusEnum)));
+              cb.equal(root.get(SubscriptionTextMessagePO_.messageStatus), messageStatusEnum)));
         });
-        predicateList.add(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), accountId));
+        predicateList.add(cb.equal(root.get(SubscriptionTextMessagePO_.senderId), accountId));
         assert query != null;
-        return query.orderBy(cb.desc(root.get(SubscriptionTextMessageDo_.creationTime)))
+        return query.orderBy(cb.desc(root.get(SubscriptionTextMessagePO_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
       };
@@ -161,15 +161,15 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
     //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-      .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchiveDo(
-        subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedDo -> {
-        subscriptionTextMessageArchivedDo.setArchived(true);
+      .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchivePO(
+        subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedPO -> {
+        subscriptionTextMessageArchivedPO.setArchived(true);
         subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
-        subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedDo);
+        subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedPO);
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(subscriptionTextMessageArchivedDo.getId()));
+          () -> deleteArchivedDataJob(subscriptionTextMessageArchivedPO.getId()));
       }));
   }
 
@@ -189,12 +189,12 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
         accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .ifPresent(
-        subscriptionTextMessageArchivedDo -> subscriptionTextMessageConvertor.toDataObject(
-            subscriptionTextMessageArchivedDo)
+        subscriptionTextMessageArchivedPO -> subscriptionTextMessageConvertor.toPO(
+            subscriptionTextMessageArchivedPO)
           .ifPresent(subscriptionTextMessageDo -> {
             subscriptionTextMessageDo.setArchived(false);
             subscriptionTextMessageArchivedRepository.delete(
-              subscriptionTextMessageArchivedDo);
+              subscriptionTextMessageArchivedPO);
             subscriptionTextMessageRepository.persist(subscriptionTextMessageDo);
           }));
   }
@@ -203,16 +203,16 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   public Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(
     int current, int pageSize, Long receiverId) {
     return SecurityContextUtil.getLoginAccountId().map(accountId -> {
-      Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
+      Specification<SubscriptionTextMessagePO> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         predicateList.add(
-          cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), accountId),
-            cb.equal(root.get(SubscriptionTextMessageDo_.receiverId), receiverId))));
+          cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessagePO_.senderId), accountId),
+            cb.equal(root.get(SubscriptionTextMessagePO_.receiverId), receiverId))));
         predicateList.add(
-          cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessageDo_.senderId), receiverId),
-            cb.equal(root.get(SubscriptionTextMessageDo_.receiverId), accountId))));
+          cb.or(cb.and(cb.equal(root.get(SubscriptionTextMessagePO_.senderId), receiverId),
+            cb.equal(root.get(SubscriptionTextMessagePO_.receiverId), accountId))));
         assert query != null;
-        return query.orderBy(cb.desc(root.get(SubscriptionTextMessageDo_.creationTime)))
+        return query.orderBy(cb.desc(root.get(SubscriptionTextMessagePO_.creationTime)))
           .where(predicateList.toArray(new Predicate[0]))
           .getRestriction();
       };
@@ -222,9 +222,9 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
 
   @NotNull
   private PageImpl<SubscriptionTextMessage> getSubscriptionTextMessages(int current, int pageSize,
-    Specification<SubscriptionTextMessageDo> subscriptionTextMessageDoSpecification) {
+    Specification<SubscriptionTextMessagePO> subscriptionTextMessageDoSpecification) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Page<SubscriptionTextMessageDo> repositoryAll = subscriptionTextMessageRepository.findAll(
+    Page<SubscriptionTextMessagePO> repositoryAll = subscriptionTextMessageRepository.findAll(
       subscriptionTextMessageDoSpecification,
       pageRequest);
     List<SubscriptionTextMessage> subscriptionTextMessages = repositoryAll.getContent().stream()

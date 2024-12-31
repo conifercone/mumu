@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl.database;
 
-import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.dataobject.BroadcastTextMessageArchivedDo;
+import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessageArchivedPO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.3
  */
 public interface BroadcastTextMessageArchivedRepository extends
-  BaseJpaRepository<BroadcastTextMessageArchivedDo, Long>,
-  JpaSpecificationExecutor<BroadcastTextMessageArchivedDo> {
+  BaseJpaRepository<BroadcastTextMessageArchivedPO, Long>,
+  JpaSpecificationExecutor<BroadcastTextMessageArchivedPO> {
 
-  Optional<BroadcastTextMessageArchivedDo> findByIdAndSenderId(Long id, Long senderId);
+  Optional<BroadcastTextMessageArchivedPO> findByIdAndSenderId(Long id, Long senderId);
 }

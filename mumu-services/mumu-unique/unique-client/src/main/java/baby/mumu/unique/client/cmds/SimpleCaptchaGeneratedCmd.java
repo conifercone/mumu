@@ -15,6 +15,7 @@
  */
 package baby.mumu.unique.client.cmds;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -27,17 +28,14 @@ import lombok.Data;
 public class SimpleCaptchaGeneratedCmd {
 
   /**
-   * 验证码id
-   */
-  private Long id;
-
-  /**
    * 有效期
    */
+  @Size(max = 3600)
   private Long ttl;
 
   /**
    * 验证码长度
    */
+  @Size(min = 1, max = 10)
   private Integer length;
 }

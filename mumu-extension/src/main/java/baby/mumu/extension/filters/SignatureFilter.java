@@ -21,7 +21,6 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties.DigitalSignature;
 import baby.mumu.extension.GlobalProperties.DigitalSignature.RequestMethod;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletException;
@@ -35,11 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 import lombok.Getter;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +46,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * 签名过滤器
- * <p>签名格式：时间戳+request ID+request URI+request parameter JSON+body JSON</p>
- * <p>request parameter JSON、body JSON格式：紧凑JSON，不包含多余换行和空格符</p>
+ * <p>签名格式：时间戳+request ID+request URI+body JSON</p>
+ * <p>body JSON格式：紧凑JSON，不包含多余换行和空格符</p>
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
@@ -62,11 +57,9 @@ public class SignatureFilter extends OncePerRequestFilter {
   public static final String X_SIGNATURE = "X-Signature";
   public static final String X_TIMESTAMP = "X-Timestamp";
   public static final String X_REQUEST_ID = "X-Request-ID";
-  public static final String PARAMETER_VALUE_CONNECTOR = ",";
   private final ExtensionProperties extensionProperties;
   private static final Logger logger = LoggerFactory.getLogger(
     SignatureFilter.class);
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
   public SignatureFilter(ExtensionProperties extensionProperties) {
@@ -86,18 +79,11 @@ public class SignatureFilter extends OncePerRequestFilter {
       String timestamp = request.getHeader(X_TIMESTAMP);
       String requestId = request.getHeader(X_REQUEST_ID);
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
-        Map<String, String[]> requestParameterMap = request.getParameterMap();
-        Map<String, String> resultMap = new TreeMap<>(requestParameterMap.entrySet()
-          .stream()
-          .collect(Collectors.toMap(
-            Map.Entry::getKey,
-            entry -> String.join(PARAMETER_VALUE_CONNECTOR, entry.getValue())
-          )));
-        String requestParameterJson =
-          MapUtils.isNotEmpty(resultMap) ? objectMapper.writeValueAsString(resultMap) : "";
         try {
           if (!SignatureUtil.validateSignature(
-            timestamp.concat(requestId).concat(requestURI).concat(requestParameterJson)
+            timestamp.concat(requestId).concat(
+                StringUtils.isNotBlank(request.getQueryString()) ? requestURI.concat("?")
+                  .concat(request.getQueryString()) : requestURI)
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {

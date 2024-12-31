@@ -23,8 +23,8 @@ import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.dataobject.OperationLogEsDo;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.dataobject.OperationLogKafkaDo;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
+import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -43,9 +43,9 @@ public interface OperationLogMapper extends GrpcMapper {
 
   OperationLogMapper INSTANCE = Mappers.getMapper(OperationLogMapper.class);
 
-  OperationLogKafkaDo toKafkaDataObject(OperationLog operationLog);
+  OperationLogKafkaPO toKafkaPO(OperationLog operationLog);
 
-  OperationLogEsDo toEsDataObject(OperationLog operationLog);
+  OperationLogEsPO toEsPO(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSubmitCmd operationLogSubmitCmd);
@@ -54,7 +54,7 @@ public interface OperationLogMapper extends GrpcMapper {
   OperationLog toEntity(OperationLogSaveCmd operationLogSaveCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLog toEntity(OperationLogEsDo operationLogEsDo);
+  OperationLog toEntity(OperationLogEsPO operationLogEsPO);
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogFindAllCmd operationLogFindAllCmd);
@@ -66,7 +66,7 @@ public interface OperationLogMapper extends GrpcMapper {
   OperationLogQryDTO toQryDTO(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLogSaveCmd toOperationLogSaveCmd(OperationLogKafkaDo operationLogKafkaDo);
+  OperationLogSaveCmd toOperationLogSaveCmd(OperationLogKafkaPO operationLogKafkaPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   OperationLogSubmitCmd toOperationLogSubmitCmd(
