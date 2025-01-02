@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,6 +128,9 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountRoleRedisRepository = accountRoleRedisRepository;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -172,6 +175,9 @@ public class AccountGatewayImpl implements AccountGateway {
 
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -186,6 +192,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -198,6 +207,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -222,6 +234,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -233,6 +248,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -248,6 +266,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -263,12 +284,18 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
     return passwordTokenRepository.count();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -286,6 +313,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -303,6 +333,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -314,6 +347,9 @@ public class AccountGatewayImpl implements AccountGateway {
         .collect(Collectors.toList())).orElse(new ArrayList<>());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -325,6 +361,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -344,6 +383,9 @@ public class AccountGatewayImpl implements AccountGateway {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账户ID为%0的账户")
@@ -376,6 +418,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
@@ -387,6 +432,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addAddress(AccountAddress accountAddress) {
@@ -402,6 +450,9 @@ public class AccountGatewayImpl implements AccountGateway {
           })));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> getAccountBasicInfoById(Long id) {
@@ -415,6 +466,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsById(String systemSettingsId) {
@@ -427,6 +481,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .ifPresent(accountSystemSettingsMongodbRepository::save);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
@@ -439,6 +496,9 @@ public class AccountGatewayImpl implements AccountGateway {
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
@@ -455,6 +515,9 @@ public class AccountGatewayImpl implements AccountGateway {
           }));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
@@ -474,6 +537,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("强制ID为%0的用户下线")
@@ -496,6 +562,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Page<Account> findAll(Account account, int current, int pageSize) {
@@ -511,6 +580,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .toList(), pageRequest, accountPOS.getTotalElements());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
