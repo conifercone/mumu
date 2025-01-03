@@ -46,13 +46,13 @@ import org.hibernate.annotations.DynamicInsert;
 @Metamodel
 @AllArgsConstructor
 @NoArgsConstructor
-public class RolePathsPO extends JpaBasisDefaultPersistentObject {
+public class RolePathPO extends JpaBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = 482569681126058709L;
 
   @EmbeddedId
-  private RolePathsPOId id;
+  private RolePathPOId id;
 
   @MapsId("ancestorId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

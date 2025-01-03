@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.P
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
-import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -65,17 +65,17 @@ public class PermissionConvertor {
   private final PermissionRepository permissionRepository;
   private final SimpleTextTranslation simpleTextTranslation;
   private final PermissionArchivedRepository permissionArchivedRepository;
-  private final PermissionPathsRepository permissionPathsRepository;
+  private final PermissionPathRepository permissionPathRepository;
 
   @Autowired
   public PermissionConvertor(PermissionRepository permissionRepository,
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     PermissionArchivedRepository permissionArchivedRepository,
-    PermissionPathsRepository permissionPathsRepository) {
+    PermissionPathRepository permissionPathRepository) {
     this.permissionRepository = permissionRepository;
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.permissionArchivedRepository = permissionArchivedRepository;
-    this.permissionPathsRepository = permissionPathsRepository;
+    this.permissionPathRepository = permissionPathRepository;
   }
 
   @Contract("_ -> new")
@@ -95,7 +95,7 @@ public class PermissionConvertor {
   private Optional<Permission> hasDescendant(Permission permission) {
     return Optional.ofNullable(permission).map(permissionNotNull -> {
       permissionNotNull.setHasDescendant(
-        permissionPathsRepository.existsDescendantPermissions(permission.getId()));
+        permissionPathRepository.existsDescendantPermissions(permission.getId()));
       return permissionNotNull;
     });
   }

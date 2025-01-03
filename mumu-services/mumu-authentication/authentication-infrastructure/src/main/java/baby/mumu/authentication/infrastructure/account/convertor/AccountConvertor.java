@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,9 @@ import baby.mumu.authentication.infrastructure.account.units.AccountDigitalPrefe
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePOId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPO;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPOId;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisPO;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
@@ -92,7 +92,7 @@ public class AccountConvertor {
   private final RoleRedisRepository roleRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
   private final AccountRoleRedisRepository accountRoleRedisRepository;
-  private final RolePathsRepository rolePathsRepository;
+  private final RolePathRepository rolePathRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
@@ -103,7 +103,7 @@ public class AccountConvertor {
     RoleRedisRepository roleRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
     AccountRoleRedisRepository accountRoleRedisRepository,
-    RolePathsRepository rolePathsRepository) {
+    RolePathRepository rolePathRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -113,7 +113,7 @@ public class AccountConvertor {
     this.roleRedisRepository = roleRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
     this.accountRoleRedisRepository = accountRoleRedisRepository;
-    this.rolePathsRepository = rolePathsRepository;
+    this.rolePathRepository = rolePathRepository;
   }
 
   @Contract("_ -> new")
@@ -200,9 +200,9 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     if (CollectionUtils.isNotEmpty(ancestorIds)) {
       accountNotNull.setDescendantRoles(
-        getRoles(rolePathsRepository.findByAncestorIdIn(
-          ancestorIds).stream().map(RolePathsPO::getId).map(
-          RolePathsPOId::getDescendantId).distinct().collect(Collectors.toList())));
+        getRoles(rolePathRepository.findByAncestorIdIn(
+          ancestorIds).stream().map(RolePathPO::getId).map(
+          RolePathPOId::getDescendantId).distinct().collect(Collectors.toList())));
     }
   }
 

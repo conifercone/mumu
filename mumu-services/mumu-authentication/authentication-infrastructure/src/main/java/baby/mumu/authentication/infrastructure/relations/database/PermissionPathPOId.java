@@ -29,10 +29,10 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 /**
- * 角色路径表主键实体
+ * 权限路径表主键实体
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.3.0
  */
 @Getter
 @Setter
@@ -40,10 +40,10 @@ import org.hibernate.Hibernate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolePathsPOId implements Serializable {
+public class PermissionPathPOId implements Serializable {
 
   @Serial
-  private static final long serialVersionUID = -238439433633275439L;
+  private static final long serialVersionUID = -550546129487660285L;
 
   @NotNull
   @Column(name = "ancestor_id", nullable = false)
@@ -65,7 +65,7 @@ public class RolePathsPOId implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    RolePathsPOId entity = (RolePathsPOId) o;
+    PermissionPathPOId entity = (PermissionPathPOId) o;
     return Objects.equals(this.ancestorId, entity.ancestorId) &&
       Objects.equals(this.descendantId, entity.descendantId) &&
       Objects.equals(this.depth, entity.depth);

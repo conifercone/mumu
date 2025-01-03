@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPO;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPOId;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisRepository;
@@ -75,7 +75,7 @@ public class RoleGatewayImpl implements RoleGateway {
   private final RolePermissionRepository rolePermissionRepository;
   private final RoleRedisRepository roleRedisRepository;
   private final RolePermissionRedisRepository rolePermissionRedisRepository;
-  private final RolePathsRepository rolePathsRepository;
+  private final RolePathRepository rolePathRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
     AccountGateway accountGateway, RoleConvertor roleConvertor,
@@ -84,7 +84,7 @@ public class RoleGatewayImpl implements RoleGateway {
     RolePermissionRepository rolePermissionRepository,
     RoleRedisRepository roleRedisRepository,
     RolePermissionRedisRepository rolePermissionRedisRepository,
-    RolePathsRepository rolePathsRepository) {
+    RolePathRepository rolePathRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
     this.roleConvertor = roleConvertor;
@@ -94,7 +94,7 @@ public class RoleGatewayImpl implements RoleGateway {
     this.rolePermissionRepository = rolePermissionRepository;
     this.roleRedisRepository = roleRedisRepository;
     this.rolePermissionRedisRepository = rolePermissionRedisRepository;
-    this.rolePathsRepository = rolePathsRepository;
+    this.rolePathRepository = rolePathRepository;
   }
 
   @Override
@@ -108,8 +108,8 @@ public class RoleGatewayImpl implements RoleGateway {
       .ifPresentOrElse(rolePO -> {
         roleRepository.persist(rolePO);
         Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
-        rolePathsRepository.persist(
-          new RolePathsPO(new RolePathsPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
+        rolePathRepository.persist(
+          new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
         roleRedisRepository.deleteById(rolePO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
@@ -143,7 +143,7 @@ public class RoleGatewayImpl implements RoleGateway {
       }
       rolePermissionRepository.deleteByRoleId(roleId);
       roleRepository.deleteById(roleId);
-      rolePathsRepository.deleteAllPathsByRoleId(roleId);
+      rolePathRepository.deleteAllPathsByRoleId(roleId);
       roleArchivedRepository.deleteById(roleId);
       roleRedisRepository.deleteById(roleId);
       rolePermissionRedisRepository.deleteById(roleId);
@@ -278,7 +278,7 @@ public class RoleGatewayImpl implements RoleGateway {
       .filter(roleId -> accountGateway.findAllAccountByRoleId(roleId).isEmpty())
       .ifPresent(roleIdNotNull -> {
         roleArchivedRepository.deleteById(roleIdNotNull);
-        rolePathsRepository.deleteAllPathsByRoleId(roleIdNotNull);
+        rolePathRepository.deleteAllPathsByRoleId(roleIdNotNull);
         rolePermissionRepository.deleteByRoleId(roleIdNotNull);
         roleRedisRepository.deleteById(roleIdNotNull);
         rolePermissionRedisRepository.deleteById(roleIdNotNull);
@@ -308,31 +308,31 @@ public class RoleGatewayImpl implements RoleGateway {
       // 后代角色
       RolePO descendantRolePO = descendantRolePOOptional.get();
       // 为节点添加从所有祖先到自身的路径
-      List<RolePathsPO> ancestorRoles = rolePathsRepository.findByDescendantId(
+      List<RolePathPO> ancestorRoles = rolePathRepository.findByDescendantId(
         ancestorId);
       // 成环检测
       Set<Long> ancestorIds = ancestorRoles.stream()
-        .map(rolePathsPO -> rolePathsPO.getId().getAncestorId())
+        .map(rolePathPO -> rolePathPO.getId().getAncestorId())
         .collect(
           Collectors.toSet());
       if (ancestorIds.contains(descendantId)) {
         throw new MuMuException(ResponseCode.ROLE_CYCLE);
       }
-      if (rolePathsRepository.existsById(
-        new RolePathsPOId(ancestorId, descendantId, 1L))) {
+      if (rolePathRepository.existsById(
+        new RolePathPOId(ancestorId, descendantId, 1L))) {
         throw new MuMuException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
       }
-      List<RolePathsPO> rolePathsPOS = ancestorRoles.stream()
-        .map(rolePathsPO -> new RolePathsPO(
-          new RolePathsPOId(rolePathsPO.getId().getAncestorId(), descendantId,
-            rolePathsPO.getId().getDepth() + 1),
-          rolePathsPO.getAncestor(), descendantRolePO))
+      List<RolePathPO> rolePathPOS = ancestorRoles.stream()
+        .map(rolePathPO -> new RolePathPO(
+          new RolePathPOId(rolePathPO.getId().getAncestorId(), descendantId,
+            rolePathPO.getId().getDepth() + 1),
+          rolePathPO.getAncestor(), descendantRolePO))
         .filter(
-          rolePathsPO -> !rolePathsRepository.existsById(rolePathsPO.getId())
+          rolePathPO -> !rolePathRepository.existsById(rolePathPO.getId())
         )
         .collect(
           Collectors.toList());
-      rolePathsRepository.persistAll(rolePathsPOS);
+      rolePathRepository.persistAll(rolePathPOS);
       roleRedisRepository.deleteById(ancestorId);
       roleRedisRepository.deleteById(descendantId);
     }
@@ -341,10 +341,10 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   public Page<Role> findRootRoles(int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Page<RolePathsPO> repositoryAll = rolePathsRepository.findRootRoles(
+    Page<RolePathPO> repositoryAll = rolePathRepository.findRootRoles(
       pageRequest);
     List<Role> roles = repositoryAll.getContent().stream().flatMap(
-        rolePathsPO -> findById(rolePathsPO.getId().getAncestorId()).stream())
+        rolePathPO -> findById(rolePathPO.getId().getAncestorId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }
@@ -352,11 +352,11 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   public Page<Role> findDirectRoles(Long ancestorId, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-    Page<RolePathsPO> repositoryAll = rolePathsRepository.findDirectRoles(
+    Page<RolePathPO> repositoryAll = rolePathRepository.findDirectRoles(
       ancestorId,
       pageRequest);
     List<Role> roles = repositoryAll.getContent().stream().flatMap(
-        rolePathsPO -> findById(rolePathsPO.getId().getDescendantId()).stream())
+        rolePathPO -> findById(rolePathPO.getId().getDescendantId()).stream())
       .collect(Collectors.toList());
     return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
   }
@@ -364,11 +364,11 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deletePath(Long ancestorId, Long descendantId) {
-    if (rolePathsRepository.existsDescendantRoles(descendantId)) {
+    if (rolePathRepository.existsDescendantRoles(descendantId)) {
       throw new MuMuException(ResponseCode.DESCENDANT_ROLE_HAS_DESCENDANT_ROLE);
     }
-    rolePathsRepository.deleteById(new RolePathsPOId(ancestorId, descendantId, 1L));
-    rolePathsRepository.deleteUnreachableData();
+    rolePathRepository.deleteById(new RolePathPOId(ancestorId, descendantId, 1L));
+    rolePathRepository.deleteUnreachableData();
     roleRedisRepository.deleteById(ancestorId);
     roleRedisRepository.deleteById(descendantId);
   }
