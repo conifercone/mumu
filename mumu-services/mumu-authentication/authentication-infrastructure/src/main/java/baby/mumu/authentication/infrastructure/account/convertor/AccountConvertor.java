@@ -157,7 +157,7 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -167,7 +167,7 @@ public class AccountConvertor {
         uncachedCollectionOfRoleId -> roleRepository.findAllById(
             uncachedCollectionOfRoleId)
           .stream()
-          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
           .collect(
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
@@ -216,7 +216,7 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -225,7 +225,7 @@ public class AccountConvertor {
       .filter(CollectionUtils::isNotEmpty).map(
         uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
           .stream()
-          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
           .collect(
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
@@ -258,8 +258,8 @@ public class AccountConvertor {
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       accountNotNull.setSystemSettings(
         accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-          .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-            accountSystemSettingsMongodbDo).stream())
+          .flatMap(accountSystemSettingsMongodbPO -> this.toAccountSystemSettings(
+            accountSystemSettingsMongodbPO).stream())
           .collect(Collectors.toList()));
       setDigitalPreference(accountNotNull);
       return accountNotNull;
@@ -274,8 +274,8 @@ public class AccountConvertor {
         setRolesWithIds(account, getRoleIds(account.getId()));
         account.setSystemSettings(
           accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
-            .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-              accountSystemSettingsMongodbDo).stream())
+            .flatMap(accountSystemSettingsMongodbPO -> this.toAccountSystemSettings(
+              accountSystemSettingsMongodbPO).stream())
             .collect(Collectors.toList()));
         setDigitalPreference(account);
         return account;
@@ -372,9 +372,9 @@ public class AccountConvertor {
     return Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountUpdateRoleCmdNotNull -> {
       Optional.ofNullable(accountUpdateRoleCmdNotNull.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-      Optional<AccountPO> accountDoOptional = accountRepository.findById(
+      Optional<AccountPO> accountPOOptional = accountRepository.findById(
         accountUpdateRoleCmdNotNull.getId());
-      AccountPO accountPO = accountDoOptional.orElseThrow(
+      AccountPO accountPO = accountPOOptional.orElseThrow(
         () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountPO).map(account -> {
         Optional.ofNullable(accountUpdateRoleCmdNotNull.getRoleCodes())
@@ -457,17 +457,17 @@ public class AccountConvertor {
   public Optional<AccountSystemSettingsMongodbPO> resetAccountSystemSettingMongodbPO(
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
     return Optional.ofNullable(accountSystemSettingsMongodbPO)
-      .map(accountSystemSettingsMongodbDoTarget -> {
+      .map(systemSettingsMongodbPO -> {
         // id，userId,profile,name,enabled,version属性不重置
         AccountMapper.INSTANCE.toAccountSystemSettingMongodbPO(
-          new AccountSystemSettingsMongodbPO(accountSystemSettingsMongodbDoTarget.getId(),
-            accountSystemSettingsMongodbDoTarget.getUserId(),
-            accountSystemSettingsMongodbDoTarget.getProfile(),
-            accountSystemSettingsMongodbDoTarget.getName(),
-            accountSystemSettingsMongodbDoTarget.getEnabled(),
-            accountSystemSettingsMongodbDoTarget.getVersion()),
-          accountSystemSettingsMongodbDoTarget);
-        return accountSystemSettingsMongodbDoTarget;
+          new AccountSystemSettingsMongodbPO(systemSettingsMongodbPO.getId(),
+            systemSettingsMongodbPO.getUserId(),
+            systemSettingsMongodbPO.getProfile(),
+            systemSettingsMongodbPO.getName(),
+            systemSettingsMongodbPO.getEnabled(),
+            systemSettingsMongodbPO.getVersion()),
+          systemSettingsMongodbPO);
+        return systemSettingsMongodbPO;
       });
   }
 
@@ -535,21 +535,21 @@ public class AccountConvertor {
       .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
         .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
           .map(roles -> roles.stream().map(role -> {
-            AccountRoleCurrentLoginQueryGrpcDTO accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
+            AccountRoleCurrentLoginQueryGrpcDTO accountRoleCurrentLoginQueryGrpcDTO = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
               role);
-            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
+            return accountRoleCurrentLoginQueryGrpcDTO.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(
-                accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
+                accountRolePermissionCurrentLoginQueryDTOS -> accountRolePermissionCurrentLoginQueryDTOS.stream()
                   .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginDTO.getAddresses())
-          .map(accountAddressCurrentLoginQueryCos -> accountAddressCurrentLoginQueryCos.stream()
+          .map(accountAddressCurrentLoginQueryDTOS -> accountAddressCurrentLoginQueryDTOS.stream()
             .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
             .collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginDTO.getSystemSettings())
           .map(
-            accountSystemSettingsCurrentLoginQueryCos -> accountSystemSettingsCurrentLoginQueryCos.stream()
+            accountSystemSettingsCurrentLoginQueryDTOS -> accountSystemSettingsCurrentLoginQueryDTOS.stream()
               .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
   }
