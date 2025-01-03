@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,7 +142,7 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 地址
    */
-  private List<AccountAddressRedisDo> addresses;
+  private List<AccountAddressRedisPO> addresses;
 
   /**
    * 存活时间
@@ -152,12 +152,12 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 
   @Data
-  public static class AccountAddressRedisDo {
+  public static class AccountAddressRedisPO {
 
     /**
      * 唯一主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 账户ID

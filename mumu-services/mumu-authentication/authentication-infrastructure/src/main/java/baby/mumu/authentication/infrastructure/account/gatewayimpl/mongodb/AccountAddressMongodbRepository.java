@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.database;
+package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * 账户地址
@@ -26,10 +25,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressPO, Long>,
-  JpaSpecificationExecutor<AccountAddressPO> {
+public interface AccountAddressMongodbRepository extends
+  MongoRepository<AccountAddressMongodbPO, String> {
 
   void deleteByUserId(Long userId);
 
-  List<AccountAddressPO> findByUserId(Long userId);
+  List<AccountAddressMongodbPO> findByUserId(Long userId);
 }

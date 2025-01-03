@@ -21,12 +21,12 @@ import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountAddressMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
@@ -88,7 +88,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressRepository accountAddressRepository;
+  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
   private final JobScheduler jobScheduler;
   private final AccountRoleRepository accountRoleRepository;
   private final AccountRedisRepository accountRedisRepository;
@@ -104,7 +104,7 @@ public class AccountGatewayImpl implements AccountGateway {
     OperationLogGrpcService operationLogGrpcService,
     ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
+    AccountAddressMongodbRepository accountAddressMongodbRepository, JobScheduler jobScheduler,
     AccountRoleRepository accountRoleRepository,
     AccountRedisRepository accountRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
@@ -118,7 +118,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressRepository = accountAddressRepository;
+    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
     this.jobScheduler = jobScheduler;
     this.accountRoleRepository = accountRoleRepository;
     this.accountRedisRepository = accountRedisRepository;
@@ -155,7 +155,7 @@ public class AccountGatewayImpl implements AccountGateway {
               .stream())
             .collect(
               Collectors.toList())).filter(CollectionUtils::isNotEmpty)
-        .ifPresent(accountAddressRepository::persistAll);
+        .ifPresent(accountAddressMongodbRepository::saveAll);
       accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
       accountRedisRepository.deleteById(account.getId());
       accountRoleRedisRepository.deleteById(account.getId());
@@ -220,11 +220,12 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresent(accountPO -> {
           Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
             .ifPresent(accountAddresses -> {
-              List<AccountAddressPO> accountAddressPOS = accountAddresses.stream().flatMap(
+              List<AccountAddressMongodbPO> accountAddressMongodbPOS = accountAddresses.stream()
+                .flatMap(
                   accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
                     .stream())
                 .collect(Collectors.toList());
-              accountAddressRepository.mergeAll(accountAddressPOS);
+              accountAddressMongodbRepository.saveAll(accountAddressMongodbPOS);
             });
           accountRepository.merge(accountPO);
           accountRedisRepository.deleteById(accountId);
@@ -323,7 +324,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteCurrentAccount() {
     SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
       accountRepository.deleteById(accountId);
-      accountAddressRepository.deleteByUserId(accountId);
+      accountAddressMongodbRepository.deleteByUserId(accountId);
       passwordTokenRepository.deleteById(accountId);
       accountRoleRepository.deleteByAccountId(accountId);
       accountRedisRepository.deleteById(accountId);
@@ -411,7 +412,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);
-      accountAddressRepository.deleteByUserId(accountIdNonNull);
+      accountAddressMongodbRepository.deleteByUserId(accountIdNonNull);
       accountRoleRepository.deleteByAccountId(accountIdNonNull);
       accountRedisRepository.deleteById(accountIdNonNull);
       accountRoleRedisRepository.deleteById(accountIdNonNull);
@@ -444,7 +445,7 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresent(
           accountAddressPO -> accountRepository.findById(accountId).ifPresent(accountPO -> {
             accountAddressPO.setUserId(accountId);
-            accountAddressRepository.persist(accountAddressPO);
+            accountAddressMongodbRepository.save(accountAddressPO);
             accountRedisRepository.deleteById(accountId);
             accountRoleRedisRepository.deleteById(accountId);
           })));

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaMongodbBasisDefaultPersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
@@ -60,7 +59,6 @@ public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersis
   }
 
   @Id
-  @SnowflakeIdGenerator
   @NotBlank
   private String id;
 

@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcDTO;
 import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
 import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
@@ -33,13 +33,13 @@ import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountAddressMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import baby.mumu.authentication.infrastructure.account.units.AccountDigitalPreferenceUnit;
@@ -87,7 +87,7 @@ public class AccountConvertor {
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressRepository accountAddressRepository;
+  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
   private final AccountRoleRepository accountRoleRepository;
   private final RoleRedisRepository roleRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
@@ -98,7 +98,7 @@ public class AccountConvertor {
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
     RoleRepository roleRepository,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressRepository accountAddressRepository,
+    AccountAddressMongodbRepository accountAddressMongodbRepository,
     AccountRoleRepository accountRoleRepository,
     RoleRedisRepository roleRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
@@ -108,7 +108,7 @@ public class AccountConvertor {
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressRepository = accountAddressRepository;
+    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
     this.accountRoleRepository = accountRoleRepository;
     this.roleRedisRepository = roleRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
@@ -254,7 +254,7 @@ public class AccountConvertor {
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
       accountNotNull.setAddresses(
-        accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+        accountAddressMongodbRepository.findByUserId(accountDataObject.getId()).stream().map(
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       accountNotNull.setSystemSettings(
         accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
@@ -409,7 +409,7 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AccountAddressPO> toAccountAddressPO(
+  public Optional<AccountAddressMongodbPO> toAccountAddressPO(
     AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressPO);
   }
@@ -535,7 +535,7 @@ public class AccountConvertor {
       .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
         .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
           .map(roles -> roles.stream().map(role -> {
-            AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
+            AccountRoleCurrentLoginQueryGrpcDTO accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
               role);
             return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(

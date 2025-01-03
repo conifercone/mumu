@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,19 +82,19 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
    */
   private DigitalPreferenceEnum digitalPreference;
 
-  private List<AccountRoleCurrentLoginQueryCo> roles;
+  private List<AccountRoleCurrentLoginQueryDTO> roles;
 
-  private List<AccountAddressCurrentLoginQueryCo> addresses;
+  private List<AccountAddressCurrentLoginQueryDTO> addresses;
 
-  private List<AccountSystemSettingsCurrentLoginQueryCo> systemSettings;
+  private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
 
   @Data
-  public static class AccountAddressCurrentLoginQueryCo {
+  public static class AccountAddressCurrentLoginQueryDTO {
 
     /**
      * 唯一主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -128,7 +128,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountRoleCurrentLoginQueryCo {
+  public static class AccountRoleCurrentLoginQueryDTO {
 
     /**
      * 角色id
@@ -150,11 +150,11 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
     /**
      * 角色权限
      */
-    private List<AccountRolePermissionCurrentLoginQueryCo> permissions;
+    private List<AccountRolePermissionCurrentLoginQueryDTO> permissions;
   }
 
   @Data
-  public static class AccountRolePermissionCurrentLoginQueryCo {
+  public static class AccountRolePermissionCurrentLoginQueryDTO {
 
     /**
      * 权限id
@@ -175,7 +175,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountSystemSettingsCurrentLoginQueryCo {
+  public static class AccountSystemSettingsCurrentLoginQueryDTO {
 
     /**
      * 唯一主键

@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
+package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import baby.mumu.basis.po.jpa.JpaMongodbBasisDefaultPersistentObject;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 账户地址存储对象
@@ -36,14 +36,13 @@ import org.hibernate.annotations.DynamicInsert;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-@Getter
-@Setter
-@Entity
-@Table(name = "user_addresses")
-@DynamicInsert
+@Data
+@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Document("account-addresses")
 @Metamodel
-@RequiredArgsConstructor
-public class AccountAddressPO extends JpaBasisDefaultPersistentObject {
+public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = -8437677767812120031L;
@@ -52,55 +51,51 @@ public class AccountAddressPO extends JpaBasisDefaultPersistentObject {
    * 唯一主键
    */
   @Id
-  @SnowflakeIdGenerator
-  @Column(name = "id", nullable = false)
-  private Long id;
+  @NotBlank
+  private String id;
 
   /**
    * 账户ID
    */
-  @ColumnDefault("0")
-  @Column(name = "user_id", nullable = false)
+  @NotNull
+  @Indexed(background = true)
   private Long userId;
 
   /**
    * 街道地址，包含门牌号和街道信息
    */
   @Size(max = 255)
-  @ColumnDefault("''")
-  @Column(name = "street", nullable = false)
+  @Indexed(background = true)
   private String street;
 
   /**
    * 城市信息
    */
   @Size(max = 100)
-  @ColumnDefault("''")
-  @Column(name = "city", nullable = false, length = 100)
+  @Indexed(background = true)
   private String city;
 
   /**
    * 州或省的信息
    */
   @Size(max = 100)
-  @ColumnDefault("''")
-  @Column(name = "state", nullable = false, length = 100)
+  @Indexed(background = true)
   private String state;
 
   /**
    * 邮政编码
    */
   @Size(max = 20)
-  @ColumnDefault("''")
-  @Column(name = "postal_code", nullable = false, length = 20)
+  @Indexed(background = true)
   private String postalCode;
 
   /**
    * 国家信息
    */
   @Size(max = 100)
-  @ColumnDefault("''")
-  @Column(name = "country", nullable = false, length = 100)
+  @Indexed(background = true)
   private String country;
 
+  @Version
+  private Long version;
 }
