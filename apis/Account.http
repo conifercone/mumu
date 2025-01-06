@@ -34,14 +34,14 @@ Accept: */*
       "street": "历城区",
       "city": "济南市",
       "state": "山东省",
-      "postalCode": "250101",
+      "postalCode": "250000",
       "country": "中国"
     },
     {
       "street": "历下区",
       "city": "济南市",
       "state": "山东省",
-      "postalCode": "250101",
+      "postalCode": "250000",
       "country": "中国"
     }
   ],
@@ -131,7 +131,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   "state": "山东省",
   "city": "济南市",
   "street": "历城区",
-  "postalCode": "250101",
+  "postalCode": "250000",
   "location": {
     "x": 117.18689,
     "y": 36.65065

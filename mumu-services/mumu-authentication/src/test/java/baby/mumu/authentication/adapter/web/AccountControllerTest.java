@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ public class AccountControllerTest {
     accountAddressRegisterCmd.setStreet("历城区");
     accountAddressRegisterCmd.setCity("济南市");
     accountAddressRegisterCmd.setState("山东省");
-    accountAddressRegisterCmd.setPostalCode("250101");
+    accountAddressRegisterCmd.setPostalCode("250000");
     accountAddressRegisterCmd.setCountry("中国");
     accountRegisterCmd.setAddresses(Collections.singletonList(accountAddressRegisterCmd));
     mockMvc.perform(MockMvcRequestBuilders
