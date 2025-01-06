@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AccountNearbyAccountsDTO extends BaseDataTransferObject {
+public class AccountNearbyDTO extends BaseDataTransferObject {
 
   @Serial
   private static final long serialVersionUID = -5128372525687244372L;

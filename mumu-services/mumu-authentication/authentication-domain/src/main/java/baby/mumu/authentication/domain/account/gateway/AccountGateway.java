@@ -209,7 +209,7 @@ public interface AccountGateway {
    * @param radiusInMeters 半径（米）
    * @return 附近的账户
    */
-  List<Account> nearbyAccounts(double radiusInMeters);
+  List<Account> nearby(double radiusInMeters);
 
   /**
    * 设置默认地址

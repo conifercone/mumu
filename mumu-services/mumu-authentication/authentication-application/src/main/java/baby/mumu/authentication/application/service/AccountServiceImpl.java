@@ -27,7 +27,7 @@ import baby.mumu.authentication.application.account.executor.AccountFindAllCmdEx
 import baby.mumu.authentication.application.account.executor.AccountFindAllSliceCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
-import baby.mumu.authentication.application.account.executor.AccountNearbyAccountsCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountNearbyCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOfflineCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
@@ -56,7 +56,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
-import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
@@ -108,7 +108,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountFindAllCmdExe accountFindAllCmdExe;
   private final AccountFindAllSliceCmdExe accountFindAllSliceCmdExe;
   private final AccountConvertor accountConvertor;
-  private final AccountNearbyAccountsCmdExe accountNearbyAccountsCmdExe;
+  private final AccountNearbyCmdExe accountNearbyCmdExe;
   private final AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe;
 
   @Autowired
@@ -131,7 +131,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
     AccountFindAllCmdExe accountFindAllCmdExe,
     AccountFindAllSliceCmdExe accountFindAllSliceCmdExe, AccountConvertor accountConvertor,
-    AccountNearbyAccountsCmdExe accountNearbyAccountsCmdExe,
+    AccountNearbyCmdExe accountNearbyCmdExe,
     AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
@@ -155,7 +155,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountFindAllCmdExe = accountFindAllCmdExe;
     this.accountFindAllSliceCmdExe = accountFindAllSliceCmdExe;
     this.accountConvertor = accountConvertor;
-    this.accountNearbyAccountsCmdExe = accountNearbyAccountsCmdExe;
+    this.accountNearbyCmdExe = accountNearbyCmdExe;
     this.accountSetDefaultAddressCmdExe = accountSetDefaultAddressCmdExe;
   }
 
@@ -307,8 +307,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public List<AccountNearbyAccountsDTO> nearbyAccounts(double radiusInMeters) {
-    return accountNearbyAccountsCmdExe.execute(radiusInMeters);
+  public List<AccountNearbyDTO> nearby(double radiusInMeters) {
+    return accountNearbyCmdExe.execute(radiusInMeters);
   }
 
   @Override

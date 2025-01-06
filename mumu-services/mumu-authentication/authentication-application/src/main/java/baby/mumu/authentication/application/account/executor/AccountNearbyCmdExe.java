@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
@@ -31,22 +31,22 @@ import org.springframework.stereotype.Component;
  * @since 2.6.0
  */
 @Component
-@Observed(name = "AccountNearbyAccountsCmdExe")
-public class AccountNearbyAccountsCmdExe {
+@Observed(name = "AccountNearbyCmdExe")
+public class AccountNearbyCmdExe {
 
   private final AccountGateway accountGateway;
   private final AccountConvertor accountConvertor;
 
   @Autowired
-  public AccountNearbyAccountsCmdExe(AccountGateway accountGateway,
+  public AccountNearbyCmdExe(AccountGateway accountGateway,
     AccountConvertor accountConvertor) {
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
 
-  public List<AccountNearbyAccountsDTO> execute(double radiusInMeters) {
-    return accountGateway.nearbyAccounts(radiusInMeters).stream()
-      .flatMap(account -> accountConvertor.toAccountNearbyAccountsDTO(account).stream()).collect(
+  public List<AccountNearbyDTO> execute(double radiusInMeters) {
+    return accountGateway.nearby(radiusInMeters).stream()
+      .flatMap(account -> accountConvertor.toAccountNearbyDTO(account).stream()).collect(
         Collectors.toList());
   }
 }

@@ -30,7 +30,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
-import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -196,7 +196,7 @@ public interface AccountService {
    * @param radiusInMeters 半径（米）
    * @return 附近的账户
    */
-  List<AccountNearbyAccountsDTO> nearbyAccounts(double radiusInMeters);
+  List<AccountNearbyDTO> nearby(double radiusInMeters);
 
   /**
    * 设置默认地址

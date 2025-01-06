@@ -31,7 +31,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
-import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -281,13 +281,13 @@ public class AccountController {
   }
 
   @Operation(summary = "获取当前登录账户指定半径内所有附近的账户")
-  @GetMapping("/nearbyAccounts/{radiusInMeters}")
+  @GetMapping("/nearby/{radiusInMeters}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
-  public ResponseWrapper<List<AccountNearbyAccountsDTO>> nearbyAccounts(
+  public ResponseWrapper<List<AccountNearbyDTO>> nearby(
     @PathVariable(value = "radiusInMeters") double radiusInMeters) {
-    return ResponseWrapper.success(accountService.nearbyAccounts(radiusInMeters));
+    return ResponseWrapper.success(accountService.nearby(radiusInMeters));
   }
 
   @Operation(summary = "当前账户设置默认地址")

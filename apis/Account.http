@@ -172,7 +172,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/account/nearbyAccounts/1000
+GET {{authentication-service-url}}/account/nearby/1000
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

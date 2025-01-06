@@ -603,7 +603,7 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public List<Account> nearbyAccounts(double radiusInMeters) {
+  public List<Account> nearby(double radiusInMeters) {
     return SecurityContextUtil.getLoginAccountId().flatMap(accountId ->
         accountAddressMongodbRepository.findByUserId(accountId).stream()
           .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
