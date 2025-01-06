@@ -131,6 +131,11 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      * 定位
      */
     private Point location;
+
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
   }
 
   @Data

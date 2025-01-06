@@ -26,6 +26,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户分页查询数据传输对象（不查询总数）
@@ -173,6 +174,13 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
      */
     @Size(max = 100)
     private String country;
+
+    private Point location;
+
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
   }
 
   @Data
