@@ -48,6 +48,8 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.Ac
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
+import baby.mumu.basis.mappers.GeoMapper;
+import baby.mumu.basis.mappers.GroGrpcMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -64,7 +66,8 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper {
+public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper, GeoMapper,
+  GroGrpcMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 

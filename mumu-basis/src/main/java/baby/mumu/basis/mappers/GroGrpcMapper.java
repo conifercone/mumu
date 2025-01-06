@@ -15,19 +15,26 @@
  */
 package baby.mumu.basis.mappers;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import com.google.type.LatLng;
+import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 /**
- * base mapper
+ * grpc地理坐标相关转换
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.6.0
  */
-public interface BaseMapper {
+public interface GroGrpcMapper {
 
-  default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
-    return offsetDateTime != null ? offsetDateTime.toLocalDateTime() : null;
+  @API(status = Status.STABLE, since = "2.6.0")
+  default LatLng map(GeoJsonPoint geoJsonPoint) {
+    return Optional.ofNullable(geoJsonPoint).map(
+      geoJsonPointNotNull -> LatLng.newBuilder().setLongitude(geoJsonPointNotNull.getX())
+        .setLatitude(geoJsonPointNotNull.getY())
+        .build()).orElse(null);
   }
 
 }

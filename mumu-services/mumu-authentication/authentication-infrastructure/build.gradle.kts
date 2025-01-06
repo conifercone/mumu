@@ -7,6 +7,7 @@ dependencies {
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.protobuf.java)
+    implementation(libs.grpc.protobuf)
     implementation(libs.spring.security.core)
     implementation(libs.spring.security.crypto)
     implementation(libs.jakarta.validation.api)

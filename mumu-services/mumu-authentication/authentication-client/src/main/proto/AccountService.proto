@@ -2,6 +2,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/latlng.proto";
 
 option java_multiple_files = true;
 option java_package = "baby.mumu.authentication.client.api.grpc";
@@ -44,6 +45,8 @@ message AccountAddressCurrentLoginQueryGrpcDTO {
   google.protobuf.StringValue state = 4;
   google.protobuf.StringValue postalCode = 5;
   google.protobuf.StringValue country = 6;
+  google.type.LatLng location = 7;
+  bool defaultAddress = 8;
 }
 
 message AccountSystemSettingsCurrentLoginQueryGrpcDTO {

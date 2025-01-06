@@ -15,19 +15,32 @@
  */
 package baby.mumu.basis.mappers;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 /**
- * base mapper
+ * 地理坐标相关转换
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.6.0
  */
-public interface BaseMapper {
+public interface GeoMapper {
 
-  default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
-    return offsetDateTime != null ? offsetDateTime.toLocalDateTime() : null;
+  @API(status = Status.STABLE, since = "2.6.0")
+  default GeoJsonPoint toGeoJsonPoint(Point point) {
+    if (point == null) {
+      return null;
+    }
+    return new GeoJsonPoint(point);
   }
 
+  @API(status = Status.STABLE, since = "2.6.0")
+  default Point toPoint(GeoJsonPoint geoJsonPoint) {
+    if (geoJsonPoint == null) {
+      return null;
+    }
+    return new Point(geoJsonPoint);
+  }
 }
