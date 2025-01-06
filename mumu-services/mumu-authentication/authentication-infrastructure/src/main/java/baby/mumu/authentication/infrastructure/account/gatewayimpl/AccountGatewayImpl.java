@@ -500,7 +500,10 @@ public class AccountGatewayImpl implements AccountGateway {
       .filter(accountAddressMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
         .equals(accountAddressMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountAddressPO(
-        accountAddress)).ifPresent(accountAddressMongodbRepository::save);
+        accountAddress)).ifPresent(accountAddressMongodbPO -> {
+        accountAddressMongodbRepository.save(accountAddressMongodbPO);
+        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+      });
   }
 
   /**
