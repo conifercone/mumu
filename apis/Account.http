@@ -71,11 +71,41 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
-Authorization: Bearer {{$auth.token("admin")}}
+Authorization: Bearer {{$auth.token("test")}}
 
 {
-  "id": 1,
-  "bio": "不想把这个世界交给无趣的人"
+  "id": 2,
+  "bio": "测试用户",
+  "nickName": "测试用户"
+}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 根据ID修改账户地址
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/modifyAddressByAddressId
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("test")}}
+
+{
+  "id": "677b7392c78b097ac069201a",
+  "street": "历城区港沟街道"
 }
 
 > {%
@@ -93,7 +123,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/account/findAllSlice?current=1&pageSize=10&username=admin
+GET {{authentication-service-url}}/account/findAllSlice?current=1&pageSize=10
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -292,7 +322,7 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "id": "601146283917317",
+  "id": "67779d6313e0ea034817432a",
   "name": "默认系统设置"
 }
 

@@ -22,6 +22,7 @@ import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
@@ -171,6 +172,16 @@ public class AccountController {
   public void modifySystemSettingsBySettingsId(
     @RequestBody @Valid AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
+  }
+
+  @Operation(summary = "通过地址id修改账户地址")
+  @PutMapping("/modifyAddressByAddressId")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void modifyAddressByAddressId(
+    @RequestBody @Valid AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    accountService.modifyAddressByAddressId(accountModifyAddressByAddressIdCmd);
   }
 
   @Operation(summary = "添加系统设置")

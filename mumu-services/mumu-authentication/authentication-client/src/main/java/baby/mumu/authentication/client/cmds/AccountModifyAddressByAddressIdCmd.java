@@ -13,47 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.domain.account;
+package baby.mumu.authentication.client.cmds;
 
-import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.domain.BasisDomainModel;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
-import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户地址领域模型
+ * 更新账户地址指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.0.0
+ * @since 2.6.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@RequiredArgsConstructor
-@ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
-@Metamodel
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountAddress extends BasisDomainModel {
-
-  @Serial
-  private static final long serialVersionUID = 1106704309433693382L;
+public class AccountModifyAddressByAddressIdCmd {
 
   /**
    * 唯一主键
    */
   private String id;
-
-  /**
-   * 账户ID
-   */
-  private Long userId;
 
   /**
    * 街道地址，包含门牌号和街道信息
@@ -89,12 +67,4 @@ public class AccountAddress extends BasisDomainModel {
    * 定位
    */
   private Point location;
-
-  /**
-   * 是否为默认地址
-   */
-  private boolean defaultAddress;
-
-  private Long version;
 }
-

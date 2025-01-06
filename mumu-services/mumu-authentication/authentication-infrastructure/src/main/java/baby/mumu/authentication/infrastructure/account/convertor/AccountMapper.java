@@ -24,11 +24,11 @@ import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
 import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
-import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd.AccountAddressUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountAddressCurrentLoginQueryDTO;
@@ -117,8 +117,10 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressRegisterCmd accountAddressRegisterCmd);
 
-  @API(status = Status.STABLE, since = "2.1.0")
-  AccountAddress toAccountAddress(AccountAddressUpdateByIdCmd accountAddressUpdateByIdCmd);
+  @API(status = Status.STABLE, since = "2.6.0")
+  void toAccountAddress(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd,
+    @MappingTarget AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd, @MappingTarget Account account);

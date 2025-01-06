@@ -26,6 +26,7 @@ import baby.mumu.authentication.application.account.executor.AccountDisableCmdEx
 import baby.mumu.authentication.application.account.executor.AccountFindAllCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountFindAllSliceCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountModifyAddressByAddressIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountNearbyCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOfflineCmdExe;
@@ -47,6 +48,7 @@ import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
@@ -110,6 +112,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountConvertor accountConvertor;
   private final AccountNearbyCmdExe accountNearbyCmdExe;
   private final AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe;
+  private final AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -132,7 +135,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     AccountFindAllCmdExe accountFindAllCmdExe,
     AccountFindAllSliceCmdExe accountFindAllSliceCmdExe, AccountConvertor accountConvertor,
     AccountNearbyCmdExe accountNearbyCmdExe,
-    AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe) {
+    AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe,
+    AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -157,6 +161,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountConvertor = accountConvertor;
     this.accountNearbyCmdExe = accountNearbyCmdExe;
     this.accountSetDefaultAddressCmdExe = accountSetDefaultAddressCmdExe;
+    this.accountModifyAddressByAddressIdCmdExe = accountModifyAddressByAddressIdCmdExe;
   }
 
   @Override
@@ -315,5 +320,12 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultAddress(String addressId) {
     accountSetDefaultAddressCmdExe.execute(addressId);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void modifyAddressByAddressId(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    accountModifyAddressByAddressIdCmdExe.execute(accountModifyAddressByAddressIdCmd);
   }
 }

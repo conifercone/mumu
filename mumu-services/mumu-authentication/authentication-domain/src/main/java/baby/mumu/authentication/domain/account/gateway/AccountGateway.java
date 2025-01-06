@@ -165,6 +165,11 @@ public interface AccountGateway {
   void modifySystemSettings(AccountSystemSettings accountSystemSettings);
 
   /**
+   * 修改账户地址
+   */
+  void modifyAddress(AccountAddress accountAddress);
+
+  /**
    * 账户添加系统设置
    *
    * @param accountSystemSettings 账户系统设置

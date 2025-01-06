@@ -21,6 +21,7 @@ import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
@@ -204,4 +205,10 @@ public interface AccountService {
    * @param addressId 地址ID
    */
   void setDefaultAddress(String addressId);
+
+  /**
+   * 修改账户地址
+   */
+  void modifyAddressByAddressId(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd);
 }

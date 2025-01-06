@@ -21,6 +21,7 @@ import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
 import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
@@ -429,6 +430,13 @@ public class AccountConvertor {
       .map(AccountMapper.INSTANCE::toAccountSystemSettings);
   }
 
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountAddress> toAccountAddress(
+    AccountAddressMongodbPO accountAddressMongodbPO) {
+    return Optional.ofNullable(accountAddressMongodbPO)
+      .map(AccountMapper.INSTANCE::toAccountAddress);
+  }
+
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
@@ -559,5 +567,23 @@ public class AccountConvertor {
   public Optional<AccountNearbyDTO> toAccountNearbyDTO(
     Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountNearbyDTO);
+  }
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountAddress> toAccountAddress(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    return Optional.ofNullable(accountModifyAddressByAddressIdCmd)
+      .flatMap(modifyAddressByAddressIdCmd -> {
+        Optional.ofNullable(modifyAddressByAddressIdCmd.getId())
+          .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        return accountAddressMongodbRepository.findById(
+            modifyAddressByAddressIdCmd.getId())
+          .flatMap(this::toAccountAddress).flatMap(accountAddress -> {
+            AccountMapper.INSTANCE.toAccountAddress(
+              modifyAddressByAddressIdCmd,
+              accountAddress);
+            return Optional.of(accountAddress);
+          });
+      });
   }
 }

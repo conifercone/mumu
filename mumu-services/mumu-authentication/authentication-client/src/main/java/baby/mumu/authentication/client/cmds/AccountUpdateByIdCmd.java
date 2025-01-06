@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,7 @@ import baby.mumu.extension.annotations.NotBlankOrNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -70,53 +68,4 @@ public class AccountUpdateByIdCmd {
 
   @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
   private String nickName;
-
-  @Schema(description = "地址", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<AccountAddressUpdateByIdCmd> addresses;
-
-  @Data
-  @Schema(description = "地址", requiredMode = RequiredMode.NOT_REQUIRED)
-  public static class AccountAddressUpdateByIdCmd {
-
-    /**
-     * 唯一主键
-     */
-    @Schema(description = "地址ID", requiredMode = RequiredMode.NOT_REQUIRED)
-    private Long id;
-
-    /**
-     * 街道地址，包含门牌号和街道信息
-     */
-    @Schema(description = "街道地址，包含门牌号和街道信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Size(max = 255)
-    private String street;
-
-    /**
-     * 城市信息
-     */
-    @Schema(description = "城市信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Size(max = 100)
-    private String city;
-
-    /**
-     * 州或省的信息
-     */
-    @Schema(description = "州或省的信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Size(max = 100)
-    private String state;
-
-    /**
-     * 邮政编码
-     */
-    @Schema(description = "邮政编码", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Size(max = 20)
-    private String postalCode;
-
-    /**
-     * 国家信息
-     */
-    @Schema(description = "国家信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Size(max = 100)
-    private String country;
-  }
 }

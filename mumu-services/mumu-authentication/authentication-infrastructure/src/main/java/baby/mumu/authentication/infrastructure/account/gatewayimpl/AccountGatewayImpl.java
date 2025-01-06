@@ -218,15 +218,6 @@ public class AccountGatewayImpl implements AccountGateway {
       .filter(res -> Objects.equals(res, account.getId()))
       .ifPresentOrElse((accountId) -> accountConvertor.toPO(account)
         .ifPresent(accountPO -> {
-          Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
-            .ifPresent(accountAddresses -> {
-              List<AccountAddressMongodbPO> accountAddressMongodbPOS = accountAddresses.stream()
-                .flatMap(
-                  accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
-                    .stream())
-                .collect(Collectors.toList());
-              accountAddressMongodbRepository.saveAll(accountAddressMongodbPOS);
-            });
           accountRepository.merge(accountPO);
           accountRedisRepository.deleteById(accountId);
           accountRoleRedisRepository.deleteById(accountId);
@@ -495,6 +486,21 @@ public class AccountGatewayImpl implements AccountGateway {
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountSystemSettingMongodbPO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void modifyAddress(AccountAddress accountAddress) {
+    SecurityContextUtil.getLoginAccountId()
+      .flatMap(accountId -> accountAddressMongodbRepository.findById(
+        accountAddress.getId()))
+      .filter(accountAddressMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
+        .equals(accountAddressMongodbPO.getUserId()))
+      .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountAddressPO(
+        accountAddress)).ifPresent(accountAddressMongodbRepository::save);
   }
 
   /**
