@@ -39,6 +39,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -286,7 +288,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public ResponseWrapper<List<AccountNearbyDTO>> nearby(
-    @PathVariable(value = "radiusInMeters") double radiusInMeters) {
+    @PathVariable(value = "radiusInMeters") @Min(1) double radiusInMeters) {
     return ResponseWrapper.success(accountService.nearby(radiusInMeters));
   }
 
@@ -296,7 +298,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void setDefaultAddress(
-    @PathVariable(value = "addressId") String addressId) {
+    @PathVariable(value = "addressId") @NotBlank String addressId) {
     accountService.setDefaultAddress(addressId);
   }
 }
