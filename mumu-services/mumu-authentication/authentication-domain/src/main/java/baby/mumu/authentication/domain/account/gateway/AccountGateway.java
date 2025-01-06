@@ -204,7 +204,7 @@ public interface AccountGateway {
   Slice<Account> findAllSlice(Account account, int current, int pageSize);
 
   /**
-   * 获取当前登录账户指定半径内所有附近的账户
+   * 附近的账户
    *
    * @param radiusInMeters 半径（米）
    * @return 附近的账户
