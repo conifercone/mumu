@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -38,6 +39,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,5 +278,25 @@ public class AccountController {
   public Slice<AccountFindAllSliceDTO> findAllSlice(
     @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
+  }
+
+  @Operation(summary = "获取当前登录账户指定半径内所有附近的账户")
+  @GetMapping("/nearbyAccounts/{radiusInMeters}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public ResponseWrapper<List<AccountNearbyAccountsDTO>> nearbyAccounts(
+    @PathVariable(value = "radiusInMeters") double radiusInMeters) {
+    return ResponseWrapper.success(accountService.nearbyAccounts(radiusInMeters));
+  }
+
+  @Operation(summary = "当前账户设置默认地址")
+  @PutMapping("/setDefaultAddress/{addressId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void setDefaultAddress(
+    @PathVariable(value = "addressId") String addressId) {
+    accountService.setDefaultAddress(addressId);
   }
 }

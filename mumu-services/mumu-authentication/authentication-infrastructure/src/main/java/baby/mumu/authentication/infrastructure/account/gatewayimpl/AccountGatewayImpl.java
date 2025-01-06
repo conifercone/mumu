@@ -64,6 +64,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Point;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -597,5 +599,49 @@ public class AccountGatewayImpl implements AccountGateway {
     return new SliceImpl<>(accountPOS.getContent().stream()
       .flatMap(accountPO -> accountConvertor.toEntity(accountPO).stream())
       .toList(), pageRequest, accountPOS.hasNext());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public List<Account> nearbyAccounts(double radiusInMeters) {
+    return SecurityContextUtil.getLoginAccountId().flatMap(accountId ->
+        accountAddressMongodbRepository.findByUserId(accountId).stream()
+          .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
+      ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
+      .map(accountAddressMongodbPO -> {
+        Point center = new Point(accountAddressMongodbPO.getLocation().getX(),
+          accountAddressMongodbPO.getLocation().getY());
+        Circle circle = new Circle(center, radiusInMeters / 6378137);
+        List<AccountAddressMongodbPO> byLocationWithin = accountAddressMongodbRepository.findByLocationWithin(
+          circle);
+        return accountRepository.findAllById(byLocationWithin.stream().filter(
+            accountAddressMongodbPOProbablyTheCurrentUser -> !Objects.equals(
+              accountAddressMongodbPO.getUserId(),
+              accountAddressMongodbPOProbablyTheCurrentUser.getUserId())).collect(
+            Collectors.toMap(AccountAddressMongodbPO::getUserId, AccountAddressMongodbPO::getUserId,
+              (existing, replacement) -> existing)).values()).stream()
+          .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
+          .collect(Collectors.toList());
+      }).orElse(new ArrayList<>());
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void setDefaultAddress(String addressId) {
+    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(addressId))
+      .flatMap(accountId -> {
+          accountAddressMongodbRepository.saveAll(
+            accountAddressMongodbRepository.findByUserId(accountId).stream()
+              .filter(accountAddressMongodbPO -> !addressId.equals(
+                accountAddressMongodbPO.getId()))
+              .peek(accountAddressMongodbPO -> accountAddressMongodbPO.setDefaultAddress(false))
+              .toList());
+          return accountAddressMongodbRepository.findById(addressId)
+            .filter(accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId()));
+        }
+      ).ifPresent(accountAddressMongodbPO -> {
+        accountAddressMongodbPO.setDefaultAddress(true);
+        accountAddressMongodbRepository.save(accountAddressMongodbPO);
+      });
   }
 }

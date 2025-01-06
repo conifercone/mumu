@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -202,4 +202,19 @@ public interface AccountGateway {
    * @return 查询结果
    */
   Slice<Account> findAllSlice(Account account, int current, int pageSize);
+
+  /**
+   * 获取当前登录账户指定半径内所有附近的账户
+   *
+   * @param radiusInMeters 半径（米）
+   * @return 附近的账户
+   */
+  List<Account> nearbyAccounts(double radiusInMeters);
+
+  /**
+   * 设置默认地址
+   *
+   * @param addressId 地址ID
+   */
+  void setDefaultAddress(String addressId);
 }

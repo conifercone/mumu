@@ -28,6 +28,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -100,8 +102,14 @@ public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObj
   /**
    * 定位（WGS84坐标系）
    */
-  @Indexed(background = true)
+  @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
   private GeoJsonPoint location;
+
+  /**
+   * 是否为默认地址
+   */
+  @Indexed(background = true)
+  private boolean defaultAddress;
 
   @Version
   private Long version;

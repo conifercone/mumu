@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,9 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -187,4 +189,19 @@ public interface AccountService {
    * @return 查询结果
    */
   Slice<AccountFindAllSliceDTO> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd);
+
+  /**
+   * 获取当前登录账户指定半径内所有附近的账户
+   *
+   * @param radiusInMeters 半径（米）
+   * @return 附近的账户
+   */
+  List<AccountNearbyAccountsDTO> nearbyAccounts(double radiusInMeters);
+
+  /**
+   * 设置默认地址
+   *
+   * @param addressId 地址ID
+   */
+  void setDefaultAddress(String addressId);
 }

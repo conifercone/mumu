@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户注册指令
@@ -129,6 +130,12 @@ public class AccountRegisterCmd {
     @Size(max = 100)
     @Schema(description = "国家信息", requiredMode = RequiredMode.NOT_REQUIRED)
     private String country;
+
+    /**
+     * 定位
+     */
+    @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
+    private Point location;
   }
 
   @Data

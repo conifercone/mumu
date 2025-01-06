@@ -37,6 +37,7 @@ import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountRolePer
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountSystemSettingsCurrentLoginQueryDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
@@ -165,4 +166,7 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsCurrentLoginQueryGrpcDTO toAccountSystemSettingsCurrentLoginQueryGrpcDTO(
     AccountSystemSettingsCurrentLoginQueryDTO accountSystemSettingsCurrentLoginQueryDTO);
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  AccountNearbyAccountsDTO toAccountNearbyAccountsDTO(Account account);
 }

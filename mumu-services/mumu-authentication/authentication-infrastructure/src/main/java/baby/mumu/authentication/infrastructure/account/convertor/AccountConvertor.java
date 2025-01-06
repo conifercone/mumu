@@ -29,6 +29,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
@@ -552,5 +553,11 @@ public class AccountConvertor {
             accountSystemSettingsCurrentLoginQueryDTOS -> accountSystemSettingsCurrentLoginQueryDTOS.stream()
               .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
+  }
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountNearbyAccountsDTO> toAccountNearbyAccountsDTO(
+    Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountNearbyAccountsDTO);
   }
 }

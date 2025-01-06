@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import baby.mumu.authentication.application.account.executor.AccountFindAllCmdEx
 import baby.mumu.authentication.application.account.executor.AccountFindAllSliceCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountLogoutCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountModifySystemSettingsBySettingsIdCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountNearbyAccountsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOfflineCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountOnlineStatisticsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountPasswordVerifyCmdExe;
@@ -34,6 +35,7 @@ import baby.mumu.authentication.application.account.executor.AccountRecoverFromA
 import baby.mumu.authentication.application.account.executor.AccountRegisterCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountResetSystemSettingsBySettingsIdCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountSetDefaultAddressCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import baby.mumu.authentication.client.api.AccountService;
@@ -54,6 +56,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyAccountsDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.basis.annotations.RateLimiter;
@@ -63,7 +66,9 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
+import java.util.List;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -103,6 +108,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountFindAllCmdExe accountFindAllCmdExe;
   private final AccountFindAllSliceCmdExe accountFindAllSliceCmdExe;
   private final AccountConvertor accountConvertor;
+  private final AccountNearbyAccountsCmdExe accountNearbyAccountsCmdExe;
+  private final AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -123,7 +130,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     AccountAddSystemSettingsCmdExe accountAddSystemSettingsCmdExe,
     AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
     AccountFindAllCmdExe accountFindAllCmdExe,
-    AccountFindAllSliceCmdExe accountFindAllSliceCmdExe, AccountConvertor accountConvertor) {
+    AccountFindAllSliceCmdExe accountFindAllSliceCmdExe, AccountConvertor accountConvertor,
+    AccountNearbyAccountsCmdExe accountNearbyAccountsCmdExe,
+    AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -146,6 +155,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountFindAllCmdExe = accountFindAllCmdExe;
     this.accountFindAllSliceCmdExe = accountFindAllSliceCmdExe;
     this.accountConvertor = accountConvertor;
+    this.accountNearbyAccountsCmdExe = accountNearbyAccountsCmdExe;
+    this.accountSetDefaultAddressCmdExe = accountSetDefaultAddressCmdExe;
   }
 
   @Override
@@ -286,11 +297,23 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   @Transactional(rollbackFor = Exception.class)
   public void queryCurrentLoginAccount(Empty request,
-    StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
+    @NotNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
     AccountCurrentLoginDTO accountCurrentLoginDTO = accountCurrentLoginQueryCmdExe.execute();
     responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcDTO(accountCurrentLoginDTO)
       .orElse(AccountCurrentLoginGrpcDTO.getDefaultInstance()));
     responseObserver.onCompleted();
 
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public List<AccountNearbyAccountsDTO> nearbyAccounts(double radiusInMeters) {
+    return accountNearbyAccountsCmdExe.execute(radiusInMeters);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void setDefaultAddress(String addressId) {
+    accountSetDefaultAddressCmdExe.execute(addressId);
   }
 }
