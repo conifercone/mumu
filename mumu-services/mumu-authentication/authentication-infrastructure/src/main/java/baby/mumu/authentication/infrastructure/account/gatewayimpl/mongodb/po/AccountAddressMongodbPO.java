@@ -98,7 +98,7 @@ public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObj
   private String country;
 
   /**
-   * 定位
+   * 定位（WGS84坐标系）
    */
   @Indexed(background = true)
   private GeoJsonPoint location;
