@@ -649,4 +649,19 @@ public class AccountGatewayImpl implements AccountGateway {
         accountAddressMongodbRepository.save(accountAddressMongodbPO);
       });
   }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteAddress(String addressId) {
+    if (StringUtils.isNotBlank(addressId)) {
+      SecurityContextUtil.getLoginAccountId()
+        .flatMap(accountId -> accountAddressMongodbRepository.findById(addressId).filter(
+          accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId())))
+        .filter(accountAddressMongodbPO -> !accountAddressMongodbPO.isDefaultAddress())
+        .ifPresent(accountAddressMongodbPO -> {
+          accountAddressMongodbRepository.deleteById(addressId);
+          accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+        });
+    }
+  }
 }

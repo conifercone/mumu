@@ -312,4 +312,14 @@ public class AccountController {
     @PathVariable(value = "addressId") @NotBlank String addressId) {
     accountService.setDefaultAddress(addressId);
   }
+
+  @Operation(summary = "删除指定账户地址")
+  @DeleteMapping("/address/{addressId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void deleteAddress(
+    @PathVariable(value = "addressId") @NotBlank String addressId) {
+    accountService.deleteAddress(addressId);
+  }
 }

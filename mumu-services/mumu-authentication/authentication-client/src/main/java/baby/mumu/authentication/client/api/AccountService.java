@@ -211,4 +211,11 @@ public interface AccountService {
    */
   void modifyAddressByAddressId(
     AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd);
+
+  /**
+   * 删除指定账户地址
+   *
+   * @param addressId 地址ID
+   */
+  void deleteAddress(String addressId);
 }

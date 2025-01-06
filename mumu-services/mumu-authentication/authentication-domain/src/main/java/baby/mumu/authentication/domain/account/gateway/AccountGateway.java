@@ -222,4 +222,11 @@ public interface AccountGateway {
    * @param addressId 地址ID
    */
   void setDefaultAddress(String addressId);
+
+  /**
+   * 删除指定地址
+   *
+   * @param addressId 地址ID
+   */
+  void deleteAddress(String addressId);
 }
