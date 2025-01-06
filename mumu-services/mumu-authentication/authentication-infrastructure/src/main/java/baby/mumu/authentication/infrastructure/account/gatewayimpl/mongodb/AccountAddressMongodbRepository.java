@@ -17,8 +17,8 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb;
 
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import java.util.List;
-import org.springframework.data.geo.Circle;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  * 账户地址
@@ -33,5 +33,9 @@ public interface AccountAddressMongodbRepository extends
 
   List<AccountAddressMongodbPO> findByUserId(Long userId);
 
-  List<AccountAddressMongodbPO> findByLocationWithin(Circle circle);
+  @Query("""
+    { 'location': { $geoWithin: { $centerSphere: [ [ ?0, ?1 ], ?2 ] } } }
+    """)
+  List<AccountAddressMongodbPO> findByLocationWithin(double longitude, double latitude,
+    double radiusInRadians);
 }

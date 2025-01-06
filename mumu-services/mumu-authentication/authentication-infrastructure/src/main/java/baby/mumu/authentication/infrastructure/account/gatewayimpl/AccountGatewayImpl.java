@@ -64,8 +64,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.geo.Circle;
-import org.springframework.data.geo.Point;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -609,11 +607,9 @@ public class AccountGatewayImpl implements AccountGateway {
           .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
       ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
       .map(accountAddressMongodbPO -> {
-        Point center = new Point(accountAddressMongodbPO.getLocation().getX(),
-          accountAddressMongodbPO.getLocation().getY());
-        Circle circle = new Circle(center, radiusInMeters / 6378137);
         List<AccountAddressMongodbPO> byLocationWithin = accountAddressMongodbRepository.findByLocationWithin(
-          circle);
+          accountAddressMongodbPO.getLocation().getX(),
+          accountAddressMongodbPO.getLocation().getY(), radiusInMeters / 6378137);
         return accountRepository.findAllById(byLocationWithin.stream().filter(
             accountAddressMongodbPOProbablyTheCurrentUser -> !Objects.equals(
               accountAddressMongodbPO.getUserId(),
