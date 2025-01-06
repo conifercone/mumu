@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.geo.Point;
 import org.zalando.jackson.datatype.money.MoneyModule;
 
 /**
@@ -42,6 +43,7 @@ public class JacksonConfiguration {
     SimpleModule simpleModule = new SimpleModule();
     simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
     objectMapper.registerModule(simpleModule);
+    objectMapper.addMixIn(Point.class, PointMixin.class);
     return objectMapper;
   }
 }

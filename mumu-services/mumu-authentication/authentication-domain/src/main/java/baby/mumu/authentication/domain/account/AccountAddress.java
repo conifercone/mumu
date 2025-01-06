@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户地址领域模型
@@ -83,4 +84,10 @@ public class AccountAddress extends BasisDomainModel {
    */
   @Size(max = 100)
   private String country;
+
+  /**
+   * 定位
+   */
+  private Point location;
 }
+

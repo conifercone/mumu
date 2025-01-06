@@ -28,6 +28,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
+import org.springframework.data.geo.Point;
 
 /**
  * 查询当前登录账户信息数据传输对象
@@ -125,6 +126,11 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     @Size(max = 100)
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
   }
 
   @Data

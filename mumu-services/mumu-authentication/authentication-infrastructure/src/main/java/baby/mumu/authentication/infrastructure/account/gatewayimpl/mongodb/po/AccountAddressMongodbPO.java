@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -95,6 +96,12 @@ public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObj
   @Size(max = 100)
   @Indexed(background = true)
   private String country;
+
+  /**
+   * 定位
+   */
+  @Indexed(background = true)
+  private GeoJsonPoint location;
 
   @Version
   private Long version;

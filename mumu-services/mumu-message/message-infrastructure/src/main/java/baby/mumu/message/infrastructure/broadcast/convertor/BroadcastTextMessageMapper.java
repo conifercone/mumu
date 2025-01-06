@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.broadcast.convertor;
 
-import baby.mumu.basis.mappers.ClientObjectMapper;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
@@ -36,7 +36,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BroadcastTextMessageMapper extends ClientObjectMapper {
+public interface BroadcastTextMessageMapper extends DataTransferObjectMapper {
 
   BroadcastTextMessageMapper INSTANCE = Mappers.getMapper(BroadcastTextMessageMapper.class);
 

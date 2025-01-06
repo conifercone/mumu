@@ -6,6 +6,7 @@ dependencies {
     implementation(libs.javax.mail)
     api(libs.jakarta.persistence.api)
     compileOnly(libs.spring.boot.starter.data.jpa)
+    compileOnly(libs.spring.boot.starter.data.mongodb)
     annotationProcessor(libs.hibernate.jpamodelgen)
     implementation(libs.spring.cloud.commons)
     implementation(libs.grpc.api)

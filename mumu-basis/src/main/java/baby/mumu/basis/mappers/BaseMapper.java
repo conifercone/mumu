@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package baby.mumu.basis.mappers;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 /**
  * base mapper
@@ -28,5 +30,19 @@ public interface BaseMapper {
 
   default LocalDateTime offsetDateTimeToLocalDateTime(OffsetDateTime offsetDateTime) {
     return offsetDateTime != null ? offsetDateTime.toLocalDateTime() : null;
+  }
+
+  default GeoJsonPoint toGeoJsonPoint(Point point) {
+    if (point == null) {
+      return null;
+    }
+    return new GeoJsonPoint(point);
+  }
+
+  default Point toPoint(GeoJsonPoint geoJsonPoint) {
+    if (geoJsonPoint == null) {
+      return null;
+    }
+    return new Point(geoJsonPoint);
   }
 }

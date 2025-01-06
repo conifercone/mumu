@@ -46,7 +46,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.Ac
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import baby.mumu.basis.mappers.BaseMapper;
-import baby.mumu.basis.mappers.ClientObjectMapper;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -63,7 +63,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMapper {
+public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
@@ -165,6 +165,4 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsCurrentLoginQueryGrpcDTO toAccountSystemSettingsCurrentLoginQueryGrpcDTO(
     AccountSystemSettingsCurrentLoginQueryDTO accountSystemSettingsCurrentLoginQueryDTO);
-
-
 }

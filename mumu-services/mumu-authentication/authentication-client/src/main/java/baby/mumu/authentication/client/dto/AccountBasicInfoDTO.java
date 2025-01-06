@@ -24,6 +24,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户基本信息数据传输对象
@@ -121,11 +122,11 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountAddressBasicInfoDo> addresses;
+  private List<AccountAddressBasicInfoDTO> addresses;
 
 
   @Data
-  public static class AccountAddressBasicInfoDo {
+  public static class AccountAddressBasicInfoDTO {
 
     /**
      * 唯一主键
@@ -161,5 +162,10 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
      * 国家信息
      */
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
   }
 }

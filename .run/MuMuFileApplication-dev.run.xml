@@ -2,9 +2,11 @@
   <configuration default="false" name="MuMuFileApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev"/>
+    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
     <module name="mumu.mumu-services.mumu-file.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>
     <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.file.MuMuFileApplication"/>
+    <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
     <option name="VM_PARAMETERS"
       value="-Dcom.sun.management.jmxremote.port=31501 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
     <method v="2">

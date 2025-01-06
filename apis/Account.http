@@ -131,7 +131,11 @@ Authorization: Bearer {{$auth.token("admin")}}
   "state": "山东省",
   "city": "济南市",
   "street": "历城区",
-  "postalCode": "250101"
+  "postalCode": "250101",
+  "location": {
+    "x": 117.18689,
+    "y": 36.65065
+  }
 }
 
 > {%

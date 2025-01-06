@@ -29,6 +29,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
@@ -188,5 +189,10 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
      * 国家信息
      */
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
   }
 }
