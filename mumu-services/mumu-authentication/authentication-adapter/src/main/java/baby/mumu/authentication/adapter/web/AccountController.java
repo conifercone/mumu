@@ -282,7 +282,7 @@ public class AccountController {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 
-  @Operation(summary = "获取当前登录账户指定半径内所有附近的账户")
+  @Operation(summary = "附近的账户")
   @GetMapping("/nearby/{radiusInMeters}")
   @ResponseBody
   @RateLimiter
