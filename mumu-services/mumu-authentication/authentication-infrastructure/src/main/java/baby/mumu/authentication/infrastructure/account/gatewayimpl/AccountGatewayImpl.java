@@ -603,6 +603,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .toList(), pageRequest, accountPOS.hasNext());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public List<Account> nearby(double radiusInMeters) {
@@ -625,6 +628,9 @@ public class AccountGatewayImpl implements AccountGateway {
       }).orElse(new ArrayList<>());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultAddress(String addressId) {
@@ -645,6 +651,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultSystemSettings(String systemSettingsId) {
@@ -668,6 +677,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteAddress(String addressId) {
@@ -683,6 +695,9 @@ public class AccountGatewayImpl implements AccountGateway {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteSystemSettings(String systemSettingsId) {
