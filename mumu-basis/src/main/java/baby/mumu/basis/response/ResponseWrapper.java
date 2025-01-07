@@ -47,7 +47,7 @@ public class ResponseWrapper<T> implements Serializable {
   /**
    * 是否成功
    */
-  private Boolean success;
+  private boolean success;
 
   /**
    * 响应代码
@@ -77,13 +77,13 @@ public class ResponseWrapper<T> implements Serializable {
   private String traceId = TraceIdFilter.getTraceId();
 
 
-  private ResponseWrapper(@NotNull BaseResponse resultCode, Boolean success) {
+  private ResponseWrapper(@NotNull BaseResponse resultCode, boolean success) {
     this.code = resultCode.getCode();
     this.message = resultCode.getMessage();
     this.success = success;
   }
 
-  private ResponseWrapper(@NotNull String code, @NotNull String message, Boolean success) {
+  private ResponseWrapper(@NotNull String code, @NotNull String message, boolean success) {
     this.code = code;
     this.message = message;
     this.success = success;
