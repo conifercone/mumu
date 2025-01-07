@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -77,7 +77,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   public ResponseWrapper<?> handleMuMuException(@NotNull MuMuException mumuException,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     logger.error(mumuException.getMessage(), mumuException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -97,7 +97,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull HttpServletResponse response) {
     ResponseCode responseCode = rateLimiterException.getResponseCode();
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(Integer.parseInt(responseCode.getCode()));
     logger.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -113,7 +113,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   public ResponseWrapper<?> handleException(@NotNull ValidationException validationException,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     logger.error(validationException.getMessage(), validationException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -131,7 +131,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull HttpMessageNotReadableException httpMessageNotReadableException,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     logger.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -147,7 +147,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull MethodArgumentNotValidException methodArgumentNotValidException,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     logger.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -165,7 +165,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull IllegalArgumentException illegalArgumentException,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     logger.error(illegalArgumentException.getMessage(), illegalArgumentException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
@@ -185,7 +185,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   public ResponseWrapper<?> handleException(@NotNull Exception exception,
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     logger.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()

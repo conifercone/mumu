@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,11 @@ import baby.mumu.basis.kotlin.tools.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.base.Charsets;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import lombok.Data;
@@ -129,7 +129,7 @@ public class ResponseWrapper<T> implements Serializable {
     String jsonResult)
     throws IOException {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(Charsets.UTF_8.name());
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.getWriter().print(jsonResult);
   }
 

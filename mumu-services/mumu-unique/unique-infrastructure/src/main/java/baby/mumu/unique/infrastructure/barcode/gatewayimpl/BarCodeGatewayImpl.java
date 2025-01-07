@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.barcode.BarCode;
 import baby.mumu.unique.domain.barcode.gateway.BarCodeGateway;
-import com.google.common.base.Charsets;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -35,6 +34,7 @@ import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
 import javax.imageio.ImageIO;
@@ -58,7 +58,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
     return Optional.ofNullable(barCode).map(barCodeModel -> {
       HashMap<EncodeHintType, Object> hints = new HashMap<>();
       hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-      hints.put(EncodeHintType.CHARACTER_SET, Charsets.UTF_8.name());
+      hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.name());
       Code128Writer code128Writer = new Code128Writer();
       try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
         BitMatrix bitMatrix = code128Writer.encode(barCodeModel.getContent(),
