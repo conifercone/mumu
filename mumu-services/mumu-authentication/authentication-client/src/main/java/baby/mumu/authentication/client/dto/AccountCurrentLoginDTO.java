@@ -45,20 +45,44 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
 
   private Long id;
 
+  /**
+   * 用户名
+   */
   private String username;
 
+  /**
+   * 头像地址
+   */
   private String avatarUrl;
 
+  /**
+   * 手机号
+   */
   private String phone;
 
+  /**
+   * 性别
+   */
   private SexEnum sex;
 
+  /**
+   * 邮箱
+   */
   private String email;
 
+  /**
+   * 时区
+   */
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   private LanguageEnum language;
 
+  /**
+   * 出生日期
+   */
   private LocalDate birthday;
 
   /**
@@ -71,6 +95,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
    */
   private String nickName;
 
+  /**
+   * 年龄
+   */
   private int age;
 
   /**
@@ -83,10 +110,19 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
    */
   private DigitalPreferenceEnum digitalPreference;
 
+  /**
+   * 账户所属角色
+   */
   private List<AccountRoleCurrentLoginQueryDTO> roles;
 
+  /**
+   * 账户地址
+   */
   private List<AccountAddressCurrentLoginQueryDTO> addresses;
 
+  /**
+   * 账户系统设置
+   */
   private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
 
   @Data
@@ -156,6 +192,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     private String name;
 
+    /**
+     * 角色描述
+     */
     private String description;
 
     /**
@@ -182,6 +221,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     private String name;
 
+    /**
+     * 权限描述
+     */
     private String description;
   }
 
@@ -218,6 +260,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     private boolean defaultSystemSettings;
 
+    /**
+     * 版本号
+     */
     private Long version;
   }
 }
