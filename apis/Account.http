@@ -316,8 +316,7 @@ Authorization: Bearer {{$auth.token("admin")}}
 
 {
   "profile": "default",
-  "name": "默认系统设置",
-  "enabled": true
+  "name": "默认系统设置"
 }
 
 > {%
@@ -345,7 +344,7 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "id": "67779d6313e0ea034817432a",
+  "id": "677c866780f0b5754fd51eac",
   "name": "默认系统设置"
 }
 
@@ -663,6 +662,54 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("requestId", headers.requestId)
 %}
 POST {{authentication-service-url}}/account/logout
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 当前账户设置默认系统设置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/setDefaultSystemSettings/677c866780f0b5754fd51eac
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 删除指定账户系统设置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/account/systemSettings/677c866780f0b5754fd51eac
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

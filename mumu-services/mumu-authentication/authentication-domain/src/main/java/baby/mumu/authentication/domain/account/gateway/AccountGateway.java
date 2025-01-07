@@ -224,9 +224,23 @@ public interface AccountGateway {
   void setDefaultAddress(String addressId);
 
   /**
+   * 设置默认系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void setDefaultSystemSettings(String systemSettingsId);
+
+  /**
    * 删除指定地址
    *
    * @param addressId 地址ID
    */
   void deleteAddress(String addressId);
+
+  /**
+   * 删除指定系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void deleteSystemSettings(String systemSettingsId);
 }

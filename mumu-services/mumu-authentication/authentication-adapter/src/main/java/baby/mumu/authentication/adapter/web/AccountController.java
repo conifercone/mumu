@@ -322,4 +322,24 @@ public class AccountController {
     @PathVariable(value = "addressId") @NotBlank String addressId) {
     accountService.deleteAddress(addressId);
   }
+
+  @Operation(summary = "当前账户设置默认系统设置")
+  @PutMapping("/setDefaultSystemSettings/{systemSettingsId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void setDefaultSystemSettings(
+    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    accountService.setDefaultSystemSettings(systemSettingsId);
+  }
+
+  @Operation(summary = "删除指定账户系统设置")
+  @DeleteMapping("/systemSettings/{systemSettingsId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void deleteSystemSettings(
+    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    accountService.deleteSystemSettings(systemSettingsId);
+  }
 }

@@ -207,6 +207,20 @@ public interface AccountService {
   void setDefaultAddress(String addressId);
 
   /**
+   * 设置默认系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void setDefaultSystemSettings(String systemSettingsId);
+
+  /**
+   * 删除指定系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void deleteSystemSettings(String systemSettingsId);
+
+  /**
    * 修改账户地址
    */
   void modifyAddressByAddressId(

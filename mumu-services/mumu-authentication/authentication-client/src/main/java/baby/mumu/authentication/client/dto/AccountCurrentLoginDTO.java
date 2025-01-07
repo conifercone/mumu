@@ -214,9 +214,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
     private SystemThemeModeEnum systemThemeMode;
 
     /**
-     * 已启用
+     * 默认系统设置
      */
-    private Boolean enabled;
+    private boolean defaultSystemSettings;
 
     private Long version;
   }

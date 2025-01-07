@@ -49,12 +49,12 @@ public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersis
   private static final long serialVersionUID = 6286174255794150761L;
 
   public AccountSystemSettingsMongodbPO(String id, Long userId, String profile, String name,
-    boolean enabled, Long version) {
+    boolean defaultSystemSettings, Long version) {
     this.id = id;
     this.userId = userId;
     this.profile = profile;
     this.name = name;
-    this.enabled = enabled;
+    this.defaultSystemSettings = defaultSystemSettings;
     this.version = version;
   }
 
@@ -93,10 +93,10 @@ public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersis
   private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 
   /**
-   * 已启用
+   * 是否是默认系统设置
    */
   @Indexed(background = true)
-  private Boolean enabled;
+  private boolean defaultSystemSettings;
 
   @Version
   private Long version;

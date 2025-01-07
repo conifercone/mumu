@@ -23,6 +23,7 @@ import baby.mumu.authentication.application.account.executor.AccountChangePasswo
 import baby.mumu.authentication.application.account.executor.AccountCurrentLoginQueryCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteAddressByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDeleteCurrentCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountDeleteSystemSettingsByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountDisableCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountFindAllCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountFindAllSliceCmdExe;
@@ -38,6 +39,7 @@ import baby.mumu.authentication.application.account.executor.AccountRegisterCmdE
 import baby.mumu.authentication.application.account.executor.AccountResetPasswordCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountResetSystemSettingsBySettingsIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountSetDefaultAddressCmdExe;
+import baby.mumu.authentication.application.account.executor.AccountSetDefaultSystemSettingsCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateByIdCmdExe;
 import baby.mumu.authentication.application.account.executor.AccountUpdateRoleCmdExe;
 import baby.mumu.authentication.client.api.AccountService;
@@ -115,6 +117,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   private final AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe;
   private final AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe;
   private final AccountDeleteAddressByIdCmdExe accountDeleteAddressByIdCmdExe;
+  private final AccountSetDefaultSystemSettingsCmdExe accountSetDefaultSystemSettingsCmdExe;
+  private final AccountDeleteSystemSettingsByIdCmdExe accountDeleteSystemSettingsByIdCmdExe;
 
   @Autowired
   public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
@@ -139,7 +143,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     AccountNearbyCmdExe accountNearbyCmdExe,
     AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe,
     AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe,
-    AccountDeleteAddressByIdCmdExe accountDeleteAddressByIdCmdExe) {
+    AccountDeleteAddressByIdCmdExe accountDeleteAddressByIdCmdExe,
+    AccountSetDefaultSystemSettingsCmdExe accountSetDefaultSystemSettingsCmdExe,
+    AccountDeleteSystemSettingsByIdCmdExe accountDeleteSystemSettingsByIdCmdExe) {
     this.accountRegisterCmdExe = accountRegisterCmdExe;
     this.accountUpdateByIdCmdExe = accountUpdateByIdCmdExe;
     this.accountDisableCmdExe = accountDisableCmdExe;
@@ -166,6 +172,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     this.accountSetDefaultAddressCmdExe = accountSetDefaultAddressCmdExe;
     this.accountModifyAddressByAddressIdCmdExe = accountModifyAddressByAddressIdCmdExe;
     this.accountDeleteAddressByIdCmdExe = accountDeleteAddressByIdCmdExe;
+    this.accountSetDefaultSystemSettingsCmdExe = accountSetDefaultSystemSettingsCmdExe;
+    this.accountDeleteSystemSettingsByIdCmdExe = accountDeleteSystemSettingsByIdCmdExe;
   }
 
   @Override
@@ -337,5 +345,17 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @Transactional(rollbackFor = Exception.class)
   public void deleteAddress(String addressId) {
     accountDeleteAddressByIdCmdExe.execute(addressId);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void setDefaultSystemSettings(String systemSettingsId) {
+    accountSetDefaultSystemSettingsCmdExe.execute(systemSettingsId);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteSystemSettings(String systemSettingsId) {
+    accountDeleteSystemSettingsByIdCmdExe.execute(systemSettingsId);
   }
 }

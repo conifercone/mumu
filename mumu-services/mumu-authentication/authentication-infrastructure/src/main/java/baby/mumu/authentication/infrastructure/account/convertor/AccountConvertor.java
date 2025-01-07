@@ -57,11 +57,9 @@ import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
-import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -319,20 +317,6 @@ public class AccountConvertor {
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddresses -> accountAddresses.forEach(
           accountAddress -> accountAddress.setUserId(account.getId())));
-      Optional.ofNullable(account.getSystemSettings())
-        .ifPresentOrElse(
-          accountSystemSettings -> accountSystemSettings.forEach(
-            accountSystemSettingsItem -> accountSystemSettingsItem.setUserId(account.getId())),
-          () -> account.setSystemSettings(Collections.singletonList(
-            AccountSystemSettings.builder()
-              .userId(
-                account.getId()).enabled(true).profile(
-                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
-              .name(
-                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
-              .enabled(true)
-              .build()))
-        );
       return account;
     });
   }
@@ -467,13 +451,12 @@ public class AccountConvertor {
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
     return Optional.ofNullable(accountSystemSettingsMongodbPO)
       .map(systemSettingsMongodbPO -> {
-        // id，userId,profile,name,enabled,version属性不重置
         AccountMapper.INSTANCE.toAccountSystemSettingMongodbPO(
           new AccountSystemSettingsMongodbPO(systemSettingsMongodbPO.getId(),
             systemSettingsMongodbPO.getUserId(),
             systemSettingsMongodbPO.getProfile(),
             systemSettingsMongodbPO.getName(),
-            systemSettingsMongodbPO.getEnabled(),
+            systemSettingsMongodbPO.isDefaultSystemSettings(),
             systemSettingsMongodbPO.getVersion()),
           systemSettingsMongodbPO);
         return systemSettingsMongodbPO;
@@ -549,17 +532,20 @@ public class AccountConvertor {
             return accountRoleCurrentLoginQueryGrpcDTO.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(
                 accountRolePermissionCurrentLoginQueryDTOS -> accountRolePermissionCurrentLoginQueryDTOS.stream()
-                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
+                  .map(
+                    AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginDTO.getAddresses())
-          .map(accountAddressCurrentLoginQueryDTOS -> accountAddressCurrentLoginQueryDTOS.stream()
-            .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
-            .collect(Collectors.toList())).orElse(new ArrayList<>()))
+          .map(
+            accountAddressCurrentLoginQueryDTOS -> accountAddressCurrentLoginQueryDTOS.stream()
+              .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
+              .collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginDTO.getSystemSettings())
           .map(
             accountSystemSettingsCurrentLoginQueryDTOS -> accountSystemSettingsCurrentLoginQueryDTOS.stream()
-              .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
+              .map(
+                AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
   }
 

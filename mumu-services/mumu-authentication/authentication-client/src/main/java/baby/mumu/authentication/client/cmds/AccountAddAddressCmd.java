@@ -29,11 +29,6 @@ import org.springframework.data.geo.Point;
 public class AccountAddAddressCmd {
 
   /**
-   * 唯一主键
-   */
-  private Long id;
-
-  /**
    * 街道地址，包含门牌号和街道信息
    */
   @Size(max = 255)

@@ -144,11 +144,6 @@ public class AccountGatewayImpl implements AccountGateway {
       accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
       accountRepository.persist(accountPO);
       account.setId(accountPO.getId());
-      if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
-        accountSystemSettingsMongodbRepository.saveAll(account.getSystemSettings().stream().flatMap(
-          accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbPO(
-            accountSystemSettings).stream()).collect(Collectors.toList()));
-      }
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
           accountAddresses -> accountAddresses.stream()
             .flatMap(accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
@@ -652,6 +647,29 @@ public class AccountGatewayImpl implements AccountGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
+  public void setDefaultSystemSettings(String systemSettingsId) {
+    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(systemSettingsId))
+      .flatMap(accountId -> {
+          accountSystemSettingsMongodbRepository.saveAll(
+            accountSystemSettingsMongodbRepository.findByUserId(accountId).stream()
+              .filter(accountSystemSettingsMongodbPO -> !systemSettingsId.equals(
+                accountSystemSettingsMongodbPO.getId()))
+              .peek(
+                accountSystemSettingsMongodbPO -> accountSystemSettingsMongodbPO.setDefaultSystemSettings(
+                  false))
+              .toList());
+          return accountSystemSettingsMongodbRepository.findById(systemSettingsId)
+            .filter(accountSystemSettingsMongodbPO -> accountId.equals(
+              accountSystemSettingsMongodbPO.getUserId()));
+        }
+      ).ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbPO.setDefaultSystemSettings(true);
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+      });
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
   public void deleteAddress(String addressId) {
     if (StringUtils.isNotBlank(addressId)) {
       SecurityContextUtil.getLoginAccountId()
@@ -662,6 +680,23 @@ public class AccountGatewayImpl implements AccountGateway {
           accountAddressMongodbRepository.deleteById(addressId);
           accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
         });
+    }
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteSystemSettings(String systemSettingsId) {
+    if (StringUtils.isNotBlank(systemSettingsId)) {
+      SecurityContextUtil.getLoginAccountId()
+        .flatMap(
+          accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId).filter(
+            accountSystemSettingsMongodbPO -> accountId.equals(
+              accountSystemSettingsMongodbPO.getUserId())))
+        .filter(
+          accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbPO.isDefaultSystemSettings())
+        .ifPresent(
+          accountSystemSettingsMongodbPO -> accountSystemSettingsMongodbRepository.deleteById(
+            systemSettingsId));
     }
   }
 }

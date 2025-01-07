@@ -15,20 +15,15 @@
  */
 package baby.mumu.authentication.client.cmds;
 
-import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
-import baby.mumu.basis.enums.SystemThemeEnum;
-import baby.mumu.basis.enums.SystemThemeModeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.geo.Point;
 
@@ -85,14 +80,6 @@ public class AccountRegisterCmd {
   @Schema(description = "地址集合", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<AccountAddressRegisterCmd> addresses;
 
-  @Schema(description = "系统设置", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<AccountSystemSettingsRegisterCmd> systemSettings = Collections.singletonList(
-    AccountSystemSettingsRegisterCmd.builder().profile(
-        AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
-      .name(
-        AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
-      .enabled(true).build());
-
   @Data
   public static class AccountAddressRegisterCmd {
 
@@ -136,47 +123,6 @@ public class AccountRegisterCmd {
      */
     @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
     private Point location;
-  }
-
-  @Data
-  @Builder
-  public static class AccountSystemSettingsRegisterCmd {
-
-    /**
-     * 系统设置标识
-     */
-    @Schema(description = "系统设置标识", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String profile;
-
-    /**
-     * 系统设置名称
-     */
-    @Schema(description = "系统设置名称", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String name;
-
-    /**
-     * 系统主题
-     */
-    @Schema(description = "系统主题", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Builder.Default
-    private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
-
-    /**
-     * 系统主题模式
-     */
-    @Schema(description = "系统主题模式", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Builder.Default
-    private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
-
-    /**
-     * 已启用
-     */
-    @Schema(description = "已启用", requiredMode = RequiredMode.NOT_REQUIRED)
-    @Builder.Default
-    private Boolean enabled = true;
-
-    @Schema(description = "版本", requiredMode = RequiredMode.NOT_REQUIRED)
-    private Long version;
   }
 
   /**
