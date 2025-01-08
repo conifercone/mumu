@@ -465,7 +465,10 @@ public class AccountGatewayImpl implements AccountGateway {
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(
         accountConvertor::resetAccountSystemSettingMongodbPO)
-      .ifPresent(accountSystemSettingsMongodbRepository::save);
+      .ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+      });
   }
 
   /**
@@ -480,7 +483,10 @@ public class AccountGatewayImpl implements AccountGateway {
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountSystemSettingMongodbPO(
-        accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
+        accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+      });
   }
 
   /**
@@ -517,6 +523,7 @@ public class AccountGatewayImpl implements AccountGateway {
           accountSystemSettingsMongodbPO -> {
             accountSystemSettingsMongodbPO.setUserId(accountId);
             accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
           }));
   }
 
@@ -648,6 +655,7 @@ public class AccountGatewayImpl implements AccountGateway {
       ).ifPresent(accountAddressMongodbPO -> {
         accountAddressMongodbPO.setDefaultAddress(true);
         accountAddressMongodbRepository.save(accountAddressMongodbPO);
+        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
       });
   }
 
@@ -674,6 +682,7 @@ public class AccountGatewayImpl implements AccountGateway {
       ).ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsMongodbPO.setDefaultSystemSettings(true);
         accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
       });
   }
 
@@ -710,8 +719,10 @@ public class AccountGatewayImpl implements AccountGateway {
         .filter(
           accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbPO.isDefaultSystemSettings())
         .ifPresent(
-          accountSystemSettingsMongodbPO -> accountSystemSettingsMongodbRepository.deleteById(
-            systemSettingsId));
+          accountSystemSettingsMongodbPO -> {
+            accountSystemSettingsMongodbRepository.deleteById(systemSettingsId);
+            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+          });
     }
   }
 }

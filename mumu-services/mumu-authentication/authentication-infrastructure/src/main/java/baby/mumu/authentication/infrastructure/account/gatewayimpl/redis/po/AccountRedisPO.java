@@ -19,6 +19,8 @@ import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.basis.enums.SystemThemeEnum;
+import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
@@ -146,6 +148,11 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private List<AccountAddressRedisPO> addresses;
 
   /**
+   * 系统设置
+   */
+  private List<AccountSystemSettingsRedisPO> systemSettings;
+
+  /**
    * 存活时间
    * <p>中等级别变化数据：默认缓存时长为1小时</p>
    */
@@ -199,6 +206,47 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
      * 是否为默认地址
      */
     private boolean defaultAddress;
+
+    private Long version;
+  }
+
+  @Data
+  public static class AccountSystemSettingsRedisPO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 系统设置标识
+     */
+    private String profile;
+
+    /**
+     * 系统设置名称
+     */
+    private String name;
+
+    /**
+     * 账户ID
+     */
+    private Long userId;
+
+    /**
+     * 系统主题
+     */
+    private SystemThemeEnum systemTheme;
+
+    /**
+     * 系统主题模式
+     */
+    private SystemThemeModeEnum systemThemeMode;
+
+    /**
+     * 默认系统设置
+     */
+    private boolean defaultSystemSettings;
 
     private Long version;
   }

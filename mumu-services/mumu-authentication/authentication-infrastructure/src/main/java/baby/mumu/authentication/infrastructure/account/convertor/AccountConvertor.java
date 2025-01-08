@@ -272,11 +272,6 @@ public class AccountConvertor {
     return Optional.ofNullable(accountRedisPO).map(AccountMapper.INSTANCE::toEntity)
       .map(account -> {
         setRolesWithIds(account, getRoleIds(account.getId()));
-        account.setSystemSettings(
-          accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
-            .flatMap(accountSystemSettingsMongodbPO -> this.toAccountSystemSettings(
-              accountSystemSettingsMongodbPO).stream())
-            .collect(Collectors.toList()));
         setDigitalPreference(account);
         return account;
       });
