@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.mappers;
 
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.data.geo.Point;
@@ -30,17 +31,11 @@ public interface GeoMapper {
 
   @API(status = Status.STABLE, since = "2.6.0")
   default GeoJsonPoint toGeoJsonPoint(Point point) {
-    if (point == null) {
-      return null;
-    }
-    return new GeoJsonPoint(point);
+    return Optional.ofNullable(point).map(GeoJsonPoint::new).orElse(null);
   }
 
   @API(status = Status.STABLE, since = "2.6.0")
   default Point toPoint(GeoJsonPoint geoJsonPoint) {
-    if (geoJsonPoint == null) {
-      return null;
-    }
-    return new Point(geoJsonPoint);
+    return Optional.ofNullable(geoJsonPoint).map(Point::new).orElse(null);
   }
 }

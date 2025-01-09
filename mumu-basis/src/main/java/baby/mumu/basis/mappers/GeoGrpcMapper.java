@@ -27,7 +27,7 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.6.0
  */
-public interface GroGrpcMapper {
+public interface GeoGrpcMapper {
 
   @API(status = Status.STABLE, since = "2.6.0")
   default LatLng map(GeoJsonPoint geoJsonPoint) {
