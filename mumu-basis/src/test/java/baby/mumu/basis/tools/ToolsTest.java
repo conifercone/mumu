@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package baby.mumu.basis.tools;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -96,5 +98,15 @@ public class ToolsTest {
     String s2 = RandomStringUtils.secure().nextAlphanumeric(4);
     System.out.println(s);
     System.out.println(s2);
+  }
+
+  @Test
+  public void dateTest() {
+    // 当前日期
+    LocalDate date = LocalDate.now();
+    // 格式化为 'YYYY-Wo' 格式
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-'W'ww");
+    String formattedDate = date.format(formatter);
+    System.out.println(formattedDate);
   }
 }
