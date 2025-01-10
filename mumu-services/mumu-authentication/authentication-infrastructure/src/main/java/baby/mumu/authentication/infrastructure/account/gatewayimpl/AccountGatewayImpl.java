@@ -54,6 +54,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.javamoney.moneta.Money;
 import org.jetbrains.annotations.NotNull;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
@@ -308,16 +309,21 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("删除当前账户")
   public void deleteCurrentAccount() {
-    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
-      accountRepository.deleteById(accountId);
-      accountAddressMongodbRepository.deleteByUserId(accountId);
-      passwordTokenRepository.deleteById(accountId);
-      accountRoleRepository.deleteByAccountId(accountId);
-      accountRedisRepository.deleteById(accountId);
-      accountRoleRedisRepository.deleteById(accountId);
-    }, () -> {
-      throw new MuMuException(ResponseCode.UNAUTHORIZED);
-    });
+    SecurityContextUtil.getLoginAccountId().flatMap(accountRepository::findById)
+      .ifPresentOrElse(accountPO -> {
+        if (accountPO.getBalance()
+          .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
+          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+        }
+        accountRepository.deleteById(accountPO.getId());
+        accountAddressMongodbRepository.deleteByUserId(accountPO.getId());
+        passwordTokenRepository.deleteById(accountPO.getId());
+        accountRoleRepository.deleteByAccountId(accountPO.getId());
+        accountRedisRepository.deleteById(accountPO.getId());
+        accountRoleRedisRepository.deleteById(accountPO.getId());
+      }, () -> {
+        throw new MuMuException(ResponseCode.UNAUTHORIZED);
+      });
   }
 
   /**
@@ -377,9 +383,13 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账户ID为%0的账户")
   public void archiveById(Long id) {
-    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(accountRepository::findById)
       .flatMap(accountConvertor::toArchivedPO).ifPresent(accountArchivedPO -> {
+        if (accountArchivedPO.getBalance()
+          .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
+          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+        }
+        //noinspection DuplicatedCode
         accountArchivedPO.setArchived(true);
         accountArchivedRepository.persist(accountArchivedPO);
         accountRepository.deleteById(accountArchivedPO.getId());

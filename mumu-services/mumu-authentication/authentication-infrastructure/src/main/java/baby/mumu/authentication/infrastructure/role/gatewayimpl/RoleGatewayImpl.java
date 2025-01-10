@@ -255,9 +255,9 @@ public class RoleGatewayImpl implements RoleGateway {
       throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
         allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
-    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(roleRepository::findById)
       .flatMap(roleConvertor::toArchivedPO).ifPresent(roleArchivedPO -> {
+        //noinspection DuplicatedCode
         roleArchivedPO.setArchived(true);
         roleArchivedRepository.persist(roleArchivedPO);
         roleRepository.deleteById(roleArchivedPO.getId());

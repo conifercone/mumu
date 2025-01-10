@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,8 @@ public enum ResponseCode implements BaseResponse {
   ROLE_CYCLE(6047),
   ROLE_PATH_ALREADY_EXISTS(6048),
   DESCENDANT_ROLE_HAS_DESCENDANT_ROLE(6049),
-  FAILED_TO_EXPORT_CSV_FILE(6050);
+  FAILED_TO_EXPORT_CSV_FILE(6050),
+  THE_ACCOUNT_HAS_AN_UNUSED_BALANCE(6051);
   private final Integer code;
 
   ResponseCode(int code) {
