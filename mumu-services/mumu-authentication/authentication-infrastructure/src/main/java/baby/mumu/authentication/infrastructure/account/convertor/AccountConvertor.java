@@ -243,10 +243,9 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toBasicInfoEntity(AccountPO accountPO) {
-    return Optional.ofNullable(accountPO).flatMap(accountDataObject -> {
-      Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
-      return getBasicInfoAccount(accountDataObject, account);
-    });
+    return Optional.ofNullable(accountPO)
+      .flatMap(accountDataObject -> getBasicInfoAccount(accountDataObject,
+        AccountMapper.INSTANCE.toEntity(accountDataObject)));
   }
 
   @NotNull
