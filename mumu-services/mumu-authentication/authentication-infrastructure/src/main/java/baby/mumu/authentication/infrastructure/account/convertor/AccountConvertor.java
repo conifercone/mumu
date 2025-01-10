@@ -44,7 +44,6 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.Accou
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
-import baby.mumu.authentication.infrastructure.account.units.AccountDigitalPreferenceUnit;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePOId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
@@ -57,6 +56,7 @@ import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import java.util.ArrayList;
@@ -67,8 +67,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.drools.ruleunits.api.RuleUnitInstance;
-import org.drools.ruleunits.api.RuleUnitProvider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,13 +125,16 @@ public class AccountConvertor {
   }
 
   private void setDigitalPreference(Account account) {
-    AccountDigitalPreferenceUnit ruleUnit = new AccountDigitalPreferenceUnit();
-    ruleUnit.getAccounts().add(account);
-    // 加载规则单元并执行规则
-    try (RuleUnitInstance<AccountDigitalPreferenceUnit> instance =
-      RuleUnitProvider.get().createRuleUnitInstance(ruleUnit)) {
-      instance.fire();
-    }
+    Optional.ofNullable(account).ifPresent(accountNotNull -> {
+      int age = accountNotNull.getAge();
+      if (age <= 34) {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_NATIVE);
+      } else if (age <= 54) {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_IMMIGRANT);
+      } else {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.TRADITIONAL_USER);
+      }
+    });
   }
 
   private void setRolesWithIds(Account account, List<Long> roleIds) {

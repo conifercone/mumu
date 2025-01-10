@@ -77,12 +77,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
       request);
     String authHeader = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
-    String acceptLanguage = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
-    if (StringUtils.isBlank(acceptLanguage)) {
-      SecurityContextUtil.getLoginAccountLanguage()
-        .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
-          Locale.of(languageEnum.getCode())));
-    }
+    SecurityContextUtil.getLoginAccountLanguage()
+      .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+        Locale.of(languageEnum.getCode())));
     // 存在token
     if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
       String authToken = authHeader.substring(TOKEN_START.length());
@@ -123,11 +120,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         authenticationToken.setDetails(
           new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        if (StringUtils.isBlank(acceptLanguage)) {
-          SecurityContextUtil.getLoginAccountLanguage()
-            .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
-              Locale.of(languageEnum.getCode())));
-        }
+        SecurityContextUtil.getLoginAccountLanguage()
+          .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
+            Locale.of(languageEnum.getCode())));
       }
     }
     // 放行
