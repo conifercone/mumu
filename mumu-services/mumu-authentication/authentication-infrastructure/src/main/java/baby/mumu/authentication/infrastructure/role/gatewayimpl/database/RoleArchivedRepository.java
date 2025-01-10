@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,9 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedPO
             where (:#{#roleArchivedPO.id} is null or r.id = :#{#roleArchivedPO.id})
             and (:#{#roleArchivedPO.name} is null or r.name like %:#{#roleArchivedPO.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%) order by r.creationTime desc
+            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%)
+            and (:#{#roleArchivedPO.description} is null or r.description like %:#{#roleArchivedPO.description}%)
+            order by r.creationTime desc
       """)
   Slice<RoleArchivedPO> findAllSlice(@Param("roleArchivedPO") RoleArchivedPO roleArchivedPO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
@@ -86,7 +88,9 @@ public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedPO
             where (:#{#roleArchivedPO.id} is null or r.id = :#{#roleArchivedPO.id})
             and (:#{#roleArchivedPO.name} is null or r.name like %:#{#roleArchivedPO.name}%)
             and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%) order by r.creationTime desc
+            and (:#{#roleArchivedPO.code} is null or r.code like %:#{#roleArchivedPO.code}%)
+            and (:#{#roleArchivedPO.description} is null or r.description like %:#{#roleArchivedPO.description}%)
+            order by r.creationTime desc
       """)
   Page<RoleArchivedPO> findAllPage(@Param("roleArchivedPO") RoleArchivedPO roleArchivedPO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);

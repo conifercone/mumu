@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,9 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
     """
       select a from PermissionArchivedPO a where (:#{#permissionArchivedPO.id} is null or a.id = :#{#permissionArchivedPO.id})
             and (:#{#permissionArchivedPO.name} is null or a.name like %:#{#permissionArchivedPO.name}%)
-            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%) order by a.creationTime desc
+            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%)
+            and (:#{#permissionArchivedPO.description} is null or a.description like %:#{#permissionArchivedPO.description}%)
+            order by a.creationTime desc
       """)
   Slice<PermissionArchivedPO> findAllSlice(
     @Param("permissionArchivedPO") PermissionArchivedPO permissionArchivedPO, Pageable pageable);
@@ -84,7 +86,9 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
     """
       select a from PermissionArchivedPO a where (:#{#permissionArchivedPO.id} is null or a.id = :#{#permissionArchivedPO.id})
             and (:#{#permissionArchivedPO.name} is null or a.name like %:#{#permissionArchivedPO.name}%)
-            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%) order by a.creationTime desc
+            and (:#{#permissionArchivedPO.code} is null or a.code like %:#{#permissionArchivedPO.code}%)
+            and (:#{#permissionArchivedPO.description} is null or a.description like %:#{#permissionArchivedPO.description}%)
+            order by a.creationTime desc
       """)
   Page<PermissionArchivedPO> findAllPage(
     @Param("permissionArchivedPO") PermissionArchivedPO permissionArchivedPO, Pageable pageable);
