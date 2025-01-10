@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.core.NamedInheritableThreadLocal;
 
 /**
  * TraceId id 过滤器
@@ -36,7 +37,8 @@ import org.jetbrains.annotations.NotNull;
 public class TraceIdFilter implements Filter {
 
   // InheritableThreadLocal 变量用于存储 TraceId
-  private static final InheritableThreadLocal<String> traceIdThreadLocal = new InheritableThreadLocal<>();
+  private static final NamedInheritableThreadLocal<String> traceIdThreadLocal = new NamedInheritableThreadLocal<>(
+    "TraceId");
 
   private final Tracer tracer;
 
