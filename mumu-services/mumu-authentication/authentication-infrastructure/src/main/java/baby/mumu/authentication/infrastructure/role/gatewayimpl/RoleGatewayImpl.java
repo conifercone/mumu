@@ -107,6 +107,7 @@ public class RoleGatewayImpl implements RoleGateway {
         && !roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode()))
       .ifPresentOrElse(rolePO -> {
         roleRepository.persist(rolePO);
+        saveRoleAuthorityRelationsData(role);
         Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
         rolePathRepository.persist(
           new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
@@ -114,7 +115,6 @@ public class RoleGatewayImpl implements RoleGateway {
       }, () -> {
         throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
       });
-    saveRoleAuthorityRelationsData(role);
   }
 
   @Transactional(rollbackFor = Exception.class)
