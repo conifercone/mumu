@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,9 @@ public interface RoleRepository extends BaseJpaRepository<RolePO, Long>,
         where (:#{#rolePO.id} is null or r.id = :#{#rolePO.id})
         and (:#{#rolePO.name} is null or r.name like %:#{#rolePO.name}%)
         and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-        and (:#{#rolePO.code} is null or r.code like %:#{#rolePO.code}%) order by r.creationTime desc
+        and (:#{#rolePO.code} is null or r.code like %:#{#rolePO.code}%)
+        and (:#{#rolePO.description} is null or r.description like %:#{#rolePO.description}%)
+        order by r.creationTime desc
     """)
   Slice<RolePO> findAllSlice(@Param("rolePO") RolePO rolePO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
@@ -95,7 +97,9 @@ public interface RoleRepository extends BaseJpaRepository<RolePO, Long>,
         where (:#{#rolePO.id} is null or r.id = :#{#rolePO.id})
         and (:#{#rolePO.name} is null or r.name like %:#{#rolePO.name}%)
         and (:#{#permissionIds} is null or ra.id.permissionId in :#{#permissionIds})
-        and (:#{#rolePO.code} is null or r.code like %:#{#rolePO.code}%) order by r.creationTime desc
+        and (:#{#rolePO.code} is null or r.code like %:#{#rolePO.code}%)
+        and (:#{#rolePO.description} is null or r.description like %:#{#rolePO.description}%)
+        order by r.creationTime desc
     """)
   Page<RolePO> findAllPage(@Param("rolePO") RolePO rolePO,
     @Param("permissionIds") Collection<Long> permissionIds, Pageable pageable);
