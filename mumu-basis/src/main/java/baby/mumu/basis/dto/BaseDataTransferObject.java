@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public abstract class BaseDataTransferObject implements DataTransferObject {
   /**
    * 已归档
    */
-  private Boolean archived;
+  private boolean archived;
 
   public OffsetDateTime getCreationTime() {
     return creationTime;
@@ -105,7 +105,7 @@ public abstract class BaseDataTransferObject implements DataTransferObject {
     return archived;
   }
 
-  public void setArchived(Boolean archived) {
+  public void setArchived(boolean archived) {
     this.archived = archived;
   }
 }
