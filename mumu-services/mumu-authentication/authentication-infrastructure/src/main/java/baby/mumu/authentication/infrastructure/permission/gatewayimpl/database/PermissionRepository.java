@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,9 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionPO, Lo
     """
       select a from PermissionPO a where (:#{#permissionPO.id} is null or a.id = :#{#permissionPO.id})
             and (:#{#permissionPO.name} is null or a.name like %:#{#permissionPO.name}%)
-            and (:#{#permissionPO.code} is null or a.code like %:#{#permissionPO.code}%) order by a.creationTime desc
+            and (:#{#permissionPO.code} is null or a.code like %:#{#permissionPO.code}%)
+            and (:#{#permissionPO.description} is null or a.description like %:#{#permissionPO.description}%)
+            order by a.creationTime desc
       """)
   Slice<PermissionPO> findAllSlice(@Param("permissionPO") PermissionPO permissionPO,
     Pageable pageable);
@@ -91,7 +93,9 @@ public interface PermissionRepository extends BaseJpaRepository<PermissionPO, Lo
     """
       select a from PermissionPO a where (:#{#permissionPO.id} is null or a.id = :#{#permissionPO.id})
             and (:#{#permissionPO.name} is null or a.name like %:#{#permissionPO.name}%)
-            and (:#{#permissionPO.code} is null or a.code like %:#{#permissionPO.code}%) order by a.creationTime desc
+            and (:#{#permissionPO.code} is null or a.code like %:#{#permissionPO.code}%)
+            and (:#{#permissionPO.description} is null or a.description like %:#{#permissionPO.description}%)
+            order by a.creationTime desc
       """)
   Page<PermissionPO> findAllPage(@Param("permissionPO") PermissionPO permissionPO,
     Pageable pageable);
