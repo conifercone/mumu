@@ -44,7 +44,7 @@ jacksonDatatypeMoneyVersion = '1.3.0'
 # bom version
 grpcBomVersion = '1.69.0'
 guavaBomVersion = '33.4.0-jre'
-protobufBomVersion = '4.29.2'
+protobufBomVersion = '4.29.3'
 # plugin version
 protobufPluginVersion = '0.9.4'
 lombokPluginVersion = '8.11'
