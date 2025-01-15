@@ -26,11 +26,13 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.zalando.jackson.datatype.money.MoneyModule;
 
 /**
@@ -51,6 +53,10 @@ public final class FileDownloadUtil {
     Stream<T> stream
   ) {
     try {
+      Assert.isTrue(StringUtils.isNotBlank(fileName), "fileName must not be blank");
+      if (!fileName.endsWith(".json")) {
+        fileName += ".json";
+      }
       // 创建 ObjectMapper 实例
       ObjectMapper objectMapper = new ObjectMapper();
       // 注册模块（例如时间模块和Money模块）

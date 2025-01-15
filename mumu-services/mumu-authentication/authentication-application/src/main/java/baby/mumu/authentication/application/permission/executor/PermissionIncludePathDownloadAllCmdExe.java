@@ -44,7 +44,7 @@ public class PermissionIncludePathDownloadAllCmdExe {
   }
 
   public void execute(HttpServletResponse response) {
-    FileDownloadUtil.downloadJson(response, "permissions.json",
+    FileDownloadUtil.downloadJson(response, "permissions",
       permissionGateway.findAllIncludePath()
         .flatMap(
           permission -> permissionConvertor.toPermissionIncludePathDownloadAllDTO(permission)

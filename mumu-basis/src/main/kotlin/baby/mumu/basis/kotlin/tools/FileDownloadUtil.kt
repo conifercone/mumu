@@ -20,9 +20,11 @@ import baby.mumu.basis.response.ResponseCode
 import com.opencsv.CSVWriter
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import jakarta.servlet.http.HttpServletResponse
+import org.apache.commons.lang3.StringUtils
 import org.apiguardian.api.API
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.util.Assert
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.URLEncoder
@@ -119,12 +121,18 @@ object FileDownloadUtil {
         data: Stream<T>
     ) {
         try {
+            Assert.isTrue(StringUtils.isNotBlank(fileName), "fileName must not be blank")
+            val newFileName: String = if (!fileName.endsWith(".csv")) {
+                "$fileName.csv"
+            } else {
+                fileName
+            }
             // 设置响应头
             response.contentType = "text/csv"
             response.characterEncoding = StandardCharsets.UTF_8.name()
             response.setHeader(
                 HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=${encodeFileName(fileName)}"
+                "attachment; filename=${encodeFileName(newFileName)}"
             )
 
             // 使用 OpenCSV 写入 CSV 内容
