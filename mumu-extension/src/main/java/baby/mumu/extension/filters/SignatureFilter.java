@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.Getter;
@@ -83,7 +84,8 @@ public class SignatureFilter extends OncePerRequestFilter {
           if (!SignatureUtil.validateSignature(
             timestamp.concat(requestId).concat(
                 StringUtils.isNotBlank(request.getQueryString()) ? requestURI.concat("?")
-                  .concat(request.getQueryString()) : requestURI)
+                  .concat(URLDecoder.decode(request.getQueryString(), StandardCharsets.UTF_8))
+                  : requestURI)
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {
