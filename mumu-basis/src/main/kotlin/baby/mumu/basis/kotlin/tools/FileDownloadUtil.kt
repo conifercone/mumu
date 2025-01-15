@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.opencsv.CSVWriter
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import jakarta.servlet.http.HttpServletResponse
 import org.apiguardian.api.API
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.io.InputStream
 import java.io.OutputStreamWriter
@@ -122,7 +123,7 @@ object FileDownloadUtil {
             response.contentType = "text/csv"
             response.characterEncoding = StandardCharsets.UTF_8.name()
             response.setHeader(
-                "Content-Disposition",
+                HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=${encodeFileName(fileName)}"
             )
 
@@ -147,7 +148,7 @@ object FileDownloadUtil {
                 scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FAILED_TO_EXPORT_CSV_FILE)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
         }
     }
 

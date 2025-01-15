@@ -119,7 +119,6 @@ public enum ResponseCode implements BaseResponse {
   ROLE_CYCLE(6047),
   ROLE_PATH_ALREADY_EXISTS(6048),
   DESCENDANT_ROLE_HAS_DESCENDANT_ROLE(6049),
-  FAILED_TO_EXPORT_CSV_FILE(6050),
   THE_ACCOUNT_HAS_AN_UNUSED_BALANCE(6051);
   private final Integer code;
 
