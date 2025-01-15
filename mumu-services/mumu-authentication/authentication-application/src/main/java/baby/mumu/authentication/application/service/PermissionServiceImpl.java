@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import baby.mumu.authentication.application.permission.executor.PermissionFindBy
 import baby.mumu.authentication.application.permission.executor.PermissionFindByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindDirectCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionFindRootCmdExe;
+import baby.mumu.authentication.application.permission.executor.PermissionIncludePathDownloadAllCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionRecoverFromArchiveByIdCmdExe;
 import baby.mumu.authentication.application.permission.executor.PermissionUpdateCmdExe;
 import baby.mumu.authentication.client.api.PermissionService;
@@ -105,6 +106,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   private final PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe;
   private final PermissionDownloadAllCmdExe permissionDownloadAllCmdExe;
   private final PermissionFindByCodeCmdExe permissionFindByCodeCmdExe;
+  private final PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe;
 
   @Autowired
   public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -124,7 +126,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     PermissionDeletePathCmdExe permissionDeletePathCmdExe,
     PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe,
     PermissionDownloadAllCmdExe permissionDownloadAllCmdExe,
-    PermissionFindByCodeCmdExe permissionFindByCodeCmdExe) {
+    PermissionFindByCodeCmdExe permissionFindByCodeCmdExe,
+    PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe) {
     this.permissionAddCmdExe = permissionAddCmdExe;
     this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
     this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -143,6 +146,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     this.permissionDeleteByCodeCmdExe = permissionDeleteByCodeCmdExe;
     this.permissionDownloadAllCmdExe = permissionDownloadAllCmdExe;
     this.permissionFindByCodeCmdExe = permissionFindByCodeCmdExe;
+    this.permissionIncludePathDownloadAllCmdExe = permissionIncludePathDownloadAllCmdExe;
   }
 
   @Override
@@ -284,5 +288,11 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   @Transactional(readOnly = true)
   public void downloadAll(HttpServletResponse response) {
     permissionDownloadAllCmdExe.execute(response);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public void downloadAllIncludePath(HttpServletResponse response) {
+    permissionIncludePathDownloadAllCmdExe.execute(response);
   }
 }

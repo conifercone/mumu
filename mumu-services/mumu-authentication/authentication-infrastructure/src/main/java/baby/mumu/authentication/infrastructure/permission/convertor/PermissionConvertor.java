@@ -33,18 +33,23 @@ import baby.mumu.authentication.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.authentication.client.dto.PermissionFindByIdDTO;
 import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
 import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
+import baby.mumu.authentication.client.dto.PermissionIncludePathDownloadAllDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import jakarta.validation.Valid;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -325,5 +330,24 @@ public class PermissionConvertor {
     Permission permission) {
     return Optional.ofNullable(permission)
       .map(PermissionMapper.INSTANCE::toPermissionDownloadAllDTO);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<PermissionIncludePathDownloadAllDTO> toPermissionIncludePathDownloadAllDTO(
+    Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionIncludePathDownloadAllDTO)
+      .map(permissionIncludePathDownloadAllDTO -> {
+        if (permissionIncludePathDownloadAllDTO.isHasDescendant()) {
+          List<PermissionPathPO> byAncestorIdIn = permissionPathRepository.findByAncestorIdIn(
+            Collections.singleton(permissionIncludePathDownloadAllDTO.getId()));
+          permissionIncludePathDownloadAllDTO.setDescendants(
+            byAncestorIdIn.stream().map(PermissionPathPO::getId)
+              .map(PermissionMapper.INSTANCE::toPermissionIncludePathDTO)
+              .collect(Collectors.toList()));
+        }
+        return permissionIncludePathDownloadAllDTO;
+      });
   }
 }

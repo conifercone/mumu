@@ -15,27 +15,37 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import com.opencsv.bean.CsvBindByName;
+import java.util.List;
 import lombok.Data;
 
 /**
- * 下载所有权限数据数据传输对象
+ * 下载所有权限数据（包含权限路径）数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.6.0
  */
 @Data
-public class PermissionDownloadAllDTO {
+public class PermissionIncludePathDownloadAllDTO {
 
-  @CsvBindByName(column = "Id")
   private Long id;
 
-  @CsvBindByName(column = "Code")
   private String code;
 
-  @CsvBindByName(column = "Name")
   private String name;
 
-  @CsvBindByName(column = "Description")
   private String description;
+
+  private boolean hasDescendant;
+
+  private List<PermissionIncludePathDTO> descendants;
+
+  @Data
+  public static class PermissionIncludePathDTO {
+
+    private Long ancestorId;
+
+    private Long descendantId;
+
+    private Long depth;
+  }
 }

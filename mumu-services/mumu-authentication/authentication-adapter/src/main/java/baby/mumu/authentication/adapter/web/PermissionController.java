@@ -230,4 +230,12 @@ public class PermissionController {
   public void downloadAll(HttpServletResponse response) {
     permissionService.downloadAll(response);
   }
+
+  @Operation(summary = "下载所有权限数据（包含权限关系数据）")
+  @GetMapping("/downloadAllIncludePath")
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void downloadAllIncludePath(HttpServletResponse response) {
+    permissionService.downloadAllIncludePath(response);
+  }
 }

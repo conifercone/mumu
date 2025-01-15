@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,4 +175,11 @@ public interface PermissionService {
    * @param response 响应
    */
   void downloadAll(HttpServletResponse response);
+
+  /**
+   * 下载所有权限数据（包含权限路径）
+   *
+   * @param response 响应
+   */
+  void downloadAllIncludePath(HttpServletResponse response);
 }

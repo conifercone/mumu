@@ -349,6 +349,14 @@ public class PermissionGatewayImpl implements PermissionGateway {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  public Stream<Permission> findAllIncludePath() {
+    return permissionRepository.findAll()
+      .flatMap(
+        permissionPO -> permissionConvertor.toEntity(permissionPO).stream());
+  }
+
+  @Override
   public Optional<Permission> findByCode(String code) {
     return Optional.ofNullable(code).flatMap(permissionRedisRepository::findByCode).flatMap(
       permissionConvertor::toEntity).or(() -> permissionRepository.findByCode(code)

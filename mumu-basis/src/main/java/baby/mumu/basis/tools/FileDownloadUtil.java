@@ -39,7 +39,6 @@ import org.zalando.jackson.datatype.money.MoneyModule;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.6.0
  */
-@SuppressWarnings("unused")
 public final class FileDownloadUtil {
 
   private FileDownloadUtil() {

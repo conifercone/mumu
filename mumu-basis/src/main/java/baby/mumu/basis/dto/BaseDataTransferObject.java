@@ -16,8 +16,6 @@
 package baby.mumu.basis.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
 import java.io.Serial;
 import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,20 +37,16 @@ public abstract class BaseDataTransferObject implements DataTransferObject {
    */
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-  @CsvBindByName(column = "Creation Time")
-  @CsvDate("yyyy-MM-dd'T'HH:mm:ssXXX")
   private OffsetDateTime creationTime;
 
   /**
    * 创建人
    */
-  @CsvBindByName(column = "Founder")
   private Long founder;
 
   /**
    * 修改人
    */
-  @CsvBindByName(column = "Modifier")
   private Long modifier;
 
   /**
@@ -60,8 +54,6 @@ public abstract class BaseDataTransferObject implements DataTransferObject {
    */
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-  @CsvBindByName(column = "Modification Time")
-  @CsvDate("yyyy-MM-dd'T'HH:mm:ssXXX")
   private OffsetDateTime modificationTime;
 
   /**
