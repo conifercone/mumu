@@ -120,7 +120,7 @@ public enum ResponseCode implements BaseResponse {
   ROLE_PATH_ALREADY_EXISTS(6048),
   DESCENDANT_ROLE_HAS_DESCENDANT_ROLE(6049),
   THE_ACCOUNT_HAS_AN_UNUSED_BALANCE(6051);
-  private final Integer code;
+  private final int code;
 
   ResponseCode(int code) {
     this.code = code;
@@ -129,7 +129,7 @@ public enum ResponseCode implements BaseResponse {
   @Contract(pure = true)
   @Override
   public @NotNull String getCode() {
-    return this.code.toString();
+    return String.valueOf(this.code);
   }
 
   @Override
