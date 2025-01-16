@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,5 +38,10 @@ public class SwaggerConfiguration {
         .version("v1")
         .license(new License().name("Apache 2.0")
           .url("https://www.apache.org/licenses/LICENSE-2.0")));
+  }
+
+  @Bean
+  public MonetaryAmountConverter samplePropertyConverter() {
+    return new MonetaryAmountConverter();
   }
 }
