@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,26 @@ public class MuMuException extends RuntimeException {
 
   private final transient Object data;
 
+  private final transient Throwable throwable;
+
   public MuMuException(@NotNull ResponseCode responseCode) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = null;
+    this.throwable = null;
+  }
+
+  public MuMuException(@NotNull ResponseCode responseCode, Throwable throwable) {
+    super(throwable);
+    this.responseCode = responseCode;
+    this.data = null;
+    this.throwable = throwable;
   }
 
   public MuMuException(@NotNull ResponseCode responseCode, Object data) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = data;
+    this.throwable = null;
   }
 }

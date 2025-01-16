@@ -72,7 +72,7 @@ object FileDownloadUtil {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -109,7 +109,7 @@ object FileDownloadUtil {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -156,7 +156,7 @@ object FileDownloadUtil {
                 scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 

@@ -80,6 +80,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     logger.error(mumuException.getMessage(), mumuException);
+    if (mumuException.getThrowable() != null) {
+      logger.error(mumuException.getThrowable().getMessage(), mumuException.getThrowable());
+    }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(mumuException.getMessage())
       .setCategory("mumuException")

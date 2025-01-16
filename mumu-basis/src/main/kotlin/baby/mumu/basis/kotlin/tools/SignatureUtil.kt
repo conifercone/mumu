@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.kotlin.tools
 
-import java.util.*
+import org.slf4j.LoggerFactory
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -27,8 +27,9 @@ import javax.crypto.spec.SecretKeySpec
  */
 object SignatureUtil {
 
+    private val logger = LoggerFactory.getLogger(SignatureUtil::class.java)
+
     @JvmStatic
-    @Throws(Exception::class)
     fun generateSignature(
         data: String,
         secretKey: String,
@@ -41,19 +42,22 @@ object SignatureUtil {
     }
 
     @JvmStatic
-    @Throws(Exception::class)
     fun validateSignature(
         data: String,
         signature: String,
         secretKey: String,
         algorithm: String = "HmacSHA256"
     ): Boolean {
-        // 使用相同的数据和密钥生成签名
-        val generatedSignature = generateSignature(data, secretKey, algorithm)
-        // 将生成的签名转换为十六进制字符串
-        val generatedSignatureHex = generatedSignature.toHexString()
-        // 比较生成的签名和传入的签名
-        return generatedSignatureHex == signature
+        try {// 使用相同的数据和密钥生成签名
+            val generatedSignature = generateSignature(data, secretKey, algorithm)
+            // 将生成的签名转换为十六进制字符串
+            val generatedSignatureHex = generatedSignature.toHexString()
+            // 比较生成的签名和传入的签名
+            return generatedSignatureHex == signature
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            return false
+        }
     }
 
     // 扩展函数，将字节数组转换为十六进制字符串
