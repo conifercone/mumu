@@ -89,7 +89,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
           traceId();
           logger.error(ResponseCode.INVALID_TOKEN.getMessage());
-          response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+          response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
           ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         } finally {
           TraceIdFilter.removeTraceId();
@@ -103,7 +103,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       } catch (JwtException e) {
         traceId();
         logger.error(ResponseCode.INVALID_TOKEN.getMessage());
-        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
       } finally {

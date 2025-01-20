@@ -78,7 +78,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    response.setStatus(
+      mumuException.getResponseCode() != null ? mumuException.getResponseCode().getStatus()
+        : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     logger.error(mumuException.getMessage(), mumuException);
     if (mumuException.getThrowable() != null) {
       logger.error(mumuException.getThrowable().getMessage(), mumuException.getThrowable());
@@ -101,7 +103,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     ResponseCode responseCode = rateLimiterException.getResponseCode();
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    response.setStatus(Integer.parseInt(responseCode.getCode()));
+    response.setStatus(responseCode.getStatus());
     logger.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(rateLimiterException.getMessage())
@@ -135,7 +137,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    response.setStatus(ResponseCode.PARAMS_IS_INVALID.getStatus());
     logger.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(httpMessageNotReadableException.getMessage())
@@ -189,7 +191,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    response.setStatus(ResponseCode.INTERNAL_SERVER_ERROR.getStatus());
     logger.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(exception.getMessage())
