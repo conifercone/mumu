@@ -43,7 +43,7 @@ object SecurityContextUtil {
 
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
-    val loginAccountId: Optional<Long?>
+    val loginAccountId: Optional<Long>
         /**
          * 获取当前登录账户ID
          *
@@ -71,7 +71,7 @@ object SecurityContextUtil {
 
     @get:API(status = API.Status.STABLE, since = "2.2.0")
     @JvmStatic
-    val loginAccountName: Optional<String?>
+    val loginAccountName: Optional<String>
         /**
          * 获取当前登录账户名
          *
@@ -98,7 +98,7 @@ object SecurityContextUtil {
 
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
-    val loginAccountTimezone: Optional<String?>
+    val loginAccountTimezone: Optional<String>
         /**
          * 获取当前登录账户ID
          *
@@ -152,7 +152,7 @@ object SecurityContextUtil {
 
     @get:API(status = API.Status.STABLE, since = "1.0.0")
     @JvmStatic
-    val tokenValue: Optional<String?>
+    val tokenValue: Optional<String>
         /**
          * 获取当前token
          *

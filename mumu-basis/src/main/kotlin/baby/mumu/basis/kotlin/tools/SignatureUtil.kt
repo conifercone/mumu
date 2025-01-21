@@ -48,7 +48,8 @@ object SignatureUtil {
         secretKey: String,
         algorithm: String = "HmacSHA256"
     ): Boolean {
-        try {// 使用相同的数据和密钥生成签名
+        try {
+            // 使用相同的数据和密钥生成签名
             val generatedSignature = generateSignature(data, secretKey, algorithm)
             // 将生成的签名转换为十六进制字符串
             val generatedSignatureHex = generatedSignature.toHexString()
