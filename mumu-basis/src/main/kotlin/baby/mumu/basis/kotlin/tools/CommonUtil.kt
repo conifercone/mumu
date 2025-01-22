@@ -210,6 +210,11 @@ object CommonUtil {
         }.orElse(localDateTime)
     }
 
+    /**
+     * 验证时区是否为有效时区
+     *
+     * @param timezone 时区
+     */
     @API(status = API.Status.STABLE, since = "2.4.0")
     @JvmStatic
     fun validateTimezone(timezone: String) {
