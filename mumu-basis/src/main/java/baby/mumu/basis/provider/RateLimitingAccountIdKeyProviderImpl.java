@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public class RateLimitingAccountIdKeyProviderImpl implements RateLimitingKeyProv
   @Override
   public String generateUniqKey() {
     return String.valueOf(SecurityContextUtil.getLoginAccountId()
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED)));
+      .orElseThrow(() -> new MuMuException(
+        ResponseCode.FAILURE_TO_GET_INFORMATION_RELATED_TO_THE_LOGIN_ACCOUNT)));
   }
 }
