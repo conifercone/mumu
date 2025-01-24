@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package baby.mumu.authentication.client.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import baby.mumu.authentication.client.api.TokenGrpcService;
-import baby.mumu.authentication.client.config.ResourceServerProperties.Policy;
+import baby.mumu.authentication.client.config.ResourcePoliciesProperties.HttpPolicy;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.tracing.Tracer;
@@ -51,15 +51,15 @@ import org.springframework.util.Assert;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties(ResourceServerProperties.class)
+@EnableConfigurationProperties(ResourcePoliciesProperties.class)
 @EnableWebSecurity
 public class JWTSecurityConfig {
 
-  private final ResourceServerProperties resourceServerProperties;
+  private final ResourcePoliciesProperties resourcePoliciesProperties;
 
   @Autowired
-  public JWTSecurityConfig(ResourceServerProperties resourceServerProperties) {
-    this.resourceServerProperties = resourceServerProperties;
+  public JWTSecurityConfig(ResourcePoliciesProperties resourcePoliciesProperties) {
+    this.resourcePoliciesProperties = resourcePoliciesProperties;
   }
 
   @Bean
@@ -67,27 +67,27 @@ public class JWTSecurityConfig {
     TokenGrpcService tokenGrpcService, ObjectProvider<Tracer> tracers) throws Exception {
     //noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
-    if (CollectionUtils.isNotEmpty(resourceServerProperties.getPolicies())) {
-      for (Policy policy : resourceServerProperties.getPolicies()) {
-        if (policy.isPermitAll()) {
-          csrfIgnoreUrls.add(policy.getMatcher());
+    if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getHttp())) {
+      for (HttpPolicy httpPolicy : resourcePoliciesProperties.getHttp()) {
+        if (httpPolicy.isPermitAll()) {
+          csrfIgnoreUrls.add(httpPolicy.getMatcher());
         }
         http.authorizeHttpRequests((authorize) -> {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
-              .requestMatchers(HttpMethod.valueOf(policy.getHttpMethod()),
-                policy.getMatcher());
-            if (StringUtils.isNotBlank(policy.getRole())) {
-              authorizedUrl.hasRole(policy.getRole());
-            } else if (CollectionUtils.isNotEmpty(policy.getAnyRole())) {
+              .requestMatchers(HttpMethod.valueOf(httpPolicy.getHttpMethod()),
+                httpPolicy.getMatcher());
+          if (StringUtils.isNotBlank(httpPolicy.getRole())) {
+            authorizedUrl.hasRole(httpPolicy.getRole());
+          } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyRole())) {
               authorizedUrl.hasAnyRole(
-                policy.getAnyRole().stream().distinct().toArray(String[]::new));
-            } else if (StringUtils.isNotBlank(policy.getAuthority())) {
-              Assert.isTrue(!policy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+                httpPolicy.getAnyRole().stream().distinct().toArray(String[]::new));
+          } else if (StringUtils.isNotBlank(httpPolicy.getAuthority())) {
+            Assert.isTrue(!httpPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                 "Permission configuration cannot be empty and cannot start with SCOPE_");
               authorizedUrl.hasAuthority(
-                CommonConstants.AUTHORITY_PREFIX.concat(policy.getAuthority()));
-            } else if (CollectionUtils.isNotEmpty(policy.getAnyAuthority())) {
-              List<String> anyAuthority = policy.getAnyAuthority();
+                CommonConstants.AUTHORITY_PREFIX.concat(httpPolicy.getAuthority()));
+          } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyAuthority())) {
+            List<String> anyAuthority = httpPolicy.getAnyAuthority();
               anyAuthority.stream().filter(
                 authority -> StringUtils.isBlank(authority) || authority.startsWith(
                   CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(authority -> {
@@ -97,10 +97,12 @@ public class JWTSecurityConfig {
               authorizedUrl.hasAnyAuthority(
                 anyAuthority.stream().distinct().map(CommonConstants.AUTHORITY_PREFIX::concat)
                   .toArray(String[]::new));
-            } else if (policy.isPermitAll()) {
+          } else if (httpPolicy.isPermitAll()) {
               authorizedUrl.permitAll();
-            } else if (policy.isDenyAll()) {
+          } else if (httpPolicy.isDenyAll()) {
               authorizedUrl.denyAll();
+          } else if (httpPolicy.isAuthenticated()) {
+            authorizedUrl.authenticated();
             }
           }
         );

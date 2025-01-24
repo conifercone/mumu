@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,17 +57,17 @@ import org.springframework.util.Assert;
 public class GrpcSecurityConfiguration {
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
-  private final ResourceServerProperties resourceServerProperties;
+  private final ResourcePoliciesProperties resourcePoliciesProperties;
   private final static String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
 
   @Autowired
   public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
     JwtAuthenticationConverter jwtAuthenticationConverter,
-    ResourceServerProperties resourceServerProperties) {
+    ResourcePoliciesProperties resourcePoliciesProperties) {
     JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
     authenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
     this.jwtAuthenticationProvider = authenticationProvider;
-    this.resourceServerProperties = resourceServerProperties;
+    this.resourcePoliciesProperties = resourcePoliciesProperties;
   }
 
   @Bean
@@ -88,8 +88,8 @@ public class GrpcSecurityConfiguration {
   @Bean
   GrpcSecurityMetadataSource grpcSecurityMetadataSource() {
     final ManualGrpcSecurityMetadataSource source = new ManualGrpcSecurityMetadataSource();
-    if (CollectionUtils.isNotEmpty(resourceServerProperties.getGrpcs())) {
-      resourceServerProperties.getGrpcs()
+    if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getGrpc())) {
+      resourcePoliciesProperties.getGrpc()
         .forEach(grpc -> {
           if (CollectionUtils.isNotEmpty(grpc.getGrpcPolicies())) {
             grpc.getGrpcPolicies().forEach(grpcPolicy -> {
@@ -126,6 +126,8 @@ public class GrpcSecurityConfiguration {
                   source.set(methods, AccessPredicate.permitAll());
                 } else if (grpcPolicy.isDenyAll()) {
                   source.set(methods, AccessPredicate.denyAll());
+                } else if (grpcPolicy.isAuthenticated()) {
+                  source.set(methods, AccessPredicate.authenticated());
                 }
               } catch (ClassNotFoundException | InvocationTargetException |
                        IllegalAccessException | NoSuchMethodException e) {
