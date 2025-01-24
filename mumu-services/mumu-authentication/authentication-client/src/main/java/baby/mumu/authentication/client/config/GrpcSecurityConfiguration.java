@@ -137,7 +137,7 @@ public class GrpcSecurityConfiguration {
           }
         });
     }
-    source.setDefault(AccessPredicate.authenticated());
+    source.setDefault(AccessPredicate.denyAll());
     return source;
   }
 

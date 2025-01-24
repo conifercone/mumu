@@ -110,7 +110,7 @@ public class JWTSecurityConfig {
     }
     http.authorizeHttpRequests(
       (authorize) -> authorize.anyRequest()
-        .authenticated());
+        .denyAll());
     http.oauth2ResourceServer(
         resourceServerConfigurer -> resourceServerConfigurer.jwt(
           jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
