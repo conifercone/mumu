@@ -55,7 +55,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.javamoney.moneta.Money;
-import org.jetbrains.annotations.NotNull;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,17 +208,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@NotNull Account account) {
-    SecurityContextUtil.getLoginAccountId()
-      .filter(res -> Objects.equals(res, account.getId()))
-      .ifPresentOrElse((accountId) -> accountConvertor.toPO(account)
+  public void updateById(Account account) {
+    Optional.ofNullable(account).ifPresent(accountNotNull -> SecurityContextUtil.getLoginAccountId()
+      .filter(res -> Objects.equals(res, accountNotNull.getId()))
+      .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
         .ifPresent(accountPO -> {
           accountRepository.merge(accountPO);
           accountRedisRepository.deleteById(accountId);
           accountRoleRedisRepository.deleteById(accountId);
         }), () -> {
         throw new MuMuException(ResponseCode.UNAUTHORIZED);
-      });
+      }));
   }
 
   /**
@@ -229,11 +228,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    accountConvertor.toPO(account).ifPresent(accountPO -> {
-      accountRoleRepository.deleteByAccountId(account.getId());
-      accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-      accountRoleRedisRepository.deleteById(account.getId());
-    });
+    Optional.ofNullable(account).map(Account::getId).filter(accountRepository::existsById)
+      .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(accountPO -> {
+        accountRoleRepository.deleteByAccountId(accountId);
+        accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+        accountRoleRedisRepository.deleteById(accountId);
+      }));
   }
 
   /**
