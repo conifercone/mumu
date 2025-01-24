@@ -76,18 +76,18 @@ public class JWTSecurityConfig {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = authorize
               .requestMatchers(HttpMethod.valueOf(httpPolicy.getHttpMethod()),
                 httpPolicy.getMatcher());
-          if (StringUtils.isNotBlank(httpPolicy.getRole())) {
-            authorizedUrl.hasRole(httpPolicy.getRole());
-          } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyRole())) {
+            if (StringUtils.isNotBlank(httpPolicy.getRole())) {
+              authorizedUrl.hasRole(httpPolicy.getRole());
+            } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyRole())) {
               authorizedUrl.hasAnyRole(
                 httpPolicy.getAnyRole().stream().distinct().toArray(String[]::new));
-          } else if (StringUtils.isNotBlank(httpPolicy.getAuthority())) {
-            Assert.isTrue(!httpPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
+            } else if (StringUtils.isNotBlank(httpPolicy.getAuthority())) {
+              Assert.isTrue(!httpPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
                 "Permission configuration cannot be empty and cannot start with SCOPE_");
               authorizedUrl.hasAuthority(
                 CommonConstants.AUTHORITY_PREFIX.concat(httpPolicy.getAuthority()));
-          } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyAuthority())) {
-            List<String> anyAuthority = httpPolicy.getAnyAuthority();
+            } else if (CollectionUtils.isNotEmpty(httpPolicy.getAnyAuthority())) {
+              List<String> anyAuthority = httpPolicy.getAnyAuthority();
               anyAuthority.stream().filter(
                 authority -> StringUtils.isBlank(authority) || authority.startsWith(
                   CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(authority -> {
@@ -97,12 +97,12 @@ public class JWTSecurityConfig {
               authorizedUrl.hasAnyAuthority(
                 anyAuthority.stream().distinct().map(CommonConstants.AUTHORITY_PREFIX::concat)
                   .toArray(String[]::new));
-          } else if (httpPolicy.isPermitAll()) {
+            } else if (httpPolicy.isPermitAll()) {
               authorizedUrl.permitAll();
-          } else if (httpPolicy.isDenyAll()) {
+            } else if (httpPolicy.isDenyAll()) {
               authorizedUrl.denyAll();
-          } else if (httpPolicy.isAuthenticated()) {
-            authorizedUrl.authenticated();
+            } else if (httpPolicy.isAuthenticated()) {
+              authorizedUrl.authenticated();
             }
           }
         );
