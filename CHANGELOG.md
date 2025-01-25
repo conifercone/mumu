@@ -16,6 +16,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ Removed
 
+## [2.6.0] - 2025-01-25
+
+### ⭐ Added
+
+- Added response encoding.
+- Added bean creation conditions for `RateLimitingCustomGenerateProvider`.
+- Added method annotations.
+- Added `status` attribute to `ResponseCode`.
+- Added Swagger converter.
+- Added functionality to download all permission data containing permission paths.
+- Added a general JSON data download method.
+- Added an API to delete a specific account address.
+- Added an API to modify account addresses.
+- Added APIs to set the default account address and query nearby accounts.
+- Added a location property to account addresses.
+
+### 🕸️ Changed
+
+- Added description information matching conditions for archived role and permission queries.
+- Added description information matching conditions for role queries.
+- For security reasons, default interface permissions are set to deny access to anyone.
+- Optimized permission configuration properties.
+- Upgraded Gradle to 8.12.1.
+- Upgraded Flyway to 11.2.0.
+- Upgraded gRPC to 1.69.1.
+- Upgraded `com.aliyun:alimt20181012` to 1.4.0.
+- Upgraded MinIO to 8.5.17.
+- Changed `code` attribute type to a primitive data type.
+- Optimized utility class implementations.
+- Optimized file download utility class.
+- Upgraded OpenCSV to 5.10.
+- Upgraded `springdoc-openapi-starter-webmvc-ui` to 2.8.3.
+- Upgraded Protobuf to 4.29.3.
+- Adjusted the timing for saving role permissions.
+- Added description information matching conditions for permission queries.
+- Optimized thread variable definitions.
+- Optimized archived attribute type.
+- Adjusted time formatting.
+- Improved multilingual identifier settings logic.
+- Added caching to system settings.
+- Upgraded `resilience4j-retry` to 2.3.0.
+
+### 🐞 Fixed
+
+- Fixed an issue with Chinese garbled text in the signature filter.
+
+### ⚠️ Removed
+
+- Removed the rule engine.
+
 ## [2.5.0] - 2024-12-31
 
 ### ⭐ Added
@@ -529,7 +579,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.5.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.6.0...develop
+[2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0

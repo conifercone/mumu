@@ -16,6 +16,56 @@
 
 ### ⚠️ 移除
 
+## [2.6.0] - 2025-01-25
+
+### ⭐ 新增
+
+- 新增响应编码。
+- RateLimitingCustomGenerateProvider增加bean创建条件。
+- 新增方法注释。
+- ResponseCode新增status属性。
+- 新增swagger转换器。
+- 新增下载所有包含权限路径的权限数据。
+- 新增json数据下载通用方法。
+- 删除指定账户地址。
+- 新增修改账户地址接口。
+- 新增设置账户默认地址和查询附近的账户接口。
+- 账户地址新增定位属性。
+
+### 🕸️ 变更
+
+- 归档角色、权限查询新增描述信息匹配条件。
+- 角色查询新增描述信息匹配条件。
+- 出于安全考虑默认接口权限设置为不允许任何人访问。
+- 优化权限配置属性。
+- gradle升级至8.12.1。
+- flyway升级至11.2.0。
+- grpc升级至1.69.1。
+- com.aliyun:alimt20181012升级至1.4.0。
+- minio升级至8.5.17。
+- 修改code属性类型为基本数据类型。
+- 优化工具类实现。
+- 优化文件下载工具类。
+- opencsv升级至5.10。
+- springdoc-openapi-starter-webmvc-ui升级至2.8.3。
+- protobuf升级至4.29.3。
+- 调整角色权限保存时机。
+- 权限查询新增描述信息匹配条件。
+- 优化线程变量定义。
+- 优化已归档属性类型。
+- 时间格式调整。
+- 优化多语言标识设置逻辑。
+- 系统设置增加缓存。
+- resilience4j-retry升级至2.3.0。
+
+### 🐞 修复
+
+- 修复签名过滤器中文乱码问题。
+
+### ⚠️ 移除
+
+- 移除规则引擎。
+
 ## [2.5.0] - 2024-12-31
 
 ### ⭐ 新增
@@ -513,7 +563,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.5.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.6.0...develop
+[2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
