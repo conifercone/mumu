@@ -199,7 +199,6 @@ subprojects {
             from(rootProject.file("LICENSE"))
         }
         manifest {
-            @Suppress("SpellCheckingInspection")
             attributes(
                 "Implementation-Title" to archiveBaseName.get(),
                 "Implementation-Version" to archiveVersion.get(),
@@ -208,7 +207,7 @@ subprojects {
                 "Build-OS" to System.getProperty("os.name"),
                 "Build-Jdk" to System.getProperty("java.version"),
                 "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"))
+                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
             )
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 package baby.mumu.authentication.infrastructure.account.convertor;
 
 import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcDTO;
 import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
 import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
@@ -29,37 +30,36 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountAddressMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
-import baby.mumu.authentication.infrastructure.account.units.AccountDigitalPreferenceUnit;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePOId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPO;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsPOId;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisPO;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
-import baby.mumu.basis.constants.AccountSystemSettingsDefaultValueConstants;
+import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,8 +67,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.drools.ruleunits.api.RuleUnitInstance;
-import org.drools.ruleunits.api.RuleUnitProvider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,33 +85,33 @@ public class AccountConvertor {
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressRepository accountAddressRepository;
+  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
   private final AccountRoleRepository accountRoleRepository;
   private final RoleRedisRepository roleRedisRepository;
   private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
   private final AccountRoleRedisRepository accountRoleRedisRepository;
-  private final RolePathsRepository rolePathsRepository;
+  private final RolePathRepository rolePathRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
     RoleRepository roleRepository,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressRepository accountAddressRepository,
+    AccountAddressMongodbRepository accountAddressMongodbRepository,
     AccountRoleRepository accountRoleRepository,
     RoleRedisRepository roleRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
     AccountRoleRedisRepository accountRoleRedisRepository,
-    RolePathsRepository rolePathsRepository) {
+    RolePathRepository rolePathRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressRepository = accountAddressRepository;
+    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
     this.accountRoleRepository = accountRoleRepository;
     this.roleRedisRepository = roleRedisRepository;
     this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
     this.accountRoleRedisRepository = accountRoleRedisRepository;
-    this.rolePathsRepository = rolePathsRepository;
+    this.rolePathRepository = rolePathRepository;
   }
 
   @Contract("_ -> new")
@@ -127,13 +125,16 @@ public class AccountConvertor {
   }
 
   private void setDigitalPreference(Account account) {
-    AccountDigitalPreferenceUnit ruleUnit = new AccountDigitalPreferenceUnit();
-    ruleUnit.getAccounts().add(account);
-    // 加载规则单元并执行规则
-    try (RuleUnitInstance<AccountDigitalPreferenceUnit> instance =
-      RuleUnitProvider.get().createRuleUnitInstance(ruleUnit)) {
-      instance.fire();
-    }
+    Optional.ofNullable(account).ifPresent(accountNotNull -> {
+      int age = accountNotNull.getAge();
+      if (age <= 34) {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_NATIVE);
+      } else if (age <= 54) {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.DIGITAL_IMMIGRANT);
+      } else {
+        accountNotNull.setDigitalPreference(DigitalPreferenceEnum.TRADITIONAL_USER);
+      }
+    });
   }
 
   private void setRolesWithIds(Account account, List<Long> roleIds) {
@@ -157,7 +158,7 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -167,7 +168,7 @@ public class AccountConvertor {
         uncachedCollectionOfRoleId -> roleRepository.findAllById(
             uncachedCollectionOfRoleId)
           .stream()
-          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
           .collect(
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
@@ -200,9 +201,9 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     if (CollectionUtils.isNotEmpty(ancestorIds)) {
       accountNotNull.setDescendantRoles(
-        getRoles(rolePathsRepository.findByAncestorIdIn(
-          ancestorIds).stream().map(RolePathsPO::getId).map(
-          RolePathsPOId::getDescendantId).distinct().collect(Collectors.toList())));
+        getRoles(rolePathRepository.findByAncestorIdIn(
+          ancestorIds).stream().map(RolePathPO::getId).map(
+          RolePathPOId::getDescendantId).distinct().collect(Collectors.toList())));
     }
   }
 
@@ -216,7 +217,7 @@ public class AccountConvertor {
       .collect(Collectors.toList());
     // 已缓存的角色
     List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisDo -> roleConvertor.toEntity(roleRedisDo).stream())
+      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -225,7 +226,7 @@ public class AccountConvertor {
       .filter(CollectionUtils::isNotEmpty).map(
         uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
           .stream()
-          .flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+          .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
           .collect(
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
@@ -243,10 +244,9 @@ public class AccountConvertor {
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toBasicInfoEntity(AccountPO accountPO) {
-    return Optional.ofNullable(accountPO).flatMap(accountDataObject -> {
-      Account account = AccountMapper.INSTANCE.toEntity(accountDataObject);
-      return getBasicInfoAccount(accountDataObject, account);
-    });
+    return Optional.ofNullable(accountPO)
+      .flatMap(accountDataObject -> getBasicInfoAccount(accountDataObject,
+        AccountMapper.INSTANCE.toEntity(accountDataObject)));
   }
 
   @NotNull
@@ -254,12 +254,12 @@ public class AccountConvertor {
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
       accountNotNull.setAddresses(
-        accountAddressRepository.findByUserId(accountDataObject.getId()).stream().map(
+        accountAddressMongodbRepository.findByUserId(accountDataObject.getId()).stream().map(
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       accountNotNull.setSystemSettings(
         accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-          .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-            accountSystemSettingsMongodbDo).stream())
+          .flatMap(accountSystemSettingsMongodbPO -> this.toAccountSystemSettings(
+            accountSystemSettingsMongodbPO).stream())
           .collect(Collectors.toList()));
       setDigitalPreference(accountNotNull);
       return accountNotNull;
@@ -272,11 +272,6 @@ public class AccountConvertor {
     return Optional.ofNullable(accountRedisPO).map(AccountMapper.INSTANCE::toEntity)
       .map(account -> {
         setRolesWithIds(account, getRoleIds(account.getId()));
-        account.setSystemSettings(
-          accountSystemSettingsMongodbRepository.findByUserId(account.getId()).stream()
-            .flatMap(accountSystemSettingsMongodbDo -> this.toAccountSystemSettings(
-              accountSystemSettingsMongodbDo).stream())
-            .collect(Collectors.toList()));
         setDigitalPreference(account);
         return account;
       });
@@ -317,20 +312,6 @@ public class AccountConvertor {
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddresses -> accountAddresses.forEach(
           accountAddress -> accountAddress.setUserId(account.getId())));
-      Optional.ofNullable(account.getSystemSettings())
-        .ifPresentOrElse(
-          accountSystemSettings -> accountSystemSettings.forEach(
-            accountSystemSettingsItem -> accountSystemSettingsItem.setUserId(account.getId())),
-          () -> account.setSystemSettings(Collections.singletonList(
-            AccountSystemSettings.builder()
-              .userId(
-                account.getId()).enabled(true).profile(
-                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE)
-              .name(
-                AccountSystemSettingsDefaultValueConstants.DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE)
-              .enabled(true)
-              .build()))
-        );
       return account;
     });
   }
@@ -372,9 +353,9 @@ public class AccountConvertor {
     return Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountUpdateRoleCmdNotNull -> {
       Optional.ofNullable(accountUpdateRoleCmdNotNull.getId())
         .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-      Optional<AccountPO> accountDoOptional = accountRepository.findById(
+      Optional<AccountPO> accountPOOptional = accountRepository.findById(
         accountUpdateRoleCmdNotNull.getId());
-      AccountPO accountPO = accountDoOptional.orElseThrow(
+      AccountPO accountPO = accountPOOptional.orElseThrow(
         () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountPO).map(account -> {
         Optional.ofNullable(accountUpdateRoleCmdNotNull.getRoleCodes())
@@ -409,7 +390,7 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AccountAddressPO> toAccountAddressPO(
+  public Optional<AccountAddressMongodbPO> toAccountAddressPO(
     AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressPO);
   }
@@ -426,6 +407,13 @@ public class AccountConvertor {
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
     return Optional.ofNullable(accountSystemSettingsMongodbPO)
       .map(AccountMapper.INSTANCE::toAccountSystemSettings);
+  }
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountAddress> toAccountAddress(
+    AccountAddressMongodbPO accountAddressMongodbPO) {
+    return Optional.ofNullable(accountAddressMongodbPO)
+      .map(AccountMapper.INSTANCE::toAccountAddress);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
@@ -457,17 +445,16 @@ public class AccountConvertor {
   public Optional<AccountSystemSettingsMongodbPO> resetAccountSystemSettingMongodbPO(
     AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
     return Optional.ofNullable(accountSystemSettingsMongodbPO)
-      .map(accountSystemSettingsMongodbDoTarget -> {
-        // id，userId,profile,name,enabled,version属性不重置
+      .map(systemSettingsMongodbPO -> {
         AccountMapper.INSTANCE.toAccountSystemSettingMongodbPO(
-          new AccountSystemSettingsMongodbPO(accountSystemSettingsMongodbDoTarget.getId(),
-            accountSystemSettingsMongodbDoTarget.getUserId(),
-            accountSystemSettingsMongodbDoTarget.getProfile(),
-            accountSystemSettingsMongodbDoTarget.getName(),
-            accountSystemSettingsMongodbDoTarget.getEnabled(),
-            accountSystemSettingsMongodbDoTarget.getVersion()),
-          accountSystemSettingsMongodbDoTarget);
-        return accountSystemSettingsMongodbDoTarget;
+          new AccountSystemSettingsMongodbPO(systemSettingsMongodbPO.getId(),
+            systemSettingsMongodbPO.getUserId(),
+            systemSettingsMongodbPO.getProfile(),
+            systemSettingsMongodbPO.getName(),
+            systemSettingsMongodbPO.isDefaultSystemSettings(),
+            systemSettingsMongodbPO.getVersion()),
+          systemSettingsMongodbPO);
+        return systemSettingsMongodbPO;
       });
   }
 
@@ -535,22 +522,49 @@ public class AccountConvertor {
       .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
         .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
           .map(roles -> roles.stream().map(role -> {
-            AccountRoleCurrentLoginQueryGrpcCo accountRoleCurrentLoginQueryGrpcCo = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
+            AccountRoleCurrentLoginQueryGrpcDTO accountRoleCurrentLoginQueryGrpcDTO = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
               role);
-            return accountRoleCurrentLoginQueryGrpcCo.toBuilder().addAllPermissions(
+            return accountRoleCurrentLoginQueryGrpcDTO.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(
-                accountRoleAuthorityCurrentLoginQueryCos -> accountRoleAuthorityCurrentLoginQueryCos.stream()
-                  .map(AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
+                accountRolePermissionCurrentLoginQueryDTOS -> accountRolePermissionCurrentLoginQueryDTOS.stream()
+                  .map(
+                    AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginDTO.getAddresses())
-          .map(accountAddressCurrentLoginQueryCos -> accountAddressCurrentLoginQueryCos.stream()
-            .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
-            .collect(Collectors.toList())).orElse(new ArrayList<>()))
+          .map(
+            accountAddressCurrentLoginQueryDTOS -> accountAddressCurrentLoginQueryDTOS.stream()
+              .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
+              .collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginDTO.getSystemSettings())
           .map(
-            accountSystemSettingsCurrentLoginQueryCos -> accountSystemSettingsCurrentLoginQueryCos.stream()
-              .map(AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
+            accountSystemSettingsCurrentLoginQueryDTOS -> accountSystemSettingsCurrentLoginQueryDTOS.stream()
+              .map(
+                AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
+  }
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountNearbyDTO> toAccountNearbyDTO(
+    Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountNearbyDTO);
+  }
+
+  @API(status = Status.STABLE, since = "2.6.0")
+  public Optional<AccountAddress> toAccountAddress(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    return Optional.ofNullable(accountModifyAddressByAddressIdCmd)
+      .flatMap(modifyAddressByAddressIdCmd -> {
+        Optional.ofNullable(modifyAddressByAddressIdCmd.getId())
+          .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        return accountAddressMongodbRepository.findById(
+            modifyAddressByAddressIdCmd.getId())
+          .flatMap(this::toAccountAddress).flatMap(accountAddress -> {
+            AccountMapper.INSTANCE.toAccountAddress(
+              modifyAddressByAddressIdCmd,
+              accountAddress);
+            return Optional.of(accountAddress);
+          });
+      });
   }
 }

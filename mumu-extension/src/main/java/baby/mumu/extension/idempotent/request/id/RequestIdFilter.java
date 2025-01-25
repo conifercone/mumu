@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class RequestIdFilter extends OncePerRequestFilter {
       StringUtils.isBlank(requestIdHeaderValue) || requestIdIdempotentProcessor.processed(
         requestIdHeaderValue))) {
       logger.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
-      response.setStatus(Integer.parseInt(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getCode()));
+      response.setStatus(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getStatus());
       ResponseWrapper.exceptionResponse(response, ResponseCode.REQUEST_HAS_BEEN_PROCESSED);
       return;
     }

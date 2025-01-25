@@ -2,6 +2,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/latlng.proto";
 
 option java_multiple_files = true;
 option java_package = "baby.mumu.authentication.client.api.grpc";
@@ -25,28 +26,30 @@ message AccountCurrentLoginGrpcDTO{
     LanguageEnum language = 8;
   }
   google.protobuf.Timestamp birthday = 9;
-  repeated AccountRoleCurrentLoginQueryGrpcCo roles = 10;
-  repeated AccountAddressCurrentLoginQueryGrpcCo addresses = 11;
-  repeated AccountSystemSettingsCurrentLoginQueryGrpcCo systemSettings = 12;
+  repeated AccountRoleCurrentLoginQueryGrpcDTO roles = 10;
+  repeated AccountAddressCurrentLoginQueryGrpcDTO addresses = 11;
+  repeated AccountSystemSettingsCurrentLoginQueryGrpcDTO systemSettings = 12;
 }
 
-message AccountRoleCurrentLoginQueryGrpcCo {
+message AccountRoleCurrentLoginQueryGrpcDTO {
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;
-  repeated AccountRolePermissionCurrentLoginQueryGrpcCo permissions = 4;
+  repeated AccountRolePermissionCurrentLoginQueryGrpcDTO permissions = 4;
 }
 
-message AccountAddressCurrentLoginQueryGrpcCo {
-  google.protobuf.Int64Value id = 1;
+message AccountAddressCurrentLoginQueryGrpcDTO {
+  google.protobuf.StringValue id = 1;
   google.protobuf.StringValue street = 2;
   google.protobuf.StringValue city = 3;
   google.protobuf.StringValue state = 4;
   google.protobuf.StringValue postalCode = 5;
   google.protobuf.StringValue country = 6;
+  google.type.LatLng location = 7;
+  bool defaultAddress = 8;
 }
 
-message AccountSystemSettingsCurrentLoginQueryGrpcCo {
+message AccountSystemSettingsCurrentLoginQueryGrpcDTO {
   google.protobuf.StringValue id = 1;
   google.protobuf.StringValue profile = 2;
   google.protobuf.StringValue name = 3;
@@ -60,7 +63,7 @@ message AccountSystemSettingsCurrentLoginQueryGrpcCo {
 }
 
 
-message AccountRolePermissionCurrentLoginQueryGrpcCo{
+message AccountRolePermissionCurrentLoginQueryGrpcDTO{
   google.protobuf.Int64Value id = 1;
   google.protobuf.StringValue code = 2;
   google.protobuf.StringValue name = 3;

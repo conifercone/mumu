@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -74,6 +75,7 @@ public class AspectConfiguration {
 
   @Bean
   @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+  @ConditionalOnMissingBean(RateLimitingCustomGenerateProvider.class)
   public RateLimitingCustomGenerateProvider rateLimitingCustomGenerateDefaultProviderImpl() {
     return new RateLimitingCustomGenerateDefaultProviderImpl();
   }

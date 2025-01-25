@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@ package baby.mumu.authentication.client.cmds;
 
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -31,13 +29,6 @@ import lombok.Data;
  */
 @Data
 public class AccountAddSystemSettingsCmd {
-
-  /**
-   * 唯一主键
-   */
-  @Nullable
-  @Size(min = 1)
-  private String id;
 
   /**
    * 系统设置标识
@@ -62,10 +53,4 @@ public class AccountAddSystemSettingsCmd {
    */
   @NotNull
   private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
-
-  /**
-   * 已启用
-   */
-  @NotNull
-  private Boolean enabled = false;
 }

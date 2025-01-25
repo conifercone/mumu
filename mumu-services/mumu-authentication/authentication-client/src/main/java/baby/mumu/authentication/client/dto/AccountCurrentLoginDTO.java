@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
+import org.springframework.data.geo.Point;
 
 /**
  * 查询当前登录账户信息数据传输对象
@@ -44,20 +45,44 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
 
   private Long id;
 
+  /**
+   * 用户名
+   */
   private String username;
 
+  /**
+   * 头像地址
+   */
   private String avatarUrl;
 
+  /**
+   * 手机号
+   */
   private String phone;
 
+  /**
+   * 性别
+   */
   private SexEnum sex;
 
+  /**
+   * 邮箱
+   */
   private String email;
 
+  /**
+   * 时区
+   */
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   private LanguageEnum language;
 
+  /**
+   * 出生日期
+   */
   private LocalDate birthday;
 
   /**
@@ -70,6 +95,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
    */
   private String nickName;
 
+  /**
+   * 年龄
+   */
   private int age;
 
   /**
@@ -82,19 +110,28 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
    */
   private DigitalPreferenceEnum digitalPreference;
 
-  private List<AccountRoleCurrentLoginQueryCo> roles;
+  /**
+   * 账户所属角色
+   */
+  private List<AccountRoleCurrentLoginQueryDTO> roles;
 
-  private List<AccountAddressCurrentLoginQueryCo> addresses;
+  /**
+   * 账户地址
+   */
+  private List<AccountAddressCurrentLoginQueryDTO> addresses;
 
-  private List<AccountSystemSettingsCurrentLoginQueryCo> systemSettings;
+  /**
+   * 账户系统设置
+   */
+  private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
 
   @Data
-  public static class AccountAddressCurrentLoginQueryCo {
+  public static class AccountAddressCurrentLoginQueryDTO {
 
     /**
      * 唯一主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -125,10 +162,20 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     @Size(max = 100)
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
+
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
   }
 
   @Data
-  public static class AccountRoleCurrentLoginQueryCo {
+  public static class AccountRoleCurrentLoginQueryDTO {
 
     /**
      * 角色id
@@ -145,16 +192,19 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     private String name;
 
+    /**
+     * 角色描述
+     */
     private String description;
 
     /**
      * 角色权限
      */
-    private List<AccountRolePermissionCurrentLoginQueryCo> permissions;
+    private List<AccountRolePermissionCurrentLoginQueryDTO> permissions;
   }
 
   @Data
-  public static class AccountRolePermissionCurrentLoginQueryCo {
+  public static class AccountRolePermissionCurrentLoginQueryDTO {
 
     /**
      * 权限id
@@ -171,11 +221,14 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
      */
     private String name;
 
+    /**
+     * 权限描述
+     */
     private String description;
   }
 
   @Data
-  public static class AccountSystemSettingsCurrentLoginQueryCo {
+  public static class AccountSystemSettingsCurrentLoginQueryDTO {
 
     /**
      * 唯一主键
@@ -203,10 +256,13 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
     private SystemThemeModeEnum systemThemeMode;
 
     /**
-     * 已启用
+     * 默认系统设置
      */
-    private Boolean enabled;
+    private boolean defaultSystemSettings;
 
+    /**
+     * 版本号
+     */
     private Long version;
   }
 }

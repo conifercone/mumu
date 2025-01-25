@@ -34,14 +34,14 @@ Accept: */*
       "street": "历城区",
       "city": "济南市",
       "state": "山东省",
-      "postalCode": "250101",
+      "postalCode": "250000",
       "country": "中国"
     },
     {
       "street": "历下区",
       "city": "济南市",
       "state": "山东省",
-      "postalCode": "250101",
+      "postalCode": "250000",
       "country": "中国"
     }
   ],
@@ -71,11 +71,41 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
-Authorization: Bearer {{$auth.token("admin")}}
+Authorization: Bearer {{$auth.token("test")}}
 
 {
-  "id": 1,
-  "bio": "不想把这个世界交给无趣的人"
+  "id": 2,
+  "bio": "测试用户",
+  "nickName": "测试用户"
+}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 根据ID修改账户地址
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/modifyAddressByAddressId
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("test")}}
+
+{
+  "id": "677b7392c78b097ac069201a",
+  "street": "历城区港沟街道"
 }
 
 > {%
@@ -93,7 +123,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/account/findAllSlice?current=1&pageSize=10&username=admin
+GET {{authentication-service-url}}/account/findAllSlice?current=1&pageSize=10
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -131,14 +161,85 @@ Authorization: Bearer {{$auth.token("admin")}}
   "state": "山东省",
   "city": "济南市",
   "street": "历城区",
-  "postalCode": "250101"
+  "postalCode": "250000",
+  "location": {
+    "x": 117.18689,
+    "y": 36.65065
+  }
 }
+
+### 账户设置默认地址
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/setDefaultAddress/677b4c5dd14df91de0e7d721
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
 
 > {%
   client.test("Request executed successfully", function () {
     client.assert(response.status === 200, "Response status is not 200");
   });
 %}
+
+### 删除指定账户地址
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/account/address/677b4c5dd14df91de0e7d721
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 查询当前账户指定范围内的附近的账户
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/account/nearby/1000
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
 
 ### 更新账户角色
 < {%
@@ -215,8 +316,7 @@ Authorization: Bearer {{$auth.token("admin")}}
 
 {
   "profile": "default",
-  "name": "默认系统设置",
-  "enabled": true
+  "name": "默认系统设置"
 }
 
 > {%
@@ -244,7 +344,7 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "id": "601146283917317",
+  "id": "677c866780f0b5754fd51eac",
   "name": "默认系统设置"
 }
 
@@ -562,6 +662,54 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("requestId", headers.requestId)
 %}
 POST {{authentication-service-url}}/account/logout
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 当前账户设置默认系统设置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+PUT {{authentication-service-url}}/account/setDefaultSystemSettings/677c866780f0b5754fd51eac
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 删除指定账户系统设置
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{authentication-service-url}}/account/systemSettings/677c866780f0b5754fd51eac
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

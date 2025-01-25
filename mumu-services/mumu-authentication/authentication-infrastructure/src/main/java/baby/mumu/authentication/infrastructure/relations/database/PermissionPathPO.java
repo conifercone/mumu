@@ -46,13 +46,13 @@ import org.hibernate.annotations.DynamicInsert;
 @Metamodel
 @AllArgsConstructor
 @NoArgsConstructor
-public class PermissionPathsPO extends JpaBasisDefaultPersistentObject {
+public class PermissionPathPO extends JpaBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = 5664371470283158730L;
 
   @EmbeddedId
-  private PermissionPathsPOId id;
+  private PermissionPathPOId id;
 
   @MapsId("ancestorId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

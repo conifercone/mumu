@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
+import baby.mumu.basis.enums.SystemThemeEnum;
+import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
@@ -29,6 +31,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
@@ -142,7 +145,12 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 地址
    */
-  private List<AccountAddressRedisDo> addresses;
+  private List<AccountAddressRedisPO> addresses;
+
+  /**
+   * 系统设置
+   */
+  private List<AccountSystemSettingsRedisPO> systemSettings;
 
   /**
    * 存活时间
@@ -152,12 +160,12 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 
   @Data
-  public static class AccountAddressRedisDo {
+  public static class AccountAddressRedisPO {
 
     /**
      * 唯一主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 账户ID
@@ -188,5 +196,58 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
      * 国家信息
      */
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
+
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
+
+    private Long version;
+  }
+
+  @Data
+  public static class AccountSystemSettingsRedisPO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 系统设置标识
+     */
+    private String profile;
+
+    /**
+     * 系统设置名称
+     */
+    private String name;
+
+    /**
+     * 账户ID
+     */
+    private Long userId;
+
+    /**
+     * 系统主题
+     */
+    private SystemThemeEnum systemTheme;
+
+    /**
+     * 系统主题模式
+     */
+    private SystemThemeModeEnum systemThemeMode;
+
+    /**
+     * 默认系统设置
+     */
+    private boolean defaultSystemSettings;
+
+    private Long version;
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,10 +39,10 @@ public class JpaBasisArchivablePersistentObject extends JpaBasisDefaultPersisten
   private static final long serialVersionUID = -382042388255526616L;
 
   @Column(name = "archived", nullable = false)
-  private Boolean archived;
+  private boolean archived;
 
   @Override
-  public Boolean isArchived() {
+  public boolean isArchived() {
     return archived;
   }
 }

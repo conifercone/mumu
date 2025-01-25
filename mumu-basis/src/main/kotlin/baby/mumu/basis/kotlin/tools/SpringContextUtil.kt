@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.kotlin.tools
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.BeansException
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
@@ -28,6 +29,7 @@ import java.util.*
  * @since 1.0.0
  */
 class SpringContextUtil : ApplicationContextAware {
+
     @Throws(BeansException::class)
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         if (Companion.applicationContext == null) {
@@ -40,6 +42,7 @@ class SpringContextUtil : ApplicationContextAware {
          * Spring上下文
          */
         private var applicationContext: ApplicationContext? = null
+        private val logger = LoggerFactory.getLogger(SpringContextUtil::class.java)
 
         /**
          * bean class -> bean LRU cache
@@ -72,9 +75,8 @@ class SpringContextUtil : ApplicationContextAware {
                 }
                 @Suppress("UNCHECKED_CAST")
                 Optional.of(bean as T)
-            } catch (e: NoSuchBeanDefinitionException) {
-                Optional.empty()
             } catch (e: Exception) {
+                logger.error(e.message, e)
                 Optional.empty()
             }
         }

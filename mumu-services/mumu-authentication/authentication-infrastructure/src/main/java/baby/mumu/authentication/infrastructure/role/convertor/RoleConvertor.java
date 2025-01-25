@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,10 @@ import baby.mumu.authentication.infrastructure.permission.convertor.PermissionCo
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.PermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
-import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsPO;
-import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsPOId;
-import baby.mumu.authentication.infrastructure.relations.database.PermissionPathsRepository;
-import baby.mumu.authentication.infrastructure.relations.database.RolePathsRepository;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPOId;
+import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
+import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
@@ -86,8 +86,8 @@ public class RoleConvertor {
   private final RolePermissionRepository rolePermissionRepository;
   private final PermissionRedisRepository permissionRedisRepository;
   private final RolePermissionRedisRepository rolePermissionRedisRepository;
-  private final PermissionPathsRepository permissionPathsRepository;
-  private final RolePathsRepository rolePathsRepository;
+  private final PermissionPathRepository permissionPathRepository;
+  private final RolePathRepository rolePathRepository;
 
   @Autowired
   public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
@@ -97,7 +97,7 @@ public class RoleConvertor {
     RolePermissionRepository rolePermissionRepository,
     PermissionRedisRepository permissionRedisRepository,
     RolePermissionRedisRepository rolePermissionRedisRepository,
-    PermissionPathsRepository permissionPathsRepository, RolePathsRepository rolePathsRepository) {
+    PermissionPathRepository permissionPathRepository, RolePathRepository rolePathRepository) {
     this.permissionConvertor = permissionConvertor;
     this.roleRepository = roleRepository;
     this.permissionRepository = permissionRepository;
@@ -106,8 +106,8 @@ public class RoleConvertor {
     this.rolePermissionRepository = rolePermissionRepository;
     this.permissionRedisRepository = permissionRedisRepository;
     this.rolePermissionRedisRepository = rolePermissionRedisRepository;
-    this.permissionPathsRepository = permissionPathsRepository;
-    this.rolePathsRepository = rolePathsRepository;
+    this.permissionPathRepository = permissionPathRepository;
+    this.rolePathRepository = rolePathRepository;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -123,7 +123,7 @@ public class RoleConvertor {
   private Optional<Role> hasDescendant(Role role) {
     return Optional.ofNullable(role).map(roleNotNull -> {
       roleNotNull.setHasDescendant(
-        rolePathsRepository.existsDescendantRoles(role.getId()));
+        rolePathRepository.existsDescendantRoles(role.getId()));
       return roleNotNull;
     });
   }
@@ -152,9 +152,9 @@ public class RoleConvertor {
         .collect(Collectors.toList());
       if (CollectionUtils.isNotEmpty(ancestorIds)) {
         roleDataObject.setDescendantPermissions(
-          getAuthorities(permissionPathsRepository.findByAncestorIdIn(
-            ancestorIds).stream().map(PermissionPathsPO::getId).map(
-            PermissionPathsPOId::getDescendantId).distinct().collect(Collectors.toList())));
+          getAuthorities(permissionPathRepository.findByAncestorIdIn(
+            ancestorIds).stream().map(PermissionPathPO::getId).map(
+            PermissionPathPOId::getDescendantId).distinct().collect(Collectors.toList())));
       }
     });
   }

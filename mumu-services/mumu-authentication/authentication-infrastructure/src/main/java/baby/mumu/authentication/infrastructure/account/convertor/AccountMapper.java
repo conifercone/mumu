@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,38 +15,41 @@
  */
 package baby.mumu.authentication.infrastructure.account.convertor;
 
-import baby.mumu.authentication.client.api.grpc.AccountAddressCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountAddressCurrentLoginQueryGrpcDTO;
 import baby.mumu.authentication.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AccountRolePermissionCurrentLoginQueryGrpcCo;
-import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcCo;
+import baby.mumu.authentication.client.api.grpc.AccountRoleCurrentLoginQueryGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.AccountRolePermissionCurrentLoginQueryGrpcDTO;
+import baby.mumu.authentication.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcDTO;
 import baby.mumu.authentication.client.cmds.AccountAddAddressCmd;
 import baby.mumu.authentication.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
-import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd.AccountAddressUpdateByIdCmd;
 import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
-import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountAddressCurrentLoginQueryCo;
-import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountRoleCurrentLoginQueryCo;
-import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountRolePermissionCurrentLoginQueryCo;
-import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountSystemSettingsCurrentLoginQueryCo;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountAddressCurrentLoginQueryDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountRoleCurrentLoginQueryDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountRolePermissionCurrentLoginQueryDTO;
+import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO.AccountSystemSettingsCurrentLoginQueryDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
 import baby.mumu.basis.mappers.BaseMapper;
-import baby.mumu.basis.mappers.ClientObjectMapper;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
+import baby.mumu.basis.mappers.GeoGrpcMapper;
+import baby.mumu.basis.mappers.GeoMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -63,7 +66,8 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMapper {
+public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper, GeoMapper,
+  GeoGrpcMapper {
 
   AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
@@ -74,10 +78,10 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
   Account toEntity(AccountRedisPO accountRedisPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toAccountAddress(AccountAddressPO accountAddressPO);
+  AccountAddress toAccountAddress(AccountAddressMongodbPO accountAddressMongodbPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressPO toAccountAddressPO(AccountAddress accountAddress);
+  AccountAddressMongodbPO toAccountAddressPO(AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsMongodbPO toAccountSystemSettingMongodbPO(
@@ -116,8 +120,10 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
   @API(status = Status.STABLE, since = "2.1.0")
   AccountAddress toAccountAddress(AccountAddressRegisterCmd accountAddressRegisterCmd);
 
-  @API(status = Status.STABLE, since = "2.1.0")
-  AccountAddress toAccountAddress(AccountAddressUpdateByIdCmd accountAddressUpdateByIdCmd);
+  @API(status = Status.STABLE, since = "2.6.0")
+  void toAccountAddress(
+    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd,
+    @MappingTarget AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd, @MappingTarget Account account);
@@ -151,20 +157,21 @@ public interface AccountMapper extends GrpcMapper, ClientObjectMapper, BaseMappe
     AccountCurrentLoginDTO accountCurrentLoginDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountAddressCurrentLoginQueryGrpcCo toAccountAddressCurrentLoginQueryGrpcDTO(
-    AccountAddressCurrentLoginQueryCo accountAddressCurrentLoginQueryCo);
+  AccountAddressCurrentLoginQueryGrpcDTO toAccountAddressCurrentLoginQueryGrpcDTO(
+    AccountAddressCurrentLoginQueryDTO accountAddressCurrentLoginQueryDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRoleCurrentLoginQueryGrpcCo toAccountRoleCurrentLoginQueryGrpcDTO(
-    AccountRoleCurrentLoginQueryCo accountRoleCurrentLoginQueryCo);
+  AccountRoleCurrentLoginQueryGrpcDTO toAccountRoleCurrentLoginQueryGrpcDTO(
+    AccountRoleCurrentLoginQueryDTO accountRoleCurrentLoginQueryDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRolePermissionCurrentLoginQueryGrpcCo toAccountRolePermissionCurrentLoginQueryGrpcDTO(
-    AccountRolePermissionCurrentLoginQueryCo accountRolePermissionCurrentLoginQueryCo);
+  AccountRolePermissionCurrentLoginQueryGrpcDTO toAccountRolePermissionCurrentLoginQueryGrpcDTO(
+    AccountRolePermissionCurrentLoginQueryDTO accountRolePermissionCurrentLoginQueryDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountSystemSettingsCurrentLoginQueryGrpcCo toAccountSystemSettingsCurrentLoginQueryGrpcDTO(
-    AccountSystemSettingsCurrentLoginQueryCo accountSystemSettingsCurrentLoginQueryCo);
+  AccountSystemSettingsCurrentLoginQueryGrpcDTO toAccountSystemSettingsCurrentLoginQueryGrpcDTO(
+    AccountSystemSettingsCurrentLoginQueryDTO accountSystemSettingsCurrentLoginQueryDTO);
 
-
+  @API(status = Status.STABLE, since = "2.6.0")
+  AccountNearbyDTO toAccountNearbyDTO(Account account);
 }

@@ -11,6 +11,7 @@ export function generateHeaders(serviceUrl) {
       JSON.parse(requestBody));
   const dataToSign = timestampString + requestIdString + requestPath
       + compactJsonString;
+  console.log(dataToSign);
   const signatureString = crypto.hmac.sha256()
   .withTextSecret(request.environment.get("secret"))
   .updateWithText(dataToSign)

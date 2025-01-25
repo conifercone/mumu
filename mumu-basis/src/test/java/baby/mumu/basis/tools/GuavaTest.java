@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.constants;
+package baby.mumu.basis.tools;
+
+import com.google.common.reflect.TypeToken;
+import java.util.Collection;
+import org.junit.jupiter.api.Test;
 
 /**
- * 账户系统设置默认值常量
+ * guava测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.6.0
  */
-public final class AccountSystemSettingsDefaultValueConstants {
+public class GuavaTest {
 
-  private AccountSystemSettingsDefaultValueConstants() {
+  @Test
+  public void typeTokenTest() {
+    TypeToken<Collection<String>> collectionTypeToken = new TypeToken<>() {
+    };
+    System.out.println(collectionTypeToken.getType());
   }
-
-  /**
-   * 默认帐户系统设置配置文件值
-   */
-  public static final String DEFAULT_ACCOUNT_SYSTEM_SETTINGS_PROFILE_VALUE = "default";
-
-  /**
-   * 系统设置名称默认值
-   */
-  public static final String DEFAULT_ACCOUNT_SYSTEM_SETTINGS_NAME_VALUE = "default system configuration";
 }

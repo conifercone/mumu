@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import baby.mumu.basis.dto.BaseDataTransferObject
 import baby.mumu.basis.exception.MuMuException
 import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -37,6 +38,8 @@ import javax.mail.internet.InternetAddress
 object CommonUtil {
     private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
     private val EMAIL_PATTERN: Pattern = Pattern.compile(EMAIL_REGEX)
+    private val logger = LoggerFactory.getLogger(CommonUtil::class.java)
+
 
     /**
      * 校验邮箱地址格式的方法
@@ -68,7 +71,8 @@ object CommonUtil {
         try {
             val emailAddr = InternetAddress(email)
             emailAddr.validate()
-        } catch (ex: AddressException) {
+        } catch (e: AddressException) {
+            logger.error(e.message, e)
             return false
         }
         return true
@@ -206,6 +210,11 @@ object CommonUtil {
         }.orElse(localDateTime)
     }
 
+    /**
+     * 验证时区是否为有效时区
+     *
+     * @param timezone 时区
+     */
     @API(status = API.Status.STABLE, since = "2.4.0")
     @JvmStatic
     fun validateTimezone(timezone: String) {
@@ -213,7 +222,7 @@ object CommonUtil {
             try {
                 ZoneId.of(timezone)
             } catch (e: Exception) {
-                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE)
+                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE, e)
             }
         }
     }

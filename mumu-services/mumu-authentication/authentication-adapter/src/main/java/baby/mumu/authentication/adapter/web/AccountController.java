@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import baby.mumu.authentication.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllCmd;
 import baby.mumu.authentication.client.cmds.AccountFindAllSliceCmd;
+import baby.mumu.authentication.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.authentication.client.cmds.AccountModifySystemSettingsBySettingsIdCmd;
 import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
@@ -31,6 +32,7 @@ import baby.mumu.authentication.client.dto.AccountBasicInfoDTO;
 import baby.mumu.authentication.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllDTO;
 import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
+import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.client.dto.AccountOnlineStatisticsDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -38,6 +40,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +174,16 @@ public class AccountController {
     accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
   }
 
+  @Operation(summary = "通过地址id修改账户地址")
+  @PutMapping("/modifyAddressByAddressId")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void modifyAddressByAddressId(
+    @RequestBody @Valid AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    accountService.modifyAddressByAddressId(accountModifyAddressByAddressIdCmd);
+  }
+
   @Operation(summary = "添加系统设置")
   @PostMapping("/addSystemSettings")
   @ResponseBody
@@ -276,5 +291,55 @@ public class AccountController {
   public Slice<AccountFindAllSliceDTO> findAllSlice(
     @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
+  }
+
+  @Operation(summary = "附近的账户")
+  @GetMapping("/nearby/{radiusInMeters}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public ResponseWrapper<List<AccountNearbyDTO>> nearby(
+    @PathVariable(value = "radiusInMeters") @Min(1) double radiusInMeters) {
+    return ResponseWrapper.success(accountService.nearby(radiusInMeters));
+  }
+
+  @Operation(summary = "当前账户设置默认地址")
+  @PutMapping("/setDefaultAddress/{addressId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void setDefaultAddress(
+    @PathVariable(value = "addressId") @NotBlank String addressId) {
+    accountService.setDefaultAddress(addressId);
+  }
+
+  @Operation(summary = "删除指定账户地址")
+  @DeleteMapping("/address/{addressId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void deleteAddress(
+    @PathVariable(value = "addressId") @NotBlank String addressId) {
+    accountService.deleteAddress(addressId);
+  }
+
+  @Operation(summary = "当前账户设置默认系统设置")
+  @PutMapping("/setDefaultSystemSettings/{systemSettingsId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void setDefaultSystemSettings(
+    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    accountService.setDefaultSystemSettings(systemSettingsId);
+  }
+
+  @Operation(summary = "删除指定账户系统设置")
+  @DeleteMapping("/systemSettings/{systemSettingsId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.6.0")
+  public void deleteSystemSettings(
+    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    accountService.deleteSystemSettings(systemSettingsId);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,6 +165,11 @@ public interface AccountGateway {
   void modifySystemSettings(AccountSystemSettings accountSystemSettings);
 
   /**
+   * 修改账户地址
+   */
+  void modifyAddress(AccountAddress accountAddress);
+
+  /**
    * 账户添加系统设置
    *
    * @param accountSystemSettings 账户系统设置
@@ -202,4 +207,40 @@ public interface AccountGateway {
    * @return 查询结果
    */
   Slice<Account> findAllSlice(Account account, int current, int pageSize);
+
+  /**
+   * 附近的账户
+   *
+   * @param radiusInMeters 半径（米）
+   * @return 附近的账户
+   */
+  List<Account> nearby(double radiusInMeters);
+
+  /**
+   * 设置默认地址
+   *
+   * @param addressId 地址ID
+   */
+  void setDefaultAddress(String addressId);
+
+  /**
+   * 设置默认系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void setDefaultSystemSettings(String systemSettingsId);
+
+  /**
+   * 删除指定地址
+   *
+   * @param addressId 地址ID
+   */
+  void deleteAddress(String addressId);
+
+  /**
+   * 删除指定系统设置
+   *
+   * @param systemSettingsId 系统设置ID
+   */
+  void deleteSystemSettings(String systemSettingsId);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户地址领域模型
@@ -47,7 +48,7 @@ public class AccountAddress extends BasisDomainModel {
   /**
    * 唯一主键
    */
-  private Long id;
+  private String id;
 
   /**
    * 账户ID
@@ -83,4 +84,17 @@ public class AccountAddress extends BasisDomainModel {
    */
   @Size(max = 100)
   private String country;
+
+  /**
+   * 定位
+   */
+  private Point location;
+
+  /**
+   * 是否为默认地址
+   */
+  private boolean defaultAddress;
+
+  private Long version;
 }
+

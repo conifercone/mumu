@@ -28,18 +28,18 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * @since 1.0.0
  */
 @Data
-@ConfigurationProperties("mumu.resource")
-public class ResourceServerProperties {
+@ConfigurationProperties("mumu.resource.policies")
+public class ResourcePoliciesProperties {
 
   @NestedConfigurationProperty
-  private List<Policy> policies = new ArrayList<>();
+  private List<HttpPolicy> http = new ArrayList<>();
 
   @NestedConfigurationProperty
-  private List<Grpc> grpcs = new ArrayList<>();
+  private List<Grpc> grpc = new ArrayList<>();
 
 
   @Data
-  public static class Policy {
+  public static class HttpPolicy {
 
     private String httpMethod;
 
@@ -56,6 +56,8 @@ public class ResourceServerProperties {
     private boolean permitAll;
 
     private boolean denyAll;
+
+    private boolean authenticated;
   }
 
   /**
@@ -93,5 +95,7 @@ public class ResourceServerProperties {
     private boolean permitAll;
 
     private boolean denyAll;
+
+    private boolean authenticated;
   }
 }

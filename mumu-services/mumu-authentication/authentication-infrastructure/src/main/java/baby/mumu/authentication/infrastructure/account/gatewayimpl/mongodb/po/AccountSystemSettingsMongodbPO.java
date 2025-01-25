@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaMongodbBasisDefaultPersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
@@ -50,17 +49,16 @@ public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersis
   private static final long serialVersionUID = 6286174255794150761L;
 
   public AccountSystemSettingsMongodbPO(String id, Long userId, String profile, String name,
-    boolean enabled, Long version) {
+    boolean defaultSystemSettings, Long version) {
     this.id = id;
     this.userId = userId;
     this.profile = profile;
     this.name = name;
-    this.enabled = enabled;
+    this.defaultSystemSettings = defaultSystemSettings;
     this.version = version;
   }
 
   @Id
-  @SnowflakeIdGenerator
   @NotBlank
   private String id;
 
@@ -95,10 +93,10 @@ public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersis
   private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 
   /**
-   * 已启用
+   * 是否是默认系统设置
    */
   @Indexed(background = true)
-  private Boolean enabled;
+  private boolean defaultSystemSettings;
 
   @Version
   private Long version;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.subscription.convertor;
 
-import baby.mumu.basis.mappers.ClientObjectMapper;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
@@ -37,7 +37,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.2
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface SubscriptionTextMessageMapper extends ClientObjectMapper {
+public interface SubscriptionTextMessageMapper extends DataTransferObjectMapper {
 
   SubscriptionTextMessageMapper INSTANCE = Mappers.getMapper(SubscriptionTextMessageMapper.class);
 

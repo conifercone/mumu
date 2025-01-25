@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,8 @@
  */
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.dto.BaseDataTransferObject;
 import com.opencsv.bean.CsvBindByName;
-import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 下载所有权限数据数据传输对象
@@ -28,11 +25,7 @@ import lombok.EqualsAndHashCode;
  * @since 2.4.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class PermissionDownloadAllDTO extends BaseDataTransferObject {
-
-  @Serial
-  private static final long serialVersionUID = 6242302479488819166L;
+public class PermissionDownloadAllDTO {
 
   @CsvBindByName(column = "Id")
   private Long id;

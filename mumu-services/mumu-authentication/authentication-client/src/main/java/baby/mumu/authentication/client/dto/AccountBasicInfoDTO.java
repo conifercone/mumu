@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户基本信息数据传输对象
@@ -121,16 +122,16 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountAddressBasicInfoDo> addresses;
+  private List<AccountAddressBasicInfoDTO> addresses;
 
 
   @Data
-  public static class AccountAddressBasicInfoDo {
+  public static class AccountAddressBasicInfoDTO {
 
     /**
      * 唯一主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 账户ID
@@ -161,5 +162,15 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
      * 国家信息
      */
     private String country;
+
+    /**
+     * 定位
+     */
+    private Point location;
+
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
   }
 }

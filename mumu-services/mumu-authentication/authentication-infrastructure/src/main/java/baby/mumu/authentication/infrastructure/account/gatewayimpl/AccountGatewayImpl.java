@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountAddressRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountAddressMongodbRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.AccountRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
@@ -54,7 +54,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.javamoney.moneta.Money;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressRepository accountAddressRepository;
+  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
   private final JobScheduler jobScheduler;
   private final AccountRoleRepository accountRoleRepository;
   private final AccountRedisRepository accountRedisRepository;
@@ -104,7 +104,7 @@ public class AccountGatewayImpl implements AccountGateway {
     OperationLogGrpcService operationLogGrpcService,
     ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressRepository accountAddressRepository, JobScheduler jobScheduler,
+    AccountAddressMongodbRepository accountAddressMongodbRepository, JobScheduler jobScheduler,
     AccountRoleRepository accountRoleRepository,
     AccountRedisRepository accountRedisRepository,
     AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
@@ -118,7 +118,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressRepository = accountAddressRepository;
+    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
     this.jobScheduler = jobScheduler;
     this.accountRoleRepository = accountRoleRepository;
     this.accountRedisRepository = accountRedisRepository;
@@ -128,6 +128,9 @@ public class AccountGatewayImpl implements AccountGateway {
     this.accountRoleRedisRepository = accountRoleRedisRepository;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -141,18 +144,13 @@ public class AccountGatewayImpl implements AccountGateway {
       accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
       accountRepository.persist(accountPO);
       account.setId(accountPO.getId());
-      if (CollectionUtils.isNotEmpty(account.getSystemSettings())) {
-        accountSystemSettingsMongodbRepository.saveAll(account.getSystemSettings().stream().flatMap(
-          accountSystemSettings -> accountConvertor.toAccountSystemSettingMongodbPO(
-            accountSystemSettings).stream()).collect(Collectors.toList()));
-      }
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
           accountAddresses -> accountAddresses.stream()
             .flatMap(accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
               .stream())
             .collect(
               Collectors.toList())).filter(CollectionUtils::isNotEmpty)
-        .ifPresent(accountAddressRepository::persistAll);
+        .ifPresent(accountAddressMongodbRepository::saveAll);
       accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
       accountRedisRepository.deleteById(account.getId());
       accountRoleRedisRepository.deleteById(account.getId());
@@ -172,6 +170,9 @@ public class AccountGatewayImpl implements AccountGateway {
 
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -186,6 +187,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -198,41 +202,43 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@NotNull Account account) {
-    SecurityContextUtil.getLoginAccountId()
-      .filter(res -> Objects.equals(res, account.getId()))
-      .ifPresentOrElse((accountId) -> accountConvertor.toPO(account)
+  public void updateById(Account account) {
+    Optional.ofNullable(account).ifPresent(accountNotNull -> SecurityContextUtil.getLoginAccountId()
+      .filter(res -> Objects.equals(res, accountNotNull.getId()))
+      .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
         .ifPresent(accountPO -> {
-          Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
-            .ifPresent(accountAddresses -> {
-              List<AccountAddressPO> accountAddressPOS = accountAddresses.stream().flatMap(
-                  accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
-                    .stream())
-                .collect(Collectors.toList());
-              accountAddressRepository.mergeAll(accountAddressPOS);
-            });
           accountRepository.merge(accountPO);
           accountRedisRepository.deleteById(accountId);
           accountRoleRedisRepository.deleteById(accountId);
         }), () -> {
         throw new MuMuException(ResponseCode.UNAUTHORIZED);
-      });
+      }));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    accountConvertor.toPO(account).ifPresent(accountPO -> {
-      accountRoleRepository.deleteByAccountId(account.getId());
-      accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-      accountRoleRedisRepository.deleteById(account.getId());
-    });
+    Optional.ofNullable(account).map(Account::getId).filter(accountRepository::existsById)
+      .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(accountPO -> {
+        accountRoleRepository.deleteByAccountId(accountId);
+        accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+        accountRoleRedisRepository.deleteById(accountId);
+      }));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -248,6 +254,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
@@ -263,12 +272,18 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
     return passwordTokenRepository.count();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -286,23 +301,34 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("删除当前账户")
   public void deleteCurrentAccount() {
-    SecurityContextUtil.getLoginAccountId().ifPresentOrElse(accountId -> {
-      accountRepository.deleteById(accountId);
-      accountAddressRepository.deleteByUserId(accountId);
-      passwordTokenRepository.deleteById(accountId);
-      accountRoleRepository.deleteByAccountId(accountId);
-      accountRedisRepository.deleteById(accountId);
-      accountRoleRedisRepository.deleteById(accountId);
-    }, () -> {
-      throw new MuMuException(ResponseCode.UNAUTHORIZED);
-    });
+    SecurityContextUtil.getLoginAccountId().flatMap(accountRepository::findById)
+      .ifPresentOrElse(accountPO -> {
+        if (accountPO.getBalance()
+          .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
+          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+        }
+        accountRepository.deleteById(accountPO.getId());
+        accountAddressMongodbRepository.deleteByUserId(accountPO.getId());
+        passwordTokenRepository.deleteById(accountPO.getId());
+        accountRoleRepository.deleteByAccountId(accountPO.getId());
+        accountRedisRepository.deleteById(accountPO.getId());
+        accountRoleRedisRepository.deleteById(accountPO.getId());
+      }, () -> {
+        throw new MuMuException(ResponseCode.UNAUTHORIZED);
+      });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -314,6 +340,9 @@ public class AccountGatewayImpl implements AccountGateway {
         .collect(Collectors.toList())).orElse(new ArrayList<>());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -325,6 +354,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
@@ -344,13 +376,20 @@ public class AccountGatewayImpl implements AccountGateway {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账户ID为%0的账户")
   public void archiveById(Long id) {
-    //noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(accountRepository::findById)
       .flatMap(accountConvertor::toArchivedPO).ifPresent(accountArchivedPO -> {
+        if (accountArchivedPO.getBalance()
+          .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
+          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+        }
+        //noinspection DuplicatedCode
         accountArchivedPO.setArchived(true);
         accountArchivedRepository.persist(accountArchivedPO);
         accountRepository.deleteById(accountArchivedPO.getId());
@@ -369,13 +408,16 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);
-      accountAddressRepository.deleteByUserId(accountIdNonNull);
+      accountAddressMongodbRepository.deleteByUserId(accountIdNonNull);
       accountRoleRepository.deleteByAccountId(accountIdNonNull);
       accountRedisRepository.deleteById(accountIdNonNull);
       accountRoleRedisRepository.deleteById(accountIdNonNull);
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
@@ -387,6 +429,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addAddress(AccountAddress accountAddress) {
@@ -396,12 +441,15 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresent(
           accountAddressPO -> accountRepository.findById(accountId).ifPresent(accountPO -> {
             accountAddressPO.setUserId(accountId);
-            accountAddressRepository.persist(accountAddressPO);
+            accountAddressMongodbRepository.save(accountAddressPO);
             accountRedisRepository.deleteById(accountId);
             accountRoleRedisRepository.deleteById(accountId);
           })));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> getAccountBasicInfoById(Long id) {
@@ -415,6 +463,9 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsById(String systemSettingsId) {
@@ -424,9 +475,15 @@ public class AccountGatewayImpl implements AccountGateway {
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(
         accountConvertor::resetAccountSystemSettingMongodbPO)
-      .ifPresent(accountSystemSettingsMongodbRepository::save);
+      .ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+      });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
@@ -436,9 +493,33 @@ public class AccountGatewayImpl implements AccountGateway {
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountSystemSettingMongodbPO(
-        accountSystemSettings)).ifPresent(accountSystemSettingsMongodbRepository::save);
+        accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+      });
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void modifyAddress(AccountAddress accountAddress) {
+    SecurityContextUtil.getLoginAccountId()
+      .flatMap(accountId -> accountAddressMongodbRepository.findById(
+        accountAddress.getId()))
+      .filter(accountAddressMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
+        .equals(accountAddressMongodbPO.getUserId()))
+      .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountAddressPO(
+        accountAddress)).ifPresent(accountAddressMongodbPO -> {
+        accountAddressMongodbRepository.save(accountAddressMongodbPO);
+        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+      });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
@@ -452,9 +533,13 @@ public class AccountGatewayImpl implements AccountGateway {
           accountSystemSettingsMongodbPO -> {
             accountSystemSettingsMongodbPO.setUserId(accountId);
             accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
           }));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
@@ -474,6 +559,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("强制ID为%0的用户下线")
@@ -496,6 +584,9 @@ public class AccountGatewayImpl implements AccountGateway {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Page<Account> findAll(Account account, int current, int pageSize) {
@@ -511,6 +602,9 @@ public class AccountGatewayImpl implements AccountGateway {
       .toList(), pageRequest, accountPOS.getTotalElements());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
@@ -524,5 +618,121 @@ public class AccountGatewayImpl implements AccountGateway {
     return new SliceImpl<>(accountPOS.getContent().stream()
       .flatMap(accountPO -> accountConvertor.toEntity(accountPO).stream())
       .toList(), pageRequest, accountPOS.hasNext());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public List<Account> nearby(double radiusInMeters) {
+    return SecurityContextUtil.getLoginAccountId().flatMap(accountId ->
+        accountAddressMongodbRepository.findByUserId(accountId).stream()
+          .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
+      ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
+      .map(accountAddressMongodbPO -> {
+        List<AccountAddressMongodbPO> byLocationWithin = accountAddressMongodbRepository.findByLocationWithin(
+          accountAddressMongodbPO.getLocation().getX(),
+          accountAddressMongodbPO.getLocation().getY(), radiusInMeters / 6378137);
+        return accountRepository.findAllById(byLocationWithin.stream().filter(
+            accountAddressMongodbPOProbablyTheCurrentUser -> !Objects.equals(
+              accountAddressMongodbPO.getUserId(),
+              accountAddressMongodbPOProbablyTheCurrentUser.getUserId())).collect(
+            Collectors.toMap(AccountAddressMongodbPO::getUserId, AccountAddressMongodbPO::getUserId,
+              (existing, replacement) -> existing)).values()).stream()
+          .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
+          .collect(Collectors.toList());
+      }).orElse(new ArrayList<>());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void setDefaultAddress(String addressId) {
+    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(addressId))
+      .flatMap(accountId -> {
+          accountAddressMongodbRepository.saveAll(
+            accountAddressMongodbRepository.findByUserId(accountId).stream()
+              .filter(accountAddressMongodbPO -> !addressId.equals(
+                accountAddressMongodbPO.getId()))
+              .peek(accountAddressMongodbPO -> accountAddressMongodbPO.setDefaultAddress(false))
+              .toList());
+          return accountAddressMongodbRepository.findById(addressId)
+            .filter(accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId()));
+        }
+      ).ifPresent(accountAddressMongodbPO -> {
+        accountAddressMongodbPO.setDefaultAddress(true);
+        accountAddressMongodbRepository.save(accountAddressMongodbPO);
+        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+      });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void setDefaultSystemSettings(String systemSettingsId) {
+    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(systemSettingsId))
+      .flatMap(accountId -> {
+          accountSystemSettingsMongodbRepository.saveAll(
+            accountSystemSettingsMongodbRepository.findByUserId(accountId).stream()
+              .filter(accountSystemSettingsMongodbPO -> !systemSettingsId.equals(
+                accountSystemSettingsMongodbPO.getId()))
+              .peek(
+                accountSystemSettingsMongodbPO -> accountSystemSettingsMongodbPO.setDefaultSystemSettings(
+                  false))
+              .toList());
+          return accountSystemSettingsMongodbRepository.findById(systemSettingsId)
+            .filter(accountSystemSettingsMongodbPO -> accountId.equals(
+              accountSystemSettingsMongodbPO.getUserId()));
+        }
+      ).ifPresent(accountSystemSettingsMongodbPO -> {
+        accountSystemSettingsMongodbPO.setDefaultSystemSettings(true);
+        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
+        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+      });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteAddress(String addressId) {
+    if (StringUtils.isNotBlank(addressId)) {
+      SecurityContextUtil.getLoginAccountId()
+        .flatMap(accountId -> accountAddressMongodbRepository.findById(addressId).filter(
+          accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId())))
+        .filter(accountAddressMongodbPO -> !accountAddressMongodbPO.isDefaultAddress())
+        .ifPresent(accountAddressMongodbPO -> {
+          accountAddressMongodbRepository.deleteById(addressId);
+          accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+        });
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteSystemSettings(String systemSettingsId) {
+    if (StringUtils.isNotBlank(systemSettingsId)) {
+      SecurityContextUtil.getLoginAccountId()
+        .flatMap(
+          accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId).filter(
+            accountSystemSettingsMongodbPO -> accountId.equals(
+              accountSystemSettingsMongodbPO.getUserId())))
+        .filter(
+          accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbPO.isDefaultSystemSettings())
+        .ifPresent(
+          accountSystemSettingsMongodbPO -> {
+            accountSystemSettingsMongodbRepository.deleteById(systemSettingsId);
+            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+          });
+    }
   }
 }

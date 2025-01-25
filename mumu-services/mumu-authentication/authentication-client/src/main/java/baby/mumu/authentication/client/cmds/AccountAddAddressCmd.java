@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package baby.mumu.authentication.client.cmds;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.data.geo.Point;
 
 /**
  * 账户添加地址指令
@@ -26,11 +27,6 @@ import lombok.Data;
  */
 @Data
 public class AccountAddAddressCmd {
-
-  /**
-   * 唯一主键
-   */
-  private Long id;
 
   /**
    * 街道地址，包含门牌号和街道信息
@@ -61,4 +57,9 @@ public class AccountAddAddressCmd {
    */
   @Size(max = 100)
   private String country;
+
+  /**
+   * 定位
+   */
+  private Point location;
 }

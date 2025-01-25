@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.database;
+package baby.mumu.basis.mappers;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountAddressPO;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.kotlin.tools.CommonUtil;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.MappingTarget;
 
 /**
- * 账户地址
+ * client object mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.0.0
+ * @since 2.4.0
  */
-public interface AccountAddressRepository extends BaseJpaRepository<AccountAddressPO, Long>,
-  JpaSpecificationExecutor<AccountAddressPO> {
+public interface DataTransferObjectMapper {
 
-  void deleteByUserId(Long userId);
-
-  List<AccountAddressPO> findByUserId(Long userId);
+  @AfterMapping
+  default void convertToAccountTimezone(
+    @MappingTarget BaseDataTransferObject baseDataTransferObject) {
+    CommonUtil.convertToAccountZone(baseDataTransferObject);
+  }
 }

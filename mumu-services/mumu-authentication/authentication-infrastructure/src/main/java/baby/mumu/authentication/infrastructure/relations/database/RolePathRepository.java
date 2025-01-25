@@ -31,9 +31,9 @@ import org.springframework.data.repository.query.Param;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.4.0
  */
-public interface RolePathsRepository extends
-  BaseJpaRepository<RolePathsPO, RolePathsPOId>,
-  JpaSpecificationExecutor<RolePathsPO> {
+public interface RolePathRepository extends
+  BaseJpaRepository<RolePathPO, RolePathPOId>,
+  JpaSpecificationExecutor<RolePathPO> {
 
   /**
    * 根据后代角色ID获取所有角色路径
@@ -41,7 +41,7 @@ public interface RolePathsRepository extends
    * @param descendantId 后代角色ID
    * @return 角色路径
    */
-  List<RolePathsPO> findByDescendantId(Long descendantId);
+  List<RolePathPO> findByDescendantId(Long descendantId);
 
   /**
    * 根据祖先ID和后代ID删除所有关系
@@ -49,7 +49,7 @@ public interface RolePathsRepository extends
    * @param roleId 祖先ID
    */
   @Modifying
-  @Query("delete from RolePathsPO a where a.descendant.id=:roleId or a.ancestor.id=:roleId")
+  @Query("delete from RolePathPO a where a.descendant.id=:roleId or a.ancestor.id=:roleId")
   void deleteAllPathsByRoleId(@Param("roleId") Long roleId);
 
   /**
@@ -58,10 +58,10 @@ public interface RolePathsRepository extends
    * @return 根角色
    */
   @Query("""
-      select a from RolePathsPO a where a.id.depth = 0 and not exists
-         (select 1 from RolePathsPO b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
+      select a from RolePathPO a where a.id.depth = 0 and not exists
+         (select 1 from RolePathPO b where b.descendant.id = a.ancestor.id and b.id.depth > 0)
     """)
-  Page<RolePathsPO> findRootRoles(Pageable pageable);
+  Page<RolePathPO> findRootRoles(Pageable pageable);
 
   /**
    * 获取直系后代角色
@@ -69,8 +69,8 @@ public interface RolePathsRepository extends
    * @param ancestorId 祖先角色ID
    * @return 直系后代角色
    */
-  @Query("select a from RolePathsPO a where a.id.depth = 1 and a.ancestor.id = :ancestorId")
-  Page<RolePathsPO> findDirectRoles(@Param("ancestorId") Long ancestorId,
+  @Query("select a from RolePathPO a where a.id.depth = 1 and a.ancestor.id = :ancestorId")
+  Page<RolePathPO> findDirectRoles(@Param("ancestorId") Long ancestorId,
     Pageable pageable);
 
   /**
@@ -79,8 +79,8 @@ public interface RolePathsRepository extends
    * @param ancestorIds 祖先角色ID集合
    * @return 后代角色
    */
-  @Query("select a from RolePathsPO a where a.id.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
-  List<RolePathsPO> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
+  @Query("select a from RolePathPO a where a.id.depth != 0 and a.ancestor.id in :#{#ancestorIds}")
+  List<RolePathPO> findByAncestorIdIn(@Param("ancestorIds") Collection<Long> ancestorIds);
 
   /**
    * 是否存在后代角色
@@ -88,7 +88,7 @@ public interface RolePathsRepository extends
    * @param ancestorId 祖先角色ID
    * @return 是否存在
    */
-  @Query("SELECT COUNT(*) > 0 FROM RolePathsPO WHERE ancestor.id = :ancestorId AND id.depth = 1")
+  @Query("SELECT COUNT(*) > 0 FROM RolePathPO WHERE ancestor.id = :ancestorId AND id.depth = 1")
   boolean existsDescendantRoles(@Param("ancestorId") Long ancestorId);
 
 
@@ -97,12 +97,12 @@ public interface RolePathsRepository extends
    */
   @Modifying
   @Query("""
-    DELETE FROM RolePathsPO ap1
+    DELETE FROM RolePathPO ap1
     WHERE ap1.id.depth > 1
     AND NOT EXISTS (
         SELECT 1
-        FROM RolePathsPO ap2
-        JOIN RolePathsPO ap3
+        FROM RolePathPO ap2
+        JOIN RolePathPO ap3
             ON ap2.descendant.id = ap3.ancestor.id
         WHERE ap2.ancestor.id = ap1.ancestor.id
         AND ap3.descendant.id = ap1.descendant.id

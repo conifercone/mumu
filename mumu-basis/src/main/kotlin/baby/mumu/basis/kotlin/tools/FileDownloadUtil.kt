@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@ import baby.mumu.basis.response.ResponseCode
 import com.opencsv.CSVWriter
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import jakarta.servlet.http.HttpServletResponse
+import org.apache.commons.lang3.StringUtils
 import org.apiguardian.api.API
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.util.Assert
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.URLEncoder
@@ -69,7 +72,7 @@ object FileDownloadUtil {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -106,7 +109,7 @@ object FileDownloadUtil {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -118,12 +121,18 @@ object FileDownloadUtil {
         data: Stream<T>
     ) {
         try {
+            Assert.isTrue(StringUtils.isNotBlank(fileName), "fileName must not be blank")
+            val newFileName: String = if (!fileName.endsWith(".csv")) {
+                "$fileName.csv"
+            } else {
+                fileName
+            }
             // 设置响应头
             response.contentType = "text/csv"
             response.characterEncoding = StandardCharsets.UTF_8.name()
             response.setHeader(
-                "Content-Disposition",
-                "attachment; filename=${encodeFileName(fileName)}"
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=${encodeFileName(newFileName)}"
             )
 
             // 使用 OpenCSV 写入 CSV 内容
@@ -147,7 +156,7 @@ object FileDownloadUtil {
                 scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FAILED_TO_EXPORT_CSV_FILE)
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 

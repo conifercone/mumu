@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -88,7 +89,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
           traceId();
           logger.error(ResponseCode.INVALID_TOKEN.getMessage());
-          response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+          response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
           ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         } finally {
           TraceIdFilter.removeTraceId();
@@ -102,7 +103,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       } catch (JwtException e) {
         traceId();
         logger.error(ResponseCode.INVALID_TOKEN.getMessage());
-        response.setStatus(Integer.parseInt(ResponseCode.UNAUTHORIZED.getCode()));
+        response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
       } finally {
@@ -114,7 +115,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         JwtAuthenticationToken authenticationToken =
           new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
               authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
-            .orElse(null));
+            .orElse(new HashSet<>()));
         // 重新设置回用户对象
         authenticationToken.setDetails(
           new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));

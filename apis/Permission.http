@@ -228,7 +228,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 下载所有权限数据
+### 下载所有权限数据（不包含权限关系数据）
 < {%
   import {generateHeaders} from "./utils"
 
@@ -238,6 +238,30 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("requestId", headers.requestId)
 %}
 GET {{authentication-service-url}}/permission/downloadAll
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 下载所有权限数据（包含权限关系数据）
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{authentication-service-url}}/permission/downloadAllIncludePath
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

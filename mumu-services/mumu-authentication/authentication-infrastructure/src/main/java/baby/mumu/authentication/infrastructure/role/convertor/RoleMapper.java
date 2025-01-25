@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
-import baby.mumu.basis.mappers.ClientObjectMapper;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -55,7 +55,7 @@ import org.mapstruct.factory.Mappers;
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RoleMapper extends GrpcMapper, ClientObjectMapper {
+public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
 
   RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 

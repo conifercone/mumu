@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.mappers;
+package baby.mumu.authentication.configuration;
 
-import baby.mumu.basis.dto.BaseDataTransferObject;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.MappingTarget;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * client object mapper
+ * PointMixin
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.6.0
  */
-public interface ClientObjectMapper {
+public abstract class PointMixin {
 
-  @AfterMapping
-  default void convertToAccountTimezone(
-    @MappingTarget BaseDataTransferObject baseDataTransferObject) {
-    CommonUtil.convertToAccountZone(baseDataTransferObject);
+  @SuppressWarnings("unused")
+  @JsonCreator
+  public PointMixin(@JsonProperty("x") double x, @JsonProperty("y") double y) {
   }
 }
