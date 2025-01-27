@@ -3,7 +3,7 @@ springbootVersion = "3.4.1"
 springCloudVersion = "2024.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
-jetbrainsAnnotationsVersion = '26.0.1'
+jetbrainsAnnotationsVersion = '26.0.2'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.8.3'
 swagger3AnnotationsVersion = '2.2.27'
