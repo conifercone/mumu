@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.geo.Point;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -275,6 +276,7 @@ public class AuthorizationConfiguration {
     objectMapper.registerModule(simpleModule);
     objectMapper.addMixIn(Long.class, LongMixin.class);
     objectMapper.addMixIn(BigDecimal.class, BigDecimalMixin.class);
+    objectMapper.addMixIn(Point.class, PointMixin.class);
     rowMapper.setObjectMapper(objectMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
     OAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new OAuth2AuthorizationParametersMapper();
