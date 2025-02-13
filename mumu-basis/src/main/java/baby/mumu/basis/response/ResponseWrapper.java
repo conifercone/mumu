@@ -138,6 +138,7 @@ public class ResponseWrapper<T> implements Serializable {
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);
     ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
     applicationJsonResponse(response, jsonResult);
   }
