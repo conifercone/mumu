@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @Setter
 @Entity
-@Table(name = "broadcast_text_message_receivers")
+@Table(name = "mumu_broadcast_text_message_receivers")
 @DynamicInsert
 @Metamodel
 public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObject {
