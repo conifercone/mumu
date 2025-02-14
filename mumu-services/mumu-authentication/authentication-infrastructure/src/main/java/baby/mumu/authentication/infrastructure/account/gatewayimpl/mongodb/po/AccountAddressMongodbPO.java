@@ -43,7 +43,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("account-addresses")
+@Document("mumu-account-addresses")
 @Metamodel
 public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObject {
 
