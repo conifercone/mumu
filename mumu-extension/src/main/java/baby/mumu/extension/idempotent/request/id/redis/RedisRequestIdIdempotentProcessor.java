@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  */
 public class RedisRequestIdIdempotentProcessor implements RequestIdIdempotentProcessor {
 
-  private final String REQUEST_ID_PREFIX = "mumu-request:id:";
+  private final String REQUEST_ID_PREFIX = "mumu:request:id:";
   private final ExtensionProperties extensionProperties;
   private final RedisTemplate<String, String> redisTemplate;
 

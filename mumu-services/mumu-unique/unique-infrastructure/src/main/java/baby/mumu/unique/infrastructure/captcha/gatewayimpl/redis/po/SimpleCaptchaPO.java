@@ -30,7 +30,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.1
  */
 @Data
-@Document(value = "mumu-simple-captcha")
+@Document(value = "mumu:unique:simple-captcha")
 public class SimpleCaptchaPO {
 
   @Id

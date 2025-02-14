@@ -30,7 +30,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 2.4.0
  */
 @Data
-@Document(value = "mumu-authorize-code-token")
+@Document(value = "mumu:authentication:authorize-code-token")
 public class AuthorizeCodeTokenRedisPO {
 
   @Id

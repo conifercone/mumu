@@ -33,7 +33,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu-role")
+@Document(value = "mumu:authentication:role")
 public class RoleRedisPO extends JpaRedisBasisArchivablePersistentObject {
 
   @Serial

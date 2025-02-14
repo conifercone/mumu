@@ -30,7 +30,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.0
  */
 @Data
-@Document(value = "mumu-password-token")
+@Document(value = "mumu:authentication:password-token")
 public class PasswordTokenRedisPO {
 
   @Id

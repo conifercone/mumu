@@ -30,7 +30,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.0
  */
 @Data
-@Document(value = "mumu-oidc-id-token")
+@Document(value = "mumu:authentication:oidc-id-token")
 public class OidcIdTokenRedisPO {
 
   @Id

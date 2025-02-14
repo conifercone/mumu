@@ -36,7 +36,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu-account-role")
+@Document(value = "mumu:authentication:account-role")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountRoleRedisPO extends JpaRedisBasisDefaultPersistentObject {

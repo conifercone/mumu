@@ -36,7 +36,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu-role-permission")
+@Document(value = "mumu:authentication:role-permission")
 @AllArgsConstructor
 @NoArgsConstructor
 public class RolePermissionRedisPO extends JpaRedisBasisDefaultPersistentObject {
