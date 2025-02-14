@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.4
  */
 @Entity
-@Table(name = "users_archived")
+@Table(name = "mumu_users_archived")
 @Getter
 @Setter
 @RequiredArgsConstructor
