@@ -29,9 +29,13 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.log")
 public class LogProperties {
 
+  //  操作日志索引名称
   public static final String OPERATION_LOG_ES_INDEX_NAME = "mumu-operation-log";
+  //  系统日志索引名称
   public static final String SYSTEM_LOG_ES_INDEX_NAME = "mumu-system-log";
+  //  操作日志topic名称
   public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "mumu-operation-log";
+  //  系统日志topic名称
   public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "mumu-system-log";
 
   @NestedConfigurationProperty
