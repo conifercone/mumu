@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class ExtensionConfiguration {
   @ConditionalOnClass(ObservationPredicate.class)
   ObservationPredicate noActuatorServerObservations() {
     return (name, context) -> {
-      if (name.equals("http.server.requests")
+      if ("http.server.requests".equals(name)
         && context instanceof ServerRequestObservationContext serverContext) {
         return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
       } else {

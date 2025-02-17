@@ -99,20 +99,20 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         .equals(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getCode())) {
         response.setStatus(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getStatus());
         exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST, request);
-      } else if (error.getErrorCode()
-        .equals(UNSUPPORTED_GRANT_TYPE)) {
+      } else if (UNSUPPORTED_GRANT_TYPE
+        .equals(error.getErrorCode())) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
-      } else if (error.getErrorCode()
-        .equals(INVALID_CLIENT)) {
+      } else if (INVALID_CLIENT
+        .equals(error.getErrorCode())) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
-      } else if (error.getErrorCode()
-        .equals(INVALID_GRANT)) {
+      } else if (INVALID_GRANT
+        .equals(error.getErrorCode())) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
-      } else if (error.getErrorCode()
-        .equals(INVALID_SCOPE)) {
+      } else if (INVALID_SCOPE
+        .equals(error.getErrorCode())) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
       } else {
