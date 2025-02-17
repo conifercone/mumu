@@ -39,8 +39,8 @@ jobs:
 
       - name: PMD with Gradle Wrapper
         run: |
-          chmod +x ../../pmd.sh
-          ../../pmd.sh
+          chmod +x ./pmd.sh
+          ./pmd.sh
         continue-on-error: true
       - name: Upload PMD Reports
         uses: actions/upload-artifact@v4
