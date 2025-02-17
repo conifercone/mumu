@@ -39,8 +39,8 @@ jobs:
       # 执行 PMD 脚本
       - name: PMD with Gradle Wrapper
         run: |
-          chmod +x ./pmd.sh
-          ./pmd.sh
+          chmod +x ./scripts/pmd.sh
+          ./scripts/pmd.sh
         continue-on-error: true
 
       # 判断是否存在 PMD 报告并上传

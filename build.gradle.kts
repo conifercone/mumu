@@ -25,7 +25,7 @@ tasks.register<Copy>("installGitHooks") {
     // 源文件路径
     val hooksDir = file("${rootDirectory}/.git/hooks")
     val sourceDir = file("${rootDirectory}/scripts/git/hooks")
-    val updateLicenseShell = file("${rootDirectory}/update_license.sh")
+    val updateLicenseShell = file("${rootDirectory}/scripts/update_license.sh")
     // 将文件从源目录拷贝到目标目录
     from(sourceDir)
     // 目标目录

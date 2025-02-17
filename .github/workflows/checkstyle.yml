@@ -44,8 +44,8 @@ jobs:
       # 执行 Checkstyle 脚本
       - name: Checkstyle with Gradle Wrapper
         run: |
-          chmod +x ./checkstyle.sh
-          ./checkstyle.sh
+          chmod +x ./scripts/checkstyle.sh
+          ./scripts/checkstyle.sh
         continue-on-error: true
 
       # 判断是否存在 Checkstyle 报告并上传
