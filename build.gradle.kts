@@ -166,12 +166,10 @@ subprojects {
     val osName = System.getProperty("os.name")
     val javaVersion = System.getProperty("java.version")
 
-    val hasProcessor = providers.provider {
-        configurations["annotationProcessor"]
-            .dependencies
+    val hasProcessorProvider = providers.provider {
+        configurations["annotationProcessor"].dependencies
             .any { it.name.contains("mumu-processor") }
-    }.get()
-
+    }
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
 
@@ -179,11 +177,10 @@ subprojects {
         inputs.property("projectVersion", projectVersionStr)
         inputs.property("projectName", projectNameStr)
         inputs.property("gradleVersion", gradleVersionStr)
-        inputs.property("hasProcessor", hasProcessor)
 
         doFirst {
             val compilerArgs = mutableListOf("-Amapstruct.unmappedTargetPolicy=IGNORE")
-
+            val hasProcessor = hasProcessorProvider.get()
             if (hasProcessor) {
                 @Suppress("SpellCheckingInspection")
                 compilerArgs.addAll(
