@@ -16,7 +16,7 @@
 package baby.mumu.authentication.application.service;
 
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.kotlin.tools.EmailUtils;
 import baby.mumu.basis.response.ResponseCode;
 import io.micrometer.observation.annotation.Observed;
 import java.util.function.Supplier;
@@ -54,7 +54,7 @@ public class AccountUserDetailService implements UserDetailsService {
         StringUtils.EMPTY);
       return new OAuth2AuthenticationException(error);
     };
-    return CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
+    return EmailUtils.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
       usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
       : accountGateway.findAccountByUsername(usernameOrEmail)
         .orElseThrow(usernameNotFoundExceptionSupplier);

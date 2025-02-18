@@ -26,7 +26,7 @@ import org.apiguardian.api.API
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.7.0
  */
-object PhoneUtil {
+object PhoneUtils {
 
     private val phoneNumberUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
 

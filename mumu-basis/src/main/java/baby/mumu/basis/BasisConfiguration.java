@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package baby.mumu.basis;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import baby.mumu.basis.filters.TraceIdFilter;
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import baby.mumu.basis.spring.ApplicationProperties;
 import io.micrometer.tracing.Tracer;
 import org.springframework.beans.factory.ObjectProvider;
@@ -42,8 +42,8 @@ public class BasisConfiguration {
 
   @Bean
   @Order(HIGHEST_PRECEDENCE)
-  public SpringContextUtil springContextUtil() {
-    return new SpringContextUtil();
+  public SpringContextUtils springContextUtil() {
+    return new SpringContextUtils();
   }
 
   @Bean

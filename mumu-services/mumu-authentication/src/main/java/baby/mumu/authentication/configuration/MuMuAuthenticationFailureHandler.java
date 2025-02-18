@@ -21,7 +21,7 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_SCOPE;
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
 
-import baby.mumu.basis.kotlin.tools.IpUtil;
+import baby.mumu.basis.kotlin.tools.IpUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.log.client.api.OperationLogGrpcService;
@@ -117,7 +117,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
       } else {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        operationFailLog(errorCode, error.getDescription(), IpUtil.getIpAddr(request));
+        operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
         ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
       }
     }
@@ -135,7 +135,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
     HttpServletRequest request)
     throws IOException {
     operationFailLog(responseCode.getCode(),
-      responseCode.getMessage(), IpUtil.getIpAddr(request));
+      responseCode.getMessage(), IpUtils.getIpAddr(request));
     ResponseWrapper.exceptionResponse(response,
       responseCode);
   }

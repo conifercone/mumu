@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static baby.mumu.basis.constants.CommonConstants.PERCENT_SIGN;
 
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.condition.ConditionalExecutor;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import org.apache.commons.lang3.ArrayUtils;
@@ -50,7 +50,7 @@ public class DangerousOperationAspect extends AbstractAspect {
   public void checkDangerousOperation(JoinPoint joinPoint) {
     getCurrentMethod(joinPoint).map(method -> method.getAnnotation(DangerousOperation.class))
       .ifPresent(
-        annotationNonNull -> SecurityContextUtil.getLoginAccountId()
+        annotationNonNull -> SecurityContextUtils.getLoginAccountId()
           .ifPresent(accountId -> {
             String content = String.format(
               "The user with user ID %s performed a dangerous operation:%s", accountId,

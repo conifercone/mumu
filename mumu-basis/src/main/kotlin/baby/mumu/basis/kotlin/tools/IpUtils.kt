@@ -25,7 +25,7 @@ import java.util.function.BiConsumer
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-object IpUtil {
+object IpUtils {
     /**
      * 从request对象中获取客户端真实的ip地址
      *

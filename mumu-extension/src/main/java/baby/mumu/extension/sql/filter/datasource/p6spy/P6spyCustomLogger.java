@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import com.google.common.base.Strings;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
@@ -58,7 +58,7 @@ public class P6spyCustomLogger extends FormattedLogger {
       stringBuilder.append("trace-id:[");
       String traceId;
       try {
-        traceId = Optional.ofNullable(SpringContextUtil.getApplicationContext())
+        traceId = Optional.ofNullable(SpringContextUtils.getApplicationContext())
           .flatMap(applicationContext -> Optional.ofNullable(
             applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
             tracer -> Optional.ofNullable(tracer.currentSpan())

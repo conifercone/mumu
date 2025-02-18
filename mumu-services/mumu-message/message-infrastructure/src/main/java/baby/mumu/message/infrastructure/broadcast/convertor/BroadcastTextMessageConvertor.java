@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package baby.mumu.message.infrastructure.broadcast.convertor;
 
 import baby.mumu.basis.enums.MessageStatusEnum;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
@@ -72,7 +72,7 @@ public class BroadcastTextMessageConvertor {
   public Optional<BroadcastTextMessage> toEntity(
     BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     return Optional.ofNullable(broadcastTextMessageForwardCmd)
-      .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
+      .flatMap(res -> SecurityContextUtils.getLoginAccountId().map(senderAccountId -> {
         BroadcastTextMessage entity = BroadcastTextMessageMapper.INSTANCE.toEntity(res);
         entity.setSenderId(senderAccountId);
         entity.setReadReceiverIds(Collections.emptyList());

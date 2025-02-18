@@ -42,6 +42,7 @@ opencsvVersion = '5.10'
 monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
 libphonenumberVersion = '8.13.55'
+commonsValidatorVersion = '1.9.0'
 # bom version
 grpcBomVersion = '1.70.0'
 guavaBomVersion = '33.4.0-jre'
@@ -265,6 +266,8 @@ moneta = { module = "org.javamoney:moneta", version.ref = "monetaVersion" }
 jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version.ref = "jacksonDatatypeMoneyVersion" }
 # https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
+# https://mvnrepository.com/artifact/commons-validator/commons-validator
+commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

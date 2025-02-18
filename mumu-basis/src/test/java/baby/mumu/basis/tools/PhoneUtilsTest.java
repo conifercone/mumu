@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.tools;
 
-import baby.mumu.basis.kotlin.tools.PhoneUtil;
+import baby.mumu.basis.kotlin.tools.PhoneUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,15 +25,15 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.7.0
  */
-public class PhoneUtilTest {
+public class PhoneUtilsTest {
 
   @Test
   public void isValidPhoneNumber() {
-    boolean validPhoneNumber = PhoneUtil.isValidPhoneNumber("13031723736", "+86");
+    boolean validPhoneNumber = PhoneUtils.isValidPhoneNumber("13031723736", "+86");
     Assertions.assertTrue(validPhoneNumber);
-    boolean validPhoneNumber2 = PhoneUtil.isValidPhoneNumber("5486560", "+86");
+    boolean validPhoneNumber2 = PhoneUtils.isValidPhoneNumber("5486560", "+86");
     Assertions.assertFalse(validPhoneNumber2);
-    boolean validPhoneNumber3 = PhoneUtil.isValidPhoneNumber("2132901064", "+1");
+    boolean validPhoneNumber3 = PhoneUtils.isValidPhoneNumber("2132901064", "+1");
     Assertions.assertTrue(validPhoneNumber3);
   }
 }

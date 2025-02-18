@@ -16,7 +16,7 @@
 package baby.mumu.authentication.util;
 
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -36,28 +36,28 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
-public class SecurityContextUtilTest {
+public class SecurityContextUtilsTest {
 
   private static final Logger logger = LoggerFactory.getLogger(
-    SecurityContextUtilTest.class);
+    SecurityContextUtilsTest.class);
 
   @Test
   public void loginAccountId() {
-    Long accountId = SecurityContextUtil.getLoginAccountId().orElse(null);
+    Long accountId = SecurityContextUtils.getLoginAccountId().orElse(null);
     Assertions.assertNotNull(accountId);
     logger.info("loginAccountId: {}", accountId);
   }
 
   @Test
   public void loginAccountName() {
-    String accountName = SecurityContextUtil.getLoginAccountName().orElse(null);
+    String accountName = SecurityContextUtils.getLoginAccountName().orElse(null);
     Assertions.assertNotNull(accountName);
     logger.info("loginAccountName: {}", accountName);
   }
 
   @Test
   public void loginAccountLanguage() {
-    LanguageEnum languageEnum = SecurityContextUtil.getLoginAccountLanguage().orElse(null);
+    LanguageEnum languageEnum = SecurityContextUtils.getLoginAccountLanguage().orElse(null);
     Assertions.assertNotNull(languageEnum);
     logger.info("languageEnum: {}", languageEnum);
   }

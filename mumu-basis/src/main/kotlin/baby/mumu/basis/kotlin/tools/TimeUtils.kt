@@ -19,15 +19,11 @@ import baby.mumu.basis.dto.BaseDataTransferObject
 import baby.mumu.basis.exception.MuMuException
 import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
-import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.*
-import java.util.regex.Pattern
-import javax.mail.internet.AddressException
-import javax.mail.internet.InternetAddress
 
 /**
  * 通用工具类
@@ -35,48 +31,7 @@ import javax.mail.internet.InternetAddress
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-object CommonUtil {
-    private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-    private val EMAIL_PATTERN: Pattern = Pattern.compile(EMAIL_REGEX)
-    private val logger = LoggerFactory.getLogger(CommonUtil::class.java)
-
-
-    /**
-     * 校验邮箱地址格式的方法
-     * @param email 邮箱地址
-     * @return 是否为合法格式的邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "1.0.0")
-    @JvmStatic
-    fun isValidEmailFormat(email: String?): Boolean {
-        if (email.isNullOrEmpty()) {
-            return false
-        }
-        val matcher = EMAIL_PATTERN.matcher(email)
-        return matcher.matches()
-    }
-
-    /**
-     * 校验邮箱有效性
-     *
-     * @param email 邮箱地址
-     * @return 是否为有效邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "1.0.0")
-    @JvmStatic
-    fun isValidEmail(email: String?): Boolean {
-        if (!isValidEmailFormat(email)) {
-            return false
-        }
-        try {
-            val emailAddr = InternetAddress(email)
-            emailAddr.validate()
-        } catch (e: AddressException) {
-            logger.error(e.message, e)
-            return false
-        }
-        return true
-    }
+object TimeUtils {
 
     /**
      * 转换为utc时间
@@ -124,7 +79,7 @@ object CommonUtil {
         localDateTime: LocalDateTime,
         fromZone: ZoneId
     ): LocalDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             convertToZone(
                 localDateTime,
                 fromZone,
@@ -144,7 +99,7 @@ object CommonUtil {
     fun convertToAccountZone(
         offsetDateTime: OffsetDateTime
     ): OffsetDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             offsetDateTime.atZoneSameInstant(ZoneId.of(timezone)).toOffsetDateTime()
         }.orElse(offsetDateTime)
     }
@@ -160,7 +115,7 @@ object CommonUtil {
         baseDataTransferObject: BaseDataTransferObject
     ) {
         Optional.ofNullable(baseDataTransferObject).ifPresent { dataTransferObject ->
-            SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
+            SecurityContextUtils.loginAccountTimezone.ifPresent { timezone ->
                 val targetZoneId = ZoneId.of(timezone)
                 Optional.ofNullable(dataTransferObject.creationTime).ifPresent {
                     val creationTimeZonedDateTime =
@@ -202,7 +157,7 @@ object CommonUtil {
     fun convertAccountZoneToUTC(
         localDateTime: LocalDateTime
     ): LocalDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             convertToUTC(
                 localDateTime,
                 ZoneId.of(timezone)

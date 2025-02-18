@@ -17,7 +17,7 @@ package baby.mumu.processor.metamodel;
 
 import baby.mumu.basis.annotations.Meta;
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.processor.kotlin.tools.ObjectUtil;
+import baby.mumu.processor.kotlin.tools.ObjectUtils;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
@@ -191,14 +191,14 @@ public class MetamodelGenerator extends AbstractProcessor {
     Builder builder) {
     Metamodel annotation = annotatedElement.getAnnotation(Metamodel.class);
     generateBasicProjectInformation(packageName, entityName, builder, annotation);
-    List<VariableElement> fields = ObjectUtil.getFields(annotatedElement);
+    List<VariableElement> fields = ObjectUtils.getFields(annotatedElement);
     Set<String> collect = fields.stream()
       .map(variableElement -> variableElement.getSimpleName().toString()).collect(
         Collectors.toSet());
-    List<VariableElement> superClassFields = ObjectUtil.getAllSuperclasses(annotatedElement,
+    List<VariableElement> superClassFields = ObjectUtils.getAllSuperclasses(annotatedElement,
         typeUtils)
       .stream()
-      .flatMap(typeElement -> ObjectUtil.getFields(typeElement).stream())
+      .flatMap(typeElement -> ObjectUtils.getFields(typeElement).stream())
       .collect(
         Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
           (existing, replacement) -> existing)).values()
@@ -216,20 +216,20 @@ public class MetamodelGenerator extends AbstractProcessor {
           .initializer("$S", field.getSimpleName().toString())
           .addJavadoc(String.format(
             "@see %s#%s",
-            ObjectUtil.getEntityQualifiedName(field), field.getSimpleName()))
+            ObjectUtils.getEntityQualifiedName(field), field.getSimpleName()))
           .build();
         builder.addField(fieldSpec);
-        ObjectUtil.getFieldClassName(field, elementUtils, typeUtils).ifPresent(fieldClassName -> {
+        ObjectUtils.getFieldClassName(field, elementUtils, typeUtils).ifPresent(fieldClassName -> {
           FieldSpec fieldSingularSpec = FieldSpec.builder(
               ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
                   SingularAttribute.class.getSimpleName()),
-                TypeName.get(ObjectUtil.getEntityType(field).asType()),
+                TypeName.get(ObjectUtils.getEntityType(field).asType()),
                 fieldClassName),
               field.getSimpleName().toString().concat(SINGULAR_FIELD_SUFFIX))
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
             .addJavadoc(String.format(
               "@see %s#%s",
-              ObjectUtil.getEntityQualifiedName(field), field.getSimpleName()))
+              ObjectUtils.getEntityQualifiedName(field), field.getSimpleName()))
             .build();
           builder.addField(fieldSingularSpec);
         });

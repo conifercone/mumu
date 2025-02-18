@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package baby.mumu.basis.mappers;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.kotlin.tools.TimeUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.MappingTarget;
 
@@ -31,6 +31,6 @@ public interface DataTransferObjectMapper {
   @AfterMapping
   default void convertToAccountTimezone(
     @MappingTarget BaseDataTransferObject baseDataTransferObject) {
-    CommonUtil.convertToAccountZone(baseDataTransferObject);
+    TimeUtils.convertToAccountZone(baseDataTransferObject);
   }
 }

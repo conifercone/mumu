@@ -15,7 +15,7 @@
  */
 package baby.mumu.basis.tools;
 
-import baby.mumu.basis.kotlin.tools.DataMaskingUtil;
+import baby.mumu.basis.kotlin.tools.DataMaskingUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -24,40 +24,40 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-public class DataMaskingUtilTest {
+public class DataMaskingUtilsTest {
 
   @Test
   public void maskPhoneNumber() {
     String phone = "13812345678";
-    System.out.println(DataMaskingUtil.maskPhoneNumber(phone));
+    System.out.println(DataMaskingUtils.maskPhoneNumber(phone));
   }
 
   @Test
   public void maskIdCard() {
     String idCard = "123456789012345678";
-    System.out.println(DataMaskingUtil.maskIdCard(idCard));
+    System.out.println(DataMaskingUtils.maskIdCard(idCard));
   }
 
   @Test
   public void maskEmail() {
     String email = "test@example.com";
-    System.out.println(DataMaskingUtil.maskEmail(email));
+    System.out.println(DataMaskingUtils.maskEmail(email));
   }
 
   @Test
   public void maskName() {
     String name = "张三丰";
-    System.out.println(DataMaskingUtil.maskName(name));
+    System.out.println(DataMaskingUtils.maskName(name));
   }
 
   @Test
   public void maskBankCard() {
     String bankCard = "6222021234567890";
-    System.out.println(DataMaskingUtil.maskBankCard(bankCard));
+    System.out.println(DataMaskingUtils.maskBankCard(bankCard));
   }
 
   @Test
   public void maskData() {
-    System.out.println(DataMaskingUtil.maskData("12345678901234567890", 4, 4));
+    System.out.println(DataMaskingUtils.maskData("12345678901234567890", 4, 4));
   }
 }

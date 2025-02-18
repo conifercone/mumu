@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.unique.client.config;
 
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.Serial;
 import java.util.Properties;
@@ -41,7 +41,7 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
 
   @Override
   public Object generate(@NotNull SharedSessionContractImplementor session, Object object) {
-    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtil.getBean(
+    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtils.getBean(
         PrimaryKeyGrpcService.class)
       .orElseThrow(() -> new IllegalArgumentException("PrimaryKeyGrpcService bean not found"));
     if (String.class.isAssignableFrom(idType)) {

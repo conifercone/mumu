@@ -32,7 +32,7 @@ import java.util.*
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-object SecurityContextUtil {
+object SecurityContextUtils {
     /**
      * Account领域模型id属性名
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUE
 
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.MessageStatusEnum;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
@@ -114,7 +114,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
-    Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtil.getLoginAccountId()
+    Optional.ofNullable(id).ifPresent(msgId -> SecurityContextUtils.getLoginAccountId()
       .flatMap(accountId -> broadcastTextMessageReceiverRepository.findById(
         BroadcastTextMessageReceiverPOId.builder().messageId(msgId).receiverId(accountId)
           .build())).ifPresent(broadcastTextMessageReceiverPO -> {
@@ -139,7 +139,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
-      .flatMap(msgId -> SecurityContextUtil.getLoginAccountId()).flatMap(accountId ->
+      .flatMap(msgId -> SecurityContextUtils.getLoginAccountId()).flatMap(accountId ->
         broadcastTextMessageRepository.findByIdAndSenderId(id, accountId)
       ).ifPresent(broadcastTextMessageDo -> {
         broadcastTextMessageRepository.deleteById(id);
@@ -152,7 +152,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   public Page<BroadcastTextMessage> findAllYouSend(BroadcastTextMessage broadcastTextMessage,
     int current,
     int pageSize) {
-    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+    return SecurityContextUtils.getLoginAccountId().map(accountId -> {
       Specification<BroadcastTextMessagePO> broadcastTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         Optional.ofNullable(broadcastTextMessage).ifPresent(broadcastTextMessageEntity -> {
@@ -187,7 +187,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
     //noinspection DuplicatedCode
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
           accountId)))
       .ifPresent(broadcastTextMessagePO -> broadcastTextMessageConvertor.toArchivePO(
@@ -216,7 +216,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .flatMap(

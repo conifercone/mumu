@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
 
 import baby.mumu.basis.exception.DataConversionException;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infrastructure.config.LogProperties;
@@ -128,19 +128,19 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         .ifPresent(
           recordTime -> criteria.and(new Criteria(
             SystemLogEsPOMetamodel.recordTime).matches(
-            CommonUtil.convertAccountZoneToUTC(recordTime))));
+            TimeUtils.convertAccountZoneToUTC(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
         .ifPresent(
           recordStartTime -> criteria.and(
             new Criteria(
               SystemLogEsPOMetamodel.recordTime).greaterThan(
-              CommonUtil.convertAccountZoneToUTC(recordStartTime))));
+              TimeUtils.convertAccountZoneToUTC(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
         .ifPresent(
           recordEndTime -> criteria.and(
             new Criteria(
               SystemLogEsPOMetamodel.recordTime).lessThan(
-              CommonUtil.convertAccountZoneToUTC(recordEndTime))));
+              TimeUtils.convertAccountZoneToUTC(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
       .addSort(
@@ -151,7 +151,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
       .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
       .filter(Optional::isPresent).map(Optional::get)
       .peek(systemLogDomain -> systemLogDomain.setRecordTime(
-        CommonUtil.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
+        TimeUtils.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
       .toList();
     return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
 

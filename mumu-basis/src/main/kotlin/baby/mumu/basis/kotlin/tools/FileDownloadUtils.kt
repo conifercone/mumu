@@ -39,7 +39,7 @@ import java.util.stream.Stream
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.4.0
  */
-object FileDownloadUtil {
+object FileDownloadUtils {
 
     /**
      * 通用文件下载工具（字节数组版本）

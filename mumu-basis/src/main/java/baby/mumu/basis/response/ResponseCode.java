@@ -15,8 +15,8 @@
  */
 package baby.mumu.basis.response;
 
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import java.util.Locale;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
@@ -149,9 +149,9 @@ public enum ResponseCode implements BaseResponse {
   }
 
   private @NotNull String makeMessage(@Nullable Object[] args) {
-    return SpringContextUtil.getBean(MessageSource.class)
+    return SpringContextUtils.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
-        SecurityContextUtil.getLoginAccountLanguage()
+        SecurityContextUtils.getLoginAccountLanguage()
           .map(languageEnum -> Locale.of(languageEnum.getCode()))
           .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }

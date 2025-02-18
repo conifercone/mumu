@@ -25,9 +25,9 @@ import javax.crypto.spec.SecretKeySpec
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
-object SignatureUtil {
+object SignatureUtils {
 
-    private val logger = LoggerFactory.getLogger(SignatureUtil::class.java)
+    private val logger = LoggerFactory.getLogger(SignatureUtils::class.java)
 
     @JvmStatic
     fun generateSignature(

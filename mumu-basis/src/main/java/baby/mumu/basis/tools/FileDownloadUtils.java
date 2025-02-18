@@ -41,9 +41,9 @@ import org.zalando.jackson.datatype.money.MoneyModule;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.6.0
  */
-public final class FileDownloadUtil {
+public final class FileDownloadUtils {
 
-  private FileDownloadUtil() {
+  private FileDownloadUtils() {
   }
 
   @API(status = API.Status.STABLE, since = "2.6.0")
