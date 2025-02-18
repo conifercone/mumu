@@ -17,9 +17,6 @@ package baby.mumu.basis.kotlin.tools
 
 import org.apache.commons.validator.routines.EmailValidator
 import org.apiguardian.api.API
-import org.slf4j.LoggerFactory
-import javax.mail.internet.AddressException
-import javax.mail.internet.InternetAddress
 
 /**
  * 邮箱工具类
@@ -28,8 +25,6 @@ import javax.mail.internet.InternetAddress
  * @since 2.7.0
  */
 object EmailUtils {
-
-    private val logger = LoggerFactory.getLogger(EmailUtils::class.java)
 
     /**
      * 校验邮箱地址格式的方法
@@ -43,27 +38,5 @@ object EmailUtils {
             return false
         }
         return EmailValidator.getInstance().isValid(email)
-    }
-
-    /**
-     * 校验邮箱有效性
-     *
-     * @param email 邮箱地址
-     * @return 是否为有效邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "2.7.0")
-    @JvmStatic
-    fun isValidEmail(email: String?): Boolean {
-        if (!isValidEmailFormat(email)) {
-            return false
-        }
-        try {
-            val emailAddr = InternetAddress(email)
-            emailAddr.validate()
-        } catch (e: AddressException) {
-            logger.error(e.message, e)
-            return false
-        }
-        return true
     }
 }

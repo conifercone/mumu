@@ -17,7 +17,6 @@ yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.9.2"
 curatorRecipesVersion = "5.7.1"
 flywayVersion = "11.3.2"
-javaxMailVersion = '1.6.2'
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
 mapstructVersion = '1.6.3'
@@ -179,9 +178,8 @@ spring-security-test = { module = "org.springframework.security:spring-security-
 curator-recipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
+# https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
-# https://mvnrepository.com/artifact/com.sun.mail/javax.mail
-javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin

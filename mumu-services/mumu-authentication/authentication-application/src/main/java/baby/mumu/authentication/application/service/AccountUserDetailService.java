@@ -54,7 +54,7 @@ public class AccountUserDetailService implements UserDetailsService {
         StringUtils.EMPTY);
       return new OAuth2AuthenticationException(error);
     };
-    return EmailUtils.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
+    return EmailUtils.isValidEmailFormat(usernameOrEmail) ? accountGateway.findAccountByEmail(
       usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
       : accountGateway.findAccountByUsername(usernameOrEmail)
         .orElseThrow(usernameNotFoundExceptionSupplier);
