@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class AuthenticationProperties {
   /**
    * 初始密码
    */
-  private String initialPassword = "3c380190e5c34f3bc97cae24ac6062";
+  private String initialPassword = "3c38019#0e5c34f@3Bc97cae24aC6062";
 
   @NestedConfigurationProperty
   private Rsa rsa = new Rsa();
