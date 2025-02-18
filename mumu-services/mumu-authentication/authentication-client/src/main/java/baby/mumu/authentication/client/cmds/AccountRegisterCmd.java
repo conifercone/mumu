@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +44,7 @@ public class AccountRegisterCmd {
 
   @Schema(description = "密码", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.password.validation.not.blank}")
+  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+{}\":;,.<>?]).{8,}$", message = "{account.password.validation.pattern}")
   private String password;
 
   @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
