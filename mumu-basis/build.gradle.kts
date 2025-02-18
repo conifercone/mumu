@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.micrometer.tracing)
     implementation(libs.protobuf.java)
     implementation(libs.opencsv)
+    implementation(libs.libphonenumber)
 }

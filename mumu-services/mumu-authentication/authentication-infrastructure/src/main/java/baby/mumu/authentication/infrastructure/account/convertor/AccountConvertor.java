@@ -58,6 +58,7 @@ import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisR
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.kotlin.tools.PhoneUtil;
 import baby.mumu.basis.response.ResponseCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -305,6 +306,12 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountRegisterCmd accountRegisterCmd) {
     return Optional.ofNullable(accountRegisterCmd).map(accountRegisterCmdNotNull -> {
+      if (StringUtils.isNoneBlank(accountRegisterCmdNotNull.getPhone(),
+        accountRegisterCmdNotNull.getPhoneCountryCode()) && !PhoneUtil.isValidPhoneNumber(
+        accountRegisterCmdNotNull.getPhone(),
+        accountRegisterCmdNotNull.getPhoneCountryCode())) {
+        throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
+      }
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterCmdNotNull.getRoleCodes())
         .orElse(new ArrayList<>()));
@@ -331,6 +338,11 @@ public class AccountConvertor {
               accountAddress -> accountAddress.setUserId(account.getId())));
           String emailAfterUpdated = account.getEmail();
           String usernameAfterUpdated = account.getUsername();
+          if (StringUtils.isNoneBlank(account.getPhone(), account.getPhoneCountryCode())
+            && !PhoneUtil.isValidPhoneNumber(account.getPhone(),
+            account.getPhoneCountryCode())) {
+            throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
+          }
           if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
             emailBeforeUpdated
           ) && (accountRepository.existsByEmail(emailAfterUpdated)
