@@ -15,6 +15,7 @@
  */
 package baby.mumu.basis.tools;
 
+import baby.mumu.basis.constants.RegexpConstants;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -115,7 +116,7 @@ public class ToolsTest {
   @Test
   public void passwordTest() {
     // 定义密码验证的正则表达式
-    String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+{}\":;,.<>?]).{8,}$";
+    String regex = RegexpConstants.PASSWORD_REGEXP;
     // 测试密码
     String password = "3c38019#0e5c34f@3Bc97cae24aC6062";
     // 创建 Pattern 对象

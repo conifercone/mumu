@@ -13,26 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.client.cmds;
-
-import baby.mumu.basis.constants.RegexpConstants;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+package baby.mumu.basis.constants;
 
 /**
- * 账户修改密码指令
+ * 正则表达式常量类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.7.0
  */
-@Data
-public class AccountChangePasswordCmd {
+public final class RegexpConstants {
 
-  @NotBlank(message = "{account.password.validation.not.blank}")
-  private String originalPassword;
+  private RegexpConstants() {
+  }
 
-  @NotBlank(message = "{account.password.validation.not.blank}")
-  @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
-  private String newPassword;
+  public static final String PASSWORD_REGEXP = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+{}\":;,.<>?]).{8,}$";
 }

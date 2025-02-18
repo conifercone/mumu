@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.client.cmds;
 
+import baby.mumu.basis.constants.RegexpConstants;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,7 +45,7 @@ public class AccountRegisterCmd {
 
   @Schema(description = "密码", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.password.validation.not.blank}")
-  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+{}\":;,.<>?]).{8,}$", message = "{account.password.validation.pattern}")
+  @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
   private String password;
 
   @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
