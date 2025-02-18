@@ -88,7 +88,7 @@ public class AccountControllerTest {
     accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId().getValue());
     accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget().getValue());
     accountRegisterCmd.setUsername("test1");
-    accountRegisterCmd.setPassword("test1");
+    accountRegisterCmd.setPassword("Test@123456");
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
     accountRegisterCmd.setAvatarUrl("https://github.com/users/conifercone");
     accountRegisterCmd.setPhone("13031723736");
@@ -179,7 +179,7 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void verifyPassword() throws Exception {
     AccountPasswordVerifyCmd accountPasswordVerifyCmd = new AccountPasswordVerifyCmd();
-    accountPasswordVerifyCmd.setPassword("admin");
+    accountPasswordVerifyCmd.setPassword("Admin@5211314");
     mockMvc.perform(MockMvcRequestBuilders
         .get("/account/verifyPassword").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
@@ -195,8 +195,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void changePassword() throws Exception {
     AccountChangePasswordCmd accountChangePasswordCmd = new AccountChangePasswordCmd();
-    accountChangePasswordCmd.setNewPassword("admin1");
-    accountChangePasswordCmd.setOriginalPassword("admin");
+    accountChangePasswordCmd.setNewPassword("Admin@5211314");
+    accountChangePasswordCmd.setOriginalPassword("Admin@5211314");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/changePassword").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))

@@ -570,8 +570,8 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "originalPassword": "admin",
-  "newPassword": "admin"
+  "originalPassword": "Admin@5211314",
+  "newPassword": "Admin@5211314"
 }
 
 > {%

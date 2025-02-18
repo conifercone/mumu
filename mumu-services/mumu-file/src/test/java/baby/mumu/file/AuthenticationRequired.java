@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class AuthenticationRequired {
     String url = "http://localhost:9080/api/mumu/authentication/oauth2/token";
     MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
     form.add("username", "admin");
-    form.add("password", "admin");
+    form.add("password", "Admin@5211314");
     form.add("scope", "message.read message.write openid");
     form.add("grant_type", OAuth2Enum.GRANT_TYPE_PASSWORD.getName());
     HttpHeaders headers = new HttpHeaders();
