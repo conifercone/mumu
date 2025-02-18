@@ -83,7 +83,12 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   private String avatarUrl;
 
   /**
-   * 电话
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
+   * 手机号
    */
   private String phone;
 

@@ -84,6 +84,10 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   @Column(name = "avatar_url", length = 200, nullable = false)
   private String avatarUrl;
 
+  @Size(max = 10)
+  @Column(name = "phone_country_code", length = 10, nullable = false)
+  private String phoneCountryCode;
+
   @Size(max = 200)
   @Column(name = "phone", length = 200, nullable = false)
   private String phone;

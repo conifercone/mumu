@@ -115,6 +115,13 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private String avatarUrl;
 
   /**
+   * 国际电话区号
+   */
+  @Size(max = 10)
+  @Column(name = "phone_country_code", length = 10, nullable = false)
+  private String phoneCountryCode;
+
+  /**
    * 手机号
    */
   @Size(max = 200)

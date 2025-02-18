@@ -44,7 +44,10 @@ public class AccountUpdateByIdCmd {
   @Schema(description = "头像地址", requiredMode = RequiredMode.NOT_REQUIRED)
   private String avatarUrl;
 
-  @Schema(description = "联系方式", requiredMode = RequiredMode.NOT_REQUIRED)
+  @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String phoneCountryCode;
+
+  @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
   private String phone;
 
   @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)

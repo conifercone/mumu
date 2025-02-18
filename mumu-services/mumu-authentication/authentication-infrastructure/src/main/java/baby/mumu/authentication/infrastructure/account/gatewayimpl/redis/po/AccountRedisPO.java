@@ -92,6 +92,11 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private String avatarUrl;
 
   /**
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
    * 手机号
    */
   private String phone;

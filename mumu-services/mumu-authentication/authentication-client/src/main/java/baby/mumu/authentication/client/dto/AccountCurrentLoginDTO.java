@@ -56,6 +56,11 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   private String avatarUrl;
 
   /**
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
    * 手机号
    */
   private String phone;

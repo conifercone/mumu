@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,12 @@ public class AccountFindAllCmd {
   private List<Long> roleIds;
 
   /**
-   * 电话
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
+   * 手机号
    */
   private String phone;
 

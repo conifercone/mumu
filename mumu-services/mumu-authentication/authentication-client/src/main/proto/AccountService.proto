@@ -29,6 +29,7 @@ message AccountCurrentLoginGrpcDTO{
   repeated AccountRoleCurrentLoginQueryGrpcDTO roles = 10;
   repeated AccountAddressCurrentLoginQueryGrpcDTO addresses = 11;
   repeated AccountSystemSettingsCurrentLoginQueryGrpcDTO systemSettings = 12;
+  google.protobuf.StringValue phoneCountryCode = 13;
 }
 
 message AccountRoleCurrentLoginQueryGrpcDTO {
