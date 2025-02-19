@@ -17,6 +17,8 @@ package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.exception.MuMuException
 import baby.mumu.basis.response.ResponseCode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.opencsv.CSVWriter
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import jakarta.servlet.http.HttpServletResponse
@@ -25,6 +27,8 @@ import org.apiguardian.api.API
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.util.Assert
+import org.zalando.jackson.datatype.money.MoneyModule
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.URLEncoder
@@ -157,6 +161,60 @@ object FileDownloadUtils {
             }
         } catch (e: Exception) {
             throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
+        }
+    }
+
+    @JvmStatic
+    @API(status = API.Status.STABLE, since = "2.7.0")
+    fun <T> downloadJson(
+        response: HttpServletResponse,
+        fileName: String,
+        stream: Stream<T>
+    ) {
+        var fileName = fileName
+        try {
+            Assert.isTrue(StringUtils.isNotBlank(fileName), "fileName must not be blank")
+            if (!fileName.endsWith(".json")) {
+                fileName += ".json"
+            }
+            // 创建 ObjectMapper 实例
+            val objectMapper = ObjectMapper()
+            // 注册模块（例如时间模块和Money模块）
+            objectMapper.registerModule(JavaTimeModule())
+            objectMapper.registerModule(MoneyModule())
+
+            // 创建 ObjectWriter 实例
+            val objectWriter = objectMapper.writerWithDefaultPrettyPrinter()
+
+            // 获取 JSON 生成器
+            val generator = objectMapper.factory
+                .createGenerator(response.outputStream)
+            generator.useDefaultPrettyPrinter()
+
+            // 设置响应头
+            response.contentType = MediaType.APPLICATION_JSON_VALUE
+            response.setHeader(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + encodeFileName(fileName)
+            )
+
+            // 写入 JSON 数组开始符
+            generator.writeStartArray()
+
+            // 遍历流并写入 JSON 对象
+            stream.forEach { obj: T ->
+                try {
+                    objectWriter.writeValue(generator, obj)
+                } catch (_: IOException) {
+                    throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+                }
+            }
+            // 写入 JSON 数组结束符
+            generator.writeEndArray()
+            // 关闭生成器
+            generator.close()
+        } catch (_: java.lang.Exception) {
+            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
         }
     }
 
