@@ -34,11 +34,11 @@ object IpUtils {
     @JvmStatic
     fun getIpAddr(request: HttpServletRequest): String? {
         val ip = AtomicReference(request.remoteAddr)
-        @Suppress("SpellCheckingInspection") val localIp = setOf(
-            "127.0.0.1",      // loopback address (IPv4)
-            "::1",            // loopback address (IPv6)
-            "localhost",      // equivalent to 127.0.0.1
-            "unknown"         // used when the IP is not available
+        val localIp = setOf(
+            "127.0.0.1",      // 本地回环地址 (IPv4)，用于指代当前计算机
+            "::1",            // 本地回环地址 (IPv6)，等同于 127.0.0.1
+            "localhost",      // 本地主机名，通常与 127.0.0.1 映射
+            "unknown"         // 当 IP 地址未知时使用
         )
 
         // 如果 IP 是本地地址或 "unknown"，则不使用
