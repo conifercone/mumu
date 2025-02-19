@@ -32,6 +32,7 @@ import java.util.*
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
+@API(status = API.Status.INTERNAL, since = "1.0.0")
 object SecurityContextUtils {
     /**
      * Account领域模型id属性名
@@ -41,7 +42,7 @@ object SecurityContextUtils {
     private const val TIMEZONE = "timezone"
     private const val LANGUAGE = "language"
 
-    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
     @JvmStatic
     val loginAccountId: Optional<Long>
         /**
@@ -69,7 +70,7 @@ object SecurityContextUtils {
                 null
             }
 
-    @get:API(status = API.Status.STABLE, since = "2.2.0")
+    @get:API(status = API.Status.INTERNAL, since = "2.2.0")
     @JvmStatic
     val loginAccountName: Optional<String>
         /**
@@ -96,7 +97,7 @@ object SecurityContextUtils {
                 null
             }
 
-    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
     @JvmStatic
     val loginAccountTimezone: Optional<String>
         /**
@@ -123,7 +124,7 @@ object SecurityContextUtils {
                 null
             }
 
-    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
     @JvmStatic
     val loginAccountLanguage: Optional<LanguageEnum>
         /**
@@ -150,7 +151,7 @@ object SecurityContextUtils {
                 null
             }
 
-    @get:API(status = API.Status.STABLE, since = "1.0.0")
+    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
     @JvmStatic
     val tokenValue: Optional<String>
         /**

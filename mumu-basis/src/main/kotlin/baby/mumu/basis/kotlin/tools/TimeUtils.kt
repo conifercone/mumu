@@ -26,11 +26,12 @@ import java.time.ZoneOffset
 import java.util.*
 
 /**
- * 通用工具类
+ * 时间工具类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.7.0
  */
+@API(status = API.Status.INTERNAL, since = "2.7.0")
 object TimeUtils {
 
     /**
@@ -40,7 +41,7 @@ object TimeUtils {
      * @param zoneId 源时区
      * @return UTC时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToUTC(localDateTime: LocalDateTime, zoneId: ZoneId): LocalDateTime {
         return convertToZone(localDateTime, zoneId, ZoneOffset.UTC)
@@ -54,7 +55,7 @@ object TimeUtils {
      * @param toZone 目标时区
      * @return 指定时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToZone(
         localDateTime: LocalDateTime,
@@ -73,7 +74,7 @@ object TimeUtils {
      * @param fromZone 源时区
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         localDateTime: LocalDateTime,
@@ -94,7 +95,7 @@ object TimeUtils {
      * @param offsetDateTime 时间
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "2.2.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         offsetDateTime: OffsetDateTime
@@ -109,7 +110,7 @@ object TimeUtils {
      *
      * @param baseDataTransferObject 基础数据传输对象
      */
-    @API(status = API.Status.STABLE, since = "1.0.3")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         baseDataTransferObject: BaseDataTransferObject
@@ -138,7 +139,7 @@ object TimeUtils {
      * @param localDateTime 时间
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertUTCToAccountZone(
         localDateTime: LocalDateTime
@@ -152,7 +153,7 @@ object TimeUtils {
      * @param localDateTime 时间
      * @return UTC时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertAccountZoneToUTC(
         localDateTime: LocalDateTime
@@ -170,7 +171,7 @@ object TimeUtils {
      *
      * @param timezone 时区
      */
-    @API(status = API.Status.STABLE, since = "2.4.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun validateTimezone(timezone: String) {
         if (timezone.isNotBlank()) {
