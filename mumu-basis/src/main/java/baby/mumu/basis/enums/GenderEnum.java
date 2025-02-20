@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,16 @@ public enum GenderEnum {
   MALE,
   FEMALE,
   // 非二元性别选项
-  //  非二元
+  // 非二元
   NON_BINARY,
-  //  性别酷儿
+  // 性别酷儿
   GENDER_QUEER,
-  //  性别流动
+  // 性别流动
   GENDER_FLUID,
-  //  无性别
+  // 无性别
   AGENDER,
-  //  其他
+  // 其他
   OTHER,
-  //  不愿透露
+  // 不愿透露
   PREFER_NOT_TO_SAY
 }
