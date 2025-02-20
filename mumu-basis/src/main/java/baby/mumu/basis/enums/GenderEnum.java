@@ -19,7 +19,7 @@ package baby.mumu.basis.enums;
  * 性别枚举
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.7.0
  */
 public enum GenderEnum {
 
