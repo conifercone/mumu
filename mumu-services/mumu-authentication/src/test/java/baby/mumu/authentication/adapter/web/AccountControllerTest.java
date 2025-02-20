@@ -25,8 +25,8 @@ import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
@@ -92,7 +92,7 @@ public class AccountControllerTest {
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
     accountRegisterCmd.setAvatarUrl("https://github.com/users/conifercone");
     accountRegisterCmd.setPhone("13031723736");
-    accountRegisterCmd.setSex(SexEnum.MALE);
+    accountRegisterCmd.setGender(GenderEnum.MALE);
     accountRegisterCmd.setLanguage(LanguageEnum.ZH);
     accountRegisterCmd.setTimezone("Asia/Shanghai");
     accountRegisterCmd.setEmail("547913250@qq.com");

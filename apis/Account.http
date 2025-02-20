@@ -24,7 +24,7 @@ Accept: */*
   ],
   "avatarUrl": "https://github.com/users/conifercone",
   "phone": "{{$random.phoneNumber.phoneNumber}}",
-  "sex": "MALE",
+  "gender": "MALE",
   "email": "{{$random.email}}",
   "timezone": "Asia/Shanghai",
   "language": "EN",

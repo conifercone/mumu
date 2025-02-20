@@ -17,8 +17,8 @@ message AccountCurrentLoginGrpcDTO{
   google.protobuf.StringValue username = 2;
   google.protobuf.StringValue avatarUrl = 3;
   google.protobuf.StringValue phone = 4;
-  oneof sex_wrapper {
-    SexEnum sex = 5;
+  oneof gender_wrapper {
+    GenderEnum gender = 5;
   }
   google.protobuf.StringValue email = 6;
   google.protobuf.StringValue timezone = 7;
@@ -71,12 +71,24 @@ message AccountRolePermissionCurrentLoginQueryGrpcDTO{
 }
 
 
-enum SexEnum
+enum GenderEnum
 {
-  GREY = 0;
-  FEMALE = 1;
-  MALE = 2;
-  SEXLESS = 3;
+  //  不愿透露
+  PREFER_NOT_TO_SAY = 0;
+  // 基本性别选项
+  MALE = 1;
+  FEMALE = 2;
+  // 非二元性别选项
+  //  非二元
+  NON_BINARY = 3;
+  //  性别酷儿
+  GENDER_QUEER = 4;
+  //  性别流动
+  GENDER_FLUID = 5;
+  //  无性别
+  AGENDER = 6;
+  //  其他
+  OTHER = 7;
 }
 
 enum LanguageEnum {

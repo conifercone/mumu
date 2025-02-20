@@ -17,8 +17,8 @@ package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import jakarta.validation.constraints.Size;
@@ -68,7 +68,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 邮箱

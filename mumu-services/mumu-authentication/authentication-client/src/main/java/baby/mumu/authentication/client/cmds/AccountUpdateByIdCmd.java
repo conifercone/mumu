@@ -15,8 +15,8 @@
  */
 package baby.mumu.authentication.client.cmds;
 
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.extension.annotations.NotBlankOrNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
@@ -51,7 +51,7 @@ public class AccountUpdateByIdCmd {
   private String phone;
 
   @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   @Schema(description = "邮箱", requiredMode = RequiredMode.NOT_REQUIRED)
   @NotBlankOrNull(message = "{account.email.validation.not.blank}")

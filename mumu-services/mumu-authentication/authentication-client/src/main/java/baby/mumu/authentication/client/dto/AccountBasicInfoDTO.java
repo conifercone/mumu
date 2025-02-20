@@ -16,8 +16,8 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
@@ -87,7 +87,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮箱

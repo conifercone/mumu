@@ -16,8 +16,8 @@
 package baby.mumu.authentication.client.cmds;
 
 import baby.mumu.basis.constants.RegexpConstants;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
@@ -61,7 +61,7 @@ public class AccountRegisterCmd {
   private String phone;
 
   @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   @Schema(description = "邮箱地址", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.email.validation.not.blank}")

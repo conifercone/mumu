@@ -16,8 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
 import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
@@ -131,9 +131,9 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   /**
    * 性别
    */
-  @Column(name = "sex", nullable = false)
+  @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮箱

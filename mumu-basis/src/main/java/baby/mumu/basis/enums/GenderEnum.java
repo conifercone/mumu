@@ -21,25 +21,22 @@ package baby.mumu.basis.enums;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-public enum SexEnum {
+public enum GenderEnum {
 
-  /**
-   * 男性
-   */
+  // 基本性别选项
   MALE,
-
-  /**
-   * 女性
-   */
   FEMALE,
-
-  /**
-   * 双性
-   */
-  GREY,
-
-  /**
-   * 无性
-   */
-  SEXLESS
+  // 非二元性别选项
+  //  非二元
+  NON_BINARY,
+  //  性别酷儿
+  GENDER_QUEER,
+  //  性别流动
+  GENDER_FLUID,
+  //  无性别
+  AGENDER,
+  //  其他
+  OTHER,
+  //  不愿透露
+  PREFER_NOT_TO_SAY
 }

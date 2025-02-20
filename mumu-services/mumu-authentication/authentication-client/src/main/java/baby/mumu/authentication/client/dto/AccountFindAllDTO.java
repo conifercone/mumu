@@ -17,8 +17,8 @@ package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -95,7 +95,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮件

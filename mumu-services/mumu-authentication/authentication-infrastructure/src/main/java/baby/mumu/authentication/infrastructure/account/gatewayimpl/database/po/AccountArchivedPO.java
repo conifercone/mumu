@@ -16,8 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
 import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
 import jakarta.persistence.AttributeOverride;
@@ -92,9 +92,9 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   @Column(name = "phone", length = 200, nullable = false)
   private String phone;
 
-  @Column(name = "sex", nullable = false)
+  @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   @Size(max = 200)
   @Column(name = "email", length = 200, nullable = false)

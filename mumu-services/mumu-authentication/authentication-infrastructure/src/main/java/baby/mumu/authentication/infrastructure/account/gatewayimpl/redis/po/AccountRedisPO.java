@@ -17,8 +17,8 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
@@ -104,7 +104,7 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮箱
