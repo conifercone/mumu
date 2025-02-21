@@ -133,6 +133,16 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   private Money balance;
 
   /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
+
+  /**
    * 地址
    */
   private List<AccountFindAllSliceAddressCo> addresses;

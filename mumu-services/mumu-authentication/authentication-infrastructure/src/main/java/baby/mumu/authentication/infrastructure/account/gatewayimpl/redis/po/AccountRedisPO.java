@@ -143,6 +143,16 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private Money balance;
 
   /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
+
+  /**
    * 数字偏好
    */
   private DigitalPreferenceEnum digitalPreference;

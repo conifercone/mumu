@@ -26,6 +26,8 @@ message AccountCurrentLoginGrpcDTO{
   repeated AccountAddressCurrentLoginQueryGrpcDTO addresses = 11;
   repeated AccountSystemSettingsCurrentLoginQueryGrpcDTO systemSettings = 12;
   string phoneCountryCode = 13;
+  bool phoneVerified = 14;
+  bool emailVerified = 15;
 }
 
 message AccountRoleCurrentLoginQueryGrpcDTO {

@@ -129,6 +129,16 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
    */
   private List<AccountAddressBasicInfoDTO> addresses;
 
+  /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
+
 
   @Data
   public static class AccountAddressBasicInfoDTO {

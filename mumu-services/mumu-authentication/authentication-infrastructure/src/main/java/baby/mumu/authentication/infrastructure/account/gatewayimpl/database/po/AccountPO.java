@@ -191,4 +191,16 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   )
   @CompositeType(MonetaryAmountType.class)
   private Money balance;
+
+  /**
+   * 手机号已验证
+   */
+  @Column(name = "phone_verified", nullable = false)
+  private boolean phoneVerified;
+
+  /**
+   * 邮箱已验证
+   */
+  @Column(name = "email_verified", nullable = false)
+  private boolean emailVerified;
 }

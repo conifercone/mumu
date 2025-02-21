@@ -185,6 +185,16 @@ public class Account extends BasisDomainModel implements UserDetails {
    */
   private List<AccountSystemSettings> systemSettings;
 
+  /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
+
   @Override
   @JsonIgnore
   public Collection<Permission> getAuthorities() {
