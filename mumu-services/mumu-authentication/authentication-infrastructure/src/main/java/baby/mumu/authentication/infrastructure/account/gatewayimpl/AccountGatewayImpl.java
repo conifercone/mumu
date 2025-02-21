@@ -140,7 +140,11 @@ public class AccountGatewayImpl implements AccountGateway {
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())).ifPresentOrElse(accountPO -> {
-      TimeUtils.validateTimezone(accountPO.getTimezone());
+      // 验证时区是否为有效时区类型
+      if (StringUtils.isNotBlank(accountPO.getTimezone()) && !TimeUtils.isValidTimeZone(
+        accountPO.getTimezone())) {
+        throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+      }
       accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
       accountRepository.persist(accountPO);
       account.setId(accountPO.getId());

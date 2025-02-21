@@ -16,8 +16,6 @@
 package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.dto.BaseDataTransferObject
-import baby.mumu.basis.exception.MuMuException
-import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -173,13 +171,12 @@ object TimeUtils {
      */
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
-    fun validateTimezone(timezone: String) {
-        if (timezone.isNotBlank()) {
-            try {
-                ZoneId.of(timezone)
-            } catch (e: Exception) {
-                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE, e)
-            }
+    fun isValidTimeZone(timezone: String): Boolean {
+        try {
+            ZoneId.of(timezone)
+            return true
+        } catch (_: Exception) {
+            return false
         }
     }
 }
