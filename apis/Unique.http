@@ -104,7 +104,7 @@ Accept: */*
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{unique-service-url}}/timezone/serverTime
+GET {{unique-service-url}}/timezone/serverTime?zoneId=Asia/Shanghai
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
