@@ -170,6 +170,10 @@ spring-security-oauth2-core = { module = "org.springframework.security:spring-se
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
 spring-data-commons = { module = "org.springframework.data:spring-data-commons" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
+spring-data-elasticsearch = { module = "org.springframework.data:spring-data-elasticsearch" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
+spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" }
 # https://mvnrepository.com/artifact/org.springframework/spring-web
 spring-web = { module = "org.springframework:spring-web" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test

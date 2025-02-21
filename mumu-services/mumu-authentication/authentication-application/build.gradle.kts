@@ -9,5 +9,6 @@ dependencies {
     implementation(libs.grpc.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
+    implementation(libs.spring.data.mongodb)
     implementation(libs.spring.tx)
 }
