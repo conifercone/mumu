@@ -165,15 +165,15 @@ object TimeUtils {
     }
 
     /**
-     * 验证时区是否为有效时区
+     * 是否为有效时区类型
      *
-     * @param timezone 时区
+     * @param zoneId 时区ID
      */
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
-    fun isValidTimeZone(timezone: String): Boolean {
+    fun isValidTimeZone(zoneId: String): Boolean {
         try {
-            ZoneId.of(timezone)
+            ZoneId.of(zoneId)
             return true
         } catch (_: Exception) {
             return false
