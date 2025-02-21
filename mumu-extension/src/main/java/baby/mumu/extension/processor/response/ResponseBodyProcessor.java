@@ -45,6 +45,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -184,6 +185,24 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
             illegalArgumentException.getMessage()))
         .orElse(illegalArgumentException.getMessage())
     );
+  }
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseWrapper<?> handleException(
+    @NotNull MissingServletRequestParameterException missingServletRequestParameterException,
+    @NotNull HttpServletResponse response) {
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+    response.setStatus(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS.getStatus());
+    logger.error(missingServletRequestParameterException.getMessage(),
+      missingServletRequestParameterException);
+    systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+      .setContent(missingServletRequestParameterException.getMessage())
+      .setCategory("missingServletRequestParameterException")
+      .setFail(ExceptionUtils.getStackTrace(missingServletRequestParameterException))
+      .build());
+    return ResponseWrapper.failure(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS,
+      missingServletRequestParameterException.getParameterName());
   }
 
   @ExceptionHandler(Exception.class)
