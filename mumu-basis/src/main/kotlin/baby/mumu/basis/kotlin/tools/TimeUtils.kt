@@ -172,11 +172,6 @@ object TimeUtils {
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun isValidTimeZone(zoneId: String): Boolean {
-        try {
-            ZoneId.of(zoneId)
-            return true
-        } catch (_: Exception) {
-            return false
-        }
+        return ZoneId.getAvailableZoneIds().contains(zoneId)
     }
 }
