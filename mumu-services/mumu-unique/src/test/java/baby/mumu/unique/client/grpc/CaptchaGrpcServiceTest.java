@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -58,8 +56,8 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void generateSimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     logger.info("simpleCaptchaGeneratedGrpcDTO : {}", simpleCaptchaGeneratedGrpcDTO);
@@ -70,8 +68,8 @@ public class CaptchaGrpcServiceTest {
   public void syncGenerateSimpleCaptcha() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     ListenableFuture<SimpleCaptchaGeneratedGrpcDTO> simpleCaptchaGeneratedGrpcDTOListenableFuture = captchaGrpcService.syncGenerateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     simpleCaptchaGeneratedGrpcDTOListenableFuture.addListener(() -> {
@@ -91,8 +89,8 @@ public class CaptchaGrpcServiceTest {
   @Test
   public void verifySimpleCaptcha() {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()
@@ -110,8 +108,8 @@ public class CaptchaGrpcServiceTest {
     throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd = SimpleCaptchaVerifyGrpcCmd.newBuilder()

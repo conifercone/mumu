@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import baby.mumu.file.client.api.grpc.StreamFileRemoveGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
-import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -63,8 +62,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void download() {
     StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-      .setName(StringValue.of("test2.log"))
-      .setStorageAddress(StringValue.of("test"))
+      .setName("test2.log")
+      .setStorageAddress("test")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
@@ -83,8 +82,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   public void syncDownload() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-      .setName(StringValue.of("test2.log"))
-      .setStorageAddress(StringValue.of("test"))
+      .setName("test2.log")
+      .setStorageAddress("test")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
@@ -112,8 +111,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void removeFile() {
     StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
-      .setName(StringValue.of("test2.log"))
-      .setStorageAddress(StringValue.of("test"))
+      .setName("test2.log")
+      .setStorageAddress("test")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
@@ -128,8 +127,8 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
   public void syncRemoveFile() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
-      .setName(StringValue.of("test2.log"))
-      .setStorageAddress(StringValue.of("test"))
+      .setName("test2.log")
+      .setStorageAddress("test")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(

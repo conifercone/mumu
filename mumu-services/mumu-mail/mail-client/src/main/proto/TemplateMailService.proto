@@ -11,10 +11,10 @@ service TemplateMailService {
 }
 
 message TemplateMailSendGrpcCmd {
-  google.protobuf.StringValue address = 1;
-  google.protobuf.StringValue name = 2;
-  google.protobuf.StringValue from = 3;
-  google.protobuf.StringValue to = 4;
-  google.protobuf.StringValue subject = 5;
-  google.protobuf.StringValue data = 6;
+  string address = 1;
+  string name = 2;
+  string from = 3;
+  string to = 4;
+  string subject = 5;
+  string data = 6;
 }

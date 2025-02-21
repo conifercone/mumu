@@ -26,7 +26,6 @@ import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
-import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
@@ -67,8 +66,8 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   public void sendMail(TemplateMail templateMail) {
     Optional.ofNullable(templateMail).ifPresent(templateMailDomain -> {
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-        .setName(StringValue.of(templateMailDomain.getName()))
-        .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
+        .setName(templateMailDomain.getName())
+        .setStorageAddress(templateMailDomain.getAddress())
         .build();
       CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
         () -> SecurityContextUtils.getTokenValue().orElseThrow(

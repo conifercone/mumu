@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,14 +90,9 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   public void download(StreamFileDownloadGrpcCmd request,
     @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
     StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
-    streamFileDownloadCmd.setName(
-      request.hasName() ? request.getName().getValue() : null);
-    streamFileDownloadCmd.setRename(
-      request.hasRename() ? request.getRename().getValue()
-        : null);
-    streamFileDownloadCmd.setStorageAddress(
-      request.hasStorageAddress() ? request.getStorageAddress()
-        .getValue() : null);
+    streamFileDownloadCmd.setName(request.getName());
+    streamFileDownloadCmd.setRename(request.getRename());
+    streamFileDownloadCmd.setStorageAddress(request.getStorageAddress());
     try (InputStream inputStream = streamFileDownloadCmdExe.execute(streamFileDownloadCmd)) {
       ByteString byteString = ByteString.copyFrom(inputStream.readAllBytes());
       BytesValue bytesValue = BytesValue.newBuilder().setValue(byteString).build();

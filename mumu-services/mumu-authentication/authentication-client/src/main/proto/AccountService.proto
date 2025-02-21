@@ -13,61 +13,53 @@ service AccountService {
 }
 
 message AccountCurrentLoginGrpcDTO{
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue username = 2;
-  google.protobuf.StringValue avatarUrl = 3;
-  google.protobuf.StringValue phone = 4;
-  oneof gender_wrapper {
-    GenderEnum gender = 5;
-  }
-  google.protobuf.StringValue email = 6;
-  google.protobuf.StringValue timezone = 7;
-  oneof language_wrapper {
-    LanguageEnum language = 8;
-  }
+  int64 id = 1;
+  string username = 2;
+  string avatarUrl = 3;
+  string phone = 4;
+  GenderEnum gender = 5;
+  string email = 6;
+  string timezone = 7;
+  LanguageEnum language = 8;
   google.protobuf.Timestamp birthday = 9;
   repeated AccountRoleCurrentLoginQueryGrpcDTO roles = 10;
   repeated AccountAddressCurrentLoginQueryGrpcDTO addresses = 11;
   repeated AccountSystemSettingsCurrentLoginQueryGrpcDTO systemSettings = 12;
-  google.protobuf.StringValue phoneCountryCode = 13;
+  string phoneCountryCode = 13;
 }
 
 message AccountRoleCurrentLoginQueryGrpcDTO {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
   repeated AccountRolePermissionCurrentLoginQueryGrpcDTO permissions = 4;
 }
 
 message AccountAddressCurrentLoginQueryGrpcDTO {
-  google.protobuf.StringValue id = 1;
-  google.protobuf.StringValue street = 2;
-  google.protobuf.StringValue city = 3;
-  google.protobuf.StringValue state = 4;
-  google.protobuf.StringValue postalCode = 5;
-  google.protobuf.StringValue country = 6;
+  string id = 1;
+  string street = 2;
+  string city = 3;
+  string state = 4;
+  string postalCode = 5;
+  string country = 6;
   google.type.LatLng location = 7;
   bool defaultAddress = 8;
 }
 
 message AccountSystemSettingsCurrentLoginQueryGrpcDTO {
-  google.protobuf.StringValue id = 1;
-  google.protobuf.StringValue profile = 2;
-  google.protobuf.StringValue name = 3;
-  oneof system_theme_wrapper {
-    SystemThemeEnum systemTheme = 4;
-  }
-  oneof system_theme_mode_wrapper {
-    SystemThemeModeEnum systemThemeMode = 5;
-  }
-  google.protobuf.BoolValue enabled = 6;
+  string id = 1;
+  string profile = 2;
+  string name = 3;
+  SystemThemeEnum systemTheme = 4;
+  SystemThemeModeEnum systemThemeMode = 5;
+  bool defaultSystemSettings = 6;
 }
 
 
 message AccountRolePermissionCurrentLoginQueryGrpcDTO{
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
 }
 
 

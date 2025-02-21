@@ -31,8 +31,6 @@ import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -80,13 +78,13 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
-    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId().getValue());
-    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget().getValue());
+    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
+    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
     accountRegisterCmd.setUsername("test1");
     accountRegisterCmd.setPassword("Test@123456");
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
@@ -212,13 +210,13 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrent() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
-    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId().getValue());
-    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget().getValue());
+    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
+    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
     mockMvc.perform(MockMvcRequestBuilders
         .delete("/account/deleteCurrent").with(csrf())
         .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())

@@ -12,18 +12,18 @@ service CaptchaService {
 }
 
 message SimpleCaptchaGeneratedGrpcCmd {
-  google.protobuf.Int64Value ttl = 1;
-  google.protobuf.Int32Value length = 2;
+  int64 ttl = 1;
+  int32 length = 2;
 }
 message SimpleCaptchaGeneratedGrpcDTO {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue target = 2;
-  google.protobuf.Int64Value ttl = 3;
-  google.protobuf.Int32Value length = 4;
+  int64 id = 1;
+  string target = 2;
+  int64 ttl = 3;
+  int32 length = 4;
 }
 message SimpleCaptchaVerifyGrpcCmd {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue source = 2;
+  int64 id = 1;
+  string source = 2;
 }
 
 message SimpleCaptchaVerifyGrpcResult {
