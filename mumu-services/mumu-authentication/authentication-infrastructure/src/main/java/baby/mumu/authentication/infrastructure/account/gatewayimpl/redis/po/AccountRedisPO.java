@@ -69,22 +69,22 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 已启用
    */
-  private Boolean enabled;
+  private boolean enabled;
 
   /**
    * 凭证未过期
    */
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired;
 
   /**
    * 帐户未锁定
    */
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked;
 
   /**
    * 帐号未过期
    */
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired;
 
   /**
    * 头像地址

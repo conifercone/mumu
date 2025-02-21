@@ -69,16 +69,16 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   private String password;
 
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   @Column(name = "credentials_non_expired", nullable = false)
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired = true;
 
   @Column(name = "account_non_locked", nullable = false)
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked = true;
 
   @Column(name = "account_non_expired", nullable = false)
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired = true;
 
   @Size(max = 200)
   @Column(name = "avatar_url", length = 200, nullable = false)

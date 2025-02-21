@@ -52,7 +52,7 @@ public class RedisRequestIdIdempotentProcessor implements RequestIdIdempotentPro
     if (StringUtils.isBlank(requestId)) {
       return false;
     }
-    return Boolean.TRUE.equals(redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId)));
+    return redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId));
   }
 
   @Override

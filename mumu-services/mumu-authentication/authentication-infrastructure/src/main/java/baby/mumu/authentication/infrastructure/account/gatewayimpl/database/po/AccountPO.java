@@ -87,25 +87,25 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
    */
   @NotNull
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   /**
    * 凭证未过期
    */
   @Column(name = "credentials_non_expired", nullable = false)
-  private Boolean credentialsNonExpired = true;
+  private boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
   @Column(name = "account_non_locked", nullable = false)
-  private Boolean accountNonLocked = true;
+  private boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
   @Column(name = "account_non_expired", nullable = false)
-  private Boolean accountNonExpired = true;
+  private boolean accountNonExpired = true;
 
   /**
    * 头像地址

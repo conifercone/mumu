@@ -93,7 +93,7 @@ public abstract class BaseDataTransferObject implements DataTransferObject {
     this.modificationTime = modificationTime;
   }
 
-  public Boolean getArchived() {
+  public boolean isArchived() {
     return archived;
   }
 

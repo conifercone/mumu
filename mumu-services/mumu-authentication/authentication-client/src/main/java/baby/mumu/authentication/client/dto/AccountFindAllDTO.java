@@ -55,22 +55,22 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   /**
    * 是否启用
    */
-  private Boolean enabled;
+  private boolean enabled;
 
   /**
    * 凭证未过期
    */
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired;
 
   /**
    * 帐户未锁定
    */
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked;
 
   /**
    * 帐号未过期
    */
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired;
 
   /**
    * 账户角色

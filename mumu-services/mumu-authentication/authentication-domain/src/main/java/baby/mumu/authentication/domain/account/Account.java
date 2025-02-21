@@ -84,25 +84,25 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 是否启用
    */
   @Builder.Default
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   /**
    * 凭证未过期
    */
   @Builder.Default
-  private Boolean credentialsNonExpired = true;
+  private boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
   @Builder.Default
-  private Boolean accountNonLocked = true;
+  private boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
   @Builder.Default
-  private Boolean accountNonExpired = true;
+  private boolean accountNonExpired = true;
 
   /**
    * 账户角色
