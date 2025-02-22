@@ -17,8 +17,8 @@ package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -55,22 +55,22 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   /**
    * 是否启用
    */
-  private Boolean enabled;
+  private boolean enabled;
 
   /**
    * 凭证未过期
    */
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired;
 
   /**
    * 帐户未锁定
    */
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked;
 
   /**
    * 帐号未过期
    */
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired;
 
   /**
    * 账户角色
@@ -83,14 +83,19 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   private String avatarUrl;
 
   /**
-   * 电话
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
+   * 手机号
    */
   private String phone;
 
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮件
@@ -126,6 +131,16 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
    * 余额
    */
   private Money balance;
+
+  /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
 
   /**
    * 地址

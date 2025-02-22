@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 查找当前目录及其子目录中包含 serialVersionUID 的 .java 文件，且路径中包含 src/main/java 或 src/test/java
-find . -type f \( -path "*/src/main/java/*" -o -path "*/src/test/java/*" \) -name "*.java" -exec grep -H "serialVersionUID" {} \; | \
+find ../ -type f \( -path "*/src/main/java/*" -o -path "*/src/test/java/*" \) -name "*.java" -exec grep -H "serialVersionUID" {} \; | \
 awk -F'[=;]' '
 {
     # 获取文件名和 serialVersionUID

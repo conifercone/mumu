@@ -1,12 +1,12 @@
 [versions]
-springbootVersion = "3.4.1"
+springbootVersion = "3.4.3"
 springCloudVersion = "2024.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
-jetbrainsAnnotationsVersion = '26.0.1'
+jetbrainsAnnotationsVersion = '26.0.2'
 jasyptVersion = '3.0.5'
-swagger3Version = '2.8.3'
-swagger3AnnotationsVersion = '2.2.27'
+swagger3Version = '2.8.5'
+swagger3AnnotationsVersion = '2.2.28'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '3.1.0.RELEASE'
@@ -14,23 +14,22 @@ redisOmSpringVersion = "0.9.7"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.9.0"
+hypersistenceUtilsVersion = "3.9.2"
 curatorRecipesVersion = "5.7.1"
-flywayVersion = "11.2.0"
-javaxMailVersion = '1.6.2'
+flywayVersion = "11.3.2"
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.18.0'
 commonsTextVersion = '1.13.0'
-jobrunrSpringBoot3StarterVersion = '7.3.2'
+jobrunrSpringBoot3StarterVersion = '7.4.0'
 alimtVersion = '1.4.0'
-deeplVersion = '1.7.0'
+deeplVersion = '1.8.1'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
 javapoetVersion = '1.13.0'
 autoServiceVersion = '1.1.1'
-tess4jVersion = '5.13.0'
+tess4jVersion = '5.15.0'
 javacvVersion = '1.5.11'
 aliyunOcrVersion = '3.1.2'
 bucket4jVersion = '8.14.0'
@@ -41,14 +40,16 @@ springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.10'
 monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
+libphonenumberVersion = '8.13.55'
+commonsValidatorVersion = '1.9.0'
 # bom version
-grpcBomVersion = '1.69.1'
+grpcBomVersion = '1.70.0'
 guavaBomVersion = '33.4.0-jre'
 protobufBomVersion = '4.29.3'
 # plugin version
 protobufPluginVersion = '0.9.4'
-lombokPluginVersion = '8.11'
-kotlinPluginVersion = '2.1.0'
+lombokPluginVersion = '8.12.1'
+kotlinPluginVersion = '2.1.10'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -169,6 +170,10 @@ spring-security-oauth2-core = { module = "org.springframework.security:spring-se
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
 # https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
 spring-data-commons = { module = "org.springframework.data:spring-data-commons" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
+spring-data-elasticsearch = { module = "org.springframework.data:spring-data-elasticsearch" }
+# https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
+spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" }
 # https://mvnrepository.com/artifact/org.springframework/spring-web
 spring-web = { module = "org.springframework:spring-web" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
@@ -177,9 +182,8 @@ spring-security-test = { module = "org.springframework.security:spring-security-
 curator-recipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
+# https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
-# https://mvnrepository.com/artifact/com.sun.mail/javax.mail
-javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMailVersion" }
 # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 # https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
@@ -262,6 +266,10 @@ opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsvVersion" }
 moneta = { module = "org.javamoney:moneta", version.ref = "monetaVersion" }
 # https://mvnrepository.com/artifact/org.zalando/jackson-datatype-money
 jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version.ref = "jacksonDatatypeMoneyVersion" }
+# https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
+# https://mvnrepository.com/artifact/commons-validator/commons-validator
+commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

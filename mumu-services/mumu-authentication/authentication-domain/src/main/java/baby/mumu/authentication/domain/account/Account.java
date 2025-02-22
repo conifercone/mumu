@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
@@ -84,25 +84,25 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 是否启用
    */
   @Builder.Default
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   /**
    * 凭证未过期
    */
   @Builder.Default
-  private Boolean credentialsNonExpired = true;
+  private boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
   @Builder.Default
-  private Boolean accountNonLocked = true;
+  private boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
   @Builder.Default
-  private Boolean accountNonExpired = true;
+  private boolean accountNonExpired = true;
 
   /**
    * 账户角色
@@ -121,14 +121,19 @@ public class Account extends BasisDomainModel implements UserDetails {
   private String avatarUrl;
 
   /**
-   * 电话
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
+
+  /**
+   * 手机号
    */
   private String phone;
 
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮件
@@ -179,6 +184,16 @@ public class Account extends BasisDomainModel implements UserDetails {
    * 系统设置
    */
   private List<AccountSystemSettings> systemSettings;
+
+  /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
 
   @Override
   @JsonIgnore

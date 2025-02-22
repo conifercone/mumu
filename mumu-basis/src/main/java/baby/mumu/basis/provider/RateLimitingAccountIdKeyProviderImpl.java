@@ -16,7 +16,7 @@
 package baby.mumu.basis.provider;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.response.ResponseCode;
 
 /**
@@ -31,7 +31,7 @@ public class RateLimitingAccountIdKeyProviderImpl implements RateLimitingKeyProv
 
   @Override
   public String generateUniqKey() {
-    return String.valueOf(SecurityContextUtil.getLoginAccountId()
+    return String.valueOf(SecurityContextUtils.getLoginAccountId()
       .orElseThrow(() -> new MuMuException(
         ResponseCode.FAILURE_TO_GET_INFORMATION_RELATED_TO_THE_LOGIN_ACCOUNT)));
   }

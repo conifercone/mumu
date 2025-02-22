@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.enums;
+package baby.mumu.basis.kotlin.tools
+
+import org.apache.commons.validator.routines.EmailValidator
+import org.apiguardian.api.API
 
 /**
- * 性别枚举
+ * 邮箱工具类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.7.0
  */
-public enum SexEnum {
+object EmailUtils {
 
-  /**
-   * 男性
-   */
-  MALE,
-
-  /**
-   * 女性
-   */
-  FEMALE,
-
-  /**
-   * 双性
-   */
-  GREY,
-
-  /**
-   * 无性
-   */
-  SEXLESS
+    /**
+     * 校验邮箱地址格式的方法
+     * @param email 邮箱地址
+     * @return 是否为合法格式的邮箱地址
+     */
+    @API(status = API.Status.STABLE, since = "2.7.0")
+    @JvmStatic
+    fun isValidEmailFormat(email: String?): Boolean {
+        if (email.isNullOrEmpty()) {
+            return false
+        }
+        return EmailValidator.getInstance().isValid(email)
+    }
 }

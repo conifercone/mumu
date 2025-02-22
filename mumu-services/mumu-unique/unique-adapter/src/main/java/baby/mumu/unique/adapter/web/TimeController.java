@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.kotlin.tools.TimeUtils;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,25 +29,26 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 时区相关接口
+ * 时间相关接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.1
+ * @since 2.7.0
  */
 @RestController
-@RequestMapping("/timezone")
-@Tag(name = "时区管理")
-public class TimezoneController {
+@RequestMapping("/time")
+@Tag(name = "时间管理")
+public class TimeController {
 
   @Operation(summary = "获取可用时区列表")
-  @GetMapping("/available")
+  @GetMapping("/timezone/available")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
+  @API(status = Status.STABLE, since = "2.7.0")
   public ResponseWrapper<Set<String>> available() {
     return ResponseWrapper.success(ZoneId.getAvailableZoneIds());
   }
@@ -53,8 +57,12 @@ public class TimezoneController {
   @GetMapping("/serverTime")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.4")
-  public ResponseWrapper<OffsetDateTime> serverTime() {
-    return ResponseWrapper.success(OffsetDateTime.now());
+  @API(status = Status.STABLE, since = "2.7.0")
+  public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {
+    if (!TimeUtils.isValidTimeZone(zoneId)) {
+      throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+    } else {
+      return ResponseWrapper.success(OffsetDateTime.now(ZoneId.of(zoneId)));
+    }
   }
 }

@@ -15,7 +15,7 @@
  */
 package baby.mumu.extension.filters;
 
-import baby.mumu.basis.kotlin.tools.SignatureUtil;
+import baby.mumu.basis.kotlin.tools.SignatureUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.extension.ExtensionProperties;
@@ -81,7 +81,7 @@ public class SignatureFilter extends OncePerRequestFilter {
       String requestId = request.getHeader(X_REQUEST_ID);
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
         try {
-          if (!SignatureUtil.validateSignature(
+          if (!SignatureUtils.validateSignature(
             timestamp.concat(requestId).concat(
                 StringUtils.isNotBlank(request.getQueryString()) ? requestURI.concat("?")
                   .concat(URLDecoder.decode(request.getQueryString(), StandardCharsets.UTF_8))

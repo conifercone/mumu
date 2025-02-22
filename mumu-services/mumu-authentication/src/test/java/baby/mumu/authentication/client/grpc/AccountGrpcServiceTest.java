@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void queryCurrentLoginAccount() {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc, "admin", "admin").orElseThrow(
+      () -> getToken(mockMvc, "admin", "Admin@5211314").orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount(
       callCredentials);
@@ -73,7 +73,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
   public void syncQueryCurrentLoginAccount() {
     CountDownLatch countDownLatch = new CountDownLatch(1);
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc, "admin", "admin").orElseThrow(
+      () -> getToken(mockMvc, "admin", "Admin@5211314").orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<AccountCurrentLoginGrpcDTO> accountCurrentLoginGrpcDTOListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
       callCredentials);

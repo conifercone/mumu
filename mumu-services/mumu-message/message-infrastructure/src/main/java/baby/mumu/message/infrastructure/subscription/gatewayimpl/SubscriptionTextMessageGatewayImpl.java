@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUE
 
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.MessageStatusEnum;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
@@ -97,7 +97,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void readMsgById(Long id) {
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
       .filter(subscriptionTextMessagePO -> MessageStatusEnum.UNREAD.equals(
         subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
@@ -109,7 +109,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void unreadMsgById(Long id) {
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndReceiverId(msgId, accountId)))
       .filter(subscriptionTextMessagePO -> MessageStatusEnum.READ.equals(
         subscriptionTextMessagePO.getMessageStatus())).ifPresent(subscriptionTextMessageDo -> {
@@ -121,7 +121,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId())
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId())
       .ifPresent(
         accountId -> {
           subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId);
@@ -132,7 +132,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   public Page<SubscriptionTextMessage> findAllYouSend(
     SubscriptionTextMessage subscriptionTextMessage, int current, int pageSize) {
-    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+    return SecurityContextUtils.getLoginAccountId().map(accountId -> {
       Specification<SubscriptionTextMessagePO> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         Optional.ofNullable(subscriptionTextMessage).ifPresent(subscriptionTextMessageEntity -> {
@@ -159,7 +159,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
     //noinspection DuplicatedCode
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
       .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchivePO(
         subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedPO -> {
@@ -185,7 +185,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
     //noinspection DuplicatedCode
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtil.getLoginAccountId().flatMap(
+    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .ifPresent(
@@ -202,7 +202,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   public Page<SubscriptionTextMessage> findAllMessageRecordWithSomeone(
     int current, int pageSize, Long receiverId) {
-    return SecurityContextUtil.getLoginAccountId().map(accountId -> {
+    return SecurityContextUtils.getLoginAccountId().map(accountId -> {
       Specification<SubscriptionTextMessagePO> subscriptionTextMessageDoSpecification = (root, query, cb) -> {
         List<Predicate> predicateList = new ArrayList<>();
         predicateList.add(

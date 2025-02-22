@@ -16,6 +16,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ Removed
 
+## [2.7.0] - 2025-02-22
+
+### ⭐ Added
+
+- Added response encoding.
+- Added `.mailmap` file.
+- Added new attribute fields for mobile phone number verified and email verified.
+- Added documents.
+- Add idea encoding configuration.
+- New mobile phone number validity verification for the account.
+- New international telephone area code to the account.
+
+### 🕸️ Changed
+
+- Optimize time interface.
+- Add regular verification to the account registration password.
+- Optimize time tool class.
+- `springboot` upgrade to 3.4.3.
+- Optimize attribute types to save memory usage.
+- Modify the default value of the `mumu-users` table field.
+- Modify the gender field name.
+- Document rename.
+- Optimize IP tool class.
+- Merge tool classes.
+- Optimize git commit-msg scripts.
+- Modify the initial password to comply with password rules.
+- `hypersistence-utils-hibernate-63` upgrade to 3.9.2.
+- `flyway` upgraded to 11.3.2.
+- `tess4j` upgrade to 5.15.0.
+- `springdoc-openapi-starter-webmvc-ui` upgraded to 2.8.5.
+- `deepl-java` upgrade to 1.8.1.
+- Unify script position.
+- Optimize `pmd`, `checkstyle` tasks.
+- Turn on configuration cache.
+- Modify cache key name.
+- The storage name is uniformly added to prevent duplication.
+- Add prefixes to the collection name to prevent duplication.
+- Add prefixes to table names to prevent duplication.
+- Optimize token endpoint error handling logic.
+- `swagger-annotations-jakarta` upgrade to 2.2.28.
+- `lombok` upgraded to 8.12.1.
+- Replace icon.
+- `jobrunr-spring-boot-3-starter` upgrade to 7.4.0.
+- `grpc` upgrade to 1.70.0.
+- `org.jetbrains:annotations` upgrade to 26.0.2.
+- `kotlin` upgrade to 2.1.10.
+
+### 🐞 Fixed
+
+- Solve compile warnings.
+- Fixed refresh token exception.
+
+### ⚠️ Removed
+
+- Remove useless dependencies.
+- Remove useless code.
+
 ## [2.6.0] - 2025-01-25
 
 ### ⭐ Added
@@ -579,7 +636,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.6.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.7.0...develop
+[2.7.0]: https://github.com/conifercone/mumu/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0

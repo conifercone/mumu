@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
 import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
 import jakarta.persistence.AttributeOverride;
@@ -45,7 +45,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.4
  */
 @Entity
-@Table(name = "users_archived")
+@Table(name = "mumu_users_archived")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -69,28 +69,32 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   private String password;
 
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   @Column(name = "credentials_non_expired", nullable = false)
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired = true;
 
   @Column(name = "account_non_locked", nullable = false)
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked = true;
 
   @Column(name = "account_non_expired", nullable = false)
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired = true;
 
   @Size(max = 200)
   @Column(name = "avatar_url", length = 200, nullable = false)
   private String avatarUrl;
 
+  @Size(max = 10)
+  @Column(name = "phone_country_code", length = 10, nullable = false)
+  private String phoneCountryCode;
+
   @Size(max = 200)
   @Column(name = "phone", length = 200, nullable = false)
   private String phone;
 
-  @Column(name = "sex", nullable = false)
+  @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   @Size(max = 200)
   @Column(name = "email", length = 200, nullable = false)
@@ -135,4 +139,16 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   )
   @CompositeType(MonetaryAmountType.class)
   private Money balance;
+
+  /**
+   * 手机号已验证
+   */
+  @Column(name = "phone_verified", nullable = false)
+  private boolean phoneVerified;
+
+  /**
+   * 邮箱已验证
+   */
+  @Column(name = "email_verified", nullable = false)
+  private boolean emailVerified;
 }

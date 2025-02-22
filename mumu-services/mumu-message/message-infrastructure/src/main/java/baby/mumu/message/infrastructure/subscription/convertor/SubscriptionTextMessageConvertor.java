@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package baby.mumu.message.infrastructure.subscription.convertor;
 
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
@@ -54,7 +54,7 @@ public class SubscriptionTextMessageConvertor {
   public Optional<SubscriptionTextMessage> toEntity(
     SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     return Optional.ofNullable(subscriptionTextMessageForwardCmd)
-      .flatMap(res -> SecurityContextUtil.getLoginAccountId().map(senderAccountId -> {
+      .flatMap(res -> SecurityContextUtils.getLoginAccountId().map(senderAccountId -> {
         SubscriptionTextMessage entity = SubscriptionTextMessageMapper.INSTANCE.toEntity(res);
         entity.setSenderId(senderAccountId);
         return entity;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package baby.mumu.authentication.client.cmds;
 
+import baby.mumu.basis.constants.RegexpConstants;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
@@ -27,9 +29,10 @@ import lombok.Data;
 @Data
 public class AccountChangePasswordCmd {
 
-  @NotBlank
+  @NotBlank(message = "{account.password.validation.not.blank}")
   private String originalPassword;
 
-  @NotBlank
+  @NotBlank(message = "{account.password.validation.not.blank}")
+  @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
   private String newPassword;
 }

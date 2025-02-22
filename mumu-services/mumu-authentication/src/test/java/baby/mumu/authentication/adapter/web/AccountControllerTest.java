@@ -25,14 +25,12 @@ import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -80,19 +78,19 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void register() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
-    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId().getValue());
-    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget().getValue());
+    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
+    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
     accountRegisterCmd.setUsername("test1");
-    accountRegisterCmd.setPassword("test1");
+    accountRegisterCmd.setPassword("Test@123456");
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
     accountRegisterCmd.setAvatarUrl("https://github.com/users/conifercone");
     accountRegisterCmd.setPhone("13031723736");
-    accountRegisterCmd.setSex(SexEnum.MALE);
+    accountRegisterCmd.setGender(GenderEnum.MALE);
     accountRegisterCmd.setLanguage(LanguageEnum.ZH);
     accountRegisterCmd.setTimezone("Asia/Shanghai");
     accountRegisterCmd.setEmail("547913250@qq.com");
@@ -179,7 +177,7 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void verifyPassword() throws Exception {
     AccountPasswordVerifyCmd accountPasswordVerifyCmd = new AccountPasswordVerifyCmd();
-    accountPasswordVerifyCmd.setPassword("admin");
+    accountPasswordVerifyCmd.setPassword("Admin@5211314");
     mockMvc.perform(MockMvcRequestBuilders
         .get("/account/verifyPassword").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
@@ -195,8 +193,8 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void changePassword() throws Exception {
     AccountChangePasswordCmd accountChangePasswordCmd = new AccountChangePasswordCmd();
-    accountChangePasswordCmd.setNewPassword("admin1");
-    accountChangePasswordCmd.setOriginalPassword("admin");
+    accountChangePasswordCmd.setNewPassword("Admin@5211314");
+    accountChangePasswordCmd.setOriginalPassword("Admin@5211314");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/changePassword").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
@@ -212,13 +210,13 @@ public class AccountControllerTest {
   @Transactional(rollbackFor = Exception.class)
   public void deleteCurrent() throws Exception {
     SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(Int32Value.of(4))
-      .setTtl(Int64Value.of(500)).build();
+      .setLength(4)
+      .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
     AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
-    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId().getValue());
-    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget().getValue());
+    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
+    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
     mockMvc.perform(MockMvcRequestBuilders
         .delete("/account/deleteCurrent").with(csrf())
         .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())

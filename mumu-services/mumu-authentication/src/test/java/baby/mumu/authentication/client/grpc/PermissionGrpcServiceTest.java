@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import baby.mumu.basis.response.ResponseCode;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
-import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -66,7 +65,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void findAll() {
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
-      .setName(StringValue.of("数据"))
+      .setName("数据")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
@@ -76,7 +75,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
       callCredentials);
     logger.info("PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
     pageOfPermissionFindAllGrpcDTO.getContentList().stream().map(PermissionFindAllGrpcDTO::getName)
-      .map(StringValue::getValue).forEach(logger::info);
+      .forEach(logger::info);
     Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
     Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
   }
@@ -85,7 +84,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
-      .setName(StringValue.of("数据"))
+      .setName("数据")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(

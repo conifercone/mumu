@@ -8,4 +8,5 @@ dependencies {
     implementation(libs.spring.kafka)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
+    implementation(libs.spring.data.elasticsearch)
 }

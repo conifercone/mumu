@@ -16,67 +16,21 @@
 package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.dto.BaseDataTransferObject
-import baby.mumu.basis.exception.MuMuException
-import baby.mumu.basis.response.ResponseCode
 import org.apiguardian.api.API
-import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.*
-import java.util.regex.Pattern
-import javax.mail.internet.AddressException
-import javax.mail.internet.InternetAddress
 
 /**
- * 通用工具类
+ * 时间工具类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.7.0
  */
-object CommonUtil {
-    private const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-    private val EMAIL_PATTERN: Pattern = Pattern.compile(EMAIL_REGEX)
-    private val logger = LoggerFactory.getLogger(CommonUtil::class.java)
-
-
-    /**
-     * 校验邮箱地址格式的方法
-     * @param email 邮箱地址
-     * @return 是否为合法格式的邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "1.0.0")
-    @JvmStatic
-    fun isValidEmailFormat(email: String?): Boolean {
-        if (email.isNullOrEmpty()) {
-            return false
-        }
-        val matcher = EMAIL_PATTERN.matcher(email)
-        return matcher.matches()
-    }
-
-    /**
-     * 校验邮箱有效性
-     *
-     * @param email 邮箱地址
-     * @return 是否为有效邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "1.0.0")
-    @JvmStatic
-    fun isValidEmail(email: String?): Boolean {
-        if (!isValidEmailFormat(email)) {
-            return false
-        }
-        try {
-            val emailAddr = InternetAddress(email)
-            emailAddr.validate()
-        } catch (e: AddressException) {
-            logger.error(e.message, e)
-            return false
-        }
-        return true
-    }
+@API(status = API.Status.INTERNAL, since = "2.7.0")
+object TimeUtils {
 
     /**
      * 转换为utc时间
@@ -85,7 +39,7 @@ object CommonUtil {
      * @param zoneId 源时区
      * @return UTC时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToUTC(localDateTime: LocalDateTime, zoneId: ZoneId): LocalDateTime {
         return convertToZone(localDateTime, zoneId, ZoneOffset.UTC)
@@ -99,7 +53,7 @@ object CommonUtil {
      * @param toZone 目标时区
      * @return 指定时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToZone(
         localDateTime: LocalDateTime,
@@ -118,13 +72,13 @@ object CommonUtil {
      * @param fromZone 源时区
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         localDateTime: LocalDateTime,
         fromZone: ZoneId
     ): LocalDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             convertToZone(
                 localDateTime,
                 fromZone,
@@ -139,12 +93,12 @@ object CommonUtil {
      * @param offsetDateTime 时间
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "2.2.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         offsetDateTime: OffsetDateTime
     ): OffsetDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             offsetDateTime.atZoneSameInstant(ZoneId.of(timezone)).toOffsetDateTime()
         }.orElse(offsetDateTime)
     }
@@ -154,13 +108,13 @@ object CommonUtil {
      *
      * @param baseDataTransferObject 基础数据传输对象
      */
-    @API(status = API.Status.STABLE, since = "1.0.3")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertToAccountZone(
         baseDataTransferObject: BaseDataTransferObject
     ) {
         Optional.ofNullable(baseDataTransferObject).ifPresent { dataTransferObject ->
-            SecurityContextUtil.loginAccountTimezone.ifPresent { timezone ->
+            SecurityContextUtils.loginAccountTimezone.ifPresent { timezone ->
                 val targetZoneId = ZoneId.of(timezone)
                 Optional.ofNullable(dataTransferObject.creationTime).ifPresent {
                     val creationTimeZonedDateTime =
@@ -183,7 +137,7 @@ object CommonUtil {
      * @param localDateTime 时间
      * @return 账户时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertUTCToAccountZone(
         localDateTime: LocalDateTime
@@ -197,12 +151,12 @@ object CommonUtil {
      * @param localDateTime 时间
      * @return UTC时区时间
      */
-    @API(status = API.Status.STABLE, since = "1.0.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
     fun convertAccountZoneToUTC(
         localDateTime: LocalDateTime
     ): LocalDateTime {
-        return SecurityContextUtil.loginAccountTimezone.map { timezone ->
+        return SecurityContextUtils.loginAccountTimezone.map { timezone ->
             convertToUTC(
                 localDateTime,
                 ZoneId.of(timezone)
@@ -211,19 +165,13 @@ object CommonUtil {
     }
 
     /**
-     * 验证时区是否为有效时区
+     * 是否为有效时区类型
      *
-     * @param timezone 时区
+     * @param zoneId 时区ID
      */
-    @API(status = API.Status.STABLE, since = "2.4.0")
+    @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
-    fun validateTimezone(timezone: String) {
-        if (timezone.isNotBlank()) {
-            try {
-                ZoneId.of(timezone)
-            } catch (e: Exception) {
-                throw MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE, e)
-            }
-        }
+    fun isValidTimeZone(zoneId: String): Boolean {
+        return ZoneId.getAvailableZoneIds().contains(zoneId)
     }
 }

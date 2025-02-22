@@ -17,7 +17,7 @@ package baby.mumu.authentication.application.permission.executor;
 
 import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
-import baby.mumu.basis.kotlin.tools.FileDownloadUtil;
+import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class PermissionDownloadAllCmdExe {
   }
 
   public void execute(HttpServletResponse response) {
-    FileDownloadUtil.downloadCSV(response, "permissions",
+    FileDownloadUtils.downloadCSV(response, "permissions",
       permissionGateway.findAll()
         .flatMap(
           permission -> permissionConvertor.toPermissionDownloadAllDTO(permission).stream()));

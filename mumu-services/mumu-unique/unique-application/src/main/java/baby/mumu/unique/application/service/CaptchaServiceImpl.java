@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@ import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Int64Value;
-import com.google.protobuf.StringValue;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
@@ -81,20 +78,16 @@ public class CaptchaServiceImpl extends CaptchaServiceImplBase implements Captch
   public void generateSimpleCaptcha(@NotNull SimpleCaptchaGeneratedGrpcCmd request,
     StreamObserver<SimpleCaptchaGeneratedGrpcDTO> responseObserver) {
     SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd = new SimpleCaptchaGeneratedCmd();
-    simpleCaptchaGeneratedCmd.setTtl(
-      request.hasTtl() ? request.getTtl().getValue()
-        : null);
-    simpleCaptchaGeneratedCmd.setLength(
-      request.hasLength() ? request.getLength()
-        .getValue() : null);
+    simpleCaptchaGeneratedCmd.setTtl(request.getTtl());
+    simpleCaptchaGeneratedCmd.setLength(request.getLength());
     Builder builder = SimpleCaptchaGeneratedGrpcDTO.newBuilder();
     SimpleCaptchaGeneratedDTO captchaGeneratedCo = simpleCaptchaGeneratedCmdExe.execute(
       simpleCaptchaGeneratedCmd);
     if (captchaGeneratedCo != null) {
-      builder.setId(Int64Value.of(captchaGeneratedCo.getId()))
-        .setTtl(Int64Value.of(captchaGeneratedCo.getTtl())).setLength(
-          Int32Value.of(captchaGeneratedCo.getLength()))
-        .setTarget(StringValue.of(captchaGeneratedCo.getTarget()));
+      builder.setId(captchaGeneratedCo.getId())
+        .setTtl(captchaGeneratedCo.getTtl()).setLength(
+          captchaGeneratedCo.getLength())
+        .setTarget(captchaGeneratedCo.getTarget());
     }
 
     responseObserver.onNext(builder.build());

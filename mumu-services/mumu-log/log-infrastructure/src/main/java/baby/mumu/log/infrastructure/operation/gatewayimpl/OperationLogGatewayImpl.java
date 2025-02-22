@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
 
 import baby.mumu.basis.exception.DataConversionException;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infrastructure.config.LogProperties;
@@ -171,19 +171,19 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         .ifPresent(
           operatingTime -> criteria.and(new Criteria(
             OperationLogEsPOMetamodel.operatingTime).matches(
-            CommonUtil.convertAccountZoneToUTC(operatingTime))));
+            TimeUtils.convertAccountZoneToUTC(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
         .ifPresent(
           operatingStartTime -> criteria.and(
             new Criteria(
               OperationLogEsPOMetamodel.operatingTime).greaterThan(
-              CommonUtil.convertAccountZoneToUTC(operatingStartTime))));
+              TimeUtils.convertAccountZoneToUTC(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
         .ifPresent(
           operatingEndTime -> criteria.and(
             new Criteria(
               OperationLogEsPOMetamodel.operatingTime).lessThan(
-              CommonUtil.convertAccountZoneToUTC(operatingEndTime))));
+              TimeUtils.convertAccountZoneToUTC(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
       .addSort(
@@ -195,7 +195,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
       .filter(Optional::isPresent).map(Optional::get)
       .peek(operationLogDomain ->
         operationLogDomain.setOperatingTime(
-          CommonUtil.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))
+          TimeUtils.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))
       .toList();
     return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package baby.mumu.mail.infrastructure.template.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.file.client.api.StreamFileGrpcService;
 import baby.mumu.file.client.api.grpc.StreamFileDownloadGrpcCmd;
@@ -26,7 +26,6 @@ import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
-import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
@@ -67,11 +66,11 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   public void sendMail(TemplateMail templateMail) {
     Optional.ofNullable(templateMail).ifPresent(templateMailDomain -> {
       StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
-        .setName(StringValue.of(templateMailDomain.getName()))
-        .setStorageAddress(StringValue.of(templateMailDomain.getAddress()))
+        .setName(templateMailDomain.getName())
+        .setStorageAddress(templateMailDomain.getAddress())
         .build();
       CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-        () -> SecurityContextUtil.getTokenValue().orElseThrow(
+        () -> SecurityContextUtils.getTokenValue().orElseThrow(
           () -> new MuMuException(ResponseCode.UNAUTHORIZED)));
       try {
         StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(

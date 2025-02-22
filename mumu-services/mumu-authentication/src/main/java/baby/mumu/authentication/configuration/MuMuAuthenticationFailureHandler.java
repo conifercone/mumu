@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_SCOPE;
 import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
 
-import baby.mumu.basis.kotlin.tools.IpUtil;
+import baby.mumu.basis.kotlin.tools.IpUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.log.client.api.OperationLogGrpcService;
@@ -77,18 +77,48 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      logger.error(errorCode);
-      response.setStatus(HttpStatus.UNAUTHORIZED.value());
-      switch (errorCode) {
-        case UNSUPPORTED_GRANT_TYPE ->
-          exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
-        case INVALID_CLIENT -> exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
-        case INVALID_GRANT -> exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
-        case INVALID_SCOPE -> exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
-        default -> {
-          operationFailLog(errorCode, error.getDescription(), IpUtil.getIpAddr(request));
-          ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
-        }
+      logger.error(oAuth2AuthenticationException.getMessage());
+
+      if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
+        response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());
+        exceptionResponse(response, ResponseCode.ACCOUNT_DISABLED, request);
+      } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_LOCKED.getCode())) {
+        response.setStatus(ResponseCode.ACCOUNT_LOCKED.getStatus());
+        exceptionResponse(response, ResponseCode.ACCOUNT_LOCKED, request);
+      } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_HAS_EXPIRED.getCode())) {
+        response.setStatus(ResponseCode.ACCOUNT_HAS_EXPIRED.getStatus());
+        exceptionResponse(response, ResponseCode.ACCOUNT_HAS_EXPIRED, request);
+      } else if (error.getErrorCode().equals(ResponseCode.PASSWORD_EXPIRED.getCode())) {
+        response.setStatus(ResponseCode.PASSWORD_EXPIRED.getStatus());
+        exceptionResponse(response, ResponseCode.PASSWORD_EXPIRED, request);
+      } else if (error.getErrorCode()
+        .equals(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getCode())) {
+        response.setStatus(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getStatus());
+        exceptionResponse(response, ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT, request);
+      } else if (error.getErrorCode()
+        .equals(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getCode())) {
+        response.setStatus(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getStatus());
+        exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST, request);
+      } else if (UNSUPPORTED_GRANT_TYPE
+        .equals(error.getErrorCode())) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
+      } else if (INVALID_CLIENT
+        .equals(error.getErrorCode())) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
+      } else if (INVALID_GRANT
+        .equals(error.getErrorCode())) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
+      } else if (INVALID_SCOPE
+        .equals(error.getErrorCode())) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
+      } else {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
+        ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
       }
     }
   }
@@ -105,7 +135,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
     HttpServletRequest request)
     throws IOException {
     operationFailLog(responseCode.getCode(),
-      responseCode.getMessage(), IpUtil.getIpAddr(request));
+      responseCode.getMessage(), IpUtils.getIpAddr(request));
     ResponseWrapper.exceptionResponse(response,
       responseCode);
   }

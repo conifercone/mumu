@@ -35,7 +35,7 @@ import javax.lang.model.util.Types
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
-object ObjectUtil {
+object ObjectUtils {
 
     /**
      * 获取所有字段

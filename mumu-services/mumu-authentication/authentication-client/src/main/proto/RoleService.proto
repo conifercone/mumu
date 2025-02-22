@@ -12,36 +12,36 @@ service RoleService {
 }
 
 message RoleFindAllGrpcCmd {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-  google.protobuf.StringValue description = 4;
-  google.protobuf.Int32Value current = 5;
-  google.protobuf.Int32Value page_size = 6;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string description = 4;
+  int32 current = 5;
+  int32 page_size = 6;
 }
 
 message RoleFindByIdGrpcDTO {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-  google.protobuf.StringValue description = 4;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string description = 4;
   bool hasDescendant = 5;
 }
 
 message RoleFindAllGrpcDTO {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
   repeated RoleFindAllPermissionGrpcDTO permissions = 4;
-  google.protobuf.StringValue description = 5;
+  string description = 5;
   bool hasDescendant = 6;
 }
 
 message RoleFindAllPermissionGrpcDTO {
-  google.protobuf.Int64Value id = 1;
-  google.protobuf.StringValue code = 2;
-  google.protobuf.StringValue name = 3;
-  google.protobuf.StringValue description = 4;
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string description = 4;
   bool hasDescendant = 5;
 }
 

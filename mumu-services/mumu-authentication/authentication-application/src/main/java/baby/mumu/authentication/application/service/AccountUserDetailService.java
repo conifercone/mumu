@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 package baby.mumu.authentication.application.service;
 
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
+import baby.mumu.basis.kotlin.tools.EmailUtils;
+import baby.mumu.basis.response.ResponseCode;
 import io.micrometer.observation.annotation.Observed;
 import java.util.function.Supplier;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.util.Assert;
 
 /**
@@ -44,9 +48,13 @@ public class AccountUserDetailService implements UserDetailsService {
   public @NotNull UserDetails loadUserByUsername(String usernameOrEmail)
     throws UsernameNotFoundException {
     Assert.hasText(usernameOrEmail, "username or email is required");
-    Supplier<UsernameNotFoundException> usernameNotFoundExceptionSupplier = () -> new UsernameNotFoundException(
-      usernameOrEmail);
-    return CommonUtil.isValidEmail(usernameOrEmail) ? accountGateway.findAccountByEmail(
+    Supplier<OAuth2AuthenticationException> usernameNotFoundExceptionSupplier = () -> {
+      OAuth2Error error = new OAuth2Error(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getCode(),
+        ResponseCode.ACCOUNT_DOES_NOT_EXIST.getMessage(),
+        StringUtils.EMPTY);
+      return new OAuth2AuthenticationException(error);
+    };
+    return EmailUtils.isValidEmailFormat(usernameOrEmail) ? accountGateway.findAccountByEmail(
       usernameOrEmail).orElseThrow(usernameNotFoundExceptionSupplier)
       : accountGateway.findAccountByUsername(usernameOrEmail)
         .orElseThrow(usernameNotFoundExceptionSupplier);

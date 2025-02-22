@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import java.util.Map;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,13 +51,10 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
 
   private final TemplateMailSendCmdExe templateMailSendCmdExe;
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final MailProperties mailProperties;
 
   @Autowired
-  public TemplateMailServiceImpl(TemplateMailSendCmdExe templateMailSendCmdExe,
-    MailProperties mailProperties) {
+  public TemplateMailServiceImpl(TemplateMailSendCmdExe templateMailSendCmdExe) {
     this.templateMailSendCmdExe = templateMailSendCmdExe;
-    this.mailProperties = mailProperties;
   }
 
   @Override
@@ -69,24 +65,16 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
   private @NotNull TemplateMailSendCmd getTemplateMailSendCmd(
     @NotNull TemplateMailSendGrpcCmd request) {
     TemplateMailSendCmd templateMailSendCmd = new TemplateMailSendCmd();
-    templateMailSendCmd.setTo(
-      request.hasTo() ? request.getTo().getValue() : null);
-    templateMailSendCmd.setName(
-      request.hasName() ? request.getName().getValue() : null);
-    templateMailSendCmd.setFrom(
-      request.hasFrom() ? request.getFrom().getValue() : mailProperties.getUsername());
-    templateMailSendCmd.setAddress(
-      request.hasAddress() ? request.getAddress().getValue()
-        : null);
-    templateMailSendCmd.setSubject(
-      request.hasSubject() ? request.getSubject().getValue()
-        : null);
+    templateMailSendCmd.setTo(request.getTo());
+    templateMailSendCmd.setName(request.getName());
+    templateMailSendCmd.setFrom(request.getFrom());
+    templateMailSendCmd.setAddress(request.getAddress());
+    templateMailSendCmd.setSubject(request.getSubject());
     try {
       //noinspection unchecked
-      templateMailSendCmd.setData(
-        request.hasData() ? (Map<String, Object>) objectMapper.readValue(
-          request.getData().getValue(),
-          Map.class) : null);
+      templateMailSendCmd.setData((Map<String, Object>) objectMapper.readValue(
+        request.getData(),
+        Map.class));
     } catch (JsonProcessingException e) {
       throw new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR);
     }

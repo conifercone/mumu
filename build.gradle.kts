@@ -17,14 +17,15 @@ plugins {
     alias(libs.plugins.pmd)
 }
 
+val rootDirectory = project.rootDir
 // 安装git hook
 tasks.register<Copy>("installGitHooks") {
     group = "setup"
     description = "Copies git hooks to .git/hooks"
     // 源文件路径
-    val hooksDir = file("${project.rootDir}/.git/hooks")
-    val sourceDir = file("${project.rootDir}/scripts/git/hooks")
-    val updateLicenseShell = file("${project.rootDir}/update_license.sh")
+    val hooksDir = file("${rootDirectory}/.git/hooks")
+    val sourceDir = file("${rootDirectory}/scripts/git/hooks")
+    val updateLicenseShell = file("${rootDirectory}/scripts/update_license.sh")
     // 将文件从源目录拷贝到目标目录
     from(sourceDir)
     // 目标目录
@@ -159,30 +160,44 @@ subprojects {
         options.encoding = StandardCharsets.UTF_8.name()
     }
 
+    val projectVersionStr = project.version.toString()
+    val projectNameStr = project.name
+    val gradleVersionStr = gradle.gradleVersion
+    val osName = System.getProperty("os.name")
+    val javaVersion = System.getProperty("java.version")
+
+    val hasProcessorProvider = providers.provider {
+        configurations["annotationProcessor"].dependencies
+            .any { it.name.contains("mumu-processor") }
+    }
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
+
+        // 预先存储计算后的值
+        inputs.property("projectVersion", projectVersionStr)
+        inputs.property("projectName", projectNameStr)
+        inputs.property("gradleVersion", gradleVersionStr)
+
         doFirst {
-            val hasProcessor = configurations["annotationProcessor"]
-                .dependencies
-                .any { it.name.contains("mumu-processor") }
+            val compilerArgs = mutableListOf("-Amapstruct.unmappedTargetPolicy=IGNORE")
+            val hasProcessor = hasProcessorProvider.get()
             if (hasProcessor) {
-                options.compilerArgs.addAll(
-                    @Suppress("SpellCheckingInspection")
+                @Suppress("SpellCheckingInspection")
+                compilerArgs.addAll(
                     listOf(
-                        "-Amapstruct.unmappedTargetPolicy=IGNORE",
-                        "-Agradle.version=${gradle.gradleVersion}",
-                        "-Aos.name=${System.getProperty("os.name")}",
-                        "-Ajava.version=${System.getProperty("java.version")}",
-                        "-Aproject.version=${project.version}",
-                        "-Aproject.name=${project.name}",
+                        "-Agradle.version=$gradleVersionStr",
+                        "-Aos.name=$osName",
+                        "-Ajava.version=$javaVersion",
+                        "-Aproject.version=$projectVersionStr",
+                        "-Aproject.name=$projectNameStr"
                     )
                 )
-            } else {
-                @Suppress("SpellCheckingInspection")
-                options.compilerArgs.add("-Amapstruct.unmappedTargetPolicy=IGNORE")
             }
+
+            options.compilerArgs.addAll(compilerArgs)
         }
     }
+
 
     tasks.named(
         "compileKotlin",

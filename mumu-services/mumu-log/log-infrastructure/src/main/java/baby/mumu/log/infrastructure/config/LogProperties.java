@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,14 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.log")
 public class LogProperties {
 
-  public static final String OPERATION_LOG_ES_INDEX_NAME = "operation-log";
-  public static final String SYSTEM_LOG_ES_INDEX_NAME = "system-log";
-  public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "operation-log";
-  public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "system-log";
+  //  操作日志索引名称
+  public static final String OPERATION_LOG_ES_INDEX_NAME = "mumu-operation-log";
+  //  系统日志索引名称
+  public static final String SYSTEM_LOG_ES_INDEX_NAME = "mumu-system-log";
+  //  操作日志topic名称
+  public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "mumu-operation-log";
+  //  系统日志topic名称
+  public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "mumu-system-log";
 
   @NestedConfigurationProperty
   private Elasticsearch elasticsearch = new Elasticsearch();

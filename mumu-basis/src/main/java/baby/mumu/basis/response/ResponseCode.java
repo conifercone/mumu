@@ -15,8 +15,8 @@
  */
 package baby.mumu.basis.response;
 
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
-import baby.mumu.basis.kotlin.tools.SpringContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import java.util.Locale;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
@@ -47,6 +47,7 @@ public enum ResponseCode implements BaseResponse {
   DATA_ALREADY_EXISTS("1003", 400),
   DATA_DOES_NOT_EXIST("1004", 400),
   PRIMARY_KEY_CANNOT_BE_EMPTY("1005", 400),
+  REQUEST_MISSING_NECESSARY_PARAMETERS("1006", 400),
   /*认证错误2001-2999*/
   ACCOUNT_ALREADY_EXISTS("2001", 500),
   ACCOUNT_NAME_CANNOT_BE_EMPTY("2002", 500),
@@ -121,7 +122,8 @@ public enum ResponseCode implements BaseResponse {
   ROLE_PATH_ALREADY_EXISTS("6048", 500),
   DESCENDANT_ROLE_HAS_DESCENDANT_ROLE("6049", 500),
   FAILURE_TO_GET_INFORMATION_RELATED_TO_THE_LOGIN_ACCOUNT("6050", 500),
-  THE_ACCOUNT_HAS_AN_UNUSED_BALANCE("6051", 500);
+  THE_ACCOUNT_HAS_AN_UNUSED_BALANCE("6051", 500),
+  INVALID_PHONE_NUMBER("6052", 500);
   private final String code;
   @Getter
   private final int status;
@@ -148,9 +150,9 @@ public enum ResponseCode implements BaseResponse {
   }
 
   private @NotNull String makeMessage(@Nullable Object[] args) {
-    return SpringContextUtil.getBean(MessageSource.class)
+    return SpringContextUtils.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
-        SecurityContextUtil.getLoginAccountLanguage()
+        SecurityContextUtils.getLoginAccountLanguage()
           .map(languageEnum -> Locale.of(languageEnum.getCode()))
           .orElse(LocaleContextHolder.getLocale()))).orElse(getCode());
   }

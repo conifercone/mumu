@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  */
 public class RedisRequestIdIdempotentProcessor implements RequestIdIdempotentProcessor {
 
-  private final String REQUEST_ID_PREFIX = "request:id:";
+  private final String REQUEST_ID_PREFIX = "mumu:request:id:";
   private final ExtensionProperties extensionProperties;
   private final RedisTemplate<String, String> redisTemplate;
 
@@ -52,7 +52,7 @@ public class RedisRequestIdIdempotentProcessor implements RequestIdIdempotentPro
     if (StringUtils.isBlank(requestId)) {
       return false;
     }
-    return Boolean.TRUE.equals(redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId)));
+    return redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId));
   }
 
   @Override

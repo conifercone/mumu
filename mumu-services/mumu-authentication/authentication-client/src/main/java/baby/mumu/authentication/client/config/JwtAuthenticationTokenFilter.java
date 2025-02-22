@@ -19,7 +19,7 @@ import baby.mumu.authentication.client.api.TokenGrpcService;
 import baby.mumu.authentication.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.basis.filters.TraceIdFilter;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import io.micrometer.tracing.Span;
@@ -77,7 +77,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
       request);
     String authHeader = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
-    SecurityContextUtil.getLoginAccountLanguage()
+    SecurityContextUtils.getLoginAccountLanguage()
       .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
         Locale.of(languageEnum.getCode())));
     // 存在token
@@ -120,7 +120,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         authenticationToken.setDetails(
           new WebAuthenticationDetailsSource().buildDetails(mumuHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        SecurityContextUtil.getLoginAccountLanguage()
+        SecurityContextUtils.getLoginAccountLanguage()
           .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
             Locale.of(languageEnum.getCode())));
       }

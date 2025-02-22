@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package baby.mumu.file.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.kotlin.tools.FileDownloadUtil;
+import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
 import baby.mumu.file.client.api.StreamFileService;
 import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
 import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
@@ -83,7 +83,7 @@ public class StreamFileController {
   public void download(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd,
     HttpServletResponse response) {
     Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
-    FileDownloadUtil.download(response, ObjectUtils.isEmpty(
+    FileDownloadUtils.download(response, ObjectUtils.isEmpty(
         streamFileDownloadCmd.getRename())
         ? streamFileDownloadCmd.getName()
         : streamFileDownloadCmd.getRename(), streamFileService.download(streamFileDownloadCmd),

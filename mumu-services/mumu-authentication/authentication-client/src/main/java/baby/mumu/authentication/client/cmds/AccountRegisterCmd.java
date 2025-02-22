@@ -15,12 +15,14 @@
  */
 package baby.mumu.authentication.client.cmds;
 
+import baby.mumu.basis.constants.RegexpConstants;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +45,7 @@ public class AccountRegisterCmd {
 
   @Schema(description = "密码", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.password.validation.not.blank}")
+  @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
   private String password;
 
   @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
@@ -51,11 +54,14 @@ public class AccountRegisterCmd {
   @Schema(description = "头像地址", requiredMode = RequiredMode.NOT_REQUIRED)
   private String avatarUrl;
 
+  @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
+  private String phoneCountryCode;
+
   @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
   private String phone;
 
   @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   @Schema(description = "邮箱地址", requiredMode = RequiredMode.REQUIRED)
   @NotBlank(message = "{account.email.validation.not.blank}")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import baby.mumu.mail.client.api.grpc.TemplateMailSendGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
-import com.google.protobuf.StringValue;
 import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -67,12 +66,12 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
                   ]
               }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-      .setName(StringValue.of("template/verification_code.html"))
-      .setAddress(StringValue.of("mail"))
-      .setFrom(StringValue.of("conifercone@163.com"))
-      .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-      .setSubject(StringValue.of("验证码"))
-      .setData(StringValue.of(data))
+      .setName("template/verification_code.html")
+      .setAddress("mail")
+      .setFrom("conifercone@163.com")
+      .setTo("kaiyu.shan@outlook.com")
+      .setSubject("验证码")
+      .setData(data)
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
@@ -96,12 +95,12 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
                   ]
               }""";
     TemplateMailSendGrpcCmd templateMailSendGrpcCmd = TemplateMailSendGrpcCmd.newBuilder()
-      .setName(StringValue.of("template/verification_code.html"))
-      .setAddress(StringValue.of("mail"))
-      .setFrom(StringValue.of("conifercone@163.com"))
-      .setTo(StringValue.of("kaiyu.shan@outlook.com"))
-      .setSubject(StringValue.of("验证码"))
-      .setData(StringValue.of(data))
+      .setName("template/verification_code.html")
+      .setAddress("mail")
+      .setFrom("conifercone@163.com")
+      .setTo("kaiyu.shan@outlook.com")
+      .setSubject("验证码")
+      .setData(data)
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(

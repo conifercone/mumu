@@ -28,7 +28,7 @@ import java.util.*
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
-class SpringContextUtil : ApplicationContextAware {
+class SpringContextUtils : ApplicationContextAware {
 
     @Throws(BeansException::class)
     override fun setApplicationContext(applicationContext: ApplicationContext) {
@@ -42,7 +42,7 @@ class SpringContextUtil : ApplicationContextAware {
          * Spring上下文
          */
         private var applicationContext: ApplicationContext? = null
-        private val logger = LoggerFactory.getLogger(SpringContextUtil::class.java)
+        private val logger = LoggerFactory.getLogger(SpringContextUtils::class.java)
 
         /**
          * bean class -> bean LRU cache

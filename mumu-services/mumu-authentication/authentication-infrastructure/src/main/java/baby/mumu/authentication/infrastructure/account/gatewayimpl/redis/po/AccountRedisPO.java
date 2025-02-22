@@ -17,8 +17,8 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
@@ -42,7 +42,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "account")
+@Document(value = "mumu:authentication:account")
 public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
 
   @Serial
@@ -69,27 +69,32 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 已启用
    */
-  private Boolean enabled;
+  private boolean enabled;
 
   /**
    * 凭证未过期
    */
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired;
 
   /**
    * 帐户未锁定
    */
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked;
 
   /**
    * 帐号未过期
    */
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired;
 
   /**
    * 头像地址
    */
   private String avatarUrl;
+
+  /**
+   * 国际电话区号
+   */
+  private String phoneCountryCode;
 
   /**
    * 手机号
@@ -99,7 +104,7 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 性别
    */
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮箱
@@ -136,6 +141,16 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
    * 余额
    */
   private Money balance;
+
+  /**
+   * 手机号已验证
+   */
+  private boolean phoneVerified;
+
+  /**
+   * 电子邮件已验证
+   */
+  private boolean emailVerified;
 
   /**
    * 数字偏好

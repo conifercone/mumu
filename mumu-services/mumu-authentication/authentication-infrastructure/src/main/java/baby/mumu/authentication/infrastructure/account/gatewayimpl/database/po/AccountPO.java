@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SexEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
 import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
@@ -47,7 +47,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.0
  */
 @Entity
-@Table(name = "users")
+@Table(name = "mumu_users")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -87,25 +87,25 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
    */
   @NotNull
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = true;
+  private boolean enabled = true;
 
   /**
    * 凭证未过期
    */
   @Column(name = "credentials_non_expired", nullable = false)
-  private Boolean credentialsNonExpired;
+  private boolean credentialsNonExpired = true;
 
   /**
    * 帐户未锁定
    */
   @Column(name = "account_non_locked", nullable = false)
-  private Boolean accountNonLocked;
+  private boolean accountNonLocked = true;
 
   /**
    * 帐号未过期
    */
   @Column(name = "account_non_expired", nullable = false)
-  private Boolean accountNonExpired;
+  private boolean accountNonExpired = true;
 
   /**
    * 头像地址
@@ -113,6 +113,13 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   @Size(max = 200)
   @Column(name = "avatar_url", length = 200, nullable = false)
   private String avatarUrl;
+
+  /**
+   * 国际电话区号
+   */
+  @Size(max = 10)
+  @Column(name = "phone_country_code", length = 10, nullable = false)
+  private String phoneCountryCode;
 
   /**
    * 手机号
@@ -124,9 +131,9 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   /**
    * 性别
    */
-  @Column(name = "sex", nullable = false)
+  @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
-  private SexEnum sex;
+  private GenderEnum gender;
 
   /**
    * 电子邮箱
@@ -184,4 +191,16 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   )
   @CompositeType(MonetaryAmountType.class)
   private Money balance;
+
+  /**
+   * 手机号已验证
+   */
+  @Column(name = "phone_verified", nullable = false)
+  private boolean phoneVerified;
+
+  /**
+   * 邮箱已验证
+   */
+  @Column(name = "email_verified", nullable = false)
+  private boolean emailVerified;
 }

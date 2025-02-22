@@ -36,8 +36,8 @@ import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.kotlin.tools.CommonUtil;
-import baby.mumu.basis.kotlin.tools.SecurityContextUtil;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
+import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
@@ -140,7 +140,11 @@ public class AccountGatewayImpl implements AccountGateway {
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())).ifPresentOrElse(accountPO -> {
-      CommonUtil.validateTimezone(accountPO.getTimezone());
+      // 验证时区是否为有效时区类型
+      if (StringUtils.isNotBlank(accountPO.getTimezone()) && !TimeUtils.isValidTimeZone(
+        accountPO.getTimezone())) {
+        throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+      }
       accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
       accountRepository.persist(accountPO);
       account.setId(accountPO.getId());
@@ -209,16 +213,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Account account) {
-    Optional.ofNullable(account).ifPresent(accountNotNull -> SecurityContextUtil.getLoginAccountId()
-      .filter(res -> Objects.equals(res, accountNotNull.getId()))
-      .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
-        .ifPresent(accountPO -> {
-          accountRepository.merge(accountPO);
-          accountRedisRepository.deleteById(accountId);
-          accountRoleRedisRepository.deleteById(accountId);
-        }), () -> {
-        throw new MuMuException(ResponseCode.UNAUTHORIZED);
-      }));
+    Optional.ofNullable(account)
+      .ifPresent(accountNotNull -> SecurityContextUtils.getLoginAccountId()
+        .filter(res -> Objects.equals(res, accountNotNull.getId()))
+        .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
+          .ifPresent(accountPO -> {
+            accountRepository.merge(accountPO);
+            accountRedisRepository.deleteById(accountId);
+            accountRoleRedisRepository.deleteById(accountId);
+          }), () -> {
+          throw new MuMuException(ResponseCode.UNAUTHORIZED);
+        }));
   }
 
   /**
@@ -261,10 +266,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> queryCurrentLoginAccount() {
-    return SecurityContextUtil.getLoginAccountId().flatMap(accountRedisRepository::findById)
+    return SecurityContextUtils.getLoginAccountId().flatMap(accountRedisRepository::findById)
       .flatMap(accountConvertor::toEntity).or(() -> {
         Optional<Account> account = accountRepository.findById(
-            SecurityContextUtil.getLoginAccountId().get())
+            SecurityContextUtils.getLoginAccountId().get())
           .flatMap(accountConvertor::toEntity);
         account.flatMap(accountConvertor::toAccountRedisPO)
           .ifPresent(accountRedisRepository::save);
@@ -309,7 +314,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("删除当前账户")
   public void deleteCurrentAccount() {
-    SecurityContextUtil.getLoginAccountId().flatMap(accountRepository::findById)
+    SecurityContextUtils.getLoginAccountId().flatMap(accountRepository::findById)
       .ifPresentOrElse(accountPO -> {
         if (accountPO.getBalance()
           .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
@@ -347,7 +352,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public boolean verifyPassword(String password) {
-    return SecurityContextUtil.getLoginAccountId()
+    return SecurityContextUtils.getLoginAccountId()
       .map(accountId -> accountRepository.findById(accountId)
         .map(accountPO -> passwordEncoder.matches(password, accountPO.getPassword()))
         .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
@@ -362,7 +367,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(String originalPassword, String newPassword) {
     if (verifyPassword(originalPassword)) {
-      AccountPO newAccountPO = SecurityContextUtil.getLoginAccountId()
+      AccountPO newAccountPO = SecurityContextUtils.getLoginAccountId()
         .map(accountId -> accountRepository.findById(accountId)
           .stream()
           .peek(accountPO -> accountPO.setPassword(passwordEncoder.encode(newPassword)))
@@ -435,7 +440,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addAddress(AccountAddress accountAddress) {
-    SecurityContextUtil.getLoginAccountId().ifPresent(
+    SecurityContextUtils.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountAddress)
         .flatMap(accountConvertor::toAccountAddressPO)
         .ifPresent(
@@ -469,9 +474,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsById(String systemSettingsId) {
-    SecurityContextUtil.getLoginAccountId()
+    SecurityContextUtils.getLoginAccountId()
       .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId))
-      .filter(accountSystemSettingsMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
+      .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(
         accountConvertor::resetAccountSystemSettingMongodbPO)
@@ -487,10 +492,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
-    SecurityContextUtil.getLoginAccountId()
+    SecurityContextUtils.getLoginAccountId()
       .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(
         accountSystemSettings.getId()))
-      .filter(accountSystemSettingsMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
+      .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountSystemSettingMongodbPO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
@@ -505,10 +510,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void modifyAddress(AccountAddress accountAddress) {
-    SecurityContextUtil.getLoginAccountId()
+    SecurityContextUtils.getLoginAccountId()
       .flatMap(accountId -> accountAddressMongodbRepository.findById(
         accountAddress.getId()))
-      .filter(accountAddressMongodbPO -> SecurityContextUtil.getLoginAccountId().get()
+      .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountAddressMongodbPO.getUserId()))
       .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountAddressPO(
         accountAddress)).ifPresent(accountAddressMongodbPO -> {
@@ -523,7 +528,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
-    SecurityContextUtil.getLoginAccountId().ifPresent(
+    SecurityContextUtils.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountSystemSettings)
         .flatMap(accountConvertor::toAccountSystemSettingMongodbPO)
         .filter(
@@ -543,14 +548,14 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
-    SecurityContextUtil.getLoginAccountId().ifPresent(accountId -> {
+    SecurityContextUtils.getLoginAccountId().ifPresent(accountId -> {
       passwordTokenRepository.deleteById(accountId);
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);
       applicationEventPublisher.publishEvent(new LogoutSuccessEvent(
         SecurityContextHolder.getContext().getAuthentication()));
-      SecurityContextUtil.getLoginAccountName().ifPresent(
+      SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setContent("用户退出登录")
           .setBizNo(accountName)
@@ -575,7 +580,7 @@ public class AccountGatewayImpl implements AccountGateway {
       oidcIdTokenRepository.deleteById(accountId);
       accountRedisRepository.deleteById(accountId);
       accountRoleRedisRepository.deleteById(accountId);
-      SecurityContextUtil.getLoginAccountName().ifPresent(
+      SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setContent("用户下线")
           .setBizNo(accountName)
@@ -626,7 +631,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public List<Account> nearby(double radiusInMeters) {
-    return SecurityContextUtil.getLoginAccountId().flatMap(accountId ->
+    return SecurityContextUtils.getLoginAccountId().flatMap(accountId ->
         accountAddressMongodbRepository.findByUserId(accountId).stream()
           .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
       ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
@@ -651,7 +656,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultAddress(String addressId) {
-    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(addressId))
+    SecurityContextUtils.getLoginAccountId().filter(a -> StringUtils.isNotBlank(addressId))
       .flatMap(accountId -> {
           accountAddressMongodbRepository.saveAll(
             accountAddressMongodbRepository.findByUserId(accountId).stream()
@@ -675,7 +680,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultSystemSettings(String systemSettingsId) {
-    SecurityContextUtil.getLoginAccountId().filter(a -> StringUtils.isNotBlank(systemSettingsId))
+    SecurityContextUtils.getLoginAccountId().filter(a -> StringUtils.isNotBlank(systemSettingsId))
       .flatMap(accountId -> {
           accountSystemSettingsMongodbRepository.saveAll(
             accountSystemSettingsMongodbRepository.findByUserId(accountId).stream()
@@ -703,7 +708,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void deleteAddress(String addressId) {
     if (StringUtils.isNotBlank(addressId)) {
-      SecurityContextUtil.getLoginAccountId()
+      SecurityContextUtils.getLoginAccountId()
         .flatMap(accountId -> accountAddressMongodbRepository.findById(addressId).filter(
           accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId())))
         .filter(accountAddressMongodbPO -> !accountAddressMongodbPO.isDefaultAddress())
@@ -721,7 +726,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void deleteSystemSettings(String systemSettingsId) {
     if (StringUtils.isNotBlank(systemSettingsId)) {
-      SecurityContextUtil.getLoginAccountId()
+      SecurityContextUtils.getLoginAccountId()
         .flatMap(
           accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId).filter(
             accountSystemSettingsMongodbPO -> accountId.equals(

@@ -9,39 +9,66 @@ name: PMD
 
 on:
   push:
-    branches: [ "main","develop" ]
+    branches: [ "main", "develop" ]
     paths:
       - '**/*.java'
   pull_request:
-    branches: [ "main","develop" ]
+    branches: [ "main", "develop" ]
     paths:
       - '**/*.java'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      # 配置 Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
+      # 执行 PMD 脚本
       - name: PMD with Gradle Wrapper
-        run: ./gradlew pmdMain
+        run: |
+          chmod +x ./scripts/pmd.sh
+          ./scripts/pmd.sh
         continue-on-error: true
+
+      # 判断是否存在 PMD 报告并上传
+      - name: Check if PMD Report exists and Upload
+        id: check_pmd_report
+        run: |
+          REPORT_PATH="$(find . -name "main.html" -path "**/build/reports/pmd/main.html")"
+          if [ -n "$REPORT_PATH" ]; then
+            echo "PMD reports found. Uploading..."
+            echo "mumu_pmd_reports_found=true" >> $GITHUB_ENV
+          else
+            echo "No PMD reports found. Skipping upload."
+            echo "mumu_pmd_reports_found=false" >> $GITHUB_ENV
+          fi
+
+      # 上传 PMD 报告（仅在找到报告时执行）
       - name: Upload PMD Reports
+        if: env.mumu_pmd_reports_found == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: PMD-Reports
           path: '**/build/reports/pmd/main.html'
+
+      # 根据是否找到报告来标记任务失败或成功
+      - name: Mark task success or failure
+        if: env.mumu_pmd_reports_found == 'true'
+        run: exit 1 # 标记为失败
+
+      - name: Mark task success (if no report)
+        if: env.mumu_pmd_reports_found == 'false'
+        run: echo "No PMD reports found, task completed successfully."

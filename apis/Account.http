@@ -24,7 +24,7 @@ Accept: */*
   ],
   "avatarUrl": "https://github.com/users/conifercone",
   "phone": "{{$random.phoneNumber.phoneNumber}}",
-  "sex": "MALE",
+  "gender": "MALE",
   "email": "{{$random.email}}",
   "timezone": "Asia/Shanghai",
   "language": "EN",
@@ -570,8 +570,8 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "originalPassword": "admin",
-  "newPassword": "admin"
+  "originalPassword": "Admin@5211314",
+  "newPassword": "Admin@5211314"
 }
 
 > {%

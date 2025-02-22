@@ -81,7 +81,7 @@ Accept: */*
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{unique-service-url}}/timezone/available
+GET {{unique-service-url}}/time/timezone/available
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -104,7 +104,7 @@ Accept: */*
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{unique-service-url}}/timezone/serverTime
+GET {{unique-service-url}}/time/serverTime?zoneId=UTC
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

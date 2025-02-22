@@ -11,6 +11,7 @@ insert_final_newline = true
 # 以 2 个空格缩进
 indent_size = 2
 tab_width = 2
+indent_style = space
 # 自动移除行尾多余空格
 trim_trailing_whitespace = true
 
@@ -19,5 +20,6 @@ trim_trailing_whitespace = true
 # 以 4 个空格缩进
 indent_size = 4
 tab_width = 4
+indent_style = space
 # 自动移除行尾多余空格
 trim_trailing_whitespace = true

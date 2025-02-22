@@ -21,7 +21,7 @@ package baby.mumu.basis.kotlin.tools
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-object DataMaskingUtil {
+object DataMaskingUtils {
 
     /**
      * 脱敏手机号码: 保留前3位和后4位，其他部分用*代替
