@@ -34,21 +34,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 时区相关接口
+ * 时间相关接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.1
+ * @since 2.7.0
  */
 @RestController
-@RequestMapping("/timezone")
-@Tag(name = "时区管理")
-public class TimezoneController {
+@RequestMapping("/time")
+@Tag(name = "时间管理")
+public class TimeController {
 
   @Operation(summary = "获取可用时区列表")
-  @GetMapping("/available")
+  @GetMapping("/timezone/available")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
+  @API(status = Status.STABLE, since = "2.7.0")
   public ResponseWrapper<Set<String>> available() {
     return ResponseWrapper.success(ZoneId.getAvailableZoneIds());
   }
@@ -57,7 +57,7 @@ public class TimezoneController {
   @GetMapping("/serverTime")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.4")
+  @API(status = Status.STABLE, since = "2.7.0")
   public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {
     if (!TimeUtils.isValidTimeZone(zoneId)) {
       throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
