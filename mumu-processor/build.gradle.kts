@@ -1,3 +1,5 @@
+description = "注解处理器"
+
 dependencies {
     implementation(project(":mumu-basis"))
     implementation(libs.javapoet)

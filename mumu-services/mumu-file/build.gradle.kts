@@ -1,3 +1,5 @@
+description = "文件服务"
+
 dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-client"))
     implementation(project(":mumu-extension"))

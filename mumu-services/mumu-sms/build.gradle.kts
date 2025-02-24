@@ -1,3 +1,5 @@
+description = "短信服务"
+
 dependencies {
     implementation(project(":mumu-extension"))
     implementation(libs.spring.cloud.starter.consul.discovery)

@@ -1,3 +1,5 @@
+description = "特制服务"
+
 dependencies {
     implementation(project(":mumu-services:mumu-unique:unique-adapter"))
     implementation(project(":mumu-services:mumu-unique:unique-client"))

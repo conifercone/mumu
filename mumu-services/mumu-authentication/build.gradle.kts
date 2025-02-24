@@ -1,3 +1,5 @@
+description = "认证服务"
+
 plugins {
     alias(libs.plugins.flyway)
 }
