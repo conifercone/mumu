@@ -567,11 +567,11 @@ X-Signature: {{signature}}
 X-Timestamp: {{timestamp}}
 Connection: keep-alive
 Accept: */*
-Authorization: Bearer {{$auth.token("admin")}}
+Authorization: Bearer {{$auth.token("test")}}
 
 {
-  "originalPassword": "Admin@5211314",
-  "newPassword": "Admin@5211314"
+  "originalPassword": "Test@5211314",
+  "newPassword": "Test@5211314"
 }
 
 > {%
