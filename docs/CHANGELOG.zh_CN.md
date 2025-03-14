@@ -16,6 +16,30 @@
 
 ### ⚠️ 移除
 
+## [2.8.0] - 2025-03-14
+
+### ⭐ 新增
+
+- 新增`sdkman`配置文件。
+- 增加属性注释。
+- 增加模块描述。
+
+### 🕸️ 变更
+
+- `jdk`升级至23。
+- 规范变量名称格式。
+- `hypersistence-utils-hibernate-63`升级至3.9.3。
+- `protobuf`升级至4.30.0。
+- `lombok`升级至8.12.2.1。
+- `org.apache.curator:curator-recipes`升级至5.8.0。
+- `grpc`升级至1.71.0。
+- 规范包名。
+- `com.googlecode.libphonenumber:libphonenumber`升级至9.0.0。
+- `flyway`升级至11.3.4。
+- gradle版本升级至8.13。
+- `com.deepl.api:deepl-java`升级至1.9.0。
+- `org.jobrunr:jobrunr-spring-boot-3-starter`升级至7.4.1。
+
 ## [2.7.0] - 2025-02-22
 
 ### ⭐ 新增
@@ -620,7 +644,8 @@
 - 基于zookeeper的分布式锁。
 
 [//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.7.0...develop
+[未发布]: https://github.com/conifercone/mumu/compare/v2.8.0...develop
+[2.8.0]: https://github.com/conifercone/mumu/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/conifercone/mumu/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
