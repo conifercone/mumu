@@ -40,7 +40,7 @@ import java.util.stream.Stream
 /**
  * 文件下载工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.4.0
  */
 object FileDownloadUtils {
@@ -171,11 +171,11 @@ object FileDownloadUtils {
         fileName: String,
         stream: Stream<T>
     ) {
-        var fileName = fileName
+        var processedFileName = fileName
         try {
-            Assert.isTrue(StringUtils.isNotBlank(fileName), "fileName must not be blank")
-            if (!fileName.endsWith(".json")) {
-                fileName += ".json"
+            Assert.isTrue(StringUtils.isNotBlank(processedFileName), "fileName must not be blank")
+            if (!processedFileName.endsWith(".json")) {
+                processedFileName += ".json"
             }
             // 创建 ObjectMapper 实例
             val objectMapper = ObjectMapper()
@@ -195,7 +195,7 @@ object FileDownloadUtils {
             response.contentType = MediaType.APPLICATION_JSON_VALUE
             response.setHeader(
                 HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + encodeFileName(fileName)
+                "attachment; filename=" + encodeFileName(processedFileName)
             )
 
             // 写入 JSON 数组开始符

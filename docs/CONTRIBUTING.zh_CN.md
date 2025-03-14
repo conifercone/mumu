@@ -6,7 +6,7 @@
 👍🎉 首先，感谢您抽出时间来贡献！ 🎉👍
 
 本项目遵循贡献者公约 [行为守则](../CODE_OF_CONDUCT.md)。参与时，您需遵守此守则。如有不当行为，请报告至
-kaiyu.shan@outlook.com。
+kaiyu.shan@mumu.baby。
 
 以下是一组为 MuMu 做贡献的指南。这些仅是指导方针，而非规则，请根据实际情况判断，并随时在 Pull Request
 中提出对本文档的修改建议。

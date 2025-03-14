@@ -20,11 +20,11 @@ import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.PermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 权限领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

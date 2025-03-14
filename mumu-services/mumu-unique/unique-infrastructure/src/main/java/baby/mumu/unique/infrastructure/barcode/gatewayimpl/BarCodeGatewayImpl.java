@@ -47,7 +47,7 @@ import org.springframework.util.Assert;
 /**
  * 条形码领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

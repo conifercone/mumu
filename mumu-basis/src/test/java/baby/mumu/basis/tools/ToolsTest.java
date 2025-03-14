@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 工具类单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 public class ToolsTest {
@@ -86,7 +86,7 @@ public class ToolsTest {
       "1", "1", "1", "1");
     ProgressBarBuilder pbb = new ProgressBarBuilder();
     pbb.setStyle(ProgressBarStyle.ASCII);
-    ProgressBar.wrap(list, pbb).forEach(res -> {
+    ProgressBar.wrap(list, pbb).forEach(_ -> {
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {

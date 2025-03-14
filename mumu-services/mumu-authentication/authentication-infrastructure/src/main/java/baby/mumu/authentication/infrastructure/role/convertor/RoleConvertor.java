@@ -35,9 +35,11 @@ import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.PermissionRedisRepository;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionRedisPO;
+import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
@@ -45,13 +47,11 @@ import baby.mumu.authentication.infrastructure.relations.database.RolePathReposi
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
-import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisPO;
-import baby.mumu.authentication.infrastructure.relations.redis.RolePermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
@@ -72,7 +72,7 @@ import org.springframework.stereotype.Component;
 /**
  * 角色信息转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

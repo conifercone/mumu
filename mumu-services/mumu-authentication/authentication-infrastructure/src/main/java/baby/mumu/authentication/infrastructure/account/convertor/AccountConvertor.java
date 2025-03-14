@@ -35,27 +35,27 @@ import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountRedisPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountAddressMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.AccountSystemSettingsMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountAddressMongodbPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.mongodb.po.AccountSystemSettingsMongodbPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.redis.po.AccountRedisPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsMongodbRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressMongodbPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsMongodbPO;
+import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleRedisPO;
+import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePOId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
-import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisPO;
-import baby.mumu.authentication.infrastructure.relations.redis.AccountRoleRedisRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.RoleRedisRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.RoleRedisRepository;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.PhoneUtils;
@@ -76,7 +76,7 @@ import org.springframework.stereotype.Component;
 /**
  * 账户信息转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

@@ -35,9 +35,9 @@ import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.redis.po.RoleRedisPO;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import org.apiguardian.api.API;
@@ -51,7 +51,7 @@ import org.mapstruct.factory.Mappers;
 /**
  * Role mapstruct转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)

@@ -27,7 +27,7 @@ Authorization: Bearer {{$auth.token("admin")}}
       4
     ]
   },
-  "to": "kaiyu.shan@outlook.com",
+  "to": "kaiyu.shan@mumu.baby",
   "subject": "验证码"
 }
 

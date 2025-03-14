@@ -1,3 +1,5 @@
+description = "功能拓展模块"
+
 dependencies {
     api(project(":mumu-basis"))
     implementation(project(":mumu-services:mumu-log:log-client"))

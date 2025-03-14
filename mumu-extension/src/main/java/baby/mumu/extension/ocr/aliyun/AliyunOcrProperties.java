@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,30 @@ import lombok.Data;
 /**
  * 阿里云ocr属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.0.0
  */
 @Data
 public class AliyunOcrProperties {
 
+  /**
+   * 区域
+   */
   private String endpoint = "ocr-api.cn-hangzhou.aliyuncs.com";
 
+  /**
+   * 密钥ID
+   */
   private String accessKeyId;
 
+  /**
+   * 密钥
+   */
   private String accessKeySecret;
 
+  /**
+   * 已启用
+   */
   private boolean enabled;
 
 }

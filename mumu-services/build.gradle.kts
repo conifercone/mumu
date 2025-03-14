@@ -4,6 +4,8 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+description = "服务模块"
+
 subprojects {
     if (this.parent?.parent == rootProject) {
         apply(plugin = rootProject.libs.plugins.springboot.get().pluginId)

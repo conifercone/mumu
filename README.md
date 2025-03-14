@@ -11,7 +11,7 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/conifercone/mumu)
 ![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/mumu)
 ![GitHub top language](https://img.shields.io/github/languages/top/conifercone/mumu)
-[![JDK version](https://img.shields.io/badge/JDK-21+-green.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
+[![JDK version](https://img.shields.io/badge/JDK-23+-green.svg)](https://jdk.java.net/23)
 ![GitHub Release](https://img.shields.io/github/v/release/conifercone/mumu)
 [![GitHub License](https://img.shields.io/github/license/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![GitHub issues](https://img.shields.io/github/issues/conifercone/mumu)](https://github.com/conifercone/mumu/issues)
@@ -100,7 +100,7 @@ mumu
 
 ## License
 
-[Apache License 2.0](LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+[Apache License 2.0](LICENSE) © <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
 
 ## Contributors
 

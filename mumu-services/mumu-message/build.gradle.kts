@@ -1,3 +1,5 @@
+description = "消息服务"
+
 plugins {
     alias(libs.plugins.flyway)
 }

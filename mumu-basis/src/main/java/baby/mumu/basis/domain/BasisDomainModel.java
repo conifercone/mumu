@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 基础领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Getter

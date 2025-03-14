@@ -33,14 +33,14 @@ spring:
         format: YAML
         data-key: ${spring.application.name}
         prefixes: mumu
-        acl-token: ${consul_token}
+        acl-token: ${CONSUL_TOKEN}
       discovery:
         register: true
         instance-id: ${spring.application.name}
         service-name: ${spring.application.name}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
-        acl-token: ${consul_token}
+        acl-token: ${CONSUL_TOKEN}
         heartbeat:
           enabled: true
           use-actuator-health: false

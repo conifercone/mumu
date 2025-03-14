@@ -14,17 +14,17 @@ redisOmSpringVersion = "0.9.7"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.9.2"
-curatorRecipesVersion = "5.7.1"
-flywayVersion = "11.3.2"
+hypersistenceUtilsVersion = "3.9.3"
+curatorRecipesVersion = "5.8.0"
+flywayVersion = "11.3.4"
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.18.0'
 commonsTextVersion = '1.13.0'
-jobrunrSpringBoot3StarterVersion = '7.4.0'
+jobrunrSpringBoot3StarterVersion = '7.4.1'
 alimtVersion = '1.4.0'
-deeplVersion = '1.8.1'
+deeplVersion = '1.9.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
 javapoetVersion = '1.13.0'
@@ -40,15 +40,15 @@ springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.10'
 monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
-libphonenumberVersion = '8.13.55'
+libphonenumberVersion = '9.0.0'
 commonsValidatorVersion = '1.9.0'
 # bom version
-grpcBomVersion = '1.70.0'
+grpcBomVersion = '1.71.0'
 guavaBomVersion = '33.4.0-jre'
-protobufBomVersion = '4.29.3'
+protobufBomVersion = '4.30.0'
 # plugin version
 protobufPluginVersion = '0.9.4'
-lombokPluginVersion = '8.12.1'
+lombokPluginVersion = '8.12.2.1'
 kotlinPluginVersion = '2.1.10'
 
 [libraries]

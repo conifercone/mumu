@@ -22,7 +22,7 @@ import lombok.Setter;
 /**
  * jpa redis 基础可存档数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Setter

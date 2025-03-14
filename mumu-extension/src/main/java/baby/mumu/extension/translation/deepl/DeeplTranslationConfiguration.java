@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package baby.mumu.extension.translation.deepl;
 
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.translation.SimpleTextTranslation;
+import com.deepl.api.DeepLClient;
 import com.deepl.api.Translator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * deepl配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Configuration
@@ -40,7 +41,7 @@ public class DeeplTranslationConfiguration {
   @Bean
   @ConditionalOnMissingBean(Translator.class)
   public Translator deeplTranslator(ExtensionProperties extensionProperties) {
-    return new Translator(extensionProperties.getTranslation().getDeepl().getAccessKey());
+    return new DeepLClient(extensionProperties.getTranslation().getDeepl().getAccessKey());
   }
 
   @Bean

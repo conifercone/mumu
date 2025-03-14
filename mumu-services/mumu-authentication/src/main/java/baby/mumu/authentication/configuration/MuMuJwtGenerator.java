@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package baby.mumu.authentication.configuration;
 import static org.springframework.security.oauth2.core.AuthorizationGrantType.AUTHORIZATION_CODE;
 
 import baby.mumu.authentication.domain.account.Account;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.AuthorizeCodeTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.ClientTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.OidcIdTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.po.PasswordTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.AuthorizeCodeTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.ClientTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.OidcIdTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.PasswordTokenRedisPO;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
@@ -69,7 +69,7 @@ import org.springframework.util.Assert;
 /**
  * mumu jwt generator
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {

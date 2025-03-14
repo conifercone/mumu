@@ -1,3 +1,5 @@
+description = "基础模块"
+
 dependencies {
     implementation(libs.spring.security.core)
     implementation(libs.jakarta.servlet.api)

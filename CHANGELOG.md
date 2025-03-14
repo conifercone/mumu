@@ -16,6 +16,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠️ Removed
 
+## [2.8.0] - 2025-03-14
+
+### ⭐ Added
+
+- Added `sdkman` configuration file.
+- Add attribute comments.
+- Added module description.
+
+### 🕸️ Changed
+
+- `jdk` upgrade to 23.
+- Canonical variable name format.
+- `hypersistence-utils-hibernate-63` upgrade to 3.9.3.
+- `protobuf` upgrade to 4.30.0.
+- `lombok` upgraded to 8.12.2.1.
+- `org.apache.curator:curator-recipes` upgrade to 5.8.0.
+- `grpc` upgrade to 1.71.0.
+- Standardize package name.
+- `com.googlecode.libphonenumber:libphonenumber` upgrade to 9.0.0.
+- `flyway` upgraded to 11.3.4.
+- gradle version upgrade to 8.13.
+- `com.deepl.api:deepl-java` upgrade to 1.9.0.
+- `org.jobrunr:jobrunr-spring-boot-3-starter` upgrade to 7.4.1.
+
 ## [2.7.0] - 2025-02-22
 
 ### ⭐ Added
@@ -636,7 +660,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distributed lock based on zookeeper.
 
 [//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.7.0...develop
+[unreleased]: https://github.com/conifercone/mumu/compare/v2.8.0...develop
+[2.8.0]: https://github.com/conifercone/mumu/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/conifercone/mumu/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0

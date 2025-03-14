@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package baby.mumu.authentication.infrastructure.token.gatewayimpl;
 
 import baby.mumu.authentication.domain.token.gateway.TokenGateway;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.redis.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 /**
  * token领域网关实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

@@ -100,7 +100,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(23))
         }
     }
 
@@ -127,9 +127,9 @@ subprojects {
     }
 
     signing {
-        val mumuSigningKeyId = "mumu_signing_key_id"
-        val mumuSigningKey = "mumu_signing_key"
-        val mumuSigningPassword = "mumu_signing_password"
+        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
+        val mumuSigningKey = "MUMU_SIGNING_KEY"
+        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
         if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
             !System.getenv(mumuSigningKey).isNullOrBlank() &&
             !System.getenv(mumuSigningPassword).isNullOrBlank()

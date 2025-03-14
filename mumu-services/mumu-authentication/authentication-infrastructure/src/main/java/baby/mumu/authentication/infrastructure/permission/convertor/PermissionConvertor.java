@@ -35,11 +35,11 @@ import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
 import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.client.dto.PermissionIncludePathDownloadAllDTO;
 import baby.mumu.authentication.domain.permission.Permission;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.redis.po.PermissionRedisPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
 import baby.mumu.basis.exception.MuMuException;
@@ -61,7 +61,7 @@ import org.springframework.stereotype.Component;
 /**
  * 权限信息转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

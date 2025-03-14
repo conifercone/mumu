@@ -21,7 +21,7 @@ import lombok.Data;
 /**
  * 下载所有权限数据数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.4.0
  */
 @Data

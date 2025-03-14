@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 文本订阅消息领域网关实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component
@@ -121,7 +121,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
-    Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId())
+    Optional.ofNullable(id).flatMap(_ -> SecurityContextUtils.getLoginAccountId())
       .ifPresent(
         accountId -> {
           subscriptionTextMessageRepository.deleteByIdAndSenderId(id, accountId);

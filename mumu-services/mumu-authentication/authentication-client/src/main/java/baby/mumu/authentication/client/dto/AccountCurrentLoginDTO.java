@@ -33,7 +33,7 @@ import org.springframework.data.geo.Point;
 /**
  * 查询当前登录账户信息数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

@@ -16,15 +16,15 @@
 package baby.mumu.basis.kotlin.tools
 
 import jakarta.servlet.http.HttpServletRequest
-import java.util.concurrent.atomic.AtomicReference
 
 /**
  * ip工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 object IpUtils {
+
     /**
      * 从request对象中获取客户端真实的ip地址
      *
@@ -33,57 +33,46 @@ object IpUtils {
      */
     @JvmStatic
     fun getIpAddr(request: HttpServletRequest): String? {
-        val ip = AtomicReference(request.remoteAddr)
+        var ip: String? = request.remoteAddr
+
         val localIp = setOf(
-            "127.0.0.1",      // 本地回环地址 (IPv4)，用于指代当前计算机
-            "::1",            // 本地回环地址 (IPv6)，等同于 127.0.0.1
-            "localhost",      // 本地主机名，通常与 127.0.0.1 映射
-            "unknown"         // 当 IP 地址未知时使用
+            "127.0.0.1",  // 本地回环地址 (IPv4)
+            "::1",        // 本地回环地址 (IPv6)
+            "localhost",  // 本地主机名
+            "unknown"     // 未知地址
         )
 
-        // 如果 IP 是本地地址或 "unknown"，则不使用
-        if (localIp.contains(ip.get())) {
-            ip.set(null)
+        // 如果 IP 是本地地址或 "unknown"，则置空
+        if (ip in localIp) {
+            ip = null
         }
 
-        // 按照可信度从高到低的顺序处理请求头
+        // 按可信度排序的请求头列表
         val headers = listOf(
-            "X-Real-IP",               // 最高可信度
-            "X-Forwarded-For",         // 次高可信度
-            "Proxy-Client-IP",         // 相对较低的可信度
-            "WL-Proxy-Client-IP",      // 相对较低的可信度
-            "HTTP_CLIENT_IP",          // 可能包含客户端 IP 地址
-            "HTTP_X_FORWARDED_FOR"     // 可能包含客户端 IP 地址
+            "X-Real-IP",
+            "X-Forwarded-For",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_X_FORWARDED_FOR"
         )
 
-        var foundIp = false  // 标志位，表示是否已找到有效的 IP 地址
-
-        headers.forEach { header ->
-            if (!foundIp) {
-                val headerValue = request.getHeader(header)
-                if (!headerValue.isNullOrEmpty() && !"unknown".equals(
-                        headerValue,
-                        ignoreCase = true
-                    )
-                ) {
-                    if (header == "X-Forwarded-For") {
-                        // 对 X-Forwarded-For 进行处理，获取第一个有效的 IP
-                        headerValue.split(",").forEach { ipCandidate ->
-                            if (!"unknown".equals(ipCandidate.trim(), ignoreCase = true)) {
-                                ip.set(ipCandidate.trim())
-                                foundIp = true  // 找到有效 IP 后标记
-                                return@forEach
-                            }
-                        }
-                    } else {
-                        ip.set(headerValue)
-                        foundIp = true  // 找到有效 IP 后标记
-                    }
+        for (header in headers) {
+            val headerValue = request.getHeader(header)
+            if (!headerValue.isNullOrEmpty() && !"unknown".equals(headerValue, ignoreCase = true)) {
+                ip = if (header == "X-Forwarded-For") {
+                    // 处理多个 IP，获取第一个有效的 IP
+                    headerValue.split(",").map { it.trim() }
+                        .firstOrNull { !"unknown".equals(it, ignoreCase = true) }
+                } else {
+                    headerValue
                 }
+                if (ip != null) break // 找到有效 IP 就终止循环
             }
         }
 
-        return ip.get()
+        return ip
     }
+
 
 }

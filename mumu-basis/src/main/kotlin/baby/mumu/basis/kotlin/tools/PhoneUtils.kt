@@ -23,7 +23,7 @@ import org.apiguardian.api.API
 /**
  * 手机号工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.7.0
  */
 object PhoneUtils {
