@@ -74,7 +74,7 @@ import org.springframework.util.Assert;
 /**
  * 用户领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
@@ -136,7 +136,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
     accountConvertor.toPO(account).filter(
-      accountPO -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
+      _ -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())).ifPresentOrElse(accountPO -> {
@@ -234,7 +234,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
     Optional.ofNullable(account).map(Account::getId).filter(accountRepository::existsById)
-      .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(accountPO -> {
+      .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(_ -> {
         accountRoleRepository.deleteByAccountId(accountId);
         accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
         accountRoleRedisRepository.deleteById(accountId);
@@ -444,7 +444,7 @@ public class AccountGatewayImpl implements AccountGateway {
       accountId -> Optional.ofNullable(accountAddress)
         .flatMap(accountConvertor::toAccountAddressPO)
         .ifPresent(
-          accountAddressPO -> accountRepository.findById(accountId).ifPresent(accountPO -> {
+          accountAddressPO -> accountRepository.findById(accountId).ifPresent(_ -> {
             accountAddressPO.setUserId(accountId);
             accountAddressMongodbRepository.save(accountAddressPO);
             accountRedisRepository.deleteById(accountId);
@@ -475,7 +475,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsById(String systemSettingsId) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId))
+      .flatMap(_ -> accountSystemSettingsMongodbRepository.findById(systemSettingsId))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(
@@ -493,11 +493,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(accountId -> accountSystemSettingsMongodbRepository.findById(
+      .flatMap(_ -> accountSystemSettingsMongodbRepository.findById(
         accountSystemSettings.getId()))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
-      .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountSystemSettingMongodbPO(
+      .flatMap(_ -> accountConvertor.toAccountSystemSettingMongodbPO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
         accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
@@ -511,11 +511,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void modifyAddress(AccountAddress accountAddress) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(accountId -> accountAddressMongodbRepository.findById(
+      .flatMap(_ -> accountAddressMongodbRepository.findById(
         accountAddress.getId()))
       .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountAddressMongodbPO.getUserId()))
-      .flatMap(accountSystemSettingsMongodbPO -> accountConvertor.toAccountAddressPO(
+      .flatMap(_ -> accountConvertor.toAccountAddressPO(
         accountAddress)).ifPresent(accountAddressMongodbPO -> {
         accountAddressMongodbRepository.save(accountAddressMongodbPO);
         accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
@@ -644,7 +644,7 @@ public class AccountGatewayImpl implements AccountGateway {
               accountAddressMongodbPO.getUserId(),
               accountAddressMongodbPOProbablyTheCurrentUser.getUserId())).collect(
             Collectors.toMap(AccountAddressMongodbPO::getUserId, AccountAddressMongodbPO::getUserId,
-              (existing, replacement) -> existing)).values()).stream()
+              (existing, _) -> existing)).values()).stream()
           .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
           .collect(Collectors.toList());
       }).orElse(new ArrayList<>());
@@ -656,7 +656,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultAddress(String addressId) {
-    SecurityContextUtils.getLoginAccountId().filter(a -> StringUtils.isNotBlank(addressId))
+    SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(addressId))
       .flatMap(accountId -> {
           accountAddressMongodbRepository.saveAll(
             accountAddressMongodbRepository.findByUserId(accountId).stream()
@@ -680,7 +680,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void setDefaultSystemSettings(String systemSettingsId) {
-    SecurityContextUtils.getLoginAccountId().filter(a -> StringUtils.isNotBlank(systemSettingsId))
+    SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(systemSettingsId))
       .flatMap(accountId -> {
           accountSystemSettingsMongodbRepository.saveAll(
             accountSystemSettingsMongodbRepository.findByUserId(accountId).stream()

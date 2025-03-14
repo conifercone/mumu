@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 日期工具类测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.7.0
  */
 public class TimeUtilsTest {

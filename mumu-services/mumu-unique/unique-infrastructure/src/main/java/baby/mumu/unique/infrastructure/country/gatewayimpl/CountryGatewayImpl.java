@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 /**
  * 国家领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.0.0
  */
 @Component
@@ -85,7 +85,7 @@ public class CountryGatewayImpl implements CountryGateway {
   @Override
   public List<State> getStatesByCountryId(Long countryId) {
     return Optional.ofNullable(countryId)
-      .map(countryIdNonNull -> countryIdMappingStates.getOrDefault(countryId, new ArrayList<>()))
+      .map(_ -> countryIdMappingStates.getOrDefault(countryId, new ArrayList<>()))
       .orElse(new ArrayList<>());
   }
 

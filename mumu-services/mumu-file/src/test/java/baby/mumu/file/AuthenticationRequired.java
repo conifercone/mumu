@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 自动获取token
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 public class AuthenticationRequired {

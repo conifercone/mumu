@@ -39,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 /**
  * TemplateMailGrpcService单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -69,7 +69,7 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
       .setName("template/verification_code.html")
       .setAddress("mail")
       .setFrom("conifercone@163.com")
-      .setTo("kaiyu.shan@outlook.com")
+      .setTo("kaiyu.shan@mumu.baby")
       .setSubject("验证码")
       .setData(data)
       .build();
@@ -98,7 +98,7 @@ public class TemplateMailGrpcServiceTest extends AuthenticationRequired {
       .setName("template/verification_code.html")
       .setAddress("mail")
       .setFrom("conifercone@163.com")
-      .setTo("kaiyu.shan@outlook.com")
+      .setTo("kaiyu.shan@mumu.baby")
       .setSubject("验证码")
       .setData(data)
       .build();

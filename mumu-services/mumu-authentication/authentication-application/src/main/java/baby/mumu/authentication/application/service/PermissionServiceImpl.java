@@ -80,7 +80,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 权限管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Service

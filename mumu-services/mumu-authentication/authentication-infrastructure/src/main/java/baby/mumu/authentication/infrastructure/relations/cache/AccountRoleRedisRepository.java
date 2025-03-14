@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 /**
  * 账户角色关系缓存
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.2.0
  */
 public interface AccountRoleRedisRepository extends

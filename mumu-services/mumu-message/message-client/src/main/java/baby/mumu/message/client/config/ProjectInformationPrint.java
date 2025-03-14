@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 项目信息日志打印
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Metamodel(projectVersion = true, projectName = true)

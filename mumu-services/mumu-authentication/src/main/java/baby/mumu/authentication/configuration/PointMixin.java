@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * PointMixin
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.6.0
  */
 public abstract class PointMixin {

@@ -50,7 +50,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 账户领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @ToString(callSuper = true)
@@ -202,7 +202,7 @@ public class Account extends BasisDomainModel implements UserDetails {
         Optional.ofNullable(this.roles).orElse(Collections.emptyList()).stream(),
         this.descendantRoles.stream()
       )
-      .collect(Collectors.toMap(Role::getCode, role -> role, (v1, v2) -> v1))
+      .collect(Collectors.toMap(Role::getCode, role -> role, (v1, _) -> v1))
       .values()
       .stream()
       .flatMap(role -> {
@@ -212,7 +212,7 @@ public class Account extends BasisDomainModel implements UserDetails {
         // 将角色权限去重
         Set<Permission> authorities = new HashSet<>(
           CollectionUtils.union(role.getPermissions(), role.getDescendantPermissions()).stream()
-            .collect(Collectors.toMap(Permission::getCode, authority -> authority, (v1, v2) -> v1))
+            .collect(Collectors.toMap(Permission::getCode, authority -> authority, (v1, _) -> v1))
             .values());
         // 添加角色本身的权限
         authorities.add(Permission.builder()

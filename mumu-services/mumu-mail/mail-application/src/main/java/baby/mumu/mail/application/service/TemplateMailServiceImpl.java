@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
 /**
  * 模板邮件service实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Service

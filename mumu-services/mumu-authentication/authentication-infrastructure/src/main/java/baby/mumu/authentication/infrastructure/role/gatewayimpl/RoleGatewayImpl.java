@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 角色领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

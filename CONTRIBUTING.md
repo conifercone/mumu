@@ -7,7 +7,7 @@
 
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable
-behavior to kaiyu.shan@outlook.com.
+behavior to kaiyu.shan@mumu.baby.
 
 The following is a set of guidelines for contributing to MuMu.
 These are just guidelines, not rules, use your best judgment and feel free to

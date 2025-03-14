@@ -97,7 +97,7 @@ mumu
 
 ## 라이선스
 
-[Apache License 2.0](../LICENSE) © <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+[Apache License 2.0](../LICENSE) © <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
 
 ## 기여자
 

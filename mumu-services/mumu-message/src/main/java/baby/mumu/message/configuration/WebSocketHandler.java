@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2024, the original author or authors.
+ * Copyright (c) 2024-2025, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 网络套接字处理程序
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Sharable
@@ -73,8 +73,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             long senderAccountId = senderAccountStringId.longValue();
             ConcurrentHashMap<Long, Channel> longChannelConcurrentHashMap = messageProperties.getWebSocket()
               .getAccountSubscriptionChannelMap()
-              .computeIfAbsent(receiverAccountId, key -> new ConcurrentHashMap<>());
-            longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, key -> ctx.channel());
+              .computeIfAbsent(receiverAccountId, _ -> new ConcurrentHashMap<>());
+            longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, _ -> ctx.channel());
             // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
             AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
             ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
@@ -84,7 +84,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
           }, () -> {
             messageProperties.getWebSocket()
               .getAccountBroadcastChannelMap()
-              .computeIfAbsent(receiverAccountId, key -> ctx.channel());
+              .computeIfAbsent(receiverAccountId, _ -> ctx.channel());
             // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
             AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
             ctx.channel().attr(receiverAccountIdKey)

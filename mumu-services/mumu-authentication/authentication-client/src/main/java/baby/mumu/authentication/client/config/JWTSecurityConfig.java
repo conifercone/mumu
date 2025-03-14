@@ -47,7 +47,7 @@ import org.springframework.util.Assert;
 /**
  * jwt类型资源服务器配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Configuration
@@ -90,7 +90,7 @@ public class JWTSecurityConfig {
               List<String> anyAuthority = httpPolicy.getAnyAuthority();
               anyAuthority.stream().filter(
                 authority -> StringUtils.isBlank(authority) || authority.startsWith(
-                  CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(authority -> {
+                  CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(_ -> {
                 throw new IllegalArgumentException(
                   "Permission configuration cannot be empty and cannot start with SCOPE_");
               });

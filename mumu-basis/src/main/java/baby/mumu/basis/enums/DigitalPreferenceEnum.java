@@ -18,7 +18,7 @@ package baby.mumu.basis.enums;
 /**
  * 数字偏好枚举
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.4.0
  */
 public enum DigitalPreferenceEnum {

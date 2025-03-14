@@ -56,7 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 广播文本消息领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Component
@@ -139,9 +139,9 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Transactional(rollbackFor = Exception.class)
   public void deleteMsgById(Long id) {
     Optional.ofNullable(id)
-      .flatMap(msgId -> SecurityContextUtils.getLoginAccountId()).flatMap(accountId ->
+      .flatMap(_ -> SecurityContextUtils.getLoginAccountId()).flatMap(accountId ->
         broadcastTextMessageRepository.findByIdAndSenderId(id, accountId)
-      ).ifPresent(broadcastTextMessageDo -> {
+      ).ifPresent(_ -> {
         broadcastTextMessageRepository.deleteById(id);
         broadcastTextMessageReceiverRepository.deleteByBroadcastTextMessageId(id);
         broadcastTextMessageArchivedRepository.deleteById(id);

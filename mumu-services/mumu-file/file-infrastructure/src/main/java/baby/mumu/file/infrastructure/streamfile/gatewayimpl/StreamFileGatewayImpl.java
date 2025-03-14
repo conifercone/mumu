@@ -35,7 +35,7 @@ import org.springframework.util.ObjectUtils;
 /**
  * 流式文件领域网关实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Component

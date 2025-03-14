@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 /**
  * base mapper
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 2.4.0
  */
 public interface BaseMapper {
