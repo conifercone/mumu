@@ -48,7 +48,7 @@ guavaBomVersion = '33.4.0-jre'
 protobufBomVersion = '4.30.0'
 # plugin version
 protobufPluginVersion = '0.9.4'
-lombokPluginVersion = '8.12.2.1'
+lombokPluginVersion = '8.13'
 kotlinPluginVersion = '2.1.10'
 
 [libraries]
