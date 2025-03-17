@@ -40,7 +40,7 @@ springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.10'
 monetaVersion = '1.4.4'
 jacksonDatatypeMoneyVersion = '1.3.0'
-libphonenumberVersion = '9.0.0'
+libphonenumberVersion = '9.0.1'
 commonsValidatorVersion = '1.9.0'
 # bom version
 grpcBomVersion = '1.71.0'
