@@ -8,17 +8,17 @@
 
 # mumu
 
-![GitHub Created At](https://img.shields.io/github/created-at/conifercone/mumu)
-![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/mumu)
-![GitHub top language](https://img.shields.io/github/languages/top/conifercone/mumu)
+[![GitHub Created At](https://img.shields.io/github/created-at/conifercone/mumu)](https://github.com/conifercone/mumu)
+[![GitHub repo size](https://img.shields.io/github/repo-size/conifercone/mumu)](https://github.com/conifercone/mumu)
+[![GitHub top language](https://img.shields.io/github/languages/top/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![JDK version](https://img.shields.io/badge/JDK-23+-green.svg)](https://jdk.java.net/23)
-![GitHub Release](https://img.shields.io/github/v/release/conifercone/mumu)
+[![GitHub Release](https://img.shields.io/github/v/release/conifercone/mumu)](https://github.com/conifercone/mumu/releases/latest)
 [![GitHub License](https://img.shields.io/github/license/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![GitHub issues](https://img.shields.io/github/issues/conifercone/mumu)](https://github.com/conifercone/mumu/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/conifercone/mumu)](https://github.com/conifercone/mumu/pulls)
 [![GitHub language count](https://img.shields.io/github/languages/count/conifercone/mumu)](https://github.com/conifercone/mumu)
 [![GitHub last commit](https://img.shields.io/github/last-commit/conifercone/mumu/develop)](https://github.com/conifercone/mumu)
-![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)
+[![GitHub Discussions](https://img.shields.io/github/discussions/conifercone/mumu)](https://github.com/conifercone/mumu/discussions)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle)
 [![CodeFactor](https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop)](https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop)
