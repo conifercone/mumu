@@ -38,28 +38,28 @@ import org.springframework.test.context.ActiveProfiles;
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class SecurityContextUtilsTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(
+  private static final Logger log = LoggerFactory.getLogger(
     SecurityContextUtilsTest.class);
 
   @Test
   public void loginAccountId() {
     Long accountId = SecurityContextUtils.getLoginAccountId().orElse(null);
     Assertions.assertNotNull(accountId);
-    logger.info("loginAccountId: {}", accountId);
+    log.info("loginAccountId: {}", accountId);
   }
 
   @Test
   public void loginAccountName() {
     String accountName = SecurityContextUtils.getLoginAccountName().orElse(null);
     Assertions.assertNotNull(accountName);
-    logger.info("loginAccountName: {}", accountName);
+    log.info("loginAccountName: {}", accountName);
   }
 
   @Test
   public void loginAccountLanguage() {
     LanguageEnum languageEnum = SecurityContextUtils.getLoginAccountLanguage().orElse(null);
     Assertions.assertNotNull(languageEnum);
-    logger.info("languageEnum: {}", languageEnum);
+    log.info("languageEnum: {}", languageEnum);
   }
 
 }

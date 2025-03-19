@@ -40,7 +40,7 @@ import org.springframework.util.Assert;
 public class MuMuJwtGrantedAuthoritiesConverter implements
   Converter<Jwt, Collection<GrantedAuthority>> {
 
-  private final Log logger = LogFactory.getLog(getClass());
+  private final Log log = LogFactory.getLog(getClass());
 
   private static final String DEFAULT_AUTHORITY_PREFIX = "SCOPE_";
 
@@ -129,12 +129,12 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
   private Collection<String> getAuthorities(Jwt jwt) {
     String claimName = getAuthoritiesClaimName(jwt);
     if (claimName == null) {
-      this.logger.trace(
+      this.log.trace(
         "Returning no authorities since could not find any claims that might contain scopes");
       return Collections.emptyList();
     }
-    if (this.logger.isTraceEnabled()) {
-      this.logger.trace(LogMessage.format("Looking for scopes in claim %s", claimName));
+    if (this.log.isTraceEnabled()) {
+      this.log.trace(LogMessage.format("Looking for scopes in claim %s", claimName));
     }
     Object authorities = jwt.getClaim(claimName);
     if (authorities instanceof String authoritiesString) {

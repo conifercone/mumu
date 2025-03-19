@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class DangerousOperationAspect extends AbstractAspect {
 
   private final SystemLogGrpcService systemLogGrpcService;
-  private static final Logger logger = LoggerFactory.getLogger(DangerousOperationAspect.class);
+  private static final Logger log = LoggerFactory.getLogger(DangerousOperationAspect.class);
 
   public DangerousOperationAspect(SystemLogGrpcService systemLogGrpcService) {
     this.systemLogGrpcService = systemLogGrpcService;
@@ -59,7 +59,7 @@ public class DangerousOperationAspect extends AbstractAspect {
               .setContent(content)
               .setCategory("dangerousOperation")
               .build());
-            logger.info(content);
+            log.info(content);
           }));
   }
 

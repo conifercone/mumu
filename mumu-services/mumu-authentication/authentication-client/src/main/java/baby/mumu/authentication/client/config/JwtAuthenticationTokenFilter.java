@@ -59,7 +59,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   private static final String TOKEN_START = "Bearer ";
   JwtDecoder jwtDecoder;
   TokenGrpcService tokenGrpcService;
-  private static final Logger logger = LoggerFactory.getLogger(
+  private static final Logger log = LoggerFactory.getLogger(
     JwtAuthenticationTokenFilter.class);
   Tracer tracer;
 
@@ -88,7 +88,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         .getValidity()) {
         try {
           traceId();
-          logger.error(ResponseCode.INVALID_TOKEN.getMessage());
+          log.error(ResponseCode.INVALID_TOKEN.getMessage());
           response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
           ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         } finally {
@@ -102,7 +102,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
         traceId();
-        logger.error(ResponseCode.INVALID_TOKEN.getMessage());
+        log.error(ResponseCode.INVALID_TOKEN.getMessage());
         response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;

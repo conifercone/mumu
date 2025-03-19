@@ -37,7 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class PrimaryKeyGrpcServiceTest {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
-  private static final Logger logger = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
+  private static final Logger log = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
 
   @Autowired
   public PrimaryKeyGrpcServiceTest(PrimaryKeyGrpcService primaryKeyGrpcService) {
@@ -47,7 +47,7 @@ public class PrimaryKeyGrpcServiceTest {
   @Test
   public void snowflake() {
     Long snowflake = primaryKeyGrpcService.snowflake();
-    logger.info("snowflake : {}", snowflake);
+    log.info("snowflake : {}", snowflake);
     Assertions.assertNotNull(snowflake);
   }
 }

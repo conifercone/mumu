@@ -29,10 +29,10 @@ import org.springframework.context.ApplicationListener;
  */
 public class MuMuApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
-  private final Logger logger = LoggerFactory.getLogger(MuMuApplicationStartupListener.class);
+  private final Logger log = LoggerFactory.getLogger(MuMuApplicationStartupListener.class);
 
   @Override
   public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
-    logger.info("🎉 Startup completed!");
+    log.info("🎉 Startup completed!");
   }
 }

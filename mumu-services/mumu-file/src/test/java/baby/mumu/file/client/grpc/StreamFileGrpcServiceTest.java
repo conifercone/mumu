@@ -52,7 +52,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class StreamFileGrpcServiceTest extends AuthenticationRequired {
 
   private final StreamFileGrpcService streamFileGrpcService;
-  private static final Logger logger = LoggerFactory.getLogger(StreamFileGrpcServiceTest.class);
+  private static final Logger log = LoggerFactory.getLogger(StreamFileGrpcServiceTest.class);
 
   @Autowired
   public StreamFileGrpcServiceTest(StreamFileGrpcService streamFileGrpcService) {
@@ -75,7 +75,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
     Assertions.assertNotNull(download);
     String fileContent = download.getFileContent().getValue().toStringUtf8();
     Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
-    logger.info("Download result: {}", fileContent);
+    log.info("Download result: {}", fileContent);
   }
 
   @Test
@@ -98,7 +98,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
         String fileContent = streamFileDownloadGrpcResult.getFileContent().getValue()
           .toStringUtf8();
         Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
-        logger.info("SyncDownload result: {}", fileContent);
+        log.info("SyncDownload result: {}", fileContent);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

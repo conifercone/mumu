@@ -45,7 +45,7 @@ public class GrpcExceptionAdvice {
     this.systemLogGrpcService = systemLogGrpcService;
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
+  private static final Logger log = LoggerFactory.getLogger(GrpcExceptionAdvice.class);
 
 
   @SuppressWarnings("unused")
@@ -53,7 +53,7 @@ public class GrpcExceptionAdvice {
   public Status handle(MuMuException mumuException) {
     Status internal = Status.INTERNAL;
     if (mumuException != null) {
-      logger.error(mumuException.getMessage(), mumuException);
+      log.error(mumuException.getMessage(), mumuException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(mumuException.getMessage())
         .setCategory("mumuException")
@@ -69,7 +69,7 @@ public class GrpcExceptionAdvice {
   public Status handle(RateLimiterException rateLimiterException) {
     Status resourceExhausted = Status.RESOURCE_EXHAUSTED;
     if (rateLimiterException != null) {
-      logger.error(rateLimiterException.getMessage(), rateLimiterException);
+      log.error(rateLimiterException.getMessage(), rateLimiterException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(rateLimiterException.getMessage())
         .setCategory("rateLimiterException")
@@ -86,7 +86,7 @@ public class GrpcExceptionAdvice {
   public Status handle(AuthenticationException authenticationException) {
     Status unauthenticated = Status.UNAUTHENTICATED;
     if (authenticationException != null) {
-      logger.error(ResponseCode.UNAUTHORIZED.getMessage(), authenticationException);
+      log.error(ResponseCode.UNAUTHORIZED.getMessage(), authenticationException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(ResponseCode.UNAUTHORIZED.getMessage())
         .setCategory("exception")
