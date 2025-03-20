@@ -1,0 +1,126 @@
+:doctype: article
+:imagesdir: ..
+:icons: font
+:slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
+
+image::logo.svg[mumu]
+
+- link:README.zh_CN.adoc[简体中文]
+- link:README.zh_TW.adoc[繁體中文]
+- link:../README.adoc[English]
+- link:README.ja.adoc[日本語]
+- link:README.ko.adoc[한국어]
+
+== mumu
+
+image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/badge/JDK-23+-green.svg[JDK version,link="https://jdk.java.net/23"]
+image:https://img.shields.io/github/v/release/conifercone/mumu[GitHub Release,link="https://github.com/conifercone/mumu/releases/latest"]
+image:https://img.shields.io/github/license/conifercone/mumu[GitHub License,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/issues/conifercone/mumu[GitHub issues,link="https://github.com/conifercone/mumu/issues"]
+image:https://img.shields.io/github/issues-pr/conifercone/mumu[GitHub Pull Requests,link="https://github.com/conifercone/mumu/pulls"]
+image:https://img.shields.io/github/languages/count/conifercone/mumu[GitHub language count,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/last-commit/conifercone/mumu/develop[GitHub last commit,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/discussions/conifercone/mumu[GitHub Discussions,link="https://github.com/conifercone/mumu/discussions"]
+image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD[GitHub Actions Workflow Status]
+image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle[GitHub Actions Workflow Status]
+image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop[CodeFactor,link="https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop"]
+image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link="{slack-invite}"]
+image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
+image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
+
+=== 목차
+
+- <<project, 프로젝트>>
+- <<module-introduction, 모듈 소개>>
+- <<build, 빌드>>
+- <<dependency-statement, 의존성 선언>>
+- <<license, 라이선스>>
+- <<contributors, 기여자>>
+
+[#project]
+=== 프로젝트
+
+[quote]
+____
+이미 많은 성숙한 백엔드 관리 시스템이 존재하지만, 저는 코드의 청결함에 대한 강박이 있어서 적합한 프로젝트를 찾지 못했습니다.
+그래서 스스로 코드가 깔끔하고 기능이 완비된 백엔드 관리 시스템을 오픈 소스로 개발하기로 결정했습니다. 이 프로젝트의 이름은 mumu 입니다.
+제 아들(沐沐)의 이름에서 따왔으며, 아들이 건강하게 자라길 바라는 마음처럼, mumu 프로젝트도 튼튼하게 성장하길 바랍니다.
+제 생애 동안 본 프로젝트는 개인과 조직에게 무료로 오픈 소스로 제공될 것입니다.
+____
+
+[#delightfully-clean-system]
+==== 🎉 즐겁게 사용할 수 있는 깔끔한 관리 시스템! 🎉
+
+복잡한 설정과 어지러운 코드에 지치셨나요?
+*즉시 사용 가능한 관리 시스템*을 확인해 보세요!
+🎁 상자를 열면, 슈퍼스타처럼 쉽게 관리할 수 있습니다.
+청결한 코드가 빛나고 있습니다!
+✨
+
+🌟 *이 시스템을 사랑하게 될 이유:*
+
+- *즉각적인 설정*: 마법 주문이 필요 없습니다.
+연결만 하면 작동합니다!
+- *청결한 코드*: 별을 주고 싶을 만큼 깔끔합니다!
+- *사용자 친화적*: 금붕어도 사용할 수 있을 정도로 간단합니다!
+
+복잡함과 이별하고, 즐거운 관리의 여정을 시작하세요!
+🚀🎈
+
+[#module-introduction]
+=== 모듈 소개
+
+[source,text]
+----
+mumu
+├── mumu-services
+│   ├── mumu-authentication
+│   ├── mumu-file
+│   ├── mumu-log
+│   ├── mumu-mail
+│   ├── mumu-message
+│   ├── mumu-sms
+│   └── mumu-unique
+├── mumu-basis
+├── mumu-extension
+└── mumu-processor
+----
+
+[#build]
+=== 빌드
+
+[#infrastructure]
+==== 기본 인프라
+
+[cols="1,1",options="header"]
+|===
+| 이름            | 릴리즈
+| apisix        | 3.8.0
+| elasticsearch | 8.12.0
+| kafka         | 3.4
+| postgresql    | 16.3
+| redis         | latest
+| zookeeper     | 3.8
+| consul        | 1.15.4
+| minio         | RELEASE.2024-06-13T22-53-53Z
+| zipkin        | 3.19.0
+| mongodb       | 8.0.1
+|===
+
+[#dependency-statement]
+=== 의존성 선언
+
+link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph**]
+
+[#license]
+=== 라이선스
+
+link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@mumu.baby[kaiyu.shan]
+
+[#contributors]
+=== 기여자
+
+image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]
