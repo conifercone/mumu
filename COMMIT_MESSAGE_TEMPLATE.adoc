@@ -1,5 +1,5 @@
 :doctype: article
-:imagesdir: ..
+:imagesdir: .
 :icons: font
 
 - link:docs/COMMIT_MESSAGE_TEMPLATE.zh_CN.adoc[简体中文]
