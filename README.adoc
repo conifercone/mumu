@@ -31,7 +31,7 @@ image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
 
-=== Content list
+=== TOC
 
 - <<project, Projects>>
 - <<module-introduction, Module Introduction>>

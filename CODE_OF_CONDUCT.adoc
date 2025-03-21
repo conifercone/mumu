@@ -10,7 +10,7 @@
 
 == Contributor Covenant Code of Conduct
 
-=== 目次
+=== TOC
 
 - <<our-pledge, Our Pledge>>
 - <<our-standards, Our Standards>>
