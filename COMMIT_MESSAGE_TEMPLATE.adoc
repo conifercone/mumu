@@ -1,0 +1,47 @@
+:doctype: article
+:imagesdir: ..
+:icons: font
+
+- link:docs/COMMIT_MESSAGE_TEMPLATE.zh_CN.adoc[简体中文]
+- link:docs/COMMIT_MESSAGE_TEMPLATE.zh_TW.adoc[繁體中文]
+- link:COMMIT_MESSAGE_TEMPLATE.adoc[English]
+- link:docs/COMMIT_MESSAGE_TEMPLATE.ja.adoc[日本語]
+- link:docs/COMMIT_MESSAGE_TEMPLATE.ko.adoc[한국어]
+
+== Commit Message Template
+
+[source,text]
+----
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+----
+
+[#explanation]
+== Explanation
+
+- `<type>`: indicates the type of the commit, which can be one of the following:
+- `feat`: New features
+- `fix`: Fix the problem
+- `docs`: Document update
+- `style`: Code style (no changes that affect functionality)
+- `refactor`: Refactor code (function has not changed)
+- `perf`: Performance optimization
+- `test`: Test related changes
+- `build`: Build related changes
+- `ci`: CI configuration modification
+- `chore`: Miscellaneous changes
+- `revert`: Undo the change
+
+- `<scope>`: The module or function that indicates the influence, can be in lowercase letters or can contain Chinese.
+For example: `user`, `auth`, `Login function`.
+
+- `<subject>`: A short description of the submission, with a maximum length of 50 characters.
+The description should be concise and clear, and the first letter should be capitalized.
+
+- `<body>`: Optional section, fill in a more detailed description, up to 72 characters per line, explaining why this change needs to be made, how to solve the problem, and whether there are side effects.
+
+- `<footer>`: Optional section, usually containing a ticket link related to the submission, for example: `Closes #11`.
+If it is a destructive update, it should be noted here, for example: `BREAKING CHANGE: Content`.
