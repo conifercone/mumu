@@ -5,11 +5,11 @@
 
 image::logo.svg[mumu]
 
-- link:README.zh_CN.adoc[簡體中文]
+- link:README.zh_CN.adoc[简体中文]
 - link:README.zh_TW.adoc[繁體中文]
 - link:../README.adoc[English]
 - link:README.ja.adoc[日本語]
-- link:README.ko.adoc[韓國語]
+- link:README.ko.adoc[한국어]
 
 == mumu
 
