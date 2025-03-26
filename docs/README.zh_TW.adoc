@@ -93,7 +93,7 @@ mumu
 | apisix        | 3.8.0
 | elasticsearch | 8.12.0
 | kafka         | 3.4
-| postgresql    | 16.3
+| postgresql    | 16.8
 | redis         | latest
 | zookeeper     | 3.8
 | consul        | 1.15.4
