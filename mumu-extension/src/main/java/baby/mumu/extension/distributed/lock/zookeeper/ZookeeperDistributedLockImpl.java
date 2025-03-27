@@ -38,7 +38,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   }
 
   @Override
-  public boolean lock() {
+  public boolean tryLock() {
     try {
       interProcessLock.acquire();
       return true;
