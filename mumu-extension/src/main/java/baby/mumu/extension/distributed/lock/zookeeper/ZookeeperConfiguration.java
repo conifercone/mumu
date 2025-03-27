@@ -23,6 +23,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.RetryNTimes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -48,6 +49,7 @@ public class ZookeeperConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingBean(InterProcessLock.class)
   public InterProcessLock mumuInterProcessLock() {
     ZookeeperProperties zookeeper = extensionProperties.getDistributed().getLock().getZookeeper();
     CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(
@@ -61,6 +63,7 @@ public class ZookeeperConfiguration {
 
   @Bean
   @ConditionalOnMissingBean(DistributedLock.class)
+  @ConditionalOnBean(InterProcessLock.class)
   public DistributedLock zookeeperDistributedLock(InterProcessLock mumuInterProcessLock) {
     return new ZookeeperDistributedLockImpl(mumuInterProcessLock);
   }
