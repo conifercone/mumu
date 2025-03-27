@@ -56,7 +56,7 @@ public class ZookeeperConfiguration {
       zookeeper.getConnectionTimeoutMs(),
       new RetryNTimes(zookeeper.getRetryCount(), zookeeper.getElapsedTimeMs()));
     curatorFramework.start();
-    return new InterProcessMutex(curatorFramework, "/locks");
+    return new InterProcessMutex(curatorFramework, zookeeper.getLockPath());
   }
 
   @Bean

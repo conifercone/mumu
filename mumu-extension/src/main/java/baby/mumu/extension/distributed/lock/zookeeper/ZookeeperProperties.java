@@ -56,4 +56,9 @@ public class ZookeeperProperties {
    * 是否启用
    */
   private boolean enabled;
+
+  /**
+   * 分布式锁路径
+   */
+  private String lockPath = "/mumu/lock/resource";
 }
