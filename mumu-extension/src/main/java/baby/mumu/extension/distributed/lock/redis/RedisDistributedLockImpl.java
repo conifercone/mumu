@@ -33,6 +33,7 @@ public class RedisDistributedLockImpl implements DistributedLock {
 
   private static final Logger log = LogManager.getLogger(RedisDistributedLockImpl.class);
   private final RLock lock;
+  private final long leaseTime = 60000;
 
   public RedisDistributedLockImpl(RLock lock) {
     this.lock = lock;
@@ -41,16 +42,16 @@ public class RedisDistributedLockImpl implements DistributedLock {
   @Override
   public void tryLock() {
     try {
-      lock.lock(60000, TimeUnit.MILLISECONDS);
+      lock.lock(leaseTime, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
     }
   }
 
   @Override
-  public boolean tryLock(long waitTime, TimeUnit unit) {
+  public boolean tryLock(long waitTime) {
     try {
-      return lock.tryLock(waitTime, 60000, unit);
+      return lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;

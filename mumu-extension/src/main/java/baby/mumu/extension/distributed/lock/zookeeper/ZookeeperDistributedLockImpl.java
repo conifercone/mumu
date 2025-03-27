@@ -48,9 +48,9 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   }
 
   @Override
-  public boolean tryLock(long waitTime, TimeUnit unit) {
+  public boolean tryLock(long waitTime) {
     try {
-      return interProcessLock.acquire(waitTime, unit);
+      return interProcessLock.acquire(waitTime, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;
