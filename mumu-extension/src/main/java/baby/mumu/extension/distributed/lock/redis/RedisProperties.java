@@ -13,34 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.extension.distributed.lock;
+package baby.mumu.extension.distributed.lock.redis;
 
-import java.util.concurrent.TimeUnit;
+import lombok.Data;
 
 /**
- * 分布式锁顶级接口
+ * redis配置属性
  *
  * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.9.0
  */
-public interface DistributedLock {
+@Data
+public class RedisProperties {
 
-  /**
-   * 尝试获取锁
-   */
-  void tryLock();
+  private boolean enabled;
 
-  /**
-   * 尝试获取锁
-   *
-   * @param unit     等待时间单位
-   * @param waitTime 等待时间
-   * @return 是否成功获取到分布式锁
-   */
-  boolean tryLock(long waitTime, TimeUnit unit);
-
-  /**
-   * 释放锁
-   */
-  void unlock();
+  private String lockName = "mumu:lock:resource";
 }

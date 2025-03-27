@@ -13,35 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.extension.distributed.lock.zookeeper;
+package baby.mumu.extension.distributed.lock.redis;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import java.util.concurrent.TimeUnit;
-import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.redisson.api.RLock;
 
 /**
- * zookeeper分布式锁实现
+ * redis分布式锁实现
  *
  * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.9.0
  */
-public class ZookeeperDistributedLockImpl implements DistributedLock {
+public class RedisDistributedLockImpl implements DistributedLock {
 
-  private static final Logger log = LogManager.getLogger(ZookeeperDistributedLockImpl.class);
-  private final InterProcessLock interProcessLock;
+  private static final Logger log = LogManager.getLogger(RedisDistributedLockImpl.class);
+  private final RLock lock;
 
-  public ZookeeperDistributedLockImpl(InterProcessLock interProcessLock) {
-    this.interProcessLock = interProcessLock;
+  public RedisDistributedLockImpl(RLock lock) {
+    this.lock = lock;
   }
 
   @Override
   public void tryLock() {
     try {
-      interProcessLock.acquire(-1, null);
+      lock.lock(60000, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
     }
@@ -50,7 +50,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   @Override
   public boolean tryLock(long waitTime, TimeUnit unit) {
     try {
-      return interProcessLock.acquire(waitTime, unit);
+      return lock.tryLock(waitTime, 60000, unit);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;
@@ -60,7 +60,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   @Override
   public void unlock() {
     try {
-      interProcessLock.release();
+      lock.unlock();
     } catch (Exception e) {
       throw new MuMuException(ResponseCode.FAILED_TO_RELEASE_DISTRIBUTED_LOCK);
     }
