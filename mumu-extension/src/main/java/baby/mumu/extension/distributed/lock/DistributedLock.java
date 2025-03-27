@@ -25,8 +25,10 @@ public interface DistributedLock {
 
   /**
    * 尝试获取锁
+   *
+   * @return 是否成功获取到分布式锁
    */
-  void lock();
+  boolean lock();
 
   /**
    * 释放锁

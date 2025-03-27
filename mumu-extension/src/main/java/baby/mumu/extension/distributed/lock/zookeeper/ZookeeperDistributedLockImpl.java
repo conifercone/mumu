@@ -19,6 +19,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * zookeeper分布式锁实现
@@ -28,6 +30,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessLock;
  */
 public class ZookeeperDistributedLockImpl implements DistributedLock {
 
+  private static final Logger log = LogManager.getLogger(ZookeeperDistributedLockImpl.class);
   private final InterProcessLock interProcessLock;
 
   public ZookeeperDistributedLockImpl(InterProcessLock interProcessLock) {
@@ -35,11 +38,13 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   }
 
   @Override
-  public void lock() {
+  public boolean lock() {
     try {
       interProcessLock.acquire();
+      return true;
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK);
+      log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
+      return false;
     }
   }
 
