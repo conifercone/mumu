@@ -15,6 +15,8 @@
  */
 package baby.mumu.extension.distributed.lock;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 分布式锁顶级接口
  *
@@ -29,6 +31,15 @@ public interface DistributedLock {
    * @return 是否成功获取到分布式锁
    */
   boolean tryLock();
+
+  /**
+   * 尝试获取锁
+   *
+   * @param unit     等待时间单位
+   * @param waitTime 等待时间
+   * @return 是否成功获取到分布式锁
+   */
+  boolean tryLock(long waitTime, TimeUnit unit);
 
   /**
    * 释放锁

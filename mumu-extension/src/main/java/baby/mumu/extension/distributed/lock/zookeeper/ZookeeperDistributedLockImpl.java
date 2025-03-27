@@ -18,6 +18,7 @@ package baby.mumu.extension.distributed.lock.zookeeper;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.distributed.lock.DistributedLock;
+import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,8 +41,17 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   @Override
   public boolean tryLock() {
     try {
-      interProcessLock.acquire();
-      return true;
+      return interProcessLock.acquire(-1, null);
+    } catch (Exception e) {
+      log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
+      return false;
+    }
+  }
+
+  @Override
+  public boolean tryLock(long waitTime, TimeUnit unit) {
+    try {
+      return interProcessLock.acquire(waitTime, unit);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;
