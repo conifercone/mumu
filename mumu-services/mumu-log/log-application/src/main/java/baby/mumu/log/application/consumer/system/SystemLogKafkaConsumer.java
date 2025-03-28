@@ -13,46 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.log.application.consumer.operation;
+package baby.mumu.log.application.consumer.system;
 
-import baby.mumu.log.client.api.OperationLogService;
+import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.infrastructure.config.LogProperties;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
+import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
+import baby.mumu.log.infrastructure.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 /**
- * 操作日志消费者
+ * 系统日志消费者
  *
  * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
-@Observed(name = "OperationLogConsumer")
-public class OperationLogConsumer {
+@Observed(name = "SystemLogKafkaConsumer")
+@ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
+public class SystemLogKafkaConsumer {
 
   private final ObjectMapper objectMapper;
-  private final OperationLogService operationLogService;
-  private final OperationLogConvertor operationLogConvertor;
+  private final SystemLogService systemLogService;
+  private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
-  public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService,
-    OperationLogConvertor operationLogConvertor) {
+  public SystemLogKafkaConsumer(ObjectMapper objectMapper, SystemLogService systemLogService,
+    SystemLogConvertor systemLogConvertor) {
     this.objectMapper = objectMapper;
-    this.operationLogService = operationLogService;
-    this.operationLogConvertor = operationLogConvertor;
+    this.systemLogService = systemLogService;
+    this.systemLogConvertor = systemLogConvertor;
   }
 
-  @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
-  public void handle(String operationLog) throws JsonProcessingException {
-    OperationLogKafkaPO operationLogKafkaPO = objectMapper.readValue(operationLog,
-      OperationLogKafkaPO.class);
-    operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
-      .ifPresent(operationLogService::save);
+  @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
+  public void handle(String systemLog) throws JsonProcessingException {
+    SystemLogKafkaPO systemLogKafkaPO = objectMapper.readValue(systemLog,
+      SystemLogKafkaPO.class);
+    systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);
   }
 }

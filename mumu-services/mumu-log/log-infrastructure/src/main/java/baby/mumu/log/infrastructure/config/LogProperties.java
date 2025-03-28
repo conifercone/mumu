@@ -44,12 +44,6 @@ public class LogProperties {
   @NestedConfigurationProperty
   private Kafka kafka = new Kafka();
 
-
-  /**
-   * 是否开启服务日志
-   */
-  private boolean enableLog = false;
-
   @Data
   public static class Elasticsearch {
 
@@ -73,7 +67,7 @@ public class LogProperties {
     /**
      * 是否启用
      */
-    private boolean enabled;
+    private boolean enabled = true;
   }
 
   @Data
@@ -82,6 +76,6 @@ public class LogProperties {
     /**
      * 是否启用
      */
-    private boolean enabled;
+    private boolean enabled = true;
   }
 }
