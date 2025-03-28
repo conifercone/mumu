@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start All Services" type="CompoundRunConfigurationType">
+  <configuration default="false" name="Start All Development Services"
+    type="CompoundRunConfigurationType">
     <toRun name="MuMuAuthenticationApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuFileApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuLogApplication-dev" type="SpringBootApplicationConfigurationType"/>
