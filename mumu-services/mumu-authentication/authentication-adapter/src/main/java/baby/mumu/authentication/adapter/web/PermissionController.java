@@ -37,12 +37,12 @@ import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -61,6 +61,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  */
 @RestController
+@Validated
 @RequestMapping("/permission")
 @Tag(name = "权限管理")
 public class PermissionController {
@@ -77,7 +78,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Valid PermissionAddCmd permissionAddCmd) {
+  public void add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
     permissionService.add(permissionAddCmd);
   }
 
@@ -104,7 +105,7 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Valid PermissionUpdateCmd permissionUpdateCmd) {
+  public void updateById(@RequestBody @Validated PermissionUpdateCmd permissionUpdateCmd) {
     permissionService.updateById(permissionUpdateCmd);
   }
 
@@ -114,7 +115,7 @@ public class PermissionController {
   @API(status = Status.STABLE, since = "1.0.0")
   @RateLimiter
   public Page<PermissionFindAllDTO> findAll(
-    @ModelAttribute @Valid PermissionFindAllCmd permissionFindAllCmd) {
+    @ModelAttribute @Validated PermissionFindAllCmd permissionFindAllCmd) {
     return permissionService.findAll(permissionFindAllCmd);
   }
 
@@ -124,7 +125,7 @@ public class PermissionController {
   @API(status = Status.STABLE, since = "2.2.0")
   @RateLimiter
   public Slice<PermissionFindAllSliceDTO> findAllSlice(
-    @ModelAttribute @Valid PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
+    @ModelAttribute @Validated PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
     return permissionService.findAllSlice(permissionFindAllSliceCmd);
   }
 
@@ -134,7 +135,7 @@ public class PermissionController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public Page<PermissionArchivedFindAllDTO> findArchivedAll(
-    @ModelAttribute @Valid PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
+    @ModelAttribute @Validated PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
     return permissionService.findArchivedAll(permissionArchivedFindAllCmd);
   }
 
@@ -144,7 +145,7 @@ public class PermissionController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
-    @ModelAttribute @Valid PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
+    @ModelAttribute @Validated PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
     return permissionService.findArchivedAllSlice(permissionArchivedFindAllSliceCmd);
   }
 
@@ -189,7 +190,8 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public void addAncestor(@RequestBody @Valid PermissionAddAncestorCmd permissionAddAncestorCmd) {
+  public void addAncestor(
+    @RequestBody @Validated PermissionAddAncestorCmd permissionAddAncestorCmd) {
     permissionService.addAncestor(permissionAddAncestorCmd);
   }
 

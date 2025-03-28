@@ -22,11 +22,11 @@ import baby.mumu.unique.client.api.QRCodeService;
 import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import java.util.Base64;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.4
  */
 @RestController
+@Validated
 @RequestMapping("/qrCode")
 @Tag(name = "二维码管理")
 public class QRCodeController {
@@ -57,7 +58,7 @@ public class QRCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public ResponseWrapper<String> dataUrlGenerate(
-    @ModelAttribute @Valid QRCodeGenerateCmd qrCodeGenerateCmd) {
+    @ModelAttribute @Validated QRCodeGenerateCmd qrCodeGenerateCmd) {
     return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
       qrCodeGenerateCmd.getImageFormat().getMimeType(),
       Base64.getEncoder().encodeToString(qrCodeService.generate(qrCodeGenerateCmd))));

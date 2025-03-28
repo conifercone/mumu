@@ -22,11 +22,11 @@ import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  */
 @RestController
+@Validated
 @RequestMapping("/system")
 @Tag(name = "系统日志管理")
 public class SystemLogController {
@@ -68,7 +69,7 @@ public class SystemLogController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<SystemLogFindAllDTO> findAll(
-    @ModelAttribute @Valid SystemLogFindAllCmd systemLogFindAllCmd) {
+    @ModelAttribute @Validated SystemLogFindAllCmd systemLogFindAllCmd) {
     return systemLogService.findAll(systemLogFindAllCmd);
   }
 }

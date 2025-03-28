@@ -45,7 +45,6 @@ import baby.mumu.authentication.infrastructure.relations.database.PermissionPath
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
-import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +56,7 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 权限信息转换器
@@ -173,14 +173,14 @@ public class PermissionConvertor {
 
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Permission> toEntity(
-    @Valid PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
+    @Validated PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
     return Optional.ofNullable(permissionArchivedFindAllCmd)
       .map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Permission> toEntity(
-    @Valid PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
+    @Validated PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
     return Optional.ofNullable(permissionArchivedFindAllSliceCmd)
       .map(PermissionMapper.INSTANCE::toEntity);
   }

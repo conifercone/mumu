@@ -23,11 +23,11 @@ import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  */
 @RestController
+@Validated
 @RequestMapping("/operation")
 @Tag(name = "操作日志管理")
 public class OperationLogController {
@@ -79,7 +80,7 @@ public class OperationLogController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public Page<OperationLogFindAllDTO> findAll(
-    @ModelAttribute @Valid OperationLogFindAllCmd operationLogFindAllCmd) {
+    @ModelAttribute @Validated OperationLogFindAllCmd operationLogFindAllCmd) {
     return operationLogService.findAll(operationLogFindAllCmd);
   }
 
