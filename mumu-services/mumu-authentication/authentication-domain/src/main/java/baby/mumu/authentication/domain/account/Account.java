@@ -253,6 +253,11 @@ public class Account extends BasisDomainModel implements UserDetails {
     return this.credentialsNonExpired;
   }
 
+  /**
+   * 获取年龄
+   *
+   * @return 年龄
+   */
   public int getAge() {
     return Optional.ofNullable(this.birthday)
       .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())
