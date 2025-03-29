@@ -45,7 +45,7 @@ commonsValidatorVersion = '1.9.0'
 redissonVersion = '3.45.1'
 # bom version
 grpcBomVersion = '1.71.0'
-guavaBomVersion = '33.4.5-jre'
+guavaBomVersion = '33.4.6-jre'
 protobufBomVersion = '4.30.2'
 # plugin version
 protobufPluginVersion = '0.9.4'
