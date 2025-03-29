@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 消息客户端配置类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Configuration

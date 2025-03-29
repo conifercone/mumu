@@ -110,7 +110,7 @@ link:https://github.com/conifercone/mumu/network/dependencies[**相依圖**]
 [#license]
 === 授權
 
-link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@mumu.baby[kaiyu.shan]
+link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
 
 [#contributors]
 === 貢獻者

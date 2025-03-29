@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec
 /**
  * 签名工具类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
 object SignatureUtils {

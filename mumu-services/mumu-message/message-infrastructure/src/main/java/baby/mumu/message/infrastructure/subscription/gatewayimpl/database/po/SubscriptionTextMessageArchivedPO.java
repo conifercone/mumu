@@ -35,7 +35,7 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * 订阅文本消息归档数据对象
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.3
  */
 @Getter

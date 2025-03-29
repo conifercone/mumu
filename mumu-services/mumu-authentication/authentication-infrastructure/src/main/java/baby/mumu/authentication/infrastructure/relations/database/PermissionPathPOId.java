@@ -31,7 +31,7 @@ import org.hibernate.Hibernate;
 /**
  * 权限路径表主键实体
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
 @Getter

@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 时间相关接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.7.0
  */
 @RestController

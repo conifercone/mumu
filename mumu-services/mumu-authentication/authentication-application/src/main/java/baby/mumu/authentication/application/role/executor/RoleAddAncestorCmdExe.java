@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 /**
  * 给指定后代角色添加祖先角色指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.4.0
  */
 @Component

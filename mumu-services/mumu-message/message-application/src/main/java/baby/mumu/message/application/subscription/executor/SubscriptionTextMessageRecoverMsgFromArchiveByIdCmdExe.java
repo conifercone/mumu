@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 /**
  * 文本订阅消息根据ID从归档恢复消息指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @Component

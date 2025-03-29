@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {

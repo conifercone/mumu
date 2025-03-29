@@ -18,7 +18,7 @@ package baby.mumu.unique.domain.pk.gateway;
 /**
  * 唯一性主键领域网关
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public interface PrimaryKeyGateway {

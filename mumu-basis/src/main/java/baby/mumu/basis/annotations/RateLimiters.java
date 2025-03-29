@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * 限流集合注解
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 @Inherited

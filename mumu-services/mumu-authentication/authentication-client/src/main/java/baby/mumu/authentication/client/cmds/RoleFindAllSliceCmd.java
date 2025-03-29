@@ -23,7 +23,7 @@ import lombok.Data;
 /**
  * 查询角色指令（不查询总数）
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Data

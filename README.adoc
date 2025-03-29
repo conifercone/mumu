@@ -119,7 +119,7 @@ link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph
 [#license]
 === License
 
-link:LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@mumu.baby[kaiyu.shan]
+link:LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
 
 [#contributors]
 === Contributors

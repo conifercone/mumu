@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 /**
  * 账户禁用指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component

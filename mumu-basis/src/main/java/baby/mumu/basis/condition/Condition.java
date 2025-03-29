@@ -18,7 +18,7 @@ package baby.mumu.basis.condition;
 /**
  * 条件顶级接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 public interface Condition {

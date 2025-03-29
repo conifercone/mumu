@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 限流基本信息自动生成默认提供者接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 public class RateLimitingCustomGenerateDefaultProviderImpl implements

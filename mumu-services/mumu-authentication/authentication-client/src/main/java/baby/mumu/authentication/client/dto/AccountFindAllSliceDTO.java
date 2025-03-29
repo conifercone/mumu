@@ -31,7 +31,7 @@ import org.springframework.data.geo.Point;
 /**
  * 账户分页查询数据传输对象（不查询总数）
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Data

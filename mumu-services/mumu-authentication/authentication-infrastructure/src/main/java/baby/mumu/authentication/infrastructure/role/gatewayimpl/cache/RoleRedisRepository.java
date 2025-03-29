@@ -23,7 +23,7 @@ import java.util.Optional;
 /**
  * 角色基本信息缓存（不包含角色关联的权限信息）
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 public interface RoleRedisRepository extends

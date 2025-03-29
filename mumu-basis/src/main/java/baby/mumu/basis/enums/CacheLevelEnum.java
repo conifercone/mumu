@@ -21,7 +21,7 @@ import org.apache.commons.lang3.time.DurationUtils;
 /**
  * 缓存等级枚举
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.4.0
  */
 public enum CacheLevelEnum {
