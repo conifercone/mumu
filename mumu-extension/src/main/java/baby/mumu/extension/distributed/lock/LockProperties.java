@@ -15,7 +15,6 @@
  */
 package baby.mumu.extension.distributed.lock;
 
-import baby.mumu.extension.distributed.lock.redis.RedisProperties;
 import baby.mumu.extension.distributed.lock.zookeeper.ZookeeperProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -35,9 +34,4 @@ public class LockProperties {
   @NestedConfigurationProperty
   private ZookeeperProperties zookeeper = new ZookeeperProperties();
 
-  /**
-   * redis相关配置
-   */
-  @NestedConfigurationProperty
-  private RedisProperties redis = new RedisProperties();
 }

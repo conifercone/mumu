@@ -17,7 +17,6 @@ package baby.mumu.extension;
 
 import baby.mumu.extension.aspects.AspectConfiguration;
 import baby.mumu.extension.cors.MuMuCorsConfiguration;
-import baby.mumu.extension.distributed.lock.redis.RedisConfiguration;
 import baby.mumu.extension.distributed.lock.zookeeper.ZookeeperConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
@@ -46,7 +45,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
-  ZookeeperConfiguration.class, RedisConfiguration.class, MuMuCorsConfiguration.class,
+  ZookeeperConfiguration.class, MuMuCorsConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class,

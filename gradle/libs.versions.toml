@@ -42,7 +42,6 @@ monetaVersion = '1.4.5'
 jacksonDatatypeMoneyVersion = '1.3.0'
 libphonenumberVersion = '9.0.2'
 commonsValidatorVersion = '1.9.0'
-redissonVersion = '3.45.1'
 # bom version
 grpcBomVersion = '1.71.0'
 guavaBomVersion = '33.4.6-jre'
@@ -271,8 +270,6 @@ jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", versio
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
 # https://mvnrepository.com/artifact/commons-validator/commons-validator
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
-# https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter
-redisson = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redissonVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
