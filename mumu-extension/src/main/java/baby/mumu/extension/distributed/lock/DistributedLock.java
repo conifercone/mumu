@@ -21,6 +21,7 @@ package baby.mumu.extension.distributed.lock;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
+@SuppressWarnings("unused")
 public interface DistributedLock {
 
   /**
