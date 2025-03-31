@@ -26,19 +26,24 @@ public interface DistributedLock {
 
   /**
    * 尝试获取锁
+   *
+   * @param lockName 锁名称
    */
-  void tryLock();
+  void tryLock(String lockName);
 
   /**
    * 尝试获取锁
    *
+   * @param lockName 锁名称
    * @param waitTime 等待时间，单位毫秒
    * @return 是否成功获取到分布式锁
    */
-  boolean tryLock(long waitTime);
+  boolean tryLock(String lockName, long waitTime);
 
   /**
    * 释放锁
+   *
+   * @param lockName 锁名称
    */
-  void unlock();
+  void unlock(String lockName);
 }

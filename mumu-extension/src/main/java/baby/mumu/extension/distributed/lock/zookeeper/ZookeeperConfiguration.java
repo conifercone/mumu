@@ -19,8 +19,6 @@ import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.distributed.lock.DistributedLock;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.locks.InterProcessLock;
-import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.RetryNTimes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -49,8 +47,8 @@ public class ZookeeperConfiguration {
   }
 
   @Bean
-  @ConditionalOnMissingBean(InterProcessLock.class)
-  public InterProcessLock mumuInterProcessLock() {
+  @ConditionalOnMissingBean(CuratorFramework.class)
+  public CuratorFramework mumuCuratorFramework() {
     ZookeeperProperties zookeeper = extensionProperties.getDistributed().getLock().getZookeeper();
     CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(
       zookeeper.getConnectString(),
@@ -58,13 +56,14 @@ public class ZookeeperConfiguration {
       zookeeper.getConnectionTimeoutMs(),
       new RetryNTimes(zookeeper.getRetryCount(), zookeeper.getElapsedTimeMs()));
     curatorFramework.start();
-    return new InterProcessMutex(curatorFramework, zookeeper.getLockPath());
+    return curatorFramework;
   }
 
   @Bean
   @ConditionalOnMissingBean(DistributedLock.class)
-  @ConditionalOnBean(InterProcessLock.class)
-  public DistributedLock zookeeperDistributedLock(InterProcessLock mumuInterProcessLock) {
-    return new ZookeeperDistributedLockImpl(mumuInterProcessLock);
+  @ConditionalOnBean({CuratorFramework.class, ZookeeperProperties.class})
+  public DistributedLock zookeeperDistributedLock(CuratorFramework mumuCuratorFramework,
+    ZookeeperProperties zookeeperProperties) {
+    return new ZookeeperDistributedLockImpl(mumuCuratorFramework, zookeeperProperties);
   }
 }
