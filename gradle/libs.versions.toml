@@ -129,7 +129,7 @@ grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
 # https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
 javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
 # https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter
-grpc-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+grpc-server-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 # https://mvnrepository.com/artifact/net.devh/grpc-client-spring-boot-starter
 grpc-client-spring-boot-starter = { module = "net.devh:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
 # https://mvnrepository.com/artifact/com.redis.om/redis-om-spring

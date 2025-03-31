@@ -4,7 +4,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-message:message-infrastructure"))
     implementation(project(":mumu-extension"))
     implementation(libs.grpc.stub)
-    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
     implementation(libs.spring.tx)

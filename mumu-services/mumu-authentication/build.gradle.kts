@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.spring.cloud.starter.consul.config)
     implementation(libs.swagger3Ui)
     implementation(libs.bundles.micrometer)
-    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.spring.boot.starter.data.mongodb)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.jasypt)
