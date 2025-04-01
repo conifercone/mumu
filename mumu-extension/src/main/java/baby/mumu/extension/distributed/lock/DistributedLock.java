@@ -28,8 +28,9 @@ public interface DistributedLock {
    * 尝试获取锁
    *
    * @param lockName 锁名称
+   * @return 是否成功获取到分布式锁
    */
-  void tryLock(String lockName);
+  boolean tryLock(String lockName);
 
   /**
    * 尝试获取锁

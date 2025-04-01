@@ -63,11 +63,12 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   }
 
   @Override
-  public void tryLock(String lockName) {
+  public boolean tryLock(String lockName) {
     try {
-      getInterProcessLock(lockName).acquire(-1, null);
+      return getInterProcessLock(lockName).acquire(-1, null);
     } catch (Exception e) {
       log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
+      return false;
     }
   }
 
