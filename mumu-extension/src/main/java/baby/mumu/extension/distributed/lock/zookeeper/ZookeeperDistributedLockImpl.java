@@ -46,7 +46,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   public ZookeeperDistributedLockImpl(CuratorFramework mumuCuratorFramework,
     @NotNull ZookeeperProperties zookeeperProperties) {
     this.curatorFramework = mumuCuratorFramework;
-    rootNode = ensureLeadingAndTrailingSlash(zookeeperProperties.getLockPath());
+    rootNode = ensureLeadingAndTrailingSlash(zookeeperProperties.getRootLockPath());
   }
 
   private static @NotNull String ensureLeadingAndTrailingSlash(String input) {
