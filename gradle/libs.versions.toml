@@ -27,7 +27,7 @@ alimtVersion = '1.4.0'
 deeplVersion = '1.9.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
-javapoetVersion = '1.13.0'
+javapoetVersion = '0.6.0'
 autoServiceVersion = '1.1.1'
 tess4jVersion = '5.15.0'
 javacvVersion = '1.5.11'
@@ -226,8 +226,8 @@ spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxingVersion" }
 # https://mvnrepository.com/artifact/com.google.zxing/javase
 zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxingVersion" }
-# https://mvnrepository.com/artifact/com.squareup/javapoet
-javapoet = { module = "com.squareup:javapoet", version.ref = "javapoetVersion" }
+# https://mvnrepository.com/artifact/com.palantir.javapoet/javapoet
+javapoet = { module = "com.palantir.javapoet:javapoet", version.ref = "javapoetVersion" }
 # https://mvnrepository.com/artifact/com.google.auto.service/auto-service
 auto-service = { module = "com.google.auto.service:auto-service", version.ref = "autoServiceVersion" }
 # https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
