@@ -18,6 +18,7 @@ plugins {
 }
 
 val rootDirectory = project.rootDir
+
 // 安装git hook
 tasks.register<Copy>("installGitHooks") {
     group = "setup"
