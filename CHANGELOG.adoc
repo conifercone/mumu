@@ -1,30 +1,33 @@
-# Changelog
+:doctype: article
+:imagesdir: .
+:icons: font
 
-- [简体中文](docs/CHANGELOG.zh_CN.md)
-- [English](CHANGELOG.md)
+= Changelog
+
+- link:docs/CHANGELOG.zh_CN.adoc[简体中文]
+- link:CHANGELOG.adoc[English]
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelog], and this project adheres to link:https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
-## [Unreleased]
+== [Unreleased]
 
-### ⭐ Added
+=== ⭐ Added
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
-## [2.8.0] - 2025-03-14
+== [2.8.0] - 2025-03-14
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added `sdkman` configuration file.
 - Add attribute comments.
 - Added module description.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - `jdk` upgrade to 23.
 - Canonical variable name format.
@@ -40,9 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `com.deepl.api:deepl-java` upgrade to 1.9.0.
 - `org.jobrunr:jobrunr-spring-boot-3-starter` upgrade to 7.4.1.
 
-## [2.7.0] - 2025-02-22
+== [2.7.0] - 2025-02-22
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added response encoding.
 - Added `.mailmap` file.
@@ -52,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New mobile phone number validity verification for the account.
 - New international telephone area code to the account.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Optimize time interface.
 - Add regular verification to the account registration password.
@@ -87,19 +90,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `org.jetbrains:annotations` upgrade to 26.0.2.
 - `kotlin` upgrade to 2.1.10.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Solve compile warnings.
 - Fixed refresh token exception.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Remove useless dependencies.
 - Remove useless code.
 
-## [2.6.0] - 2025-01-25
+== [2.6.0] - 2025-01-25
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added response encoding.
 - Added bean creation conditions for `RateLimitingCustomGenerateProvider`.
@@ -113,7 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added APIs to set the default account address and query nearby accounts.
 - Added a location property to account addresses.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Added description information matching conditions for archived role and permission queries.
 - Added description information matching conditions for role queries.
@@ -139,17 +142,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added caching to system settings.
 - Upgraded `resilience4j-retry` to 2.3.0.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fixed an issue with Chinese garbled text in the signature filter.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Removed the rule engine.
 
-## [2.5.0] - 2024-12-31
+== [2.5.0] - 2024-12-31
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added parameter verification for verification code generation.
 - Add method comments.
@@ -158,7 +161,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a new interface for character query based on code.
 - Permission verification can specify the permission range.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Modify the method name.
 - Modify response status value reference.
@@ -177,18 +180,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reconstruct verification code generation logic.
 - Replace deprecated code.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fixed the problem of failure to add character account.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Remove useless functions.
 - Delete useless files.
 
-## [2.4.0] - 2024-12-14
+== [2.4.0] - 2024-12-14
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added numeric preference attributes to the account domain model.
 - Integrated rules engine.
@@ -208,7 +211,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added grpc interface for querying roles based on ID.
 - Added blood relationship for characters.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Long integers are serialized into strings to prevent loss of precision.
 - Standard modification of class name.
@@ -237,18 +240,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SpringBoot is upgraded to 3.4.0.
 - org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.2.
 - commons-io: commons-io is upgraded to 2.18.0.
-- Modify the verification logic of TokenGatewayImpl#validity method.
+- Modify the verification logic of TokenGatewayImpl=validity method.
 - Reorganize token caching and verification logic.
 - Gradle upgraded to 8.11.1.
 - Optimize the scope of token permissions.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fixed the problem that the authorization code mode is not available.
 
-## [2.3.0] - 2024-11-19
+== [2.3.0] - 2024-11-19
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added support for Japanese, Traditional Chinese, Korean, and Russian localization.
 - Added digital signature filter to prevent replay attacks.
@@ -262,7 +265,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Git hook scripts.
 - Added lineage feature for permissions.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Optimized datasource extension configuration.
 - Improved signature verification logic.
@@ -280,14 +283,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded Spring Boot to 3.3.5.
 - Upgraded org.apache.zookeeper:zookeeper to 3.9.3.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fixed missing banner information issue when starting the project in IntelliJ.
 - Fixed code standard issues.
 
-## [2.2.0] - 2024-10-24
+== [2.2.0] - 2024-10-24
 
-### ⭐ Added
+=== ⭐ Added
 
 - Add traceId field to unified response results.
 - Add a timestamp field to unified response results.
@@ -312,12 +315,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The role has added paging query that does not query the total number.
 - MapStruct mapper uniformly adds unmappedTargetPolicy = ReportingPolicy.IGNORE.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
-- Fixed the issue that the file content may be garbled after execution of
-  update_license_current_year.sh.
+- Fixed the issue that the file content may be garbled after execution of update_license_current_year.sh.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Standardize interface parameters and reduce complexity.
 - Optimize grpc interface.
@@ -335,8 +337,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The page number parameter is renamed to current.
 - Optimize account login performance.
 - Logic optimization of online user number statistics.
-- The CustomDescription annotation is renamed to Meta, and the GenerateDescription annotation is
-  renamed to Metamodel.
+- The CustomDescription annotation is renamed to Meta, and the GenerateDescription annotation is renamed to Metamodel.
 - kotlin upgraded to 2.0.21.
 - org.apache.curator:curator-recipes upgraded to 5.7.1.
 - org.jetbrains:annotations upgraded to 26.0.1.
@@ -344,21 +345,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - redis-om-spring upgraded to 0.9.6.
 - BaseClientObject date attribute format modified to comply with ISO-8601 standard.
 - Optimize multi-language acquisition logic to prevent NPE.
-- Reconstruct the text broadcast message table and corresponding logic according to the database
-  paradigm.
+- Reconstruct the text broadcast message table and corresponding logic according to the database paradigm.
 - io.hypersistence:hypersistence-utils-hibernate-63 is upgraded to 3.8.3.
 - com.google.guava:guava-bom is upgraded to 33.3.1-jre.
 - Change the account gender & language type to varchar to eliminate database differences.
 - Update annotation processor prompt information.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Removed uncommon and dangerous grpc methods.
 - Delete authentication-related duplicate configurations.
 
-## [2.1.0] - 2024-09-30
+== [2.1.0] - 2024-09-30
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added conditional executor.
 - Added conditional annotation.
@@ -368,25 +368,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added flyway plug-in.
 - Added script to check and set environment variables.
 - Added license script.
-- When deleting an account & deleting the account archive data, the account address data will also
-  be deleted.
+- When deleting an account & deleting the account archive data, the account address data will also be deleted.
 - Added git hash value identification to project versions (development, testing, pre-release).
 - Added current limit expansion function.
-- Added scheduled tasks for deleting subscription messages and broadcast message archiving data
-  based on ID.
+- Added scheduled tasks for deleting subscription messages and broadcast message archiving data based on ID.
 - Added scheduled tasks to delete roles and account archive data based on ID.
 - Added a new scheduled task for archiving data based on ID deletion permission.
 - The value attribute of the dangerous operation annotation adds parameter substitution function.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
-- Fixed the problem that the user address is empty when updating the user role interface based on
-  ID.
+- Fixed the problem that the user address is empty when updating the user role interface based on ID.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
-- Reconstruct the account and role mapping relationship according to the database paradigm, allowing
-  accounts to have multiple roles at the same time.
+- Reconstruct the account and role mapping relationship according to the database paradigm, allowing accounts to have multiple roles at the same time.
 - Account supports adding multiple addresses.
 - Reconstruct role and permission mapping relationships according to database paradigm.
 - collections4 CollectionUtils replaces spring CollectionUtils.
@@ -400,7 +396,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modify jpa scanning range.
 - springboot upgraded to 3.3.4.
 - protobuf upgraded to 4.28.2.
-- Modify the default value of Rsa#jksKeyPair.
+- Modify the default value of Rsa=jksKeyPair.
 - Improve account registration grpc interface parameter attributes.
 - flyway upgraded to 10.18.0.
 - mapstruct upgraded to 1.6.2.
@@ -409,27 +405,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimize project structure.
 - Optimize the execution logic of permission archiving scheduled tasks.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
-- The unified authentication endpoint processor removes the automatic log upload function to reduce
-  architectural complexity.
+- The unified authentication endpoint processor removes the automatic log upload function to reduce architectural complexity.
 - Delete plug-ins that are temporarily unused.
 
-## [2.0.0] - 2024-09-06
+== [2.0.0] - 2024-09-06
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added Chinese version of readme document.
 - Added Chinese version of contribution guide.
 - Added face detection function.
 - Added ocr expansion function.
-- Added the ability to obtain a province or state based on the province or state ID, obtain the
-  province or state (including lower-level cities) based on the province or state ID, and obtain the
-  province or state based on the city ID.
-- Added interfaces for obtaining province or state information based on country ID and obtaining
-  city information based on province or state ID.
-- Added an interface to obtain detailed information about the country (excluding province, state,
-  and city information).
+- Added the ability to obtain a province or state based on the province or state ID, obtain the province or state (including lower-level cities) based on the province or state ID, and obtain the province or state based on the city ID.
+- Added interfaces for obtaining province or state information based on country ID and obtaining city information based on province or state ID.
+- Added an interface to obtain detailed information about the country (excluding province, state, and city information).
 - Added interface for obtaining detailed country information.
 - Added global geographic data json file.
 - Add new account and add address interface.
@@ -441,7 +432,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The permissions for archiving have been increased to determine whether archiving is in use.
 - Added paging query archived permissions interface.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Project rename.
 - Optimize unit test logic.
@@ -453,9 +444,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - commons-lang3 StringUtils replaces spring StringUtils.
 - Added serialization interface for related entities.
 
-## [1.0.4] - 2024-08-27
+== [1.0.4] - 2024-08-27
 
-### ⭐ Added
+=== ⭐ Added
 
 - Add pr badge.
 - Added internationalization information.
@@ -480,11 +471,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new archiving and recovery functions for accounts.
 - Added slack badge.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fix permission verification exception.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Modify slow sql table format.
 - Modify slow sql statistics threshold.
@@ -502,14 +493,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The guava version is upgraded to 33.3.0-jre.
 - minio version upgraded to 8.5.12.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Exclude tomcat globally.
 - Message service message status delete archived attribute.
 
-## [1.0.3] - 2024-08-07
+== [1.0.3] - 2024-08-07
 
-### ⭐ Added
+=== ⭐ Added
 
 - Added custom jks key function.
 - Added NotBlankOrNull verification annotation.
@@ -539,12 +530,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the ability to delete text subscription messages based on ID.
 - Added the ability to subscribe to messages based on ID read text.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fix permission verification exception.
 - Fix spelling errors.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Modify the default branch of GitHub actions to develop.
 - Standardize libs.versions.toml key value naming.
@@ -553,15 +544,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - redis-om-spring upgraded to 0.9.4.
 - Add restrictions based on ID read text subscription messages.
 - Add restrictions on read text broadcast messages based on ID.
-- SubscriptionTextMessageRepository#findByIdAndReceiverId parameter adds NotNull annotation.
+- SubscriptionTextMessageRepository=findByIdAndReceiverId parameter adds NotNull annotation.
 - Unified modify the EnableRedisDocumentRepositories annotation range.
 - Pagination query uniformly adds page number and current page number parameter value verification.
 - Optimize subscription and broadcast channel storage logic.
 - Group and version are extracted into the gradle.properties file.
 
-## [1.0.2] - 2024-07-19
+== [1.0.2] - 2024-07-19
 
-### ⭐ Added
+=== ⭐ Added
 
 - integrate redis-om-spring annotation processor.
 - Exception prompt content adapts to user language preference.
@@ -575,12 +566,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The message module implements the subscription text message forwarding function.
 - The message module implements the broadcast text message publishing function.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fixed permission name format prompt information error.
 - Fixed the problem of token validity verification failure.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Permission code adds unique constraints.
 - Modify the grpc synchronization calling method.
@@ -597,43 +588,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The client token combines the permissions of the role and the permissions in the client itself.
 - The upper limit of log file size is adjusted to 250MB.
 - The gradle version is upgraded to 8.9.
-- Operation logs and system logs kafka topic name & elasticsearch index name are extracted into
-  LogProperties.
+- Operation logs and system logs kafka topic name & elasticsearch index name are extracted into LogProperties.
 - When the account is disabled and deleted, the current account login information will be cleared.
 - PgSqlFunctionNameConstants adds final access modifier.
 - Gradle is migrated from groovy to kotlin.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Remove log4j2 OnStartupTriggeringPolicy policy.
 - Delete the -Xmx, -XX:MaxMetaspaceSize configuration in gradle jvmargs.
 
-## [1.0.1] - 2024-06-28
+== [1.0.1] - 2024-06-28
 
-### ⭐ Added
+=== ⭐ Added
 
 - Unique data generation service adds code generation, verify function.
 - Add mail service.
 - Add template email notification in mail service.
 - Add file service.
-- The file service adds streaming file upload, download, deletion, and obtaining file content in
-  text format.
+- The file service adds streaming file upload, download, deletion, and obtaining file content in text format.
 - Added language preference and time zone attributes to the account.
-- A new interface for obtaining the list of available time zones has been added to the unique data
-  generation service.
+- A new interface for obtaining the list of available time zones has been added to the unique data generation service.
 - Added sms module.
 
-### 🐞 Fixed
+=== 🐞 Fixed
 
 - Fix transaction does not take effect.
 - Fix internationalization exception prompt error.
 
-### 🕸️ Changed
+=== 🕸️ Changed
 
 - Account registration function adds time zone validity check.
 - Account registration function adds verification code check.
-- Modify the database columns of the user table, permission table, and role table to NOT_NULL, and
-  add corresponding default values.
+- Modify the database columns of the user table, permission table, and role table to NOT_NULL, and add corresponding default values.
 - The account registration grpc interface parameter attribute is modified to a wrapper class.
 - Modify grpc channel closing logic.
 - Integrate mapstruct to replace the original bull for object conversion.
@@ -643,14 +630,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - redis-om-spring upgraded to 0.9.3.
 - hypersistence-utils-hibernate-63 upgraded to 3.7.7.
 
-### ⚠️ Removed
+=== ⚠️ Removed
 
 - Remove flyway gradle plugin.
 - sql file remove license.
 
-## [1.0.0] - 2024-06-13
+== [1.0.0] - 2024-06-13
 
-### ⭐ Added
+=== ⭐ Added
 
 - Authentication server.
 - Resource Server Client.
@@ -658,21 +645,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - System log collection function.
 - Distributed unique primary key generation.
 - Distributed lock based on zookeeper.
-
-[//]: # (@formatter:off)
-[unreleased]: https://github.com/conifercone/mumu/compare/v2.8.0...develop
-[2.8.0]: https://github.com/conifercone/mumu/compare/v2.7.0...v2.8.0
-[2.7.0]: https://github.com/conifercone/mumu/compare/v2.6.0...v2.7.0
-[2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
-[2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
-[2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
-[2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
-[2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
-[2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
-[1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
-[1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3
-[1.0.2]: https://github.com/conifercone/mumu/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/conifercone/mumu/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/conifercone/mumu/releases/tag/v1.0.0
-[//]: # (@formatter:on)
