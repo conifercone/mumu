@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.0__db_init.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.1__add_comment_authorities.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.2__add_columns_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.3__add_email_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.4__add_time_zone_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.5__rename_users_time_zone.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.6__add_language_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.7__set_column_not_null_and_add_default_value_for_authorities.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.8__set_column_not_null_and_add_default_value_for_roles.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.0.9__set_column_not_null_and_add_default_value_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.0__set_code_unique_for_authorities.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.1__set_email_unique_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.2__alert_index_name_for_authorities_roles_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.3__add_default_data_for_authorities_roles_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.4__add_gin_index_for_authorities_roles.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.5__add_comment_for_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.6__add_columns_for_users.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.7__add_columns_for_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.8__add_archive_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.1.9__add_user_addresses_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.0__add_column_for_users_archived.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.1__add_index_for_user_addresses_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.2__rename_index_for_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.3__add_role_authorities_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.4__alert_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.5__add_user_roles_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.6__alert_uses_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.7__add_check_for_table_column.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.8__add_authority_paths_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.2.9__authorities_table_rename.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.0__add_role_paths_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.1__add_column_for_permissions_roles_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.2__add_comment.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.3__add_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.4__add_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.5__add_columns_for_oauth2_registered_client_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.6__alert_columns_default_value_for_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.7__delete_user_addresses_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.8__alert_table_name.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.3.9__add_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.4.0__alert_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.4.1__alert_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.4.2__add_columns_for_users_table.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-authentication/src/main/resources/db/migration/postgresql/V1.4.3__alert_columns_for_users_table.sql" dialect="PostgreSQL" />
+  </component>
+</project>
