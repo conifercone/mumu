@@ -2,10 +2,10 @@
 :imagesdir: .
 :icons: font
 
+== Security Policy
+
 - link:docs/SECURITY.zh_CN.adoc[简体中文]
 - link:SECURITY.adoc[English]
-
-== Security Policy
 
 == Supported Versions
 
