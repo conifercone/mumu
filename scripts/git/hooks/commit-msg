@@ -15,7 +15,7 @@ fi
 
 # 使用 grep -P 来检查提交信息是否符合正则表达式
 if ! echo "$commit_message" | grep -P "$pattern"; then
-    echo "🌥️ Commit message does not conform to the mumu commit format,Please check the COMMIT_MESSAGE_TEMPLATE.md file."
+    echo "🌥️ Commit message does not conform to the mumu commit format,Please check the COMMIT_MESSAGE_TEMPLATE.adoc file."
     exit 1
 fi
 

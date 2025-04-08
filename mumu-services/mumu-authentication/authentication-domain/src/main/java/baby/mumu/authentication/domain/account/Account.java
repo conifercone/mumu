@@ -50,7 +50,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 账户领域模型
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @ToString(callSuper = true)
@@ -253,6 +253,11 @@ public class Account extends BasisDomainModel implements UserDetails {
     return this.credentialsNonExpired;
   }
 
+  /**
+   * 获取年龄
+   *
+   * @return 年龄
+   */
   public int getAge() {
     return Optional.ofNullable(this.birthday)
       .map(accountBirthday -> Period.between(accountBirthday, LocalDate.now()).getYears())

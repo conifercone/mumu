@@ -25,7 +25,7 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 /**
  * thymeleaf模板引擎配置文件
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Configuration

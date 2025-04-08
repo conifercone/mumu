@@ -46,13 +46,13 @@ import org.springframework.stereotype.Component;
 /**
  * 自定义异常处理
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
 public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-  private static final Logger logger = LoggerFactory.getLogger(
+  private static final Logger log = LoggerFactory.getLogger(
     MuMuAuthenticationFailureHandler.class);
 
   private final OperationLogGrpcService operationLogGrpcService;
@@ -77,7 +77,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      logger.error(oAuth2AuthenticationException.getMessage());
+      log.error(oAuth2AuthenticationException.getMessage());
 
       if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
         response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());

@@ -1,7 +1,7 @@
-# Add 'documentation' label to any change to .md files within the entire repository
+# Add 'documentation' label to any change to .md and .adoc files within the entire repository
 documentation:
   - changed-files:
-      - any-glob-to-any-file: '**/*.md'
+      - any-glob-to-any-file: [ '**/*.md','**/*.adoc' ]
 
 # Add 'enhancement' label to any PR where the head branch name starts with `feature` or has a `feature` section in the name
 enhancement:

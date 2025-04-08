@@ -28,14 +28,14 @@ import org.springframework.context.ApplicationContext;
 /**
  * 条件注解切面
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 @Aspect
 public class ConditionalAspect extends AbstractAspect {
 
   private final ApplicationContext applicationContext;
-  private static final Logger logger = LoggerFactory.getLogger(ConditionalAspect.class);
+  private static final Logger log = LoggerFactory.getLogger(ConditionalAspect.class);
 
   public ConditionalAspect(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -53,7 +53,7 @@ public class ConditionalAspect extends AbstractAspect {
             throw new RuntimeException(e);
           }
         }, () -> {
-          logger.warn("{} method execution conditions are not met",
+          log.warn("{} method execution conditions are not met",
             joinPoint.getSignature().getName());
           return null;
         })).orElse(joinPoint.proceed());

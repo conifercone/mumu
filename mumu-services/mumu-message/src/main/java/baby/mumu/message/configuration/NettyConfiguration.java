@@ -41,14 +41,14 @@ import org.springframework.context.annotation.Configuration;
 /**
  * netty配置类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @Configuration
 @EnableConfigurationProperties(MessageProperties.class)
 public class NettyConfiguration {
 
-  private static final Logger logger = LoggerFactory.getLogger(NettyConfiguration.class);
+  private static final Logger log = LoggerFactory.getLogger(NettyConfiguration.class);
   private static final String WEBSOCKET_PROTOCOL = "WebSocket";
   private EventLoopGroup bossGroup;
   private EventLoopGroup workGroup;
@@ -105,7 +105,7 @@ public class NettyConfiguration {
     });
     // 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
     ChannelFuture channelFuture = bootstrap.bind().sync();
-    logger.info("Server started and listen on:{}", channelFuture.channel().localAddress());
+    log.info("Server started and listen on:{}", channelFuture.channel().localAddress());
     // 对关闭通道进行监听
     channelFuture.channel().closeFuture().sync();
   }

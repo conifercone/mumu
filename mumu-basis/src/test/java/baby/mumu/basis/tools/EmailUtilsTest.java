@@ -22,14 +22,14 @@ import org.junit.jupiter.api.Test;
 /**
  * 邮箱工具类测试
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.7.0
  */
 public class EmailUtilsTest {
 
   @Test
   public void isValidEmailFormat() {
-    boolean validEmailFormat = EmailUtils.isValidEmailFormat("kaiyu.shan@mumu.baby");
+    boolean validEmailFormat = EmailUtils.isValidEmailFormat("kaiyu.shan@outlook.com");
     Assertions.assertTrue(validEmailFormat);
     boolean validEmailFormat1 = EmailUtils.isValidEmailFormat("123456abc");
     Assertions.assertFalse(validEmailFormat1);

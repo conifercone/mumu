@@ -17,7 +17,7 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)
     implementation(libs.resilience4j.retry)
-    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.grpc.client.spring.boot.starter)
 }
 protobuf {

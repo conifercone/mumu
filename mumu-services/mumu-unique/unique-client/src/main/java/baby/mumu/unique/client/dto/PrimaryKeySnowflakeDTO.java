@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 主键生成雪花算法数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data

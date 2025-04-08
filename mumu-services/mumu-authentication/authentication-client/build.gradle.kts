@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.spring.data.commons)
     implementation(libs.spring.web)
     implementation(libs.jakarta.servlet.api)
-    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.grpc.client.spring.boot.starter)
     implementation(libs.resilience4j.retry)
     api(libs.spring.boot.starter.oauth2.resource.server)

@@ -50,7 +50,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * <p>签名格式：时间戳+request ID+request URI+body JSON</p>
  * <p>body JSON格式：紧凑JSON，不包含多余换行和空格符</p>
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
 public class SignatureFilter extends OncePerRequestFilter {
@@ -59,7 +59,7 @@ public class SignatureFilter extends OncePerRequestFilter {
   public static final String X_TIMESTAMP = "X-Timestamp";
   public static final String X_REQUEST_ID = "X-Request-ID";
   private final ExtensionProperties extensionProperties;
-  private static final Logger logger = LoggerFactory.getLogger(
+  private static final Logger log = LoggerFactory.getLogger(
     SignatureFilter.class);
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -89,21 +89,21 @@ public class SignatureFilter extends OncePerRequestFilter {
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {
-            logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+            log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             ResponseWrapper.exceptionResponse(response,
               ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
             return;
           }
         } catch (Exception e) {
-          logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+          log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
           response.setStatus(HttpStatus.BAD_REQUEST.value());
           ResponseWrapper.exceptionResponse(response,
             ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
           return;
         }
       } else {
-        logger.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+        log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         ResponseWrapper.exceptionResponse(response,
           ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);

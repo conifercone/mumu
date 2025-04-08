@@ -18,18 +18,33 @@ package baby.mumu.extension.distributed.lock;
 /**
  * 分布式锁顶级接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
+@SuppressWarnings("unused")
 public interface DistributedLock {
 
   /**
    * 尝试获取锁
+   *
+   * @param lockName 锁名称
+   * @return 是否成功获取到分布式锁
    */
-  void lock();
+  boolean tryLock(String lockName);
+
+  /**
+   * 尝试获取锁
+   *
+   * @param lockName 锁名称
+   * @param waitTime 等待时间，单位毫秒
+   * @return 是否成功获取到分布式锁
+   */
+  boolean tryLock(String lockName, long waitTime);
 
   /**
    * 释放锁
+   *
+   * @param lockName 锁名称
    */
-  void unlock();
+  void unlock(String lockName);
 }

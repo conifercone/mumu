@@ -25,23 +25,23 @@ import org.slf4j.LoggerFactory;
 /**
  * p6spy数据源过滤器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(P6spyDataSourceFilter.class);
+  private static final Logger log = LoggerFactory.getLogger(P6spyDataSourceFilter.class);
 
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
     @NotNull ExtensionProperties extensionProperties) {
-    logger.debug("P6spyDataSourceFilter afterCreate starting...");
+    log.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
       extensionProperties.getSql().getLog().isEnabled();
     if (enableLog) {
       dataSource = new P6DataSource(dataSource);
-      logger.debug("p6spy datasource wrapped datasource");
+      log.debug("p6spy datasource wrapped datasource");
     }
 
     return dataSource;

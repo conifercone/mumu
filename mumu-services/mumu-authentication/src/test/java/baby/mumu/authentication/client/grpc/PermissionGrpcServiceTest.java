@@ -44,7 +44,7 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * PermissionGrpcService单元测试
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,7 +54,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
 
   private final PermissionGrpcService permissionGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger logger = LoggerFactory.getLogger(PermissionGrpcServiceTest.class);
+  private static final Logger log = LoggerFactory.getLogger(PermissionGrpcServiceTest.class);
 
   @Autowired
   public PermissionGrpcServiceTest(PermissionGrpcService permissionGrpcService, MockMvc mockMvc) {
@@ -73,9 +73,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = permissionGrpcService.findAll(
       permissionFindAllGrpcCmd,
       callCredentials);
-    logger.info("PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+    log.info("PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
     pageOfPermissionFindAllGrpcDTO.getContentList().stream().map(PermissionFindAllGrpcDTO::getName)
-      .forEach(logger::info);
+      .forEach(log::info);
     Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
     Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
   }
@@ -95,7 +95,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     pageOfPermissionFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
         PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = pageOfPermissionFindAllGrpcDTOListenableFuture.get();
-        logger.info("Sync PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+        log.info("Sync PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
         Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
         Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
@@ -115,7 +115,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionGrpcService.findById(
       Int64Value.of(1),
       callCredentials);
-    logger.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+    log.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
     Assertions.assertNotNull(permissionFindByIdGrpcDTO);
   }
 
@@ -131,7 +131,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     permissionFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
         PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionFindByIdGrpcDTOListenableFuture.get();
-        logger.info("Sync PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+        log.info("Sync PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
         Assertions.assertNotNull(permissionFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

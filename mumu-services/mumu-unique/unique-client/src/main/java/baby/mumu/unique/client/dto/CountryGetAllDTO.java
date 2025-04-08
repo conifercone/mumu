@@ -20,7 +20,7 @@ import lombok.Data;
 /**
  * 获取所有国家(不包含省或州、市信息)数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
 @Data

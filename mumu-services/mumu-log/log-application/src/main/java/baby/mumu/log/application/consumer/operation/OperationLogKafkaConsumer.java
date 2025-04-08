@@ -23,25 +23,28 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 /**
  * 操作日志消费者
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Component
-@Observed(name = "OperationLogConsumer")
-public class OperationLogConsumer {
+@Observed(name = "OperationLogKafkaConsumer")
+@ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
+public class OperationLogKafkaConsumer {
 
   private final ObjectMapper objectMapper;
   private final OperationLogService operationLogService;
   private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
-  public OperationLogConsumer(ObjectMapper objectMapper, OperationLogService operationLogService,
+  public OperationLogKafkaConsumer(ObjectMapper objectMapper,
+    OperationLogService operationLogService,
     OperationLogConvertor operationLogConvertor) {
     this.objectMapper = objectMapper;
     this.operationLogService = operationLogService;

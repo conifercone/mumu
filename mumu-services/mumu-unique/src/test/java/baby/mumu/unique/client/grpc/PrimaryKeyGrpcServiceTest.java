@@ -28,7 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 /**
  * 主键生成grpc接口单元测试
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,7 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class PrimaryKeyGrpcServiceTest {
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
-  private static final Logger logger = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
+  private static final Logger log = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
 
   @Autowired
   public PrimaryKeyGrpcServiceTest(PrimaryKeyGrpcService primaryKeyGrpcService) {
@@ -47,7 +47,7 @@ public class PrimaryKeyGrpcServiceTest {
   @Test
   public void snowflake() {
     Long snowflake = primaryKeyGrpcService.snowflake();
-    logger.info("snowflake : {}", snowflake);
+    log.info("snowflake : {}", snowflake);
     Assertions.assertNotNull(snowflake);
   }
 }

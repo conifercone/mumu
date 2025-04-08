@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 已归档角色查询数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Data

@@ -15,9 +15,9 @@
  */
 package baby.mumu.processor.kotlin.tools
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
+import com.palantir.javapoet.ClassName
+import com.palantir.javapoet.ParameterizedTypeName
+import com.palantir.javapoet.TypeName
 import java.util.*
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -32,7 +32,7 @@ import javax.lang.model.util.Types
 /**
  * 对象工具类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 object ObjectUtils {
@@ -56,7 +56,7 @@ object ObjectUtils {
     @JvmStatic
     fun getAllSuperclasses(element: Element, types: Types): List<TypeElement> {
         val superclasses = mutableListOf<TypeElement>()
-        var currentElement: TypeElement? = if (element is TypeElement) element else null
+        var currentElement: TypeElement? = element as? TypeElement
         while (currentElement != null) {
             superclasses.add(currentElement)
             val superclassMirror: TypeMirror = currentElement.superclass
@@ -65,7 +65,7 @@ object ObjectUtils {
                 break
             }
             val superclassElement = types.asElement(superclassMirror)
-            currentElement = if (superclassElement is TypeElement) superclassElement else null
+            currentElement = superclassElement as? TypeElement
         }
         return superclasses
     }
@@ -82,11 +82,8 @@ object ObjectUtils {
         val enclosingElement: Element = fieldElement.enclosingElement
 
         // 检查父元素是否为 TypeElement
-        return if (enclosingElement is TypeElement) {
-            enclosingElement
-        } else {
-            throw IllegalArgumentException("The provided element is not a field of a class.")
-        }
+        return enclosingElement as? TypeElement
+            ?: throw IllegalArgumentException("The provided element is not a field of a class.")
     }
 
 

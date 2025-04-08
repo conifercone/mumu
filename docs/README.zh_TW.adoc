@@ -1,0 +1,118 @@
+:doctype: article
+:imagesdir: ..
+:icons: font
+:slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
+
+image::logo.svg[mumu]
+
+- link:README.zh_CN.adoc[简体中文]
+- link:README.zh_TW.adoc[繁體中文]
+- link:../README.adoc[English]
+- link:README.ja.adoc[日本語]
+- link:README.ko.adoc[한국어]
+
+== mumu
+
+image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/badge/JDK-23+-green.svg[JDK version,link="https://adoptium.net/temurin/releases/?version=23"]
+image:https://img.shields.io/github/v/release/conifercone/mumu[GitHub Release,link="https://github.com/conifercone/mumu/releases/latest"]
+image:https://img.shields.io/github/license/conifercone/mumu[GitHub License,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/issues/conifercone/mumu[GitHub issues,link="https://github.com/conifercone/mumu/issues"]
+image:https://img.shields.io/github/issues-pr/conifercone/mumu[GitHub Pull Requests,link="https://github.com/conifercone/mumu/pulls"]
+image:https://img.shields.io/github/languages/count/conifercone/mumu[GitHub language count,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/last-commit/conifercone/mumu/develop[GitHub last commit,link="https://github.com/conifercone/mumu"]
+image:https://img.shields.io/github/discussions/conifercone/mumu[GitHub Discussions,link="https://github.com/conifercone/mumu/discussions"]
+image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD[GitHub Actions Workflow Status]
+image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle[GitHub Actions Workflow Status]
+image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop[CodeFactor,link="https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop"]
+image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link="{slack-invite}"]
+image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
+image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
+
+=== 目次
+
+- <<projects, 專案>>
+- <<module-introduction, 模組介紹>>
+- <<build, 建置>>
+- <<dependency-statement, 相依聲明>>
+- <<license, 授權>>
+- <<contributors, 貢獻者>>
+
+[#projects]
+=== 專案
+
+[quote]
+____
+雖然市面上已經有許多成熟的後台管理系統，但由於我對於整潔的程式碼有強烈的執念，所以一直找不到合適的專案。 因此決定自己動手開源一個程式碼整潔且功能完善的後台管理系統。這就是 mumu 的由來，mumu 名稱來自我的兒子（沐沐）， 希望他能夠健康成長，同樣也希望 mumu 專案能夠茁壯成長。只要我在世，本專案將永遠免費開源，供個人和組織自由使用。
+____
+
+[#delightfully-clean-system]
+==== 🎉 令人愉快的即用型整潔管理系統！ 🎉
+
+對那些讓你頭疼的混亂程式碼和複雜設置感到厭倦了嗎？ 來試試我們的 *即用型管理系統*！🎁 只需打開，它就會如超級巨星般輕鬆運行，程式碼潔淨得閃閃發亮！✨
+
+🌟 *你會愛上它的理由：*
+
+- *即時設置*：不需要任何魔法咒語，只需插上就能運行！
+- *整潔程式碼*：乾淨到你會想給它一顆金星！
+- *使用者友好*：即使你的金魚也能搞懂！
+
+加入輕鬆管理的樂趣，和混亂說再見！讓管理變成一場愉快的旅程吧！🚀🎈
+
+[#module-introduction]
+=== 模組介紹
+
+[source,text]
+----
+mumu
+├── mumu-services
+│FEREnces
+│   ├── mumu-authentication
+│   ├── mumu-file
+│   ├── mumu-log
+│   ├── mumu-mail
+│   ├── mumu-message
+│   ├── mumu-sms
+│   └── mumu-unique
+├── mumu-basis
+├── mumu-extension
+└── mumu-processor
+----
+
+[#build]
+=== 建置
+
+[#infrastructure]
+==== 基礎設施
+
+[cols="1,1",options="header"]
+|===
+| 名稱          | 版本
+| apisix        | 3.8.0
+| elasticsearch | 8.12.0
+| kafka         | 3.4
+| postgresql    | 16.8
+| redis         | latest
+| zookeeper     | 3.8
+| consul        | 1.15.4
+| minio         | RELEASE.2024-06-13T22-53-53Z
+| zipkin        | 3.19.0
+| mongodb       | 8.0.1
+|===
+
+[#dependency-statement]
+=== 相依聲明
+
+link:https://github.com/conifercone/mumu/network/dependencies[**相依圖**]
+
+[#license]
+=== 授權
+
+link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
+
+[#contributors]
+=== 貢獻者
+
+image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]

@@ -25,7 +25,7 @@ import java.util.*
 /**
  * spring上下文工具类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 class SpringContextUtils : ApplicationContextAware {
@@ -42,7 +42,7 @@ class SpringContextUtils : ApplicationContextAware {
          * Spring上下文
          */
         private var applicationContext: ApplicationContext? = null
-        private val logger = LoggerFactory.getLogger(SpringContextUtils::class.java)
+        private val log = LoggerFactory.getLogger(SpringContextUtils::class.java)
 
         /**
          * bean class -> bean LRU cache
@@ -76,7 +76,7 @@ class SpringContextUtils : ApplicationContextAware {
                 @Suppress("UNCHECKED_CAST")
                 Optional.of(bean as T)
             } catch (e: Exception) {
-                logger.error(e.message, e)
+                log.error(e.message, e)
                 Optional.empty()
             }
         }

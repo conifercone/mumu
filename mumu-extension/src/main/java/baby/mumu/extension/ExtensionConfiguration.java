@@ -40,12 +40,13 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
 /**
  * 拓展模块配置
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Configuration
 @Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
-  ZookeeperConfiguration.class, MuMuCorsConfiguration.class, DatasourceConfiguration.class,
+  ZookeeperConfiguration.class, MuMuCorsConfiguration.class,
+  DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class,
   FilterConfiguration.class, IdempotentConfiguration.class, GsonConfiguration.class})

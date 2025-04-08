@@ -19,14 +19,14 @@ import baby.mumu.basis.annotations.Meta;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.processor.kotlin.tools.ObjectUtils;
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeSpec.Builder;
+import com.palantir.javapoet.AnnotationSpec;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeName;
+import com.palantir.javapoet.TypeSpec;
+import com.palantir.javapoet.TypeSpec.Builder;
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.SingularAttribute;
 import java.io.BufferedReader;
@@ -66,7 +66,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 元模型生成器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
  */
 @SuppressWarnings("unused")

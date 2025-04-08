@@ -27,6 +27,7 @@ import java.time.ZoneId;
 import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,10 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 时间相关接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.7.0
  */
 @RestController
+@Validated
 @RequestMapping("/time")
 @Tag(name = "时间管理")
 public class TimeController {

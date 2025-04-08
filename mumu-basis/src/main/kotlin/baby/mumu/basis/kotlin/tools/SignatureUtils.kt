@@ -22,12 +22,12 @@ import javax.crypto.spec.SecretKeySpec
 /**
  * 签名工具类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
 object SignatureUtils {
 
-    private val logger = LoggerFactory.getLogger(SignatureUtils::class.java)
+    private val log = LoggerFactory.getLogger(SignatureUtils::class.java)
 
     @JvmStatic
     fun generateSignature(
@@ -56,7 +56,7 @@ object SignatureUtils {
             // 比较生成的签名和传入的签名
             return generatedSignatureHex == signature
         } catch (e: Exception) {
-            logger.error(e.message, e)
+            log.error(e.message, e)
             return false
         }
     }

@@ -24,11 +24,11 @@ import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllYouSendDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,10 +43,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 文本订阅消息管理
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @RestController
+@Validated
 @RequestMapping("/subscriptionTextMsg")
 @Tag(name = "文本订阅消息管理")
 public class SubscriptionTextMessageController {
@@ -65,7 +66,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-    @RequestBody @Valid SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
+    @RequestBody @Validated SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd) {
     subscriptionTextMessageService.forwardMsg(subscriptionTextMessageForwardCmd);
   }
 
@@ -102,7 +103,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllYouSendDTO> findAllYouSend(
-    @ModelAttribute @Valid SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
+    @ModelAttribute @Validated SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd) {
     return subscriptionTextMessageService.findAllYouSend(subscriptionTextMessageFindAllYouSendCmd);
   }
 
@@ -131,7 +132,7 @@ public class SubscriptionTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<SubscriptionTextMessageFindAllWithSomeOneDTO> findAllWithSomeOne(
-    @ModelAttribute @Valid SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
+    @ModelAttribute @Validated SubscriptionTextMessageFindAllWithSomeOneCmd subscriptionTextMessageFindAllWithSomeOneCmd) {
     return subscriptionTextMessageService.findAllMessageRecordWithSomeone(
       subscriptionTextMessageFindAllWithSomeOneCmd);
   }

@@ -18,7 +18,7 @@ package baby.mumu.authentication.domain.client.gateway;
 /**
  * 客户端领域网关
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.5.0
  */
 public interface ClientGateway {

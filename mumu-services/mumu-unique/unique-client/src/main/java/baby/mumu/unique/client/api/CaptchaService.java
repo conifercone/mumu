@@ -22,7 +22,7 @@ import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 /**
  * 验证码service
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 public interface CaptchaService {

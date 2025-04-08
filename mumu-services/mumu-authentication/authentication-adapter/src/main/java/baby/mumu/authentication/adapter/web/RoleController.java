@@ -36,12 +36,12 @@ import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.basis.annotations.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,10 +56,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 角色管理
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestController
+@Validated
 @RequestMapping("/role")
 @Tag(name = "角色管理")
 public class RoleController {
@@ -76,7 +77,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Valid RoleAddCmd roleAddCmd) {
+  public void add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
     roleService.add(roleAddCmd);
   }
 
@@ -103,7 +104,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Valid RoleUpdateCmd roleUpdateCmd) {
+  public void updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
     roleService.updateById(roleUpdateCmd);
   }
 
@@ -112,7 +113,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public Page<RoleFindAllDTO> findAll(@ModelAttribute @Valid RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllDTO> findAll(@ModelAttribute @Validated RoleFindAllCmd roleFindAllCmd) {
     return roleService.findAll(roleFindAllCmd);
   }
 
@@ -122,7 +123,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleFindAllSliceDTO> findAllSlice(
-    @ModelAttribute @Valid RoleFindAllSliceCmd roleFindAllSliceCmd) {
+    @ModelAttribute @Validated RoleFindAllSliceCmd roleFindAllSliceCmd) {
     return roleService.findAllSlice(roleFindAllSliceCmd);
   }
 
@@ -132,7 +133,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Page<RoleArchivedFindAllDTO> findArchivedAll(
-    @ModelAttribute @Valid RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+    @ModelAttribute @Validated RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
     return roleService.findArchivedAll(roleArchivedFindAllCmd);
   }
 
@@ -142,7 +143,7 @@ public class RoleController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
-    @ModelAttribute @Valid RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    @ModelAttribute @Validated RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
   }
 
@@ -169,7 +170,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void addAncestor(@RequestBody @Valid RoleAddAncestorCmd roleAddAncestorCmd) {
+  public void addAncestor(@RequestBody @Validated RoleAddAncestorCmd roleAddAncestorCmd) {
     roleService.addAncestor(roleAddAncestorCmd);
   }
 

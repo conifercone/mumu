@@ -4,7 +4,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-log:log-infrastructure"))
     implementation(project(":mumu-extension"))
     implementation(libs.grpc.stub)
-    implementation(libs.grpc.spring.boot.starter)
+    implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.spring.kafka)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)

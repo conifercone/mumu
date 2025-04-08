@@ -54,7 +54,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /**
  * 响应处理器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestControllerAdvice(annotations = RestController.class)
@@ -62,7 +62,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String VOID = "void";
-  private static final Logger logger = LoggerFactory.getLogger(ResponseBodyProcessor.class);
+  private static final Logger log = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
   private final SystemLogGrpcService systemLogGrpcService;
   private final SimpleTextTranslation simpleTextTranslation;
@@ -82,9 +82,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setStatus(
       mumuException.getResponseCode() != null ? mumuException.getResponseCode().getStatus()
         : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    logger.error(mumuException.getMessage(), mumuException);
+    log.error(mumuException.getMessage(), mumuException);
     if (mumuException.getThrowable() != null) {
-      logger.error(mumuException.getThrowable().getMessage(), mumuException.getThrowable());
+      log.error(mumuException.getThrowable().getMessage(), mumuException.getThrowable());
     }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(mumuException.getMessage())
@@ -105,7 +105,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(responseCode.getStatus());
-    logger.error(rateLimiterException.getMessage(), rateLimiterException);
+    log.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(rateLimiterException.getMessage())
       .setCategory("rateLimiterException")
@@ -121,7 +121,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    logger.error(validationException.getMessage(), validationException);
+    log.error(validationException.getMessage(), validationException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(validationException.getMessage())
       .setCategory("validationException")
@@ -139,7 +139,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.PARAMS_IS_INVALID.getStatus());
-    logger.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
+    log.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(httpMessageNotReadableException.getMessage())
       .setCategory("httpMessageNotReadableException")
@@ -155,7 +155,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    logger.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
+    log.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(methodArgumentNotValidException.getMessage())
       .setCategory("methodArgumentNotValidException")
@@ -173,7 +173,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    logger.error(illegalArgumentException.getMessage(), illegalArgumentException);
+    log.error(illegalArgumentException.getMessage(), illegalArgumentException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(illegalArgumentException.getMessage())
       .setCategory("illegalArgumentException")
@@ -194,7 +194,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS.getStatus());
-    logger.error(missingServletRequestParameterException.getMessage(),
+    log.error(missingServletRequestParameterException.getMessage(),
       missingServletRequestParameterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(missingServletRequestParameterException.getMessage())
@@ -211,7 +211,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.INTERNAL_SERVER_ERROR.getStatus());
-    logger.error(exception.getMessage(), exception);
+    log.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(exception.getMessage())
       .setCategory("exception")

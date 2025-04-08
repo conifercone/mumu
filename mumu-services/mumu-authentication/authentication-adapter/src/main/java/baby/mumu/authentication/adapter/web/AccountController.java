@@ -39,7 +39,6 @@ import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
@@ -48,6 +47,7 @@ import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,10 +62,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 账户相关
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @RestController
+@Validated
 @RequestMapping("/account")
 @Tag(name = "账户管理")
 public class AccountController {
@@ -83,7 +84,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(
-    @Parameter(description = "账户注册指令", required = true) @RequestBody @Valid AccountRegisterCmd accountRegisterCmd) {
+    @Parameter(description = "账户注册指令", required = true) @RequestBody @Validated AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
   }
 
@@ -93,7 +94,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(
-    @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Valid AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Validated AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
   }
 
@@ -103,7 +104,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
-    @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Valid AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Validated AccountUpdateRoleCmd accountUpdateRoleCmd) {
     accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
@@ -170,7 +171,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void modifySystemSettingsBySettingsId(
-    @RequestBody @Valid AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
+    @RequestBody @Validated AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd) {
     accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
   }
 
@@ -180,7 +181,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void modifyAddressByAddressId(
-    @RequestBody @Valid AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+    @RequestBody @Validated AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
     accountService.modifyAddressByAddressId(accountModifyAddressByAddressIdCmd);
   }
 
@@ -190,7 +191,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void addSystemSettings(
-    @RequestBody @Valid AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
+    @RequestBody @Validated AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
     accountService.addSystemSettings(accountAddSystemSettingsCmd);
   }
 
@@ -199,7 +200,8 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteCurrent(@RequestBody @Valid AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+  public void deleteCurrent(
+    @RequestBody @Validated AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
     accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
   }
 
@@ -209,7 +211,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public ResponseWrapper<Boolean> verifyPassword(
-    @ModelAttribute @Valid AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+    @ModelAttribute @Validated AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     return ResponseWrapper.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
@@ -219,7 +221,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(
-    @RequestBody @Valid AccountChangePasswordCmd accountChangePasswordCmd) {
+    @RequestBody @Validated AccountChangePasswordCmd accountChangePasswordCmd) {
     accountService.changePassword(accountChangePasswordCmd);
   }
 
@@ -249,7 +251,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public void addAddress(
-    @RequestBody @Valid AccountAddAddressCmd accountAddAddressCmd) {
+    @RequestBody @Validated AccountAddAddressCmd accountAddAddressCmd) {
     accountService.addAddress(accountAddAddressCmd);
   }
 
@@ -279,7 +281,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Page<AccountFindAllDTO> findAll(
-    @ModelAttribute @Valid AccountFindAllCmd accountFindAllCmd) {
+    @ModelAttribute @Validated AccountFindAllCmd accountFindAllCmd) {
     return accountService.findAll(accountFindAllCmd);
   }
 
@@ -289,7 +291,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public Slice<AccountFindAllSliceDTO> findAllSlice(
-    @ModelAttribute @Valid AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    @ModelAttribute @Validated AccountFindAllSliceCmd accountFindAllSliceCmd) {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 

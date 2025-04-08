@@ -33,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 服务发现客户端名称解析器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0
  */
 public class DiscoveryClientNameResolver extends NameResolver {

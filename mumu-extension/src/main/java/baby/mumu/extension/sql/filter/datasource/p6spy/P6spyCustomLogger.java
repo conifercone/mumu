@@ -31,21 +31,21 @@ import org.slf4j.LoggerFactory;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {
 
-  private static final Logger logger = LoggerFactory.getLogger(P6spyCustomLogger.class);
+  private static final Logger log = LoggerFactory.getLogger(P6spyCustomLogger.class);
 
   @Override
   public void logException(Exception e) {
-    logger.info("", e);
+    log.info("", e);
   }
 
   @Override
   public void logText(String text) {
-    logger.info(text);
+    log.info(text);
   }
 
   @Override
@@ -79,13 +79,13 @@ public class P6spyCustomLogger extends FormattedLogger {
 
   private static void print(Category category, StringBuilder stringBuilder) {
     if (Category.ERROR.equals(category)) {
-      logger.error(stringBuilder.toString());
+      log.error(stringBuilder.toString());
     } else if (Category.WARN.equals(category)) {
-      logger.warn(stringBuilder.toString());
+      log.warn(stringBuilder.toString());
     } else if (Category.DEBUG.equals(category)) {
-      logger.debug(stringBuilder.toString());
+      log.debug(stringBuilder.toString());
     } else {
-      logger.info(stringBuilder.toString());
+      log.info(stringBuilder.toString());
     }
   }
 
@@ -93,13 +93,13 @@ public class P6spyCustomLogger extends FormattedLogger {
   @Override
   public boolean isCategoryEnabled(Category category) {
     if (Category.ERROR.equals(category)) {
-      return logger.isErrorEnabled();
+      return log.isErrorEnabled();
     } else if (Category.WARN.equals(category)) {
-      return logger.isWarnEnabled();
+      return log.isWarnEnabled();
     } else if (Category.DEBUG.equals(category)) {
-      return logger.isDebugEnabled();
+      return log.isDebugEnabled();
     } else {
-      return logger.isInfoEnabled();
+      return log.isInfoEnabled();
     }
   }
 

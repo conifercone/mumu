@@ -23,10 +23,10 @@ import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,10 +38,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 验证码相关接口
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @RestController
+@Validated
 @RequestMapping("/captcha")
 @Tag(name = "验证码管理")
 public class CaptchaController {
@@ -59,7 +60,7 @@ public class CaptchaController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public SimpleCaptchaGeneratedDTO simple(
-    @ModelAttribute @Valid SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
+    @ModelAttribute @Validated SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
     return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
   }
 

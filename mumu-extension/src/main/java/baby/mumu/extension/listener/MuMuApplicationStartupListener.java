@@ -24,15 +24,15 @@ import org.springframework.context.ApplicationListener;
 /**
  * 项目启动成功监听器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 public class MuMuApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
-  private final Logger logger = LoggerFactory.getLogger(MuMuApplicationStartupListener.class);
+  private final Logger log = LoggerFactory.getLogger(MuMuApplicationStartupListener.class);
 
   @Override
   public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
-    logger.info("🎉 Startup completed!");
+    log.info("🎉 Startup completed!");
   }
 }

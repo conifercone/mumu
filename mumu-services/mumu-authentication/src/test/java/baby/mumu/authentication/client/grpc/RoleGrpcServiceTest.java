@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * RoleGrpcService单元测试
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -53,7 +53,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   private final RoleGrpcService roleGrpcService;
   private final MockMvc mockMvc;
-  private static final Logger logger = LoggerFactory.getLogger(RoleGrpcServiceTest.class);
+  private static final Logger log = LoggerFactory.getLogger(RoleGrpcServiceTest.class);
 
   @Autowired
   public RoleGrpcServiceTest(RoleGrpcService roleGrpcService, MockMvc mockMvc) {
@@ -73,7 +73,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    logger.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+    log.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
     Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
     Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
   }
@@ -93,7 +93,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     pageOfRoleFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
         PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = pageOfRoleFindAllGrpcDTOListenableFuture.get();
-        logger.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+        log.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
         Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
         Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
@@ -114,7 +114,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleGrpcService.findById(
       Int64Value.of(0L),
       callCredentials);
-    logger.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+    log.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
     Assertions.assertNotNull(roleFindByIdGrpcDTO);
   }
 
@@ -130,7 +130,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     roleFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
         RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleFindByIdGrpcDTOListenableFuture.get();
-        logger.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+        log.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
         Assertions.assertNotNull(roleFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

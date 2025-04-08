@@ -1,105 +1,147 @@
-# 更新日志
+:doctype: article
+:imagesdir: .
+:icons: font
 
-- [简体中文](CHANGELOG.zh_CN.md)
-- [English](../CHANGELOG.md)
+= 更新日志
+
+- link:CHANGELOG.zh_CN.adoc[简体中文]
+- link:../CHANGELOG.adoc[English]
 
 该项目的所有显着更改都将记录在该文件中。
 
-格式基于[Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
-并且该项目遵循[语义版本控制](https://semver.org/spec/v2.0.0.html)。
+格式基于link:https://keepachangelog.com/en/1.1.0/[Keep a Changelog]， 并且该项目遵循link:https://semver.org/spec/v2.0.0.html[Semantic Versioning]。
 
-## [未发布]
+== [未发布]
 
-### ⭐ 新增
+=== ⭐ 新增
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
-## [2.8.0] - 2025-03-14
+== [2.9.0] - 2025-04-08
 
-### ⭐ 新增
+=== ⭐ 新增
 
-- 新增`sdkman`配置文件。
+- 新增配置文件。
 - 增加属性注释。
 - 增加模块描述。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
-- `jdk`升级至23。
+- `com.google.protobuf` 升级至0.9.5。
+- `flyway` 升级至11.6.0。
+- adoc替换md。
+- `com.palantir.javapoet` 替换 `com.squareup.javapoet`。
+- 优化zk分布式锁实现。
+- `io.hypersistence:hypersistence-utils-hibernate-63` 升级至3.9.9。
+- 修改依赖项名称。
+- 调整open-pull-requests-limit为20。
+- `com.google.guava:guava-bom` 升级至33.4.6-jre。
+- `io.swagger.core.v3:swagger-annotations-jakarta` 升级至2.2.29。
+- `io.freefair.lombok` 升级至8.13.1。
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.2。
+- `org.javamoney:moneta` 升级至1.4.5。
+- 重命名运行配置文件。
+- 用户语言偏好默认值修改为EN。
+- @Validated替换@Valid。
+- 优化配置类。
+- zookeeper分布式锁属性新增锁路径配置。
+- 修改获取分布式锁方法名。
+- `org.springframework.cloud:spring-cloud-dependencies` 升级至2024.0.1。
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` 升级至2.8.6。
+- `kotlin` 升级至2.1.20。
+- `spring boot` 升级至3.4.4。
+
+=== ⚠️ 移除
+
+- 删除使用频率低的运行文件。
+- 删除无用属性、类重命名。
+
+== [2.8.0] - 2025-03-14
+
+=== ⭐ 新增
+
+- 新增 `sdkman` 配置文件。
+- 增加属性注释。
+- 增加模块描述。
+
+=== 🕸️ 变更
+
+- `jdk` 升级至23。
 - 规范变量名称格式。
-- `hypersistence-utils-hibernate-63`升级至3.9.3。
-- `protobuf`升级至4.30.0。
-- `lombok`升级至8.12.2.1。
-- `org.apache.curator:curator-recipes`升级至5.8.0。
-- `grpc`升级至1.71.0。
+- `hypersistence-utils-hibernate-63` 升级至3.9.3。
+- `protobuf` 升级至4.30.0。
+- `lombok` 升级至8.12.2.1。
+- `org.apache.curator:curator-recipes` 升级至5.8.0。
+- `grpc` 升级至1.71.0。
 - 规范包名。
-- `com.googlecode.libphonenumber:libphonenumber`升级至9.0.0。
-- `flyway`升级至11.3.4。
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.0。
+- `flyway` 升级至11.3.4。
 - gradle版本升级至8.13。
-- `com.deepl.api:deepl-java`升级至1.9.0。
-- `org.jobrunr:jobrunr-spring-boot-3-starter`升级至7.4.1。
+- `com.deepl.api:deepl-java` 升级至1.9.0。
+- `org.jobrunr:jobrunr-spring-boot-3-starter` 升级至7.4.1。
 
-## [2.7.0] - 2025-02-22
+== [2.7.0] - 2025-02-22
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 新增响应编码。
-- 新增`.mailmap`文件。
+- 新增 `.mailmap` 文件。
 - 账户新增手机号已验证、邮箱已验证属性字段。
 - 新增文档。
 - 添加idea编码配置。
 - 账户新增手机号有效性检验。
 - 账户新增国际电话区号。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 优化时间接口。
 - 账户注册密码增加正则校验。
 - 优化时间工具类。
-- `springboot`升级至3.4.3。
+- `springboot` 升级至3.4.3。
 - 优化属性类型节省内存占用。
-- 修改`mumu-users`表字段的默认值。
+- 修改 `mumu-users` 表字段的默认值。
 - 修改性别字段名称。
 - 文档重命名。
 - 优化ip工具类。
 - 合并工具类。
 - 优化git commit-msg脚本。
 - 修改初始密码以符合密码规则。
-- `hypersistence-utils-hibernate-63`升级至3.9.2。
-- `flyway`升级至11.3.2。
-- `tess4j`升级至5.15.0。
-- `springdoc-openapi-starter-webmvc-ui`升级至2.8.5。
-- `deepl-java`升级至1.8.1。
+- `hypersistence-utils-hibernate-63` 升级至3.9.2。
+- `flyway` 升级至11.3.2。
+- `tess4j` 升级至5.15.0。
+- `springdoc-openapi-starter-webmvc-ui` 升级至2.8.5。
+- `deepl-java` 升级至1.8.1。
 - 统一脚本位置。
-- 优化`pmd`、`checkstyle`任务。
+- 优化 `pmd` 、`checkstyle` 任务。
 - 开启配置缓存。
 - 修改缓存key名。
 - 存储名称统一增加前缀防止重复。
 - 集合名统一增加前缀防止重复。
 - 表名统一增加前缀防止重复。
 - 优化token端点错误处理逻辑。
-- `swagger-annotations-jakarta`升级至2.2.28。
-- `lombok`升级至8.12.1。
+- `swagger-annotations-jakarta` 升级至2.2.28。
+- `lombok` 升级至8.12.1。
 - 更换图标。
-- `jobrunr-spring-boot-3-starter`升级至7.4.0。
-- `grpc`升级至1.70.0。
-- `org.jetbrains:annotations`升级至26.0.2。
-- `kotlin`升级至2.1.10。
+- `jobrunr-spring-boot-3-starter` 升级至7.4.0。
+- `grpc` 升级至1.70.0。
+- `org.jetbrains:annotations` 升级至26.0.2。
+- `kotlin` 升级至2.1.10。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 解决编译警告。
 - 修复刷新token异常。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 删除无用依赖。
 - 移除无用代码。
 
-## [2.6.0] - 2025-01-25
+== [2.6.0] - 2025-01-25
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 新增响应编码。
 - RateLimitingCustomGenerateProvider增加bean创建条件。
@@ -113,7 +155,7 @@
 - 新增设置账户默认地址和查询附近的账户接口。
 - 账户地址新增定位属性。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 归档角色、权限查询新增描述信息匹配条件。
 - 角色查询新增描述信息匹配条件。
@@ -139,17 +181,17 @@
 - 系统设置增加缓存。
 - resilience4j-retry升级至2.3.0。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复签名过滤器中文乱码问题。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 移除规则引擎。
 
-## [2.5.0] - 2024-12-31
+== [2.5.0] - 2024-12-31
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 验证码生成增加参数校验。
 - 增加方法注释。
@@ -158,7 +200,7 @@
 - 新增根据code查询角色接口。
 - 权限验证可以指定权限允许范围。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 修改方法名。
 - 修改响应状态值引用。
@@ -177,18 +219,18 @@
 - 重构验证码生成逻辑。
 - 替换已弃用代码。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复角色账户新增失败。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 删除无用功能。
 - 删除无用文件。
 
-## [2.4.0] - 2024-12-14
+== [2.4.0] - 2024-12-14
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 账户领域模型新增数字偏好属性。
 - 集成规则引擎。
@@ -208,7 +250,7 @@
 - 新增根据ID查询角色grpc接口。
 - 角色新增血缘关系。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 长整型序列化成字符串防止丢失精度。
 - 类名规范性修改。
@@ -237,18 +279,18 @@
 - SpringBoot升级至3.4.0。
 - org.jobrunr:jobrunr-spring-boot-3-starter升级至7.3.2。
 - commons-io:commons-io升级至2.18.0。
-- 修改TokenGatewayImpl#validity方法验证逻辑。
+- 修改TokenGatewayImpl=validity方法验证逻辑。
 - 重新梳理token缓存和校验逻辑。
 - gradle升级至8.11.1。
 - 优化token权限范围。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复授权码模式不可用。
 
-## [2.3.0] - 2024-11-19
+== [2.3.0] - 2024-11-19
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 国际化新增日语、中文繁体、韩语、俄语支持。
 - 新增数字签名过滤器预防重放攻击。
@@ -262,7 +304,7 @@
 - 新增git hook脚本。
 - 权限新增血缘关系功能。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 优化数据源拓展配置。
 - 优化签名验证逻辑。
@@ -280,14 +322,14 @@
 - springboot升级至3.3.5。
 - org.apache.zookeeper:zookeeper升级至3.9.3。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复Intellij启动项目banner信息缺失问题。
 - 修复代码规范问题。
 
-## [2.2.0] - 2024-10-24
+== [2.2.0] - 2024-10-24
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 统一响应结果增加traceId字段。
 - 统一响应结果增加时间戳字段。
@@ -312,11 +354,11 @@
 - 角色新增不查询总数的分页查询。
 - MapStruct mapper统一增加unmappedTargetPolicy = ReportingPolicy.IGNORE。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复update_license_current_year.sh执行后可能导致文件内容乱码问题。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 规范接口参数，降低复杂度。
 - 优化grpc接口。
@@ -348,14 +390,14 @@
 - 账户性别&语言类型修改为varchar消除数据库差异。
 - 更新注解处理器提示信息。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 移除不常用且用途危险的grpc方法。
 - 删除认证相关重复配置。
 
-## [2.1.0] - 2024-09-30
+== [2.1.0] - 2024-09-30
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 新增条件执行器。
 - 新增条件注解。
@@ -373,11 +415,11 @@
 - 新增根据ID删除权限归档数据定时任务。
 - 危险操作注解value属性增加参数替换功能。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复根据ID更新用户角色接口时用户地址为空问题。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 按照数据库范式重构账户和角色映射关系，允许账户同时拥有多个角色。
 - 账户支持添加多个地址。
@@ -393,7 +435,7 @@
 - 修改jpa扫描范围。
 - springboot升级至3.3.4。
 - protobuf升级至4.28.2。
-- 修改Rsa#jksKeyPair默认值。
+- 修改Rsa=jksKeyPair默认值。
 - 完善账户注册grpc接口参数属性。
 - flyway升级至10.18.0。
 - mapstruct升级至1.6.2。
@@ -402,14 +444,14 @@
 - 优化项目结构。
 - 优化权限归档定时任务执行逻辑。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 统一认证端点处理器去除日志自动上传功能降低架构复杂度。
 - 删除暂时不用的插件。
 
-## [2.0.0] - 2024-09-06
+== [2.0.0] - 2024-09-06
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 添加了中文版的 README 文档。
 - 添加了中文版的贡献指南。
@@ -429,7 +471,7 @@
 - 增加了归档时的权限，判断是否正在使用。
 - 添加了分页查询归档权限的接口。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 项目重命名。
 - 优化单元测试逻辑。
@@ -441,9 +483,9 @@
 - 使用 commons-lang3 的 StringUtils 替换 spring 的 StringUtils。
 - 为相关实体添加了序列化接口。
 
-## [1.0.4] - 2024-08-27
+== [1.0.4] - 2024-08-27
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 添加了 PR 徽章。
 - 添加了国际化信息。
@@ -468,11 +510,11 @@
 - 为账户新增了归档和恢复功能。
 - 添加了 Slack 徽章。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复权限验证异常。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 修改了慢 SQL 表格式。
 - 修改了慢 SQL 统计阈值。
@@ -490,14 +532,14 @@
 - Guava 版本升级到 33.3.0-jre。
 - Minio 版本升级到 8.5.12。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 全局排除 tomcat。
 - 消息服务消息状态删除存档属性。
 
-## [1.0.3] - 2024-08-07
+== [1.0.3] - 2024-08-07
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 添加了自定义 JKS 密钥功能。
 - 添加了 `NotBlankOrNull` 校验注解。
@@ -527,12 +569,12 @@
 - 添加了基于 ID 删除文本订阅消息的功能。
 - 添加了基于 ID 阅读文本订阅消息的功能。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复权限验证异常。
 - 修复拼写错误。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 修改 GitHub Actions 的默认分支为 `develop`。
 - 规范 `libs.versions.toml` 的键值命名。
@@ -541,15 +583,15 @@
 - `redis-om-spring` 升级到 0.9.4。
 - 添加了基于 ID 阅读文本订阅消息的限制。
 - 添加了基于 ID 阅读文本广播消息的限制。
-- `SubscriptionTextMessageRepository#findByIdAndReceiverId` 参数添加了 `NotNull` 注解。
+- `SubscriptionTextMessageRepository=findByIdAndReceiverId` 参数添加了 `NotNull` 注解。
 - 统一修改了 `EnableRedisDocumentRepositories` 注解的范围。
 - 分页查询统一添加了页码和当前页码参数值的校验。
 - 优化了订阅和广播通道的存储逻辑。
 - 将 `group` 和 `version` 提取到 `gradle.properties` 文件中。
 
-## [1.0.2] - 2024-07-19
+== [1.0.2] - 2024-07-19
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 集成了 `redis-om-spring` 注解处理器。
 - 异常提示内容适应用户语言偏好。
@@ -563,12 +605,12 @@
 - 消息模块实现了订阅文本消息转发功能。
 - 消息模块实现了广播文本消息发布功能。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复权限名称格式提示信息错误。
 - 修复token有效性验证失败的问题。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 权限代码添加了唯一约束。
 - 修改了 gRPC 同步调用方法。
@@ -590,14 +632,14 @@
 - `PgSqlFunctionNameConstants` 添加了 `final` 访问修饰符。
 - Gradle 从 Groovy 迁移到 Kotlin。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 删除 log4j2 OnStartupTriggeringPolicy 策略。
 - 删除gradle jvmargs中的-Xmx、-XX:MaxMetaspaceSize配置。
 
-## [1.0.1] - 2024-06-28
+== [1.0.1] - 2024-06-28
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 唯一数据生成服务新增了代码生成和验证功能。
 - 添加了邮件服务。
@@ -608,12 +650,12 @@
 - 唯一数据生成服务中新增了获取可用时区列表的接口。
 - 新增了短信模块。
 
-### 🐞 修复
+=== 🐞 修复
 
 - 修复了事务无效的问题。
 - 修复了国际化异常提示错误。
 
-### 🕸️ 变更
+=== 🕸️ 变更
 
 - 账户注册功能新增了时区有效性检查。
 - 账户注册功能新增了验证码检查。
@@ -627,14 +669,14 @@
 - `redis-om-spring` 升级到 0.9.3。
 - `hypersistence-utils-hibernate-63` 升级到 3.7.7。
 
-### ⚠️ 移除
+=== ⚠️ 移除
 
 - 删除 Flyway gradle 插件。
 - sql 文件删除许可证。
 
-## [1.0.0] - 2024-06-13
+== [1.0.0] - 2024-06-13
 
-### ⭐ 新增
+=== ⭐ 新增
 
 - 身份验证服务器。
 - 资源服务器客户端。
@@ -642,21 +684,3 @@
 - 系统日志收集功能。
 - 分布式唯一主键生成。
 - 基于zookeeper的分布式锁。
-
-[//]: # (@formatter:off)
-[未发布]: https://github.com/conifercone/mumu/compare/v2.8.0...develop
-[2.8.0]: https://github.com/conifercone/mumu/compare/v2.7.0...v2.8.0
-[2.7.0]: https://github.com/conifercone/mumu/compare/v2.6.0...v2.7.0
-[2.6.0]: https://github.com/conifercone/mumu/compare/v2.5.0...v2.6.0
-[2.5.0]: https://github.com/conifercone/mumu/compare/v2.4.0...v2.5.0
-[2.4.0]: https://github.com/conifercone/mumu/compare/v2.3.0...v2.4.0
-[2.3.0]: https://github.com/conifercone/mumu/compare/v2.2.0...v2.3.0
-[2.2.0]: https://github.com/conifercone/mumu/compare/v2.1.0...v2.2.0
-[2.1.0]: https://github.com/conifercone/mumu/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/conifercone/mumu/compare/v1.0.4...v2.0.0
-[1.0.4]: https://github.com/conifercone/mumu/compare/v1.0.3...v1.0.4
-[1.0.3]: https://github.com/conifercone/mumu/compare/v1.0.2...v1.0.3
-[1.0.2]: https://github.com/conifercone/mumu/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/conifercone/mumu/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/conifercone/mumu/releases/tag/v1.0.0
-[//]: # (@formatter:on)

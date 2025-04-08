@@ -27,7 +27,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 /**
  * Thymeleaf模板邮件操作类
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1
  */
 @Component

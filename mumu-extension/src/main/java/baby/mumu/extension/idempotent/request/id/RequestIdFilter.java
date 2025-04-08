@@ -35,13 +35,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * request id 过滤器
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.3.0
  */
 public class RequestIdFilter extends OncePerRequestFilter {
 
   private final RequestIdIdempotentProcessor requestIdIdempotentProcessor;
-  private static final Logger logger = LoggerFactory.getLogger(
+  private static final Logger log = LoggerFactory.getLogger(
     RequestIdFilter.class);
   private final ExtensionProperties extensionProperties;
   private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -62,7 +62,7 @@ public class RequestIdFilter extends OncePerRequestFilter {
       extensionProperties.getIdempotent().getAllowlist())) && (
       StringUtils.isBlank(requestIdHeaderValue) || requestIdIdempotentProcessor.processed(
         requestIdHeaderValue))) {
-      logger.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
+      log.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
       response.setStatus(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getStatus());
       ResponseWrapper.exceptionResponse(response, ResponseCode.REQUEST_HAS_BEEN_PROCESSED);
       return;

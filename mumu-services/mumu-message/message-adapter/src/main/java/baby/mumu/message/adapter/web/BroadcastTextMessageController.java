@@ -22,11 +22,11 @@ import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,10 +41,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 文本广播消息管理
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.2
  */
 @RestController
+@Validated
 @RequestMapping("/broadcastTextMsg")
 @Tag(name = "文本广播消息管理")
 public class BroadcastTextMessageController {
@@ -63,7 +64,7 @@ public class BroadcastTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.2")
   public void forward(
-    @RequestBody @Valid BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
+    @RequestBody @Validated BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd) {
     broadcastTextMessageService.forwardMsg(broadcastTextMessageForwardCmd);
   }
 
@@ -91,7 +92,7 @@ public class BroadcastTextMessageController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.3")
   public Page<BroadcastTextMessageFindAllYouSendDTO> findAllYouSend(
-    @ModelAttribute @Valid BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
+    @ModelAttribute @Validated BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd) {
     return broadcastTextMessageService.findAllYouSend(broadcastTextMessageFindAllYouSendCmd);
   }
 

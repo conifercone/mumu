@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 日志服务全局配置信息
  *
- * @author <a href="mailto:kaiyu.shan@mumu.baby">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
@@ -43,12 +43,6 @@ public class LogProperties {
 
   @NestedConfigurationProperty
   private Kafka kafka = new Kafka();
-
-
-  /**
-   * 是否开启服务日志
-   */
-  private boolean enableLog = false;
 
   @Data
   public static class Elasticsearch {
@@ -73,7 +67,7 @@ public class LogProperties {
     /**
      * 是否启用
      */
-    private boolean enabled;
+    private boolean enabled = true;
   }
 
   @Data
@@ -82,6 +76,6 @@ public class LogProperties {
     /**
      * 是否启用
      */
-    private boolean enabled;
+    private boolean enabled = true;
   }
 }
