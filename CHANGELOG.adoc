@@ -19,6 +19,45 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.9.0] - 2025-04-08
+
+=== ⭐ Added
+
+- Added configuration file.
+- Add attribute comments.
+- Added module description.
+
+=== 🕸️ Changed
+
+- `com.google.protobuf` Upgrade to 0.9.5.
+- `flyway` upgrade to 11.6.0.
+- adoc replace md.
+- `com.palantir.javapoet` Replace `com.squareup.javapoet`.
+- Optimize the implementation of zk distributed locks.
+- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.9.9.
+- Modify the dependency name.
+- Adjust open-pull-requests-limit to 20.
+- `com.google.guava:guava-bom` Upgrade to 33.4.6-jre.
+- `io.swagger.core.v3:swagger-annotations-jakarta` Upgrade to 2.2.29.
+- ʻio.freefair.lombok` Upgrade to 8.13.1.
+- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.2.
+- `org.javamoney:moneta` Upgrade to 1.4.5.
+- Rename the run configuration file.
+- The default value of user language preference is changed to EN.
+- @Validated replace @Valid.
+- Optimize configuration class.
+- Zookeeper distributed lock attribute has added lock path configuration.
+- Modify the name of the distributed lock method.
+- `org.springframework.cloud:spring-cloud-dependencies` Upgrade to 2024.0.1.
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` Upgrade to 2.8.6.
+- `kotlin` upgrade to 2.1.20.
+- `spring boot` upgrade to 3.4.4.
+
+=== ⚠️ Removed
+
+- Delete running files that are used frequently.
+- Remove useless attributes, class renaming.
+
 == [2.8.0] - 2025-03-14
 
 === ⭐ Added

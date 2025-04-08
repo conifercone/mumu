@@ -19,36 +19,75 @@
 
 === ⚠️ 移除
 
-== [2.8.0] - 2025-03-14
+== [2.9.0] - 2025-04-08
 
 === ⭐ 新增
 
-- 新增`sdkman`配置文件。
+- 新增配置文件。
 - 增加属性注释。
 - 增加模块描述。
 
 === 🕸️ 变更
 
-- `jdk`升级至23。
+- `com.google.protobuf` 升级至0.9.5。
+- `flyway` 升级至11.6.0。
+- adoc替换md。
+- `com.palantir.javapoet` 替换 `com.squareup.javapoet`。
+- 优化zk分布式锁实现。
+- `io.hypersistence:hypersistence-utils-hibernate-63` 升级至3.9.9。
+- 修改依赖项名称。
+- 调整open-pull-requests-limit为20。
+- `com.google.guava:guava-bom` 升级至33.4.6-jre。
+- `io.swagger.core.v3:swagger-annotations-jakarta` 升级至2.2.29。
+- `io.freefair.lombok` 升级至8.13.1。
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.2。
+- `org.javamoney:moneta` 升级至1.4.5。
+- 重命名运行配置文件。
+- 用户语言偏好默认值修改为EN。
+- @Validated替换@Valid。
+- 优化配置类。
+- zookeeper分布式锁属性新增锁路径配置。
+- 修改获取分布式锁方法名。
+- `org.springframework.cloud:spring-cloud-dependencies` 升级至2024.0.1。
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` 升级至2.8.6。
+- `kotlin` 升级至2.1.20。
+- `spring boot` 升级至3.4.4。
+
+=== ⚠️ 移除
+
+- 删除使用频率低的运行文件。
+- 删除无用属性、类重命名。
+
+== [2.8.0] - 2025-03-14
+
+=== ⭐ 新增
+
+- 新增 `sdkman` 配置文件。
+- 增加属性注释。
+- 增加模块描述。
+
+=== 🕸️ 变更
+
+- `jdk` 升级至23。
 - 规范变量名称格式。
-- `hypersistence-utils-hibernate-63`升级至3.9.3。
-- `protobuf`升级至4.30.0。
-- `lombok`升级至8.12.2.1。
-- `org.apache.curator:curator-recipes`升级至5.8.0。
-- `grpc`升级至1.71.0。
+- `hypersistence-utils-hibernate-63` 升级至3.9.3。
+- `protobuf` 升级至4.30.0。
+- `lombok` 升级至8.12.2.1。
+- `org.apache.curator:curator-recipes` 升级至5.8.0。
+- `grpc` 升级至1.71.0。
 - 规范包名。
-- `com.googlecode.libphonenumber:libphonenumber`升级至9.0.0。
-- `flyway`升级至11.3.4。
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.0。
+- `flyway` 升级至11.3.4。
 - gradle版本升级至8.13。
-- `com.deepl.api:deepl-java`升级至1.9.0。
-- `org.jobrunr:jobrunr-spring-boot-3-starter`升级至7.4.1。
+- `com.deepl.api:deepl-java` 升级至1.9.0。
+- `org.jobrunr:jobrunr-spring-boot-3-starter` 升级至7.4.1。
 
 == [2.7.0] - 2025-02-22
 
 === ⭐ 新增
 
 - 新增响应编码。
-- 新增`.mailmap`文件。
+- 新增 `.mailmap` 文件。
 - 账户新增手机号已验证、邮箱已验证属性字段。
 - 新增文档。
 - 添加idea编码配置。
@@ -60,35 +99,35 @@
 - 优化时间接口。
 - 账户注册密码增加正则校验。
 - 优化时间工具类。
-- `springboot`升级至3.4.3。
+- `springboot` 升级至3.4.3。
 - 优化属性类型节省内存占用。
-- 修改`mumu-users`表字段的默认值。
+- 修改 `mumu-users` 表字段的默认值。
 - 修改性别字段名称。
 - 文档重命名。
 - 优化ip工具类。
 - 合并工具类。
 - 优化git commit-msg脚本。
 - 修改初始密码以符合密码规则。
-- `hypersistence-utils-hibernate-63`升级至3.9.2。
-- `flyway`升级至11.3.2。
-- `tess4j`升级至5.15.0。
-- `springdoc-openapi-starter-webmvc-ui`升级至2.8.5。
-- `deepl-java`升级至1.8.1。
+- `hypersistence-utils-hibernate-63` 升级至3.9.2。
+- `flyway` 升级至11.3.2。
+- `tess4j` 升级至5.15.0。
+- `springdoc-openapi-starter-webmvc-ui` 升级至2.8.5。
+- `deepl-java` 升级至1.8.1。
 - 统一脚本位置。
-- 优化`pmd`、`checkstyle`任务。
+- 优化 `pmd` 、`checkstyle` 任务。
 - 开启配置缓存。
 - 修改缓存key名。
 - 存储名称统一增加前缀防止重复。
 - 集合名统一增加前缀防止重复。
 - 表名统一增加前缀防止重复。
 - 优化token端点错误处理逻辑。
-- `swagger-annotations-jakarta`升级至2.2.28。
-- `lombok`升级至8.12.1。
+- `swagger-annotations-jakarta` 升级至2.2.28。
+- `lombok` 升级至8.12.1。
 - 更换图标。
-- `jobrunr-spring-boot-3-starter`升级至7.4.0。
-- `grpc`升级至1.70.0。
-- `org.jetbrains:annotations`升级至26.0.2。
-- `kotlin`升级至2.1.10。
+- `jobrunr-spring-boot-3-starter` 升级至7.4.0。
+- `grpc` 升级至1.70.0。
+- `org.jetbrains:annotations` 升级至26.0.2。
+- `kotlin` 升级至2.1.10。
 
 === 🐞 修复
 
