@@ -159,13 +159,13 @@ public class AccountGatewayImpl implements AccountGateway {
       accountCacheRepository.deleteById(account.getId());
       accountRoleCacheRepository.deleteById(account.getId());
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setContent("用户注册")
+        .setContent("User registration")
         .setBizNo(account.getUsername())
-        .setSuccess(String.format("%s注册成功", account.getUsername()))
+        .setSuccess(String.format("User %s registration successfully", account.getUsername()))
         .build());
     }, () -> {
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setContent("用户注册")
+        .setContent("User registration")
         .setBizNo(account.getUsername())
         .setFail(ResponseCode.ACCOUNT_ALREADY_EXISTS.getMessage())
         .build());
@@ -558,9 +558,9 @@ public class AccountGatewayImpl implements AccountGateway {
         SecurityContextHolder.getContext().getAuthentication()));
       SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setContent("用户退出登录")
+          .setContent("User logout")
           .setBizNo(accountName)
-          .setSuccess(String.format("用户%s成功退出登录", accountName))
+          .setSuccess(String.format("User %s successfully logged out", accountName))
           .build()));
     });
   }
@@ -584,9 +584,9 @@ public class AccountGatewayImpl implements AccountGateway {
       accountRoleCacheRepository.deleteById(accountId);
       SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setContent("用户下线")
+          .setContent("User offline")
           .setBizNo(accountName)
-          .setSuccess(String.format("用户%s成功下线", accountName))
+          .setSuccess(String.format("User %s successfully offline", accountName))
           .build()));
     });
   }
