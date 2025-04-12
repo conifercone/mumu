@@ -24,14 +24,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 密码模式 token redis数据对象
+ * oidc id token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
-@Document(value = "mumu:authentication:password-token")
-public class PasswordTokenRedisPO {
+@Document(value = "mumu:authentication:oidc-id-token")
+public class OidcIdTokenCacheablePO {
 
   @Id
   @Indexed

@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.cache;
+package baby.mumu.authentication.infrastructure.relations.cache;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountRedisPO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
-import java.util.Optional;
 
 /**
- * 账户基本信息缓存
+ * 角色权限关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-public interface AccountRedisRepository extends
-  RedisDocumentRepository<AccountRedisPO, Long> {
+public interface RolePermissionCacheRepository extends
+  RedisDocumentRepository<RolePermissionCacheablePO, Long> {
 
-  Optional<AccountRedisPO> findByUsername(String username);
-
-  Optional<AccountRedisPO> findByEmail(String email);
 }

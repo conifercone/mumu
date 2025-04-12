@@ -13,39 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po;
+package baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
+import baby.mumu.basis.po.jpa.JpaCacheableBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.TextIndexed;
+import java.io.Serial;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 授权码 token redis数据对象
+ * 角色基本信息缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 2.2.0
  */
 @Data
-@Document(value = "mumu:authentication:authorize-code-token")
-public class AuthorizeCodeTokenRedisPO {
+@EqualsAndHashCode(callSuper = true)
+@Document(value = "mumu:authentication:role")
+public class RoleCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
+  @Serial
+  private static final long serialVersionUID = 2814267592168109003L;
+
+  /**
+   * 角色ID
+   */
   @Id
   @Indexed
   private Long id;
 
   /**
-   * token值
+   * 角色编码
    */
-  @TextIndexed
-  private String tokenValue;
+  @Indexed
+  private String code;
+
+  /**
+   * 角色名称
+   */
+  private String name;
+
+  private String description;
 
   /**
    * 存活时间
+   * <p>低等级别变化数据：默认缓存时间为6小时</p>
    */
   @TimeToLive
-  private Long ttl = CacheLevelEnum.HIGH.getSecondTtl();
+  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
 }

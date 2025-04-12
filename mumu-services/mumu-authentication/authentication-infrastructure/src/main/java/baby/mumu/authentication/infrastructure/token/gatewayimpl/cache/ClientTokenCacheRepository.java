@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.extension.nosql;
+package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache;
 
-import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_MONGODB_AUDITOR_AWARE;
-
-import baby.mumu.basis.po.jpa.MuMuJpaMongodbAuditorAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.ClientTokenCacheablePO;
+import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * mongo配置类
+ * client token redis repository
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 1.0.2
  */
-@Configuration
-public class MongodbConfiguration {
+public interface ClientTokenCacheRepository extends
+  RedisDocumentRepository<ClientTokenCacheablePO, String> {
 
-  @Bean(name = MUMU_JPA_MONGODB_AUDITOR_AWARE)
-  public MuMuJpaMongodbAuditorAware mumuJpaMongodbAuditorAware() {
-    return new MuMuJpaMongodbAuditorAware();
-  }
 }

@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.role.gatewayimpl.cache;
+package baby.mumu.authentication.infrastructure.account.gatewayimpl.cache;
 
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
-import java.util.List;
 import java.util.Optional;
 
 /**
- * 角色基本信息缓存（不包含角色关联的权限信息）
+ * 账户基本信息缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-public interface RoleRedisRepository extends
-  RedisDocumentRepository<RoleRedisPO, Long> {
+public interface AccountCacheRepository extends
+  RedisDocumentRepository<AccountCacheablePO, Long> {
 
-  List<RoleRedisPO> findByCodeIn(List<String> codes);
+  Optional<AccountCacheablePO> findByUsername(String username);
 
-  Optional<RoleRedisPO> findByCode(String code);
+  Optional<AccountCacheablePO> findByEmail(String email);
 }

@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.relations.cache;
+package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache;
 
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.AuthorizeCodeTokenCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * 角色权限关系缓存
+ * 授权码 token redis repository
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
-public interface RolePermissionRedisRepository extends
-  RedisDocumentRepository<RolePermissionRedisPO, Long> {
+public interface AuthorizeCodeTokenCacheRepository extends
+  RedisDocumentRepository<AuthorizeCodeTokenCacheablePO, Long> {
 
 }

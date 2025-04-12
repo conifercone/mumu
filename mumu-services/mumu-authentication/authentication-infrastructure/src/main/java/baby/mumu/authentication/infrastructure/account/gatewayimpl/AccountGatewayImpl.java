@@ -21,17 +21,17 @@ import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.AccountRedisRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.AccountCacheRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressMongodbPO;
-import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleRedisRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheRepository;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
@@ -82,50 +82,50 @@ import org.springframework.util.Assert;
 public class AccountGatewayImpl implements AccountGateway {
 
   private final AccountRepository accountRepository;
-  private final PasswordTokenRepository passwordTokenRepository;
+  private final PasswordTokenCacheRepository passwordTokenCacheRepository;
   private final PasswordEncoder passwordEncoder;
   private final OperationLogGrpcService operationLogGrpcService;
   private final ExtensionProperties extensionProperties;
   private final AccountConvertor accountConvertor;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
+  private final AccountAddressDocumentRepository accountAddressDocumentRepository;
   private final JobScheduler jobScheduler;
   private final AccountRoleRepository accountRoleRepository;
-  private final AccountRedisRepository accountRedisRepository;
-  private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
-  private final OidcIdTokenRepository oidcIdTokenRepository;
+  private final AccountCacheRepository accountCacheRepository;
+  private final AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository;
+  private final OidcIdTokenCacheRepository oidcIdTokenCacheRepository;
   private final ApplicationEventPublisher applicationEventPublisher;
-  private final AccountRoleRedisRepository accountRoleRedisRepository;
+  private final AccountRoleCacheRepository accountRoleCacheRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository,
-    PasswordTokenRepository passwordTokenRepository,
+    PasswordTokenCacheRepository passwordTokenCacheRepository,
     PasswordEncoder passwordEncoder,
     OperationLogGrpcService operationLogGrpcService,
     ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressMongodbRepository accountAddressMongodbRepository, JobScheduler jobScheduler,
+    AccountAddressDocumentRepository accountAddressDocumentRepository, JobScheduler jobScheduler,
     AccountRoleRepository accountRoleRepository,
-    AccountRedisRepository accountRedisRepository,
-    AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
-    OidcIdTokenRepository oidcIdTokenRepository,
+    AccountCacheRepository accountCacheRepository,
+    AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository,
+    OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
     ApplicationEventPublisher applicationEventPublisher,
-    AccountRoleRedisRepository accountRoleRedisRepository) {
+    AccountRoleCacheRepository accountRoleCacheRepository) {
     this.accountRepository = accountRepository;
-    this.passwordTokenRepository = passwordTokenRepository;
+    this.passwordTokenCacheRepository = passwordTokenCacheRepository;
     this.passwordEncoder = passwordEncoder;
     this.operationLogGrpcService = operationLogGrpcService;
     this.extensionProperties = extensionProperties;
     this.accountConvertor = accountConvertor;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
+    this.accountAddressDocumentRepository = accountAddressDocumentRepository;
     this.jobScheduler = jobScheduler;
     this.accountRoleRepository = accountRoleRepository;
-    this.accountRedisRepository = accountRedisRepository;
-    this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
-    this.oidcIdTokenRepository = oidcIdTokenRepository;
+    this.accountCacheRepository = accountCacheRepository;
+    this.accountSystemSettingsDocumentRepository = accountSystemSettingsDocumentRepository;
+    this.oidcIdTokenCacheRepository = oidcIdTokenCacheRepository;
     this.applicationEventPublisher = applicationEventPublisher;
-    this.accountRoleRedisRepository = accountRoleRedisRepository;
+    this.accountRoleCacheRepository = accountRoleCacheRepository;
   }
 
   /**
@@ -154,10 +154,10 @@ public class AccountGatewayImpl implements AccountGateway {
               .stream())
             .collect(
               Collectors.toList())).filter(CollectionUtils::isNotEmpty)
-        .ifPresent(accountAddressMongodbRepository::saveAll);
+        .ifPresent(accountAddressDocumentRepository::saveAll);
       accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-      accountRedisRepository.deleteById(account.getId());
-      accountRoleRedisRepository.deleteById(account.getId());
+      accountCacheRepository.deleteById(account.getId());
+      accountRoleCacheRepository.deleteById(account.getId());
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
         .setContent("用户注册")
         .setBizNo(account.getUsername())
@@ -181,12 +181,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
-    return accountRedisRepository.findByUsername(username).flatMap(accountConvertor::toEntity)
+    return accountCacheRepository.findByUsername(username).flatMap(accountConvertor::toEntity)
       .or(() -> {
         Optional<Account> account = accountRepository.findByUsername(username)
           .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountRedisPO)
-          .ifPresent(accountRedisRepository::save);
+        account.flatMap(accountConvertor::toAccountCacheablePO)
+          .ifPresent(accountCacheRepository::save);
         return account;
       });
   }
@@ -198,10 +198,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
-    return accountRedisRepository.findByEmail(email).flatMap(accountConvertor::toEntity).or(() -> {
+    return accountCacheRepository.findByEmail(email).flatMap(accountConvertor::toEntity).or(() -> {
       Optional<Account> account = accountRepository.findByEmail(email)
         .flatMap(accountConvertor::toEntity);
-      account.flatMap(accountConvertor::toAccountRedisPO).ifPresent(accountRedisRepository::save);
+      account.flatMap(accountConvertor::toAccountCacheablePO)
+        .ifPresent(accountCacheRepository::save);
       return account;
     });
   }
@@ -219,8 +220,8 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
           .ifPresent(accountPO -> {
             accountRepository.merge(accountPO);
-            accountRedisRepository.deleteById(accountId);
-            accountRoleRedisRepository.deleteById(accountId);
+            accountCacheRepository.deleteById(accountId);
+            accountRoleCacheRepository.deleteById(accountId);
           }), () -> {
           throw new MuMuException(ResponseCode.UNAUTHORIZED);
         }));
@@ -237,7 +238,7 @@ public class AccountGatewayImpl implements AccountGateway {
       .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(_ -> {
         accountRoleRepository.deleteByAccountId(accountId);
         accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-        accountRoleRedisRepository.deleteById(accountId);
+        accountRoleCacheRepository.deleteById(accountId);
       }));
   }
 
@@ -251,9 +252,9 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.findById(id).ifPresentOrElse((accountPO) -> {
       accountPO.setEnabled(false);
       accountRepository.merge(accountPO);
-      passwordTokenRepository.deleteById(id);
-      accountRedisRepository.deleteById(id);
-      accountRoleRedisRepository.deleteById(id);
+      passwordTokenCacheRepository.deleteById(id);
+      accountCacheRepository.deleteById(id);
+      accountRoleCacheRepository.deleteById(id);
     }, () -> {
       throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -266,13 +267,13 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> queryCurrentLoginAccount() {
-    return SecurityContextUtils.getLoginAccountId().flatMap(accountRedisRepository::findById)
+    return SecurityContextUtils.getLoginAccountId().flatMap(accountCacheRepository::findById)
       .flatMap(accountConvertor::toEntity).or(() -> {
         Optional<Account> account = accountRepository.findById(
             SecurityContextUtils.getLoginAccountId().get())
           .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountRedisPO)
-          .ifPresent(accountRedisRepository::save);
+        account.flatMap(accountConvertor::toAccountCacheablePO)
+          .ifPresent(accountCacheRepository::save);
         return account;
       });
   }
@@ -283,7 +284,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.0")
   public long onlineAccounts() {
-    return passwordTokenRepository.count();
+    return passwordTokenCacheRepository.count();
   }
 
   /**
@@ -299,8 +300,8 @@ public class AccountGatewayImpl implements AccountGateway {
         ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getMessage());
       accountPO.setPassword(passwordEncoder.encode(initialPassword));
       accountRepository.merge(accountPO);
-      accountRedisRepository.deleteById(accountPO.getId());
-      accountRoleRedisRepository.deleteById(accountPO.getId());
+      accountCacheRepository.deleteById(accountPO.getId());
+      accountRoleCacheRepository.deleteById(accountPO.getId());
     }, () -> {
       throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -321,11 +322,11 @@ public class AccountGatewayImpl implements AccountGateway {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
         }
         accountRepository.deleteById(accountPO.getId());
-        accountAddressMongodbRepository.deleteByUserId(accountPO.getId());
-        passwordTokenRepository.deleteById(accountPO.getId());
+        accountAddressDocumentRepository.deleteByUserId(accountPO.getId());
+        passwordTokenCacheRepository.deleteById(accountPO.getId());
         accountRoleRepository.deleteByAccountId(accountPO.getId());
-        accountRedisRepository.deleteById(accountPO.getId());
-        accountRoleRedisRepository.deleteById(accountPO.getId());
+        accountCacheRepository.deleteById(accountPO.getId());
+        accountRoleCacheRepository.deleteById(accountPO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.UNAUTHORIZED);
       });
@@ -374,8 +375,8 @@ public class AccountGatewayImpl implements AccountGateway {
           .findAny().orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
         .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
       accountRepository.merge(newAccountPO);
-      accountRedisRepository.deleteById(newAccountPO.getId());
-      accountRoleRedisRepository.deleteById(newAccountPO.getId());
+      accountCacheRepository.deleteById(newAccountPO.getId());
+      accountRoleCacheRepository.deleteById(newAccountPO.getId());
     } else {
       throw new MuMuException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
@@ -398,8 +399,8 @@ public class AccountGatewayImpl implements AccountGateway {
         accountArchivedPO.setArchived(true);
         accountArchivedRepository.persist(accountArchivedPO);
         accountRepository.deleteById(accountArchivedPO.getId());
-        accountRedisRepository.deleteById(accountArchivedPO.getId());
-        accountRoleRedisRepository.deleteById(accountArchivedPO.getId());
+        accountCacheRepository.deleteById(accountArchivedPO.getId());
+        accountRoleCacheRepository.deleteById(accountArchivedPO.getId());
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -413,10 +414,10 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);
-      accountAddressMongodbRepository.deleteByUserId(accountIdNonNull);
+      accountAddressDocumentRepository.deleteByUserId(accountIdNonNull);
       accountRoleRepository.deleteByAccountId(accountIdNonNull);
-      accountRedisRepository.deleteById(accountIdNonNull);
-      accountRoleRedisRepository.deleteById(accountIdNonNull);
+      accountCacheRepository.deleteById(accountIdNonNull);
+      accountRoleCacheRepository.deleteById(accountIdNonNull);
     });
   }
 
@@ -446,9 +447,9 @@ public class AccountGatewayImpl implements AccountGateway {
         .ifPresent(
           accountAddressPO -> accountRepository.findById(accountId).ifPresent(_ -> {
             accountAddressPO.setUserId(accountId);
-            accountAddressMongodbRepository.save(accountAddressPO);
-            accountRedisRepository.deleteById(accountId);
-            accountRoleRedisRepository.deleteById(accountId);
+            accountAddressDocumentRepository.save(accountAddressPO);
+            accountCacheRepository.deleteById(accountId);
+            accountRoleCacheRepository.deleteById(accountId);
           })));
   }
 
@@ -458,12 +459,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> getAccountBasicInfoById(Long id) {
-    return Optional.ofNullable(id).flatMap(accountRedisRepository::findById)
+    return Optional.ofNullable(id).flatMap(accountCacheRepository::findById)
       .flatMap(accountConvertor::toEntity).or(() -> {
         Optional<Account> account = accountRepository.findById(id)
           .flatMap(accountConvertor::toBasicInfoEntity);
-        account.flatMap(accountConvertor::toAccountRedisPO)
-          .ifPresent(accountRedisRepository::save);
+        account.flatMap(accountConvertor::toAccountCacheablePO)
+          .ifPresent(accountCacheRepository::save);
         return account;
       });
   }
@@ -475,14 +476,14 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void resetSystemSettingsById(String systemSettingsId) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(_ -> accountSystemSettingsMongodbRepository.findById(systemSettingsId))
+      .flatMap(_ -> accountSystemSettingsDocumentRepository.findById(systemSettingsId))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
       .flatMap(
-        accountConvertor::resetAccountSystemSettingMongodbPO)
+        accountConvertor::resetAccountSystemSettingsDocumentPO)
       .ifPresent(accountSystemSettingsMongodbPO -> {
-        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
-        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
       });
   }
 
@@ -493,14 +494,14 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void modifySystemSettings(AccountSystemSettings accountSystemSettings) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(_ -> accountSystemSettingsMongodbRepository.findById(
+      .flatMap(_ -> accountSystemSettingsDocumentRepository.findById(
         accountSystemSettings.getId()))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountSystemSettingsMongodbPO.getUserId()))
-      .flatMap(_ -> accountConvertor.toAccountSystemSettingMongodbPO(
+      .flatMap(_ -> accountConvertor.toAccountSystemSettingsDocumentPO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
-        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
-        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
       });
   }
 
@@ -511,14 +512,14 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void modifyAddress(AccountAddress accountAddress) {
     SecurityContextUtils.getLoginAccountId()
-      .flatMap(_ -> accountAddressMongodbRepository.findById(
+      .flatMap(_ -> accountAddressDocumentRepository.findById(
         accountAddress.getId()))
       .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountAddressMongodbPO.getUserId()))
       .flatMap(_ -> accountConvertor.toAccountAddressPO(
         accountAddress)).ifPresent(accountAddressMongodbPO -> {
-        accountAddressMongodbRepository.save(accountAddressMongodbPO);
-        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+        accountAddressDocumentRepository.save(accountAddressMongodbPO);
+        accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
       });
   }
 
@@ -530,15 +531,15 @@ public class AccountGatewayImpl implements AccountGateway {
   public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
     SecurityContextUtils.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountSystemSettings)
-        .flatMap(accountConvertor::toAccountSystemSettingMongodbPO)
+        .flatMap(accountConvertor::toAccountSystemSettingsDocumentPO)
         .filter(
-          accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbRepository.existsByUserIdAndProfile(
+          accountSystemSettingsMongodbPO -> !accountSystemSettingsDocumentRepository.existsByUserIdAndProfile(
             accountId, accountSystemSettingsMongodbPO.getProfile()))
         .ifPresent(
           accountSystemSettingsMongodbPO -> {
             accountSystemSettingsMongodbPO.setUserId(accountId);
-            accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
-            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+            accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
+            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
           }));
   }
 
@@ -549,10 +550,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
     SecurityContextUtils.getLoginAccountId().ifPresent(accountId -> {
-      passwordTokenRepository.deleteById(accountId);
-      oidcIdTokenRepository.deleteById(accountId);
-      accountRedisRepository.deleteById(accountId);
-      accountRoleRedisRepository.deleteById(accountId);
+      passwordTokenCacheRepository.deleteById(accountId);
+      oidcIdTokenCacheRepository.deleteById(accountId);
+      accountCacheRepository.deleteById(accountId);
+      accountRoleCacheRepository.deleteById(accountId);
       applicationEventPublisher.publishEvent(new LogoutSuccessEvent(
         SecurityContextHolder.getContext().getAuthentication()));
       SecurityContextUtils.getLoginAccountName().ifPresent(
@@ -572,14 +573,15 @@ public class AccountGatewayImpl implements AccountGateway {
   @DangerousOperation("强制ID为%0的用户下线")
   public void offline(Long id) {
     Optional.ofNullable(id).ifPresent(accountId -> {
-      passwordTokenRepository.findById(accountId)
+      passwordTokenCacheRepository.findById(accountId)
         .ifPresent(
-          passwordTokenRedisPO -> applicationEventPublisher.publishEvent(new OfflineSuccessEvent(
-            this, passwordTokenRedisPO.getTokenValue())));
-      passwordTokenRepository.deleteById(accountId);
-      oidcIdTokenRepository.deleteById(accountId);
-      accountRedisRepository.deleteById(accountId);
-      accountRoleRedisRepository.deleteById(accountId);
+          passwordTokenCacheablePO -> applicationEventPublisher.publishEvent(
+            new OfflineSuccessEvent(
+              this, passwordTokenCacheablePO.getTokenValue())));
+      passwordTokenCacheRepository.deleteById(accountId);
+      oidcIdTokenCacheRepository.deleteById(accountId);
+      accountCacheRepository.deleteById(accountId);
+      accountRoleCacheRepository.deleteById(accountId);
       SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setContent("用户下线")
@@ -632,18 +634,18 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public List<Account> nearby(double radiusInMeters) {
     return SecurityContextUtils.getLoginAccountId().flatMap(accountId ->
-        accountAddressMongodbRepository.findByUserId(accountId).stream()
-          .filter(AccountAddressMongodbPO::isDefaultAddress).findAny()
+        accountAddressDocumentRepository.findByUserId(accountId).stream()
+          .filter(AccountAddressDocumentPO::isDefaultAddress).findAny()
       ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
       .map(accountAddressMongodbPO -> {
-        List<AccountAddressMongodbPO> byLocationWithin = accountAddressMongodbRepository.findByLocationWithin(
+        List<AccountAddressDocumentPO> byLocationWithin = accountAddressDocumentRepository.findByLocationWithin(
           accountAddressMongodbPO.getLocation().getX(),
           accountAddressMongodbPO.getLocation().getY(), radiusInMeters / 6378137);
         return accountRepository.findAllById(byLocationWithin.stream().filter(
             accountAddressMongodbPOProbablyTheCurrentUser -> !Objects.equals(
               accountAddressMongodbPO.getUserId(),
               accountAddressMongodbPOProbablyTheCurrentUser.getUserId())).collect(
-            Collectors.toMap(AccountAddressMongodbPO::getUserId, AccountAddressMongodbPO::getUserId,
+            Collectors.toMap(AccountAddressDocumentPO::getUserId, AccountAddressDocumentPO::getUserId,
               (existing, _) -> existing)).values()).stream()
           .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
           .collect(Collectors.toList());
@@ -658,19 +660,19 @@ public class AccountGatewayImpl implements AccountGateway {
   public void setDefaultAddress(String addressId) {
     SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(addressId))
       .flatMap(accountId -> {
-          accountAddressMongodbRepository.saveAll(
-            accountAddressMongodbRepository.findByUserId(accountId).stream()
+          accountAddressDocumentRepository.saveAll(
+            accountAddressDocumentRepository.findByUserId(accountId).stream()
               .filter(accountAddressMongodbPO -> !addressId.equals(
                 accountAddressMongodbPO.getId()))
               .peek(accountAddressMongodbPO -> accountAddressMongodbPO.setDefaultAddress(false))
               .toList());
-          return accountAddressMongodbRepository.findById(addressId)
+          return accountAddressDocumentRepository.findById(addressId)
             .filter(accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId()));
         }
       ).ifPresent(accountAddressMongodbPO -> {
         accountAddressMongodbPO.setDefaultAddress(true);
-        accountAddressMongodbRepository.save(accountAddressMongodbPO);
-        accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+        accountAddressDocumentRepository.save(accountAddressMongodbPO);
+        accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
       });
   }
 
@@ -682,22 +684,22 @@ public class AccountGatewayImpl implements AccountGateway {
   public void setDefaultSystemSettings(String systemSettingsId) {
     SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(systemSettingsId))
       .flatMap(accountId -> {
-          accountSystemSettingsMongodbRepository.saveAll(
-            accountSystemSettingsMongodbRepository.findByUserId(accountId).stream()
+          accountSystemSettingsDocumentRepository.saveAll(
+            accountSystemSettingsDocumentRepository.findByUserId(accountId).stream()
               .filter(accountSystemSettingsMongodbPO -> !systemSettingsId.equals(
                 accountSystemSettingsMongodbPO.getId()))
               .peek(
                 accountSystemSettingsMongodbPO -> accountSystemSettingsMongodbPO.setDefaultSystemSettings(
                   false))
               .toList());
-          return accountSystemSettingsMongodbRepository.findById(systemSettingsId)
+          return accountSystemSettingsDocumentRepository.findById(systemSettingsId)
             .filter(accountSystemSettingsMongodbPO -> accountId.equals(
               accountSystemSettingsMongodbPO.getUserId()));
         }
       ).ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsMongodbPO.setDefaultSystemSettings(true);
-        accountSystemSettingsMongodbRepository.save(accountSystemSettingsMongodbPO);
-        accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
       });
   }
 
@@ -709,12 +711,12 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteAddress(String addressId) {
     if (StringUtils.isNotBlank(addressId)) {
       SecurityContextUtils.getLoginAccountId()
-        .flatMap(accountId -> accountAddressMongodbRepository.findById(addressId).filter(
+        .flatMap(accountId -> accountAddressDocumentRepository.findById(addressId).filter(
           accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId())))
         .filter(accountAddressMongodbPO -> !accountAddressMongodbPO.isDefaultAddress())
         .ifPresent(accountAddressMongodbPO -> {
-          accountAddressMongodbRepository.deleteById(addressId);
-          accountRedisRepository.deleteById(accountAddressMongodbPO.getUserId());
+          accountAddressDocumentRepository.deleteById(addressId);
+          accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
         });
     }
   }
@@ -728,15 +730,15 @@ public class AccountGatewayImpl implements AccountGateway {
     if (StringUtils.isNotBlank(systemSettingsId)) {
       SecurityContextUtils.getLoginAccountId()
         .flatMap(
-          accountId -> accountSystemSettingsMongodbRepository.findById(systemSettingsId).filter(
+          accountId -> accountSystemSettingsDocumentRepository.findById(systemSettingsId).filter(
             accountSystemSettingsMongodbPO -> accountId.equals(
               accountSystemSettingsMongodbPO.getUserId())))
         .filter(
           accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbPO.isDefaultSystemSettings())
         .ifPresent(
           accountSystemSettingsMongodbPO -> {
-            accountSystemSettingsMongodbRepository.deleteById(systemSettingsId);
-            accountRedisRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+            accountSystemSettingsDocumentRepository.deleteById(systemSettingsId);
+            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
           });
     }
   }

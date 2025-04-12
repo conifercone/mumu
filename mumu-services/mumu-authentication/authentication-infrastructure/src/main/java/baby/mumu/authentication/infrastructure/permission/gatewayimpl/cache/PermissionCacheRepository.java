@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache;
+package baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache;
 
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
+import java.util.Optional;
 
 /**
- * 简单验证码操作类
+ * 权限缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.1
+ * @since 2.2.0
  */
-public interface SimpleCaptchaRepository extends
-  RedisDocumentRepository<SimpleCaptchaPO, Long> {
+public interface PermissionCacheRepository extends
+  RedisDocumentRepository<PermissionCacheablePO, Long> {
 
+  Optional<PermissionCacheablePO> findByCode(String code);
 }

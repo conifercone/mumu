@@ -15,7 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressMongodbPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -26,16 +26,16 @@ import org.springframework.data.mongodb.repository.Query;
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
  */
-public interface AccountAddressMongodbRepository extends
-  MongoRepository<AccountAddressMongodbPO, String> {
+public interface AccountAddressDocumentRepository extends
+  MongoRepository<AccountAddressDocumentPO, String> {
 
   void deleteByUserId(Long userId);
 
-  List<AccountAddressMongodbPO> findByUserId(Long userId);
+  List<AccountAddressDocumentPO> findByUserId(Long userId);
 
   @Query("""
     { 'location': { $geoWithin: { $centerSphere: [ [ ?0, ?1 ], ?2 ] } } }
     """)
-  List<AccountAddressMongodbPO> findByLocationWithin(double longitude, double latitude,
+  List<AccountAddressDocumentPO> findByLocationWithin(double longitude, double latitude,
     double radiusInRadians);
 }

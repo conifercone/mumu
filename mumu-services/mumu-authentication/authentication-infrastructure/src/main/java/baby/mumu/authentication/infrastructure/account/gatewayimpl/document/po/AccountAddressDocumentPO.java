@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.po.jpa.JpaMongodbBasisDefaultPersistentObject;
+import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -45,7 +45,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document("mumu-account-addresses")
 @Metamodel
-public class AccountAddressMongodbPO extends JpaMongodbBasisDefaultPersistentObject {
+public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = -8437677767812120031L;

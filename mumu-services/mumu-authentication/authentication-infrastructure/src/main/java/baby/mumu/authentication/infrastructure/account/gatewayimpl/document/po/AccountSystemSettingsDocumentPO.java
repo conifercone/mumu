@@ -18,7 +18,7 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
-import baby.mumu.basis.po.jpa.JpaMongodbBasisDefaultPersistentObject;
+import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
@@ -43,12 +43,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document("mumu-account-system-settings")
 @Metamodel
-public class AccountSystemSettingsMongodbPO extends JpaMongodbBasisDefaultPersistentObject {
+public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = 6286174255794150761L;
 
-  public AccountSystemSettingsMongodbPO(String id, Long userId, String profile, String name,
+  public AccountSystemSettingsDocumentPO(String id, Long userId, String profile, String name,
     boolean defaultSystemSettings, Long version) {
     this.id = id;
     this.userId = userId;

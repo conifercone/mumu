@@ -24,24 +24,24 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * client token redis数据对象
+ * 密码模式 token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.2
+ * @since 1.0.0
  */
 @Data
-@Document(value = "mumu:authentication:client-token")
-public class ClientTokenRedisPO {
+@Document(value = "mumu:authentication:password-token")
+public class PasswordTokenCacheablePO {
 
   @Id
   @Indexed
-  private String id;
+  private Long id;
 
   /**
-   * client token值
+   * token值
    */
   @TextIndexed
-  private String clientTokenValue;
+  private String tokenValue;
 
   /**
    * 存活时间

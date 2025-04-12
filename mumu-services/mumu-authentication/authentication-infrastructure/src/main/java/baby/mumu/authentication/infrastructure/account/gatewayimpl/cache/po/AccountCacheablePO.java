@@ -21,7 +21,7 @@ import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
-import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
+import baby.mumu.basis.po.jpa.JpaCacheableBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
@@ -43,7 +43,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:authentication:account")
-public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
+public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
   @Serial
   private static final long serialVersionUID = -2322179892503865278L;
@@ -160,12 +160,12 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   /**
    * 地址
    */
-  private List<AccountAddressRedisPO> addresses;
+  private List<AccountAddressCacheablePO> addresses;
 
   /**
    * 系统设置
    */
-  private List<AccountSystemSettingsRedisPO> systemSettings;
+  private List<AccountSystemSettingsCacheablePO> systemSettings;
 
   /**
    * 存活时间
@@ -175,7 +175,7 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 
   @Data
-  public static class AccountAddressRedisPO {
+  public static class AccountAddressCacheablePO {
 
     /**
      * 唯一主键
@@ -226,7 +226,7 @@ public class AccountRedisPO extends JpaRedisBasisArchivablePersistentObject {
   }
 
   @Data
-  public static class AccountSystemSettingsRedisPO {
+  public static class AccountSystemSettingsCacheablePO {
 
     /**
      * 唯一主键

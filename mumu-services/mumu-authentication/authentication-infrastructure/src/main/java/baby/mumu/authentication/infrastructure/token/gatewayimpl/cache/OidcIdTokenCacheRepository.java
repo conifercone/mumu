@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache;
+package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache;
 
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.OidcIdTokenCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
-import java.util.Optional;
 
 /**
- * 权限缓存
+ * oidc id token redis repository
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 1.0.0
  */
-public interface PermissionRedisRepository extends
-  RedisDocumentRepository<PermissionRedisPO, Long> {
+public interface OidcIdTokenCacheRepository extends
+  RedisDocumentRepository<OidcIdTokenCacheablePO, Long> {
 
-  Optional<PermissionRedisPO> findByCode(String code);
 }

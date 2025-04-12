@@ -13,53 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.relations.cache;
+package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
-import baby.mumu.basis.po.jpa.JpaRedisBasisDefaultPersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import java.io.Serial;
-import java.util.List;
-import lombok.AllArgsConstructor;
+import com.redis.om.spring.annotations.TextIndexed;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 角色权限关系缓存
+ * client token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 1.0.2
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:role-permission")
-@AllArgsConstructor
-@NoArgsConstructor
-public class RolePermissionRedisPO extends JpaRedisBasisDefaultPersistentObject {
-
-  @Serial
-  private static final long serialVersionUID = 4744706662530961684L;
-
-  public RolePermissionRedisPO(Long roleId, List<Long> permissionIds) {
-    this.roleId = roleId;
-    this.permissionIds = permissionIds;
-  }
+@Document(value = "mumu:authentication:client-token")
+public class ClientTokenCacheablePO {
 
   @Id
   @Indexed
-  private Long roleId;
+  private String id;
 
-  @Indexed
-  private List<Long> permissionIds;
+  /**
+   * client token值
+   */
+  @TextIndexed
+  private String clientTokenValue;
 
   /**
    * 存活时间
-   * <p>低等级别变化数据：默认缓存时间为6小时</p>
    */
   @TimeToLive
-  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
+  private Long ttl = CacheLevelEnum.HIGH.getSecondTtl();
 }

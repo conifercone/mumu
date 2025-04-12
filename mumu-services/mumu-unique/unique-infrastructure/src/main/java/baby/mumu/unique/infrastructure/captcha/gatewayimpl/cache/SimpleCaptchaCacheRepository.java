@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.basis.po.jpa;
+package baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache;
 
-import baby.mumu.basis.po.ArchivablePersistentObject;
-import java.io.Serial;
-import lombok.Setter;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
+import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * jpa redis 基础可存档数据对象
+ * 简单验证码操作类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 1.0.1
  */
-@Setter
-public class JpaRedisBasisArchivablePersistentObject extends
-  JpaRedisBasisDefaultPersistentObject implements
-  ArchivablePersistentObject {
+public interface SimpleCaptchaCacheRepository extends
+  RedisDocumentRepository<SimpleCaptchaPO, Long> {
 
-  @Serial
-  private static final long serialVersionUID = -9004328530785061008L;
-
-  private boolean archived;
-
-  @Override
-  public boolean isArchived() {
-    return archived;
-  }
 }

@@ -13,51 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po;
+package baby.mumu.authentication.infrastructure.relations.cache;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
-import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
+import baby.mumu.basis.po.jpa.JpaCacheableBasisDefaultPersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 角色基本信息缓存
+ * 角色权限关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:role")
-public class RoleRedisPO extends JpaRedisBasisArchivablePersistentObject {
+@Document(value = "mumu:authentication:role-permission")
+@AllArgsConstructor
+@NoArgsConstructor
+public class RolePermissionCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
 
   @Serial
-  private static final long serialVersionUID = 2814267592168109003L;
+  private static final long serialVersionUID = 4744706662530961684L;
 
-  /**
-   * 角色ID
-   */
+  public RolePermissionCacheablePO(Long roleId, List<Long> permissionIds) {
+    this.roleId = roleId;
+    this.permissionIds = permissionIds;
+  }
+
   @Id
   @Indexed
-  private Long id;
+  private Long roleId;
 
-  /**
-   * 角色编码
-   */
   @Indexed
-  private String code;
-
-  /**
-   * 角色名称
-   */
-  private String name;
-
-  private String description;
+  private List<Long> permissionIds;
 
   /**
    * 存活时间

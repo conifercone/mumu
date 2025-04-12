@@ -13,17 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.relations.cache;
+package baby.mumu.extension.nosql;
 
-import com.redis.om.spring.repository.RedisDocumentRepository;
+import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE;
+
+import baby.mumu.basis.po.jpa.MuMuJpaDocumentAuditorAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * 账户角色关系缓存
+ * document相关配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-public interface AccountRoleRedisRepository extends
-  RedisDocumentRepository<AccountRoleRedisPO, Long> {
+@Configuration
+public class DocumentConfiguration {
 
+  @Bean(name = MUMU_JPA_DOCUMENT_AUDITOR_AWARE)
+  public MuMuJpaDocumentAuditorAware mumuJpaDocumentAuditorAware() {
+    return new MuMuJpaDocumentAuditorAware();
+  }
 }

@@ -17,39 +17,28 @@ package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.po.PersistentObject;
 import java.io.Serial;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Optional;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 /**
- * jpa mongodb 基础默认数据对象
+ * jpa 可缓存的基础默认数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Setter
-public class JpaMongodbBasisDefaultPersistentObject implements PersistentObject {
+public class JpaCacheableBasisDefaultPersistentObject implements PersistentObject {
 
   @Serial
-  private static final long serialVersionUID = -2846827195409026681L;
+  private static final long serialVersionUID = -8179617300616311221L;
 
-  @CreatedDate
-  private LocalDateTime creationTime;
+  private OffsetDateTime creationTime;
 
-  @CreatedBy
   private Long founder;
 
-  @LastModifiedBy
   private Long modifier;
 
-  @LastModifiedDate
-  private LocalDateTime modificationTime;
+  private OffsetDateTime modificationTime;
 
   @Override
   public Long getFounder() {
@@ -63,15 +52,11 @@ public class JpaMongodbBasisDefaultPersistentObject implements PersistentObject 
 
   @Override
   public OffsetDateTime getCreationTime() {
-    return Optional.ofNullable(creationTime)
-      .map(creationTimeNotNull -> OffsetDateTime.of(creationTimeNotNull, ZoneOffset.UTC))
-      .orElse(null);
+    return creationTime;
   }
 
   @Override
   public OffsetDateTime getModificationTime() {
-    return Optional.ofNullable(modificationTime)
-      .map(modificationTimeNotNull -> OffsetDateTime.of(modificationTimeNotNull, ZoneOffset.UTC))
-      .orElse(null);
+    return modificationTime;
   }
 }

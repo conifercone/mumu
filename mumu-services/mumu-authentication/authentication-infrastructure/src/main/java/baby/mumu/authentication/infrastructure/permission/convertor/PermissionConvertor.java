@@ -35,7 +35,7 @@ import baby.mumu.authentication.client.dto.PermissionFindDirectDTO;
 import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.client.dto.PermissionIncludePathDownloadAllDTO;
 import baby.mumu.authentication.domain.permission.Permission;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
@@ -157,18 +157,18 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Permission> toEntity(PermissionRedisPO permissionRedisPO) {
-    return Optional.ofNullable(permissionRedisPO).map(PermissionMapper.INSTANCE::toEntity);
+  public Optional<Permission> toEntity(PermissionCacheablePO permissionCacheablePO) {
+    return Optional.ofNullable(permissionCacheablePO).map(PermissionMapper.INSTANCE::toEntity);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionRedisPO> toPermissionRedisPO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionRedisPO);
+  public Optional<PermissionCacheablePO> toPermissionCacheablePO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionCacheablePO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionPO> toPO(PermissionRedisPO permissionRedisPO) {
-    return Optional.ofNullable(permissionRedisPO).map(PermissionMapper.INSTANCE::toPO);
+  public Optional<PermissionPO> toPO(PermissionCacheablePO permissionCacheablePO) {
+    return Optional.ofNullable(permissionCacheablePO).map(PermissionMapper.INSTANCE::toPO);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")

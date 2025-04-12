@@ -35,11 +35,11 @@ import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionRedisRepository;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionCacheRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
-import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionRedisPO;
-import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionCacheRepository;
+import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionCacheablePO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathRepository;
@@ -47,7 +47,7 @@ import baby.mumu.authentication.infrastructure.relations.database.RolePathReposi
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleCacheablePO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
@@ -84,8 +84,8 @@ public class RoleConvertor {
   private final SimpleTextTranslation simpleTextTranslation;
   private final RoleArchivedRepository roleArchivedRepository;
   private final RolePermissionRepository rolePermissionRepository;
-  private final PermissionRedisRepository permissionRedisRepository;
-  private final RolePermissionRedisRepository rolePermissionRedisRepository;
+  private final PermissionCacheRepository permissionCacheRepository;
+  private final RolePermissionCacheRepository rolePermissionCacheRepository;
   private final PermissionPathRepository permissionPathRepository;
   private final RolePathRepository rolePathRepository;
 
@@ -95,8 +95,8 @@ public class RoleConvertor {
     ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
     RoleArchivedRepository roleArchivedRepository,
     RolePermissionRepository rolePermissionRepository,
-    PermissionRedisRepository permissionRedisRepository,
-    RolePermissionRedisRepository rolePermissionRedisRepository,
+    PermissionCacheRepository permissionCacheRepository,
+    RolePermissionCacheRepository rolePermissionCacheRepository,
     PermissionPathRepository permissionPathRepository, RolePathRepository rolePathRepository) {
     this.permissionConvertor = permissionConvertor;
     this.roleRepository = roleRepository;
@@ -104,8 +104,8 @@ public class RoleConvertor {
     this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     this.roleArchivedRepository = roleArchivedRepository;
     this.rolePermissionRepository = rolePermissionRepository;
-    this.permissionRedisRepository = permissionRedisRepository;
-    this.rolePermissionRedisRepository = rolePermissionRedisRepository;
+    this.permissionCacheRepository = permissionCacheRepository;
+    this.rolePermissionCacheRepository = rolePermissionCacheRepository;
     this.permissionPathRepository = permissionPathRepository;
     this.rolePathRepository = rolePathRepository;
   }
@@ -129,12 +129,13 @@ public class RoleConvertor {
   }
 
   private @NotNull List<Long> getPermissionIds(@NotNull Role role) {
-    return rolePermissionRedisRepository.findById(role.getId())
-      .map(RolePermissionRedisPO::getPermissionIds).orElseGet(() -> {
+    return rolePermissionCacheRepository.findById(role.getId())
+      .map(RolePermissionCacheablePO::getPermissionIds).orElseGet(() -> {
         List<Long> permissionIds = rolePermissionRepository.findByRoleId(role.getId()).stream()
           .map(RolePermissionPO::getId)
           .map(RolePermissionPOId::getPermissionId).distinct().collect(Collectors.toList());
-        rolePermissionRedisRepository.save(new RolePermissionRedisPO(role.getId(), permissionIds));
+        rolePermissionCacheRepository.save(
+          new RolePermissionCacheablePO(role.getId(), permissionIds));
         return permissionIds;
       });
   }
@@ -161,15 +162,16 @@ public class RoleConvertor {
 
   private @NotNull ArrayList<Permission> getAuthorities(List<Long> permissionIds) {
     // 查询缓存中存在的数据
-    List<PermissionRedisPO> permissionRedisPOS = permissionRedisRepository.findAllById(
+    List<PermissionCacheablePO> permissionCacheablePOS = permissionCacheRepository.findAllById(
       permissionIds);
     // 缓存中存在的权限ID
-    List<Long> cachedCollectionOfPermissionIDs = permissionRedisPOS.stream()
-      .map(PermissionRedisPO::getId)
+    List<Long> cachedCollectionOfPermissionIDs = permissionCacheablePOS.stream()
+      .map(PermissionCacheablePO::getId)
       .collect(Collectors.toList());
     // 已缓存的权限
-    List<Permission> cachedCollectionOfPermission = permissionRedisPOS.stream()
-      .flatMap(permissionRedisDo -> permissionConvertor.toEntity(permissionRedisDo).stream())
+    List<Permission> cachedCollectionOfPermission = permissionCacheablePOS.stream()
+      .flatMap(
+        permissionCacheablePO -> permissionConvertor.toEntity(permissionCacheablePO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的权限
@@ -184,8 +186,8 @@ public class RoleConvertor {
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的权限放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfPermission)) {
-      permissionRedisRepository.saveAll(uncachedCollectionOfPermission.stream()
-        .flatMap(permission -> permissionConvertor.toPermissionRedisPO(permission).stream())
+      permissionCacheRepository.saveAll(uncachedCollectionOfPermission.stream()
+        .flatMap(permission -> permissionConvertor.toPermissionCacheablePO(permission).stream())
         .collect(
           Collectors.toList()));
     }
@@ -311,8 +313,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Role> toEntity(RoleRedisPO roleRedisPO) {
-    return Optional.ofNullable(roleRedisPO).map(RoleMapper.INSTANCE::toEntity)
+  public Optional<Role> toEntity(RoleCacheablePO roleCacheablePO) {
+    return Optional.ofNullable(roleCacheablePO).map(RoleMapper.INSTANCE::toEntity)
       .map(role -> {
         setAuthorities(role, getPermissionIds(role));
         return role;
@@ -352,8 +354,8 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleRedisPO> toRoleRedisPO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleRedisPO);
+  public Optional<RoleCacheablePO> toRoleCacheablePO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleCacheablePO);
   }
 
   @Contract("_ -> new")

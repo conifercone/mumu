@@ -16,7 +16,7 @@
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
-import baby.mumu.basis.po.jpa.JpaRedisBasisArchivablePersistentObject;
+import baby.mumu.basis.po.jpa.JpaCacheableBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
@@ -34,7 +34,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:authentication:permission")
-public class PermissionRedisPO extends JpaRedisBasisArchivablePersistentObject {
+public class PermissionCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
   @Serial
   private static final long serialVersionUID = -6055203641258590170L;

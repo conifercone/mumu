@@ -15,48 +15,28 @@
  */
 package baby.mumu.basis.po.jpa;
 
-import baby.mumu.basis.po.PersistentObject;
+import baby.mumu.basis.po.ArchivablePersistentObject;
 import java.io.Serial;
-import java.time.OffsetDateTime;
 import lombok.Setter;
 
 /**
- * jpa redis 基础默认数据对象
+ * jpa 可缓存的基础可存档数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
 @Setter
-public class JpaRedisBasisDefaultPersistentObject implements PersistentObject {
+public class JpaCacheableBasisArchivablePersistentObject extends
+  JpaCacheableBasisDefaultPersistentObject implements
+  ArchivablePersistentObject {
 
   @Serial
-  private static final long serialVersionUID = -8179617300616311221L;
+  private static final long serialVersionUID = -9004328530785061008L;
 
-  private OffsetDateTime creationTime;
-
-  private Long founder;
-
-  private Long modifier;
-
-  private OffsetDateTime modificationTime;
+  private boolean archived;
 
   @Override
-  public Long getFounder() {
-    return founder;
-  }
-
-  @Override
-  public Long getModifier() {
-    return modifier;
-  }
-
-  @Override
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
-
-  @Override
-  public OffsetDateTime getModificationTime() {
-    return modificationTime;
+  public boolean isArchived() {
+    return archived;
   }
 }

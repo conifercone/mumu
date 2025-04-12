@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache;
+package baby.mumu.basis.po.jpa;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.PasswordTokenRedisPO;
-import com.redis.om.spring.repository.RedisDocumentRepository;
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
+import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.AuditorAware;
 
 /**
- * token redis repository
+ * 创建人&修改人自动填充
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
-public interface PasswordTokenRepository extends
-  RedisDocumentRepository<PasswordTokenRedisPO, Long> {
+public class MuMuJpaDocumentAuditorAware implements AuditorAware<Long> {
 
+  @Override
+  public @NotNull Optional<Long> getCurrentAuditor() {
+    return SecurityContextUtils.getLoginAccountId();
+  }
 }

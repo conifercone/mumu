@@ -16,9 +16,9 @@
 package baby.mumu.authentication.infrastructure.token.gatewayimpl;
 
 import baby.mumu.authentication.domain.token.gateway.TokenGateway;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import io.micrometer.observation.annotation.Observed;
@@ -40,19 +40,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "TokenGatewayImpl")
 public class TokenGatewayImpl implements TokenGateway {
 
-  private final PasswordTokenRepository passwordTokenRepository;
+  private final PasswordTokenCacheRepository passwordTokenCacheRepository;
   private final JwtDecoder jwtDecoder;
-  private final ClientTokenRepository clientTokenRepository;
-  private final AuthorizeCodeTokenRepository authorizeCodeTokenRepository;
+  private final ClientTokenCacheRepository clientTokenCacheRepository;
+  private final AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository;
 
   @Autowired
-  public TokenGatewayImpl(PasswordTokenRepository passwordTokenRepository, JwtDecoder jwtDecoder,
-    ClientTokenRepository clientTokenRepository,
-    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
-    this.passwordTokenRepository = passwordTokenRepository;
+  public TokenGatewayImpl(PasswordTokenCacheRepository passwordTokenCacheRepository,
+    JwtDecoder jwtDecoder,
+    ClientTokenCacheRepository clientTokenCacheRepository,
+    AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
+    this.passwordTokenCacheRepository = passwordTokenCacheRepository;
     this.jwtDecoder = jwtDecoder;
-    this.clientTokenRepository = clientTokenRepository;
-    this.authorizeCodeTokenRepository = authorizeCodeTokenRepository;
+    this.clientTokenCacheRepository = clientTokenCacheRepository;
+    this.authorizeCodeTokenCacheRepository = authorizeCodeTokenCacheRepository;
   }
 
   @Override
@@ -63,12 +64,12 @@ public class TokenGatewayImpl implements TokenGateway {
           String claimAsString = jwt.getClaimAsString(
             TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName());
           if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
-            return passwordTokenRepository.existsById(
+            return passwordTokenCacheRepository.existsById(
               Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
           } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
-            return clientTokenRepository.existsById(jwt.getClaimAsString(JwtClaimNames.SUB));
+            return clientTokenCacheRepository.existsById(jwt.getClaimAsString(JwtClaimNames.SUB));
           } else if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(claimAsString)) {
-            return authorizeCodeTokenRepository.existsById(
+            return authorizeCodeTokenCacheRepository.existsById(
               Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
 
           }

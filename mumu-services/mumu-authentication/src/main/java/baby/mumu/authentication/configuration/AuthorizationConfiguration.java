@@ -27,10 +27,10 @@ import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.P
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.Oauth2AuthenticationRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import baby.mumu.basis.constants.CommonConstants;
@@ -195,16 +195,16 @@ public class AuthorizationConfiguration {
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
     OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
-    PasswordTokenRepository passwordTokenRepository,
-    OidcIdTokenRepository oidcIdTokenRepository,
-    ClientTokenRepository clientTokenRepository,
-    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
+    PasswordTokenCacheRepository passwordTokenCacheRepository,
+    OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
+    ClientTokenCacheRepository clientTokenCacheRepository,
+    AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
     MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
-    jwtGenerator.setPasswordTokenRepository(passwordTokenRepository);
-    jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
-    jwtGenerator.setClientTokenRepository(clientTokenRepository);
-    jwtGenerator.setAuthorizeCodeTokenRepository(authorizeCodeTokenRepository);
+    jwtGenerator.setPasswordTokenCacheRepository(passwordTokenCacheRepository);
+    jwtGenerator.setOidcIdTokenCacheRepository(oidcIdTokenCacheRepository);
+    jwtGenerator.setClientTokenCacheRepository(clientTokenCacheRepository);
+    jwtGenerator.setAuthorizeCodeTokenCacheRepository(authorizeCodeTokenCacheRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(

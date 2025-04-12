@@ -35,17 +35,17 @@ import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountRedisPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountCacheablePO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsMongodbRepository;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressMongodbPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsMongodbPO;
-import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleRedisPO;
-import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleRedisRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
+import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheRepository;
+import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheablePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePO;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRolePOId;
 import baby.mumu.authentication.infrastructure.relations.database.AccountRoleRepository;
@@ -53,8 +53,8 @@ import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.RoleRedisRepository;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.RoleCacheRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleCacheablePO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.exception.MuMuException;
@@ -86,32 +86,32 @@ public class AccountConvertor {
   private final AccountRepository accountRepository;
   private final RoleRepository roleRepository;
   private final AccountArchivedRepository accountArchivedRepository;
-  private final AccountAddressMongodbRepository accountAddressMongodbRepository;
+  private final AccountAddressDocumentRepository accountAddressDocumentRepository;
   private final AccountRoleRepository accountRoleRepository;
-  private final RoleRedisRepository roleRedisRepository;
-  private final AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository;
-  private final AccountRoleRedisRepository accountRoleRedisRepository;
+  private final RoleCacheRepository roleCacheRepository;
+  private final AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository;
+  private final AccountRoleCacheRepository accountRoleCacheRepository;
   private final RolePathRepository rolePathRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
     RoleRepository roleRepository,
     AccountArchivedRepository accountArchivedRepository,
-    AccountAddressMongodbRepository accountAddressMongodbRepository,
+    AccountAddressDocumentRepository accountAddressDocumentRepository,
     AccountRoleRepository accountRoleRepository,
-    RoleRedisRepository roleRedisRepository,
-    AccountSystemSettingsMongodbRepository accountSystemSettingsMongodbRepository,
-    AccountRoleRedisRepository accountRoleRedisRepository,
+    RoleCacheRepository roleCacheRepository,
+    AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository,
+    AccountRoleCacheRepository accountRoleCacheRepository,
     RolePathRepository rolePathRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
     this.accountArchivedRepository = accountArchivedRepository;
-    this.accountAddressMongodbRepository = accountAddressMongodbRepository;
+    this.accountAddressDocumentRepository = accountAddressDocumentRepository;
     this.accountRoleRepository = accountRoleRepository;
-    this.roleRedisRepository = roleRedisRepository;
-    this.accountSystemSettingsMongodbRepository = accountSystemSettingsMongodbRepository;
-    this.accountRoleRedisRepository = accountRoleRedisRepository;
+    this.roleCacheRepository = roleCacheRepository;
+    this.accountSystemSettingsDocumentRepository = accountSystemSettingsDocumentRepository;
+    this.accountRoleCacheRepository = accountRoleCacheRepository;
     this.rolePathRepository = rolePathRepository;
   }
 
@@ -151,15 +151,15 @@ public class AccountConvertor {
 
   private @NotNull ArrayList<Role> getRoles(List<Long> roleIds) {
     // 查询缓存中存在的数据
-    List<RoleRedisPO> roleRedisPOS = roleRedisRepository.findAllById(
+    List<RoleCacheablePO> roleCacheablePOS = roleCacheRepository.findAllById(
       roleIds);
     // 缓存中存在的角色ID
-    List<Long> cachedCollectionOfRoleIDs = roleRedisPOS.stream()
-      .map(RoleRedisPO::getId)
+    List<Long> cachedCollectionOfRoleIDs = roleCacheablePOS.stream()
+      .map(RoleCacheablePO::getId)
       .collect(Collectors.toList());
     // 已缓存的角色
-    List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
+    List<Role> cachedCollectionOfRole = roleCacheablePOS.stream()
+      .flatMap(roleCacheablePO -> roleConvertor.toEntity(roleCacheablePO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -174,8 +174,8 @@ public class AccountConvertor {
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
-      roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
-        .flatMap(authority -> roleConvertor.toRoleRedisPO(authority).stream())
+      roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()
+        .flatMap(authority -> roleConvertor.toRoleCacheablePO(authority).stream())
         .collect(
           Collectors.toList()));
     }
@@ -210,15 +210,15 @@ public class AccountConvertor {
 
   private @NotNull ArrayList<Role> getRolesByCodes(List<String> codes) {
     // 查询缓存中存在的数据
-    List<RoleRedisPO> roleRedisPOS = roleRedisRepository.findByCodeIn(
+    List<RoleCacheablePO> roleCacheablePOS = roleCacheRepository.findByCodeIn(
       codes);
     // 缓存中存在的角色编码
-    List<String> cachedCollectionOfRoleCodes = roleRedisPOS.stream()
-      .map(RoleRedisPO::getCode)
+    List<String> cachedCollectionOfRoleCodes = roleCacheablePOS.stream()
+      .map(RoleCacheablePO::getCode)
       .collect(Collectors.toList());
     // 已缓存的角色
-    List<Role> cachedCollectionOfRole = roleRedisPOS.stream()
-      .flatMap(roleRedisPO -> roleConvertor.toEntity(roleRedisPO).stream())
+    List<Role> cachedCollectionOfRole = roleCacheablePOS.stream()
+      .flatMap(roleCacheablePO -> roleConvertor.toEntity(roleCacheablePO).stream())
       .collect(
         Collectors.toList());
     // 未缓存的角色
@@ -232,8 +232,8 @@ public class AccountConvertor {
             Collectors.toList())).orElse(new ArrayList<>());
     // 未缓存的角色放入缓存
     if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
-      roleRedisRepository.saveAll(uncachedCollectionOfRole.stream()
-        .flatMap(authority -> roleConvertor.toRoleRedisPO(authority).stream())
+      roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()
+        .flatMap(authority -> roleConvertor.toRoleCacheablePO(authority).stream())
         .collect(
           Collectors.toList()));
     }
@@ -255,12 +255,12 @@ public class AccountConvertor {
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
       accountNotNull.setAddresses(
-        accountAddressMongodbRepository.findByUserId(accountDataObject.getId()).stream().map(
+        accountAddressDocumentRepository.findByUserId(accountDataObject.getId()).stream().map(
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       accountNotNull.setSystemSettings(
-        accountSystemSettingsMongodbRepository.findByUserId(accountDataObject.getId()).stream()
-          .flatMap(accountSystemSettingsMongodbPO -> this.toAccountSystemSettings(
-            accountSystemSettingsMongodbPO).stream())
+        accountSystemSettingsDocumentRepository.findByUserId(accountDataObject.getId()).stream()
+          .flatMap(accountSystemSettingsDocumentPO -> this.toAccountSystemSettings(
+            accountSystemSettingsDocumentPO).stream())
           .collect(Collectors.toList()));
       setDigitalPreference(accountNotNull);
       return accountNotNull;
@@ -269,8 +269,8 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<Account> toEntity(AccountRedisPO accountRedisPO) {
-    return Optional.ofNullable(accountRedisPO).map(AccountMapper.INSTANCE::toEntity)
+  public Optional<Account> toEntity(AccountCacheablePO accountCacheablePO) {
+    return Optional.ofNullable(accountCacheablePO).map(AccountMapper.INSTANCE::toEntity)
       .map(account -> {
         setRolesWithIds(account, getRoleIds(account.getId()));
         setDigitalPreference(account);
@@ -279,14 +279,14 @@ public class AccountConvertor {
   }
 
   private @NotNull List<Long> getRoleIds(Long account) {
-    return accountRoleRedisRepository.findById(account)
-      .map(AccountRoleRedisPO::getRoleIds).orElseGet(() -> {
+    return accountRoleCacheRepository.findById(account)
+      .map(AccountRoleCacheablePO::getRoleIds).orElseGet(() -> {
         List<Long> roleIds = accountRoleRepository.findByAccountId(account)
           .stream()
           .map(AccountRolePO::getId).map(AccountRolePOId::getRoleId)
           .collect(Collectors.toList());
-        accountRoleRedisRepository.save(
-          new AccountRoleRedisPO(account, roleIds));
+        accountRoleCacheRepository.save(
+          new AccountRoleCacheablePO(account, roleIds));
         return roleIds;
       });
   }
@@ -299,8 +299,8 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountRedisPO> toAccountRedisPO(Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountRedisPO);
+  public Optional<AccountCacheablePO> toAccountCacheablePO(Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountCacheablePO);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -402,29 +402,29 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AccountAddressMongodbPO> toAccountAddressPO(
+  public Optional<AccountAddressDocumentPO> toAccountAddressPO(
     AccountAddress accountAddress) {
     return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressPO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountSystemSettingsMongodbPO> toAccountSystemSettingMongodbPO(
+  public Optional<AccountSystemSettingsDocumentPO> toAccountSystemSettingsDocumentPO(
     AccountSystemSettings accountSystemSettings) {
     return Optional.ofNullable(accountSystemSettings)
-      .map(AccountMapper.INSTANCE::toAccountSystemSettingMongodbPO);
+      .map(AccountMapper.INSTANCE::toAccountSystemSettingsDocumentPO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountSystemSettings> toAccountSystemSettings(
-    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
-    return Optional.ofNullable(accountSystemSettingsMongodbPO)
+    AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPO) {
+    return Optional.ofNullable(accountSystemSettingsDocumentPO)
       .map(AccountMapper.INSTANCE::toAccountSystemSettings);
   }
 
   @API(status = Status.STABLE, since = "2.6.0")
   public Optional<AccountAddress> toAccountAddress(
-    AccountAddressMongodbPO accountAddressMongodbPO) {
-    return Optional.ofNullable(accountAddressMongodbPO)
+    AccountAddressDocumentPO accountAddressDocumentPO) {
+    return Optional.ofNullable(accountAddressDocumentPO)
       .map(AccountMapper.INSTANCE::toAccountAddress);
   }
 
@@ -442,7 +442,7 @@ public class AccountConvertor {
       .flatMap(accountModifySystemSettingsBySettingsIdCmdNotNull -> {
         Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
           .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-        return accountSystemSettingsMongodbRepository.findById(
+        return accountSystemSettingsDocumentRepository.findById(
             accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
           .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
             AccountMapper.INSTANCE.toAccountSystemSettings(
@@ -454,19 +454,19 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountSystemSettingsMongodbPO> resetAccountSystemSettingMongodbPO(
-    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO) {
-    return Optional.ofNullable(accountSystemSettingsMongodbPO)
-      .map(systemSettingsMongodbPO -> {
-        AccountMapper.INSTANCE.toAccountSystemSettingMongodbPO(
-          new AccountSystemSettingsMongodbPO(systemSettingsMongodbPO.getId(),
-            systemSettingsMongodbPO.getUserId(),
-            systemSettingsMongodbPO.getProfile(),
-            systemSettingsMongodbPO.getName(),
-            systemSettingsMongodbPO.isDefaultSystemSettings(),
-            systemSettingsMongodbPO.getVersion()),
-          systemSettingsMongodbPO);
-        return systemSettingsMongodbPO;
+  public Optional<AccountSystemSettingsDocumentPO> resetAccountSystemSettingsDocumentPO(
+    AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPO) {
+    return Optional.ofNullable(accountSystemSettingsDocumentPO)
+      .map(systemSettingsDocumentPO -> {
+        AccountMapper.INSTANCE.toAccountSystemSettingsDocumentPO(
+          new AccountSystemSettingsDocumentPO(systemSettingsDocumentPO.getId(),
+            systemSettingsDocumentPO.getUserId(),
+            systemSettingsDocumentPO.getProfile(),
+            systemSettingsDocumentPO.getName(),
+            systemSettingsDocumentPO.isDefaultSystemSettings(),
+            systemSettingsDocumentPO.getVersion()),
+          systemSettingsDocumentPO);
+        return systemSettingsDocumentPO;
       });
   }
 
@@ -569,7 +569,7 @@ public class AccountConvertor {
       .flatMap(modifyAddressByAddressIdCmd -> {
         Optional.ofNullable(modifyAddressByAddressIdCmd.getId())
           .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-        return accountAddressMongodbRepository.findById(
+        return accountAddressDocumentRepository.findById(
             modifyAddressByAddressIdCmd.getId())
           .flatMap(this::toAccountAddress).flatMap(accountAddress -> {
             AccountMapper.INSTANCE.toAccountAddress(

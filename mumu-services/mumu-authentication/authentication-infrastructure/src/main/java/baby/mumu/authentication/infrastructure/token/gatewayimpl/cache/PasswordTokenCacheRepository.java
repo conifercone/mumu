@@ -15,16 +15,16 @@
  */
 package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache;
 
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.AuthorizeCodeTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.PasswordTokenCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * 授权码 token redis repository
+ * token redis repository
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.4.0
+ * @since 1.0.0
  */
-public interface AuthorizeCodeTokenRepository extends
-  RedisDocumentRepository<AuthorizeCodeTokenRedisPO, Long> {
+public interface PasswordTokenCacheRepository extends
+  RedisDocumentRepository<PasswordTokenCacheablePO, Long> {
 
 }

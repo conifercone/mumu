@@ -13,24 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.document;
+package baby.mumu.basis.po.jpa;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsMongodbPO;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.util.List;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import baby.mumu.basis.po.ArchivablePersistentObject;
+import jakarta.persistence.EntityListeners;
+import java.io.Serial;
+import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * 账户系统设置
+ * jpa 文档类型基础可存档数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
  */
-public interface AccountSystemSettingsMongodbRepository extends
-  MongoRepository<AccountSystemSettingsMongodbPO, String> {
+@SuppressWarnings("unused")
+@EntityListeners(AuditingEntityListener.class)
+@Setter
+public class JpaDocumentBasisArchivablePersistentObject extends
+  JpaDocumentBasisDefaultPersistentObject implements
+  ArchivablePersistentObject {
 
-  List<AccountSystemSettingsMongodbPO> findByUserId(@NotNull Long userId);
+  @Serial
+  private static final long serialVersionUID = -1101323311607199590L;
 
-  boolean existsByUserIdAndProfile(@NotNull Long userId, @NotBlank String profile);
+  private boolean archived;
+
+  @Override
+  public boolean isArchived() {
+    return archived;
+  }
 }

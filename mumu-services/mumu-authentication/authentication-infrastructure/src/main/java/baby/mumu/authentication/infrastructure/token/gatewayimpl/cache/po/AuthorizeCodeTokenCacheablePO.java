@@ -13,53 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.relations.cache;
+package baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
-import baby.mumu.basis.po.jpa.JpaRedisBasisDefaultPersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import java.io.Serial;
-import java.util.List;
-import lombok.AllArgsConstructor;
+import com.redis.om.spring.annotations.TextIndexed;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 账户角色关系缓存
+ * 授权码 token redis数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:account-role")
-@AllArgsConstructor
-@NoArgsConstructor
-public class AccountRoleRedisPO extends JpaRedisBasisDefaultPersistentObject {
-
-  @Serial
-  private static final long serialVersionUID = 1872502889758524323L;
-
-  public AccountRoleRedisPO(Long userId, List<Long> roleIds) {
-    this.userId = userId;
-    this.roleIds = roleIds;
-  }
+@Document(value = "mumu:authentication:authorize-code-token")
+public class AuthorizeCodeTokenCacheablePO {
 
   @Id
   @Indexed
-  private Long userId;
+  private Long id;
 
-  @Indexed
-  private List<Long> roleIds;
+  /**
+   * token值
+   */
+  @TextIndexed
+  private String tokenValue;
 
   /**
    * 存活时间
-   * <p>低等级别变化数据：默认缓存时间为6小时</p>
    */
   @TimeToLive
-  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
+  private Long ttl = CacheLevelEnum.HIGH.getSecondTtl();
 }
