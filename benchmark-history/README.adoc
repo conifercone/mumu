@@ -1,0 +1,5 @@
+:doctype: article
+:imagesdir: .
+:icons: font
+
+= Benchmark history
