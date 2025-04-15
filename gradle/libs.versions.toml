@@ -42,6 +42,7 @@ monetaVersion = '1.4.5'
 jacksonDatatypeMoneyVersion = '1.3.0'
 libphonenumberVersion = '9.0.3'
 commonsValidatorVersion = '1.9.0'
+jmhVersion = '1.37'
 # bom version
 grpcBomVersion = '1.71.0'
 guavaBomVersion = '33.4.7-jre'
@@ -50,6 +51,7 @@ protobufBomVersion = '4.30.2'
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.13.1'
 kotlinPluginVersion = '2.1.20'
+jmhPluginVersion = '0.7.3'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -270,10 +272,15 @@ jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", versio
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
 # https://mvnrepository.com/artifact/commons-validator/commons-validator
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
 micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
+jmh = ["jmh-core", "jmh-generator-annprocess"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
@@ -290,3 +297,4 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersio
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
