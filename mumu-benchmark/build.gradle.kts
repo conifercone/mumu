@@ -18,13 +18,25 @@ jmh {
     resultsFile.set(jmhReportFile)
 }
 
+fun getBenchmarkClassNames(): String {
+    val primary = project.findProperty("include") as? String
+    val fallback = project.findProperty("jmh.include") as? String
+    val raw = primary ?: fallback
+    return when {
+        raw.isNullOrBlank() -> "AllBenchmarks"
+        else -> raw.split('|').joinToString("+") { it.trim() }
+    }
+}
+
 tasks.register<Copy>("saveBenchmarkResult") {
     dependsOn("jmh")
 
     val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
     sdf.timeZone = TimeZone.getTimeZone(ZoneOffset.UTC)
     val timestamp = sdf.format(Date())
-    val outputFileName = "result_$timestamp.json"
+
+    val classNames = getBenchmarkClassNames()
+    val outputFileName = "result_${classNames}_$timestamp.json"
 
     from(jmhReportFile)
     into(jmhHistoryDir)
