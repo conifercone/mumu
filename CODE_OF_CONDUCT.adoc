@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: .
 :icons: font
+:email: kaiyu.shan@outlook.com
 
 = Contributor Covenant Code of Conduct
 
@@ -62,7 +63,7 @@ Examples of representing our community include using an official e-mail address,
 [#enforcement]
 == Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at mailto:kaiyu.shan@outlook.com[kaiyu.shan@outlook.com].
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at mailto:{email}[{email}].
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.

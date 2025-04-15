@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+:email: kaiyu.shan@outlook.com
 
 = 贡献指南
 
@@ -9,7 +10,7 @@
 
 👍🎉 首先，感谢您抽出时间来贡献！ 🎉👍
 
-本项目遵循贡献者公约 link:../CODE_OF_CONDUCT.adoc[行为守则]。参与时，您需遵守此守则。如有不当行为，请报告至 mailto:kaiyu.shan@outlook.com[kaiyu.shan@outlook.com]。
+本项目遵循贡献者公约 link:../CODE_OF_CONDUCT.adoc[行为守则]。参与时，您需遵守此守则。如有不当行为，请报告至 mailto:{email}[{email}]。
 
 以下是一组为 mumu 做贡献的指南。这些仅是指导方针，而非规则，请根据实际情况判断，并随时在 Pull Request 中提出对本文档的修改建议。
 

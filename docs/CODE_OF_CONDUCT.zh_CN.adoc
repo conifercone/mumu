@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+:email: kaiyu.shan@outlook.com
 
 = 贡献者誓言行为规范
 
@@ -61,7 +62,7 @@
 [#enforcement]
 == 执行
 
-可以将虐待、骚扰或其他不可接受的行为报告给负责执行的社区领导者，联系方式为 mailto:kaiyu.shan@outlook.com[kaiyu.shan@outlook.com]。所有投诉将被迅速和公平地审查和调查。
+可以将虐待、骚扰或其他不可接受的行为报告给负责执行的社区领导者，联系方式为 mailto:{email}[{email}]。所有投诉将被迅速和公平地审查和调查。
 
 所有社区领导者有义务尊重事件报告者的隐私和安全。
 

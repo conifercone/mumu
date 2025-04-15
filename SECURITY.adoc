@@ -1,6 +1,8 @@
 :doctype: article
 :imagesdir: .
 :icons: font
+:mumu-github-homepage-link: https://github.com/conifercone/mumu
+:mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
 
 = Security Policy
 
@@ -21,7 +23,7 @@
 The mumu team and community take security bugs in mumu seriously.
 We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
-To report a security issue, please use the GitHub Security Advisory link:https://github.com/conifercone/mumu/security/advisories/new[Report a Vulnerability]
+To report a security issue, please use the GitHub Security Advisory link:{mumu-github-new-security-report-link}[Report a Vulnerability]
 tab.
 
 The mumu team will send a response indicating the next steps in handling your report.
