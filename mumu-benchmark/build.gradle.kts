@@ -19,7 +19,9 @@ jmh {
 tasks.register<Copy>("saveBenchmarkResult") {
     dependsOn("jmh")
 
-    val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Date())
+    val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    val timestamp = sdf.format(Date())
     val outputFileName = "result_$timestamp.json"
 
     from(jmhReportFile)
