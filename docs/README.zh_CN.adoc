@@ -3,6 +3,8 @@
 :icons: font
 :slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
 
+= mumu
+
 image::logo.svg[mumu]
 
 - link:README.zh_CN.adoc[简体中文]
@@ -10,8 +12,6 @@ image::logo.svg[mumu]
 - link:../README.adoc[English]
 - link:README.ja.adoc[日本語]
 - link:README.ko.adoc[한국어]
-
-== mumu
 
 image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="https://github.com/conifercone/mumu"]
 image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="https://github.com/conifercone/mumu"]
@@ -31,7 +31,7 @@ image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
 
-=== 目次
+== 目次
 
 - <<project, 项目>>
 - <<module-introduction, 模块介绍>>
@@ -41,7 +41,7 @@ image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contrib
 - <<contributors, 贡献者>>
 
 [#project]
-=== 项目
+== 项目
 
 [quote]
 ____
@@ -49,7 +49,7 @@ ____
 ____
 
 [#delightfully-clean-system]
-==== 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
+=== 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
 
 厌倦了那些让你头疼的混乱代码和复杂设置？来看看我们的 *开箱即玩管理系统*！🎁 只需打开盒子，哇！你就能像超级明星一样轻松管理，代码整洁得闪闪发光！✨
 
@@ -62,7 +62,7 @@ ____
 加入轻松管理的乐趣，和混乱说再见！让我们把管理变成一场快乐的旅程吧！🚀🎈
 
 [#module-introduction]
-=== 模块介绍
+== 模块介绍
 
 [source,text]
 ----
@@ -82,10 +82,10 @@ mumu
 ----
 
 [#build]
-=== 构建
+== 构建
 
 [#infrastructure]
-==== 基础设施
+=== 基础设施
 
 [cols="1,1",options="header"]
 |===
@@ -103,16 +103,16 @@ mumu
 |===
 
 [#dependency-statement]
-=== 依赖声明
+== 依赖声明
 
 link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph**]
 
 [#license]
-=== 许可
+== 许可
 
 link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
 
 [#contributors]
-=== 贡献者
+== 贡献者
 
 image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]

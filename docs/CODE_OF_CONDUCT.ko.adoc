@@ -2,15 +2,15 @@
 :imagesdir: ..
 :icons: font
 
+= 기여자 서약 행동 강령
+
 - link:CODE_OF_CONDUCT.zh_CN.adoc[简体中文]
 - link:CODE_OF_CONDUCT.zh_TW.adoc[繁體中文]
 - link:../CODE_OF_CONDUCT.adoc[English]
 - link:CODE_OF_CONDUCT.ja.adoc[日本語]
 - link:CODE_OF_CONDUCT.ko.adoc[한국어]
 
-== 기여자 서약 행동 강령
-
-=== 목차
+== 목차
 
 - <<our-pledge, 우리의 약속>>
 - <<our-standards, 우리의 기준>>

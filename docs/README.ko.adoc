@@ -3,6 +3,8 @@
 :icons: font
 :slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
 
+= mumu
+
 image::logo.svg[mumu]
 
 - link:README.zh_CN.adoc[简体中文]
@@ -10,8 +12,6 @@ image::logo.svg[mumu]
 - link:../README.adoc[English]
 - link:README.ja.adoc[日本語]
 - link:README.ko.adoc[한국어]
-
-== mumu
 
 image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="https://github.com/conifercone/mumu"]
 image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="https://github.com/conifercone/mumu"]
@@ -31,7 +31,7 @@ image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
 
-=== 목차
+== 목차
 
 - <<project, 프로젝트>>
 - <<module-introduction, 모듈 소개>>
@@ -41,7 +41,7 @@ image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contrib
 - <<contributors, 기여자>>
 
 [#project]
-=== 프로젝트
+== 프로젝트
 
 [quote]
 ____
@@ -52,7 +52,7 @@ ____
 ____
 
 [#delightfully-clean-system]
-==== 🎉 즐겁게 사용할 수 있는 깔끔한 관리 시스템! 🎉
+=== 🎉 즐겁게 사용할 수 있는 깔끔한 관리 시스템! 🎉
 
 복잡한 설정과 어지러운 코드에 지치셨나요?
 *즉시 사용 가능한 관리 시스템*을 확인해 보세요!
@@ -71,7 +71,7 @@ ____
 🚀🎈
 
 [#module-introduction]
-=== 모듈 소개
+== 모듈 소개
 
 [source,text]
 ----
@@ -91,10 +91,10 @@ mumu
 ----
 
 [#build]
-=== 빌드
+== 빌드
 
 [#infrastructure]
-==== 기본 인프라
+=== 기본 인프라
 
 [cols="1,1",options="header"]
 |===
@@ -112,16 +112,16 @@ mumu
 |===
 
 [#dependency-statement]
-=== 의존성 선언
+== 의존성 선언
 
 link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph**]
 
 [#license]
-=== 라이선스
+== 라이선스
 
 link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
 
 [#contributors]
-=== 기여자
+== 기여자
 
 image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]

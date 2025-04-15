@@ -2,15 +2,15 @@
 :imagesdir: ..
 :icons: font
 
+= 貢獻者誓言行為規範
+
 - link:CODE_OF_CONDUCT.zh_CN.adoc[简体中文]
 - link:CODE_OF_CONDUCT.zh_TW.adoc[繁體中文]
 - link:../CODE_OF_CONDUCT.adoc[English]
 - link:CODE_OF_CONDUCT.ja.adoc[日本語]
 - link:CODE_OF_CONDUCT.ko.adoc[한국어]
 
-== 貢獻者誓言行為規範
-
-=== 目次
+== 目次
 
 - <<our-pledge, 我們的承諾>>
 - <<our-standards, 我們的標準>>
