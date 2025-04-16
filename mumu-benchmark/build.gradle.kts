@@ -10,7 +10,6 @@ dependencies {
     jmh(libs.bundles.jmh)
 }
 
-// 🔹 先获取 benchmark class name，供 jmh + saveBenchmarkResult 两处使用
 val classNames: String = run {
     val primary = project.findProperty("include") as? String
     val fallback = project.findProperty("jmh.include") as? String
@@ -21,17 +20,14 @@ val classNames: String = run {
 
 val jmhFileName = "result_${classNames}.json"
 
-// ✅ 修改：把历史文件放在 jmhHistoryDir 的 classNames 子目录下
 val jmhHistoryDir = layout.projectDirectory.dir("../benchmark-history")
 val jmhHistorySubDir = jmhHistoryDir.dir(classNames)
 
-// ✅ 设置 JMH 执行时的输出文件名
 jmh {
     resultFormat.set("JSON")
     resultsFile.set(layout.buildDirectory.file("reports/jmh/$jmhFileName"))
 }
 
-// ✅ 保存历史的任务
 tasks.register<Copy>("saveBenchmarkResult") {
     dependsOn("jmh")
 
