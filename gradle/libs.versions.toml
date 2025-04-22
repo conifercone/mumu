@@ -44,7 +44,7 @@ libphonenumberVersion = '9.0.3'
 commonsValidatorVersion = '1.9.0'
 jmhVersion = '1.37'
 # bom version
-grpcBomVersion = '1.71.0'
+grpcBomVersion = '1.72.0'
 guavaBomVersion = '33.4.8-jre'
 protobufBomVersion = '4.30.2'
 # plugin version
