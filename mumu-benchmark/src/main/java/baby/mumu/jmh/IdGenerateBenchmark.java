@@ -15,7 +15,10 @@
  */
 package baby.mumu.jmh;
 
+import static baby.mumu.jmh.MuMuBenchmarkUtils.getResultFilePath;
+
 import com.github.yitter.idgen.YitIdHelper;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -33,7 +36,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
- * Yitter#nextId基准测试
+ * 常见ID生成方法基准测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.10.0
@@ -51,17 +54,22 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 // 正式执行5次，每次1秒
 @Measurement(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
-public class YitterNextIdBenchmark {
+public class IdGenerateBenchmark {
 
   @Benchmark
-  public long nextId() {
+  public long yitId() {
     return YitIdHelper.nextId();
+  }
+
+  @Benchmark
+  public String uuid() {
+    return UUID.randomUUID().toString();
   }
 
   public static void main(String[] args) throws RunnerException {
     Options opt = new OptionsBuilder()
-      .include(YitterNextIdBenchmark.class.getSimpleName())
-      .result("./benchmark-history/YitterNextIdBenchmark.json")
+      .include(IdGenerateBenchmark.class.getSimpleName())
+      .result(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.JSON))
       .resultFormat(ResultFormatType.JSON).build();
     new Runner(opt).run();
   }
