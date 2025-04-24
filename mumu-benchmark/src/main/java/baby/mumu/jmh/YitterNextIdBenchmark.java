@@ -26,6 +26,11 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.results.format.ResultFormatType;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * Yitter#nextId基准测试
@@ -51,5 +56,13 @@ public class YitterNextIdBenchmark {
   @Benchmark
   public long nextId() {
     return YitIdHelper.nextId();
+  }
+
+  public static void main(String[] args) throws RunnerException {
+    Options opt = new OptionsBuilder()
+      .include(YitterNextIdBenchmark.class.getSimpleName())
+      .result("./benchmark-history/YitterNextIdBenchmark.json")
+      .resultFormat(ResultFormatType.JSON).build();
+    new Runner(opt).run();
   }
 }

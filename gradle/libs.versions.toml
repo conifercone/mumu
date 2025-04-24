@@ -51,7 +51,6 @@ protobufBomVersion = '4.30.2'
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.13.1'
 kotlinPluginVersion = '2.1.20'
-jmhPluginVersion = '0.7.3'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -280,7 +279,6 @@ jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess"
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
 micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
-jmh = ["jmh-core", "jmh-generator-annprocess"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
@@ -297,4 +295,3 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersio
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }
-jmh = { id = "me.champeau.jmh", version.ref = "jmhPluginVersion" }
