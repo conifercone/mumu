@@ -1,0 +1,89 @@
+# JMH version: 1.37
+# VM version: JDK 23.0.2, OpenJDK 64-Bit Server VM, 23.0.2+7
+# VM invoker: C:\Users\kaiyu\scoop\apps\msys2\current\home\kaiyu\.sdkman\candidates\java\23.0.2-tem\bin\java.exe
+# VM options: -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: baby.mumu.jmh.IdGenerateBenchmark.uuid
+
+# Run progress: 0.00% complete, ETA 00:00:26
+# Fork: 1 of 1
+# Warmup Iteration   1: 1133.718 ops/ms
+# Warmup Iteration   2: 1251.003 ops/ms
+# Warmup Iteration   3: 1245.026 ops/ms
+Iteration   1: 1254.340 ops/ms
+Iteration   2: 1248.111 ops/ms
+Iteration   3: 1253.486 ops/ms
+Iteration   4: 1264.353 ops/ms
+Iteration   5: 1263.199 ops/ms
+Iteration   6: 1266.508 ops/ms
+Iteration   7: 1261.230 ops/ms
+Iteration   8: 1264.126 ops/ms
+Iteration   9: 1254.453 ops/ms
+Iteration  10: 1264.834 ops/ms
+
+
+Result "baby.mumu.jmh.IdGenerateBenchmark.uuid":
+  1259.464 ±(99.9%) 9.524 ops/ms [Average]
+  (min, avg, max) = (1248.111, 1259.464, 1266.508), stdev = 6.299
+  CI (99.9%): [1249.940, 1268.988] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 23.0.2, OpenJDK 64-Bit Server VM, 23.0.2+7
+# VM invoker: C:\Users\kaiyu\scoop\apps\msys2\current\home\kaiyu\.sdkman\candidates\java\23.0.2-tem\bin\java.exe
+# VM options: -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: baby.mumu.jmh.IdGenerateBenchmark.yitId
+
+# Run progress: 50.00% complete, ETA 00:00:14
+# Fork: 1 of 1
+# Warmup Iteration   1: 46.859 ops/ms
+# Warmup Iteration   2: 58.996 ops/ms
+# Warmup Iteration   3: 58.978 ops/ms
+Iteration   1: 59.011 ops/ms
+Iteration   2: 58.983 ops/ms
+Iteration   3: 58.977 ops/ms
+Iteration   4: 58.983 ops/ms
+Iteration   5: 58.981 ops/ms
+Iteration   6: 58.995 ops/ms
+Iteration   7: 59.007 ops/ms
+Iteration   8: 58.987 ops/ms
+Iteration   9: 58.987 ops/ms
+Iteration  10: 58.983 ops/ms
+
+
+Result "baby.mumu.jmh.IdGenerateBenchmark.yitId":
+  58.989 ±(99.9%) 0.017 ops/ms [Average]
+  (min, avg, max) = (58.977, 58.989, 59.011), stdev = 0.012
+  CI (99.9%): [58.972, 59.007] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:00:42
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                   Mode  Cnt     Score   Error   Units
+IdGenerateBenchmark.uuid   thrpt   10  1259.464 ± 9.524  ops/ms
+IdGenerateBenchmark.yitId  thrpt   10    58.989 ± 0.017  ops/ms
+
+Benchmark result is saved to ./benchmark-history/IdGenerateBenchmark.json

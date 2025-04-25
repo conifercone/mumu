@@ -69,6 +69,7 @@ public class IdGenerateBenchmark {
   public static void main(String[] args) throws RunnerException {
     Options opt = new OptionsBuilder()
       .include(IdGenerateBenchmark.class.getSimpleName())
+      .output(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.TEXT))
       .result(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.JSON))
       .resultFormat(ResultFormatType.JSON).build();
     new Runner(opt).run();
