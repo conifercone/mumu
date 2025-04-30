@@ -42,10 +42,13 @@ tasks.register<Copy>("installGitHooks") {
     }
 }
 
+// 获取git短hash用于版本号后缀
 val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()
+// 版本号后缀集合
 val suffixes = listOf("-alpha", "-beta", "-snapshot", "-dev", "-test", "-pre")
+// 当前UTC时间
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
