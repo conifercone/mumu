@@ -73,7 +73,7 @@ import org.jetbrains.annotations.NotNull;
 @SupportedAnnotationTypes(
   value = {"baby.mumu.basis.annotations.Metamodel"}
 )
-@SupportedSourceVersion(SourceVersion.RELEASE_21)
+@SupportedSourceVersion(SourceVersion.RELEASE_23)
 @AutoService(Processor.class)
 @SupportedOptions({"gradle.version", "os.name", "java.version", "project.version", "project.name"})
 public class MetamodelGenerator extends AbstractProcessor {
