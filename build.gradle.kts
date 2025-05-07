@@ -65,6 +65,7 @@ allprojects {
 
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
+    // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (endsWithAny(
                 versionString,
