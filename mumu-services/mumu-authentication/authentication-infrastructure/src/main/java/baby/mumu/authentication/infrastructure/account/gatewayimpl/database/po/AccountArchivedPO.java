@@ -27,13 +27,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.javamoney.moneta.Money;
@@ -108,7 +108,7 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   @Enumerated(EnumType.STRING)
   private LanguageEnum language;
 
-  @ColumnDefault("'1970-01-01'::date")
+  @NotNull
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
 

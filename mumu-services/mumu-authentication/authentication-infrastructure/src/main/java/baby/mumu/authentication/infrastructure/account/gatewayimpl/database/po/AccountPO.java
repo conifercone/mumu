@@ -35,7 +35,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.javamoney.moneta.Money;
@@ -160,7 +159,6 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
    * 出生日期
    */
   @NotNull
-  @ColumnDefault("'1970-01-01'::date")
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
 
