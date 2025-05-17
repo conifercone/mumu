@@ -60,7 +60,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
    */
   @NotNull
   @Indexed(background = true)
-  private Long userId;
+  private Long accountId;
 
   /**
    * 头像来源
