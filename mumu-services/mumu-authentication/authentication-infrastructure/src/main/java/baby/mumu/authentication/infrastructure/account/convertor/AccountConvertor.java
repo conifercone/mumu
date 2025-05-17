@@ -255,10 +255,10 @@ public class AccountConvertor {
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
       accountNotNull.setAddresses(
-        accountAddressDocumentRepository.findByUserId(accountDataObject.getId()).stream().map(
+        accountAddressDocumentRepository.findByAccountId(accountDataObject.getId()).stream().map(
           AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
       accountNotNull.setSystemSettings(
-        accountSystemSettingsDocumentRepository.findByUserId(accountDataObject.getId()).stream()
+        accountSystemSettingsDocumentRepository.findByAccountId(accountDataObject.getId()).stream()
           .flatMap(accountSystemSettingsDocumentPO -> this.toAccountSystemSettings(
             accountSystemSettingsDocumentPO).stream())
           .collect(Collectors.toList()));
@@ -318,7 +318,7 @@ public class AccountConvertor {
       Optional.ofNullable(account.getAddresses())
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddresses -> accountAddresses.forEach(
-          accountAddress -> accountAddress.setUserId(account.getId())));
+          accountAddress -> accountAddress.setAccountId(account.getId())));
       return account;
     });
   }
@@ -335,7 +335,7 @@ public class AccountConvertor {
           AccountMapper.INSTANCE.toEntity(accountUpdateByIdCmdNotNull, account);
           Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty)
             .ifPresent(accountAddresses -> accountAddresses.forEach(
-              accountAddress -> accountAddress.setUserId(account.getId())));
+              accountAddress -> accountAddress.setAccountId(account.getId())));
           String emailAfterUpdated = account.getEmail();
           String usernameAfterUpdated = account.getUsername();
           if (StringUtils.isNoneBlank(account.getPhone(), account.getPhoneCountryCode())
@@ -460,7 +460,7 @@ public class AccountConvertor {
       .map(systemSettingsDocumentPO -> {
         AccountMapper.INSTANCE.toAccountSystemSettingsDocumentPO(
           new AccountSystemSettingsDocumentPO(systemSettingsDocumentPO.getId(),
-            systemSettingsDocumentPO.getUserId(),
+            systemSettingsDocumentPO.getAccountId(),
             systemSettingsDocumentPO.getProfile(),
             systemSettingsDocumentPO.getName(),
             systemSettingsDocumentPO.isDefaultSystemSettings(),

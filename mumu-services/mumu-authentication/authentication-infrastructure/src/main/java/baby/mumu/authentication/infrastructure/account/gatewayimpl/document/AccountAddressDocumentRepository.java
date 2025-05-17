@@ -29,9 +29,9 @@ import org.springframework.data.mongodb.repository.Query;
 public interface AccountAddressDocumentRepository extends
   MongoRepository<AccountAddressDocumentPO, String> {
 
-  void deleteByUserId(Long userId);
+  void deleteByAccountId(Long accountId);
 
-  List<AccountAddressDocumentPO> findByUserId(Long userId);
+  List<AccountAddressDocumentPO> findByAccountId(Long accountId);
 
   @Query("""
     { 'location': { $geoWithin: { $centerSphere: [ [ ?0, ?1 ], ?2 ] } } }

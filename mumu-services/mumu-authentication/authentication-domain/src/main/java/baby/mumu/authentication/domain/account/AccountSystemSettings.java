@@ -64,7 +64,7 @@ public class AccountSystemSettings extends BasisDomainModel {
   /**
    * 账户ID
    */
-  private Long userId;
+  private Long accountId;
 
   /**
    * 系统主题

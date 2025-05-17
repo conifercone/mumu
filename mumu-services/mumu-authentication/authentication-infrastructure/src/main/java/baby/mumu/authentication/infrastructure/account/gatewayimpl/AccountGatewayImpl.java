@@ -322,7 +322,7 @@ public class AccountGatewayImpl implements AccountGateway {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
         }
         accountRepository.deleteById(accountPO.getId());
-        accountAddressDocumentRepository.deleteByUserId(accountPO.getId());
+        accountAddressDocumentRepository.deleteByAccountId(accountPO.getId());
         passwordTokenCacheRepository.deleteById(accountPO.getId());
         accountRoleRepository.deleteByAccountId(accountPO.getId());
         accountCacheRepository.deleteById(accountPO.getId());
@@ -414,7 +414,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
       accountArchivedRepository.deleteById(accountIdNonNull);
-      accountAddressDocumentRepository.deleteByUserId(accountIdNonNull);
+      accountAddressDocumentRepository.deleteByAccountId(accountIdNonNull);
       accountRoleRepository.deleteByAccountId(accountIdNonNull);
       accountCacheRepository.deleteById(accountIdNonNull);
       accountRoleCacheRepository.deleteById(accountIdNonNull);
@@ -446,7 +446,7 @@ public class AccountGatewayImpl implements AccountGateway {
         .flatMap(accountConvertor::toAccountAddressPO)
         .ifPresent(
           accountAddressPO -> accountRepository.findById(accountId).ifPresent(_ -> {
-            accountAddressPO.setUserId(accountId);
+            accountAddressPO.setAccountId(accountId);
             accountAddressDocumentRepository.save(accountAddressPO);
             accountCacheRepository.deleteById(accountId);
             accountRoleCacheRepository.deleteById(accountId);
@@ -478,12 +478,12 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtils.getLoginAccountId()
       .flatMap(_ -> accountSystemSettingsDocumentRepository.findById(systemSettingsId))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
-        .equals(accountSystemSettingsMongodbPO.getUserId()))
+        .equals(accountSystemSettingsMongodbPO.getAccountId()))
       .flatMap(
         accountConvertor::resetAccountSystemSettingsDocumentPO)
       .ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
-        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
       });
   }
 
@@ -497,11 +497,11 @@ public class AccountGatewayImpl implements AccountGateway {
       .flatMap(_ -> accountSystemSettingsDocumentRepository.findById(
         accountSystemSettings.getId()))
       .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
-        .equals(accountSystemSettingsMongodbPO.getUserId()))
+        .equals(accountSystemSettingsMongodbPO.getAccountId()))
       .flatMap(_ -> accountConvertor.toAccountSystemSettingsDocumentPO(
         accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
-        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
       });
   }
 
@@ -515,11 +515,11 @@ public class AccountGatewayImpl implements AccountGateway {
       .flatMap(_ -> accountAddressDocumentRepository.findById(
         accountAddress.getId()))
       .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
-        .equals(accountAddressMongodbPO.getUserId()))
+        .equals(accountAddressMongodbPO.getAccountId()))
       .flatMap(_ -> accountConvertor.toAccountAddressPO(
         accountAddress)).ifPresent(accountAddressMongodbPO -> {
         accountAddressDocumentRepository.save(accountAddressMongodbPO);
-        accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
+        accountCacheRepository.deleteById(accountAddressMongodbPO.getAccountId());
       });
   }
 
@@ -533,13 +533,13 @@ public class AccountGatewayImpl implements AccountGateway {
       accountId -> Optional.ofNullable(accountSystemSettings)
         .flatMap(accountConvertor::toAccountSystemSettingsDocumentPO)
         .filter(
-          accountSystemSettingsMongodbPO -> !accountSystemSettingsDocumentRepository.existsByUserIdAndProfile(
+          accountSystemSettingsMongodbPO -> !accountSystemSettingsDocumentRepository.existsByAccountIdAndProfile(
             accountId, accountSystemSettingsMongodbPO.getProfile()))
         .ifPresent(
           accountSystemSettingsMongodbPO -> {
-            accountSystemSettingsMongodbPO.setUserId(accountId);
+            accountSystemSettingsMongodbPO.setAccountId(accountId);
             accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
-            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
           }));
   }
 
@@ -634,7 +634,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public List<Account> nearby(double radiusInMeters) {
     return SecurityContextUtils.getLoginAccountId().flatMap(accountId ->
-        accountAddressDocumentRepository.findByUserId(accountId).stream()
+        accountAddressDocumentRepository.findByAccountId(accountId).stream()
           .filter(AccountAddressDocumentPO::isDefaultAddress).findAny()
       ).filter(accountAddressMongodbPO -> accountAddressMongodbPO.getLocation() != null)
       .map(accountAddressMongodbPO -> {
@@ -643,9 +643,10 @@ public class AccountGatewayImpl implements AccountGateway {
           accountAddressMongodbPO.getLocation().getY(), radiusInMeters / 6378137);
         return accountRepository.findAllById(byLocationWithin.stream().filter(
             accountAddressMongodbPOProbablyTheCurrentUser -> !Objects.equals(
-              accountAddressMongodbPO.getUserId(),
-              accountAddressMongodbPOProbablyTheCurrentUser.getUserId())).collect(
-            Collectors.toMap(AccountAddressDocumentPO::getUserId, AccountAddressDocumentPO::getUserId,
+              accountAddressMongodbPO.getAccountId(),
+              accountAddressMongodbPOProbablyTheCurrentUser.getAccountId())).collect(
+            Collectors.toMap(AccountAddressDocumentPO::getAccountId,
+              AccountAddressDocumentPO::getAccountId,
               (existing, _) -> existing)).values()).stream()
           .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
           .collect(Collectors.toList());
@@ -661,18 +662,19 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(addressId))
       .flatMap(accountId -> {
           accountAddressDocumentRepository.saveAll(
-            accountAddressDocumentRepository.findByUserId(accountId).stream()
+            accountAddressDocumentRepository.findByAccountId(accountId).stream()
               .filter(accountAddressMongodbPO -> !addressId.equals(
                 accountAddressMongodbPO.getId()))
               .peek(accountAddressMongodbPO -> accountAddressMongodbPO.setDefaultAddress(false))
               .toList());
           return accountAddressDocumentRepository.findById(addressId)
-            .filter(accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId()));
+            .filter(
+              accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getAccountId()));
         }
       ).ifPresent(accountAddressMongodbPO -> {
         accountAddressMongodbPO.setDefaultAddress(true);
         accountAddressDocumentRepository.save(accountAddressMongodbPO);
-        accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
+        accountCacheRepository.deleteById(accountAddressMongodbPO.getAccountId());
       });
   }
 
@@ -685,7 +687,7 @@ public class AccountGatewayImpl implements AccountGateway {
     SecurityContextUtils.getLoginAccountId().filter(_ -> StringUtils.isNotBlank(systemSettingsId))
       .flatMap(accountId -> {
           accountSystemSettingsDocumentRepository.saveAll(
-            accountSystemSettingsDocumentRepository.findByUserId(accountId).stream()
+            accountSystemSettingsDocumentRepository.findByAccountId(accountId).stream()
               .filter(accountSystemSettingsMongodbPO -> !systemSettingsId.equals(
                 accountSystemSettingsMongodbPO.getId()))
               .peek(
@@ -694,12 +696,12 @@ public class AccountGatewayImpl implements AccountGateway {
               .toList());
           return accountSystemSettingsDocumentRepository.findById(systemSettingsId)
             .filter(accountSystemSettingsMongodbPO -> accountId.equals(
-              accountSystemSettingsMongodbPO.getUserId()));
+              accountSystemSettingsMongodbPO.getAccountId()));
         }
       ).ifPresent(accountSystemSettingsMongodbPO -> {
         accountSystemSettingsMongodbPO.setDefaultSystemSettings(true);
         accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
-        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+        accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
       });
   }
 
@@ -712,11 +714,11 @@ public class AccountGatewayImpl implements AccountGateway {
     if (StringUtils.isNotBlank(addressId)) {
       SecurityContextUtils.getLoginAccountId()
         .flatMap(accountId -> accountAddressDocumentRepository.findById(addressId).filter(
-          accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getUserId())))
+          accountAddressMongodbPO -> accountId.equals(accountAddressMongodbPO.getAccountId())))
         .filter(accountAddressMongodbPO -> !accountAddressMongodbPO.isDefaultAddress())
         .ifPresent(accountAddressMongodbPO -> {
           accountAddressDocumentRepository.deleteById(addressId);
-          accountCacheRepository.deleteById(accountAddressMongodbPO.getUserId());
+          accountCacheRepository.deleteById(accountAddressMongodbPO.getAccountId());
         });
     }
   }
@@ -732,13 +734,13 @@ public class AccountGatewayImpl implements AccountGateway {
         .flatMap(
           accountId -> accountSystemSettingsDocumentRepository.findById(systemSettingsId).filter(
             accountSystemSettingsMongodbPO -> accountId.equals(
-              accountSystemSettingsMongodbPO.getUserId())))
+              accountSystemSettingsMongodbPO.getAccountId())))
         .filter(
           accountSystemSettingsMongodbPO -> !accountSystemSettingsMongodbPO.isDefaultSystemSettings())
         .ifPresent(
           accountSystemSettingsMongodbPO -> {
             accountSystemSettingsDocumentRepository.deleteById(systemSettingsId);
-            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getUserId());
+            accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
           });
     }
   }

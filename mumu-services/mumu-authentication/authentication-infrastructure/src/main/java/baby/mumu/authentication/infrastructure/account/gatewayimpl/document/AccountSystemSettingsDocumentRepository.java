@@ -30,7 +30,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface AccountSystemSettingsDocumentRepository extends
   MongoRepository<AccountSystemSettingsDocumentPO, String> {
 
-  List<AccountSystemSettingsDocumentPO> findByUserId(@NotNull Long userId);
+  List<AccountSystemSettingsDocumentPO> findByAccountId(@NotNull Long accountId);
 
-  boolean existsByUserIdAndProfile(@NotNull Long userId, @NotBlank String profile);
+  boolean existsByAccountIdAndProfile(@NotNull Long accountId, @NotBlank String profile);
 }

@@ -62,7 +62,7 @@ public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentO
    */
   @NotNull
   @Indexed(background = true)
-  private Long userId;
+  private Long accountId;
 
   /**
    * 街道地址，包含门牌号和街道信息

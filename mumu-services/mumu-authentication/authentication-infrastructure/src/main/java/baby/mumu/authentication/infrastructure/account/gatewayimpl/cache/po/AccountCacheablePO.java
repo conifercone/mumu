@@ -185,7 +185,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     /**
      * 账户ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -246,7 +246,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     /**
      * 账户ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 系统主题

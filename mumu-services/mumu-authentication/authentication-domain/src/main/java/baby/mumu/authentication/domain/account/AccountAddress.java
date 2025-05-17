@@ -53,7 +53,7 @@ public class AccountAddress extends BasisDomainModel {
   /**
    * 账户ID
    */
-  private Long userId;
+  private Long accountId;
 
   /**
    * 街道地址，包含门牌号和街道信息
