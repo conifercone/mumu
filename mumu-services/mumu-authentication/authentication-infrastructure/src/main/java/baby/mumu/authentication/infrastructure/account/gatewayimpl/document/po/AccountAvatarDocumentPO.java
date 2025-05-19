@@ -65,16 +65,19 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   /**
    * 头像来源
    */
+  @Indexed(background = true)
   private AccountAvatarSourceEnum source;
 
   /**
    * 上传头像时的文件ID，填写URL或第三方时可为空
    */
+  @Indexed(background = true)
   private String fileId;
 
   /**
    * 头像主 URL，一般是中等尺寸（或默认展示尺寸）
    */
+  @Indexed(background = true)
   private String url;
 
   /**
