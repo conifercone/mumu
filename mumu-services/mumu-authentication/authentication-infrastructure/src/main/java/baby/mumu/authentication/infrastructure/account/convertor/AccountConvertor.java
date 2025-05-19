@@ -485,7 +485,7 @@ public class AccountConvertor {
       .map(roles -> roles.stream().map(role -> {
         AccountRolePO accountRolePO = new AccountRolePO();
         accountRolePO.setId(
-          AccountRolePOId.builder().roleId(role.getId()).userId(account.getId()).build());
+          AccountRolePOId.builder().roleId(role.getId()).accountId(account.getId()).build());
         accountRolePO.setAccount(accountRepository.findById(account.getId()).orElse(null));
         accountRolePO.setRole(roleRepository.findById(role.getId()).orElse(null));
         return accountRolePO;

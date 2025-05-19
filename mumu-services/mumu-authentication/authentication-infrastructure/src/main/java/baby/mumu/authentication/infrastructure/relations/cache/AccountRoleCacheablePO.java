@@ -44,14 +44,14 @@ public class AccountRoleCacheablePO extends JpaCacheableBasisDefaultPersistentOb
   @Serial
   private static final long serialVersionUID = 1872502889758524323L;
 
-  public AccountRoleCacheablePO(Long userId, List<Long> roleIds) {
-    this.userId = userId;
+  public AccountRoleCacheablePO(Long accountId, List<Long> roleIds) {
+    this.accountId = accountId;
     this.roleIds = roleIds;
   }
 
   @Id
   @Indexed
-  private Long userId;
+  private Long accountId;
 
   @Indexed
   private List<Long> roleIds;

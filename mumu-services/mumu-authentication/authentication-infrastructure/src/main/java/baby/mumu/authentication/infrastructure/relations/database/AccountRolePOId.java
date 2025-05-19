@@ -46,8 +46,8 @@ public class AccountRolePOId implements Serializable {
   private static final long serialVersionUID = -8007238455622220368L;
 
   @NotNull
-  @Column(name = "user_id", nullable = false)
-  private Long userId;
+  @Column(name = "account_id", nullable = false)
+  private Long accountId;
 
   @NotNull
   @Column(name = "role_id", nullable = false)
@@ -62,13 +62,13 @@ public class AccountRolePOId implements Serializable {
       return false;
     }
     AccountRolePOId entity = (AccountRolePOId) o;
-    return Objects.equals(this.userId, entity.userId) &&
+    return Objects.equals(this.accountId, entity.accountId) &&
       Objects.equals(this.roleId, entity.roleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, roleId);
+    return Objects.hash(accountId, roleId);
   }
 
 }
