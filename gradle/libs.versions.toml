@@ -46,7 +46,7 @@ jmhVersion = '1.37'
 # bom version
 grpcBomVersion = '1.72.0'
 guavaBomVersion = '33.4.8-jre'
-protobufBomVersion = '4.30.2'
+protobufBomVersion = '4.31.0'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.13.1'
