@@ -57,10 +57,10 @@ public class AccountAvatar extends BasisDomainModel {
 
   /**
    * 头像来源
-   * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatar#url}</p>
-   * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
+   * <p>头像来源为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatar#url}</p>
+   * <p>头像来源为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
    * {@link AccountAvatar#fileId}</p>
-   * <p>source为{@link AccountAvatarSourceEnum#THIRD_PARTY}时头像取值
+   * <p>头像来源为{@link AccountAvatarSourceEnum#THIRD_PARTY}时头像取值
    * {@link AccountAvatar#thirdParty}</p>
    */
   private AccountAvatarSourceEnum source;
