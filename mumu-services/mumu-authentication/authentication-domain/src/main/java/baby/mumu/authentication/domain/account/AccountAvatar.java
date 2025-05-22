@@ -13,101 +13,88 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
+package baby.mumu.authentication.domain.account;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.AccountAvatarThirdPartyProviderEnum;
-import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
- * 账户头像存储对象
+ * 账户头像领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.10.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Document("mumu-account-avatars")
+@RequiredArgsConstructor
+@ToString(callSuper = true)
+@SuperBuilder(toBuilder = true)
 @Metamodel
-public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AccountAvatar extends BasisDomainModel {
 
   @Serial
-  private static final long serialVersionUID = -976481457561712450L;
+  private static final long serialVersionUID = 2673950778392742518L;
 
   /**
    * 唯一主键
    */
-  @Id
-  @NotBlank
   private String id;
 
   /**
    * 账户ID
    */
-  @NotNull
-  @Indexed(background = true)
   private Long accountId;
 
   /**
    * 头像来源
-   * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatarDocumentPO#url}</p>
+   * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatar#url}</p>
    * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
-   * {@link AccountAvatarDocumentPO#fileId}</p>
+   * {@link AccountAvatar#fileId}</p>
    * <p>source为{@link AccountAvatarSourceEnum#THIRD_PARTY}时头像取值
-   * {@link AccountAvatarDocumentPO#thirdParty}</p>
+   * {@link AccountAvatar#thirdParty}</p>
    */
-  @Indexed(background = true)
   private AccountAvatarSourceEnum source;
 
   /**
    * 上传头像时的文件ID，填写URL或第三方时可为空
    */
-  @Indexed(background = true)
   private String fileId;
 
   /**
    * 用户上传的URL地址
    */
-  @Indexed(background = true)
   private String url;
 
   /**
    * 头像尺寸
    */
-  private AccountAvatarDocumentSize size;
+  private AccountAvatarSize size;
 
   /**
    * 三方头像
    */
-  private AccountAvatarDocumentThirdParty thirdParty;
+  private AccountAvatarThirdParty thirdParty;
 
   /**
    * 是否默认头像
    */
-  @NotNull
-  @Indexed(background = true)
   private boolean isDefault;
 
-  @Version
   private Long version;
 
 
   @Data
-  public static class AccountAvatarDocumentSize {
+  public static class AccountAvatarSize {
 
     /**
      * 小尺寸
@@ -126,7 +113,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   }
 
   @Data
-  public static class AccountAvatarDocumentThirdParty {
+  public static class AccountAvatarThirdParty {
 
     /**
      * 提供者
@@ -146,6 +133,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
     /**
      * 头像尺寸
      */
-    private AccountAvatarDocumentSize size;
+    private AccountAvatarSize size;
   }
 }
+
