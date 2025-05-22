@@ -75,7 +75,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   private String fileId;
 
   /**
-   * 头像主 URL，一般是中等尺寸（或默认展示尺寸）
+   * 用户上传的URL地址
    */
   @Indexed(background = true)
   private String url;
