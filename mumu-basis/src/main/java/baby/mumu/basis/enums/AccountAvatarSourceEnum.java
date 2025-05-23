@@ -26,7 +26,5 @@ public enum AccountAvatarSourceEnum {
   // 用户上传头像文件
   UPLOAD,
   // 用户指定头像地址
-  URL,
-  // 三方头像
-  THIRD_PARTY
+  URL
 }

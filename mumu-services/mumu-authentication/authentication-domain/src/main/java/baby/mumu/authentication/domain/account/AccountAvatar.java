@@ -18,7 +18,6 @@ package baby.mumu.authentication.domain.account;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
-import baby.mumu.basis.enums.AccountAvatarThirdPartyProviderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
 import lombok.Data;
@@ -60,8 +59,6 @@ public class AccountAvatar extends BasisDomainModel {
    * <p>头像来源为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatar#url}</p>
    * <p>头像来源为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
    * {@link AccountAvatar#fileId}</p>
-   * <p>头像来源为{@link AccountAvatarSourceEnum#THIRD_PARTY}时头像取值
-   * {@link AccountAvatar#thirdParty}</p>
    */
   private AccountAvatarSourceEnum source;
 
@@ -76,82 +73,11 @@ public class AccountAvatar extends BasisDomainModel {
   private String url;
 
   /**
-   * 头像尺寸
-   */
-  private AccountAvatarSize size;
-
-  /**
-   * 三方头像
-   */
-  private AccountAvatarThirdParty thirdParty;
-
-  /**
    * 是否默认头像
    */
   private boolean isDefault;
 
   private Long version;
 
-  @Data
-  public static class AccountAvatarSizeItem {
-
-    /**
-     * 头像地址
-     */
-    private String url;
-
-    /**
-     * 像素宽度
-     */
-    private int width;
-
-    /**
-     * 像素高度
-     */
-    private int height;
-  }
-
-  @Data
-  public static class AccountAvatarSize {
-
-    /**
-     * 小尺寸 - 用于列表、评论、头像角标等，推荐大小 48x48 px
-     */
-    private AccountAvatarSizeItem small;
-
-    /**
-     * 中等尺寸 - 用于用户卡片、设置页面头像等，推荐大小 96x96 px
-     */
-    private AccountAvatarSizeItem medium;
-
-    /**
-     * 大尺寸 - 用于个人资料页大头像展示等，推荐大小 192x192 px
-     */
-    private AccountAvatarSizeItem large;
-  }
-
-  @Data
-  public static class AccountAvatarThirdParty {
-
-    /**
-     * 提供者
-     */
-    private AccountAvatarThirdPartyProviderEnum provider;
-
-    /**
-     * 原始URL
-     */
-    private String rawUrl;
-
-    /**
-     * 链接的帐户ID
-     */
-    private String linkedAccountId;
-
-    /**
-     * 头像尺寸
-     */
-    private AccountAvatarSize size;
-  }
 }
 

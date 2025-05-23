@@ -17,7 +17,6 @@ package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
-import baby.mumu.basis.enums.AccountAvatarThirdPartyProviderEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -67,8 +66,6 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
    * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatarDocumentPO#url}</p>
    * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
    * {@link AccountAvatarDocumentPO#fileId}</p>
-   * <p>source为{@link AccountAvatarSourceEnum#THIRD_PARTY}时头像取值
-   * {@link AccountAvatarDocumentPO#thirdParty}</p>
    */
   @Indexed(background = true)
   private AccountAvatarSourceEnum source;
@@ -86,16 +83,6 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   private String url;
 
   /**
-   * 头像尺寸
-   */
-  private AccountAvatarDocumentSize size;
-
-  /**
-   * 三方头像
-   */
-  private AccountAvatarDocumentThirdParty thirdParty;
-
-  /**
    * 是否默认头像
    */
   @NotNull
@@ -104,66 +91,4 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
 
   @Version
   private Long version;
-
-  @Data
-  public static class AccountAvatarDocumentSizeItem {
-
-    /**
-     * 头像地址
-     */
-    private String url;
-
-    /**
-     * 像素宽度
-     */
-    private int width;
-
-    /**
-     * 像素高度
-     */
-    private int height;
-  }
-
-  @Data
-  public static class AccountAvatarDocumentSize {
-
-    /**
-     * 小尺寸 - 用于列表、评论、头像角标等，推荐大小 48x48 px
-     */
-    private AccountAvatarDocumentSizeItem small;
-
-    /**
-     * 中等尺寸 - 用于用户卡片、设置页面头像等，推荐大小 96x96 px
-     */
-    private AccountAvatarDocumentSizeItem medium;
-
-    /**
-     * 大尺寸 - 用于个人资料页大头像展示等，推荐大小 192x192 px
-     */
-    private AccountAvatarDocumentSizeItem large;
-  }
-
-  @Data
-  public static class AccountAvatarDocumentThirdParty {
-
-    /**
-     * 提供者
-     */
-    private AccountAvatarThirdPartyProviderEnum provider;
-
-    /**
-     * 原始URL
-     */
-    private String rawUrl;
-
-    /**
-     * 链接的帐户ID
-     */
-    private String linkedAccountId;
-
-    /**
-     * 头像尺寸
-     */
-    private AccountAvatarDocumentSize size;
-  }
 }
