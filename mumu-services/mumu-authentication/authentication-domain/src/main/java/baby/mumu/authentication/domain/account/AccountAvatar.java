@@ -72,11 +72,6 @@ public class AccountAvatar extends BasisDomainModel {
    */
   private String url;
 
-  /**
-   * 是否默认头像
-   */
-  private boolean isDefault;
-
   private Long version;
 
 }

@@ -82,13 +82,6 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   @Indexed(background = true)
   private String url;
 
-  /**
-   * 是否默认头像
-   */
-  @NotNull
-  @Indexed(background = true)
-  private boolean isDefault;
-
   @Version
   private Long version;
 }
