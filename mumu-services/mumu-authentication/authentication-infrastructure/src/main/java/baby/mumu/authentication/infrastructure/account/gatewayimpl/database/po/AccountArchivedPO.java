@@ -45,7 +45,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.4
  */
 @Entity
-@Table(name = "mumu_users_archived")
+@Table(name = "mumu_accounts_archived")
 @Getter
 @Setter
 @RequiredArgsConstructor

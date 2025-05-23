@@ -40,7 +40,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @Setter
 @Entity
-@Table(name = "mumu_user_roles")
+@Table(name = "mumu_account_roles")
 @DynamicInsert
 @Metamodel
 public class AccountRolePO extends JpaBasisDefaultPersistentObject {
