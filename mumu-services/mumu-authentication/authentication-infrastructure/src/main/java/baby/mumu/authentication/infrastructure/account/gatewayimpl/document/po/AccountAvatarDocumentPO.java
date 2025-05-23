@@ -16,10 +16,10 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,28 +27,25 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * 账户地址存储对象
+ * 账户头像存储对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.0.0
+ * @since 2.10.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("mumu-account-addresses")
+@Document("mumu-account-avatars")
 @Metamodel
-public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
+public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial
-  private static final long serialVersionUID = -8437677767812120031L;
+  private static final long serialVersionUID = -976481457561712450L;
 
   /**
    * 唯一主键
@@ -65,51 +62,25 @@ public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentO
   private Long accountId;
 
   /**
-   * 街道地址，包含门牌号和街道信息
-   */
-  @Size(max = 255)
-  @Indexed(background = true)
-  private String street;
-
-  /**
-   * 城市信息
-   */
-  @Size(max = 100)
-  @Indexed(background = true)
-  private String city;
-
-  /**
-   * 州或省的信息
-   */
-  @Size(max = 100)
-  @Indexed(background = true)
-  private String state;
-
-  /**
-   * 邮政编码
-   */
-  @Size(max = 20)
-  @Indexed(background = true)
-  private String postalCode;
-
-  /**
-   * 国家信息
-   */
-  @Size(max = 100)
-  @Indexed(background = true)
-  private String country;
-
-  /**
-   * 定位（WGS84坐标系）
-   */
-  @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-  private GeoJsonPoint location;
-
-  /**
-   * 是否为默认地址
+   * 头像来源
+   * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatarDocumentPO#url}</p>
+   * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
+   * {@link AccountAvatarDocumentPO#fileId}</p>
    */
   @Indexed(background = true)
-  private boolean defaultAddress;
+  private AccountAvatarSourceEnum source;
+
+  /**
+   * 上传头像时的文件ID，填写URL或第三方时可为空
+   */
+  @Indexed(background = true)
+  private String fileId;
+
+  /**
+   * 用户上传的URL地址
+   */
+  @Indexed(background = true)
+  private String url;
 
   @Version
   private Long version;

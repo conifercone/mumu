@@ -15,22 +15,19 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document;
 
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
-import jakarta.validation.constraints.NotBlank;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * 账户系统设置
+ * 账户头像设置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.10.0
  */
-public interface AccountSystemSettingsDocumentRepository extends
-  MongoRepository<AccountSystemSettingsDocumentPO, String> {
+public interface AccountAvatarDocumentRepository extends
+  MongoRepository<AccountAvatarDocumentPO, String> {
 
-  List<AccountSystemSettingsDocumentPO> findByAccountId(@NotNull Long accountId);
-
-  boolean existsByAccountIdAndProfile(@NotNull Long accountId, @NotBlank String profile);
+  Optional<AccountAvatarDocumentPO> findByAccountId(@NotNull Long accountId);
 }

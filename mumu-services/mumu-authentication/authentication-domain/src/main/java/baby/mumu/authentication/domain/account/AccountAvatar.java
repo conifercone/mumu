@@ -17,11 +17,9 @@ package baby.mumu.authentication.domain.account;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
-import baby.mumu.basis.enums.SystemThemeEnum;
-import baby.mumu.basis.enums.SystemThemeModeEnum;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +27,10 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 账户系统设置
+ * 账户头像领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 2.2.0
+ * @since 2.10.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -41,10 +39,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Metamodel
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountSystemSettings extends BasisDomainModel {
+public class AccountAvatar extends BasisDomainModel {
 
   @Serial
-  private static final long serialVersionUID = 3580954151681556830L;
+  private static final long serialVersionUID = 2673950778392742518L;
 
   /**
    * 唯一主键
@@ -52,36 +50,29 @@ public class AccountSystemSettings extends BasisDomainModel {
   private String id;
 
   /**
-   * 系统设置标识
-   */
-  private String profile;
-
-  /**
-   * 系统设置名称
-   */
-  private String name;
-
-  /**
    * 账户ID
    */
   private Long accountId;
 
   /**
-   * 系统主题
+   * 头像来源
+   * <p>头像来源为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatar#url}</p>
+   * <p>头像来源为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
+   * {@link AccountAvatar#fileId}</p>
    */
-  @Builder.Default
-  private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
+  private AccountAvatarSourceEnum source;
 
   /**
-   * 系统主题模式
+   * 上传头像时的文件ID，填写URL或第三方时可为空
    */
-  @Builder.Default
-  private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
+  private String fileId;
 
   /**
-   * 默认系统设置
+   * 用户上传的URL地址
    */
-  private boolean defaultSystemSettings;
+  private String url;
 
   private Long version;
+
 }
+

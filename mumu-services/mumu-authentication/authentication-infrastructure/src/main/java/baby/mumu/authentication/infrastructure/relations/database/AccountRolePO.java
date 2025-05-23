@@ -40,7 +40,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @Setter
 @Entity
-@Table(name = "mumu_user_roles")
+@Table(name = "mumu_account_roles")
 @DynamicInsert
 @Metamodel
 public class AccountRolePO extends JpaBasisDefaultPersistentObject {
@@ -52,9 +52,9 @@ public class AccountRolePO extends JpaBasisDefaultPersistentObject {
   @EmbeddedId
   private AccountRolePOId id;
 
-  @MapsId("userId")
+  @MapsId("accountId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "account_id", nullable = false)
   private AccountPO account;
 
   @MapsId("roleId")

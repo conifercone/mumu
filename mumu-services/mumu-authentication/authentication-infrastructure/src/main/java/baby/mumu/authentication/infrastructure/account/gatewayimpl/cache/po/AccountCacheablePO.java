@@ -15,6 +15,7 @@
  */
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po;
 
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.GenderEnum;
@@ -87,9 +88,9 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
   private boolean accountNonExpired;
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountAvatarCacheablePO avatar;
 
   /**
    * 国际电话区号
@@ -175,6 +176,32 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
   private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 
   @Data
+  public static class AccountAvatarCacheablePO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+    private Long version;
+  }
+
+  @Data
   public static class AccountAddressCacheablePO {
 
     /**
@@ -185,7 +212,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     /**
      * 账户ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -246,7 +273,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     /**
      * 账户ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 系统主题

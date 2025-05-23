@@ -15,7 +15,7 @@ service AccountService {
 message AccountCurrentLoginGrpcDTO{
   int64 id = 1;
   string username = 2;
-  string avatarUrl = 3;
+  AccountAvatarCurrentLoginQueryGrpcDTO avatar = 3;
   string phone = 4;
   GenderEnum gender = 5;
   string email = 6;
@@ -64,6 +64,17 @@ message AccountRolePermissionCurrentLoginQueryGrpcDTO{
   string name = 3;
 }
 
+message AccountAvatarCurrentLoginQueryGrpcDTO{
+  string id = 1;
+  AccountAvatarSourceEnum source = 2;
+  string fileId = 3;
+  string url = 4;
+}
+
+enum AccountAvatarSourceEnum{
+  URL = 0;
+  UPLOAD = 1;
+}
 
 enum GenderEnum
 {

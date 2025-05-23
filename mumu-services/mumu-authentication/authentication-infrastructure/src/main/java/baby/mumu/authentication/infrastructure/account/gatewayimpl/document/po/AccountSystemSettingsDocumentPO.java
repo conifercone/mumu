@@ -48,10 +48,10 @@ public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPers
   @Serial
   private static final long serialVersionUID = 6286174255794150761L;
 
-  public AccountSystemSettingsDocumentPO(String id, Long userId, String profile, String name,
+  public AccountSystemSettingsDocumentPO(String id, Long accountId, String profile, String name,
     boolean defaultSystemSettings, Long version) {
     this.id = id;
-    this.userId = userId;
+    this.accountId = accountId;
     this.profile = profile;
     this.name = name;
     this.defaultSystemSettings = defaultSystemSettings;
@@ -67,7 +67,7 @@ public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPers
    */
   @NotNull
   @Indexed(background = true)
-  private Long userId;
+  private Long accountId;
 
   /**
    * 系统设置标识

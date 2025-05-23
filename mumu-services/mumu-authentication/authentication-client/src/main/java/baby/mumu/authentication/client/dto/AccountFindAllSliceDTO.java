@@ -17,6 +17,7 @@ package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import jakarta.validation.constraints.Size;
@@ -75,12 +76,12 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   /**
    * 账户角色
    */
-  private List<AccountFindAllRoleCo> roles;
+  private List<AccountFindAllSliceRoleDTO> roles;
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountFindAllSliceAvatarDTO avatar;
 
   /**
    * 国际电话区号
@@ -145,10 +146,10 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountFindAllSliceAddressCo> addresses;
+  private List<AccountFindAllSliceAddressDTO> addresses;
 
   @Data
-  public static class AccountFindAllSliceAddressCo {
+  public static class AccountFindAllSliceAddressDTO {
 
     /**
      * 唯一主键
@@ -158,7 +159,7 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
     /**
      * 账户ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -199,7 +200,7 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountFindAllRoleCo {
+  public static class AccountFindAllSliceRoleDTO {
 
     private Long id;
 
@@ -209,11 +210,11 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
 
     private String description;
 
-    private List<AccountFindAllPermissionCo> permissions;
+    private List<AccountFindAllSlicePermissionDTO> permissions;
   }
 
   @Data
-  public static class AccountFindAllPermissionCo {
+  public static class AccountFindAllSlicePermissionDTO {
 
     /**
      * 权限id
@@ -231,5 +232,31 @@ public class AccountFindAllSliceDTO extends BaseDataTransferObject {
     private String name;
 
     private String description;
+  }
+
+  @Data
+  public static class AccountFindAllSliceAvatarDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+    private Long version;
   }
 }

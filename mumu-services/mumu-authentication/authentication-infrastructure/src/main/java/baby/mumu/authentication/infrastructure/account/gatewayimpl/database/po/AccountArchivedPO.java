@@ -45,7 +45,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.4
  */
 @Entity
-@Table(name = "mumu_users_archived")
+@Table(name = "mumu_accounts_archived")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -100,13 +100,6 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
    */
   @Column(name = "account_non_expired", nullable = false)
   private boolean accountNonExpired = true;
-
-  /**
-   * 头像地址
-   */
-  @Size(max = 200)
-  @Column(name = "avatar_url", length = 200, nullable = false)
-  private String avatarUrl;
 
   /**
    * 国际电话区号

@@ -116,9 +116,9 @@ public class Account extends BasisDomainModel implements UserDetails {
   private transient List<Role> descendantRoles = new ArrayList<>();
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountAvatar avatar;
 
   /**
    * 国际电话区号
