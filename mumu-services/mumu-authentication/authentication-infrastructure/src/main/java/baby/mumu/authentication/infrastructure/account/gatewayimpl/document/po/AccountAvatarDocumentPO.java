@@ -110,17 +110,17 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   public static class AccountAvatarDocumentSize {
 
     /**
-     * 小尺寸
+     * 小尺寸 - 用于列表、评论、头像角标等，推荐大小 48x48 px
      */
     private String small;
 
     /**
-     * 中等尺寸
+     * 中等尺寸 - 用于用户卡片、设置页面头像等，推荐大小 96x96 px
      */
     private String medium;
 
     /**
-     * 大尺寸
+     * 大尺寸 - 用于个人资料页大头像展示等，推荐大小 192x192 px
      */
     private String large;
   }
