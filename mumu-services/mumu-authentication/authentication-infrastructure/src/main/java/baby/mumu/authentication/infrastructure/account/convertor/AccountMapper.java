@@ -40,11 +40,13 @@ import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountAvatar;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountCacheablePO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
@@ -79,6 +81,9 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddressDocumentPO accountAddressDocumentPO);
+
+  @API(status = Status.STABLE, since = "2.10.0")
+  AccountAvatar toAccountAvatar(AccountAvatarDocumentPO accountAvatarDocumentPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddressDocumentPO toAccountAddressPO(AccountAddress accountAddress);

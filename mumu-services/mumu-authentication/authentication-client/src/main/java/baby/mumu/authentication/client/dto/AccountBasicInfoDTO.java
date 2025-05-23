@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import java.io.Serial;
@@ -70,9 +71,9 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   private boolean accountNonExpired;
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountAvatarBasicInfoDTO avatar;
 
   /**
    * 国际电话区号
@@ -187,5 +188,32 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
      * 是否为默认地址
      */
     private boolean defaultAddress;
+  }
+
+  @Data
+  public static class AccountAvatarBasicInfoDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+    private Long version;
+
   }
 }

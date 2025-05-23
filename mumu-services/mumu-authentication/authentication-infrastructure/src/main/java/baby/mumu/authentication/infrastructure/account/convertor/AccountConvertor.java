@@ -41,6 +41,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAvatarDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
@@ -92,6 +93,7 @@ public class AccountConvertor {
   private final AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository;
   private final AccountRoleCacheRepository accountRoleCacheRepository;
   private final RolePathRepository rolePathRepository;
+  private final AccountAvatarDocumentRepository accountAvatarDocumentRepository;
 
   @Autowired
   public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
@@ -102,7 +104,8 @@ public class AccountConvertor {
     RoleCacheRepository roleCacheRepository,
     AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository,
     AccountRoleCacheRepository accountRoleCacheRepository,
-    RolePathRepository rolePathRepository) {
+    RolePathRepository rolePathRepository,
+    AccountAvatarDocumentRepository accountAvatarDocumentRepository) {
     this.roleConvertor = roleConvertor;
     this.accountRepository = accountRepository;
     this.roleRepository = roleRepository;
@@ -113,6 +116,7 @@ public class AccountConvertor {
     this.accountSystemSettingsDocumentRepository = accountSystemSettingsDocumentRepository;
     this.accountRoleCacheRepository = accountRoleCacheRepository;
     this.rolePathRepository = rolePathRepository;
+    this.accountAvatarDocumentRepository = accountAvatarDocumentRepository;
   }
 
   @Contract("_ -> new")
@@ -254,14 +258,24 @@ public class AccountConvertor {
   private Optional<Account> getBasicInfoAccount(@NotNull AccountPO accountDataObject,
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
-      accountNotNull.setAddresses(
-        accountAddressDocumentRepository.findByAccountId(accountDataObject.getId()).stream().map(
-          AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
-      accountNotNull.setSystemSettings(
-        accountSystemSettingsDocumentRepository.findByAccountId(accountDataObject.getId()).stream()
-          .flatMap(accountSystemSettingsDocumentPO -> this.toAccountSystemSettings(
-            accountSystemSettingsDocumentPO).stream())
-          .collect(Collectors.toList()));
+      List<AccountAddressDocumentPO> accountAddressDocumentPOList = accountAddressDocumentRepository.findByAccountId(
+        accountDataObject.getId());
+      if (CollectionUtils.isNotEmpty(accountAddressDocumentPOList)) {
+        accountNotNull.setAddresses(
+          accountAddressDocumentPOList.stream().map(
+            AccountMapper.INSTANCE::toAccountAddress).collect(Collectors.toList()));
+      }
+      accountAvatarDocumentRepository.findByAccountId(accountDataObject.getId())
+        .map(AccountMapper.INSTANCE::toAccountAvatar).ifPresent(accountNotNull::setAvatar);
+      List<AccountSystemSettingsDocumentPO> accountSystemSettingsDocumentPOList = accountSystemSettingsDocumentRepository.findByAccountId(
+        accountDataObject.getId());
+      if (CollectionUtils.isNotEmpty(accountSystemSettingsDocumentPOList)) {
+        accountNotNull.setSystemSettings(
+          accountSystemSettingsDocumentPOList.stream()
+            .flatMap(accountSystemSettingsDocumentPO -> this.toAccountSystemSettings(
+              accountSystemSettingsDocumentPO).stream())
+            .collect(Collectors.toList()));
+      }
       setDigitalPreference(accountNotNull);
       return accountNotNull;
     });
@@ -319,6 +333,8 @@ public class AccountConvertor {
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddresses -> accountAddresses.forEach(
           accountAddress -> accountAddress.setAccountId(account.getId())));
+      Optional.ofNullable(account.getAvatar())
+        .ifPresent(accountAvatar -> accountAvatar.setAccountId(account.getId()));
       return account;
     });
   }

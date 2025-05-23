@@ -107,13 +107,6 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private boolean accountNonExpired = true;
 
   /**
-   * 头像地址
-   */
-  @Size(max = 200)
-  @Column(name = "avatar_url", length = 200, nullable = false)
-  private String avatarUrl;
-
-  /**
    * 国际电话区号
    */
   @Size(max = 10)

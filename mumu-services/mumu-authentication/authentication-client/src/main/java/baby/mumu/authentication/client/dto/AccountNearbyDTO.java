@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import java.io.Serial;
 import lombok.Data;
@@ -42,7 +43,7 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
   /**
    * 头像地址
    */
-  private String avatarUrl;
+  private AccountNearbyAvatarDTO avatar;
 
   /**
    * 时区
@@ -63,4 +64,29 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
    * 昵称
    */
   private String nickName;
+
+  @Data
+  public static class AccountNearbyAvatarDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+  }
 }

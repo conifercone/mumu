@@ -22,7 +22,10 @@ Accept: */*
     "test",
     "admin"
   ],
-  "avatarUrl": "https://github.com/users/conifercone",
+  "avatar": {
+    "source": "URL",
+    "url": "https://s.gravatar.com/avatar/0d8f419ee8a9a62d9517544e647e0c99a7222cbcc3e299daff146a0fc0468b5d"
+  },
   "phone": "{{$random.phoneNumber.phoneNumber}}",
   "gender": "MALE",
   "email": "{{$random.email}}",

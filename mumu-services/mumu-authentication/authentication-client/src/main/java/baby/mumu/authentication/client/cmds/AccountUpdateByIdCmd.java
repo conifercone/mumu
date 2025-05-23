@@ -41,9 +41,6 @@ public class AccountUpdateByIdCmd {
   @NotBlankOrNull(message = "{account.username.validation.not.blank}")
   private String username;
 
-  @Schema(description = "头像地址", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String avatarUrl;
-
   @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
   private String phoneCountryCode;
 

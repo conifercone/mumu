@@ -16,6 +16,8 @@
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document;
 
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
+import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -27,4 +29,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface AccountAvatarDocumentRepository extends
   MongoRepository<AccountAvatarDocumentPO, String> {
 
+  Optional<AccountAvatarDocumentPO> findByAccountId(@NotNull Long accountId);
 }

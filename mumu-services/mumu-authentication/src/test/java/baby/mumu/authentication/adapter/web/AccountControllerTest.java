@@ -23,8 +23,10 @@ import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
+import baby.mumu.authentication.client.cmds.AccountRegisterCmd.AccountAvatarRegisterCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.authentication.client.cmds.AccountUpdateRoleCmd;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
@@ -88,7 +90,11 @@ public class AccountControllerTest {
     accountRegisterCmd.setUsername("test1");
     accountRegisterCmd.setPassword("Test@123456");
     accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
-    accountRegisterCmd.setAvatarUrl("https://github.com/users/conifercone");
+    AccountAvatarRegisterCmd accountAvatarRegisterCmd = new AccountAvatarRegisterCmd();
+    accountAvatarRegisterCmd.setUrl(
+      "https://s.gravatar.com/avatar/0d8f419ee8a9a62d9517544e647e0c99a7222cbcc3e299daff146a0fc0468b5d");
+    accountAvatarRegisterCmd.setSource(AccountAvatarSourceEnum.URL);
+    accountRegisterCmd.setAvatar(accountAvatarRegisterCmd);
     accountRegisterCmd.setPhone("13031723736");
     accountRegisterCmd.setGender(GenderEnum.MALE);
     accountRegisterCmd.setLanguage(LanguageEnum.ZH);
