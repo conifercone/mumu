@@ -329,10 +329,12 @@ public class AccountConvertor {
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterCmdNotNull.getRoleCodes())
         .orElse(new ArrayList<>()));
+      // 设置地址所属的账号ID
       Optional.ofNullable(account.getAddresses())
         .filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddresses -> accountAddresses.forEach(
           accountAddress -> accountAddress.setAccountId(account.getId())));
+      // 设置头像所属的账号ID
       Optional.ofNullable(account.getAvatar())
         .ifPresent(accountAvatar -> accountAvatar.setAccountId(account.getId()));
       return account;
