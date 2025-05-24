@@ -29,7 +29,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 账户系统设置
+ * 账号系统设置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -62,7 +62,7 @@ public class AccountSystemSettings extends BasisDomainModel {
   private String name;
 
   /**
-   * 账户ID
+   * 账号ID
    */
   private Long accountId;
 

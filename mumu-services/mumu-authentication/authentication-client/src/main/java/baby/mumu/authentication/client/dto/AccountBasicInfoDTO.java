@@ -28,7 +28,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户基本信息数据传输对象
+ * 账号基本信息数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -41,12 +41,12 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   private static final long serialVersionUID = -6255187696908573035L;
 
   /**
-   * 账户id
+   * 账号id
    */
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
@@ -150,7 +150,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
     private String id;
 
     /**
-     * 账户ID
+     * 账号ID
      */
     private Long accountId;
 

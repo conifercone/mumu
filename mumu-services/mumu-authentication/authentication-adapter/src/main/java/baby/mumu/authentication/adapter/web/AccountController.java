@@ -60,7 +60,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 账户相关
+ * 账号相关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -68,7 +68,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequestMapping("/account")
-@Tag(name = "账户管理")
+@Tag(name = "账号管理")
 public class AccountController {
 
   private final AccountService accountService;
@@ -78,43 +78,43 @@ public class AccountController {
     this.accountService = accountService;
   }
 
-  @Operation(summary = "账户注册")
+  @Operation(summary = "账号注册")
   @PostMapping("/register")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(
-    @Parameter(description = "账户注册指令", required = true) @RequestBody @Validated AccountRegisterCmd accountRegisterCmd) {
+    @Parameter(description = "账号注册指令", required = true) @RequestBody @Validated AccountRegisterCmd accountRegisterCmd) {
     accountService.register(accountRegisterCmd);
   }
 
-  @Operation(summary = "账户基本信息更新")
+  @Operation(summary = "账号基本信息更新")
   @PutMapping("/updateById")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(
-    @Parameter(description = "根据账户ID更新账户基本信息指令", required = true) @RequestBody @Validated AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    @Parameter(description = "根据账号ID更新账号基本信息指令", required = true) @RequestBody @Validated AccountUpdateByIdCmd accountUpdateByIdCmd) {
     accountService.updateById(accountUpdateByIdCmd);
   }
 
-  @Operation(summary = "账户角色更新")
+  @Operation(summary = "账号角色更新")
   @PutMapping("/updateRoleById")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(
-    @Parameter(description = "根据账户ID更新账户角色指令", required = true) @RequestBody @Validated AccountUpdateRoleCmd accountUpdateRoleCmd) {
+    @Parameter(description = "根据账号ID更新账号角色指令", required = true) @RequestBody @Validated AccountUpdateRoleCmd accountUpdateRoleCmd) {
     accountService.updateRoleById(accountUpdateRoleCmd);
   }
 
-  @Operation(summary = "禁用账户")
+  @Operation(summary = "禁用账号")
   @PutMapping("/disable/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.disable(id);
   }
 
@@ -127,7 +127,7 @@ public class AccountController {
     accountService.logout();
   }
 
-  @Operation(summary = "获取当前登录账户信息")
+  @Operation(summary = "获取当前登录账号信息")
   @GetMapping("/currentLoginAccount")
   @ResponseBody
   @RateLimiter
@@ -136,7 +136,7 @@ public class AccountController {
     return accountService.queryCurrentLoginAccount();
   }
 
-  @Operation(summary = "获取在线账户数量等信息")
+  @Operation(summary = "获取在线账号数量等信息")
   @GetMapping("/onlineAccounts")
   @ResponseBody
   @RateLimiter
@@ -151,7 +151,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
     accountService.resetPassword(id);
   }
 
@@ -175,7 +175,7 @@ public class AccountController {
     accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
   }
 
-  @Operation(summary = "通过地址id修改账户地址")
+  @Operation(summary = "通过地址id修改账号地址")
   @PutMapping("/modifyAddressByAddressId")
   @ResponseBody
   @RateLimiter
@@ -195,7 +195,7 @@ public class AccountController {
     accountService.addSystemSettings(accountAddSystemSettingsCmd);
   }
 
-  @Operation(summary = "删除当前账户")
+  @Operation(summary = "删除当前账号")
   @DeleteMapping("/deleteCurrent")
   @ResponseBody
   @RateLimiter
@@ -205,7 +205,7 @@ public class AccountController {
     accountService.deleteCurrentAccount(accountDeleteCurrentCmd);
   }
 
-  @Operation(summary = "校验账户密码")
+  @Operation(summary = "校验账号密码")
   @GetMapping("/verifyPassword")
   @ResponseBody
   @RateLimiter
@@ -215,7 +215,7 @@ public class AccountController {
     return ResponseWrapper.success(accountService.verifyPassword(accountPasswordVerifyCmd));
   }
 
-  @Operation(summary = "修改账户密码")
+  @Operation(summary = "修改账号密码")
   @PutMapping("/changePassword")
   @ResponseBody
   @RateLimiter
@@ -225,27 +225,27 @@ public class AccountController {
     accountService.changePassword(accountChangePasswordCmd);
   }
 
-  @Operation(summary = "根据id归档账户")
+  @Operation(summary = "根据id归档账号")
   @PutMapping("/archiveById/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.archiveById(accountId);
   }
 
-  @Operation(summary = "根据id从归档中恢复账户")
+  @Operation(summary = "根据id从归档中恢复账号")
   @PutMapping("/recoverFromArchiveById/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.recoverFromArchiveById(accountId);
   }
 
-  @Operation(summary = "账户添加地址")
+  @Operation(summary = "账号添加地址")
   @PostMapping("/addAddress")
   @ResponseBody
   @RateLimiter
@@ -255,27 +255,27 @@ public class AccountController {
     accountService.addAddress(accountAddAddressCmd);
   }
 
-  @Operation(summary = "根据id查询账户基本信息")
+  @Operation(summary = "根据id查询账号基本信息")
   @GetMapping("/getAccountBasicInfoById/{id}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public AccountBasicInfoDTO getAccountBasicInfoById(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "id") Long id) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
     return accountService.getAccountBasicInfoById(id);
   }
 
-  @Operation(summary = "根据id下线账户")
+  @Operation(summary = "根据id下线账号")
   @PostMapping("/offline/{accountId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void offline(
-    @Parameter(description = "账户ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
     accountService.offline(accountId);
   }
 
-  @Operation(summary = "分页查询账户")
+  @Operation(summary = "分页查询账号")
   @GetMapping("/findAll")
   @ResponseBody
   @RateLimiter
@@ -285,7 +285,7 @@ public class AccountController {
     return accountService.findAll(accountFindAllCmd);
   }
 
-  @Operation(summary = "分页查询账户（不查询总数）")
+  @Operation(summary = "分页查询账号（不查询总数）")
   @GetMapping("/findAllSlice")
   @ResponseBody
   @RateLimiter
@@ -295,7 +295,7 @@ public class AccountController {
     return accountService.findAllSlice(accountFindAllSliceCmd);
   }
 
-  @Operation(summary = "附近的账户")
+  @Operation(summary = "附近的账号")
   @GetMapping("/nearby/{radiusInMeters}")
   @ResponseBody
   @RateLimiter
@@ -305,7 +305,7 @@ public class AccountController {
     return ResponseWrapper.success(accountService.nearby(radiusInMeters));
   }
 
-  @Operation(summary = "当前账户设置默认地址")
+  @Operation(summary = "当前账号设置默认地址")
   @PutMapping("/setDefaultAddress/{addressId}")
   @ResponseBody
   @RateLimiter
@@ -315,7 +315,7 @@ public class AccountController {
     accountService.setDefaultAddress(addressId);
   }
 
-  @Operation(summary = "删除指定账户地址")
+  @Operation(summary = "删除指定账号地址")
   @DeleteMapping("/address/{addressId}")
   @ResponseBody
   @RateLimiter
@@ -325,7 +325,7 @@ public class AccountController {
     accountService.deleteAddress(addressId);
   }
 
-  @Operation(summary = "当前账户设置默认系统设置")
+  @Operation(summary = "当前账号设置默认系统设置")
   @PutMapping("/setDefaultSystemSettings/{systemSettingsId}")
   @ResponseBody
   @RateLimiter
@@ -335,7 +335,7 @@ public class AccountController {
     accountService.setDefaultSystemSettings(systemSettingsId);
   }
 
-  @Operation(summary = "删除指定账户系统设置")
+  @Operation(summary = "删除指定账号系统设置")
   @DeleteMapping("/systemSettings/{systemSettingsId}")
   @ResponseBody
   @RateLimiter

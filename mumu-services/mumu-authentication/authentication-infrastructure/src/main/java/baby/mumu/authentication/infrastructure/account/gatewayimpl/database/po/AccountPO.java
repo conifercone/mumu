@@ -58,7 +58,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private static final long serialVersionUID = 2503384819239906407L;
 
   /**
-   * 账户id
+   * 账号id
    */
   @Id
   @SnowflakeIdGenerator
@@ -66,7 +66,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   @Size(max = 50)
   @NotNull
@@ -74,7 +74,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private String username;
 
   /**
-   * 账户密码
+   * 账号密码
    */
   @Size(max = 500)
   @NotNull

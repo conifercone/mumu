@@ -28,7 +28,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户地址领域模型
+ * 账号地址领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0
@@ -51,7 +51,7 @@ public class AccountAddress extends BasisDomainModel {
   private String id;
 
   /**
-   * 账户ID
+   * 账号ID
    */
   private Long accountId;
 

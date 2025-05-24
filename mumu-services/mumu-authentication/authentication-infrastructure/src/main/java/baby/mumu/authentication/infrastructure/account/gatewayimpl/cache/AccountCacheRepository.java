@@ -20,7 +20,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 import java.util.Optional;
 
 /**
- * 账户基本信息缓存
+ * 账号基本信息缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

@@ -23,7 +23,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * 更新账户系统设置指令
+ * 更新账号系统设置指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

@@ -158,7 +158,7 @@ public class AuthorizationConfiguration {
           .clientAuthentication(
             oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
               mumuAuthenticationFailureHandler))
-          //设置自定义密码模式
+          // 设置自定义密码模式
           .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
               .errorResponseHandler(mumuAuthenticationFailureHandler)
@@ -222,9 +222,9 @@ public class AuthorizationConfiguration {
   }
 
   /**
-   * 账户详细信息
+   * 账号详细信息
    *
-   * @return 账户详细信息实例
+   * @return 账号详细信息实例
    */
   @Bean
   public UserDetailsService userDetailsService(AccountGateway accountGateway) {
@@ -427,7 +427,7 @@ public class AuthorizationConfiguration {
   private static String getOriginAuthorizationGrantTypeValue(
     Oauth2AuthenticationRepository oauth2AuthenticationRepository,
     @NotNull OAuth2TokenContext context) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
       OAuth2Authorization authorization = context.getAuthorization();
       if (authorization != null && authorization.getRefreshToken() != null) {

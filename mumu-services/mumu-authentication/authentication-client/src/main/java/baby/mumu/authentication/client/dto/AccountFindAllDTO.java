@@ -30,7 +30,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户分页查询数据传输对象
+ * 账号分页查询数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -44,12 +44,12 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   private static final long serialVersionUID = -4857345408872981507L;
 
   /**
-   * 账户id
+   * 账号id
    */
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
@@ -74,7 +74,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   private boolean accountNonExpired;
 
   /**
-   * 账户角色
+   * 账号角色
    */
   private List<AccountFindAllRoleDTO> roles;
 
@@ -157,7 +157,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
     private String id;
 
     /**
-     * 账户ID
+     * 账号ID
      */
     private Long accountId;
 

@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * 账户删除指令
+ * 账号删除指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.1

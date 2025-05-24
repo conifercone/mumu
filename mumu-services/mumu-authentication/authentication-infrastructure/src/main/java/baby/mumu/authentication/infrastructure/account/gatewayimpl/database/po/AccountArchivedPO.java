@@ -57,21 +57,21 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   private static final long serialVersionUID = -7785479212845125722L;
 
   /**
-   * 账户id
+   * 账号id
    */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   @Size(max = 50)
   @Column(name = "username", nullable = false, length = 50)
   private String username;
 
   /**
-   * 账户密码
+   * 账号密码
    */
   @Size(max = 500)
   @Column(name = "password", nullable = false, length = 500)

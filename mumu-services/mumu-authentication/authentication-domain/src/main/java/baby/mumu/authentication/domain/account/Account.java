@@ -48,7 +48,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * 账户领域模型
+ * 账号领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -66,17 +66,17 @@ public class Account extends BasisDomainModel implements UserDetails {
   private static final long serialVersionUID = 7134070079639713190L;
 
   /**
-   * 账户id
+   * 账号id
    */
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
   /**
-   * 账户密码
+   * 账号密码
    */
   private String password;
 
@@ -105,12 +105,12 @@ public class Account extends BasisDomainModel implements UserDetails {
   private boolean accountNonExpired = true;
 
   /**
-   * 账户角色
+   * 账号角色
    */
   private List<Role> roles;
 
   /**
-   * 账户角色后代
+   * 账号角色后代
    */
   @Builder.Default
   private transient List<Role> descendantRoles = new ArrayList<>();

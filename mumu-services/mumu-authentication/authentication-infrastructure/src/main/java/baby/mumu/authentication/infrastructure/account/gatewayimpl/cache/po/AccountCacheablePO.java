@@ -36,7 +36,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 账户基本信息缓存数据对象
+ * 账号基本信息缓存数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -50,20 +50,20 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
   private static final long serialVersionUID = -2322179892503865278L;
 
   /**
-   * 账户id
+   * 账号id
    */
   @Id
   @Indexed
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   @Indexed
   private String username;
 
   /**
-   * 账户密码
+   * 账号密码
    */
   private String password;
 
@@ -210,7 +210,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     private String id;
 
     /**
-     * 账户ID
+     * 账号ID
      */
     private Long accountId;
 
@@ -271,7 +271,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     private String name;
 
     /**
-     * 账户ID
+     * 账号ID
      */
     private Long accountId;
 

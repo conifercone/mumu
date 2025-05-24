@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 账户基本信息
+ * 账号基本信息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.4
@@ -44,16 +44,16 @@ public interface AccountArchivedRepository extends BaseJpaRepository<AccountArch
   /**
    * 邮箱地址是否存在
    *
-   * @param email 账户邮箱地址
+   * @param email 账号邮箱地址
    * @return true:邮箱地址已存在 false:邮箱地址不存在
    */
   boolean existsByEmail(String email);
 
   /**
-   * 账户名是否存在
+   * 账号名是否存在
    *
-   * @param username 账户名
-   * @return true:账户名已存在 false:账户名不存在
+   * @param username 账号名
+   * @return true:账号名已存在 false:账号名不存在
    */
   boolean existsByUsername(String username);
 

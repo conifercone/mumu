@@ -18,7 +18,7 @@ package baby.mumu.authentication.infrastructure.relations.cache;
 import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * 账户角色关系缓存
+ * 账号角色关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

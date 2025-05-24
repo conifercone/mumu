@@ -75,7 +75,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账户信息转换器
+ * 账号信息转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -320,6 +320,7 @@ public class AccountConvertor {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountRegisterCmd accountRegisterCmd) {
     return Optional.ofNullable(accountRegisterCmd).map(accountRegisterCmdNotNull -> {
+      // 校验账号手机号是否合法
       if (StringUtils.isNoneBlank(accountRegisterCmdNotNull.getPhone(),
         accountRegisterCmdNotNull.getPhoneCountryCode()) && !PhoneUtils.isValidPhoneNumber(
         accountRegisterCmdNotNull.getPhone(),
@@ -327,6 +328,7 @@ public class AccountConvertor {
         throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
       }
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
+      // 根据角色code设置账号角色相关信息
       setRolesWithCodes(account, Optional.ofNullable(accountRegisterCmdNotNull.getRoleCodes())
         .orElse(new ArrayList<>()));
       // 设置地址所属的账号ID
@@ -361,12 +363,14 @@ public class AccountConvertor {
             account.getPhoneCountryCode())) {
             throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
           }
+          // 校验修改后的账号邮箱唯一性
           if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
             emailBeforeUpdated
           ) && (accountRepository.existsByEmail(emailAfterUpdated)
             || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
             throw new MuMuException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
           }
+          // 校验修改后的账号名唯一性
           if (StringUtils.isNotBlank(usernameAfterUpdated) && !usernameAfterUpdated.equals(
             usernameBeforeUpdated
           ) && (accountRepository.existsByUsername(usernameAfterUpdated)

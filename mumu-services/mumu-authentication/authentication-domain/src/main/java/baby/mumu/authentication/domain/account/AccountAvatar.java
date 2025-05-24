@@ -27,7 +27,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 账户头像领域模型
+ * 账号头像领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.10.0
@@ -50,7 +50,7 @@ public class AccountAvatar extends BasisDomainModel {
   private String id;
 
   /**
-   * 账户ID
+   * 账号ID
    */
   private Long accountId;
 

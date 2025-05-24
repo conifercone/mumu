@@ -313,7 +313,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  @DangerousOperation("删除当前账户")
+  @DangerousOperation("删除当前账号")
   public void deleteCurrentAccount() {
     SecurityContextUtils.getLoginAccountId().flatMap(accountRepository::findById)
       .ifPresentOrElse(accountPO -> {
@@ -387,7 +387,7 @@ public class AccountGatewayImpl implements AccountGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("根据ID归档账户ID为%0的账户")
+  @DangerousOperation("根据ID归档账号ID为%0的账号")
   public void archiveById(Long id) {
     Optional.ofNullable(id).flatMap(accountRepository::findById)
       .flatMap(accountConvertor::toArchivedPO).ifPresent(accountArchivedPO -> {
@@ -395,7 +395,7 @@ public class AccountGatewayImpl implements AccountGateway {
           .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
         }
-        //noinspection DuplicatedCode
+        // noinspection DuplicatedCode
         accountArchivedPO.setArchived(true);
         accountArchivedRepository.persist(accountArchivedPO);
         accountRepository.deleteById(accountArchivedPO.getId());
@@ -408,8 +408,8 @@ public class AccountGatewayImpl implements AccountGateway {
       });
   }
 
-  @Job(name = "删除ID为：%0 的账户归档数据")
-  @DangerousOperation("根据ID删除ID为%0的账户归档数据定时任务")
+  @Job(name = "删除ID为：%0 的账号归档数据")
+  @DangerousOperation("根据ID删除ID为%0的账号归档数据定时任务")
   @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     Optional.ofNullable(id).ifPresent(accountIdNonNull -> {

@@ -32,7 +32,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * 账户系统设置
+ * 账号系统设置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -63,7 +63,7 @@ public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPers
   private String id;
 
   /**
-   * 账户ID
+   * 账号ID
    */
   @NotNull
   @Indexed(background = true)

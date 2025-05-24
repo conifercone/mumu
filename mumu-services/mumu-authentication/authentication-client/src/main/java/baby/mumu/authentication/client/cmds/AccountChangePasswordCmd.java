@@ -21,7 +21,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
- * 账户修改密码指令
+ * 账号修改密码指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0

@@ -21,7 +21,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * 账户头像设置
+ * 账号头像设置
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.10.0

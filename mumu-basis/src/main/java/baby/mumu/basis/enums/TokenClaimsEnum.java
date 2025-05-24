@@ -30,12 +30,12 @@ public enum TokenClaimsEnum {
   AUTHORITIES("ats"),
 
   /**
-   * 账户ID
+   * 账号ID
    */
   ACCOUNT_ID("aid"),
 
   /**
-   * 账户名
+   * 账号名
    */
   ACCOUNT_NAME("ane"),
 

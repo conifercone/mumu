@@ -31,13 +31,13 @@ import lombok.Data;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户注册指令
+ * 账号注册指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
-@Schema(description = "账户注册指令")
+@Schema(description = "账号注册指令")
 public class AccountRegisterCmd {
 
   @Schema(description = "用户名", requiredMode = RequiredMode.REQUIRED)

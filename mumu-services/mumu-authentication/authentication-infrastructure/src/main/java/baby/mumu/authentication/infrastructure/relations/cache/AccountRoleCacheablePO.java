@@ -29,7 +29,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
 /**
- * 账户角色关系缓存
+ * 账号角色关系缓存
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

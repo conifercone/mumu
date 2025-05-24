@@ -31,7 +31,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * 账户头像存储对象
+ * 账号头像存储对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.10.0
@@ -55,7 +55,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   private String id;
 
   /**
-   * 账户ID
+   * 账号ID
    */
   @NotNull
   @Indexed(background = true)

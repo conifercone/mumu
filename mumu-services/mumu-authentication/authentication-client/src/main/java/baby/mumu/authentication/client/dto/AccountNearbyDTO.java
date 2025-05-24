@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 附近的账户数据传输对象
+ * 附近的账号数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.6.0
@@ -36,7 +36,7 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
   private static final long serialVersionUID = -5128372525687244372L;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 

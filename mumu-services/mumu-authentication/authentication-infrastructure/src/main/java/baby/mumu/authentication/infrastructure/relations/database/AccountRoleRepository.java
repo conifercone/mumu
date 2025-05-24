@@ -20,7 +20,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 账户角色关系管理
+ * 账号角色关系管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.1.0

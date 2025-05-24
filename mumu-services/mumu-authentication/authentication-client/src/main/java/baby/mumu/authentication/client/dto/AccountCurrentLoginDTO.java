@@ -32,7 +32,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
 
 /**
- * 查询当前登录账户信息数据传输对象
+ * 查询当前登录账号信息数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -127,17 +127,17 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   private DigitalPreferenceEnum digitalPreference;
 
   /**
-   * 账户所属角色
+   * 账号所属角色
    */
   private List<AccountRoleCurrentLoginQueryDTO> roles;
 
   /**
-   * 账户地址
+   * 账号地址
    */
   private List<AccountAddressCurrentLoginQueryDTO> addresses;
 
   /**
-   * 账户系统设置
+   * 账号系统设置
    */
   private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
 

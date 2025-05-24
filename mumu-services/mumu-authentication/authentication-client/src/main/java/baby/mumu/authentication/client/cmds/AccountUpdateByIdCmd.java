@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import lombok.Data;
 
 /**
- * 账户根据id更新指令
+ * 账号根据id更新指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -33,7 +33,7 @@ import lombok.Data;
 @Data
 public class AccountUpdateByIdCmd {
 
-  @Schema(description = "账户ID", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
   @NotNull(message = "{account.id.validation.not.null}")
   private Long id;
 

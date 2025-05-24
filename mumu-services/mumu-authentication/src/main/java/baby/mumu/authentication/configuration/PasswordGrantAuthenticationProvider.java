@@ -96,15 +96,15 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       (PasswordGrantAuthenticationToken) authentication;
 
     Map<String, Object> additionalParameters = passwordGrantAuthenticationToken.getAdditionalParameters();
-    //授权类型
+    // 授权类型
     AuthorizationGrantType authorizationGrantType = passwordGrantAuthenticationToken.getGrantType();
-    //用户名
+    // 用户名
     String username = (String) additionalParameters.get(OAuth2ParameterNames.USERNAME);
-    //密码
+    // 密码
     String password = (String) additionalParameters.get(OAuth2ParameterNames.PASSWORD);
-    //请求参数权限范围
+    // 请求参数权限范围
     String requestScopesStr = (String) additionalParameters.get(OAuth2ParameterNames.SCOPE);
-    //请求参数权限范围专场集合
+    // 请求参数权限范围专场集合
     Set<String> requestScopeSet = Optional.ofNullable(requestScopesStr)
       .map(res -> Stream.of(res.split(" "))
         .collect(Collectors.toSet())).orElse(new HashSet<>());
@@ -115,11 +115,11 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     RegisteredClient registeredClient = getRegisteredClient(
       clientPrincipal, authorizationGrantType);
 
-    //校验用户名信息
+    // 校验用户名信息
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
     verifyAccountInformation(userDetails, password);
 
-    //由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken
+    // 由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.authenticated(
       userDetails, clientPrincipal, userDetails.getAuthorities());
 
@@ -202,10 +202,10 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       idToken = null;
     }
 
-    //保存认证信息
+    // 保存认证信息
     OAuth2Authorization authorization = authorizationBuilder.build();
     this.authorizationService.save(authorization);
-    //删除敏感信息
+    // 删除敏感信息
     Map<String, Object> additionalParametersFinal = new HashMap<>();
     additionalParametersFinal.put(OAuth2ParameterNames.SCOPE, requestScopesStr);
     if (idToken != null) {
@@ -216,9 +216,9 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
   }
 
   /**
-   * 校验账户信息
+   * 校验账号信息
    *
-   * @param userDetails 账户信息
+   * @param userDetails 账号信息
    * @param password    密码
    */
   private void verifyAccountInformation(@NotNull UserDetails userDetails, String password) {
