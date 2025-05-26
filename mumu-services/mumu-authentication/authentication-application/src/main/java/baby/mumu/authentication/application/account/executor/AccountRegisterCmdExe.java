@@ -24,7 +24,6 @@ import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 账号注册指令执行器
@@ -47,7 +46,6 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
     this.accountConvertor = accountConvertor;
   }
 
-  @Transactional(rollbackFor = Exception.class)
   public void execute(AccountRegisterCmd accountRegisterCmd) {
     Optional.ofNullable(accountRegisterCmd).flatMap(accountConvertor::toEntity)
       .ifPresent(account -> {
