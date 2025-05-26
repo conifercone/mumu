@@ -15,11 +15,11 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.application.CaptchaVerify;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
+import baby.mumu.unique.client.api.CaptchaVerify;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

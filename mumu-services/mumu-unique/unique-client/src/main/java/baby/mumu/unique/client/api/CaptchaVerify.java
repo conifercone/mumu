@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.authentication.application;
+package baby.mumu.unique.client.api;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ import java.util.Optional;
  * 验证码校验
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
- * @since 1.0.1
+ * @since 2.10.0
  */
 public class CaptchaVerify {
 
