@@ -98,3 +98,4 @@ include("mumu-services:mumu-message:message-infrastructure")
 findProject(":mumu-services:mumu-message:message-infrastructure")?.name = "message-infrastructure"
 include("mumu-processor")
 include("mumu-services")
+include("mumu-benchmark")

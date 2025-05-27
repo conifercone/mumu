@@ -46,9 +46,9 @@ object SecurityContextUtils {
     @JvmStatic
     val loginAccountId: Optional<Long>
         /**
-         * 获取当前登录账户ID
+         * 获取当前登录账号ID
          *
-         * @return 登录账户ID
+         * @return 登录账号ID
          */
         get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
             .map { authentication: Authentication ->
@@ -74,9 +74,9 @@ object SecurityContextUtils {
     @JvmStatic
     val loginAccountName: Optional<String>
         /**
-         * 获取当前登录账户名
+         * 获取当前登录账号名
          *
-         * @return 登录账户名
+         * @return 登录账号名
          */
         get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
             .map { authentication: Authentication ->
@@ -101,9 +101,9 @@ object SecurityContextUtils {
     @JvmStatic
     val loginAccountTimezone: Optional<String>
         /**
-         * 获取当前登录账户ID
+         * 获取当前登录账号ID
          *
-         * @return 登录账户ID
+         * @return 登录账号ID
          */
         get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
             .map { authentication: Authentication ->
@@ -128,9 +128,9 @@ object SecurityContextUtils {
     @JvmStatic
     val loginAccountLanguage: Optional<LanguageEnum>
         /**
-         * 获取当前登录账户语言偏好
+         * 获取当前登录账号语言偏好
          *
-         * @return 登录账户语言偏好
+         * @return 登录账号语言偏好
          */
         get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
             .map { authentication: Authentication ->

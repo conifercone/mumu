@@ -66,11 +66,11 @@ object TimeUtils {
     }
 
     /**
-     * 转换为账户时区
+     * 转换为账号时区
      *
      * @param localDateTime 时间
      * @param fromZone 源时区
-     * @return 账户时区时间
+     * @return 账号时区时间
      */
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
@@ -88,10 +88,10 @@ object TimeUtils {
     }
 
     /**
-     * 转换为账户时区
+     * 转换为账号时区
      *
      * @param offsetDateTime 时间
-     * @return 账户时区时间
+     * @return 账号时区时间
      */
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
@@ -104,7 +104,7 @@ object TimeUtils {
     }
 
     /**
-     * 转换为账户时区
+     * 转换为账号时区
      *
      * @param baseDataTransferObject 基础数据传输对象
      */
@@ -132,10 +132,10 @@ object TimeUtils {
     }
 
     /**
-     * UTC时区转换为账户时区
+     * UTC时区转换为账号时区
      *
      * @param localDateTime 时间
-     * @return 账户时区时间
+     * @return 账号时区时间
      */
     @API(status = API.Status.INTERNAL, since = "2.7.0")
     @JvmStatic
@@ -146,7 +146,7 @@ object TimeUtils {
     }
 
     /**
-     * 账户时区转换为UTC时区
+     * 账号时区转换为UTC时区
      *
      * @param localDateTime 时间
      * @return UTC时区时间

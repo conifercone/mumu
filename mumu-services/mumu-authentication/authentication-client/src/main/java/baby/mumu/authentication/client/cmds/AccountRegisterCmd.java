@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.cmds;
 
 import baby.mumu.basis.constants.RegexpConstants;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,13 +31,13 @@ import lombok.Data;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户注册指令
+ * 账号注册指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
  */
 @Data
-@Schema(description = "账户注册指令")
+@Schema(description = "账号注册指令")
 public class AccountRegisterCmd {
 
   @Schema(description = "用户名", requiredMode = RequiredMode.REQUIRED)
@@ -51,8 +52,8 @@ public class AccountRegisterCmd {
   @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
   private List<String> roleCodes;
 
-  @Schema(description = "头像地址", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String avatarUrl;
+  @Schema(description = "头像", requiredMode = RequiredMode.NOT_REQUIRED)
+  private AccountAvatarRegisterCmd avatar;
 
   @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
   private String phoneCountryCode;
@@ -129,6 +130,25 @@ public class AccountRegisterCmd {
      */
     @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
     private Point location;
+  }
+
+  @Data
+  public static class AccountAvatarRegisterCmd {
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
   }
 
   /**

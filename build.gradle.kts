@@ -42,23 +42,30 @@ tasks.register<Copy>("installGitHooks") {
     }
 }
 
+// 获取git短hash用于版本号后缀
 val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()
+// 版本号后缀集合
 val suffixes = listOf("-alpha", "-beta", "-snapshot", "-dev", "-test", "-pre")
+// 当前UTC时间
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
-@Suppress("SpellCheckingInspection")
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
 val formattedTime: String = now.format(formatter)
 fun endsWithAny(input: String, suffixes: List<String>): Boolean {
     return suffixes.any { input.endsWith(it, ignoreCase = true) }
 }
 
+val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
+val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
+val pmdToolVersion = findProperty("pmd.tool.version")!!.toString()
+
 allprojects {
 
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
+    // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (endsWithAny(
                 versionString,
@@ -101,17 +108,17 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(23))
+            languageVersion.set(JavaLanguageVersion.of(javaMajorVersion))
         }
     }
 
     checkstyle {
-        toolVersion = "10.20.0"
+        toolVersion = checkstyleToolVersion
     }
 
     pmd {
         isConsoleOutput = true
-        toolVersion = "7.0.0"
+        toolVersion = pmdToolVersion
         ruleSetFiles = files(
             rootProject.file("config/pmd/category/java/errorprone.xml"),
             rootProject.file("config/pmd/category/java/bestpractices.xml")
@@ -183,7 +190,6 @@ subprojects {
             val compilerArgs = mutableListOf("-Amapstruct.unmappedTargetPolicy=IGNORE")
             val hasProcessor = hasProcessorProvider.get()
             if (hasProcessor) {
-                @Suppress("SpellCheckingInspection")
                 compilerArgs.addAll(
                     listOf(
                         "-Agradle.version=$gradleVersionStr",
@@ -205,7 +211,6 @@ subprojects {
         org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java
     ) {
         compilerOptions {
-            @Suppress("SpellCheckingInspection")
             freeCompilerArgs.add("-Xjsr305=strict")
         }
     }

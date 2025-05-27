@@ -21,7 +21,7 @@ import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
 import baby.mumu.unique.domain.pk.gateway.PrimaryKeyGateway;
 import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
-import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.SimpleCaptchaRepository;
+import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.SimpleCaptchaCacheRepository;
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
 import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -38,14 +38,15 @@ import org.springframework.stereotype.Component;
 public class CaptchaGatewayImpl implements CaptchaGateway {
 
   private final PrimaryKeyGateway primaryKeyGateway;
-  private final SimpleCaptchaRepository simpleCaptchaRepository;
+  private final SimpleCaptchaCacheRepository simpleCaptchaCacheRepository;
   private final CaptchaConvertor captchaConvertor;
 
   @Autowired
   public CaptchaGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
-    SimpleCaptchaRepository simpleCaptchaRepository, CaptchaConvertor captchaConvertor) {
+    SimpleCaptchaCacheRepository simpleCaptchaCacheRepository,
+    CaptchaConvertor captchaConvertor) {
     this.primaryKeyGateway = primaryKeyGateway;
-    this.simpleCaptchaRepository = simpleCaptchaRepository;
+    this.simpleCaptchaCacheRepository = simpleCaptchaCacheRepository;
     this.captchaConvertor = captchaConvertor;
   }
 
@@ -63,14 +64,14 @@ public class CaptchaGatewayImpl implements CaptchaGateway {
           ResponseCode.SIMPLE_CAPTCHA_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
         return captchaConvertor.toPO(simpleCaptchaDomain);
       }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
-    simpleCaptchaRepository.save(simpleCaptchaPO);
+    simpleCaptchaCacheRepository.save(simpleCaptchaPO);
     return simpleCaptcha;
   }
 
   @Override
   public boolean verifySimpleCaptcha(SimpleCaptcha simpleCaptcha) {
     return Optional.ofNullable(simpleCaptcha).flatMap(
-        simpleCaptchaDomain -> simpleCaptchaRepository.findById(simpleCaptchaDomain.getId()))
+        simpleCaptchaDomain -> simpleCaptchaCacheRepository.findById(simpleCaptchaDomain.getId()))
       .map(
         simpleCaptchaPO -> simpleCaptchaPO.getTarget().equalsIgnoreCase(simpleCaptcha.getSource()))
       .orElse(false);

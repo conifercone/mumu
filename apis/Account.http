@@ -1,4 +1,4 @@
-### 注册账户
+### 注册账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -22,7 +22,10 @@ Accept: */*
     "test",
     "admin"
   ],
-  "avatarUrl": "https://github.com/users/conifercone",
+  "avatar": {
+    "source": "URL",
+    "url": "https://s.gravatar.com/avatar/0d8f419ee8a9a62d9517544e647e0c99a7222cbcc3e299daff146a0fc0468b5d"
+  },
   "phone": "{{$random.phoneNumber.phoneNumber}}",
   "gender": "MALE",
   "email": "{{$random.email}}",
@@ -55,7 +58,7 @@ Accept: */*
   });
 %}
 
-### 根据ID修改账户基本信息
+### 根据ID修改账号基本信息
 < {%
   import {generateHeaders} from "./utils"
 
@@ -85,7 +88,7 @@ Authorization: Bearer {{$auth.token("test")}}
   });
 %}
 
-### 根据ID修改账户地址
+### 根据ID修改账号地址
 < {%
   import {generateHeaders} from "./utils"
 
@@ -114,7 +117,7 @@ Authorization: Bearer {{$auth.token("test")}}
   });
 %}
 
-### 分页获取账户（不查询总数）
+### 分页获取账号（不查询总数）
 < {%
   import {generateHeaders} from "./utils"
 
@@ -138,7 +141,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 账户添加地址
+### 账号添加地址
 < {%
   import {generateHeaders} from "./utils"
 
@@ -168,7 +171,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   }
 }
 
-### 账户设置默认地址
+### 账号设置默认地址
 < {%
   import {generateHeaders} from "./utils"
 
@@ -177,7 +180,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{authentication-service-url}}/account/setDefaultAddress/677b4c5dd14df91de0e7d721
+PUT {{authentication-service-url}}/account/setDefaultAddress/68280fed3faa46323a76b8aa
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -192,7 +195,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 删除指定账户地址
+### 删除指定账号地址
 < {%
   import {generateHeaders} from "./utils"
 
@@ -216,7 +219,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 查询当前账户指定范围内的附近的账户
+### 查询当前账号指定范围内的附近的账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -241,7 +244,7 @@ Authorization: Bearer {{$auth.token("admin")}}
 %}
 
 
-### 更新账户角色
+### 更新账号角色
 < {%
   import {generateHeaders} from "./utils"
 
@@ -272,7 +275,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 重置当前账户系统设置
+### 重置当前账号系统设置
 < {%
   import {generateHeaders} from "./utils"
 
@@ -296,7 +299,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 当前账户添加系统设置
+### 当前账号添加系统设置
 < {%
   import {generateHeaders} from "./utils"
 
@@ -354,7 +357,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 禁用账户
+### 禁用账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -378,7 +381,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 删除当前账户
+### 删除当前账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -431,7 +434,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 获取当前登录账户信息
+### 获取当前登录账号信息
 < {%
   import {generateHeaders} from "./utils"
 
@@ -455,7 +458,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 分页查询账户
+### 分页查询账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -479,7 +482,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 根据id查询账户基本信息
+### 根据id查询账号基本信息
 < {%
   import {generateHeaders} from "./utils"
 
@@ -503,7 +506,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 根据id下线账户
+### 根据id下线账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -527,7 +530,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 校验账户密码
+### 校验账号密码
 < {%
   import {generateHeaders} from "./utils"
 
@@ -551,7 +554,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 修改账户密码
+### 修改账号密码
 < {%
   import {generateHeaders} from "./utils"
 
@@ -580,7 +583,7 @@ Authorization: Bearer {{$auth.token("test")}}
   });
 %}
 
-### 获取在线账户数量等信息
+### 获取在线账号数量等信息
 < {%
   import {generateHeaders} from "./utils"
 
@@ -604,7 +607,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 根据id归档账户
+### 根据id归档账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -628,7 +631,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 根据id从归档中恢复账户
+### 根据id从归档中恢复账号
 < {%
   import {generateHeaders} from "./utils"
 
@@ -676,7 +679,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 当前账户设置默认系统设置
+### 当前账号设置默认系统设置
 < {%
   import {generateHeaders} from "./utils"
 
@@ -700,7 +703,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 删除指定账户系统设置
+### 删除指定账号系统设置
 < {%
   import {generateHeaders} from "./utils"
 

@@ -27,10 +27,10 @@ import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.P
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.Oauth2AuthenticationRepository;
 import baby.mumu.authentication.infrastructure.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import baby.mumu.basis.constants.CommonConstants;
@@ -158,7 +158,7 @@ public class AuthorizationConfiguration {
           .clientAuthentication(
             oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
               mumuAuthenticationFailureHandler))
-          //设置自定义密码模式
+          // 设置自定义密码模式
           .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
               .errorResponseHandler(mumuAuthenticationFailureHandler)
@@ -195,16 +195,16 @@ public class AuthorizationConfiguration {
   @Bean
   OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
     OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer,
-    PasswordTokenRepository passwordTokenRepository,
-    OidcIdTokenRepository oidcIdTokenRepository,
-    ClientTokenRepository clientTokenRepository,
-    AuthorizeCodeTokenRepository authorizeCodeTokenRepository) {
+    PasswordTokenCacheRepository passwordTokenCacheRepository,
+    OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
+    ClientTokenCacheRepository clientTokenCacheRepository,
+    AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
     MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
-    jwtGenerator.setPasswordTokenRepository(passwordTokenRepository);
-    jwtGenerator.setOidcIdTokenRepository(oidcIdTokenRepository);
-    jwtGenerator.setClientTokenRepository(clientTokenRepository);
-    jwtGenerator.setAuthorizeCodeTokenRepository(authorizeCodeTokenRepository);
+    jwtGenerator.setPasswordTokenCacheRepository(passwordTokenCacheRepository);
+    jwtGenerator.setOidcIdTokenCacheRepository(oidcIdTokenCacheRepository);
+    jwtGenerator.setClientTokenCacheRepository(clientTokenCacheRepository);
+    jwtGenerator.setAuthorizeCodeTokenCacheRepository(authorizeCodeTokenCacheRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(
@@ -222,9 +222,9 @@ public class AuthorizationConfiguration {
   }
 
   /**
-   * 账户详细信息
+   * 账号详细信息
    *
-   * @return 账户详细信息实例
+   * @return 账号详细信息实例
    */
   @Bean
   public UserDetailsService userDetailsService(AccountGateway accountGateway) {
@@ -427,7 +427,7 @@ public class AuthorizationConfiguration {
   private static String getOriginAuthorizationGrantTypeValue(
     Oauth2AuthenticationRepository oauth2AuthenticationRepository,
     @NotNull OAuth2TokenContext context) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
       OAuth2Authorization authorization = context.getAuthorization();
       if (authorization != null && authorization.getRefreshToken() != null) {

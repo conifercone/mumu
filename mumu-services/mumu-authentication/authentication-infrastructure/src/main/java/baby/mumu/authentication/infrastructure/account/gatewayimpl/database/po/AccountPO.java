@@ -35,7 +35,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.javamoney.moneta.Money;
@@ -47,7 +46,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.0
  */
 @Entity
-@Table(name = "mumu_users")
+@Table(name = "mumu_accounts")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -59,7 +58,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private static final long serialVersionUID = 2503384819239906407L;
 
   /**
-   * 账户id
+   * 账号id
    */
   @Id
   @SnowflakeIdGenerator
@@ -67,7 +66,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   @Size(max = 50)
   @NotNull
@@ -75,7 +74,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   private String username;
 
   /**
-   * 账户密码
+   * 账号密码
    */
   @Size(max = 500)
   @NotNull
@@ -106,13 +105,6 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
    */
   @Column(name = "account_non_expired", nullable = false)
   private boolean accountNonExpired = true;
-
-  /**
-   * 头像地址
-   */
-  @Size(max = 200)
-  @Column(name = "avatar_url", length = 200, nullable = false)
-  private String avatarUrl;
 
   /**
    * 国际电话区号
@@ -160,7 +152,6 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
    * 出生日期
    */
   @NotNull
-  @ColumnDefault("'1970-01-01'::date")
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
 

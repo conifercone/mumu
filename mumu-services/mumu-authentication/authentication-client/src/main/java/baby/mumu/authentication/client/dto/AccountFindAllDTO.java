@@ -17,6 +17,7 @@ package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import jakarta.validation.constraints.Size;
@@ -29,7 +30,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户分页查询数据传输对象
+ * 账号分页查询数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -43,12 +44,12 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   private static final long serialVersionUID = -4857345408872981507L;
 
   /**
-   * 账户id
+   * 账号id
    */
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
@@ -73,14 +74,14 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   private boolean accountNonExpired;
 
   /**
-   * 账户角色
+   * 账号角色
    */
-  private List<AccountFindAllRoleCo> roles;
+  private List<AccountFindAllRoleDTO> roles;
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountFindAllAvatarDTO avatar;
 
   /**
    * 国际电话区号
@@ -145,10 +146,10 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountFindAllAddressCo> addresses;
+  private List<AccountFindAllAddressDTO> addresses;
 
   @Data
-  public static class AccountFindAllAddressCo {
+  public static class AccountFindAllAddressDTO {
 
     /**
      * 唯一主键
@@ -156,9 +157,9 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
     private String id;
 
     /**
-     * 账户ID
+     * 账号ID
      */
-    private Long userId;
+    private Long accountId;
 
     /**
      * 街道地址，包含门牌号和街道信息
@@ -200,7 +201,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
 
 
   @Data
-  public static class AccountFindAllRoleCo {
+  public static class AccountFindAllRoleDTO {
 
     private Long id;
 
@@ -210,11 +211,11 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
 
     private String description;
 
-    private List<AccountFindAllPermissionCo> permissions;
+    private List<AccountFindAllPermissionDTO> permissions;
   }
 
   @Data
-  public static class AccountFindAllPermissionCo {
+  public static class AccountFindAllPermissionDTO {
 
     /**
      * 权限id
@@ -232,5 +233,31 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
     private String name;
 
     private String description;
+  }
+
+  @Data
+  public static class AccountFindAllAvatarDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+    private Long version;
   }
 }

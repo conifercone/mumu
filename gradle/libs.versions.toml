@@ -1,55 +1,56 @@
 [versions]
-springbootVersion = "3.4.4"
+springbootVersion = "3.4.6"
 springCloudVersion = "2024.0.1"
 # dependence version
 apiguardianVersion = '1.1.2'
 jetbrainsAnnotationsVersion = '26.0.2'
 jasyptVersion = '3.0.5'
-swagger3Version = '2.8.6'
-swagger3AnnotationsVersion = '2.2.29'
+swagger3Version = '2.8.8'
+swagger3AnnotationsVersion = '2.2.32'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
 grpcSpringBootStarterApiVersion = '3.1.0.RELEASE'
-redisOmSpringVersion = "0.9.7"
+redisOmSpringVersion = "0.9.11"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.9.9"
+hypersistenceUtilsVersion = "3.9.10"
 curatorRecipesVersion = "5.8.0"
-flywayVersion = "11.6.0"
+flywayVersion = "11.8.2"
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
 mapstructVersion = '1.6.3'
-commonsIoVersion = '2.18.0'
-commonsTextVersion = '1.13.0'
-jobrunrSpringBoot3StarterVersion = '7.4.1'
-alimtVersion = '1.4.0'
-deeplVersion = '1.9.0'
+commonsIoVersion = '2.19.0'
+commonsTextVersion = '1.13.1'
+jobrunrSpringBoot3StarterVersion = '7.5.1'
+alimtVersion = '1.5.0'
+deeplVersion = '1.10.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
-javapoetVersion = '0.6.0'
+javapoetVersion = '0.7.0'
 autoServiceVersion = '1.1.1'
 tess4jVersion = '5.15.0'
 javacvVersion = '1.5.11'
-aliyunOcrVersion = '3.1.2'
+aliyunOcrVersion = '3.1.3'
 bucket4jVersion = '8.14.0'
-commonsCollections4Version = '4.5.0-M3'
+commonsCollections4Version = '4.5.0'
 progressbarVersion = '0.10.1'
 resilience4jVersion = '2.3.0'
 springSecurityRsaVersion = '1.1.5'
-opencsvVersion = '5.10'
+opencsvVersion = '5.11'
 monetaVersion = '1.4.5'
 jacksonDatatypeMoneyVersion = '1.3.0'
-libphonenumberVersion = '9.0.2'
+libphonenumberVersion = '9.0.6'
 commonsValidatorVersion = '1.9.0'
+jmhVersion = '1.37'
 # bom version
-grpcBomVersion = '1.71.0'
-guavaBomVersion = '33.4.6-jre'
-protobufBomVersion = '4.30.2'
+grpcBomVersion = '1.72.0'
+guavaBomVersion = '33.4.8-jre'
+protobufBomVersion = '4.31.0'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.13.1'
-kotlinPluginVersion = '2.1.20'
+kotlinPluginVersion = '2.1.21'
 
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -270,6 +271,10 @@ jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", versio
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
 # https://mvnrepository.com/artifact/commons-validator/commons-validator
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
+# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]

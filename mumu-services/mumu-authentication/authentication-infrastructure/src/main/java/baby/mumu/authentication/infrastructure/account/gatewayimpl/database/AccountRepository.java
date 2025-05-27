@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * 账户基本信息
+ * 账号基本信息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -38,18 +38,18 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
   JpaSpecificationExecutor<AccountPO> {
 
   /**
-   * 根据用户名查询账户
+   * 根据用户名查询账号
    *
    * @param username 用户名
-   * @return 账户数据对象
+   * @return 账号数据对象
    */
   Optional<AccountPO> findByUsername(String username);
 
   /**
-   * 根据邮箱查询账户
+   * 根据邮箱查询账号
    *
    * @param email 邮箱地址
-   * @return 账户数据对象
+   * @return 账号数据对象
    */
   Optional<AccountPO> findByEmail(String email);
 
@@ -67,21 +67,21 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
   /**
    * 邮箱地址是否存在
    *
-   * @param email 账户邮箱地址
+   * @param email 账号邮箱地址
    * @return true:邮箱地址已存在 false:邮箱地址不存在
    */
   boolean existsByEmail(String email);
 
   /**
-   * 账户名是否存在
+   * 账号名是否存在
    *
-   * @param username 账户名
-   * @return true:账户名已存在 false:账户名不存在
+   * @param username 账号名
+   * @return true:账号名已存在 false:账号名不存在
    */
   boolean existsByUsername(String username);
 
   /**
-   * 切片分页查询账户（不查询总数）
+   * 切片分页查询账号（不查询总数）
    *
    * @param accountPO 查询条件
    * @param roleIds   角色ID集合
@@ -100,7 +100,7 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
     @Param("roleIds") Collection<Long> roleIds, Pageable pageable);
 
   /**
-   * 分页查询账户（查询总数）
+   * 分页查询账号（查询总数）
    *
    * @param accountPO 查询条件
    * @param roleIds   角色ID集合

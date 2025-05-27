@@ -15,19 +15,18 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.application.CaptchaVerify;
 import baby.mumu.authentication.client.cmds.AccountRegisterCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.infrastructure.account.convertor.AccountConvertor;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
+import baby.mumu.unique.client.api.CaptchaVerify;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 账户注册指令执行器
+ * 账号注册指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -47,7 +46,6 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
     this.accountConvertor = accountConvertor;
   }
 
-  @Transactional(rollbackFor = Exception.class)
   public void execute(AccountRegisterCmd accountRegisterCmd) {
     Optional.ofNullable(accountRegisterCmd).flatMap(accountConvertor::toEntity)
       .ifPresent(account -> {

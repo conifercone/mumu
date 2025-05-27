@@ -40,12 +40,14 @@ import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountAvatar;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountRedisPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountCacheablePO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressMongodbPO;
-import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsMongodbPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GeoGrpcMapper;
@@ -75,30 +77,33 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   Account toEntity(AccountPO accountPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Account toEntity(AccountRedisPO accountRedisPO);
+  Account toEntity(AccountCacheablePO accountCacheablePO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddress toAccountAddress(AccountAddressMongodbPO accountAddressMongodbPO);
+  AccountAddress toAccountAddress(AccountAddressDocumentPO accountAddressDocumentPO);
+
+  @API(status = Status.STABLE, since = "2.10.0")
+  AccountAvatar toAccountAvatar(AccountAvatarDocumentPO accountAvatarDocumentPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressMongodbPO toAccountAddressPO(AccountAddress accountAddress);
+  AccountAddressDocumentPO toAccountAddressPO(AccountAddress accountAddress);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountSystemSettingsMongodbPO toAccountSystemSettingMongodbPO(
+  AccountSystemSettingsDocumentPO toAccountSystemSettingsDocumentPO(
     AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
-    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPO);
+    AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettings toAccountSystemSettings(
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  void toAccountSystemSettingMongodbPO(
-    AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOSource,
-    @MappingTarget AccountSystemSettingsMongodbPO accountSystemSettingsMongodbPOTarget);
+  void toAccountSystemSettingsDocumentPO(
+    AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPOSource,
+    @MappingTarget AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPOTarget);
 
   @API(status = Status.STABLE, since = "2.2.0")
   void toAccountSystemSettings(
@@ -106,7 +111,7 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
     @MappingTarget AccountSystemSettings accountSystemSettings);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRedisPO toAccountRedisPO(Account account);
+  AccountCacheablePO toAccountCacheablePO(Account account);
 
   @API(status = Status.STABLE, since = "2.0.0")
   AccountAddress toAccountAddress(AccountAddAddressCmd accountAddAddressCmd);

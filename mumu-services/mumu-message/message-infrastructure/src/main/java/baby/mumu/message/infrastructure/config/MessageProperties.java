@@ -49,13 +49,13 @@ public class MessageProperties {
     private final ChannelGroup channelGroup = new DefaultChannelGroup(
       GlobalEventExecutor.INSTANCE);
     /**
-     * 存放账户与Chanel的对应信息，用于给指定账户发送订阅消息 key: 接收方ID value: Map: key: 发送者ID value: Channel
+     * 存放账号与Chanel的对应信息，用于给指定账号发送订阅消息 key: 接收方ID value: Map: key: 发送者ID value: Channel
      */
     @Getter
     private final ConcurrentHashMap<Long, ConcurrentHashMap<Long, Channel>> accountSubscriptionChannelMap = new ConcurrentHashMap<>();
 
     /**
-     * 存放账户与Chanel的对应信息，用于给指定账户发送广播消息 key: 接收方ID value: Channel
+     * 存放账号与Chanel的对应信息，用于给指定账号发送广播消息 key: 接收方ID value: Channel
      */
     @Getter
     private final ConcurrentHashMap<Long, Channel> accountBroadcastChannelMap = new ConcurrentHashMap<>();

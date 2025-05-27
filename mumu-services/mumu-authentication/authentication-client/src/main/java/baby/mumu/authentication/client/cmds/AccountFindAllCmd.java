@@ -20,7 +20,7 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * 分页查询所有账户指令
+ * 分页查询所有账号指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0
@@ -29,17 +29,17 @@ import lombok.Data;
 public class AccountFindAllCmd {
 
   /**
-   * 账户id
+   * 账号id
    */
   private Long id;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
   /**
-   * 账户角色ID集合
+   * 账号角色ID集合
    */
   private List<Long> roleIds;
 

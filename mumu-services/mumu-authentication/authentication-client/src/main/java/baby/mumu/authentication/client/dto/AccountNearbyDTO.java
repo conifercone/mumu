@@ -16,13 +16,14 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 附近的账户数据传输对象
+ * 附近的账号数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.6.0
@@ -35,14 +36,14 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
   private static final long serialVersionUID = -5128372525687244372L;
 
   /**
-   * 账户名
+   * 账号名
    */
   private String username;
 
   /**
    * 头像地址
    */
-  private String avatarUrl;
+  private AccountNearbyAvatarDTO avatar;
 
   /**
    * 时区
@@ -63,4 +64,29 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
    * 昵称
    */
   private String nickName;
+
+  @Data
+  public static class AccountNearbyAvatarDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
+  }
 }

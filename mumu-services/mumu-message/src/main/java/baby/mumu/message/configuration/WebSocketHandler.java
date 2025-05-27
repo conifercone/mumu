@@ -75,7 +75,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
               .getAccountSubscriptionChannelMap()
               .computeIfAbsent(receiverAccountId, _ -> new ConcurrentHashMap<>());
             longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, _ -> ctx.channel());
-            // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+            // 将账号ID作为自定义属性加入到channel中，方便随时channel中获取账号ID
             AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
             ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
             AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
@@ -85,7 +85,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             messageProperties.getWebSocket()
               .getAccountBroadcastChannelMap()
               .computeIfAbsent(receiverAccountId, _ -> ctx.channel());
-            // 将账户ID作为自定义属性加入到channel中，方便随时channel中获取账户ID
+            // 将账号ID作为自定义属性加入到channel中，方便随时channel中获取账号ID
             AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
             ctx.channel().attr(receiverAccountIdKey)
               .setIfAbsent(String.valueOf(receiverAccountId));

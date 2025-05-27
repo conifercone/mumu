@@ -20,7 +20,7 @@ import lombok.Data;
 import org.springframework.data.geo.Point;
 
 /**
- * 账户添加地址指令
+ * 账号添加地址指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.0.0

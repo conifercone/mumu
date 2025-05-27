@@ -20,14 +20,14 @@ import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
-import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.relations.cache.RolePermissionCacheRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathPOId;
 import baby.mumu.authentication.infrastructure.relations.database.RolePathRepository;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.RolePermissionRepository;
 import baby.mumu.authentication.infrastructure.role.convertor.RoleConvertor;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.RoleRedisRepository;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.RoleCacheRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
@@ -73,8 +73,8 @@ public class RoleGatewayImpl implements RoleGateway {
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
   private final RolePermissionRepository rolePermissionRepository;
-  private final RoleRedisRepository roleRedisRepository;
-  private final RolePermissionRedisRepository rolePermissionRedisRepository;
+  private final RoleCacheRepository roleCacheRepository;
+  private final RolePermissionCacheRepository rolePermissionCacheRepository;
   private final RolePathRepository rolePathRepository;
 
   public RoleGatewayImpl(RoleRepository roleRepository,
@@ -82,8 +82,8 @@ public class RoleGatewayImpl implements RoleGateway {
     RoleArchivedRepository roleArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties,
     RolePermissionRepository rolePermissionRepository,
-    RoleRedisRepository roleRedisRepository,
-    RolePermissionRedisRepository rolePermissionRedisRepository,
+    RoleCacheRepository roleCacheRepository,
+    RolePermissionCacheRepository rolePermissionCacheRepository,
     RolePathRepository rolePathRepository) {
     this.roleRepository = roleRepository;
     this.accountGateway = accountGateway;
@@ -92,8 +92,8 @@ public class RoleGatewayImpl implements RoleGateway {
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
     this.rolePermissionRepository = rolePermissionRepository;
-    this.roleRedisRepository = roleRedisRepository;
-    this.rolePermissionRedisRepository = rolePermissionRedisRepository;
+    this.roleCacheRepository = roleCacheRepository;
+    this.rolePermissionCacheRepository = rolePermissionCacheRepository;
     this.rolePathRepository = rolePathRepository;
   }
 
@@ -111,7 +111,7 @@ public class RoleGatewayImpl implements RoleGateway {
         Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
         rolePathRepository.persist(
           new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
-        roleRedisRepository.deleteById(rolePO.getId());
+        roleCacheRepository.deleteById(rolePO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
       });
@@ -125,7 +125,7 @@ public class RoleGatewayImpl implements RoleGateway {
       List<RolePermissionPO> rolePermissionPOS = roleConvertor.toRolePermissionPOS(role);
       if (CollectionUtils.isNotEmpty(rolePermissionPOS)) {
         rolePermissionRepository.persistAll(rolePermissionPOS);
-        rolePermissionRedisRepository.deleteById(roleNonNull.getId());
+        rolePermissionCacheRepository.deleteById(roleNonNull.getId());
       }
     });
   }
@@ -145,8 +145,8 @@ public class RoleGatewayImpl implements RoleGateway {
       roleRepository.deleteById(roleId);
       rolePathRepository.deleteAllPathsByRoleId(roleId);
       roleArchivedRepository.deleteById(roleId);
-      roleRedisRepository.deleteById(roleId);
-      rolePermissionRedisRepository.deleteById(roleId);
+      roleCacheRepository.deleteById(roleId);
+      rolePermissionCacheRepository.deleteById(roleId);
     });
   }
 
@@ -168,8 +168,8 @@ public class RoleGatewayImpl implements RoleGateway {
       //删除权限关系数据重新添加
       rolePermissionRepository.deleteByRoleId(roleDomain.getId());
       saveRoleAuthorityRelationsData(roleDomain);
-      roleRedisRepository.deleteById(roleDomain.getId());
-      rolePermissionRedisRepository.deleteById(roleDomain.getId());
+      roleCacheRepository.deleteById(roleDomain.getId());
+      rolePermissionCacheRepository.deleteById(roleDomain.getId());
     });
   }
 
@@ -261,8 +261,8 @@ public class RoleGatewayImpl implements RoleGateway {
         roleArchivedPO.setArchived(true);
         roleArchivedRepository.persist(roleArchivedPO);
         roleRepository.deleteById(roleArchivedPO.getId());
-        roleRedisRepository.deleteById(roleArchivedPO.getId());
-        rolePermissionRedisRepository.deleteById(roleArchivedPO.getId());
+        roleCacheRepository.deleteById(roleArchivedPO.getId());
+        rolePermissionCacheRepository.deleteById(roleArchivedPO.getId());
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -280,8 +280,8 @@ public class RoleGatewayImpl implements RoleGateway {
         roleArchivedRepository.deleteById(roleIdNotNull);
         rolePathRepository.deleteAllPathsByRoleId(roleIdNotNull);
         rolePermissionRepository.deleteByRoleId(roleIdNotNull);
-        roleRedisRepository.deleteById(roleIdNotNull);
-        rolePermissionRedisRepository.deleteById(roleIdNotNull);
+        roleCacheRepository.deleteById(roleIdNotNull);
+        rolePermissionCacheRepository.deleteById(roleIdNotNull);
       });
   }
 
@@ -293,8 +293,8 @@ public class RoleGatewayImpl implements RoleGateway {
         rolePO.setArchived(false);
         roleArchivedRepository.deleteById(rolePO.getId());
         roleRepository.persist(rolePO);
-        roleRedisRepository.deleteById(rolePO.getId());
-        rolePermissionRedisRepository.deleteById(rolePO.getId());
+        roleCacheRepository.deleteById(rolePO.getId());
+        rolePermissionCacheRepository.deleteById(rolePO.getId());
       });
   }
 
@@ -333,8 +333,8 @@ public class RoleGatewayImpl implements RoleGateway {
         .collect(
           Collectors.toList());
       rolePathRepository.persistAll(rolePathPOS);
-      roleRedisRepository.deleteById(ancestorId);
-      roleRedisRepository.deleteById(descendantId);
+      roleCacheRepository.deleteById(ancestorId);
+      roleCacheRepository.deleteById(descendantId);
     }
   }
 
@@ -369,26 +369,26 @@ public class RoleGatewayImpl implements RoleGateway {
     }
     rolePathRepository.deleteById(new RolePathPOId(ancestorId, descendantId, 1L));
     rolePathRepository.deleteUnreachableData();
-    roleRedisRepository.deleteById(ancestorId);
-    roleRedisRepository.deleteById(descendantId);
+    roleCacheRepository.deleteById(ancestorId);
+    roleCacheRepository.deleteById(descendantId);
   }
 
   @Override
   public Optional<Role> findById(Long id) {
-    return Optional.ofNullable(id).flatMap(roleRedisRepository::findById).flatMap(
+    return Optional.ofNullable(id).flatMap(roleCacheRepository::findById).flatMap(
       roleConvertor::toEntity).or(() -> roleRepository.findById(id)
       .flatMap(roleConvertor::toEntity).map(entity -> {
-        roleConvertor.toRoleRedisPO(entity).ifPresent(roleRedisRepository::save);
+        roleConvertor.toRoleCacheablePO(entity).ifPresent(roleCacheRepository::save);
         return entity;
       }));
   }
 
   @Override
   public Optional<Role> findByCode(String code) {
-    return Optional.ofNullable(code).flatMap(roleRedisRepository::findByCode).flatMap(
+    return Optional.ofNullable(code).flatMap(roleCacheRepository::findByCode).flatMap(
       roleConvertor::toEntity).or(() -> roleRepository.findByCode(code)
       .flatMap(roleConvertor::toEntity).map(entity -> {
-        roleConvertor.toRoleRedisPO(entity).ifPresent(roleRedisRepository::save);
+        roleConvertor.toRoleCacheablePO(entity).ifPresent(roleCacheRepository::save);
         return entity;
       }));
   }

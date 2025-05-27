@@ -7,6 +7,7 @@
         <option name="TAB_SIZE" value="2" />
       </value>
     </option>
+    <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="RIGHT_MARGIN" value="100" />
     <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
     <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
@@ -141,6 +142,10 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JAVA">
+      <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
+      <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
+      <option name="LINE_COMMENT_ADD_SPACE" value="true" />
+      <option name="LINE_COMMENT_ADD_SPACE_ON_REFORMAT" value="true" />
       <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />

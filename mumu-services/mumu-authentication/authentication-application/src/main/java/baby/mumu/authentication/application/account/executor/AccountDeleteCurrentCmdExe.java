@@ -15,17 +15,17 @@
  */
 package baby.mumu.authentication.application.account.executor;
 
-import baby.mumu.authentication.application.CaptchaVerify;
 import baby.mumu.authentication.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.authentication.domain.account.gateway.AccountGateway;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
+import baby.mumu.unique.client.api.CaptchaVerify;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账户删除指定执行器
+ * 账号删除指定执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0

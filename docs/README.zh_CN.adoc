@@ -2,6 +2,19 @@
 :imagesdir: ..
 :icons: font
 :slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
+:java-version: 23
+:java-badge: https://img.shields.io/badge/JDK-{java-version}+-green.svg
+:java-link: https://adoptium.net/temurin/releases/?version={java-version}
+:mumu-github-homepage-link: https://github.com/conifercone/mumu
+:mumu-github-releases-latest-link: {mumu-github-homepage-link}/releases/latest
+:mumu-github-issues-link: {mumu-github-homepage-link}/issues
+:mumu-github-pr-link: {mumu-github-homepage-link}/pulls
+:mumu-github-discussions-link: {mumu-github-homepage-link}/discussions
+:codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
+:email: kaiyu.shan@outlook.com
+:author: kaiyu.shan
+
+= mumu
 
 image::logo.svg[mumu]
 
@@ -11,27 +24,25 @@ image::logo.svg[mumu]
 - link:README.ja.adoc[日本語]
 - link:README.ko.adoc[한국어]
 
-== mumu
-
-image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/badge/JDK-23+-green.svg[JDK version,link="https://adoptium.net/temurin/releases/?version=23"]
-image:https://img.shields.io/github/v/release/conifercone/mumu[GitHub Release,link="https://github.com/conifercone/mumu/releases/latest"]
-image:https://img.shields.io/github/license/conifercone/mumu[GitHub License,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/github/issues/conifercone/mumu[GitHub issues,link="https://github.com/conifercone/mumu/issues"]
-image:https://img.shields.io/github/issues-pr/conifercone/mumu[GitHub Pull Requests,link="https://github.com/conifercone/mumu/pulls"]
-image:https://img.shields.io/github/languages/count/conifercone/mumu[GitHub language count,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/github/last-commit/conifercone/mumu/develop[GitHub last commit,link="https://github.com/conifercone/mumu"]
-image:https://img.shields.io/github/discussions/conifercone/mumu[GitHub Discussions,link="https://github.com/conifercone/mumu/discussions"]
+image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="{mumu-github-homepage-link}"]
+image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="{mumu-github-homepage-link}"]
+image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="{mumu-github-homepage-link}"]
+image:{java-badge}[JDK version,link="{java-link}"]
+image:https://img.shields.io/github/v/release/conifercone/mumu[GitHub Release,link="{mumu-github-releases-latest-link}"]
+image:https://img.shields.io/github/license/conifercone/mumu[GitHub License,link="{mumu-github-homepage-link}"]
+image:https://img.shields.io/github/issues/conifercone/mumu[GitHub issues,link="{mumu-github-issues-link}"]
+image:https://img.shields.io/github/issues-pr/conifercone/mumu[GitHub Pull Requests,link="{mumu-github-pr-link}"]
+image:https://img.shields.io/github/languages/count/conifercone/mumu[GitHub language count,link="{mumu-github-homepage-link}"]
+image:https://img.shields.io/github/last-commit/conifercone/mumu/develop[GitHub last commit,link="{mumu-github-homepage-link}"]
+image:https://img.shields.io/github/discussions/conifercone/mumu[GitHub Discussions,link="{mumu-github-discussions-link}"]
 image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/pmd.yml?label=PMD[GitHub Actions Workflow Status]
 image:https://img.shields.io/github/actions/workflow/status/conifercone/mumu/checkstyle.yml?label=Checkstyle[GitHub Actions Workflow Status]
-image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop[CodeFactor,link="https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop"]
+image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop[CodeFactor,link="{codeFactor-develop-branch-link}"]
 image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link="{slack-invite}"]
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
 
-=== 目次
+== 目次
 
 - <<project, 项目>>
 - <<module-introduction, 模块介绍>>
@@ -41,7 +52,7 @@ image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contrib
 - <<contributors, 贡献者>>
 
 [#project]
-=== 项目
+== 项目
 
 [quote]
 ____
@@ -49,7 +60,7 @@ ____
 ____
 
 [#delightfully-clean-system]
-==== 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
+=== 🎉 令人愉悦的整洁开箱即用管理系统！ 🎉
 
 厌倦了那些让你头疼的混乱代码和复杂设置？来看看我们的 *开箱即玩管理系统*！🎁 只需打开盒子，哇！你就能像超级明星一样轻松管理，代码整洁得闪闪发光！✨
 
@@ -62,7 +73,7 @@ ____
 加入轻松管理的乐趣，和混乱说再见！让我们把管理变成一场快乐的旅程吧！🚀🎈
 
 [#module-introduction]
-=== 模块介绍
+== 模块介绍
 
 [source,text]
 ----
@@ -76,15 +87,16 @@ mumu
 │   ├── mumu-sms
 │   └── mumu-unique
 ├── mumu-basis
+├── mumu-benchmark
 ├── mumu-extension
 └── mumu-processor
 ----
 
 [#build]
-=== 构建
+== 构建
 
 [#infrastructure]
-==== 基础设施
+=== 基础设施
 
 [cols="1,1",options="header"]
 |===
@@ -102,16 +114,16 @@ mumu
 |===
 
 [#dependency-statement]
-=== 依赖声明
+== 依赖声明
 
 link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph**]
 
 [#license]
-=== 许可
+== 许可
 
-link:../LICENSE[Apache License 2.0] © link:mailto:kaiyu.shan@outlook.com[kaiyu.shan]
+link:../LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 
 [#contributors]
-=== 贡献者
+== 贡献者
 
 image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]

@@ -35,7 +35,7 @@ import baby.mumu.authentication.client.dto.RoleFindByIdDTO;
 import baby.mumu.authentication.client.dto.RoleFindDirectDTO;
 import baby.mumu.authentication.client.dto.RoleFindRootDTO;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleRedisPO;
+import baby.mumu.authentication.infrastructure.role.gatewayimpl.cache.po.RoleCacheablePO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po.RolePO;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
@@ -78,10 +78,10 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   Role toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Role toEntity(RoleRedisPO roleRedisPO);
+  Role toEntity(RoleCacheablePO roleCacheablePO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleRedisPO toRoleRedisPO(Role role);
+  RoleCacheablePO toRoleCacheablePO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
   void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);

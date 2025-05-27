@@ -38,7 +38,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
 /**
- * 账户功能API
+ * 账号功能API
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -46,30 +46,30 @@ import org.springframework.data.domain.Slice;
 public interface AccountService {
 
   /**
-   * 账户注册
+   * 账号注册
    *
-   * @param accountRegisterCmd 账户注册指令
+   * @param accountRegisterCmd 账号注册指令
    */
   void register(AccountRegisterCmd accountRegisterCmd);
 
   /**
-   * 根据id更新账户基本信息
+   * 根据id更新账号基本信息
    *
-   * @param accountUpdateByIdCmd 根据id更新账户基本信息指令
+   * @param accountUpdateByIdCmd 根据id更新账号基本信息指令
    */
   void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
 
   /**
-   * 根据id更新账户角色信息
+   * 根据id更新账号角色信息
    *
-   * @param accountUpdateRoleCmd 根据id更新账户角色信息指令
+   * @param accountUpdateRoleCmd 根据id更新账号角色信息指令
    */
   void updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd);
 
   /**
-   * 禁用账户
+   * 禁用账号
    *
-   * @param id 禁用账户指令
+   * @param id 禁用账号指令
    */
   void disable(Long id);
 
@@ -79,23 +79,23 @@ public interface AccountService {
   void logout();
 
   /**
-   * 查询当前登录账户信息
+   * 查询当前登录账号信息
    *
-   * @return 当前登录账户信息
+   * @return 当前登录账号信息
    */
   AccountCurrentLoginDTO queryCurrentLoginAccount();
 
   /**
-   * 查询当前在线账户数量
+   * 查询当前在线账号数量
    *
-   * @return 在线账户数量
+   * @return 在线账号数量
    */
   AccountOnlineStatisticsDTO onlineAccounts();
 
   /**
    * 重置密码
    *
-   * @param id 账户ID
+   * @param id 账号ID
    */
   void resetPassword(Long id);
 
@@ -118,84 +118,84 @@ public interface AccountService {
     AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
   /**
-   * 删除当前账户
+   * 删除当前账号
    *
-   * @param accountDeleteCurrentCmd 账户删除指令
+   * @param accountDeleteCurrentCmd 账号删除指令
    */
   void deleteCurrentAccount(AccountDeleteCurrentCmd accountDeleteCurrentCmd);
 
   /**
-   * 当前登录账户密码是否正确
+   * 当前登录账号密码是否正确
    *
-   * @param accountPasswordVerifyCmd 账户密码校验指令
+   * @param accountPasswordVerifyCmd 账号密码校验指令
    * @return 密码是否正确
    */
   boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd);
 
   /**
-   * 修改账户密码
+   * 修改账号密码
    *
-   * @param accountChangePasswordCmd 修改账户密码指令
+   * @param accountChangePasswordCmd 修改账号密码指令
    */
   void changePassword(AccountChangePasswordCmd accountChangePasswordCmd);
 
   /**
-   * 根据id归档账户
+   * 根据id归档账号
    *
-   * @param accountId 账户ID
+   * @param accountId 账号ID
    */
   void archiveById(Long accountId);
 
   /**
-   * 根据id查询账户基本信息
+   * 根据id查询账号基本信息
    *
-   * @param id 账户id
+   * @param id 账号id
    */
   AccountBasicInfoDTO getAccountBasicInfoById(Long id);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param accountId 账户id
+   * @param accountId 账号id
    */
   void recoverFromArchiveById(
     Long accountId);
 
   /**
-   * 账户添加地址
+   * 账号添加地址
    *
-   * @param accountAddAddressCmd 账户添加地址指令
+   * @param accountAddAddressCmd 账号添加地址指令
    */
   void addAddress(AccountAddAddressCmd accountAddAddressCmd);
 
   /**
-   * 下线账户
+   * 下线账号
    *
-   * @param accountId 账户id
+   * @param accountId 账号id
    */
   void offline(Long accountId);
 
   /**
-   * 分页查询账户
+   * 分页查询账号
    *
-   * @param accountFindAllCmd 分页查询账户指令
+   * @param accountFindAllCmd 分页查询账号指令
    * @return 查询结果
    */
   Page<AccountFindAllDTO> findAll(AccountFindAllCmd accountFindAllCmd);
 
   /**
-   * 分页查询账户（不查询总数）
+   * 分页查询账号（不查询总数）
    *
-   * @param accountFindAllSliceCmd 分页查询账户指令
+   * @param accountFindAllSliceCmd 分页查询账号指令
    * @return 查询结果
    */
   Slice<AccountFindAllSliceDTO> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd);
 
   /**
-   * 附近的账户
+   * 附近的账号
    *
    * @param radiusInMeters 半径（米）
-   * @return 附近的账户
+   * @return 附近的账号
    */
   List<AccountNearbyDTO> nearby(double radiusInMeters);
 
@@ -221,13 +221,13 @@ public interface AccountService {
   void deleteSystemSettings(String systemSettingsId);
 
   /**
-   * 修改账户地址
+   * 修改账号地址
    */
   void modifyAddressByAddressId(
     AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd);
 
   /**
-   * 删除指定账户地址
+   * 删除指定账号地址
    *
    * @param addressId 地址ID
    */

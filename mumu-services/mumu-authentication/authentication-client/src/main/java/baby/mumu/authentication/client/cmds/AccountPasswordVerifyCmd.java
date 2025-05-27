@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 账户密码校验指令
+ * 账号密码校验指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0

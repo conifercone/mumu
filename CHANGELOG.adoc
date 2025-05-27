@@ -19,668 +19,712 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.10.0] - 2025-05-27
+
+=== ⭐ Added
+
+- Added benchmark module
+
+=== 🕸️ Changed
+
+- `springboot` upgrade to 3.4.6
+- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.6
+- `CaptchaVerify` Move to `unique client`
+- Modify LICENSE
+- Account correction to account number
+- Automatically generate line comments
+- gradle version upgrade to 8.14.1
+- Reconstructing avatar implementation
+- Table renaming
+- `io.swagger.core.v3:swagger-annotations-jakarta` Upgrade to 2.2.32
+- `protobuf` upgrade to 4.31.0
+- `kotlin` upgrade to 2.1.21
+- `flyway` upgrade to 11.8.2
+- `com.aliyun:alimt20181012` Upgrade to 1.5.0
+- `org.jobrunr:jobrunr-spring-boot-3-starter` Upgrade to 7.5.1
+- The default value of the date of birth is changed to the current date
+- Modify the jdk version of the annotation processor
+- `com.deepl.api:deepl-java` Upgrade to 1.10.0
+- `com.opencsv:opencsv` Upgrade to 5.11
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` Upgrade to 2.8.8
+- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.9.10
+- `org.apache.commons:commons-collections4` Upgrade to 4.5.0
+- `com.aliyun:ocr_api20210707` Upgrade to 3.1.3
+- `grpc` upgrade to 1.72.0
+- `com.google.guava:guava-bom` Upgrade to 33.4.8-jre
+- `redis-om-spring` upgrade to 0.9.11
+- Line separators are set to lf
+- `commons-io:commons-io` Upgrade to 2.19.0
+- `org.apache.commons:commons-text` Upgrade to 1.13.1
+- `com.palantir.javapoet:javapoet` Upgrade to 0.7.0
+
+=== ⚠️ Removed
+
+- Remove useless warning suppression
+- Remove useless code
+
 == [2.9.0] - 2025-04-08
 
 === ⭐ Added
 
-- Added configuration file.
-- Add attribute comments.
-- Added module description.
+- Added configuration file
+- Add attribute comments
+- Added module description
 
 === 🕸️ Changed
 
-- `com.google.protobuf` Upgrade to 0.9.5.
-- `flyway` upgrade to 11.6.0.
-- adoc replace md.
-- `com.palantir.javapoet` Replace `com.squareup.javapoet`.
-- Optimize the implementation of zk distributed locks.
-- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.9.9.
-- Modify the dependency name.
-- Adjust open-pull-requests-limit to 20.
-- `com.google.guava:guava-bom` Upgrade to 33.4.6-jre.
-- `io.swagger.core.v3:swagger-annotations-jakarta` Upgrade to 2.2.29.
-- ʻio.freefair.lombok` Upgrade to 8.13.1.
-- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.2.
-- `org.javamoney:moneta` Upgrade to 1.4.5.
-- Rename the run configuration file.
-- The default value of user language preference is changed to EN.
-- @Validated replace @Valid.
-- Optimize configuration class.
-- Zookeeper distributed lock attribute has added lock path configuration.
-- Modify the name of the distributed lock method.
-- `org.springframework.cloud:spring-cloud-dependencies` Upgrade to 2024.0.1.
-- `org.springdoc:springdoc-openapi-starter-webmvc-ui` Upgrade to 2.8.6.
-- `kotlin` upgrade to 2.1.20.
-- `spring boot` upgrade to 3.4.4.
+- `com.google.protobuf` Upgrade to 0.9.5
+- `flyway` upgrade to 11.6.0
+- adoc replace md
+- `com.palantir.javapoet` Replace `com.squareup.javapoet`
+- Optimize the implementation of zk distributed locks
+- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.9.9
+- Modify the dependency name
+- Adjust open-pull-requests-limit to 20
+- `com.google.guava:guava-bom` Upgrade to 33.4.6-jre
+- `io.swagger.core.v3:swagger-annotations-jakarta` Upgrade to 2.2.29
+- ʻio.freefair.lombok` Upgrade to 8.13.1
+- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.2
+- `org.javamoney:moneta` Upgrade to 1.4.5
+- Rename the run configuration file
+- The default value of user language preference is changed to EN
+- @Validated replace @Valid
+- Optimize configuration class
+- Zookeeper distributed lock attribute has added lock path configuration
+- Modify the name of the distributed lock method
+- `org.springframework.cloud:spring-cloud-dependencies` Upgrade to 2024.0.1
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` Upgrade to 2.8.6
+- `kotlin` upgrade to 2.1.20
+- `spring boot` upgrade to 3.4.4
 
 === ⚠️ Removed
 
-- Delete running files that are used frequently.
-- Remove useless attributes, class renaming.
+- Delete running files that are used frequently
+- Remove useless attributes, class renaming
 
 == [2.8.0] - 2025-03-14
 
 === ⭐ Added
 
-- Added `sdkman` configuration file.
-- Add attribute comments.
-- Added module description.
+- Added `sdkman` configuration file
+- Add attribute comments
+- Added module description
 
 === 🕸️ Changed
 
-- `jdk` upgrade to 23.
-- Canonical variable name format.
-- `hypersistence-utils-hibernate-63` upgrade to 3.9.3.
-- `protobuf` upgrade to 4.30.0.
-- `lombok` upgraded to 8.12.2.1.
-- `org.apache.curator:curator-recipes` upgrade to 5.8.0.
-- `grpc` upgrade to 1.71.0.
-- Standardize package name.
-- `com.googlecode.libphonenumber:libphonenumber` upgrade to 9.0.0.
-- `flyway` upgraded to 11.3.4.
-- gradle version upgrade to 8.13.
-- `com.deepl.api:deepl-java` upgrade to 1.9.0.
-- `org.jobrunr:jobrunr-spring-boot-3-starter` upgrade to 7.4.1.
+- `jdk` upgrade to 23
+- Canonical variable name format
+- `hypersistence-utils-hibernate-63` upgrade to 3.9.3
+- `protobuf` upgrade to 4.30.0
+- `lombok` upgraded to 8.12.2.1
+- `org.apache.curator:curator-recipes` upgrade to 5.8.0
+- `grpc` upgrade to 1.71.0
+- Standardize package name
+- `com.googlecode.libphonenumber:libphonenumber` upgrade to 9.0.0
+- `flyway` upgraded to 11.3.4
+- gradle version upgrade to 8.13
+- `com.deepl.api:deepl-java` upgrade to 1.9.0
+- `org.jobrunr:jobrunr-spring-boot-3-starter` upgrade to 7.4.1
 
 == [2.7.0] - 2025-02-22
 
 === ⭐ Added
 
-- Added response encoding.
-- Added `.mailmap` file.
-- Added new attribute fields for mobile phone number verified and email verified.
-- Added documents.
-- Add idea encoding configuration.
-- New mobile phone number validity verification for the account.
-- New international telephone area code to the account.
+- Added response encoding
+- Added `.mailmap` file
+- Added new attribute fields for mobile phone number verified and email verified
+- Added documents
+- Add idea encoding configuration
+- New mobile phone number validity verification for the account
+- New international telephone area code to the account
 
 === 🕸️ Changed
 
-- Optimize time interface.
-- Add regular verification to the account registration password.
-- Optimize time tool class.
-- `springboot` upgrade to 3.4.3.
-- Optimize attribute types to save memory usage.
-- Modify the default value of the `mumu-users` table field.
-- Modify the gender field name.
-- Document rename.
-- Optimize IP tool class.
-- Merge tool classes.
-- Optimize git commit-msg scripts.
-- Modify the initial password to comply with password rules.
-- `hypersistence-utils-hibernate-63` upgrade to 3.9.2.
-- `flyway` upgraded to 11.3.2.
-- `tess4j` upgrade to 5.15.0.
-- `springdoc-openapi-starter-webmvc-ui` upgraded to 2.8.5.
-- `deepl-java` upgrade to 1.8.1.
-- Unify script position.
-- Optimize `pmd`, `checkstyle` tasks.
-- Turn on configuration cache.
-- Modify cache key name.
-- The storage name is uniformly added to prevent duplication.
-- Add prefixes to the collection name to prevent duplication.
-- Add prefixes to table names to prevent duplication.
-- Optimize token endpoint error handling logic.
-- `swagger-annotations-jakarta` upgrade to 2.2.28.
-- `lombok` upgraded to 8.12.1.
-- Replace icon.
-- `jobrunr-spring-boot-3-starter` upgrade to 7.4.0.
-- `grpc` upgrade to 1.70.0.
-- `org.jetbrains:annotations` upgrade to 26.0.2.
-- `kotlin` upgrade to 2.1.10.
+- Optimize time interface
+- Add regular verification to the account registration password
+- Optimize time tool class
+- `springboot` upgrade to 3.4.3
+- Optimize attribute types to save memory usage
+- Modify the default value of the `mumu-users` table field
+- Modify the gender field name
+- Document rename
+- Optimize IP tool class
+- Merge tool classes
+- Optimize git commit-msg scripts
+- Modify the initial password to comply with password rules
+- `hypersistence-utils-hibernate-63` upgrade to 3.9.2
+- `flyway` upgraded to 11.3.2
+- `tess4j` upgrade to 5.15.0
+- `springdoc-openapi-starter-webmvc-ui` upgraded to 2.8.5
+- `deepl-java` upgrade to 1.8.1
+- Unify script position
+- Optimize `pmd`, `checkstyle` tasks
+- Turn on configuration cache
+- Modify cache key name
+- The storage name is uniformly added to prevent duplication
+- Add prefixes to the collection name to prevent duplication
+- Add prefixes to table names to prevent duplication
+- Optimize token endpoint error handling logic
+- `swagger-annotations-jakarta` upgrade to 2.2.28
+- `lombok` upgraded to 8.12.1
+- Replace icon
+- `jobrunr-spring-boot-3-starter` upgrade to 7.4.0
+- `grpc` upgrade to 1.70.0
+- `org.jetbrains:annotations` upgrade to 26.0.2
+- `kotlin` upgrade to 2.1.10
 
 === 🐞 Fixed
 
-- Solve compile warnings.
-- Fixed refresh token exception.
+- Solve compile warnings
+- Fixed refresh token exception
 
 === ⚠️ Removed
 
-- Remove useless dependencies.
-- Remove useless code.
+- Remove useless dependencies
+- Remove useless code
 
 == [2.6.0] - 2025-01-25
 
 === ⭐ Added
 
-- Added response encoding.
-- Added bean creation conditions for `RateLimitingCustomGenerateProvider`.
-- Added method annotations.
-- Added `status` attribute to `ResponseCode`.
-- Added Swagger converter.
-- Added functionality to download all permission data containing permission paths.
-- Added a general JSON data download method.
-- Added an API to delete a specific account address.
-- Added an API to modify account addresses.
-- Added APIs to set the default account address and query nearby accounts.
-- Added a location property to account addresses.
+- Added response encoding
+- Added bean creation conditions for `RateLimitingCustomGenerateProvider`
+- Added method annotations
+- Added `status` attribute to `ResponseCode`
+- Added Swagger converter
+- Added functionality to download all permission data containing permission paths
+- Added a general JSON data download method
+- Added an API to delete a specific account address
+- Added an API to modify account addresses
+- Added APIs to set the default account address and query nearby accounts
+- Added a location property to account addresses
 
 === 🕸️ Changed
 
-- Added description information matching conditions for archived role and permission queries.
-- Added description information matching conditions for role queries.
-- For security reasons, default interface permissions are set to deny access to anyone.
-- Optimized permission configuration properties.
-- Upgraded Gradle to 8.12.1.
-- Upgraded Flyway to 11.2.0.
-- Upgraded gRPC to 1.69.1.
-- Upgraded `com.aliyun:alimt20181012` to 1.4.0.
-- Upgraded MinIO to 8.5.17.
-- Changed `code` attribute type to a primitive data type.
-- Optimized utility class implementations.
-- Optimized file download utility class.
-- Upgraded OpenCSV to 5.10.
-- Upgraded `springdoc-openapi-starter-webmvc-ui` to 2.8.3.
-- Upgraded Protobuf to 4.29.3.
-- Adjusted the timing for saving role permissions.
-- Added description information matching conditions for permission queries.
-- Optimized thread variable definitions.
-- Optimized archived attribute type.
-- Adjusted time formatting.
-- Improved multilingual identifier settings logic.
-- Added caching to system settings.
-- Upgraded `resilience4j-retry` to 2.3.0.
+- Added description information matching conditions for archived role and permission queries
+- Added description information matching conditions for role queries
+- For security reasons, default interface permissions are set to deny access to anyone
+- Optimized permission configuration properties
+- Upgraded Gradle to 8.12.1
+- Upgraded Flyway to 11.2.0
+- Upgraded gRPC to 1.69.1
+- Upgraded `com.aliyun:alimt20181012` to 1.4.0
+- Upgraded MinIO to 8.5.17
+- Changed `code` attribute type to a primitive data type
+- Optimized utility class implementations
+- Optimized file download utility class
+- Upgraded OpenCSV to 5.10
+- Upgraded `springdoc-openapi-starter-webmvc-ui` to 2.8.3
+- Upgraded Protobuf to 4.29.3
+- Adjusted the timing for saving role permissions
+- Added description information matching conditions for permission queries
+- Optimized thread variable definitions
+- Optimized archived attribute type
+- Adjusted time formatting
+- Improved multilingual identifier settings logic
+- Added caching to system settings
+- Upgraded `resilience4j-retry` to 2.3.0
 
 === 🐞 Fixed
 
-- Fixed an issue with Chinese garbled text in the signature filter.
+- Fixed an issue with Chinese garbled text in the signature filter
 
 === ⚠️ Removed
 
-- Removed the rule engine.
+- Removed the rule engine
 
 == [2.5.0] - 2024-12-31
 
 === ⭐ Added
 
-- Added parameter verification for verification code generation.
-- Add method comments.
-- Added anyRole configuration.
-- Added api documentation.
-- Added a new interface for character query based on code.
-- Permission verification can specify the permission range.
+- Added parameter verification for verification code generation
+- Add method comments
+- Added anyRole configuration
+- Added api documentation
+- Added a new interface for character query based on code
+- Permission verification can specify the permission range
 
 === 🕸️ Changed
 
-- Modify the method name.
-- Modify response status value reference.
-- grpc upgraded to 1.69.0.
-- flyway upgraded to 11.1.0.
-- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.27.
-- org.apache.commons:commons-text upgraded to 1.13.0.
-- Gradle version upgraded to 8.12.
-- Optimize the sql log printing expansion function.
-- Optimize permission configuration.
-- Modify the passwordEncoder bean instance name and type.
-- Modify the creation time modification time default value.
-- Standard modification of class name.
-- Optimize code style configuration file.
-- Optimize gradle configuration.
-- Reconstruct verification code generation logic.
-- Replace deprecated code.
+- Modify the method name
+- Modify response status value reference
+- grpc upgraded to 1.69.0
+- flyway upgraded to 11.1.0
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.27
+- org.apache.commons:commons-text upgraded to 1.13.0
+- Gradle version upgraded to 8.12
+- Optimize the sql log printing expansion function
+- Optimize permission configuration
+- Modify the passwordEncoder bean instance name and type
+- Modify the creation time modification time default value
+- Standard modification of class name
+- Optimize code style configuration file
+- Optimize gradle configuration
+- Reconstruct verification code generation logic
+- Replace deprecated code
 
 === 🐞 Fixed
 
-- Fixed the problem of failure to add character account.
+- Fixed the problem of failure to add character account
 
 === ⚠️ Removed
 
-- Remove useless functions.
-- Delete useless files.
+- Remove useless functions
+- Delete useless files
 
 == [2.4.0] - 2024-12-14
 
 === ⭐ Added
 
-- Added numeric preference attributes to the account domain model.
-- Integrated rules engine.
-- Added a new general method for time zone verification.
-- Added account balance field.
-- Added interface to delete characters based on code.
-- Added a new interface for querying permissions based on code.
-- Added a new interface for downloading content with all permissions.
-- Added file download tool class.
-- Added a new interface to delete permissions based on code.
-- Added snowflake algorithm ID generator.
-- Added custom ObservationPredicate.
-- Added cache level enumeration class.
-- Added personalized signature and nickname attributes to the account.
-- Added description field to permission role.
-- Added custom AccessDeniedHandler.
-- Added grpc interface for querying roles based on ID.
-- Added blood relationship for characters.
+- Added numeric preference attributes to the account domain model
+- Integrated rules engine
+- Added a new general method for time zone verification
+- Added account balance field
+- Added interface to delete characters based on code
+- Added a new interface for querying permissions based on code
+- Added a new interface for downloading content with all permissions
+- Added file download tool class
+- Added a new interface to delete permissions based on code
+- Added snowflake algorithm ID generator
+- Added custom ObservationPredicate
+- Added cache level enumeration class
+- Added personalized signature and nickname attributes to the account
+- Added description field to permission role
+- Added custom AccessDeniedHandler
+- Added grpc interface for querying roles based on ID
+- Added blood relationship for characters
 
 === 🕸️ Changed
 
-- Long integers are serialized into strings to prevent loss of precision.
-- Standard modification of class name.
-- Optimize inheritance relationship.
-- Optimize grpc interface.
-- protobuf upgraded to 4.29.1.
-- flyway upgraded to 11.0.1.
-- Optimize the file service upload interface.
-- Optimize the file service download interface.
-- The default translation for internationalization is changed to English.
-- Modify LanguageEnum according to ISO 639-1 standard.
-- Optimize dependencies.
-- Simplified package name.
-- SpringCloud is upgraded to 2024.0.0.
-- The service port and grpc port are modified to random available ports.
-- io.minio:minio upgraded to 8.5.14.
-- grpc upgraded to 1.68.2.
-- org.springdoc:springdoc-openapi-starter-webmvc-ui upgraded to 2.7.0.
-- Streamline the custom key name in claim.
-- Modify the lombok plug-in version reference method.
-- The kotlin version is upgraded to 2.1.0.
-- Optimize strings with text blocks.
-- Optimize consul configuration.
-- The grpc spring boot framework is replaced with net.devh.
-- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.26.
-- SpringBoot is upgraded to 3.4.0.
-- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.2.
-- commons-io: commons-io is upgraded to 2.18.0.
-- Modify the verification logic of TokenGatewayImpl=validity method.
-- Reorganize token caching and verification logic.
-- Gradle upgraded to 8.11.1.
-- Optimize the scope of token permissions.
+- Long integers are serialized into strings to prevent loss of precision
+- Standard modification of class name
+- Optimize inheritance relationship
+- Optimize grpc interface
+- protobuf upgraded to 4.29.1
+- flyway upgraded to 11.0.1
+- Optimize the file service upload interface
+- Optimize the file service download interface
+- The default translation for internationalization is changed to English
+- Modify LanguageEnum according to ISO 639-1 standard
+- Optimize dependencies
+- Simplified package name
+- SpringCloud is upgraded to 2024.0.0
+- The service port and grpc port are modified to random available ports
+- io.minio:minio upgraded to 8.5.14
+- grpc upgraded to 1.68.2
+- org.springdoc:springdoc-openapi-starter-webmvc-ui upgraded to 2.7.0
+- Streamline the custom key name in claim
+- Modify the lombok plug-in version reference method
+- The kotlin version is upgraded to 2.1.0
+- Optimize strings with text blocks
+- Optimize consul configuration
+- The grpc spring boot framework is replaced with net.devh
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.26
+- SpringBoot is upgraded to 3.4.0
+- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.2
+- commons-io: commons-io is upgraded to 2.18.0
+- Modify the verification logic of TokenGatewayImpl=validity method
+- Reorganize token caching and verification logic
+- Gradle upgraded to 8.11.1
+- Optimize the scope of token permissions
 
 === 🐞 Fixed
 
-- Fixed the problem that the authorization code mode is not available.
+- Fixed the problem that the authorization code mode is not available
 
 == [2.3.0] - 2024-11-19
 
 === ⭐ Added
 
-- Added support for Japanese, Traditional Chinese, Korean, and Russian localization.
-- Added digital signature filter to prevent replay attacks.
-- Added gRPC interface to fetch permissions by ID.
-- Added exception handling to AuthorityFindByIdCmdExe.
-- Added idempotency extension feature.
-- Added formatted version number generation feature.
-- Added checkstyle plugin.
-- Added PMD plugin.
-- Added checkstyle and PMD GitHub workflows.
-- Added Git hook scripts.
-- Added lineage feature for permissions.
+- Added support for Japanese, Traditional Chinese, Korean, and Russian localization
+- Added digital signature filter to prevent replay attacks
+- Added gRPC interface to fetch permissions by ID
+- Added exception handling to AuthorityFindByIdCmdExe
+- Added idempotency extension feature
+- Added formatted version number generation feature
+- Added checkstyle plugin
+- Added PMD plugin
+- Added checkstyle and PMD GitHub workflows
+- Added Git hook scripts
+- Added lineage feature for permissions
 
 === 🕸️ Changed
 
-- Optimized datasource extension configuration.
-- Improved signature verification logic.
-- Upgraded Gradle to version 8.11.
-- Upgraded com.aliyun:ocr_api20210707 to 3.1.2.
-- Upgraded com.deepl.api:deepl-java to 1.7.0.
-- Upgraded org.bytedeco:javacv-platform to 1.5.11.
-- Upgraded Flyway to 10.21.0.
-- Upgraded MapStruct to 1.6.3.
-- Upgraded io.hypersistence:hypersistence-utils-hibernate-63 to 3.9.0.
-- Upgraded gRPC to 1.68.1.
-- Upgraded com.redis.om:redis-om-spring to 0.9.7.
-- Upgraded io.minio:minio to 8.5.13.
-- Upgraded Protobuf to 4.28.3.
-- Upgraded Spring Boot to 3.3.5.
-- Upgraded org.apache.zookeeper:zookeeper to 3.9.3.
+- Optimized datasource extension configuration
+- Improved signature verification logic
+- Upgraded Gradle to version 8.11
+- Upgraded com.aliyun:ocr_api20210707 to 3.1.2
+- Upgraded com.deepl.api:deepl-java to 1.7.0
+- Upgraded org.bytedeco:javacv-platform to 1.5.11
+- Upgraded Flyway to 10.21.0
+- Upgraded MapStruct to 1.6.3
+- Upgraded io.hypersistence:hypersistence-utils-hibernate-63 to 3.9.0
+- Upgraded gRPC to 1.68.1
+- Upgraded com.redis.om:redis-om-spring to 0.9.7
+- Upgraded io.minio:minio to 8.5.13
+- Upgraded Protobuf to 4.28.3
+- Upgraded Spring Boot to 3.3.5
+- Upgraded org.apache.zookeeper:zookeeper to 3.9.3
 
 === 🐞 Fixed
 
-- Fixed missing banner information issue when starting the project in IntelliJ.
-- Fixed code standard issues.
+- Fixed missing banner information issue when starting the project in IntelliJ
+- Fixed code standard issues
 
 == [2.2.0] - 2024-10-24
 
 === ⭐ Added
 
-- Add traceId field to unified response results.
-- Add a timestamp field to unified response results.
-- Account role relationships and role permission relationships are cached.
-- Add cache to the current login account information query interface.
-- A new paging query interface for accounts has been added.
-- Added offline user interface.
-- Added a new logout interface.
-- Added new project startup success listener.
-- Added new account system settings.
-- Added character cache.
-- Increase caching based on ID query permissions.
-- The client module adds project information printing.
-- Added an interface to obtain basic account information based on ID.
-- The new account ID is not equal to 0 verification.
-- Added archive data query interface for roles.
-- Added HttpMessageNotReadableException global exception handling.
-- Added paging query without querying the total number for archived permissions.
-- Added a script to check whether serialized IDs are duplicated.
-- Added permission to add paging query without querying the total number.
-- Role query adds role-related permission details returned.
-- The role has added paging query that does not query the total number.
-- MapStruct mapper uniformly adds unmappedTargetPolicy = ReportingPolicy.IGNORE.
+- Add traceId field to unified response results
+- Add a timestamp field to unified response results
+- Account role relationships and role permission relationships are cached
+- Add cache to the current login account information query interface
+- A new paging query interface for accounts has been added
+- Added offline user interface
+- Added a new logout interface
+- Added new project startup success listener
+- Added new account system settings
+- Added character cache
+- Increase caching based on ID query permissions
+- The client module adds project information printing
+- Added an interface to obtain basic account information based on ID
+- The new account ID is not equal to 0 verification
+- Added archive data query interface for roles
+- Added HttpMessageNotReadableException global exception handling
+- Added paging query without querying the total number for archived permissions
+- Added a script to check whether serialized IDs are duplicated
+- Added permission to add paging query without querying the total number
+- Role query adds role-related permission details returned
+- The role has added paging query that does not query the total number
+- MapStruct mapper uniformly adds unmappedTargetPolicy = ReportingPolicy.IGNORE
 
 === 🐞 Fixed
 
-- Fixed the issue that the file content may be garbled after execution of update_license_current_year.sh.
+- Fixed the issue that the file content may be garbled after execution of update_license_current_year.sh
 
 === 🕸️ Changed
 
-- Standardize interface parameters and reduce complexity.
-- Optimize grpc interface.
-- Log retention policy adjustment.
-- Optimize account query results.
-- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.25.
-- flyway upgraded to 10.20.0.
-- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.1.
-- Updated the description of the infrastructure section in the README document.
-- Standardize class names and interface method names.
-- Change icon.
-- Improve account interface parameter comments.
-- Pagination query for the current page starts from 1 by default.
-- Reconstruct the interface according to RESTful specifications.
-- The page number parameter is renamed to current.
-- Optimize account login performance.
-- Logic optimization of online user number statistics.
-- The CustomDescription annotation is renamed to Meta, and the GenerateDescription annotation is renamed to Metamodel.
-- kotlin upgraded to 2.0.21.
-- org.apache.curator:curator-recipes upgraded to 5.7.1.
-- org.jetbrains:annotations upgraded to 26.0.1.
-- The interface parameters are changed from List type to Collection type.
-- redis-om-spring upgraded to 0.9.6.
-- BaseClientObject date attribute format modified to comply with ISO-8601 standard.
-- Optimize multi-language acquisition logic to prevent NPE.
-- Reconstruct the text broadcast message table and corresponding logic according to the database paradigm.
-- io.hypersistence:hypersistence-utils-hibernate-63 is upgraded to 3.8.3.
-- com.google.guava:guava-bom is upgraded to 33.3.1-jre.
-- Change the account gender & language type to varchar to eliminate database differences.
-- Update annotation processor prompt information.
+- Standardize interface parameters and reduce complexity
+- Optimize grpc interface
+- Log retention policy adjustment
+- Optimize account query results
+- io.swagger.core.v3:swagger-annotations-jakarta upgraded to 2.2.25
+- flyway upgraded to 10.20.0
+- org.jobrunr:jobrunr-spring-boot-3-starter upgraded to 7.3.1
+- Updated the description of the infrastructure section in the README document
+- Standardize class names and interface method names
+- Change icon
+- Improve account interface parameter comments
+- Pagination query for the current page starts from 1 by default
+- Reconstruct the interface according to RESTful specifications
+- The page number parameter is renamed to current
+- Optimize account login performance
+- Logic optimization of online user number statistics
+- The CustomDescription annotation is renamed to Meta, and the GenerateDescription annotation is renamed to Metamodel
+- kotlin upgraded to 2.0.21
+- org.apache.curator:curator-recipes upgraded to 5.7.1
+- org.jetbrains:annotations upgraded to 26.0.1
+- The interface parameters are changed from List type to Collection type
+- redis-om-spring upgraded to 0.9.6
+- BaseClientObject date attribute format modified to comply with ISO-8601 standard
+- Optimize multi-language acquisition logic to prevent NPE
+- Reconstruct the text broadcast message table and corresponding logic according to the database paradigm
+- io.hypersistence:hypersistence-utils-hibernate-63 is upgraded to 3.8.3
+- com.google.guava:guava-bom is upgraded to 33.3.1-jre
+- Change the account gender & language type to varchar to eliminate database differences
+- Update annotation processor prompt information
 
 === ⚠️ Removed
 
-- Removed uncommon and dangerous grpc methods.
-- Delete authentication-related duplicate configurations.
+- Removed uncommon and dangerous grpc methods
+- Delete authentication-related duplicate configurations
 
 == [2.1.0] - 2024-09-30
 
 === ⭐ Added
 
-- Added conditional executor.
-- Added conditional annotation.
-- Get current login account information interface to add account role permission information return.
-- The annotation processor adds version information generation.
-- grpc adds service discovery client name resolver.
-- Added flyway plug-in.
-- Added script to check and set environment variables.
-- Added license script.
-- When deleting an account & deleting the account archive data, the account address data will also be deleted.
-- Added git hash value identification to project versions (development, testing, pre-release).
-- Added current limit expansion function.
-- Added scheduled tasks for deleting subscription messages and broadcast message archiving data based on ID.
-- Added scheduled tasks to delete roles and account archive data based on ID.
-- Added a new scheduled task for archiving data based on ID deletion permission.
-- The value attribute of the dangerous operation annotation adds parameter substitution function.
+- Added conditional executor
+- Added conditional annotation
+- Get current login account information interface to add account role permission information return
+- The annotation processor adds version information generation
+- grpc adds service discovery client name resolver
+- Added flyway plug-in
+- Added script to check and set environment variables
+- Added license script
+- When deleting an account & deleting the account archive data, the account address data will also be deleted
+- Added git hash value identification to project versions (development, testing, pre-release)
+- Added current limit expansion function
+- Added scheduled tasks for deleting subscription messages and broadcast message archiving data based on ID
+- Added scheduled tasks to delete roles and account archive data based on ID
+- Added a new scheduled task for archiving data based on ID deletion permission
+- The value attribute of the dangerous operation annotation adds parameter substitution function
 
 === 🐞 Fixed
 
-- Fixed the problem that the user address is empty when updating the user role interface based on ID.
+- Fixed the problem that the user address is empty when updating the user role interface based on ID
 
 === 🕸️ Changed
 
-- Reconstruct the account and role mapping relationship according to the database paradigm, allowing accounts to have multiple roles at the same time.
-- Account supports adding multiple addresses.
-- Reconstruct role and permission mapping relationships according to database paradigm.
-- collections4 CollectionUtils replaces spring CollectionUtils.
-- Update flyway script location.
-- Gradle version upgraded to 8.10.2.
-- Unified authentication endpoint processor.
-- grpc version upgraded to 1.68.0.
-- deepl-java upgraded to 1.6.0.
-- commons-io upgraded to 2.17.0.
-- The built-in environment variable names are changed to lowercase.
-- Modify jpa scanning range.
-- springboot upgraded to 3.3.4.
-- protobuf upgraded to 4.28.2.
-- Modify the default value of Rsa=jksKeyPair.
-- Improve account registration grpc interface parameter attributes.
-- flyway upgraded to 10.18.0.
-- mapstruct upgraded to 1.6.2.
-- Update SECURITY document content.
-- log4j2 sets UTF-8 as the default encoding.
-- Optimize project structure.
-- Optimize the execution logic of permission archiving scheduled tasks.
+- Reconstruct the account and role mapping relationship according to the database paradigm, allowing accounts to have multiple roles at the same time
+- Account supports adding multiple addresses
+- Reconstruct role and permission mapping relationships according to database paradigm
+- collections4 CollectionUtils replaces spring CollectionUtils
+- Update flyway script location
+- Gradle version upgraded to 8.10.2
+- Unified authentication endpoint processor
+- grpc version upgraded to 1.68.0
+- deepl-java upgraded to 1.6.0
+- commons-io upgraded to 2.17.0
+- The built-in environment variable names are changed to lowercase
+- Modify jpa scanning range
+- springboot upgraded to 3.3.4
+- protobuf upgraded to 4.28.2
+- Modify the default value of Rsa=jksKeyPair
+- Improve account registration grpc interface parameter attributes
+- flyway upgraded to 10.18.0
+- mapstruct upgraded to 1.6.2
+- Update SECURITY document content
+- log4j2 sets UTF-8 as the default encoding
+- Optimize project structure
+- Optimize the execution logic of permission archiving scheduled tasks
 
 === ⚠️ Removed
 
-- The unified authentication endpoint processor removes the automatic log upload function to reduce architectural complexity.
-- Delete plug-ins that are temporarily unused.
+- The unified authentication endpoint processor removes the automatic log upload function to reduce architectural complexity
+- Delete plug-ins that are temporarily unused
 
 == [2.0.0] - 2024-09-06
 
 === ⭐ Added
 
-- Added Chinese version of readme document.
-- Added Chinese version of contribution guide.
-- Added face detection function.
-- Added ocr expansion function.
-- Added the ability to obtain a province or state based on the province or state ID, obtain the province or state (including lower-level cities) based on the province or state ID, and obtain the province or state based on the city ID.
-- Added interfaces for obtaining province or state information based on country ID and obtaining city information based on province or state ID.
-- Added an interface to obtain detailed information about the country (excluding province, state, and city information).
-- Added interface for obtaining detailed country information.
-- Added global geographic data json file.
-- Add new account and add address interface.
-- Added address attribute to account.
-- Added data desensitization tool class.
-- Added notes and aspects of dangerous operations.
-- Add dangerous operation annotations for operations related to role permissions.
-- The character archive has been added to determine whether it is in use and cannot be archived.
-- The permissions for archiving have been increased to determine whether archiving is in use.
-- Added paging query archived permissions interface.
+- Added Chinese version of readme document
+- Added Chinese version of contribution guide
+- Added face detection function
+- Added ocr expansion function
+- Added the ability to obtain a province or state based on the province or state ID, obtain the province or state (including lower-level cities) based on the province or state ID, and obtain the province or state based on the city ID
+- Added interfaces for obtaining province or state information based on country ID and obtaining city information based on province or state ID
+- Added an interface to obtain detailed information about the country (excluding province, state, and city information)
+- Added interface for obtaining detailed country information
+- Added global geographic data json file
+- Add new account and add address interface
+- Added address attribute to account
+- Added data desensitization tool class
+- Added notes and aspects of dangerous operations
+- Add dangerous operation annotations for operations related to role permissions
+- The character archive has been added to determine whether it is in use and cannot be archived
+- The permissions for archiving have been increased to determine whether archiving is in use
+- Added paging query archived permissions interface
 
 === 🕸️ Changed
 
-- Project rename.
-- Optimize unit test logic.
-- eliminate duplicate constants.
-- Alibaba Cloud machine translation bean initialization adds judgment.
-- Unify dependency names.
-- Change icon.
-- bump protobufBomVersion from 3.25.3 to 4.28.0.
-- commons-lang3 StringUtils replaces spring StringUtils.
-- Added serialization interface for related entities.
+- Project rename
+- Optimize unit test logic
+- eliminate duplicate constants
+- Alibaba Cloud machine translation bean initialization adds judgment
+- Unify dependency names
+- Change icon
+- bump protobufBomVersion from 3.25.3 to 4.28.0
+- commons-lang3 StringUtils replaces spring StringUtils
+- Added serialization interface for related entities
 
 == [1.0.4] - 2024-08-27
 
 === ⭐ Added
 
-- Add pr badge.
-- Added internationalization information.
-- Add Contributors.
-- Add label action.
-- Add Greetings action.
-- Add detailed exception information printing.
-- grpc method permissions increase configuration file configuration method.
-- Added new interface to obtain current server time.
-- Added QR code related functions.
-- Added barcode related functions.
-- Added annotation processor to implement class description information generation function.
-- Added Application-Version to the jar task manifest.
-- springboot bootJar task adds signature.
-- Springboot bootJar task adds license file packaging.
-- Added archived basic attributes.
-- New trigger for archive table.
-- Text subscription messages have a new function of restoring messages from archives based on ID.
-- Added permissions for archiving and restoring from archives.
-- Permission addition, deletion and modification are compatible with archiving logic.
-- Added archiving and restoring functions to roles.
-- Added new archiving and recovery functions for accounts.
-- Added slack badge.
+- Add pr badge
+- Added internationalization information
+- Add Contributors
+- Add label action
+- Add Greetings action
+- Add detailed exception information printing
+- grpc method permissions increase configuration file configuration method
+- Added new interface to obtain current server time
+- Added QR code related functions
+- Added barcode related functions
+- Added annotation processor to implement class description information generation function
+- Added Application-Version to the jar task manifest
+- springboot bootJar task adds signature
+- Springboot bootJar task adds license file packaging
+- Added archived basic attributes
+- New trigger for archive table
+- Text subscription messages have a new function of restoring messages from archives based on ID
+- Added permissions for archiving and restoring from archives
+- Permission addition, deletion and modification are compatible with archiving logic
+- Added archiving and restoring functions to roles
+- Added new archiving and recovery functions for accounts
+- Added slack badge
 
 === 🐞 Fixed
 
-- Fix permission verification exception.
+- Fix permission verification exception
 
 === 🕸️ Changed
 
-- Modify slow sql table format.
-- Modify slow sql statistics threshold.
-- Optimize non-empty filtering logic.
-- Block sensitive information in logs.
-- Unified permission verification logic.
-- Change icon.
-- Gradle version upgraded to 8.10.
-- Update message service database trigger functions and triggers.
-- The springboot version is upgraded to 3.3.3.
-- Kotlin version upgraded to 2.0.20.
-- flyway version upgraded to 10.17.2.
-- redis-om-spring version upgraded to 0.9.5.
-- mapstruct version upgraded to 1.6.0.
-- The guava version is upgraded to 33.3.0-jre.
-- minio version upgraded to 8.5.12.
+- Modify slow sql table format
+- Modify slow sql statistics threshold
+- Optimize non-empty filtering logic
+- Block sensitive information in logs
+- Unified permission verification logic
+- Change icon
+- Gradle version upgraded to 8.10
+- Update message service database trigger functions and triggers
+- The springboot version is upgraded to 3.3.3
+- Kotlin version upgraded to 2.0.20
+- flyway version upgraded to 10.17.2
+- redis-om-spring version upgraded to 0.9.5
+- mapstruct version upgraded to 1.6.0
+- The guava version is upgraded to 33.3.0-jre
+- minio version upgraded to 8.5.12
 
 === ⚠️ Removed
 
-- Exclude tomcat globally.
-- Message service message status delete archived attribute.
+- Exclude tomcat globally
+- Message service message status delete archived attribute
 
 == [1.0.3] - 2024-08-07
 
 === ⭐ Added
 
-- Added custom jks key function.
-- Added NotBlankOrNull verification annotation.
-- CommonConstants adds private constructor.
-- Added age attribute to account model.
-- Added birthday attribute to account.
-- Added slow sql statistics function.
-- Added project-report plugin.
-- Added IllegalArgumentException global exception handling.
-- Added signature plugin.
-- Added machine translation function.
-- Text subscription messages have been added to query all and someone’s message records.
-- Text broadcast message forwarding adds receiver verification.
-- Added text broadcast message archiving function based on ID.
-- Added the function of archiving text subscription messages based on ID.
-- Added text subscription and broadcast message archive tables.
-- New index.
-- New trigger for text broadcast messages.
-- Text subscription message adds unread message interface based on ID.
-- Client object conversion adds post-processing.
-- Added BeanNameConstants.
-- Text subscription message adds a new interface for querying all current users to send messages.
-- New basic properties for top-level client objects.
-- Text broadcast message has a new interface for querying all current users sending messages.
-- Added the ability to delete text broadcast messages based on ID.
-- Added read text broadcast message based on ID.
-- Added the ability to delete text subscription messages based on ID.
-- Added the ability to subscribe to messages based on ID read text.
+- Added custom jks key function
+- Added NotBlankOrNull verification annotation
+- CommonConstants adds private constructor
+- Added age attribute to account model
+- Added birthday attribute to account
+- Added slow sql statistics function
+- Added project-report plugin
+- Added IllegalArgumentException global exception handling
+- Added signature plugin
+- Added machine translation function
+- Text subscription messages have been added to query all and someone’s message records
+- Text broadcast message forwarding adds receiver verification
+- Added text broadcast message archiving function based on ID
+- Added the function of archiving text subscription messages based on ID
+- Added text subscription and broadcast message archive tables
+- New index
+- New trigger for text broadcast messages
+- Text subscription message adds unread message interface based on ID
+- Client object conversion adds post-processing
+- Added BeanNameConstants
+- Text subscription message adds a new interface for querying all current users to send messages
+- New basic properties for top-level client objects
+- Text broadcast message has a new interface for querying all current users sending messages
+- Added the ability to delete text broadcast messages based on ID
+- Added read text broadcast message based on ID
+- Added the ability to delete text subscription messages based on ID
+- Added the ability to subscribe to messages based on ID read text
 
 === 🐞 Fixed
 
-- Fix permission verification exception.
-- Fix spelling errors.
+- Fix permission verification exception
+- Fix spelling errors
 
 === 🕸️ Changed
 
-- Modify the default branch of GitHub actions to develop.
-- Standardize libs.versions.toml key value naming.
-- spring-cloud upgraded to 2023.0.3.
-- Exclude logback globally.
-- redis-om-spring upgraded to 0.9.4.
-- Add restrictions based on ID read text subscription messages.
-- Add restrictions on read text broadcast messages based on ID.
-- SubscriptionTextMessageRepository=findByIdAndReceiverId parameter adds NotNull annotation.
-- Unified modify the EnableRedisDocumentRepositories annotation range.
-- Pagination query uniformly adds page number and current page number parameter value verification.
-- Optimize subscription and broadcast channel storage logic.
-- Group and version are extracted into the gradle.properties file.
+- Modify the default branch of GitHub actions to develop
+- Standardize libs.versions.toml key value naming
+- spring-cloud upgraded to 2023.0.3
+- Exclude logback globally
+- redis-om-spring upgraded to 0.9.4
+- Add restrictions based on ID read text subscription messages
+- Add restrictions on read text broadcast messages based on ID
+- SubscriptionTextMessageRepository=findByIdAndReceiverId parameter adds NotNull annotation
+- Unified modify the EnableRedisDocumentRepositories annotation range
+- Pagination query uniformly adds page number and current page number parameter value verification
+- Optimize subscription and broadcast channel storage logic
+- Group and version are extracted into the gradle.properties file
 
 == [1.0.2] - 2024-07-19
 
 === ⭐ Added
 
-- integrate redis-om-spring annotation processor.
-- Exception prompt content adapts to user language preference.
-- Added parameter verification for permission-related functions.
-- The permission module adds refresh_token redis storage and validity verification.
-- The permission module adds client token redis storage and verification.
-- A new data initialization script is added to the permission module.
-- The message module and permission module are integrated with jobrunr-spring-boot-3-starter.
-- Added message module.
-- The messaging module adds websocket netty implementation.
-- The message module implements the subscription text message forwarding function.
-- The message module implements the broadcast text message publishing function.
+- integrate redis-om-spring annotation processor
+- Exception prompt content adapts to user language preference
+- Added parameter verification for permission-related functions
+- The permission module adds refresh_token redis storage and validity verification
+- The permission module adds client token redis storage and verification
+- A new data initialization script is added to the permission module
+- The message module and permission module are integrated with jobrunr-spring-boot-3-starter
+- Added message module
+- The messaging module adds websocket netty implementation
+- The message module implements the subscription text message forwarding function
+- The message module implements the broadcast text message publishing function
 
 === 🐞 Fixed
 
-- Fixed permission name format prompt information error.
-- Fixed the problem of token validity verification failure.
+- Fixed permission name format prompt information error
+- Fixed the problem of token validity verification failure
 
 === 🕸️ Changed
 
-- Permission code adds unique constraints.
-- Modify the grpc synchronization calling method.
-- Update the authority grpc interface unit test logic to ensure integrity and independence.
-- Add unique verification to role code.
-- Add unique verification to the account email address.
-- When updating permissions, determine whether the updated code already exists.
-- When updating an account, check whether the updated email address already exists.
-- When the role is updated, a uniqueness check is added to the code.
-- The lombok gradle plugin is modified to latest.release.
-- When updating an account, verify whether the updated account name is unique.
-- Unified authentication service database table index name naming convention.
-- Under password authentication, principalName is changed to the username.
-- The client token combines the permissions of the role and the permissions in the client itself.
-- The upper limit of log file size is adjusted to 250MB.
-- The gradle version is upgraded to 8.9.
-- Operation logs and system logs kafka topic name & elasticsearch index name are extracted into LogProperties.
-- When the account is disabled and deleted, the current account login information will be cleared.
-- PgSqlFunctionNameConstants adds final access modifier.
-- Gradle is migrated from groovy to kotlin.
+- Permission code adds unique constraints
+- Modify the grpc synchronization calling method
+- Update the authority grpc interface unit test logic to ensure integrity and independence
+- Add unique verification to role code
+- Add unique verification to the account email address
+- When updating permissions, determine whether the updated code already exists
+- When updating an account, check whether the updated email address already exists
+- When the role is updated, a uniqueness check is added to the code
+- The lombok gradle plugin is modified to latest.release
+- When updating an account, verify whether the updated account name is unique
+- Unified authentication service database table index name naming convention
+- Under password authentication, principalName is changed to the username
+- The client token combines the permissions of the role and the permissions in the client itself
+- The upper limit of log file size is adjusted to 250MB
+- The gradle version is upgraded to 8.9
+- Operation logs and system logs kafka topic name & elasticsearch index name are extracted into LogProperties
+- When the account is disabled and deleted, the current account login information will be cleared
+- PgSqlFunctionNameConstants adds final access modifier
+- Gradle is migrated from groovy to kotlin
 
 === ⚠️ Removed
 
-- Remove log4j2 OnStartupTriggeringPolicy policy.
-- Delete the -Xmx, -XX:MaxMetaspaceSize configuration in gradle jvmargs.
+- Remove log4j2 OnStartupTriggeringPolicy policy
+- Delete the -Xmx, -XX:MaxMetaspaceSize configuration in gradle jvmargs
 
 == [1.0.1] - 2024-06-28
 
 === ⭐ Added
 
-- Unique data generation service adds code generation, verify function.
-- Add mail service.
-- Add template email notification in mail service.
-- Add file service.
-- The file service adds streaming file upload, download, deletion, and obtaining file content in text format.
-- Added language preference and time zone attributes to the account.
-- A new interface for obtaining the list of available time zones has been added to the unique data generation service.
-- Added sms module.
+- Unique data generation service adds code generation, verify function
+- Add mail service
+- Add template email notification in mail service
+- Add file service
+- The file service adds streaming file upload, download, deletion, and obtaining file content in text format
+- Added language preference and time zone attributes to the account
+- A new interface for obtaining the list of available time zones has been added to the unique data generation service
+- Added sms module
 
 === 🐞 Fixed
 
-- Fix transaction does not take effect.
-- Fix internationalization exception prompt error.
+- Fix transaction does not take effect
+- Fix internationalization exception prompt error
 
 === 🕸️ Changed
 
-- Account registration function adds time zone validity check.
-- Account registration function adds verification code check.
-- Modify the database columns of the user table, permission table, and role table to NOT_NULL, and add corresponding default values.
-- The account registration grpc interface parameter attribute is modified to a wrapper class.
-- Modify grpc channel closing logic.
-- Integrate mapstruct to replace the original bull for object conversion.
-- Delete current account function and add verification code verification.
-- Token claims adds account language preference attribute.
-- springboot upgraded to 3.3.1.
-- redis-om-spring upgraded to 0.9.3.
-- hypersistence-utils-hibernate-63 upgraded to 3.7.7.
+- Account registration function adds time zone validity check
+- Account registration function adds verification code check
+- Modify the database columns of the user table, permission table, and role table to NOT_NULL, and add corresponding default values
+- The account registration grpc interface parameter attribute is modified to a wrapper class
+- Modify grpc channel closing logic
+- Integrate mapstruct to replace the original bull for object conversion
+- Delete current account function and add verification code verification
+- Token claims adds account language preference attribute
+- springboot upgraded to 3.3.1
+- redis-om-spring upgraded to 0.9.3
+- hypersistence-utils-hibernate-63 upgraded to 3.7.7
 
 === ⚠️ Removed
 
-- Remove flyway gradle plugin.
-- sql file remove license.
+- Remove flyway gradle plugin
+- sql file remove license
 
 == [1.0.0] - 2024-06-13
 
 === ⭐ Added
 
-- Authentication server.
-- Resource Server Client.
-- Operation log collection function.
-- System log collection function.
-- Distributed unique primary key generation.
-- Distributed lock based on zookeeper.
+- Authentication server
+- Resource Server Client
+- Operation log collection function
+- System log collection function
+- Distributed unique primary key generation
+- Distributed lock based on zookeeper

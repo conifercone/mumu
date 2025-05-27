@@ -27,13 +27,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.javamoney.moneta.Money;
@@ -45,7 +45,7 @@ import org.javamoney.moneta.Money;
  * @since 1.0.4
  */
 @Entity
-@Table(name = "mumu_users_archived")
+@Table(name = "mumu_accounts_archived")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -56,59 +56,97 @@ public class AccountArchivedPO extends JpaBasisArchivablePersistentObject {
   @Serial
   private static final long serialVersionUID = -7785479212845125722L;
 
+  /**
+   * 账号id
+   */
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
 
+  /**
+   * 账号名
+   */
   @Size(max = 50)
   @Column(name = "username", nullable = false, length = 50)
   private String username;
 
+  /**
+   * 账号密码
+   */
   @Size(max = 500)
   @Column(name = "password", nullable = false, length = 500)
   private String password;
 
+  /**
+   * 已启用
+   */
   @Column(name = "enabled", nullable = false)
   private boolean enabled = true;
 
+  /**
+   * 凭证未过期
+   */
   @Column(name = "credentials_non_expired", nullable = false)
   private boolean credentialsNonExpired = true;
 
+  /**
+   * 帐户未锁定
+   */
   @Column(name = "account_non_locked", nullable = false)
   private boolean accountNonLocked = true;
 
+  /**
+   * 帐号未过期
+   */
   @Column(name = "account_non_expired", nullable = false)
   private boolean accountNonExpired = true;
 
-  @Size(max = 200)
-  @Column(name = "avatar_url", length = 200, nullable = false)
-  private String avatarUrl;
-
+  /**
+   * 国际电话区号
+   */
   @Size(max = 10)
   @Column(name = "phone_country_code", length = 10, nullable = false)
   private String phoneCountryCode;
 
+  /**
+   * 手机号
+   */
   @Size(max = 200)
   @Column(name = "phone", length = 200, nullable = false)
   private String phone;
 
+  /**
+   * 性别
+   */
   @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
   private GenderEnum gender;
 
+  /**
+   * 电子邮箱
+   */
   @Size(max = 200)
   @Column(name = "email", length = 200, nullable = false)
   private String email;
 
+  /**
+   * 时区
+   */
   @Size(max = 200)
   @Column(name = "timezone", length = 200, nullable = false)
   private String timezone;
 
+  /**
+   * 语言偏好
+   */
   @Column(name = "language", nullable = false)
   @Enumerated(EnumType.STRING)
   private LanguageEnum language;
 
-  @ColumnDefault("'1970-01-01'::date")
+  /**
+   * 出生日期
+   */
+  @NotNull
   @Column(name = "birthday", nullable = false)
   private LocalDate birthday;
 

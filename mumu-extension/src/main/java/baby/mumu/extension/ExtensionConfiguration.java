@@ -23,7 +23,7 @@ import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
-import baby.mumu.extension.nosql.MongodbConfiguration;
+import baby.mumu.extension.nosql.DocumentConfiguration;
 import baby.mumu.extension.ocr.OcrConfiguration;
 import baby.mumu.extension.processor.grpc.GrpcExceptionAdvice;
 import baby.mumu.extension.processor.response.ResponseBodyProcessor;
@@ -48,7 +48,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
   ZookeeperConfiguration.class, MuMuCorsConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
-  FaceDetectionConfiguration.class, MongodbConfiguration.class, ListenerConfiguration.class,
+  FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
   FilterConfiguration.class, IdempotentConfiguration.class, GsonConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {

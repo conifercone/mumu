@@ -1,6 +1,9 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+:email: kaiyu.shan@outlook.com
+
+= 貢献者誓言行動規範
 
 - link:CODE_OF_CONDUCT.zh_CN.adoc[简体中文]
 - link:CODE_OF_CONDUCT.zh_TW.adoc[繁體中文]
@@ -8,9 +11,7 @@
 - link:CODE_OF_CONDUCT.ja.adoc[日本語]
 - link:CODE_OF_CONDUCT.ko.adoc[한국어]
 
-== 貢献者誓言行動規範
-
-=== もくじ
+== もくじ
 
 - <<our-pledge, 我々の約束>>
 - <<our-standards, 我々の基準>>
@@ -61,7 +62,7 @@
 [#enforcement]
 == 実施
 
-虐待、ハラスメント、またはその他の許可されない行動を報告する場合は、実施を担当するコミュニティのリーダーに連絡してください。連絡先は mailto:kaiyu.shan@outlook.com[kaiyu.shan@outlook.com] です。すべての苦情は迅速かつ公平に審査され、調査されます。
+虐待、ハラスメント、またはその他の許可されない行動を報告する場合は、実施を担当するコミュニティのリーダーに連絡してください。連絡先は mailto:{email}[{email}] です。すべての苦情は迅速かつ公平に審査され、調査されます。
 
 すべてのコミュニティのリーダーは、事件の報告者のプライバシーと安全を尊重する義務があります。
 

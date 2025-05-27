@@ -22,7 +22,7 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * 账户更新角色指令
+ * 账号更新角色指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -31,7 +31,7 @@ import lombok.Data;
 public class AccountUpdateRoleCmd {
 
   @NotNull
-  @Schema(description = "账户ID", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
   private Long id;
 
   @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)

@@ -20,7 +20,7 @@ import baby.mumu.authentication.domain.permission.gateway.PermissionGateway;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.domain.role.gateway.RoleGateway;
 import baby.mumu.authentication.infrastructure.permission.convertor.PermissionConvertor;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionRedisRepository;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.PermissionCacheRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
@@ -71,7 +71,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   private final PermissionArchivedRepository permissionArchivedRepository;
   private final JobScheduler jobScheduler;
   private final ExtensionProperties extensionProperties;
-  private final PermissionRedisRepository permissionRedisRepository;
+  private final PermissionCacheRepository permissionCacheRepository;
   private final PermissionPathRepository permissionPathRepository;
 
   @Autowired
@@ -79,7 +79,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     RoleGateway roleGateway,
     PermissionConvertor permissionConvertor,
     PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
-    ExtensionProperties extensionProperties, PermissionRedisRepository permissionRedisRepository,
+    ExtensionProperties extensionProperties, PermissionCacheRepository permissionCacheRepository,
     PermissionPathRepository permissionPathRepository) {
     this.permissionRepository = permissionRepository;
     this.roleGateway = roleGateway;
@@ -87,7 +87,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     this.permissionArchivedRepository = permissionArchivedRepository;
     this.jobScheduler = jobScheduler;
     this.extensionProperties = extensionProperties;
-    this.permissionRedisRepository = permissionRedisRepository;
+    this.permissionCacheRepository = permissionCacheRepository;
     this.permissionPathRepository = permissionPathRepository;
   }
 
@@ -106,7 +106,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
           new PermissionPathPO(
             new PermissionPathPOId(permissionPO.getId(), permissionPO.getId(), 0L),
             permissionPO, permissionPO));
-        permissionRedisRepository.deleteById(permissionPO.getId());
+        permissionCacheRepository.deleteById(permissionPO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
       });
@@ -126,7 +126,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
       permissionRepository.deleteById(permissionId);
       permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
       permissionArchivedRepository.deleteById(permissionId);
-      permissionRedisRepository.deleteById(permissionId);
+      permissionCacheRepository.deleteById(permissionId);
     });
   }
 
@@ -137,7 +137,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Optional.ofNullable(permission).flatMap(permissionConvertor::toPO)
       .ifPresent(dataObject -> {
         permissionRepository.merge(dataObject);
-        permissionRedisRepository.deleteById(dataObject.getId());
+        permissionCacheRepository.deleteById(dataObject.getId());
       });
   }
 
@@ -194,13 +194,13 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
   @Override
   public Optional<Permission> findById(Long id) {
-    return Optional.ofNullable(id).flatMap(permissionRedisRepository::findById).flatMap(
+    return Optional.ofNullable(id).flatMap(permissionCacheRepository::findById).flatMap(
       permissionConvertor::toEntity).or(() ->
       permissionRepository.findById(id)
         .flatMap(permissionConvertor::toEntity)
         .map(permission -> {
-          permissionConvertor.toPermissionRedisPO(permission)
-            .ifPresent(permissionRedisRepository::save);
+          permissionConvertor.toPermissionCacheablePO(permission)
+            .ifPresent(permissionCacheRepository::save);
           return permission;
         })
     );
@@ -221,7 +221,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
         permissionArchivedPO.setArchived(true);
         permissionArchivedRepository.persist(permissionArchivedPO);
         permissionRepository.deleteById(permissionArchivedPO.getId());
-        permissionRedisRepository.deleteById(permissionArchivedPO.getId());
+        permissionCacheRepository.deleteById(permissionArchivedPO.getId());
         GlobalProperties global = extensionProperties.getGlobal();
         jobScheduler.schedule(Instant.now()
             .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
@@ -238,7 +238,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
       .ifPresent(permissionId -> {
         permissionArchivedRepository.deleteById(permissionId);
         permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
-        permissionRedisRepository.deleteById(permissionId);
+        permissionCacheRepository.deleteById(permissionId);
       });
   }
 
@@ -250,7 +250,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
         permissionPO.setArchived(false);
         permissionArchivedRepository.deleteById(permissionPO.getId());
         permissionRepository.persist(permissionPO);
-        permissionRedisRepository.deleteById(permissionPO.getId());
+        permissionCacheRepository.deleteById(permissionPO.getId());
       });
   }
 
@@ -289,8 +289,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
         .collect(
           Collectors.toList());
       permissionPathRepository.persistAll(permissionPathPOS);
-      permissionRedisRepository.deleteById(ancestorId);
-      permissionRedisRepository.deleteById(descendantId);
+      permissionCacheRepository.deleteById(ancestorId);
+      permissionCacheRepository.deleteById(descendantId);
     }
   }
 
@@ -325,8 +325,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     }
     permissionPathRepository.deleteById(new PermissionPathPOId(ancestorId, descendantId, 1L));
     permissionPathRepository.deleteUnreachableData();
-    permissionRedisRepository.deleteById(ancestorId);
-    permissionRedisRepository.deleteById(descendantId);
+    permissionCacheRepository.deleteById(ancestorId);
+    permissionCacheRepository.deleteById(descendantId);
   }
 
   @Override
@@ -358,12 +358,12 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
   @Override
   public Optional<Permission> findByCode(String code) {
-    return Optional.ofNullable(code).flatMap(permissionRedisRepository::findByCode).flatMap(
+    return Optional.ofNullable(code).flatMap(permissionCacheRepository::findByCode).flatMap(
       permissionConvertor::toEntity).or(() -> permissionRepository.findByCode(code)
       .flatMap(permissionConvertor::toEntity)
       .map(entity -> {
-        permissionConvertor.toPermissionRedisPO(entity)
-          .ifPresent(permissionRedisRepository::save);
+        permissionConvertor.toPermissionCacheablePO(entity)
+          .ifPresent(permissionCacheRepository::save);
         return entity;
       }));
   }

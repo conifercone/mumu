@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * 账户密码校验指令执行器
+ * 账号密码校验指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0

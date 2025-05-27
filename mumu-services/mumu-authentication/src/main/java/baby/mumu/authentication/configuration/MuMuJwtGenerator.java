@@ -18,14 +18,14 @@ package baby.mumu.authentication.configuration;
 import static org.springframework.security.oauth2.core.AuthorizationGrantType.AUTHORIZATION_CODE;
 
 import baby.mumu.authentication.domain.account.Account;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenRepository;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.AuthorizeCodeTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.ClientTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.OidcIdTokenRedisPO;
-import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.PasswordTokenRedisPO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.AuthorizeCodeTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.ClientTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.PasswordTokenCacheRepository;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.AuthorizeCodeTokenCacheablePO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.ClientTokenCacheablePO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.OidcIdTokenCacheablePO;
+import baby.mumu.authentication.infrastructure.token.gatewayimpl.cache.po.PasswordTokenCacheablePO;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import java.time.Duration;
@@ -76,13 +76,13 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
 
   private final JwtEncoder jwtEncoder;
   private OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
-  private PasswordTokenRepository passwordTokenRepository;
+  private PasswordTokenCacheRepository passwordTokenCacheRepository;
   @Setter
-  private OidcIdTokenRepository oidcIdTokenRepository;
+  private OidcIdTokenCacheRepository oidcIdTokenCacheRepository;
   @Setter
-  private ClientTokenRepository clientTokenRepository;
+  private ClientTokenCacheRepository clientTokenCacheRepository;
   @Setter
-  private AuthorizeCodeTokenRepository authorizeCodeTokenRepository;
+  private AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository;
 
   /**
    * Constructs a {@code JwtGenerator} using the provided parameters.
@@ -234,36 +234,36 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     Duration between = Duration.between(start, jwtExpiresAt);
     if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
       if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(authorizationGrantType)) {
-        ClientTokenRedisPO tokenRedisDo = new ClientTokenRedisPO();
-        tokenRedisDo.setId(jwt.getClaimAsString(JwtClaimNames.SUB));
-        tokenRedisDo.setClientTokenValue(tokenValue);
-        tokenRedisDo.setTtl(between.toSeconds());
-        clientTokenRepository.save(tokenRedisDo);
+        ClientTokenCacheablePO clientTokenCacheablePO = new ClientTokenCacheablePO();
+        clientTokenCacheablePO.setId(jwt.getClaimAsString(JwtClaimNames.SUB));
+        clientTokenCacheablePO.setClientTokenValue(tokenValue);
+        clientTokenCacheablePO.setTtl(between.toSeconds());
+        clientTokenCacheRepository.save(clientTokenCacheablePO);
       } else if (context.getPrincipal().getPrincipal() instanceof Account account) {
         if (AUTHORIZATION_CODE.getValue().equals(authorizationGrantType)) {
           // 缓存授权码模式token
-          AuthorizeCodeTokenRedisPO authorizeCodeTokenRedisPO = new AuthorizeCodeTokenRedisPO();
-          authorizeCodeTokenRedisPO.setId(account.getId());
-          authorizeCodeTokenRedisPO.setTokenValue(tokenValue);
-          authorizeCodeTokenRedisPO.setTtl(between.toSeconds());
-          authorizeCodeTokenRepository.save(authorizeCodeTokenRedisPO);
+          AuthorizeCodeTokenCacheablePO authorizeCodeTokenCacheablePO = new AuthorizeCodeTokenCacheablePO();
+          authorizeCodeTokenCacheablePO.setId(account.getId());
+          authorizeCodeTokenCacheablePO.setTokenValue(tokenValue);
+          authorizeCodeTokenCacheablePO.setTtl(between.toSeconds());
+          authorizeCodeTokenCacheRepository.save(authorizeCodeTokenCacheablePO);
         } else if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
           .equals(authorizationGrantType)) {
           // 缓存密码模式token
-          PasswordTokenRedisPO passwordTokenRedisPO = new PasswordTokenRedisPO();
-          passwordTokenRedisPO.setId(account.getId());
-          passwordTokenRedisPO.setTokenValue(tokenValue);
-          passwordTokenRedisPO.setTtl(between.toSeconds());
-          passwordTokenRepository.save(passwordTokenRedisPO);
+          PasswordTokenCacheablePO passwordTokenCacheablePO = new PasswordTokenCacheablePO();
+          passwordTokenCacheablePO.setId(account.getId());
+          passwordTokenCacheablePO.setTokenValue(tokenValue);
+          passwordTokenCacheablePO.setTtl(between.toSeconds());
+          passwordTokenCacheRepository.save(passwordTokenCacheablePO);
         }
       }
     } else if (OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())) {
-      OidcIdTokenRedisPO oidcIdTokenRedisPO = new OidcIdTokenRedisPO();
-      oidcIdTokenRedisPO.setId(
+      OidcIdTokenCacheablePO oidcIdTokenCacheablePO = new OidcIdTokenCacheablePO();
+      oidcIdTokenCacheablePO.setId(
         Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
-      oidcIdTokenRedisPO.setTokenValue(tokenValue);
-      oidcIdTokenRedisPO.setTtl(between.toSeconds());
-      oidcIdTokenRepository.save(oidcIdTokenRedisPO);
+      oidcIdTokenCacheablePO.setTokenValue(tokenValue);
+      oidcIdTokenCacheablePO.setTtl(between.toSeconds());
+      oidcIdTokenCacheRepository.save(oidcIdTokenCacheablePO);
     }
   }
 
@@ -280,10 +280,10 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     this.jwtCustomizer = jwtCustomizer;
   }
 
-  public void setPasswordTokenRepository(
-    PasswordTokenRepository passwordTokenRepository) {
-    Assert.notNull(passwordTokenRepository, "passwordTokenRepository cannot be null");
-    this.passwordTokenRepository = passwordTokenRepository;
+  public void setPasswordTokenCacheRepository(
+    PasswordTokenCacheRepository passwordTokenCacheRepository) {
+    Assert.notNull(passwordTokenCacheRepository, "passwordTokenCacheRepository cannot be null");
+    this.passwordTokenCacheRepository = passwordTokenCacheRepository;
   }
 
 }

@@ -16,6 +16,7 @@
 package baby.mumu.authentication.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
@@ -31,7 +32,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
 
 /**
- * 查询当前登录账户信息数据传输对象
+ * 查询当前登录账号信息数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 1.0.0
@@ -51,9 +52,9 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   private String username;
 
   /**
-   * 头像地址
+   * 头像
    */
-  private String avatarUrl;
+  private AccountAvatarCurrentLoginQueryDTO avatar;
 
   /**
    * 国际电话区号
@@ -126,17 +127,17 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   private DigitalPreferenceEnum digitalPreference;
 
   /**
-   * 账户所属角色
+   * 账号所属角色
    */
   private List<AccountRoleCurrentLoginQueryDTO> roles;
 
   /**
-   * 账户地址
+   * 账号地址
    */
   private List<AccountAddressCurrentLoginQueryDTO> addresses;
 
   /**
-   * 账户系统设置
+   * 账号系统设置
    */
   private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
 
@@ -278,6 +279,33 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
     /**
      * 版本号
      */
+    private Long version;
+  }
+
+
+  @Data
+  public static class AccountAvatarCurrentLoginQueryDTO {
+
+    /**
+     * 唯一主键
+     */
+    private String id;
+
+    /**
+     * 头像来源
+     */
+    private AccountAvatarSourceEnum source;
+
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    private String fileId;
+
+    /**
+     * 用户上传的URL地址
+     */
+    private String url;
+
     private Long version;
   }
 }

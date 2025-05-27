@@ -30,7 +30,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
 /**
- * 分页查询所有账户指令执行器(不查询总数)
+ * 分页查询所有账号指令执行器(不查询总数)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
  * @since 2.2.0

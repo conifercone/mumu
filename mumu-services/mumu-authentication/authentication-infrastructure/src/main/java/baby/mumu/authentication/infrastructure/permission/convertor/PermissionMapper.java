@@ -36,7 +36,7 @@ import baby.mumu.authentication.client.dto.PermissionFindRootDTO;
 import baby.mumu.authentication.client.dto.PermissionIncludePathDownloadAllDTO;
 import baby.mumu.authentication.client.dto.PermissionIncludePathDownloadAllDTO.PermissionIncludePathDTO;
 import baby.mumu.authentication.domain.permission.Permission;
-import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionRedisPO;
+import baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.authentication.infrastructure.relations.database.PermissionPathPOId;
@@ -77,13 +77,13 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   Permission toEntity(PermissionArchivedPO permissionArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  Permission toEntity(PermissionRedisPO permissionRedisPO);
+  Permission toEntity(PermissionCacheablePO permissionCacheablePO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionRedisPO toPermissionRedisPO(Permission permission);
+  PermissionCacheablePO toPermissionCacheablePO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionPO toPO(PermissionRedisPO permissionRedisPO);
+  PermissionPO toPO(PermissionCacheablePO permissionCacheablePO);
 
   @API(status = Status.STABLE, since = "2.0.0")
   Permission toEntity(PermissionArchivedFindAllCmd permissionArchivedFindAllCmd);
