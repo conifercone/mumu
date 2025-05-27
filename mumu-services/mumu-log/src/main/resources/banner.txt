@@ -1,8 +1,8 @@
-,--.
-|  |    ,---. ,---.
-|  |   | .-. | .-. |
-|  '--.' '-' ' '-' '
-`-----' `---'.`-  /
-             `---'
+    __
+   / /   ____  ____ _
+  / /   / __ \/ __ `/
+ / /___/ /_/ / /_/ /
+/_____/\____/\__, /
+            /____/
 ${application.title} Version : ${application.formatted-version}
 Spring Boot Version :${spring-boot.formatted-version}
