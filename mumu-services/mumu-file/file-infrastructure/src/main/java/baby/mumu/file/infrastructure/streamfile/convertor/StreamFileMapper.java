@@ -21,7 +21,7 @@ import baby.mumu.file.client.cmds.StreamFileDownloadCmd;
 import baby.mumu.file.client.cmds.StreamFileRemoveCmd;
 import baby.mumu.file.client.cmds.StreamFileSyncUploadCmd;
 import baby.mumu.file.domain.stream.StreamFile;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po.StreamFileMinioPO;
+import baby.mumu.file.infrastructure.streamfile.gatewayimpl.storage.po.StreamFileStoragePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -50,7 +50,7 @@ public interface StreamFileMapper extends GrpcMapper {
   StreamFile toEntity(StreamFileDownloadCmd streamFileDownloadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFileMinioPO toMinioPO(StreamFile streamFile);
+  StreamFileStoragePO toStoragePO(StreamFile streamFile);
 
   @API(status = Status.STABLE, since = "2.2.0")
   StreamFileRemoveCmd toStreamFileRemoveCmd(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd);
