@@ -15,7 +15,6 @@
  */
 package baby.mumu.file.configuration;
 
-import baby.mumu.file.infrastructure.config.FileProperties;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
