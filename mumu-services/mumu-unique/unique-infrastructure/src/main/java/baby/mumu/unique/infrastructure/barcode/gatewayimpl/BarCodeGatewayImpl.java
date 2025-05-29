@@ -47,7 +47,7 @@ import org.springframework.util.Assert;
 /**
  * 条形码领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @Component
@@ -91,11 +91,11 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
       g2d.setColor(color);
       // 字体、字型、字号
       g2d.setFont(new Font("微软雅黑", Font.PLAIN, 16));
-      //文字长度
+      // 文字长度
       int strWidth = g2d.getFontMetrics().stringWidth(barCode.getFootContent());
-      //总长度减去文字长度的一半  （居中显示）
+      // 总长度减去文字长度的一半  （居中显示）
       int wordStartX = (barCode.getWidth() - strWidth) / 2;
-      //height + (outImage.getHeight() - height) / 2 + 12
+      // height + (outImage.getHeight() - height) / 2 + 12
       int wordStartY = barCode.getHeight() + 20;
       g2d.drawString(barCode.getFootContent(), wordStartX, wordStartY);
       g2d.dispose();
@@ -123,9 +123,9 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
 
   private void setColorWhite(@NotNull Graphics2D g2d, @NotNull BarCode barCode) {
     g2d.setColor(Color.WHITE);
-    //填充整个屏幕
+    // 填充整个屏幕
     g2d.fillRect(0, 0, barCode.getWidth(), barCode.getHeight() + 20);
-    //设置笔刷
+    // 设置笔刷
     g2d.setColor(Color.BLACK);
   }
 }

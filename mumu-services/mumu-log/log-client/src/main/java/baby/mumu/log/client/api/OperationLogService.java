@@ -25,7 +25,7 @@ import org.springframework.data.domain.Page;
 /**
  * 操作日志api
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface OperationLogService {

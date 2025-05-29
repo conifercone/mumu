@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * 权限缓存
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public interface PermissionCacheRepository extends

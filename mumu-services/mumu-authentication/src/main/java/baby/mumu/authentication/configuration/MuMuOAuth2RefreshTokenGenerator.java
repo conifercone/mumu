@@ -32,7 +32,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 /**
  * OAuth2RefreshToken自定义生成器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 public class MuMuOAuth2RefreshTokenGenerator implements

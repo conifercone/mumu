@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 角色相关web接口单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SpringBootTest

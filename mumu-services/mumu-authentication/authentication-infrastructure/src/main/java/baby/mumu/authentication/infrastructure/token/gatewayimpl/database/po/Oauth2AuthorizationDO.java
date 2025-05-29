@@ -29,7 +29,7 @@ import org.hibernate.annotations.ColumnDefault;
 /**
  * oauth 2 授权数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 @Getter

@@ -35,7 +35,7 @@ import org.springframework.util.MultiValueMap;
 /**
  * 密码模式转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationConverter implements AuthenticationConverter {
@@ -49,7 +49,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
       return null;
     }
     Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
-    //从request中提取请求参数，然后存入MultiValueMap<String, String>
+    // 从request中提取请求参数，然后存入MultiValueMap<String, String>
     MultiValueMap<String, String> parameters = getParameters(request);
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
@@ -68,10 +68,10 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
         new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
           accountPasswordCannotBeEmpty.getMessage(), StringUtils.EMPTY));
     }
-    //收集要传入PasswordGrantAuthenticationToken构造方法的参数，
-    //该参数接下来在PasswordGrantAuthenticationProvider中使用
+    // 收集要传入PasswordGrantAuthenticationToken构造方法的参数，
+    // 该参数接下来在PasswordGrantAuthenticationProvider中使用
     Map<String, Object> additionalParameters = new HashMap<>();
-    //遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
+    // 遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
     parameters.forEach((key, value) -> {
       if (!OAuth2ParameterNames.GRANT_TYPE.equals(key) &&
         !OAuth2ParameterNames.CLIENT_ID.equals(key) &&
@@ -80,7 +80,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
       }
     });
 
-    //返回自定义的PasswordGrantAuthenticationToken对象
+    // 返回自定义的PasswordGrantAuthenticationToken对象
     return new PasswordGrantAuthenticationToken(clientPrincipal, additionalParameters);
   }
 

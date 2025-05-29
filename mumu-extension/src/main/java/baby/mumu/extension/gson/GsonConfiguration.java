@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * gson配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 @Configuration

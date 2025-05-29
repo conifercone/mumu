@@ -24,7 +24,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * 账号系统设置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public interface AccountSystemSettingsDocumentRepository extends

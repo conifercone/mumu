@@ -48,7 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 流式文件管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @RestController

@@ -72,7 +72,7 @@ import org.springframework.stereotype.Component;
 /**
  * 角色信息转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
@@ -112,7 +112,7 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> toEntity(RolePO rolePO) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.ofNullable(rolePO).map(roleDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
       setAuthorities(role, getPermissionIds(role));
@@ -198,7 +198,7 @@ public class RoleConvertor {
 
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<Role> toEntity(RoleArchivedPO roleArchivedPO) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.ofNullable(roleArchivedPO).map(roleArchivedDataObject -> {
       Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
       setAuthorities(role, getPermissionIds(role));

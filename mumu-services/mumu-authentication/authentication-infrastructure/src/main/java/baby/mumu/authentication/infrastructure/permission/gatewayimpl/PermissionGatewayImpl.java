@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 权限领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
@@ -215,7 +215,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
       throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
         authorities.stream().map(Role::getCode).toList());
     }
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(permissionRepository::findById)
       .flatMap(permissionConvertor::toArchivedPO).ifPresent(permissionArchivedPO -> {
         permissionArchivedPO.setArchived(true);

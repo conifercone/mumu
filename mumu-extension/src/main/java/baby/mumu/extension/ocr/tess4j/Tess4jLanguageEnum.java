@@ -20,7 +20,7 @@ import lombok.Getter;
 /**
  * tess4j语言枚举
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @SuppressWarnings("SpellCheckingInspection")

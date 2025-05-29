@@ -18,7 +18,7 @@ package baby.mumu.basis.constants;
 /**
  * springboot 相关常量
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public final class SpringBootConstants {

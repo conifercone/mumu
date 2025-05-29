@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 /**
  * 文本订阅消息转换器转换器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Component

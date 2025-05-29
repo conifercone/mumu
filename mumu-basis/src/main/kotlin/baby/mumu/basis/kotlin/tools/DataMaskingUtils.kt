@@ -18,7 +18,7 @@ package baby.mumu.basis.kotlin.tools
 /**
  * 数据脱敏工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 object DataMaskingUtils {

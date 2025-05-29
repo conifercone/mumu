@@ -69,7 +69,7 @@ import org.springframework.util.Assert;
 /**
  * mumu jwt generator
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {

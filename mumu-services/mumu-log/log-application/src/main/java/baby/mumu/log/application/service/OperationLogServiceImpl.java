@@ -45,7 +45,7 @@ import org.springframework.stereotype.Service;
 /**
  * 操作日志
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Service

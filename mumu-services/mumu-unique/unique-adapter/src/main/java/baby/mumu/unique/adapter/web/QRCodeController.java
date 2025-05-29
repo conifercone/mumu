@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 二维码相关接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @RestController

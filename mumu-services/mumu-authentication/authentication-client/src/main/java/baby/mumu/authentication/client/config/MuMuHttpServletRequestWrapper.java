@@ -22,7 +22,7 @@ import java.util.Locale;
 /**
  * HttpServletRequest包装类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 public class MuMuHttpServletRequestWrapper extends HttpServletRequestWrapper {

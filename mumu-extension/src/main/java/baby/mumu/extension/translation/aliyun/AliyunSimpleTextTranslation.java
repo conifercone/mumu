@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 阿里云简单文本翻译
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 public class AliyunSimpleTextTranslation implements SimpleTextTranslation {

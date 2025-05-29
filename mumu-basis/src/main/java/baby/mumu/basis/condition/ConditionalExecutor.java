@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 条件执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class ConditionalExecutor {

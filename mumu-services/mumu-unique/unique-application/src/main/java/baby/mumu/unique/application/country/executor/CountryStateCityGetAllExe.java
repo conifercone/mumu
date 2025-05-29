@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 /**
  * 获取所有国家详细信息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Component

@@ -23,7 +23,7 @@ import org.springframework.data.domain.AuditorAware;
 /**
  * 创建人&修改人自动填充
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public class MuMuJpaDocumentAuditorAware implements AuditorAware<Long> {

@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.repository.Query;
 /**
  * 账号地址
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 public interface AccountAddressDocumentRepository extends

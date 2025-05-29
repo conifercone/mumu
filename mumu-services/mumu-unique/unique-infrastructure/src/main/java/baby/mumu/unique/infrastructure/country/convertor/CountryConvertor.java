@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 /**
  * 国家对象转换类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Component

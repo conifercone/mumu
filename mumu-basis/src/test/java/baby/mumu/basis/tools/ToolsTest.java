@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 工具类单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public class ToolsTest {
@@ -76,7 +76,7 @@ public class ToolsTest {
   @Test
   public void isNotBlank() {
     System.out.println((String) null);
-    //noinspection RedundantCast
+    // noinspection RedundantCast
     Assertions.assertFalse(StringUtils.isNotBlank((String) null));
   }
 

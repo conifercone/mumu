@@ -20,7 +20,7 @@ import lombok.Data;
 /**
  * 根据城市id获取城市数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Data

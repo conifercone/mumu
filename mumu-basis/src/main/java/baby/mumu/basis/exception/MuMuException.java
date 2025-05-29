@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 顶级异常
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data

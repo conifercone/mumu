@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
 /**
  * 密码模式
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {

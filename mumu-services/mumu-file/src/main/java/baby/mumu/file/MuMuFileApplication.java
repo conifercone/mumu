@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 /**
  * 文件服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @EnableAsync

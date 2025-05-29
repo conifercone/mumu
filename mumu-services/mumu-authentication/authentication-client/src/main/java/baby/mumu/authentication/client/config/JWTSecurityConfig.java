@@ -47,7 +47,7 @@ import org.springframework.util.Assert;
 /**
  * jwt类型资源服务器配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration
@@ -65,7 +65,7 @@ public class JWTSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
     TokenGrpcService tokenGrpcService, ObjectProvider<Tracer> tracers) throws Exception {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getHttp())) {
       for (HttpPolicy httpPolicy : resourcePoliciesProperties.getHttp()) {

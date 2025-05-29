@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 /**
  * 用户下线成功监听
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Component

@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationEvent;
 /**
  * 用户下线成功事件
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Getter

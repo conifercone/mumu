@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 唯一数据服务客户端配置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

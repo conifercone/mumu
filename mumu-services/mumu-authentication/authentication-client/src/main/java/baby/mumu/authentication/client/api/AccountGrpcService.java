@@ -38,7 +38,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 账号对外提供grpc调用实例
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class AccountGrpcService extends AuthenticationGrpcService implements DisposableBean {

@@ -31,7 +31,7 @@ import org.hibernate.Hibernate;
 /**
  * 角色权限关系数据对象联合主键
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Getter

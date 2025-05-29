@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 雪花算法ID生成器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator {

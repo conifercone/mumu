@@ -50,7 +50,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * <p>签名格式：时间戳+request ID+request URI+body JSON</p>
  * <p>body JSON格式：紧凑JSON，不包含多余换行和空格符</p>
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public class SignatureFilter extends OncePerRequestFilter {

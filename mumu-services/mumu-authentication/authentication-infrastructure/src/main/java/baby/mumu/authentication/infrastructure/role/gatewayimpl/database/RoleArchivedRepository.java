@@ -30,7 +30,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * 角色归档管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 public interface RoleArchivedRepository extends BaseJpaRepository<RoleArchivedPO, Long>,

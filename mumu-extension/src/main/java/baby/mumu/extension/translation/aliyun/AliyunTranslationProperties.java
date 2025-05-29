@@ -20,7 +20,7 @@ import lombok.Data;
 /**
  * 阿里云机器翻译属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Data

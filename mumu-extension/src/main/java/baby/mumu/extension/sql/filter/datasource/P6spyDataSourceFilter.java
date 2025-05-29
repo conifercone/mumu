@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 /**
  * p6spy数据源过滤器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class P6spyDataSourceFilter extends AbstractDataSourceFilter {

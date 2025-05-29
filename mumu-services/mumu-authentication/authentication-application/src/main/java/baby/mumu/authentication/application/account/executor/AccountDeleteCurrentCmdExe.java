@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 /**
  * 账号删除指定执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

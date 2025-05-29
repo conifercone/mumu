@@ -18,7 +18,7 @@ package baby.mumu.basis.enums;
 /**
  * 账号头像来源枚举
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
 public enum AccountAvatarSourceEnum {

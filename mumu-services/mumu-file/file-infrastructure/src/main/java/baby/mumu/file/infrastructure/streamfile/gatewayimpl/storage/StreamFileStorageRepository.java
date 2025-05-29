@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
 /**
  * 文件存储操作类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component

@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * 账号头像设置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
 public interface AccountAvatarDocumentRepository extends

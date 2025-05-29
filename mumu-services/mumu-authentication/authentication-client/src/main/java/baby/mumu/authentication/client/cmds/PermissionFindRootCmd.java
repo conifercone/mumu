@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 获取所有根权限指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 @Data

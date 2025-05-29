@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletRequest
 /**
  * ip工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 object IpUtils {

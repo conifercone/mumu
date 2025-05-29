@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 文本订阅消息查询所有和某人的消息记录数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Data

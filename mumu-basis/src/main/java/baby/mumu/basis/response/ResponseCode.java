@@ -28,7 +28,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * 响应码
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public enum ResponseCode implements BaseResponse {
