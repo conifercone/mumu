@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href="https://zh.wikipedia.org/wiki/ISO_639-1">ISO 639-1</a>
  * @since 1.0.1
  */
-@SuppressWarnings({"LombokGetterMayBeUsed", "SpellCheckingInspection"})
+@SuppressWarnings({"LombokGetterMayBeUsed"})
 public enum LanguageEnum {
   AA("aa", "Afar"),
   AB("ab", "Abkhazian"),

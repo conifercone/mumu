@@ -23,7 +23,6 @@ import lombok.Getter;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
-@SuppressWarnings("SpellCheckingInspection")
 @Getter
 public enum Tess4jLanguageEnum {
 

@@ -12,7 +12,7 @@
 :mumu-github-discussions-link: {mumu-github-homepage-link}/discussions
 :codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
 :email: kaiyu.shan@outlook.com
-:author: kaiyu.shan
+:author: Kaiyu Shan
 
 = mumu
 
