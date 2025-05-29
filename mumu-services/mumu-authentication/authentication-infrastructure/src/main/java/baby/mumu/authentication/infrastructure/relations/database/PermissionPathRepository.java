@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * 权限路径
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public interface PermissionPathRepository extends

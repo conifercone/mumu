@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 /**
  * 二维码领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @Component

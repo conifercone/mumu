@@ -15,7 +15,6 @@
  */
 package baby.mumu.file.configuration;
 
-import baby.mumu.file.infrastructure.config.FileProperties;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * minio配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Configuration

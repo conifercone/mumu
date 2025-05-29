@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 角色领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
@@ -101,7 +101,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
-    //保存角色数据
+    // 保存角色数据
     Optional.ofNullable(role).flatMap(roleConvertor::toPO)
       .filter(rolePO -> !roleRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())
         && !roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode()))
@@ -120,7 +120,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "2.1.0")
   protected void saveRoleAuthorityRelationsData(Role role) {
-    //保存角色权限关系数据（如果存在关系）
+    // 保存角色权限关系数据（如果存在关系）
     Optional.ofNullable(role).ifPresent(roleNonNull -> {
       List<RolePermissionPO> rolePermissionPOS = roleConvertor.toRolePermissionPOS(role);
       if (CollectionUtils.isNotEmpty(rolePermissionPOS)) {
@@ -165,7 +165,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public void updateById(Role role) {
     Optional.ofNullable(role).ifPresent(roleDomain -> {
       roleConvertor.toPO(roleDomain).ifPresent(roleRepository::merge);
-      //删除权限关系数据重新添加
+      // 删除权限关系数据重新添加
       rolePermissionRepository.deleteByRoleId(roleDomain.getId());
       saveRoleAuthorityRelationsData(roleDomain);
       roleCacheRepository.deleteById(roleDomain.getId());
@@ -257,7 +257,7 @@ public class RoleGatewayImpl implements RoleGateway {
     }
     Optional.ofNullable(id).flatMap(roleRepository::findById)
       .flatMap(roleConvertor::toArchivedPO).ifPresent(roleArchivedPO -> {
-        //noinspection DuplicatedCode
+        // noinspection DuplicatedCode
         roleArchivedPO.setArchived(true);
         roleArchivedRepository.persist(roleArchivedPO);
         roleRepository.deleteById(roleArchivedPO.getId());

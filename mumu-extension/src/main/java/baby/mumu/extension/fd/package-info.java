@@ -16,7 +16,7 @@
 /**
  * FD（Face detection，人脸检测）
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 package baby.mumu.extension.fd;

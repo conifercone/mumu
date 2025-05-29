@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidatorContext;
 /**
  * NotBlankOrNull Validator
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 public class NotBlankOrNullValidator implements ConstraintValidator<NotBlankOrNull, String> {

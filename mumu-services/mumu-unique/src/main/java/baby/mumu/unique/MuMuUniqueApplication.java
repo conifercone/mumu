@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Import;
 /**
  * 分布式主键生成服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SpringBootApplication

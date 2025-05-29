@@ -26,7 +26,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 日志grpc服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 class LogGrpcService {
@@ -43,7 +43,7 @@ class LogGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(

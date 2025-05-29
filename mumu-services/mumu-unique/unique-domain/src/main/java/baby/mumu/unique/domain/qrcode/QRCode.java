@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 /**
  * 二维码领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @Data

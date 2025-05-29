@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 /**
  * 获取直系后代根权限指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 @Component

@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 /**
  * 查询权限指令执行器（不查询总数）
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Component

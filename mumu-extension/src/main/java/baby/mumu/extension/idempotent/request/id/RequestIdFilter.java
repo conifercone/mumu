@@ -35,7 +35,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * request id 过滤器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public class RequestIdFilter extends OncePerRequestFilter {

@@ -28,7 +28,7 @@ import org.springframework.data.redis.core.TimeToLive;
 /**
  * 角色基本信息缓存
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Data

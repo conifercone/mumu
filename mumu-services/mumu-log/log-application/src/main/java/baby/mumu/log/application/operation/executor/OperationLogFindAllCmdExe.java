@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 /**
  * 操作日志查询所有指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

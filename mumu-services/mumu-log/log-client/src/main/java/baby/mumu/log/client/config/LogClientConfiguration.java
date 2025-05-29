@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 日志客户端配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

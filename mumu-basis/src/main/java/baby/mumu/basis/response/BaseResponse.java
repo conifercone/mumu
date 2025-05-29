@@ -20,7 +20,7 @@ import jakarta.annotation.Nullable;
 /**
  * 基础响应顶级接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface BaseResponse {

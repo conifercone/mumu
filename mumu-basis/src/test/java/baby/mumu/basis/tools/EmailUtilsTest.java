@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 邮箱工具类测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.7.0
  */
 public class EmailUtilsTest {

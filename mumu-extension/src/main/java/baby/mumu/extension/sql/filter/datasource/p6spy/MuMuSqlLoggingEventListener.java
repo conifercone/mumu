@@ -22,7 +22,7 @@ import java.sql.SQLException;
 /**
  * LoggingEventListener
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class MuMuSqlLoggingEventListener extends LoggingEventListener {
@@ -39,7 +39,7 @@ public class MuMuSqlLoggingEventListener extends LoggingEventListener {
   @Override
   public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
     int[] updateCounts, SQLException e) {
-    //ignore batch execution results
+    // ignore batch execution results
   }
 
 }

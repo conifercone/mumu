@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 /**
  * 根据id下线账号指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Component

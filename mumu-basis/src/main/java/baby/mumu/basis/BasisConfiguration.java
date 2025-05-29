@@ -33,7 +33,7 @@ import org.springframework.core.annotation.Order;
 /**
  * 基础模块配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

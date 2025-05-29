@@ -16,7 +16,7 @@
 /**
  * mapstruct mappers
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 package baby.mumu.basis.mappers;

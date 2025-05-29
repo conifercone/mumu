@@ -25,7 +25,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * 文本广播消息接收者关系管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public interface BroadcastTextMessageReceiverRepository extends

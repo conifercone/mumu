@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 监听器配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Configuration

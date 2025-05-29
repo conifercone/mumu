@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
 /**
  * gson 构建器定制器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class MuMuGsonBuilderCustomizer implements GsonBuilderCustomizer {

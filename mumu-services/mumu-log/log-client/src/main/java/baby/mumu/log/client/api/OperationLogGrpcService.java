@@ -29,7 +29,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 操作日志对外提供grpc调用实例
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Observed(name = "OperationLogGrpcService")
@@ -60,7 +60,7 @@ public class OperationLogGrpcService extends LogGrpcService implements Disposabl
   private void syncSubmitFromGrpc(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
     OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
       channel);
-    //noinspection ResultOfMethodCallIgnored
+    // noinspection ResultOfMethodCallIgnored
     operationLogServiceFutureStub.submit(operationLogSubmitGrpcCmd);
   }
 

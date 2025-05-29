@@ -21,7 +21,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 /**
  * 简单验证码操作类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public interface SimpleCaptchaCacheRepository extends

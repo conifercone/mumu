@@ -64,7 +64,7 @@ import org.springframework.util.Assert;
 /**
  * 密码模式
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class PasswordGrantAuthenticationProvider implements AuthenticationProvider {

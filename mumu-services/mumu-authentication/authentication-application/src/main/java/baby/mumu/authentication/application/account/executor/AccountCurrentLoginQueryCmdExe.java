@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 /**
  * 查询当前登录账号信息指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

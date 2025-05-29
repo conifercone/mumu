@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 /**
  * 文本订阅消息查询所有和某人的消息记录指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Component

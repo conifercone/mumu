@@ -13,39 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.file.infrastructure.config;
+package baby.mumu.file.infrastructure.streamfile.gatewayimpl.storage.po;
 
+import baby.mumu.basis.annotations.Metamodel;
+import java.io.InputStream;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 文件存储配置类
+ * 流式文件存储数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-@ConfigurationProperties("mumu.file")
-public class FileProperties {
+@Metamodel
+public class StreamFileStoragePO {
 
-  @NestedConfigurationProperty
-  private Minio minio = new Minio();
+  /**
+   * 文件内容
+   */
+  private InputStream content;
 
-  @Data
-  public static class Minio {
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
 
-    /**
-     * 地址
-     */
-    private String endpoint;
-    /**
-     * 访问密钥
-     */
-    private String accessKey;
-    /**
-     * 密钥
-     */
-    private String secretKey;
-  }
+  /**
+   * 文件名
+   */
+  private String name;
+
+  /**
+   * 文件大小
+   */
+  private Long size;
 }

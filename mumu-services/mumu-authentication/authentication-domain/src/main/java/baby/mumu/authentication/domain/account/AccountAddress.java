@@ -30,7 +30,7 @@ import org.springframework.data.geo.Point;
 /**
  * 账号地址领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Data

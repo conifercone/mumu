@@ -20,7 +20,7 @@ import baby.mumu.unique.client.cmds.BarCodeGenerateCmd;
 /**
  * 条形码service
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 public interface BarCodeService {

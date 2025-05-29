@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 /**
  * 设置当前登录账号默认地址指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.6.0
  */
 @Component

@@ -29,7 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 /**
  * SecurityContextUtil单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @SpringBootTest

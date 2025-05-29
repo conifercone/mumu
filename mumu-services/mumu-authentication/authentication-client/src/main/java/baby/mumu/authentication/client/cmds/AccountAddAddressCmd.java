@@ -22,7 +22,7 @@ import org.springframework.data.geo.Point;
 /**
  * 账号添加地址指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Data

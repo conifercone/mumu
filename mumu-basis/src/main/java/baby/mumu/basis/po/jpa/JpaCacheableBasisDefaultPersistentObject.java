@@ -23,7 +23,7 @@ import lombok.Setter;
 /**
  * jpa 可缓存的基础默认数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Setter

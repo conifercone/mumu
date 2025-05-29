@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 限流配置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Data

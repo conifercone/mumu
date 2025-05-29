@@ -20,7 +20,7 @@ import baby.mumu.authentication.client.cmds.TokenValidityCmd;
 /**
  * token service
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface TokenService {

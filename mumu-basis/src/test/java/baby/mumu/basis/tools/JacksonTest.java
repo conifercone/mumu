@@ -25,7 +25,7 @@ import org.zalando.jackson.datatype.money.MoneyModule;
 /**
  * jackson test
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class JacksonTest {

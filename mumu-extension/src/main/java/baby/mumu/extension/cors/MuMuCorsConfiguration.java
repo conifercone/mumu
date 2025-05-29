@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * 跨域配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration
@@ -38,7 +38,7 @@ public class MuMuCorsConfiguration implements WebMvcConfigurer {
     CorsConfiguration config = new CorsConfiguration();
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
-    //noinspection HttpUrlsUsage
+    // noinspection HttpUrlsUsage
     config.addAllowedOriginPattern("http://*:[*]");
     config.addAllowedOriginPattern("https://*:[*]");
     config.setAllowCredentials(true);

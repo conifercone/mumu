@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio;
+package baby.mumu.file.infrastructure.streamfile.gatewayimpl.storage;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.file.infrastructure.streamfile.gatewayimpl.minio.po.StreamFileMinioPO;
+import baby.mumu.file.infrastructure.streamfile.gatewayimpl.storage.po.StreamFileStoragePO;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
@@ -43,31 +43,31 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 /**
- * minio操作类
+ * 文件存储操作类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component
 @ConditionalOnBean(MinioClient.class)
-public class MinioStreamFileRepository {
+public class StreamFileStorageRepository {
 
   private final MinioClient minioClient;
 
   @Autowired
-  public MinioStreamFileRepository(MinioClient minioClient) {
+  public StreamFileStorageRepository(MinioClient minioClient) {
     this.minioClient = minioClient;
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFileMinioPO streamFileMinioPO) {
-    Optional.ofNullable(streamFileMinioPO).ifPresent(minioDo -> {
-      try (InputStream minioDoContent = minioDo.getContent()) {
+  public void uploadFile(StreamFileStoragePO streamFileStoragePO) {
+    Optional.ofNullable(streamFileStoragePO).ifPresent(storagePO -> {
+      try (InputStream storagePOContent = storagePO.getContent()) {
         minioClient.putObject(
           PutObjectArgs.builder()
-            .bucket(minioDo.getStorageAddress())
-            .object(minioDo.getName())
-            .stream(minioDoContent, minioDoContent.available(),
+            .bucket(storagePO.getStorageAddress())
+            .object(storagePO.getName())
+            .stream(storagePOContent, storagePOContent.available(),
               -1)
             .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
@@ -118,17 +118,17 @@ public class MinioStreamFileRepository {
   /**
    * 获取文件流
    *
-   * @param streamFileMinioPO 流式文件minio数据对象
+   * @param streamFileStoragePO 流式文件存储数据对象
    * @return 二进制流
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<InputStream> download(StreamFileMinioPO streamFileMinioPO) {
-    return Optional.ofNullable(streamFileMinioPO).map(minioDo -> {
+  public Optional<InputStream> download(StreamFileStoragePO streamFileStoragePO) {
+    return Optional.ofNullable(streamFileStoragePO).map(storagePO -> {
       try {
         return minioClient.getObject(
           GetObjectArgs.builder()
-            .bucket(minioDo.getStorageAddress())
-            .object(minioDo.getName())
+            .bucket(storagePO.getStorageAddress())
+            .object(storagePO.getName())
             .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |
@@ -142,15 +142,16 @@ public class MinioStreamFileRepository {
   /**
    * 判断文件是否存在
    *
-   * @param streamFileMinioPO 流式文件minio数据对象
+   * @param streamFileStoragePO 流式文件存储数据对象
    * @return 是否存在
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public boolean existed(StreamFileMinioPO streamFileMinioPO) {
+  public boolean existed(StreamFileStoragePO streamFileStoragePO) {
     boolean exist = true;
     try {
-      minioClient.statObject(StatObjectArgs.builder().bucket(streamFileMinioPO.getStorageAddress())
-        .object(streamFileMinioPO.getName()).build());
+      minioClient.statObject(
+        StatObjectArgs.builder().bucket(streamFileStoragePO.getStorageAddress())
+          .object(streamFileStoragePO.getName()).build());
     } catch (Exception e) {
       exist = false;
     }
@@ -160,16 +161,16 @@ public class MinioStreamFileRepository {
   /**
    * 删除文件
    *
-   * @param streamFileMinioPO 流式文件minio数据对象
+   * @param streamFileStoragePO 流式文件存储数据对象
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(StreamFileMinioPO streamFileMinioPO) {
-    Optional.ofNullable(streamFileMinioPO).ifPresent(streamFileMinioDomainObject -> {
+  public void removeFile(StreamFileStoragePO streamFileStoragePO) {
+    Optional.ofNullable(streamFileStoragePO).ifPresent(storagePO -> {
       try {
         minioClient.removeObject(
           RemoveObjectArgs.builder()
-            .bucket(streamFileMinioDomainObject.getStorageAddress())
-            .object(streamFileMinioDomainObject.getName())
+            .bucket(storagePO.getStorageAddress())
+            .object(storagePO.getName())
             .build());
       } catch (ErrorResponseException | InsufficientDataException | InternalException |
                InvalidKeyException | InvalidResponseException | IOException |

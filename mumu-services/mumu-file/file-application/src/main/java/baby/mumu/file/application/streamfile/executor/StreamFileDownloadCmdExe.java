@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
 /**
  * 流式文件下载指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component

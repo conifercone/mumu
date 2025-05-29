@@ -20,7 +20,7 @@ import baby.mumu.unique.client.dto.PrimaryKeySnowflakeDTO;
 /**
  * 主键
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface PrimaryKeyService {

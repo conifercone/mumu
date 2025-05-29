@@ -20,7 +20,7 @@ import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 /**
  * 模板邮件service
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public interface TemplateMailService {

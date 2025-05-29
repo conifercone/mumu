@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * zookeeper分布式锁实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class ZookeeperDistributedLockImpl implements DistributedLock {

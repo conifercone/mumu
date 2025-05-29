@@ -83,7 +83,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 账号功能实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Service
