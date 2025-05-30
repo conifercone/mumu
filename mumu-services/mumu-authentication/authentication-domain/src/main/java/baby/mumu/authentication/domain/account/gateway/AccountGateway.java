@@ -71,9 +71,9 @@ public interface AccountGateway {
   /**
    * 禁用账号
    *
-   * @param id 账号id
+   * @param accountId 账号id
    */
-  void disable(Long id);
+  void disable(Long accountId);
 
   /**
    * 查询当前登录账号
@@ -92,9 +92,9 @@ public interface AccountGateway {
   /**
    * 重置密码
    *
-   * @param id 账号id
+   * @param accountId 账号id
    */
-  void resetPassword(Long id);
+  void resetPassword(Long accountId);
 
   /**
    * 删除当前账号
@@ -128,16 +128,16 @@ public interface AccountGateway {
   /**
    * 根据id归档账号
    *
-   * @param id 账号id
+   * @param accountId 账号id
    */
-  void archiveById(Long id);
+  void archiveById(Long accountId);
 
   /**
    * 通过id从归档中恢复
    *
-   * @param id 账号id
+   * @param accountId 账号id
    */
-  void recoverFromArchiveById(Long id);
+  void recoverFromArchiveById(Long accountId);
 
   /**
    * 账号添加地址
@@ -149,10 +149,10 @@ public interface AccountGateway {
   /**
    * 获取账号基本信息（不包含账号角色及角色权限信息）
    *
-   * @param id 账号ID
+   * @param accountId 账号ID
    * @return 账号基本信息
    */
-  Optional<Account> getAccountBasicInfoById(Long id);
+  Optional<Account> getAccountBasicInfoById(Long accountId);
 
   /**
    * 根据系统设置ID重置系统设置
@@ -184,9 +184,9 @@ public interface AccountGateway {
   /**
    * 根据账号id下线账号
    *
-   * @param id 账号ID
+   * @param accountId 账号ID
    */
-  void offline(Long id);
+  void offline(Long accountId);
 
   /**
    * 分页获取账号

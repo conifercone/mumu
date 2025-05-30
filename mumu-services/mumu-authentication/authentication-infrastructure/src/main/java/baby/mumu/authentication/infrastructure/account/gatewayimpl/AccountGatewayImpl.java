@@ -248,13 +248,13 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void disable(Long id) {
-    accountRepository.findById(id).ifPresentOrElse((accountPO) -> {
+  public void disable(Long accountId) {
+    accountRepository.findById(accountId).ifPresentOrElse((accountPO) -> {
       accountPO.setEnabled(false);
       accountRepository.merge(accountPO);
-      passwordTokenCacheRepository.deleteById(id);
-      accountCacheRepository.deleteById(id);
-      accountRoleCacheRepository.deleteById(id);
+      passwordTokenCacheRepository.deleteById(accountId);
+      accountCacheRepository.deleteById(accountId);
+      accountRoleCacheRepository.deleteById(accountId);
     }, () -> {
       throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
     });
@@ -293,8 +293,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void resetPassword(Long id) {
-    accountRepository.findById(id).ifPresentOrElse((accountPO) -> {
+  public void resetPassword(Long accountId) {
+    accountRepository.findById(accountId).ifPresentOrElse((accountPO) -> {
       String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
       Assert.isTrue(StringUtils.isNotBlank(initialPassword),
         ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getMessage());
@@ -388,8 +388,8 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账号ID为%0的账号")
-  public void archiveById(Long id) {
-    Optional.ofNullable(id).flatMap(accountRepository::findById)
+  public void archiveById(Long accountId) {
+    Optional.ofNullable(accountId).flatMap(accountRepository::findById)
       .flatMap(accountConvertor::toArchivedPO).ifPresent(accountArchivedPO -> {
         if (accountArchivedPO.getBalance()
           .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
@@ -426,8 +426,8 @@ public class AccountGatewayImpl implements AccountGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void recoverFromArchiveById(Long id) {
-    Optional.ofNullable(id).flatMap(accountArchivedRepository::findById)
+  public void recoverFromArchiveById(Long accountId) {
+    Optional.ofNullable(accountId).flatMap(accountArchivedRepository::findById)
       .flatMap(accountConvertor::toPO).ifPresent(accountPO -> {
         accountPO.setArchived(false);
         accountArchivedRepository.deleteById(accountPO.getId());
@@ -458,10 +458,10 @@ public class AccountGatewayImpl implements AccountGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Optional<Account> getAccountBasicInfoById(Long id) {
-    return Optional.ofNullable(id).flatMap(accountCacheRepository::findById)
+  public Optional<Account> getAccountBasicInfoById(Long accountId) {
+    return Optional.ofNullable(accountId).flatMap(accountCacheRepository::findById)
       .flatMap(accountConvertor::toEntity).or(() -> {
-        Optional<Account> account = accountRepository.findById(id)
+        Optional<Account> account = accountRepository.findById(accountId)
           .flatMap(accountConvertor::toBasicInfoEntity);
         account.flatMap(accountConvertor::toAccountCacheablePO)
           .ifPresent(accountCacheRepository::save);
@@ -571,17 +571,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("强制ID为%0的用户下线")
-  public void offline(Long id) {
-    Optional.ofNullable(id).ifPresent(accountId -> {
-      passwordTokenCacheRepository.findById(accountId)
+  public void offline(Long accountId) {
+    Optional.ofNullable(accountId).ifPresent(accountIdNotNull -> {
+      passwordTokenCacheRepository.findById(accountIdNotNull)
         .ifPresent(
           passwordTokenCacheablePO -> applicationEventPublisher.publishEvent(
             new OfflineSuccessEvent(
               this, passwordTokenCacheablePO.getTokenValue())));
-      passwordTokenCacheRepository.deleteById(accountId);
-      oidcIdTokenCacheRepository.deleteById(accountId);
-      accountCacheRepository.deleteById(accountId);
-      accountRoleCacheRepository.deleteById(accountId);
+      passwordTokenCacheRepository.deleteById(accountIdNotNull);
+      oidcIdTokenCacheRepository.deleteById(accountIdNotNull);
+      accountCacheRepository.deleteById(accountIdNotNull);
+      accountRoleCacheRepository.deleteById(accountIdNotNull);
       SecurityContextUtils.getLoginAccountName().ifPresent(
         accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
           .setContent("User offline")
