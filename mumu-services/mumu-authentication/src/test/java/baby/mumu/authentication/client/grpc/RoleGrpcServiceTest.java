@@ -74,7 +74,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = roleGrpcService.findAll(
       roleFindAllGrpcCmd,
       callCredentials);
-    log.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+    RoleGrpcServiceTest.log.info("PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
     Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
     Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
   }
@@ -94,7 +94,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     pageOfRoleFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
         PageOfRoleFindAllGrpcDTO pageOfRoleFindAllGrpcDTO = pageOfRoleFindAllGrpcDTOListenableFuture.get();
-        log.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
+        RoleGrpcServiceTest.log.info("Sync PageOfRoleFindAllGrpcDTO: {}", pageOfRoleFindAllGrpcDTO);
         Assertions.assertNotNull(pageOfRoleFindAllGrpcDTO);
         Assertions.assertFalse(pageOfRoleFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
@@ -115,7 +115,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleGrpcService.findById(
       Int64Value.of(0L),
       callCredentials);
-    log.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+    RoleGrpcServiceTest.log.info("RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
     Assertions.assertNotNull(roleFindByIdGrpcDTO);
   }
 
@@ -131,7 +131,7 @@ public class RoleGrpcServiceTest extends AuthenticationRequired {
     roleFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
         RoleFindByIdGrpcDTO roleFindByIdGrpcDTO = roleFindByIdGrpcDTOListenableFuture.get();
-        log.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
+        RoleGrpcServiceTest.log.info("Sync RoleFindByIdGrpcDTO: {}", roleFindByIdGrpcDTO);
         Assertions.assertNotNull(roleFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

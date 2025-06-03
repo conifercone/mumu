@@ -112,8 +112,9 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
 
     // Ensure the client is authenticated
     OAuth2ClientAuthenticationToken clientPrincipal =
-      getAuthenticatedClientElseThrowInvalidClient(passwordGrantAuthenticationToken);
-    RegisteredClient registeredClient = getRegisteredClient(
+      PasswordGrantAuthenticationProvider.getAuthenticatedClientElseThrowInvalidClient(
+        passwordGrantAuthenticationToken);
+    RegisteredClient registeredClient = PasswordGrantAuthenticationProvider.getRegisteredClient(
       clientPrincipal, authorizationGrantType);
 
     // 校验用户名信息
@@ -147,7 +148,8 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     OAuth2Token generatedAccessToken = this.tokenGenerator.generate(tokenContext);
     if (generatedAccessToken == null) {
       OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-        "The token generator failed to generate the access token.", ERROR_URI);
+        "The token generator failed to generate the access token.",
+        PasswordGrantAuthenticationProvider.ERROR_URI);
       throw new OAuth2AuthenticationException(error);
     }
 
@@ -173,7 +175,8 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       OAuth2Token generatedRefreshToken = this.tokenGenerator.generate(tokenContext);
       if (!(generatedRefreshToken instanceof OAuth2RefreshToken)) {
         OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-          "The token generator failed to generate the refresh token.", ERROR_URI);
+          "The token generator failed to generate the refresh token.",
+          PasswordGrantAuthenticationProvider.ERROR_URI);
         throw new OAuth2AuthenticationException(error);
       }
 
@@ -192,7 +195,8 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       OAuth2Token generatedIdToken = this.tokenGenerator.generate(tokenContext);
       if (!(generatedIdToken instanceof Jwt)) {
         OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
-          "The token generator failed to generate the ID token.", ERROR_URI);
+          "The token generator failed to generate the ID token.",
+          PasswordGrantAuthenticationProvider.ERROR_URI);
         throw new OAuth2AuthenticationException(error);
       }
       idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),

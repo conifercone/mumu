@@ -67,9 +67,9 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     Optional.ofNullable(msg.text()).ifPresent(messageText -> {
       try {
         JsonNode messageTextJsonNode = objectMapper.readTree(messageText);
-        long receiverAccountId = messageTextJsonNode.get(RECEIVER_ACCOUNT_ID)
+        long receiverAccountId = messageTextJsonNode.get(WebSocketHandler.RECEIVER_ACCOUNT_ID)
           .longValue();
-        Optional.ofNullable(messageTextJsonNode.get(SENDER_ACCOUNT_ID))
+        Optional.ofNullable(messageTextJsonNode.get(WebSocketHandler.SENDER_ACCOUNT_ID))
           .ifPresentOrElse(senderAccountStringId -> {
             long senderAccountId = senderAccountStringId.longValue();
             ConcurrentHashMap<Long, Channel> longChannelConcurrentHashMap = messageProperties.getWebSocket()
@@ -77,9 +77,11 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
               .computeIfAbsent(receiverAccountId, _ -> new ConcurrentHashMap<>());
             longChannelConcurrentHashMap.computeIfAbsent(senderAccountId, _ -> ctx.channel());
             // 将账号ID作为自定义属性加入到channel中，方便随时channel中获取账号ID
-            AttributeKey<String> accountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
+            AttributeKey<String> accountIdKey = AttributeKey.valueOf(
+              WebSocketHandler.SENDER_ACCOUNT_ID);
             ctx.channel().attr(accountIdKey).setIfAbsent(String.valueOf(senderAccountId));
-            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(
+              WebSocketHandler.RECEIVER_ACCOUNT_ID);
             ctx.channel().attr(receiverAccountIdKey)
               .setIfAbsent(String.valueOf(receiverAccountId));
           }, () -> {
@@ -87,7 +89,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
               .getAccountBroadcastChannelMap()
               .computeIfAbsent(receiverAccountId, _ -> ctx.channel());
             // 将账号ID作为自定义属性加入到channel中，方便随时channel中获取账号ID
-            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+            AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(
+              WebSocketHandler.RECEIVER_ACCOUNT_ID);
             ctx.channel().attr(receiverAccountIdKey)
               .setIfAbsent(String.valueOf(receiverAccountId));
           });
@@ -111,8 +114,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
   }
 
   private void removeAccountId(@NotNull ChannelHandlerContext ctx) {
-    AttributeKey<String> senderAccountIdKey = AttributeKey.valueOf(SENDER_ACCOUNT_ID);
-    AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(RECEIVER_ACCOUNT_ID);
+    AttributeKey<String> senderAccountIdKey = AttributeKey.valueOf(
+      WebSocketHandler.SENDER_ACCOUNT_ID);
+    AttributeKey<String> receiverAccountIdKey = AttributeKey.valueOf(
+      WebSocketHandler.RECEIVER_ACCOUNT_ID);
     Optional.ofNullable(ctx.channel().attr(receiverAccountIdKey).get())
       .ifPresent(
         receiverAccountId -> Optional.ofNullable(ctx.channel().attr(senderAccountIdKey).get())

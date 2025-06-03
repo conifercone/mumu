@@ -98,7 +98,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   @Nullable
   @Override
   public Jwt generate(@NotNull OAuth2TokenContext context) {
-    if (calibration(context)) {
+    if (MuMuJwtGenerator.calibration(context)) {
       return null;
     }
 
@@ -120,13 +120,13 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
       expiresAt = issuedAt.plus(registeredClient.getTokenSettings().getAccessTokenTimeToLive());
     }
 
-    Builder claimsBuilder = getClaimsBuilder(context,
+    Builder claimsBuilder = MuMuJwtGenerator.getClaimsBuilder(context,
       issuer, registeredClient, issuedAt, expiresAt);
 
     JwsHeader.Builder jwsHeaderBuilder = JwsHeader.with(jwsAlgorithm);
 
     if (this.jwtCustomizer != null) {
-      JwtEncodingContext.Builder jwtContextBuilder = getJwtContextBuilder(
+      JwtEncodingContext.Builder jwtContextBuilder = MuMuJwtGenerator.getJwtContextBuilder(
         context, jwsHeaderBuilder, claimsBuilder);
 
       JwtEncodingContext jwtContext = jwtContextBuilder.build();

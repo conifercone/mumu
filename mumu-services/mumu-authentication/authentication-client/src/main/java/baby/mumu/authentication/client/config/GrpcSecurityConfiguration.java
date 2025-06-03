@@ -96,7 +96,8 @@ public class GrpcSecurityConfiguration {
             grpc.getGrpcPolicies().forEach(grpcPolicy -> {
               try {
                 Class<?> clazz = Class.forName(grpc.getServiceFullPath());
-                Method method = clazz.getDeclaredMethod(String.format(GRPC_GET_METHOD_TEMPLATE,
+                Method method = clazz.getDeclaredMethod(String.format(
+                  GrpcSecurityConfiguration.GRPC_GET_METHOD_TEMPLATE,
                   StringUtils.capitalize(grpcPolicy.getMethod())));
                 MethodDescriptor<?, ?> methods =
                   (MethodDescriptor<?, ?>) method.invoke(null);

@@ -46,21 +46,21 @@ public class SecurityContextUtilsTest {
   public void loginAccountId() {
     Long accountId = SecurityContextUtils.getLoginAccountId().orElse(null);
     Assertions.assertNotNull(accountId);
-    log.info("loginAccountId: {}", accountId);
+    SecurityContextUtilsTest.log.info("loginAccountId: {}", accountId);
   }
 
   @Test
   public void loginAccountName() {
     String accountName = SecurityContextUtils.getLoginAccountName().orElse(null);
     Assertions.assertNotNull(accountName);
-    log.info("loginAccountName: {}", accountName);
+    SecurityContextUtilsTest.log.info("loginAccountName: {}", accountName);
   }
 
   @Test
   public void loginAccountLanguage() {
     LanguageEnum languageEnum = SecurityContextUtils.getLoginAccountLanguage().orElse(null);
     Assertions.assertNotNull(languageEnum);
-    log.info("languageEnum: {}", languageEnum);
+    SecurityContextUtilsTest.log.info("languageEnum: {}", languageEnum);
   }
 
 }

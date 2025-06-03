@@ -48,7 +48,7 @@ class FileGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_FILE)
+            "discovery-client://" + FileGrpcService.GRPC_FILE)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,7 +57,7 @@ class FileGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_FILE).isEmpty();
+    return !discoveryClient.getInstances(FileGrpcService.GRPC_FILE).isEmpty();
   }
 
 }

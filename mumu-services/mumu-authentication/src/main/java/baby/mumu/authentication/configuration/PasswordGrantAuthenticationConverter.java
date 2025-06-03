@@ -51,7 +51,8 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     }
     Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
     // 从request中提取请求参数，然后存入MultiValueMap<String, String>
-    MultiValueMap<String, String> parameters = getParameters(request);
+    MultiValueMap<String, String> parameters = PasswordGrantAuthenticationConverter.getParameters(
+      request);
     // username (REQUIRED)
     String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
     if (StringUtils.isBlank(username) ||

@@ -47,7 +47,7 @@ class UniqueGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_UNIQUE)
+            "discovery-client://" + UniqueGrpcService.GRPC_UNIQUE)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -56,7 +56,7 @@ class UniqueGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_UNIQUE).isEmpty();
+    return !discoveryClient.getInstances(UniqueGrpcService.GRPC_UNIQUE).isEmpty();
   }
 
 }

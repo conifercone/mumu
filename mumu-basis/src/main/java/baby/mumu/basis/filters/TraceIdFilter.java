@@ -51,12 +51,12 @@ public class TraceIdFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, @NotNull FilterChain chain)
     throws IOException, ServletException {
     try {
-      traceId().ifPresent(traceIdThreadLocal::set);
+      traceId().ifPresent(TraceIdFilter.traceIdThreadLocal::set);
       // 继续处理请求
       chain.doFilter(request, response);
     } finally {
       // 清理 ThreadLocal，避免内存泄漏
-      traceIdThreadLocal.remove();
+      TraceIdFilter.traceIdThreadLocal.remove();
     }
   }
 
@@ -67,14 +67,14 @@ public class TraceIdFilter implements Filter {
 
   // 静态方法用于获取当前线程的 TraceId
   public static String getTraceId() {
-    return traceIdThreadLocal.get();
+    return TraceIdFilter.traceIdThreadLocal.get();
   }
 
   public static void setTraceId(String traceId) {
-    traceIdThreadLocal.set(traceId);
+    TraceIdFilter.traceIdThreadLocal.set(traceId);
   }
 
   public static void removeTraceId() {
-    traceIdThreadLocal.remove();
+    TraceIdFilter.traceIdThreadLocal.remove();
   }
 }

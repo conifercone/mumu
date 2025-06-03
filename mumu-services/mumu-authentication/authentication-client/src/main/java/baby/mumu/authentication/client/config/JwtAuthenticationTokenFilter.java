@@ -82,14 +82,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       .ifPresent(languageEnum -> mumuHttpServletRequestWrapper.setLocale(
         Locale.of(languageEnum.getCode())));
     // 存在token
-    if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(TOKEN_START)) {
-      String authToken = authHeader.substring(TOKEN_START.length());
+    if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(
+      JwtAuthenticationTokenFilter.TOKEN_START)) {
+      String authToken = authHeader.substring(JwtAuthenticationTokenFilter.TOKEN_START.length());
       // 判断redis中是否存在token
       if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
         .getValidity()) {
         try {
           traceId();
-          log.error(ResponseCode.INVALID_TOKEN.getMessage());
+          JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
           response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
           ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         } finally {
@@ -103,7 +104,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
         traceId();
-        log.error(ResponseCode.INVALID_TOKEN.getMessage());
+        JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
         response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;

@@ -55,19 +55,23 @@ public final class CommonConstants {
   /**
    * es 查询英文映射
    */
-  public static final String ES_QUERY_EN = DOT + ES_MAPPING_EN_SUFFIX;
+  public static final String ES_QUERY_EN =
+    CommonConstants.DOT + CommonConstants.ES_MAPPING_EN_SUFFIX;
 
   /**
    * es 查询simple映射
    */
-  public static final String ES_QUERY_SP = DOT + ES_MAPPING_SP_SUFFIX;
+  public static final String ES_QUERY_SP =
+    CommonConstants.DOT + CommonConstants.ES_MAPPING_SP_SUFFIX;
 
   /**
    * sql 左右模糊查询模板
    */
-  public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = PERCENT_SIGN.concat(PERCENT_SIGN)
+  public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = CommonConstants.PERCENT_SIGN.concat(
+      CommonConstants.PERCENT_SIGN)
     .concat(
-      STRING_FORMAT).concat(PERCENT_SIGN).concat(PERCENT_SIGN);
+      CommonConstants.STRING_FORMAT).concat(CommonConstants.PERCENT_SIGN)
+    .concat(CommonConstants.PERCENT_SIGN);
 
   /**
    * 角色前缀

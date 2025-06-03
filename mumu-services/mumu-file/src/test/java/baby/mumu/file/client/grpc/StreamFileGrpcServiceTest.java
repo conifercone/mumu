@@ -76,7 +76,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
     Assertions.assertNotNull(download);
     String fileContent = download.getFileContent().getValue().toStringUtf8();
     Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
-    log.info("Download result: {}", fileContent);
+    StreamFileGrpcServiceTest.log.info("Download result: {}", fileContent);
   }
 
   @Test
@@ -99,7 +99,7 @@ public class StreamFileGrpcServiceTest extends AuthenticationRequired {
         String fileContent = streamFileDownloadGrpcResult.getFileContent().getValue()
           .toStringUtf8();
         Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
-        log.info("SyncDownload result: {}", fileContent);
+        StreamFileGrpcServiceTest.log.info("SyncDownload result: {}", fileContent);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

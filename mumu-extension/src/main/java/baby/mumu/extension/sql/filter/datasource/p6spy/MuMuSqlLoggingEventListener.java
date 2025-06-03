@@ -31,10 +31,10 @@ public class MuMuSqlLoggingEventListener extends LoggingEventListener {
   private static MuMuSqlLoggingEventListener instance;
 
   public static MuMuSqlLoggingEventListener getInstance() {
-    if (null == instance) {
-      instance = new MuMuSqlLoggingEventListener();
+    if (null == MuMuSqlLoggingEventListener.instance) {
+      MuMuSqlLoggingEventListener.instance = new MuMuSqlLoggingEventListener();
     }
-    return instance;
+    return MuMuSqlLoggingEventListener.instance;
   }
 
   @Override

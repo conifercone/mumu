@@ -52,11 +52,11 @@ public class ClientIpInterceptor implements ServerInterceptor {
       .map(socketAddress -> ((InetSocketAddress) socketAddress).getAddress().getHostAddress())
       .orElse(
         StringUtils.EMPTY);
-    Context context = Context.current().withValue(CLIENT_IP_KEY, clientIp);
+    Context context = Context.current().withValue(ClientIpInterceptor.CLIENT_IP_KEY, clientIp);
     return Contexts.interceptCall(context, call, headers, next);
   }
 
   public static String getClientIp() {
-    return CLIENT_IP_KEY.get();
+    return ClientIpInterceptor.CLIENT_IP_KEY.get();
   }
 }

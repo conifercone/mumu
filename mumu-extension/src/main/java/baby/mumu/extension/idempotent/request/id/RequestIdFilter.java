@@ -63,7 +63,7 @@ public class RequestIdFilter extends OncePerRequestFilter {
       extensionProperties.getIdempotent().getAllowlist())) && (
       StringUtils.isBlank(requestIdHeaderValue) || requestIdIdempotentProcessor.processed(
         requestIdHeaderValue))) {
-      log.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
+      RequestIdFilter.log.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
       response.setStatus(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getStatus());
       ResponseWrapper.exceptionResponse(response, ResponseCode.REQUEST_HAS_BEEN_PROCESSED);
       return;

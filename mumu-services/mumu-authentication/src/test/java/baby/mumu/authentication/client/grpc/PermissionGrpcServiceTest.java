@@ -74,9 +74,10 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = permissionGrpcService.findAll(
       permissionFindAllGrpcCmd,
       callCredentials);
-    log.info("PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+    PermissionGrpcServiceTest.log.info("PageOfPermissionFindAllGrpcDTO: {}",
+      pageOfPermissionFindAllGrpcDTO);
     pageOfPermissionFindAllGrpcDTO.getContentList().stream().map(PermissionFindAllGrpcDTO::getName)
-      .forEach(log::info);
+      .forEach(PermissionGrpcServiceTest.log::info);
     Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
     Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
   }
@@ -96,7 +97,8 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     pageOfPermissionFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
         PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = pageOfPermissionFindAllGrpcDTOListenableFuture.get();
-        log.info("Sync PageOfPermissionFindAllGrpcDTO: {}", pageOfPermissionFindAllGrpcDTO);
+        PermissionGrpcServiceTest.log.info("Sync PageOfPermissionFindAllGrpcDTO: {}",
+          pageOfPermissionFindAllGrpcDTO);
         Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
         Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
         latch.countDown();
@@ -116,7 +118,7 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionGrpcService.findById(
       Int64Value.of(1),
       callCredentials);
-    log.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+    PermissionGrpcServiceTest.log.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
     Assertions.assertNotNull(permissionFindByIdGrpcDTO);
   }
 
@@ -132,7 +134,8 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     permissionFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
         PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionFindByIdGrpcDTOListenableFuture.get();
-        log.info("Sync PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
+        PermissionGrpcServiceTest.log.info("Sync PermissionFindByIdGrpcDTO: {}",
+          permissionFindByIdGrpcDTO);
         Assertions.assertNotNull(permissionFindByIdGrpcDTO);
         latch.countDown();
       } catch (InterruptedException | ExecutionException e) {

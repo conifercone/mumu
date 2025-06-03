@@ -230,7 +230,7 @@ public enum LanguageEnum {
   }
 
   public static @NotNull LanguageEnum fromCode(String code) {
-    for (LanguageEnum lang : values()) {
+    for (LanguageEnum lang : LanguageEnum.values()) {
       if (lang.code.equalsIgnoreCase(code)) {
         return lang;
       }

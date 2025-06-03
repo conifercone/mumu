@@ -31,7 +31,7 @@ public class MuMuBenchmarkUtils {
 
   public static @NotNull String getResultFilePath(@NotNull Class<?> clazz,
     @NotNull ResultFormatType format) {
-    return String.format(RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
+    return String.format(MuMuBenchmarkUtils.RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
       format.toString().toLowerCase());
   }
 }

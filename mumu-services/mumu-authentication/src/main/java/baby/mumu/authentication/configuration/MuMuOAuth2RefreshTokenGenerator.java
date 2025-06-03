@@ -49,7 +49,7 @@ public class MuMuOAuth2RefreshTokenGenerator implements
     if (!OAuth2TokenType.REFRESH_TOKEN.equals(context.getTokenType())) {
       return null;
     }
-    if (isPublicClientForAuthorizationCodeGrant(context)) {
+    if (MuMuOAuth2RefreshTokenGenerator.isPublicClientForAuthorizationCodeGrant(context)) {
       // Do not issue refresh token to public client
       return null;
     }

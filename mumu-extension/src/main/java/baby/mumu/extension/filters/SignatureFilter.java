@@ -77,9 +77,9 @@ public class SignatureFilter extends OncePerRequestFilter {
     String requestURI = request.getRequestURI();
     DigitalSignature digitalSignature = extensionProperties.getGlobal().getDigitalSignature();
     if (!isAllowed(requestURI, request.getMethod(), digitalSignature.getAllowlist())) {
-      String signature = request.getHeader(X_SIGNATURE);
-      String timestamp = request.getHeader(X_TIMESTAMP);
-      String requestId = request.getHeader(X_REQUEST_ID);
+      String signature = request.getHeader(SignatureFilter.X_SIGNATURE);
+      String timestamp = request.getHeader(SignatureFilter.X_TIMESTAMP);
+      String requestId = request.getHeader(SignatureFilter.X_REQUEST_ID);
       if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
         try {
           if (!SignatureUtils.validateSignature(
@@ -90,21 +90,24 @@ public class SignatureFilter extends OncePerRequestFilter {
               .concat(cachedBodyHttpServletRequest.getBody()), signature,
             digitalSignature.getSecretKey(),
             digitalSignature.getAlgorithm())) {
-            log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+            SignatureFilter.log.error(
+              ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             ResponseWrapper.exceptionResponse(response,
               ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
             return;
           }
         } catch (Exception e) {
-          log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+          SignatureFilter.log.error(
+            ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
           response.setStatus(HttpStatus.BAD_REQUEST.value());
           ResponseWrapper.exceptionResponse(response,
             ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
           return;
         }
       } else {
-        log.error(ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+        SignatureFilter.log.error(
+          ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         ResponseWrapper.exceptionResponse(response,
           ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);

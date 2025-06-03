@@ -48,7 +48,7 @@ public class PrimaryKeyGrpcServiceTest {
   @Test
   public void snowflake() {
     Long snowflake = primaryKeyGrpcService.snowflake();
-    log.info("snowflake : {}", snowflake);
+    PrimaryKeyGrpcServiceTest.log.info("snowflake : {}", snowflake);
     Assertions.assertNotNull(snowflake);
   }
 }

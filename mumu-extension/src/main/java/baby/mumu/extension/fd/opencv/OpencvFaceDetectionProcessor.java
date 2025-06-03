@@ -47,7 +47,7 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   @Override
   public Long numberOfFaces(FaceDetection faceDetection) {
     return Optional.ofNullable(faceDetection).map(faceDetectionNonNull -> {
-      Result result = getResult(faceDetectionNonNull);
+      Result result = OpencvFaceDetectionProcessor.getResult(faceDetectionNonNull);
       faceDetector.detectMultiScale(result.grayImage, result.faces);
       return result.faces.size();
     }).orElse(0L);
@@ -56,7 +56,7 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   @Override
   public void drawBorder(FaceDetection faceDetection) {
     Optional.ofNullable(faceDetection).ifPresent(faceDetectionNonNull -> {
-      Result result = getResult(
+      Result result = OpencvFaceDetectionProcessor.getResult(
         faceDetectionNonNull);
       // 绘制矩形框在检测到的人脸周围
       try (RectVector faces = result.faces()) {

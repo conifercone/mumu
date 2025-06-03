@@ -48,7 +48,7 @@ class LogGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_LOG)
+            "discovery-client://" + LogGrpcService.GRPC_LOG)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,7 +57,7 @@ class LogGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_LOG).isEmpty();
+    return !discoveryClient.getInstances(LogGrpcService.GRPC_LOG).isEmpty();
   }
 
 }

@@ -60,7 +60,7 @@ public class DangerousOperationAspect extends AbstractAspect {
               .setContent(content)
               .setCategory("dangerousOperation")
               .build());
-            log.info(content);
+            DangerousOperationAspect.log.info(content);
           }));
   }
 

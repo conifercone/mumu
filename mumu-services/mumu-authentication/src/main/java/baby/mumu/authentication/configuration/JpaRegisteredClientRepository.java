@@ -112,10 +112,11 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
       .clientName(client.getClientName())
       .clientAuthenticationMethods(authenticationMethods ->
         clientAuthenticationMethods.forEach(authenticationMethod ->
-          authenticationMethods.add(resolveClientAuthenticationMethod(authenticationMethod))))
+          authenticationMethods.add(
+            JpaRegisteredClientRepository.resolveClientAuthenticationMethod(authenticationMethod))))
       .authorizationGrantTypes((grantTypes) ->
         authorizationGrantTypes.forEach(grantType ->
-          grantTypes.add(resolveAuthorizationGrantType(grantType))))
+          grantTypes.add(JpaRegisteredClientRepository.resolveAuthorizationGrantType(grantType))))
       .redirectUris((uris) -> uris.addAll(redirectUris))
       .postLogoutRedirectUris((uris) -> uris.addAll(postLogoutRedirectUris))
       .scopes((scopes) -> scopes.addAll(clientScopes));

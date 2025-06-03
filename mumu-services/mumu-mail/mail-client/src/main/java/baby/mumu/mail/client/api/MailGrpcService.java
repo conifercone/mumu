@@ -48,7 +48,7 @@ class MailGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_MAIL)
+            "discovery-client://" + MailGrpcService.GRPC_MAIL)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,7 +57,7 @@ class MailGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_MAIL).isEmpty();
+    return !discoveryClient.getInstances(MailGrpcService.GRPC_MAIL).isEmpty();
   }
 
 }

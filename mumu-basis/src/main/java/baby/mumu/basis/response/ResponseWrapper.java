@@ -123,7 +123,7 @@ public class ResponseWrapper<T> implements Serializable {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
-    applicationJsonResponse(response, jsonResult);
+    ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 
   private static void applicationJsonResponse(@NotNull HttpServletResponse response,
@@ -141,6 +141,6 @@ public class ResponseWrapper<T> implements Serializable {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
-    applicationJsonResponse(response, jsonResult);
+    ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 }

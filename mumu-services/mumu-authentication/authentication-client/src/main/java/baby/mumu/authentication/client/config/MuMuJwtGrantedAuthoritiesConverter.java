@@ -50,9 +50,9 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
   private static final Collection<String> WELL_KNOWN_AUTHORITIES_CLAIM_NAMES = Arrays.asList(
     "scope", "scp");
 
-  private String authorityPrefix = DEFAULT_AUTHORITY_PREFIX;
+  private String authorityPrefix = MuMuJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITY_PREFIX;
 
-  private String authoritiesClaimDelimiter = DEFAULT_AUTHORITIES_CLAIM_DELIMITER;
+  private String authoritiesClaimDelimiter = MuMuJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITIES_CLAIM_DELIMITER;
 
   private String authoritiesClaimName;
 
@@ -119,7 +119,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
     if (this.authoritiesClaimName != null) {
       return this.authoritiesClaimName;
     }
-    for (String claimName : WELL_KNOWN_AUTHORITIES_CLAIM_NAMES) {
+    for (String claimName : MuMuJwtGrantedAuthoritiesConverter.WELL_KNOWN_AUTHORITIES_CLAIM_NAMES) {
       if (jwt.hasClaim(claimName)) {
         return claimName;
       }

@@ -48,7 +48,7 @@ class AuthenticationGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_AUTHENTICATION)
+            "discovery-client://" + AuthenticationGrpcService.GRPC_AUTHENTICATION)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,6 +57,6 @@ class AuthenticationGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_AUTHENTICATION).isEmpty();
+    return !discoveryClient.getInstances(AuthenticationGrpcService.GRPC_AUTHENTICATION).isEmpty();
   }
 }

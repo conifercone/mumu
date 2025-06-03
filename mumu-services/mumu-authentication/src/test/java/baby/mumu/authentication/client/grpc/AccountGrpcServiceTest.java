@@ -67,7 +67,7 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
     AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount(
       callCredentials);
     Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
-    log.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
+    AccountGrpcServiceTest.log.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
   }
 
   @Test
@@ -82,7 +82,8 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
       try {
         AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountCurrentLoginGrpcDTOListenableFuture.get();
         Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
-        log.info("Sync AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
+        AccountGrpcServiceTest.log.info("Sync AccountCurrentLoginGrpcDTO:{}",
+          accountCurrentLoginGrpcDTO);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

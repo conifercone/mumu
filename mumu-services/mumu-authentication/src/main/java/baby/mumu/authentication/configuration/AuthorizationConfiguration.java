@@ -311,7 +311,7 @@ public class AuthorizationConfiguration {
     Rsa rsa = authentication.getRsa();
     KeyPair keyPair;
     if (rsa.isAutomaticGenerated()) {
-      keyPair = generateRsaKey();
+      keyPair = AuthorizationConfiguration.generateRsaKey();
     } else {
       keyPair = loadKeyPair(rsa.getJksKeyPath(), rsa.getJksKeyPassword(), rsa.getJksKeyPair());
     }
@@ -388,13 +388,14 @@ public class AuthorizationConfiguration {
           .map(GrantedAuthority::getAuthority)
           // 去重
           .collect(Collectors.toSet());
-        String originAuthorizationGrantTypeValue = getOriginAuthorizationGrantTypeValue(
+        String originAuthorizationGrantTypeValue = AuthorizationConfiguration.getOriginAuthorizationGrantTypeValue(
           oauth2AuthenticationRepository, context);
         boolean isPasswordType = OAuth2Enum.GRANT_TYPE_PASSWORD.getName()
           .equals(originAuthorizationGrantTypeValue);
         JwtClaimsSet.Builder claims = context.getClaims();
         claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), isPasswordType ? authoritySet
-          : getFullScopes(roleRepository, roleConvertor, permissionRepository, permissionConvertor,
+          : AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
+            permissionRepository, permissionConvertor,
             scopes));
         claims.claim(TokenClaimsEnum.ACCOUNT_NAME.getClaimName(), account.getUsername());
         claims.claim(TokenClaimsEnum.ACCOUNT_ID.getClaimName(), account.getId());
@@ -417,7 +418,8 @@ public class AuthorizationConfiguration {
               .getPrincipal()).getRegisteredClient()
           )
           .map(RegisteredClient::getScopes)
-          .map(scopes -> getFullScopes(roleRepository, roleConvertor, permissionRepository,
+          .map(scopes -> AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
+            permissionRepository,
             permissionConvertor, scopes))
           .orElse(Collections.emptySet());
         claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), authoritySet);

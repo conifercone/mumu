@@ -54,7 +54,7 @@ public class ConditionalAspect extends AbstractAspect {
             throw new RuntimeException(e);
           }
         }, () -> {
-          log.warn("{} method execution conditions are not met",
+          ConditionalAspect.log.warn("{} method execution conditions are not met",
             joinPoint.getSignature().getName());
           return null;
         })).orElse(joinPoint.proceed());
