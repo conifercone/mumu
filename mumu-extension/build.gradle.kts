@@ -1,4 +1,4 @@
-description = "功能拓展模块"
+description = "Function expansion module"
 
 dependencies {
     api(project(":mumu-basis"))

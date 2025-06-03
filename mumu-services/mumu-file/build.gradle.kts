@@ -1,4 +1,4 @@
-description = "文件服务"
+description = "File service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-client"))

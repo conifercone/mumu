@@ -1,4 +1,4 @@
-description = "认证服务"
+description = "Authentication service"
 
 plugins {
     alias(libs.plugins.flyway)

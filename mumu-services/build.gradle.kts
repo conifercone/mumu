@@ -4,7 +4,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-description = "服务模块"
+description = "Services module"
 
 subprojects {
     if (this.parent?.parent == rootProject) {

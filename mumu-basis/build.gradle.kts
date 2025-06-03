@@ -1,4 +1,4 @@
-description = "基础模块"
+description = "Basic module"
 
 dependencies {
     implementation(libs.spring.security.core)

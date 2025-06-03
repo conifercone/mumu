@@ -1,4 +1,4 @@
-description = "消息服务"
+description = "Message service"
 
 plugins {
     alias(libs.plugins.flyway)

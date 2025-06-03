@@ -1,3 +1,5 @@
+description = "Benchmark module"
+
 dependencies {
     implementation(libs.jmh.core)
     annotationProcessor(libs.jmh.generator.annprocess)

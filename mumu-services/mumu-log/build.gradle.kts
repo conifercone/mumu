@@ -1,4 +1,4 @@
-description = "日志服务"
+description = "Log service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-client"))

@@ -1,4 +1,4 @@
-description = "邮件服务"
+description = "Mail service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-authentication:authentication-client"))

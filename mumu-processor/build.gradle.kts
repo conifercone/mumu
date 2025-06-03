@@ -1,4 +1,4 @@
-description = "注解处理器"
+description = "Annotation processor"
 
 dependencies {
     implementation(project(":mumu-basis"))
