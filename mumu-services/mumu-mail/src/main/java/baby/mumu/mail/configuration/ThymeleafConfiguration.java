@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.nosql;
 
 import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE;

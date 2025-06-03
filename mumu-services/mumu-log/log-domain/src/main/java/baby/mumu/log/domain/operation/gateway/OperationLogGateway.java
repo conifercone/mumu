@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.domain.operation.gateway;
 
 import baby.mumu.log.domain.operation.OperationLog;

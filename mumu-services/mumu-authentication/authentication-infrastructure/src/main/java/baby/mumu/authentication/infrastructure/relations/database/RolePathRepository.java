@@ -13,6 +13,7 @@
  * See the License for the specific language governing Roles and
  * limitations under the License.
  */
+
 package baby.mumu.authentication.infrastructure.relations.database;
 
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;

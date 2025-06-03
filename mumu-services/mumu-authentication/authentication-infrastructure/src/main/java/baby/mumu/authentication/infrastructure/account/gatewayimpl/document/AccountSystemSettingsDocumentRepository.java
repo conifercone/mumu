@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document;
 
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;

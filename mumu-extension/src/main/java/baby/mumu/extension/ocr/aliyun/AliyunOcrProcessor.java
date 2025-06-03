@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr.aliyun;
 
 import baby.mumu.basis.exception.MuMuException;

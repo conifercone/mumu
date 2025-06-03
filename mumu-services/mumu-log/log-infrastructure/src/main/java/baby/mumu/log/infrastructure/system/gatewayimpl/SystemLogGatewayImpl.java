@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.infrastructure.system.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;

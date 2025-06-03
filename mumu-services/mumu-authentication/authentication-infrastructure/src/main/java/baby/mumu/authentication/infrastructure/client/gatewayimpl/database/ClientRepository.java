@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.authentication.infrastructure.client.gatewayimpl.database;
 
 import baby.mumu.authentication.infrastructure.client.gatewayimpl.database.po.ClientPO;

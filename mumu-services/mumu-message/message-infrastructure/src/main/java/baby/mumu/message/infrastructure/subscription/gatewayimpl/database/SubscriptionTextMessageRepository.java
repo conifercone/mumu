@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.subscription.gatewayimpl.database;
 
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO;

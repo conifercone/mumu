@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.authentication.infrastructure.permission.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;

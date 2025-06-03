@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.service;
 
 import baby.mumu.unique.application.barcode.executor.BarCodeGenerateCmdExe;
