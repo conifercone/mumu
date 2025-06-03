@@ -26,17 +26,12 @@ tasks.register<Copy>("installGitHooks") {
     // 源文件路径
     val hooksDir = file("${rootDirectory}/.git/hooks")
     val sourceDir = file("${rootDirectory}/scripts/git/hooks")
-    val updateLicenseShell = file("${rootDirectory}/scripts/update_license.sh")
     // 将文件从源目录拷贝到目标目录
     from(sourceDir)
     // 目标目录
     into(hooksDir)
     // 设置执行权限（可选）
     doLast {
-        // 设置 update_license.sh 的执行权限
-        updateLicenseShell.setExecutable(true)
-        // 设置 pre-commit 的执行权限
-        hooksDir.resolve("pre-commit").setExecutable(true)
         // 设置 commit-msg 的执行权限
         hooksDir.resolve("commit-msg").setExecutable(true)
     }
