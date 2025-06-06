@@ -126,4 +126,4 @@ link:../LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 [#contributors]
 == 貢献者
 
-image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]
+image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="{mumu-github-homepage-link}/graphs/contributors"]
