@@ -16,6 +16,7 @@
 
 package baby.mumu.file.configuration;
 
+import baby.mumu.basis.enums.FileStorageMediaTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -35,6 +36,12 @@ public class FileProperties {
    */
   @NestedConfigurationProperty
   private Minio minio = new Minio();
+
+  /**
+   * 文件存储介质类型
+   */
+  @NestedConfigurationProperty
+  private FileStorageMediaTypeEnum storageMediaType = FileStorageMediaTypeEnum.MINIO;
 
   @Data
   public static class Minio {

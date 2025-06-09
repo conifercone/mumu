@@ -18,6 +18,7 @@ package baby.mumu.file.configuration;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(FileProperties.class)
+@ConditionalOnProperty(prefix = "mumu.file", value = "storage-media-type", havingValue = "MINIO")
 public class MinioConfiguration {
 
   private final FileProperties fileProperties;
