@@ -30,6 +30,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.file")
 public class FileProperties {
 
+  /**
+   * minio配置属性
+   */
   @NestedConfigurationProperty
   private Minio minio = new Minio();
 
@@ -40,12 +43,14 @@ public class FileProperties {
      * 地址
      */
     private String endpoint;
+
     /**
      * 访问密钥
      */
     private String accessKey;
+
     /**
-     * 密钥
+     * 认证密钥
      */
     private String secretKey;
   }
