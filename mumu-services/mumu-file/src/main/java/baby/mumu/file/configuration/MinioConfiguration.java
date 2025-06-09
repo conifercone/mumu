@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(FileProperties.class)
-@ConditionalOnProperty(prefix = "mumu.file", value = "storage-media-type", havingValue = "MINIO")
+@ConditionalOnProperty(prefix = "mumu.file", value = "storage-media-type", havingValue = "MINIO", matchIfMissing = true)
 public class MinioConfiguration {
 
   private final FileProperties fileProperties;
