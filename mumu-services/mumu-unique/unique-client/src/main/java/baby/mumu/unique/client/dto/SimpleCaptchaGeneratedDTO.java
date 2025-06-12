@@ -16,7 +16,6 @@
 
 package baby.mumu.unique.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import lombok.Data;
@@ -30,7 +29,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class SimpleCaptchaGeneratedDTO extends BaseDataTransferObject {
 
   @Serial

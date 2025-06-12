@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
@@ -31,7 +30,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class PermissionArchivedFindAllDTO extends BaseDataTransferObject {
 
   @Serial

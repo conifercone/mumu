@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.role.gatewayimpl.database.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
 import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
@@ -42,7 +41,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "mumu_roles")
 @DynamicInsert
-@Metamodel
 public class RolePO extends JpaBasisArchivablePersistentObject {
 
   @Serial

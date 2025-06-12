@@ -16,7 +16,6 @@
 
 package baby.mumu.file.infrastructure.streamfile.gatewayimpl.storage.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import java.io.InputStream;
 import lombok.Data;
 
@@ -27,7 +26,6 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
-@Metamodel
 public class StreamFileStoragePO {
 
   /**

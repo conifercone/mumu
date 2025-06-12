@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.domain.account;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -38,7 +37,6 @@ import lombok.experimental.SuperBuilder;
 @RequiredArgsConstructor
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
-@Metamodel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountAvatar extends BasisDomainModel {
 

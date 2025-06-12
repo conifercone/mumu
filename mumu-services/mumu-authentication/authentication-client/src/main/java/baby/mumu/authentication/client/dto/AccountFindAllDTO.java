@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.GenderEnum;
@@ -38,7 +37,6 @@ import org.springframework.data.geo.Point;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class AccountFindAllDTO extends BaseDataTransferObject {
 
   @Serial

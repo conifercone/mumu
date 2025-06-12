@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
@@ -43,7 +42,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("mumu-account-system-settings")
-@Metamodel
 public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial

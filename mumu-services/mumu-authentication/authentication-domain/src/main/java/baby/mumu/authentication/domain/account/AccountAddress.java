@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.domain.account;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
@@ -39,7 +38,6 @@ import org.springframework.data.geo.Point;
 @RequiredArgsConstructor
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
-@Metamodel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountAddress extends BasisDomainModel {
 

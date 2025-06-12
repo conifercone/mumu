@@ -16,7 +16,6 @@
 
 package baby.mumu.message.infrastructure.relations.database;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessagePO;
@@ -47,7 +46,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "mumu_broadcast_text_message_receivers")
 @DynamicInsert
-@Metamodel
 public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObject {
 
   @Serial

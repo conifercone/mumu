@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -45,7 +44,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("mumu-account-addresses")
-@Metamodel
 public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial

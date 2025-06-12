@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
@@ -42,7 +41,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("mumu-account-avatars")
-@Metamodel
 public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
   @Serial

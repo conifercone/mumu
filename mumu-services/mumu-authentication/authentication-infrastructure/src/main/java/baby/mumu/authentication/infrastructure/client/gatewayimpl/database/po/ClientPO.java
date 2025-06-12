@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.client.gatewayimpl.database.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +39,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "oauth2_registered_client")
 @DynamicInsert
-@Metamodel
 @RequiredArgsConstructor
 public class ClientPO extends JpaBasisDefaultPersistentObject {
 

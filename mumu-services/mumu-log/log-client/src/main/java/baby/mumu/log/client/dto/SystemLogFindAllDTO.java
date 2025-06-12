@@ -16,7 +16,6 @@
 
 package baby.mumu.log.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serial;
@@ -33,7 +32,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class SystemLogFindAllDTO extends BaseDataTransferObject {
 
   @Serial

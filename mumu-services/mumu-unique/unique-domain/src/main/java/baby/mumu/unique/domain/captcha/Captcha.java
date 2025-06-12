@@ -16,7 +16,6 @@
 
 package baby.mumu.unique.domain.captcha;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
@@ -48,7 +47,6 @@ public class Captcha extends BasisDomainModel {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @Metamodel
   public static class SimpleCaptcha {
 
     /**

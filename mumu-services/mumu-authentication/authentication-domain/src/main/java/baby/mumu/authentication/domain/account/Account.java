@@ -18,7 +18,6 @@ package baby.mumu.authentication.domain.account;
 
 import baby.mumu.authentication.domain.permission.Permission;
 import baby.mumu.authentication.domain.role.Role;
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
@@ -58,7 +57,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Metamodel
 @Data
 @SuperBuilder(toBuilder = true)
 public class Account extends BasisDomainModel implements UserDetails {

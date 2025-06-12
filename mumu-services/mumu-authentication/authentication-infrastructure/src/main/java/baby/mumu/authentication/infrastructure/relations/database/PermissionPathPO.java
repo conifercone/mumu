@@ -17,7 +17,6 @@
 package baby.mumu.authentication.infrastructure.relations.database;
 
 import baby.mumu.authentication.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -44,7 +43,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "mumu_permission_paths")
 @DynamicInsert
-@Metamodel
 @AllArgsConstructor
 @NoArgsConstructor
 public class PermissionPathPO extends JpaBasisDefaultPersistentObject {

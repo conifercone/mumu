@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.domain.client;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
 import java.time.Instant;
@@ -35,7 +34,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@Metamodel
 @Data
 @SuperBuilder(toBuilder = true)
 public class Client extends BasisDomainModel {

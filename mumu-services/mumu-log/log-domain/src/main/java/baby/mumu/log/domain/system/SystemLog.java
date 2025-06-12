@@ -16,7 +16,6 @@
 
 package baby.mumu.log.domain.system;
 
-import baby.mumu.basis.annotations.Metamodel;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -27,7 +26,6 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-@Metamodel
 public class SystemLog {
 
   /**

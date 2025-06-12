@@ -16,7 +16,6 @@
 
 package baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
@@ -52,7 +51,6 @@ import org.javamoney.moneta.Money;
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
-@Metamodel
 public class AccountPO extends JpaBasisArchivablePersistentObject {
 
   @Serial
