@@ -34,4 +34,6 @@ public interface AccountSystemSettingsDocumentRepository extends
   List<AccountSystemSettingsDocumentPO> findByAccountId(@NotNull Long accountId);
 
   boolean existsByAccountIdAndProfile(@NotNull Long accountId, @NotBlank String profile);
+
+  void deleteByAccountId(Long accountId);
 }

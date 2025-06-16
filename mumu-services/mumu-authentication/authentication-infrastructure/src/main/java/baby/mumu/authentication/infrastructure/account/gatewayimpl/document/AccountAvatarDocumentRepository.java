@@ -31,4 +31,6 @@ public interface AccountAvatarDocumentRepository extends
   MongoRepository<AccountAvatarDocumentPO, String> {
 
   Optional<AccountAvatarDocumentPO> findByAccountId(@NotNull Long accountId);
+
+  void deleteByAccountId(Long accountId);
 }
