@@ -27,6 +27,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.AccountRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.database.po.AccountPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAddressDocumentRepository;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAvatarDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
 import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheRepository;
@@ -97,6 +98,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final OidcIdTokenCacheRepository oidcIdTokenCacheRepository;
   private final ApplicationEventPublisher applicationEventPublisher;
   private final AccountRoleCacheRepository accountRoleCacheRepository;
+  private final AccountAvatarDocumentRepository accountAvatarDocumentRepository;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository,
@@ -111,7 +113,8 @@ public class AccountGatewayImpl implements AccountGateway {
     AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository,
     OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
     ApplicationEventPublisher applicationEventPublisher,
-    AccountRoleCacheRepository accountRoleCacheRepository) {
+    AccountRoleCacheRepository accountRoleCacheRepository,
+    AccountAvatarDocumentRepository accountAvatarDocumentRepository) {
     this.accountRepository = accountRepository;
     this.passwordTokenCacheRepository = passwordTokenCacheRepository;
     this.passwordEncoder = passwordEncoder;
@@ -127,6 +130,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.oidcIdTokenCacheRepository = oidcIdTokenCacheRepository;
     this.applicationEventPublisher = applicationEventPublisher;
     this.accountRoleCacheRepository = accountRoleCacheRepository;
+    this.accountAvatarDocumentRepository = accountAvatarDocumentRepository;
   }
 
   /**
@@ -151,11 +155,14 @@ public class AccountGatewayImpl implements AccountGateway {
       account.setId(accountPO.getId());
       Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
           accountAddresses -> accountAddresses.stream()
-            .flatMap(accountAddress -> accountConvertor.toAccountAddressPO(accountAddress)
+            .flatMap(accountAddress -> accountConvertor.toAccountAddressDocumentPO(accountAddress)
               .stream())
             .collect(
               Collectors.toList())).filter(CollectionUtils::isNotEmpty)
         .ifPresent(accountAddressDocumentRepository::saveAll);
+      Optional.ofNullable(account.getAvatar())
+        .flatMap(accountConvertor::toAccountAvatarDocumentPO)
+        .ifPresent(accountAvatarDocumentRepository::save);
       accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
       accountCacheRepository.deleteById(account.getId());
       accountRoleCacheRepository.deleteById(account.getId());
@@ -444,7 +451,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void addAddress(AccountAddress accountAddress) {
     SecurityContextUtils.getLoginAccountId().ifPresent(
       accountId -> Optional.ofNullable(accountAddress)
-        .flatMap(accountConvertor::toAccountAddressPO)
+        .flatMap(accountConvertor::toAccountAddressDocumentPO)
         .ifPresent(
           accountAddressPO -> accountRepository.findById(accountId).ifPresent(_ -> {
             accountAddressPO.setAccountId(accountId);
@@ -517,7 +524,7 @@ public class AccountGatewayImpl implements AccountGateway {
         accountAddress.getId()))
       .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
         .equals(accountAddressMongodbPO.getAccountId()))
-      .flatMap(_ -> accountConvertor.toAccountAddressPO(
+      .flatMap(_ -> accountConvertor.toAccountAddressDocumentPO(
         accountAddress)).ifPresent(accountAddressMongodbPO -> {
         accountAddressDocumentRepository.save(accountAddressMongodbPO);
         accountCacheRepository.deleteById(accountAddressMongodbPO.getAccountId());

@@ -34,6 +34,7 @@ import baby.mumu.authentication.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.authentication.client.dto.AccountNearbyDTO;
 import baby.mumu.authentication.domain.account.Account;
 import baby.mumu.authentication.domain.account.AccountAddress;
+import baby.mumu.authentication.domain.account.AccountAvatar;
 import baby.mumu.authentication.domain.account.AccountSystemSettings;
 import baby.mumu.authentication.domain.role.Role;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.cache.po.AccountCacheablePO;
@@ -45,6 +46,7 @@ import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.Acco
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountAvatarDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
 import baby.mumu.authentication.infrastructure.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheRepository;
 import baby.mumu.authentication.infrastructure.relations.cache.AccountRoleCacheablePO;
@@ -425,9 +427,17 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<AccountAddressDocumentPO> toAccountAddressPO(
+  public Optional<AccountAddressDocumentPO> toAccountAddressDocumentPO(
     AccountAddress accountAddress) {
-    return Optional.ofNullable(accountAddress).map(AccountMapper.INSTANCE::toAccountAddressPO);
+    return Optional.ofNullable(accountAddress)
+      .map(AccountMapper.INSTANCE::toAccountAddressDocumentPO);
+  }
+
+  @API(status = Status.STABLE, since = "2.11.0")
+  public Optional<AccountAvatarDocumentPO> toAccountAvatarDocumentPO(
+    AccountAvatar accountAvatar) {
+    return Optional.ofNullable(accountAvatar)
+      .map(AccountMapper.INSTANCE::toAccountAvatarDocumentPO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")

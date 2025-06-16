@@ -87,7 +87,10 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   AccountAvatar toAccountAvatar(AccountAvatarDocumentPO accountAvatarDocumentPO);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  AccountAddressDocumentPO toAccountAddressPO(AccountAddress accountAddress);
+  AccountAddressDocumentPO toAccountAddressDocumentPO(AccountAddress accountAddress);
+
+  @API(status = Status.STABLE, since = "2.11.0")
+  AccountAvatarDocumentPO toAccountAvatarDocumentPO(AccountAvatar accountAvatar);
 
   @API(status = Status.STABLE, since = "2.2.0")
   AccountSystemSettingsDocumentPO toAccountSystemSettingsDocumentPO(
