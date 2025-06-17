@@ -332,7 +332,7 @@ public class AccountGatewayImpl implements AccountGateway {
         accountRepository.deleteById(accountPO.getId());
         accountAddressDocumentRepository.deleteByAccountId(accountPO.getId());
         accountSystemSettingsDocumentRepository.deleteByAccountId(accountPO.getId());
-        // TODO 头像如果存在关联文件需要同步删除文件
+        // 头像如果存在关联文件需要同步删除文件
         accountAvatarDocumentRepository.deleteByAccountId(accountPO.getId());
         passwordTokenCacheRepository.deleteById(accountPO.getId());
         accountRoleRepository.deleteByAccountId(accountPO.getId());
