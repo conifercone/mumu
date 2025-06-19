@@ -325,6 +325,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteCurrentAccount() {
     SecurityContextUtils.getLoginAccountId().flatMap(accountRepository::findById)
       .ifPresentOrElse(accountPO -> {
+        // 账号存在未使用的余额时不允许删除
         if (accountPO.getBalance()
           .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
