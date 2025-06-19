@@ -329,14 +329,21 @@ public class AccountGatewayImpl implements AccountGateway {
           .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
         }
+        // 删除账号基本信息
         accountRepository.deleteById(accountPO.getId());
+        // 删除账号地址信息
         accountAddressDocumentRepository.deleteByAccountId(accountPO.getId());
+        // 删除账号系统设置
         accountSystemSettingsDocumentRepository.deleteByAccountId(accountPO.getId());
-        // 头像如果存在关联文件需要同步删除文件
+        // 删除账号头像信息，头像如果存在关联文件需要同步删除文件
         accountAvatarDocumentRepository.deleteByAccountId(accountPO.getId());
+        // 删除账号令牌缓存
         passwordTokenCacheRepository.deleteById(accountPO.getId());
+        // 删除账号角色关联信息
         accountRoleRepository.deleteByAccountId(accountPO.getId());
+        // 删除账号缓存
         accountCacheRepository.deleteById(accountPO.getId());
+        // 删除账号角色缓存
         accountRoleCacheRepository.deleteById(accountPO.getId());
       }, () -> {
         throw new MuMuException(ResponseCode.UNAUTHORIZED);
