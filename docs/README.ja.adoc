@@ -80,7 +80,7 @@ ____
 mumu
 ├── mumu-services
 │   ├── mumu-authentication
-│   ├── mumu-file
+│   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail
 │   ├── mumu-message

@@ -81,7 +81,7 @@ mumu
 ├── mumu-services
 │FEREnces
 │   ├── mumu-authentication
-│   ├── mumu-file
+│   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail
 │   ├── mumu-message

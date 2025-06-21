@@ -63,17 +63,17 @@ include("mumu-services:mumu-mail:mail-domain")
 findProject(":mumu-services:mumu-mail:mail-domain")?.name = "mail-domain"
 include("mumu-services:mumu-mail:mail-infrastructure")
 findProject(":mumu-services:mumu-mail:mail-infrastructure")?.name = "mail-infrastructure"
-include("mumu-services:mumu-file")
-include("mumu-services:mumu-file:file-adapter")
-findProject(":mumu-services:mumu-file:file-adapter")?.name = "file-adapter"
-include("mumu-services:mumu-file:file-application")
-findProject(":mumu-services:mumu-file:file-application")?.name = "file-application"
-include("mumu-services:mumu-file:file-client")
-findProject(":mumu-services:mumu-file:file-client")?.name = "file-client"
-include("mumu-services:mumu-file:file-domain")
-findProject(":mumu-services:mumu-file:file-domain")?.name = "file-domain"
-include("mumu-services:mumu-file:file-infrastructure")
-findProject(":mumu-services:mumu-file:file-infrastructure")?.name = "file-infrastructure"
+include("mumu-services:mumu-storage")
+include("mumu-services:mumu-storage:storage-adapter")
+findProject(":mumu-services:mumu-storage:storage-adapter")?.name = "storage-adapter"
+include("mumu-services:mumu-storage:storage-application")
+findProject(":mumu-services:mumu-storage:storage-application")?.name = "storage-application"
+include("mumu-services:mumu-storage:storage-client")
+findProject(":mumu-services:mumu-storage:storage-client")?.name = "storage-client"
+include("mumu-services:mumu-storage:storage-domain")
+findProject(":mumu-services:mumu-storage:storage-domain")?.name = "storage-domain"
+include("mumu-services:mumu-storage:storage-infrastructure")
+findProject(":mumu-services:mumu-storage:storage-infrastructure")?.name = "storage-infrastructure"
 include("mumu-services:mumu-sms")
 include("mumu-services:mumu-sms:sms-adapter")
 findProject(":mumu-services:mumu-sms:sms-adapter")?.name = "sms-adapter"
