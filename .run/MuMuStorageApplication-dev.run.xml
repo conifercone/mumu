@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MuMuFileApplication-dev"
+  <configuration default="false" name="MuMuStorageApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev"/>
     <module name="mumu.mumu-services.mumu-storage.main"/>
