@@ -16,9 +16,9 @@
 
 package baby.mumu.storage.application.file.executor;
 
-import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
-import baby.mumu.storage.domain.stream.gateway.StreamFileGateway;
-import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
+import baby.mumu.storage.client.cmds.FileRemoveCmd;
+import baby.mumu.storage.domain.file.gateway.FileGateway;
+import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,18 +32,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileRemoveCmdExe {
 
-  private final StreamFileGateway streamFileGateway;
-  private final StreamFileConvertor streamFileConvertor;
+  private final FileGateway fileGateway;
+  private final FileConvertor fileConvertor;
 
   @Autowired
-  public FileRemoveCmdExe(StreamFileGateway streamFileGateway,
-    StreamFileConvertor streamFileConvertor) {
-    this.streamFileGateway = streamFileGateway;
-    this.streamFileConvertor = streamFileConvertor;
+  public FileRemoveCmdExe(FileGateway fileGateway,
+    FileConvertor fileConvertor) {
+    this.fileGateway = fileGateway;
+    this.fileConvertor = fileConvertor;
   }
 
-  public void execute(StreamFileRemoveCmd streamFileRemoveCmd) {
-    Optional.ofNullable(streamFileRemoveCmd).flatMap(streamFileConvertor::toEntity)
-      .ifPresent(streamFileGateway::removeFile);
+  public void execute(FileRemoveCmd fileRemoveCmd) {
+    Optional.ofNullable(fileRemoveCmd).flatMap(fileConvertor::toEntity)
+      .ifPresent(fileGateway::removeFile);
   }
 }

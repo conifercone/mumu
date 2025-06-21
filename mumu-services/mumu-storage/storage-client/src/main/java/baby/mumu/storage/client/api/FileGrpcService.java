@@ -19,12 +19,12 @@ package baby.mumu.storage.client.api;
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
-import baby.mumu.storage.client.api.grpc.StreamFileRemoveGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileServiceGrpc;
-import baby.mumu.storage.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceBlockingStub;
-import baby.mumu.storage.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceFutureStub;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcResult;
+import baby.mumu.storage.client.api.grpc.FileRemoveGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileServiceGrpc;
+import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceBlockingStub;
+import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import io.grpc.CallCredentials;
@@ -61,90 +61,90 @@ public class FileGrpcService extends StorageGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public StreamFileDownloadGrpcResult download(StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
+  public FileDownloadGrpcResult download(FileDownloadGrpcCmd fileDownloadGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
         channel = ch;
-        return downloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
+        return downloadFromGrpc(fileDownloadGrpcCmd, callCredentials);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public ListenableFuture<StreamFileDownloadGrpcResult> syncDownload(
-    StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
+  public ListenableFuture<FileDownloadGrpcResult> syncDownload(
+    FileDownloadGrpcCmd fileDownloadGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
         channel = ch;
-        return syncDownloadFromGrpc(streamFileDownloadGrpcCmd, callCredentials);
+        return syncDownloadFromGrpc(fileDownloadGrpcCmd, callCredentials);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public Empty removeFile(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+  public Empty removeFile(FileRemoveGrpcCmd fileRemoveGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
         channel = ch;
-        return removeFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+        return removeFileFromGrpc(fileRemoveGrpcCmd, callCredentials);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
   public ListenableFuture<Empty> syncRemoveFile(
-    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+    FileRemoveGrpcCmd fileRemoveGrpcCmd,
     CallCredentials callCredentials) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannelUsePlaintext)
       .map(ch -> {
         channel = ch;
-        return syncRemoveFileFromGrpc(streamFileRemoveGrpcCmd, callCredentials);
+        return syncRemoveFileFromGrpc(fileRemoveGrpcCmd, callCredentials);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
 
-  private StreamFileDownloadGrpcResult downloadFromGrpc(
-    StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
+  private FileDownloadGrpcResult downloadFromGrpc(
+    FileDownloadGrpcCmd fileDownloadGrpcCmd,
     CallCredentials callCredentials) {
-    StreamFileServiceBlockingStub streamFileServiceBlockingStub = StreamFileServiceGrpc.newBlockingStub(
+    FileServiceBlockingStub fileServiceBlockingStub = FileServiceGrpc.newBlockingStub(
       channel);
-    return streamFileServiceBlockingStub.withCallCredentials(callCredentials)
-      .download(streamFileDownloadGrpcCmd);
+    return fileServiceBlockingStub.withCallCredentials(callCredentials)
+      .download(fileDownloadGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<StreamFileDownloadGrpcResult> syncDownloadFromGrpc(
-    StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd,
+  private @NotNull ListenableFuture<FileDownloadGrpcResult> syncDownloadFromGrpc(
+    FileDownloadGrpcCmd fileDownloadGrpcCmd,
     CallCredentials callCredentials) {
-    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+    FileServiceFutureStub fileServiceFutureStub = FileServiceGrpc.newFutureStub(
       channel);
-    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
-      .download(streamFileDownloadGrpcCmd);
+    return fileServiceFutureStub.withCallCredentials(callCredentials)
+      .download(fileDownloadGrpcCmd);
   }
 
   private Empty removeFileFromGrpc(
-    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+    FileRemoveGrpcCmd fileRemoveGrpcCmd,
     CallCredentials callCredentials) {
-    StreamFileServiceBlockingStub streamFileServiceBlockingStub = StreamFileServiceGrpc.newBlockingStub(
+    FileServiceBlockingStub fileServiceBlockingStub = FileServiceGrpc.newBlockingStub(
       channel);
-    return streamFileServiceBlockingStub.withCallCredentials(callCredentials)
-      .removeFile(streamFileRemoveGrpcCmd);
+    return fileServiceBlockingStub.withCallCredentials(callCredentials)
+      .removeFile(fileRemoveGrpcCmd);
   }
 
   private @NotNull ListenableFuture<Empty> syncRemoveFileFromGrpc(
-    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd,
+    FileRemoveGrpcCmd fileRemoveGrpcCmd,
     CallCredentials callCredentials) {
-    StreamFileServiceFutureStub streamFileServiceFutureStub = StreamFileServiceGrpc.newFutureStub(
+    FileServiceFutureStub fileServiceFutureStub = FileServiceGrpc.newFutureStub(
       channel);
-    return streamFileServiceFutureStub.withCallCredentials(callCredentials)
-      .removeFile(streamFileRemoveGrpcCmd);
+    return fileServiceFutureStub.withCallCredentials(callCredentials)
+      .removeFile(fileRemoveGrpcCmd);
   }
 
 }

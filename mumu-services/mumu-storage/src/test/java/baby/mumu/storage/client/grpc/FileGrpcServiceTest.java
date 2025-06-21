@@ -19,9 +19,9 @@ package baby.mumu.storage.client.grpc;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.api.FileGrpcService;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
-import baby.mumu.storage.client.api.grpc.StreamFileRemoveGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcResult;
+import baby.mumu.storage.client.api.grpc.FileRemoveGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Empty;
@@ -61,7 +61,7 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   public void download() {
-    StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
+    FileDownloadGrpcCmd fileDownloadGrpcCmd = FileDownloadGrpcCmd.newBuilder()
       .setName("test2.log")
       .setStorageAddress("test")
       .build();
@@ -69,8 +69,8 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
       () -> getToken().orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
 
-    StreamFileDownloadGrpcResult download = fileGrpcService.download(
-      streamFileDownloadGrpcCmd,
+    FileDownloadGrpcResult download = fileGrpcService.download(
+      fileDownloadGrpcCmd,
       callCredentials);
     Assertions.assertNotNull(download);
     String fileContent = download.getFileContent().getValue().toStringUtf8();
@@ -81,21 +81,21 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncDownload() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
+    FileDownloadGrpcCmd fileDownloadGrpcCmd = FileDownloadGrpcCmd.newBuilder()
       .setName("test2.log")
       .setStorageAddress("test")
       .build();
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken().orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    ListenableFuture<StreamFileDownloadGrpcResult> streamFileDownloadGrpcResultListenableFuture = fileGrpcService.syncDownload(
-      streamFileDownloadGrpcCmd,
+    ListenableFuture<FileDownloadGrpcResult> fileDownloadGrpcResultListenableFuture = fileGrpcService.syncDownload(
+      fileDownloadGrpcCmd,
       callCredentials);
-    streamFileDownloadGrpcResultListenableFuture.addListener(() -> {
+    fileDownloadGrpcResultListenableFuture.addListener(() -> {
       try {
-        StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileDownloadGrpcResultListenableFuture.get();
-        Assertions.assertNotNull(streamFileDownloadGrpcResult);
-        String fileContent = streamFileDownloadGrpcResult.getFileContent().getValue()
+        FileDownloadGrpcResult fileDownloadGrpcResult = fileDownloadGrpcResultListenableFuture.get();
+        Assertions.assertNotNull(fileDownloadGrpcResult);
+        String fileContent = fileDownloadGrpcResult.getFileContent().getValue()
           .toStringUtf8();
         Assertions.assertTrue(StringUtils.isNotBlank(fileContent));
         FileGrpcServiceTest.log.info("SyncDownload result: {}", fileContent);
@@ -110,7 +110,7 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   public void removeFile() {
-    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
+    FileRemoveGrpcCmd fileRemoveGrpcCmd = FileRemoveGrpcCmd.newBuilder()
       .setName("test2.log")
       .setStorageAddress("test")
       .build();
@@ -118,7 +118,7 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
       () -> getToken().orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     Empty empty = fileGrpcService.removeFile(
-      streamFileRemoveGrpcCmd,
+      fileRemoveGrpcCmd,
       callCredentials);
     Assertions.assertNotNull(empty);
   }
@@ -126,7 +126,7 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncRemoveFile() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd = StreamFileRemoveGrpcCmd.newBuilder()
+    FileRemoveGrpcCmd fileRemoveGrpcCmd = FileRemoveGrpcCmd.newBuilder()
       .setName("test2.log")
       .setStorageAddress("test")
       .build();
@@ -134,7 +134,7 @@ public class FileGrpcServiceTest extends AuthenticationRequired {
       () -> getToken().orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<Empty> emptyListenableFuture = fileGrpcService.syncRemoveFile(
-      streamFileRemoveGrpcCmd,
+      fileRemoveGrpcCmd,
       callCredentials);
     emptyListenableFuture.addListener(() -> {
       try {

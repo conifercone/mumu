@@ -18,9 +18,9 @@ package baby.mumu.storage.application.file.executor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
-import baby.mumu.storage.domain.stream.gateway.StreamFileGateway;
-import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
+import baby.mumu.storage.client.cmds.FileDownloadCmd;
+import baby.mumu.storage.domain.file.gateway.FileGateway;
+import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
 import java.io.InputStream;
 import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +36,22 @@ import org.springframework.util.Assert;
 @Component
 public class FileDownloadCmdExe {
 
-  private final StreamFileGateway streamFileGateway;
-  private final StreamFileConvertor streamFileConvertor;
+  private final FileGateway fileGateway;
+  private final FileConvertor fileConvertor;
 
   @Autowired
-  public FileDownloadCmdExe(StreamFileGateway streamFileGateway,
-    StreamFileConvertor streamFileConvertor) {
-    this.streamFileGateway = streamFileGateway;
-    this.streamFileConvertor = streamFileConvertor;
+  public FileDownloadCmdExe(FileGateway fileGateway,
+    FileConvertor fileConvertor) {
+    this.fileGateway = fileGateway;
+    this.fileConvertor = fileConvertor;
   }
 
-  public InputStream execute(StreamFileDownloadCmd streamFileDownloadCmd) {
-    Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
+  public InputStream execute(FileDownloadCmd fileDownloadCmd) {
+    Assert.notNull(fileDownloadCmd, "FileDownloadCmd cannot be null");
     Supplier<MuMuException> downloadFailed = () -> new MuMuException(
       ResponseCode.FILE_DOWNLOAD_FAILED);
-    return streamFileConvertor.toEntity(streamFileDownloadCmd)
-      .map(streamFile -> streamFileGateway.download(streamFile)
+    return fileConvertor.toEntity(fileDownloadCmd)
+      .map(file -> fileGateway.download(file)
         .orElseThrow(downloadFailed)
       ).orElseThrow(downloadFailed);
   }

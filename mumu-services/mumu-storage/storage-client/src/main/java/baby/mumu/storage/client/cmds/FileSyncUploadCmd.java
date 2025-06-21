@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.stream;
+package baby.mumu.storage.client.cmds;
 
-import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.basis.constants.CommonConstants;
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import java.io.InputStream;
-import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.util.ObjectUtils;
 
 /**
- * 流式文件领域模型
+ * 流式文件异步上传指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class StreamFile extends BasisDomainModel {
-
-  @Serial
-  private static final long serialVersionUID = 7195498751838257468L;
+public class FileSyncUploadCmd {
 
   /**
    * 文件内容
@@ -46,12 +43,30 @@ public class StreamFile extends BasisDomainModel {
   private String storageAddress;
 
   /**
-   * 文件名
+   * 文件名(可以不包含文件拓展名,默认取当前上传文件的文件拓展名)
    */
   private String name;
+
+  /**
+   * 源文件名
+   */
+  private String originName;
 
   /**
    * 文件大小
    */
   private Long size;
+
+  public String getName() {
+    if (ObjectUtils.isEmpty(name)) {
+      return originName;
+    } else if (!name.contains(CommonConstants.DOT)) {
+      if (ObjectUtils.isEmpty(originName)) {
+        throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
+      }
+      return name.concat(CommonConstants.DOT).concat(
+        originName.substring(originName.lastIndexOf(CommonConstants.DOT) + 1));
+    }
+    return name;
+  }
 }

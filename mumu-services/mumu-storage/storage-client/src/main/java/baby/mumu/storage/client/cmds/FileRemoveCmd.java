@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage.po;
+package baby.mumu.storage.client.cmds;
 
-import java.io.InputStream;
 import lombok.Data;
 
 /**
- * 流式文件存储数据对象
+ * 流式文件删除指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-public class StreamFileStoragePO {
-
-  /**
-   * 文件内容
-   */
-  private InputStream content;
+public class FileRemoveCmd {
 
   /**
    * 存储地址
@@ -39,12 +33,7 @@ public class StreamFileStoragePO {
   private String storageAddress;
 
   /**
-   * 文件名
+   * 源文件名(包含文件拓展名) eg: test.log
    */
   private String name;
-
-  /**
-   * 文件大小
-   */
-  private Long size;
 }

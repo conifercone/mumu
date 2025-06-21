@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.client.cmds;
+package baby.mumu.storage.domain.file.gateway;
 
-import lombok.Data;
+import baby.mumu.storage.domain.file.File;
+import java.io.InputStream;
+import java.util.Optional;
 
 /**
- * 流式文件删除指令
+ * 流式文件领域网关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Data
-public class StreamFileRemoveCmd {
+public interface FileGateway {
 
-  /**
-   * 存储地址
-   */
-  private String storageAddress;
+  void uploadFile(File file);
 
-  /**
-   * 源文件名(包含文件拓展名) eg: test.log
-   */
-  private String name;
+  Optional<InputStream> download(File file);
+
+  void removeFile(File file);
 }

@@ -19,9 +19,9 @@ package baby.mumu.storage.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
 import baby.mumu.storage.client.api.FileService;
-import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
-import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
+import baby.mumu.storage.client.cmds.FileDownloadCmd;
+import baby.mumu.storage.client.cmds.FileRemoveCmd;
+import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,7 +70,7 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void syncUpload(@ModelAttribute StreamFileSyncUploadCmd fileUploadCmd,
+  public void syncUpload(@ModelAttribute FileSyncUploadCmd fileUploadCmd,
     @RequestParam("file") MultipartFile file) throws IOException {
     fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
     fileUploadCmd.setOriginName(file.getOriginalFilename());
@@ -83,13 +83,13 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void download(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd,
+  public void download(@ModelAttribute FileDownloadCmd fileDownloadCmd,
     HttpServletResponse response) {
-    Assert.notNull(streamFileDownloadCmd, "StreamFileDownloadCmd cannot be null");
+    Assert.notNull(fileDownloadCmd, "FileDownloadCmd cannot be null");
     FileDownloadUtils.download(response, ObjectUtils.isEmpty(
-        streamFileDownloadCmd.getRename())
-        ? streamFileDownloadCmd.getName()
-        : streamFileDownloadCmd.getRename(), fileService.download(streamFileDownloadCmd),
+        fileDownloadCmd.getRename())
+        ? fileDownloadCmd.getName()
+        : fileDownloadCmd.getRename(), fileService.download(fileDownloadCmd),
       "application/force-download");
   }
 
@@ -98,9 +98,9 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public String getStringContent(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd)
+  public String getStringContent(@ModelAttribute FileDownloadCmd fileDownloadCmd)
     throws IOException {
-    return IOUtils.toString(fileService.download(streamFileDownloadCmd),
+    return IOUtils.toString(fileService.download(fileDownloadCmd),
       StandardCharsets.UTF_8);
   }
 
@@ -109,7 +109,7 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(@RequestBody StreamFileRemoveCmd streamFileRemoveCmd) {
-    fileService.removeFile(streamFileRemoveCmd);
+  public void removeFile(@RequestBody FileRemoveCmd fileRemoveCmd) {
+    fileService.removeFile(fileRemoveCmd);
   }
 }

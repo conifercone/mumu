@@ -25,8 +25,8 @@ import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import baby.mumu.storage.client.api.FileGrpcService;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcResult;
 import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.mail.internet.MimeMessage;
@@ -66,7 +66,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
   @Override
   public void sendMail(TemplateMail templateMail) {
     Optional.ofNullable(templateMail).ifPresent(templateMailDomain -> {
-      StreamFileDownloadGrpcCmd streamFileDownloadGrpcCmd = StreamFileDownloadGrpcCmd.newBuilder()
+      FileDownloadGrpcCmd fileDownloadGrpcCmd = FileDownloadGrpcCmd.newBuilder()
         .setName(templateMailDomain.getName())
         .setStorageAddress(templateMailDomain.getAddress())
         .build();
@@ -74,13 +74,13 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         () -> SecurityContextUtils.getTokenValue().orElseThrow(
           () -> new MuMuException(ResponseCode.UNAUTHORIZED)));
       try {
-        StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = fileGrpcService.download(
-          streamFileDownloadGrpcCmd,
+        FileDownloadGrpcResult fileDownloadGrpcResult = fileGrpcService.download(
+          fileDownloadGrpcCmd,
           callCredentials);
         Optional<TemplateMailThymeleafPO> thymeleafDo = templateMailConvertor.toThymeleafPO(
           templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
-          thDo.setContent(streamFileDownloadGrpcResult.getFileContent().getValue()
+          thDo.setContent(fileDownloadGrpcResult.getFileContent().getValue()
             .toStringUtf8());
           thymeleafTemplateMailRepository.processTemplate(thDo).ifPresent(mailContent -> {
             try {

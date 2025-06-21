@@ -14,23 +14,31 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.stream.gateway;
+package baby.mumu.storage.client.cmds;
 
-import baby.mumu.storage.domain.stream.StreamFile;
-import java.io.InputStream;
-import java.util.Optional;
+import lombok.Data;
 
 /**
- * 流式文件领域网关
+ * 流式文件下载指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface StreamFileGateway {
+@Data
+public class FileDownloadCmd {
 
-  void uploadFile(StreamFile streamFile);
+  /**
+   * 存储地址
+   */
+  private String storageAddress;
 
-  Optional<InputStream> download(StreamFile streamFile);
+  /**
+   * 源文件名(包含文件拓展名) eg: test.log
+   */
+  private String name;
 
-  void removeFile(StreamFile streamFile);
+  /**
+   * 下载重命名(包含文件拓展名) eg: test.log
+   */
+  private String rename;
 }

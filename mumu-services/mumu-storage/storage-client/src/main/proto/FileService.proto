@@ -4,25 +4,24 @@ import "google/protobuf/empty.proto";
 
 option java_multiple_files = true;
 option java_package = "baby.mumu.storage.client.api.grpc";
-option java_outer_classname = "StreamFileServiceProto";
+option java_outer_classname = "FileServiceProto";
 
-service StreamFileService {
-  rpc download (StreamFileDownloadGrpcCmd) returns (StreamFileDownloadGrpcResult);
-  rpc removeFile (StreamFileRemoveGrpcCmd) returns (google.protobuf.Empty);
+service FileService {
+  rpc download (FileDownloadGrpcCmd) returns (FileDownloadGrpcResult);
+  rpc removeFile (FileRemoveGrpcCmd) returns (google.protobuf.Empty);
 }
 
-message StreamFileDownloadGrpcCmd {
+message FileDownloadGrpcCmd {
   string storageAddress = 1;
   string name = 2;
   string rename = 3;
 }
 
-message StreamFileDownloadGrpcResult {
+message FileDownloadGrpcResult {
   google.protobuf.BytesValue fileContent = 1;
 }
 
-message StreamFileRemoveGrpcCmd {
+message FileRemoveGrpcCmd {
   string storageAddress = 1;
   string name = 2;
 }
-

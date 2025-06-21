@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.streamfile.convertor;
+package baby.mumu.storage.infrastructure.file.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.storage.client.api.grpc.StreamFileRemoveGrpcCmd;
-import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
-import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
-import baby.mumu.storage.domain.stream.StreamFile;
-import baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage.po.StreamFileStoragePO;
+import baby.mumu.storage.client.api.grpc.FileRemoveGrpcCmd;
+import baby.mumu.storage.client.cmds.FileDownloadCmd;
+import baby.mumu.storage.client.cmds.FileRemoveCmd;
+import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
+import baby.mumu.storage.domain.file.File;
+import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -31,28 +31,28 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * StreamFile mapstruct转换器
+ * File mapstruct转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface StreamFileMapper extends GrpcMapper {
+public interface FileMapper extends GrpcMapper {
 
-  StreamFileMapper INSTANCE = Mappers.getMapper(StreamFileMapper.class);
-
-  @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
+  FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileRemoveCmd streamFileRemoveCmd);
+  File toEntity(FileSyncUploadCmd fileSyncUploadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFile toEntity(StreamFileDownloadCmd streamFileDownloadCmd);
+  File toEntity(FileRemoveCmd fileRemoveCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  StreamFileStoragePO toStoragePO(StreamFile streamFile);
+  File toEntity(FileDownloadCmd fileDownloadCmd);
+
+  @API(status = Status.STABLE, since = "1.0.1")
+  FileStoragePO toStoragePO(File file);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  StreamFileRemoveCmd toStreamFileRemoveCmd(StreamFileRemoveGrpcCmd streamFileRemoveGrpcCmd);
+  FileRemoveCmd toFileRemoveCmd(FileRemoveGrpcCmd fileRemoveGrpcCmd);
 }

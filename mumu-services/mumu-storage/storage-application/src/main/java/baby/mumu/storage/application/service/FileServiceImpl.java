@@ -25,14 +25,14 @@ import baby.mumu.storage.application.file.executor.FileDownloadCmdExe;
 import baby.mumu.storage.application.file.executor.FileRemoveCmdExe;
 import baby.mumu.storage.application.file.executor.FileSyncUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
-import baby.mumu.storage.client.api.grpc.StreamFileRemoveGrpcCmd;
-import baby.mumu.storage.client.api.grpc.StreamFileServiceGrpc.StreamFileServiceImplBase;
-import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
-import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
-import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileDownloadGrpcResult;
+import baby.mumu.storage.client.api.grpc.FileRemoveGrpcCmd;
+import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceImplBase;
+import baby.mumu.storage.client.cmds.FileDownloadCmd;
+import baby.mumu.storage.client.cmds.FileRemoveCmd;
+import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
+import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.Empty;
@@ -54,51 +54,51 @@ import org.springframework.stereotype.Service;
 @Service
 @GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
 @Observed(name = "FileServiceImpl")
-public class FileServiceImpl extends StreamFileServiceImplBase implements FileService {
+public class FileServiceImpl extends FileServiceImplBase implements FileService {
 
   private final FileSyncUploadCmdExe fileSyncUploadCmdExe;
   private final FileDownloadCmdExe fileDownloadCmdExe;
   private final FileRemoveCmdExe fileRemoveCmdExe;
-  private final StreamFileConvertor streamFileConvertor;
+  private final FileConvertor fileConvertor;
 
   @Autowired
   public FileServiceImpl(FileSyncUploadCmdExe fileSyncUploadCmdExe,
     FileDownloadCmdExe fileDownloadCmdExe,
-    FileRemoveCmdExe fileRemoveCmdExe, StreamFileConvertor streamFileConvertor) {
+    FileRemoveCmdExe fileRemoveCmdExe, FileConvertor fileConvertor) {
     this.fileSyncUploadCmdExe = fileSyncUploadCmdExe;
     this.fileDownloadCmdExe = fileDownloadCmdExe;
     this.fileRemoveCmdExe = fileRemoveCmdExe;
-    this.streamFileConvertor = streamFileConvertor;
+    this.fileConvertor = fileConvertor;
   }
 
   @Override
-  public void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
-    fileSyncUploadCmdExe.execute(streamFileSyncUploadCmd);
+  public void syncUploadFile(FileSyncUploadCmd fileSyncUploadCmd) {
+    fileSyncUploadCmdExe.execute(fileSyncUploadCmd);
   }
 
   @Override
-  public InputStream download(StreamFileDownloadCmd streamFileDownloadCmd) {
-    return fileDownloadCmdExe.execute(streamFileDownloadCmd);
+  public InputStream download(FileDownloadCmd fileDownloadCmd) {
+    return fileDownloadCmdExe.execute(fileDownloadCmd);
   }
 
   @Override
-  public void removeFile(StreamFileRemoveCmd streamFileRemoveCmd) {
-    fileRemoveCmdExe.execute(streamFileRemoveCmd);
+  public void removeFile(FileRemoveCmd fileRemoveCmd) {
+    fileRemoveCmdExe.execute(fileRemoveCmd);
   }
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void download(StreamFileDownloadGrpcCmd request,
-    @NotNull StreamObserver<StreamFileDownloadGrpcResult> responseObserver) {
-    StreamFileDownloadCmd streamFileDownloadCmd = new StreamFileDownloadCmd();
-    streamFileDownloadCmd.setName(request.getName());
-    streamFileDownloadCmd.setRename(request.getRename());
-    streamFileDownloadCmd.setStorageAddress(request.getStorageAddress());
-    try (InputStream inputStream = fileDownloadCmdExe.execute(streamFileDownloadCmd)) {
+  public void download(FileDownloadGrpcCmd request,
+    @NotNull StreamObserver<FileDownloadGrpcResult> responseObserver) {
+    FileDownloadCmd fileDownloadCmd = new FileDownloadCmd();
+    fileDownloadCmd.setName(request.getName());
+    fileDownloadCmd.setRename(request.getRename());
+    fileDownloadCmd.setStorageAddress(request.getStorageAddress());
+    try (InputStream inputStream = fileDownloadCmdExe.execute(fileDownloadCmd)) {
       ByteString byteString = ByteString.copyFrom(inputStream.readAllBytes());
       BytesValue bytesValue = BytesValue.newBuilder().setValue(byteString).build();
       responseObserver.onNext(
-        StreamFileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
+        FileDownloadGrpcResult.newBuilder().setFileContent(bytesValue).build());
       responseObserver.onCompleted();
     } catch (Exception e) {
       throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
@@ -107,10 +107,10 @@ public class FileServiceImpl extends StreamFileServiceImplBase implements FileSe
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void removeFile(StreamFileRemoveGrpcCmd request,
+  public void removeFile(FileRemoveGrpcCmd request,
     @NotNull StreamObserver<Empty> responseObserver) {
-    streamFileConvertor.toStreamFileRemoveCmd(request).ifPresentOrElse((streamFileRemoveCmd) -> {
-      fileRemoveCmdExe.execute(streamFileRemoveCmd);
+    fileConvertor.toFileRemoveCmd(request).ifPresentOrElse((fileRemoveCmd) -> {
+      fileRemoveCmdExe.execute(fileRemoveCmd);
       responseObserver.onNext(Empty.newBuilder().build());
       responseObserver.onCompleted();
     }, () -> {

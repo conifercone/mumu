@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.client.cmds;
+package baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po;
 
+import java.io.InputStream;
 import lombok.Data;
 
 /**
- * 流式文件下载指令
+ * 流式文件存储数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-public class StreamFileDownloadCmd {
+public class FileStoragePO {
+
+  /**
+   * 文件内容
+   */
+  private InputStream content;
 
   /**
    * 存储地址
@@ -33,12 +39,12 @@ public class StreamFileDownloadCmd {
   private String storageAddress;
 
   /**
-   * 源文件名(包含文件拓展名) eg: test.log
+   * 文件名
    */
   private String name;
 
   /**
-   * 下载重命名(包含文件拓展名) eg: test.log
+   * 文件大小
    */
-  private String rename;
+  private Long size;
 }

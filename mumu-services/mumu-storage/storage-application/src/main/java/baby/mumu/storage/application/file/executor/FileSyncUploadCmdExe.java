@@ -16,9 +16,9 @@
 
 package baby.mumu.storage.application.file.executor;
 
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
-import baby.mumu.storage.domain.stream.gateway.StreamFileGateway;
-import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
+import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
+import baby.mumu.storage.domain.file.gateway.FileGateway;
+import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -33,19 +33,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileSyncUploadCmdExe {
 
-  private final StreamFileGateway streamFileGateway;
-  private final StreamFileConvertor streamFileConvertor;
+  private final FileGateway fileGateway;
+  private final FileConvertor fileConvertor;
 
   @Autowired
-  public FileSyncUploadCmdExe(StreamFileGateway streamFileGateway,
-    StreamFileConvertor streamFileConvertor) {
-    this.streamFileGateway = streamFileGateway;
-    this.streamFileConvertor = streamFileConvertor;
+  public FileSyncUploadCmdExe(FileGateway fileGateway,
+    FileConvertor fileConvertor) {
+    this.fileGateway = fileGateway;
+    this.fileConvertor = fileConvertor;
   }
 
   @Async
-  public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
-    Optional.ofNullable(streamFileSyncUploadCmd).flatMap(streamFileConvertor::toEntity)
-      .ifPresent(streamFileGateway::uploadFile);
+  public void execute(FileSyncUploadCmd fileSyncUploadCmd) {
+    Optional.ofNullable(fileSyncUploadCmd).flatMap(fileConvertor::toEntity)
+      .ifPresent(fileGateway::uploadFile);
   }
 }

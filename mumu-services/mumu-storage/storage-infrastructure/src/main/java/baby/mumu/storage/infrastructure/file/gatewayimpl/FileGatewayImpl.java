@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.streamfile.gatewayimpl;
+package baby.mumu.storage.infrastructure.file.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.storage.domain.stream.StreamFile;
-import baby.mumu.storage.domain.stream.gateway.StreamFileGateway;
-import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
-import baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage.StreamFileStorageRepository;
-import baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage.po.StreamFileStoragePO;
+import baby.mumu.storage.domain.file.File;
+import baby.mumu.storage.domain.file.gateway.FileGateway;
+import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
+import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.FileStorageRepository;
+import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
 import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
 import java.util.Optional;
@@ -40,62 +40,62 @@ import org.springframework.util.ObjectUtils;
  * @since 1.0.1
  */
 @Component
-@Observed(name = "StreamFileGatewayImpl")
-public class StreamFileGatewayImpl implements StreamFileGateway {
+@Observed(name = "FileGatewayImpl")
+public class FileGatewayImpl implements FileGateway {
 
-  private final StreamFileStorageRepository streamFileStorageRepository;
-  private final StreamFileConvertor streamFileConvertor;
+  private final FileStorageRepository fileStorageRepository;
+  private final FileConvertor fileConvertor;
 
   @Autowired
-  public StreamFileGatewayImpl(StreamFileStorageRepository streamFileStorageRepository,
-    StreamFileConvertor streamFileConvertor) {
-    this.streamFileStorageRepository = streamFileStorageRepository;
-    this.streamFileConvertor = streamFileConvertor;
+  public FileGatewayImpl(FileStorageRepository fileStorageRepository,
+    FileConvertor fileConvertor) {
+    this.fileStorageRepository = fileStorageRepository;
+    this.fileConvertor = fileConvertor;
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFile streamFile) {
-    StreamFileStoragePO streamFileStoragePO = Optional.ofNullable(streamFile)
-      .flatMap(streamFileConvertor::toStoragePO)
+  public void uploadFile(File file) {
+    FileStoragePO fileStoragePO = Optional.ofNullable(file)
+      .flatMap(fileConvertor::toStoragePO)
       .filter(storagePO -> storagePO.getContent() != null && StringUtils.isNotBlank(
         storagePO.getName()))
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
-    if (StringUtils.isNotBlank(streamFileStoragePO.getStorageAddress())) {
-      streamFileStorageRepository.createStorageAddress(streamFileStoragePO.getStorageAddress());
+    if (StringUtils.isNotBlank(fileStoragePO.getStorageAddress())) {
+      fileStorageRepository.createStorageAddress(fileStoragePO.getStorageAddress());
     } else {
       throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
     }
-    streamFileStorageRepository.uploadFile(streamFileStoragePO);
+    fileStorageRepository.uploadFile(fileStoragePO);
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<InputStream> download(StreamFile streamFile) {
-    return Optional.ofNullable(streamFile).flatMap(streamFileConvertor::toStoragePO).filter(
+  public Optional<InputStream> download(File file) {
+    return Optional.ofNullable(file).flatMap(fileConvertor::toStoragePO).filter(
       storagePO -> {
         if (ObjectUtils.isEmpty(storagePO.getStorageAddress())) {
           throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
-        } else if (!streamFileStorageRepository.storageAddressExists(
+        } else if (!fileStorageRepository.storageAddressExists(
           storagePO.getStorageAddress())) {
           throw new MuMuException(ResponseCode.THE_FILE_STORAGE_ADDRESS_DOES_NOT_EXIST);
         }
         if (ObjectUtils.isEmpty(storagePO.getName())) {
           throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
         }
-        if (!streamFileStorageRepository.existed(storagePO)) {
+        if (!fileStorageRepository.existed(storagePO)) {
           throw new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST);
         }
         return true;
-      }).flatMap(streamFileStorageRepository::download);
+      }).flatMap(fileStorageRepository::download);
   }
 
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(StreamFile streamFile) {
-    StreamFileStoragePO streamFileStoragePO = Optional.ofNullable(streamFile)
-      .flatMap(streamFileConvertor::toStoragePO).filter(streamFileStorageRepository::existed)
+  public void removeFile(File file) {
+    FileStoragePO fileStoragePO = Optional.ofNullable(file)
+      .flatMap(fileConvertor::toStoragePO).filter(fileStorageRepository::existed)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
-    streamFileStorageRepository.removeFile(streamFileStoragePO);
+    fileStorageRepository.removeFile(fileStoragePO);
   }
 }

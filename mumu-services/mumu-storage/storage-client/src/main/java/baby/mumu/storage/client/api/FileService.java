@@ -16,9 +16,9 @@
 
 package baby.mumu.storage.client.api;
 
-import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
-import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
+import baby.mumu.storage.client.cmds.FileDownloadCmd;
+import baby.mumu.storage.client.cmds.FileRemoveCmd;
+import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import java.io.InputStream;
 
 /**
@@ -32,22 +32,22 @@ public interface FileService {
   /**
    * 异步文件上传
    *
-   * @param streamFileSyncUploadCmd 流文件异步上传指令
+   * @param fileSyncUploadCmd 流文件异步上传指令
    */
-  void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd);
+  void syncUploadFile(FileSyncUploadCmd fileSyncUploadCmd);
 
   /**
    * 下载
    *
-   * @param streamFileDownloadCmd 流文件下载指令
+   * @param fileDownloadCmd 流文件下载指令
    * @return 文件流
    */
-  InputStream download(StreamFileDownloadCmd streamFileDownloadCmd);
+  InputStream download(FileDownloadCmd fileDownloadCmd);
 
   /**
    * 删除文件
    *
-   * @param streamFileRemoveCmd 流文件删除指令
+   * @param fileRemoveCmd 流文件删除指令
    */
-  void removeFile(StreamFileRemoveCmd streamFileRemoveCmd);
+  void removeFile(FileRemoveCmd fileRemoveCmd);
 }

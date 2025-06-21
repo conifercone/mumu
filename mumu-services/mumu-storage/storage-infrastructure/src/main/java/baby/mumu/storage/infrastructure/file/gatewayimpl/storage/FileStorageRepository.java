@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage;
+package baby.mumu.storage.infrastructure.file.gatewayimpl.storage;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.storage.infrastructure.streamfile.gatewayimpl.storage.po.StreamFileStoragePO;
+import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
@@ -51,18 +51,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConditionalOnBean(MinioClient.class)
-public class StreamFileStorageRepository {
+public class FileStorageRepository {
 
   private final MinioClient minioClient;
 
   @Autowired
-  public StreamFileStorageRepository(MinioClient minioClient) {
+  public FileStorageRepository(MinioClient minioClient) {
     this.minioClient = minioClient;
   }
 
   @API(status = Status.STABLE, since = "1.0.1")
-  public void uploadFile(StreamFileStoragePO streamFileStoragePO) {
-    Optional.ofNullable(streamFileStoragePO).ifPresent(storagePO -> {
+  public void uploadFile(FileStoragePO fileStoragePO) {
+    Optional.ofNullable(fileStoragePO).ifPresent(storagePO -> {
       try (InputStream storagePOContent = storagePO.getContent()) {
         minioClient.putObject(
           PutObjectArgs.builder()
@@ -119,12 +119,12 @@ public class StreamFileStorageRepository {
   /**
    * 获取文件流
    *
-   * @param streamFileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 流式文件存储数据对象
    * @return 二进制流
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<InputStream> download(StreamFileStoragePO streamFileStoragePO) {
-    return Optional.ofNullable(streamFileStoragePO).map(storagePO -> {
+  public Optional<InputStream> download(FileStoragePO fileStoragePO) {
+    return Optional.ofNullable(fileStoragePO).map(storagePO -> {
       try {
         return minioClient.getObject(
           GetObjectArgs.builder()
@@ -143,16 +143,16 @@ public class StreamFileStorageRepository {
   /**
    * 判断文件是否存在
    *
-   * @param streamFileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 流式文件存储数据对象
    * @return 是否存在
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public boolean existed(StreamFileStoragePO streamFileStoragePO) {
+  public boolean existed(FileStoragePO fileStoragePO) {
     boolean exist = true;
     try {
       minioClient.statObject(
-        StatObjectArgs.builder().bucket(streamFileStoragePO.getStorageAddress())
-          .object(streamFileStoragePO.getName()).build());
+        StatObjectArgs.builder().bucket(fileStoragePO.getStorageAddress())
+          .object(fileStoragePO.getName()).build());
     } catch (Exception e) {
       exist = false;
     }
@@ -162,11 +162,11 @@ public class StreamFileStorageRepository {
   /**
    * 删除文件
    *
-   * @param streamFileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 流式文件存储数据对象
    */
   @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(StreamFileStoragePO streamFileStoragePO) {
-    Optional.ofNullable(streamFileStoragePO).ifPresent(storagePO -> {
+  public void removeFile(FileStoragePO fileStoragePO) {
+    Optional.ofNullable(fileStoragePO).ifPresent(storagePO -> {
       try {
         minioClient.removeObject(
           RemoveObjectArgs.builder()
