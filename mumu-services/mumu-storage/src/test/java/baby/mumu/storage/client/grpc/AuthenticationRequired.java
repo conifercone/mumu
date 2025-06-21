@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file;
+package baby.mumu.storage.client.grpc;
 
 import baby.mumu.basis.enums.OAuth2Enum;
 import com.fasterxml.jackson.core.JsonProcessingException;

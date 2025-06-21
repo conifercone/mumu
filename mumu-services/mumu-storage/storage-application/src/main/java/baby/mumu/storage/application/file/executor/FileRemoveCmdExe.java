@@ -14,38 +14,36 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.application.streamfile.executor;
+package baby.mumu.storage.application.file.executor;
 
-import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
+import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
 import baby.mumu.storage.domain.stream.gateway.StreamFileGateway;
 import baby.mumu.storage.infrastructure.streamfile.convertor.StreamFileConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
- * 流式文件异步上传指令执行器
+ * 流式文件删除指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component
-public class StreamFileSyncUploadCmdExe {
+public class FileRemoveCmdExe {
 
   private final StreamFileGateway streamFileGateway;
   private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileSyncUploadCmdExe(StreamFileGateway streamFileGateway,
+  public FileRemoveCmdExe(StreamFileGateway streamFileGateway,
     StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
     this.streamFileConvertor = streamFileConvertor;
   }
 
-  @Async
-  public void execute(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
-    Optional.ofNullable(streamFileSyncUploadCmd).flatMap(streamFileConvertor::toEntity)
-      .ifPresent(streamFileGateway::uploadFile);
+  public void execute(StreamFileRemoveCmd streamFileRemoveCmd) {
+    Optional.ofNullable(streamFileRemoveCmd).flatMap(streamFileConvertor::toEntity)
+      .ifPresent(streamFileGateway::removeFile);
   }
 }

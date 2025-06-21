@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file.configuration;
+package baby.mumu.storage.configuration;
 
 import baby.mumu.basis.enums.FileStorageMediaTypeEnum;
 import lombok.Data;
@@ -22,14 +22,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * 文件存储配置类
+ * 存储配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-@ConfigurationProperties("mumu.file")
-public class FileProperties {
+@ConfigurationProperties("mumu.storage")
+public class StorageProperties {
 
   /**
    * minio配置属性

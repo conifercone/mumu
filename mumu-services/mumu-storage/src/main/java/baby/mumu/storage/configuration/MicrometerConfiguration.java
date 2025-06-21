@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file.configuration;
+package baby.mumu.storage.configuration;
 
 import baby.mumu.basis.spring.ApplicationProperties;
 import io.micrometer.core.instrument.MeterRegistry;

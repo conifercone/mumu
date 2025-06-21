@@ -27,7 +27,7 @@ import java.io.InputStream;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface StreamFileService {
+public interface FileService {
 
   /**
    * 异步文件上传

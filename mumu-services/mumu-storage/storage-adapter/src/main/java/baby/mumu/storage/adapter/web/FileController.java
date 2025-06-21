@@ -18,7 +18,7 @@ package baby.mumu.storage.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
-import baby.mumu.storage.client.api.StreamFileService;
+import baby.mumu.storage.client.api.FileService;
 import baby.mumu.storage.client.cmds.StreamFileDownloadCmd;
 import baby.mumu.storage.client.cmds.StreamFileRemoveCmd;
 import baby.mumu.storage.client.cmds.StreamFileSyncUploadCmd;
@@ -47,22 +47,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 流式文件管理
+ * 文件管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @RestController
 @Validated
-@RequestMapping("/stream")
+@RequestMapping("/file")
 @Tag(name = "流式文件管理")
-public class StreamFileController {
+public class FileController {
 
-  private final StreamFileService streamFileService;
+  private final FileService fileService;
 
   @Autowired
-  public StreamFileController(StreamFileService streamFileService) {
-    this.streamFileService = streamFileService;
+  public FileController(FileService fileService) {
+    this.fileService = fileService;
   }
 
   @Operation(summary = "异步文件上传")
@@ -75,7 +75,7 @@ public class StreamFileController {
     fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
     fileUploadCmd.setOriginName(file.getOriginalFilename());
     fileUploadCmd.setSize(file.getSize());
-    streamFileService.syncUploadFile(fileUploadCmd);
+    fileService.syncUploadFile(fileUploadCmd);
   }
 
   @Operation(summary = "文件下载")
@@ -89,7 +89,7 @@ public class StreamFileController {
     FileDownloadUtils.download(response, ObjectUtils.isEmpty(
         streamFileDownloadCmd.getRename())
         ? streamFileDownloadCmd.getName()
-        : streamFileDownloadCmd.getRename(), streamFileService.download(streamFileDownloadCmd),
+        : streamFileDownloadCmd.getRename(), fileService.download(streamFileDownloadCmd),
       "application/force-download");
   }
 
@@ -100,7 +100,7 @@ public class StreamFileController {
   @API(status = Status.STABLE, since = "1.0.1")
   public String getStringContent(@ModelAttribute StreamFileDownloadCmd streamFileDownloadCmd)
     throws IOException {
-    return IOUtils.toString(streamFileService.download(streamFileDownloadCmd),
+    return IOUtils.toString(fileService.download(streamFileDownloadCmd),
       StandardCharsets.UTF_8);
   }
 
@@ -110,6 +110,6 @@ public class StreamFileController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(@RequestBody StreamFileRemoveCmd streamFileRemoveCmd) {
-    streamFileService.removeFile(streamFileRemoveCmd);
+    fileService.removeFile(streamFileRemoveCmd);
   }
 }

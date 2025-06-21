@@ -7,7 +7,7 @@
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{file-service-url}}/stream/sync/upload
+POST {{file-service-url}}/file/sync/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -48,7 +48,7 @@ Content-Type: application/json
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{file-service-url}}/stream/download?storageAddress=mail&
+GET {{file-service-url}}/file/download?storageAddress=mail&
     name=template/zh/verification_code.html&rename=verification_code.html
 Content-Type: application/json
 X-Request-ID: {{requestId}}
@@ -73,7 +73,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{file-service-url}}/stream/remove
+DELETE {{file-service-url}}/file/remove
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -102,7 +102,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{file-service-url}}/stream/stringContent?storageAddress=mail&
+GET {{file-service-url}}/file/stringContent?storageAddress=mail&
     name=template/zh/verification_code.html
 Content-Type: application/json
 X-Request-ID: {{requestId}}

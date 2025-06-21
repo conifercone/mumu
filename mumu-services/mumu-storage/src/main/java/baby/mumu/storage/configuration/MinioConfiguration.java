@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file.configuration;
+package baby.mumu.storage.configuration;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +30,23 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.1
  */
 @Configuration
-@EnableConfigurationProperties(FileProperties.class)
-@ConditionalOnProperty(prefix = "mumu.file", value = "storage-media-type", havingValue = "MINIO", matchIfMissing = true)
+@EnableConfigurationProperties(StorageProperties.class)
+@ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO", matchIfMissing = true)
 public class MinioConfiguration {
 
-  private final FileProperties fileProperties;
+  private final StorageProperties storageProperties;
 
   @Autowired
-  public MinioConfiguration(FileProperties fileProperties) {
-    this.fileProperties = fileProperties;
+  public MinioConfiguration(StorageProperties storageProperties) {
+    this.storageProperties = storageProperties;
   }
 
   @Bean
   public MinioClient minioClient() {
     return MinioClient.builder()
-      .endpoint(fileProperties.getMinio().getEndpoint())
-      .credentials(fileProperties.getMinio().getAccessKey(),
-        fileProperties.getMinio().getSecretKey())
+      .endpoint(storageProperties.getMinio().getEndpoint())
+      .credentials(storageProperties.getMinio().getAccessKey(),
+        storageProperties.getMinio().getSecretKey())
       .build();
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file;
+package baby.mumu.storage;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
@@ -26,7 +26,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * 文件服务
+ * 存储服务
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
@@ -35,16 +35,16 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableConfigurationProperties
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
-public class MuMuFileApplication {
+public class MuMuStorageApplication {
 
   public static void main(String[] args) {
     SpringApplication springApplication = new SpringApplication(
-      MuMuFileApplication.class);
+      MuMuStorageApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      MuMuFileApplicationMetamodel.projectName);
+      MuMuStorageApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      MuMuFileApplicationMetamodel.formattedProjectVersion);
+      MuMuStorageApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

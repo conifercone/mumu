@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.application.streamfile.executor;
+package baby.mumu.storage.application.file.executor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
@@ -34,13 +34,13 @@ import org.springframework.util.Assert;
  * @since 1.0.1
  */
 @Component
-public class StreamFileDownloadCmdExe {
+public class FileDownloadCmdExe {
 
   private final StreamFileGateway streamFileGateway;
   private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileDownloadCmdExe(StreamFileGateway streamFileGateway,
+  public FileDownloadCmdExe(StreamFileGateway streamFileGateway,
     StreamFileConvertor streamFileConvertor) {
     this.streamFileGateway = streamFileGateway;
     this.streamFileConvertor = streamFileConvertor;

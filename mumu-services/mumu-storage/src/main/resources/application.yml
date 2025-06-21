@@ -19,7 +19,7 @@ server:
   shutdown: graceful
 spring:
   application:
-    name: file
+    name: storage
   config:
     import: 'optional:consul:'
   cloud:

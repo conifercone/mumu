@@ -24,7 +24,7 @@ import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
 import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
 import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
-import baby.mumu.storage.client.api.StreamFileGrpcService;
+import baby.mumu.storage.client.api.FileGrpcService;
 import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
 import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
 import io.grpc.CallCredentials;
@@ -50,16 +50,16 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
 
   private final ThymeleafTemplateMailRepository thymeleafTemplateMailRepository;
   private final JavaMailSender javaMailSender;
-  private final StreamFileGrpcService streamFileGrpcService;
+  private final FileGrpcService fileGrpcService;
   private final TemplateMailConvertor templateMailConvertor;
 
   @Autowired
   public TemplateMailGatewayImpl(ThymeleafTemplateMailRepository thymeleafTemplateMailRepository,
-    JavaMailSender javaMailSender, StreamFileGrpcService streamFileGrpcService,
+    JavaMailSender javaMailSender, FileGrpcService fileGrpcService,
     TemplateMailConvertor templateMailConvertor) {
     this.thymeleafTemplateMailRepository = thymeleafTemplateMailRepository;
     this.javaMailSender = javaMailSender;
-    this.streamFileGrpcService = streamFileGrpcService;
+    this.fileGrpcService = fileGrpcService;
     this.templateMailConvertor = templateMailConvertor;
   }
 
@@ -74,7 +74,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         () -> SecurityContextUtils.getTokenValue().orElseThrow(
           () -> new MuMuException(ResponseCode.UNAUTHORIZED)));
       try {
-        StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = streamFileGrpcService.download(
+        StreamFileDownloadGrpcResult streamFileDownloadGrpcResult = fileGrpcService.download(
           streamFileDownloadGrpcCmd,
           callCredentials);
         Optional<TemplateMailThymeleafPO> thymeleafDo = templateMailConvertor.toThymeleafPO(

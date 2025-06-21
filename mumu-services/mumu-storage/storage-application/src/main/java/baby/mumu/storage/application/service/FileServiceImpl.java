@@ -21,10 +21,10 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
-import baby.mumu.storage.application.streamfile.executor.StreamFileDownloadCmdExe;
-import baby.mumu.storage.application.streamfile.executor.StreamFileRemoveCmdExe;
-import baby.mumu.storage.application.streamfile.executor.StreamFileSyncUploadCmdExe;
-import baby.mumu.storage.client.api.StreamFileService;
+import baby.mumu.storage.application.file.executor.FileDownloadCmdExe;
+import baby.mumu.storage.application.file.executor.FileRemoveCmdExe;
+import baby.mumu.storage.application.file.executor.FileSyncUploadCmdExe;
+import baby.mumu.storage.client.api.FileService;
 import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcCmd;
 import baby.mumu.storage.client.api.grpc.StreamFileDownloadGrpcResult;
 import baby.mumu.storage.client.api.grpc.StreamFileRemoveGrpcCmd;
@@ -53,37 +53,37 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
-@Observed(name = "StreamFileServiceImpl")
-public class StreamFileServiceImpl extends StreamFileServiceImplBase implements StreamFileService {
+@Observed(name = "FileServiceImpl")
+public class FileServiceImpl extends StreamFileServiceImplBase implements FileService {
 
-  private final StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe;
-  private final StreamFileDownloadCmdExe streamFileDownloadCmdExe;
-  private final StreamFileRemoveCmdExe streamFileRemoveCmdExe;
+  private final FileSyncUploadCmdExe fileSyncUploadCmdExe;
+  private final FileDownloadCmdExe fileDownloadCmdExe;
+  private final FileRemoveCmdExe fileRemoveCmdExe;
   private final StreamFileConvertor streamFileConvertor;
 
   @Autowired
-  public StreamFileServiceImpl(StreamFileSyncUploadCmdExe streamFileSyncUploadCmdExe,
-    StreamFileDownloadCmdExe streamFileDownloadCmdExe,
-    StreamFileRemoveCmdExe streamFileRemoveCmdExe, StreamFileConvertor streamFileConvertor) {
-    this.streamFileSyncUploadCmdExe = streamFileSyncUploadCmdExe;
-    this.streamFileDownloadCmdExe = streamFileDownloadCmdExe;
-    this.streamFileRemoveCmdExe = streamFileRemoveCmdExe;
+  public FileServiceImpl(FileSyncUploadCmdExe fileSyncUploadCmdExe,
+    FileDownloadCmdExe fileDownloadCmdExe,
+    FileRemoveCmdExe fileRemoveCmdExe, StreamFileConvertor streamFileConvertor) {
+    this.fileSyncUploadCmdExe = fileSyncUploadCmdExe;
+    this.fileDownloadCmdExe = fileDownloadCmdExe;
+    this.fileRemoveCmdExe = fileRemoveCmdExe;
     this.streamFileConvertor = streamFileConvertor;
   }
 
   @Override
   public void syncUploadFile(StreamFileSyncUploadCmd streamFileSyncUploadCmd) {
-    streamFileSyncUploadCmdExe.execute(streamFileSyncUploadCmd);
+    fileSyncUploadCmdExe.execute(streamFileSyncUploadCmd);
   }
 
   @Override
   public InputStream download(StreamFileDownloadCmd streamFileDownloadCmd) {
-    return streamFileDownloadCmdExe.execute(streamFileDownloadCmd);
+    return fileDownloadCmdExe.execute(streamFileDownloadCmd);
   }
 
   @Override
   public void removeFile(StreamFileRemoveCmd streamFileRemoveCmd) {
-    streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
+    fileRemoveCmdExe.execute(streamFileRemoveCmd);
   }
 
   @Override
@@ -94,7 +94,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
     streamFileDownloadCmd.setName(request.getName());
     streamFileDownloadCmd.setRename(request.getRename());
     streamFileDownloadCmd.setStorageAddress(request.getStorageAddress());
-    try (InputStream inputStream = streamFileDownloadCmdExe.execute(streamFileDownloadCmd)) {
+    try (InputStream inputStream = fileDownloadCmdExe.execute(streamFileDownloadCmd)) {
       ByteString byteString = ByteString.copyFrom(inputStream.readAllBytes());
       BytesValue bytesValue = BytesValue.newBuilder().setValue(byteString).build();
       responseObserver.onNext(
@@ -110,7 +110,7 @@ public class StreamFileServiceImpl extends StreamFileServiceImplBase implements 
   public void removeFile(StreamFileRemoveGrpcCmd request,
     @NotNull StreamObserver<Empty> responseObserver) {
     streamFileConvertor.toStreamFileRemoveCmd(request).ifPresentOrElse((streamFileRemoveCmd) -> {
-      streamFileRemoveCmdExe.execute(streamFileRemoveCmd);
+      fileRemoveCmdExe.execute(streamFileRemoveCmd);
       responseObserver.onNext(Empty.newBuilder().build());
       responseObserver.onCompleted();
     }, () -> {

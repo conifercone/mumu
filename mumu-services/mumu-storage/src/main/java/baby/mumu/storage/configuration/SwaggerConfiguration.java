@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.file.configuration;
+package baby.mumu.storage.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -32,10 +32,10 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
   @Bean
-  public OpenAPI fileOpenAPI() {
+  public OpenAPI storageOpenAPI() {
     return new OpenAPI()
-      .info(new Info().title("mumu file")
-        .description("mumu file API document")
+      .info(new Info().title("mumu storage")
+        .description("mumu storage API document")
         .version("v1")
         .license(new License().name("Apache 2.0")
           .url("https://www.apache.org/licenses/LICENSE-2.0")));
