@@ -46,7 +46,6 @@ image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contrib
 
 - <<projects, 專案>>
 - <<module-introduction, 模組介紹>>
-- <<build, 建置>>
 - <<dependency-statement, 相依聲明>>
 - <<license, 授權>>
 - <<contributors, 貢獻者>>
@@ -92,27 +91,6 @@ mumu
 ├── mumu-extension
 └── mumu-processor
 ----
-
-[#build]
-== 建置
-
-[#infrastructure]
-=== 基礎設施
-
-[cols="1,1",options="header"]
-|===
-| 名稱          | 版本
-| apisix        | 3.8.0
-| elasticsearch | 8.12.0
-| kafka         | 3.4
-| postgresql    | 16.8
-| redis         | latest
-| zookeeper     | 3.8
-| consul        | 1.15.4
-| minio         | RELEASE.2024-06-13T22-53-53Z
-| zipkin        | 3.19.0
-| mongodb       | 8.0.1
-|===
 
 [#dependency-statement]
 == 相依聲明
