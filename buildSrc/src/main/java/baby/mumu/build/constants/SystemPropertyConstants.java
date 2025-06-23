@@ -16,18 +16,18 @@
 
 package baby.mumu.build.constants;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 系统属性常量类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
+@UtilityClass
 public final class SystemPropertyConstants {
 
-  private SystemPropertyConstants() {
-  }
+  public final String OS_NAME = "os.name";
 
-  public static final String OS_NAME = "os.name";
-
-  public static final String JAVA_VERSION = "java.version";
+  public final String JAVA_VERSION = "java.version";
 }

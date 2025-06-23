@@ -16,27 +16,27 @@
 
 package baby.mumu.build.constants;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 项目信息常量类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
-public final class ProjectInfoConstants {
+@UtilityClass
+public class ProjectInfoConstants {
 
-  private ProjectInfoConstants() {
-  }
+  public final String DESCRIPTION = "The Delightfully Clean & Ready-to-Go Management System!";
 
-  public static final String DESCRIPTION = "The Delightfully Clean & Ready-to-Go Management System!";
+  public final String VERSION = "2.11.0-dev";
 
-  public static final String VERSION = "2.11.0-dev";
+  public final String GROUP = "baby.mumu";
 
-  public static final String GROUP = "baby.mumu";
+  public final int JAVA_MAJOR_VERSION = 23;
 
-  public static final int JAVA_MAJOR_VERSION = 23;
+  public final String CHECKSTYLE_TOOL_VERSION = "10.20.0";
 
-  public static final String CHECKSTYLE_TOOL_VERSION = "10.20.0";
-
-  public static final String PMD_TOOL_VERSION = "7.0.0";
+  public final String PMD_TOOL_VERSION = "7.0.0";
 
 }

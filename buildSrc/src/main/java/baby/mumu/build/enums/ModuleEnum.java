@@ -17,12 +17,15 @@
 package baby.mumu.build.enums;
 
 
+import lombok.Getter;
+
 /**
  * 组件枚举
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
+@Getter
 public enum ModuleEnum {
 
   MUMU_BASIS("mumu-basis", "Basic module"),
@@ -53,13 +56,5 @@ public enum ModuleEnum {
   ModuleEnum(String moduleName, String description) {
     this.description = description;
     this.moduleName = moduleName;
-  }
-
-  public String getModuleName() {
-    return moduleName;
-  }
-
-  public String getDescription() {
-    return description;
   }
 }

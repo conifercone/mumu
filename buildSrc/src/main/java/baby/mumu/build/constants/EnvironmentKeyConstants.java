@@ -16,18 +16,20 @@
 
 package baby.mumu.build.constants;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 环境变量键名常量类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
-public final class EnvironmentKeyConstants {
+@UtilityClass
+public class EnvironmentKeyConstants {
 
-  private EnvironmentKeyConstants() {
-  }
+  public final String MUMU_SIGNING_KEY_ID = "MUMU_SIGNING_KEY_ID";
 
-  public static final String MUMU_SIGNING_KEY_ID = "MUMU_SIGNING_KEY_ID";
-  public static final String MUMU_SIGNING_KEY = "MUMU_SIGNING_KEY";
-  public static final String MUMU_SIGNING_PASSWORD = "MUMU_SIGNING_PASSWORD";
+  public final String MUMU_SIGNING_KEY = "MUMU_SIGNING_KEY";
+
+  public final String MUMU_SIGNING_PASSWORD = "MUMU_SIGNING_PASSWORD";
 }
