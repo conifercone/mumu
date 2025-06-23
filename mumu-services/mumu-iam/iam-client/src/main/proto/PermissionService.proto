@@ -3,7 +3,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
 option java_multiple_files = true;
-option java_package = "baby.mumu.authentication.client.api.grpc";
+option java_package = "baby.mumu.iam.client.api.grpc";
 option java_outer_classname = "PermissionServiceProto";
 
 service PermissionService {

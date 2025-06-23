@@ -19,7 +19,7 @@ server:
   shutdown: graceful
 spring:
   application:
-    name: authentication
+    name: iam
   config:
     import: 'optional:consul:'
   cloud:
