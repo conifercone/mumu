@@ -21,6 +21,8 @@ plugins {
     alias(libs.plugins.pmd)
 }
 
+description = ProjectInfoConstants.DESCRIPTION
+
 val rootDirectory = project.rootDir
 
 // 安装git hook

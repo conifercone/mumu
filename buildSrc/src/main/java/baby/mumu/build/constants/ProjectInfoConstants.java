@@ -27,6 +27,8 @@ public final class ProjectInfoConstants {
   private ProjectInfoConstants() {
   }
 
+  public static final String DESCRIPTION = "The Delightfully Clean & Ready-to-Go Management System!";
+
   public static final String VERSION = "2.11.0-dev";
 
   public static final String GROUP = "baby.mumu";
