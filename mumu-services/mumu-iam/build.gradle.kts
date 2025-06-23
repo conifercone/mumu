@@ -1,4 +1,6 @@
-description = "Identity & Access Management Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.IAM.description
 
 plugins {
     alias(libs.plugins.flyway)

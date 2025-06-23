@@ -1,4 +1,6 @@
-description = "Unique Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.UNIQUE.description
 
 dependencies {
     implementation(project(":mumu-services:mumu-unique:unique-adapter"))

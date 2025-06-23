@@ -1,3 +1,5 @@
+import baby.mumu.build.constants.EnvironmentKeyConstants
+import baby.mumu.build.constants.ProjectInfoConstants
 import java.nio.charset.StandardCharsets
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -52,14 +54,14 @@ fun endsWithAny(input: String, suffixes: List<String>): Boolean {
     return suffixes.any { input.endsWith(it, ignoreCase = true) }
 }
 
-val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
-val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
-val pmdToolVersion = findProperty("pmd.tool.version")!!.toString()
+val javaMajorVersion = ProjectInfoConstants.JAVA_MAJOR_VERSION
+val checkstyleToolVersion = ProjectInfoConstants.CHECKSTYLE_TOOL_VERSION
+val pmdToolVersion = ProjectInfoConstants.PMD_TOOL_VERSION
 
 allprojects {
 
-    group = findProperty("group")!! as String
-    val versionString = findProperty("version")!! as String
+    group = ProjectInfoConstants.GROUP
+    val versionString = ProjectInfoConstants.VERSION
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (endsWithAny(
@@ -130,9 +132,9 @@ subprojects {
     }
 
     signing {
-        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
-        val mumuSigningKey = "MUMU_SIGNING_KEY"
-        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
+        val mumuSigningKeyId = EnvironmentKeyConstants.MUMU_SIGNING_KEY_ID
+        val mumuSigningKey = EnvironmentKeyConstants.MUMU_SIGNING_KEY
+        val mumuSigningPassword = EnvironmentKeyConstants.MUMU_SIGNING_PASSWORD
         if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
             !System.getenv(mumuSigningKey).isNullOrBlank() &&
             !System.getenv(mumuSigningPassword).isNullOrBlank()

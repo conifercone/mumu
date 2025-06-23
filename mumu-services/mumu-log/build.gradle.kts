@@ -1,4 +1,6 @@
-description = "Log Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.LOG.description
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))

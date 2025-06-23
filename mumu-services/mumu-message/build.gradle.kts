@@ -1,4 +1,6 @@
-description = "Message Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.MESSAGE.description
 
 plugins {
     alias(libs.plugins.flyway)

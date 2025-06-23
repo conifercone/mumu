@@ -1,4 +1,6 @@
-description = "Storage Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.STORAGE.description
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))

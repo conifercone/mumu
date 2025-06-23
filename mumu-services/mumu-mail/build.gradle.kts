@@ -1,4 +1,6 @@
-description = "Mail Service"
+import baby.mumu.build.enums.ServiceEnum
+
+description = ServiceEnum.MAIL.description
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
