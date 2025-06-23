@@ -15,7 +15,7 @@
 #
 
 server:
-  port: ${port:0}
+  port: ${port:7803}
   shutdown: graceful
 spring:
   config:
