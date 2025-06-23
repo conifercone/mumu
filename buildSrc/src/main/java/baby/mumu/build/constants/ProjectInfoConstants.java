@@ -38,5 +38,4 @@ public class ProjectInfoConstants {
   public final String CHECKSTYLE_TOOL_VERSION = "10.20.0";
 
   public final String PMD_TOOL_VERSION = "7.0.0";
-
 }
