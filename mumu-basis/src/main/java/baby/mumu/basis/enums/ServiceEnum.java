@@ -27,31 +27,23 @@ import lombok.Getter;
 @Getter
 public enum ServiceEnum {
 
-  /**
-   * Identity & Access Management Service
-   */
-  IAM("iam", "Identity & Access Management Service"),
+  IAM("iam"),
 
-  /**
-   * Log Service
-   */
-  LOG("log", "Log Management Service"),
+  LOG("log"),
 
-  MAIL("mail", "Mail Management Service"),
+  MAIL("mail"),
 
-  MESSAGE("message", "Message Management Service"),
+  MESSAGE("message"),
 
-  SMS("sms", "SMS Management Service"),
+  SMS("sms"),
 
-  STORAGE("storage", "Storage Management Service"),
+  STORAGE("storage"),
 
-  UNIQUE("unique", "Unique Management Service");
+  UNIQUE("unique");
 
   private final String name;
-  private final String description;
 
-  ServiceEnum(String name, String description) {
+  ServiceEnum(String name) {
     this.name = name;
-    this.description = description;
   }
 }
