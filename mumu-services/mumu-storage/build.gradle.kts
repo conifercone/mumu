@@ -1,7 +1,7 @@
 description = "File service"
 
 dependencies {
-    implementation(project(":mumu-services:mumu-authentication:authentication-client"))
+    implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-extension"))
     implementation(project(":mumu-services:mumu-storage:storage-infrastructure"))
     implementation(project(":mumu-services:mumu-storage:storage-adapter"))

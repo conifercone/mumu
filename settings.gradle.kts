@@ -12,22 +12,22 @@ buildCache {
 }
 
 rootProject.name = "mumu"
-include("mumu-services:mumu-authentication")
-include("mumu-services:mumu-authentication:authentication-adapter")
-findProject(":mumu-services:mumu-authentication:authentication-adapter")?.name =
-    "authentication-adapter"
-include("mumu-services:mumu-authentication:authentication-application")
-findProject(":mumu-services:mumu-authentication:authentication-application")?.name =
-    "authentication-application"
-include("mumu-services:mumu-authentication:authentication-domain")
-findProject(":mumu-services:mumu-authentication:authentication-domain")?.name =
-    "authentication-domain"
-include("mumu-services:mumu-authentication:authentication-infrastructure")
-findProject(":mumu-services:mumu-authentication:authentication-infrastructure")?.name =
-    "authentication-infrastructure"
-include("mumu-services:mumu-authentication:authentication-client")
-findProject(":mumu-services:mumu-authentication:authentication-client")?.name =
-    "authentication-client"
+include("mumu-services:mumu-iam")
+include("mumu-services:mumu-iam:iam-adapter")
+findProject(":mumu-services:mumu-iam:iam-adapter")?.name =
+    "iam-adapter"
+include("mumu-services:mumu-iam:iam-application")
+findProject(":mumu-services:mumu-iam:iam-application")?.name =
+    "iam-application"
+include("mumu-services:mumu-iam:iam-domain")
+findProject(":mumu-services:mumu-iam:iam-domain")?.name =
+    "iam-domain"
+include("mumu-services:mumu-iam:iam-infrastructure")
+findProject(":mumu-services:mumu-iam:iam-infrastructure")?.name =
+    "iam-infrastructure"
+include("mumu-services:mumu-iam:iam-client")
+findProject(":mumu-services:mumu-iam:iam-client")?.name =
+    "iam-client"
 include("mumu-extension")
 include("mumu-services:mumu-log")
 include("mumu-services:mumu-log:log-adapter")
