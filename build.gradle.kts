@@ -1,5 +1,7 @@
 import baby.mumu.build.constants.EnvironmentKeyConstants
 import baby.mumu.build.constants.ProjectInfoConstants
+import baby.mumu.build.constants.SystemPropertyConstants
+import baby.mumu.build.enums.ModuleEnum
 import java.nio.charset.StandardCharsets
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -168,12 +170,12 @@ subprojects {
     val projectVersionStr = project.version.toString()
     val projectNameStr = project.name
     val gradleVersionStr = gradle.gradleVersion
-    val osName = System.getProperty("os.name")
-    val javaVersion = System.getProperty("java.version")
+    val osName = System.getProperty(SystemPropertyConstants.OS_NAME)
+    val javaVersion = System.getProperty(SystemPropertyConstants.JAVA_VERSION)
 
     val hasProcessorProvider = providers.provider {
         configurations["annotationProcessor"].dependencies
-            .any { it.name.contains("mumu-processor") }
+            .any { it.name.contains(ModuleEnum.MUMU_PROCESSOR.moduleName) }
     }
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
@@ -222,8 +224,8 @@ subprojects {
                 "Implementation-Version" to archiveVersion.get(),
                 "Application-Version" to archiveVersion.get(),
                 "Built-Gradle" to gradle.gradleVersion,
-                "Build-OS" to System.getProperty("os.name"),
-                "Build-Jdk" to System.getProperty("java.version"),
+                "Build-OS" to System.getProperty(SystemPropertyConstants.OS_NAME),
+                "Build-Jdk" to System.getProperty(SystemPropertyConstants.JAVA_VERSION),
                 "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
             )

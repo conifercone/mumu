@@ -25,32 +25,38 @@ package baby.mumu.build.enums;
  */
 public enum ModuleEnum {
 
-  MUMU_BASIS("Basic module"),
+  MUMU_BASIS("mumu-basis", "Basic module"),
 
-  MUMU_BENCHMARK("Benchmark module"),
+  MUMU_BENCHMARK("mumu-benchmark", "Benchmark module"),
 
-  MUMU_EXTENSION("Function expansion module"),
+  MUMU_EXTENSION("mumu-extension", "Function expansion module"),
 
-  MUMU_PROCESSOR("Annotation processor"),
+  MUMU_PROCESSOR("mumu-processor", "Annotation processor"),
 
-  MUMU_IAM("Identity & Access Management Service"),
+  MUMU_IAM("mumu-iam", "Identity & Access Management Service"),
 
-  MUMU_LOG("Log Management Service"),
+  MUMU_LOG("mumu-log", "Log Management Service"),
 
-  MUMU_MAIL("Mail Management Service"),
+  MUMU_MAIL("mumu-mail", "Mail Management Service"),
 
-  MUMU_MESSAGE("Message Management Service"),
+  MUMU_MESSAGE("mumu-message", "Message Management Service"),
 
-  MUMU_SMS("SMS Management Service"),
+  MUMU_SMS("mumu-sms", "SMS Management Service"),
 
-  MUMU_STORAGE("Storage Management Service"),
+  MUMU_STORAGE("mumu-storage", "Storage Management Service"),
 
-  MUMU_UNIQUE("Unique Management Service");
+  MUMU_UNIQUE("mumu-unique", "Unique Management Service");
 
   private final String description;
+  private final String moduleName;
 
-  ModuleEnum(String description) {
+  ModuleEnum(String moduleName, String description) {
     this.description = description;
+    this.moduleName = moduleName;
+  }
+
+  public String getModuleName() {
+    return moduleName;
   }
 
   public String getDescription() {
