@@ -81,7 +81,7 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(1, TimeUnit.HOURS)
+            cacheChangingModulesFor(0, TimeUnit.MINUTES)
             cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
 
