@@ -1,4 +1,4 @@
-description = "File service"
+description = "Storage Service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))

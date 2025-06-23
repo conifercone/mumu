@@ -1,4 +1,4 @@
-description = "Mail service"
+description = "Mail Service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))

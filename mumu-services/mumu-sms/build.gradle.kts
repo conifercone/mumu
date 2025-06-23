@@ -1,4 +1,4 @@
-description = "SMS service"
+description = "SMS Service"
 
 dependencies {
     implementation(project(":mumu-extension"))

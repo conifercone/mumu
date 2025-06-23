@@ -1,4 +1,4 @@
-description = "Log service"
+description = "Log Service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))

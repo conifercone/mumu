@@ -1,4 +1,4 @@
-description = "Unique service"
+description = "Unique Service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-unique:unique-adapter"))
