@@ -137,19 +137,31 @@ subprojects {
 
     signing {
         val mumuSigningKeyId = EnvironmentKeyConstants.MUMU_SIGNING_KEY_ID
-        val mumuSigningKey = EnvironmentKeyConstants.MUMU_SIGNING_KEY
+        val mumuSigningKeyFilePath = EnvironmentKeyConstants.MUMU_SIGNING_KEY_FILE_PATH
+        val mumuSigningKeyContent = EnvironmentKeyConstants.MUMU_SIGNING_KEY_CONTENT
         val mumuSigningPassword = EnvironmentKeyConstants.MUMU_SIGNING_PASSWORD
-        if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
-            !System.getenv(mumuSigningKey).isNullOrBlank() &&
-            !System.getenv(mumuSigningPassword).isNullOrBlank()
-        ) {
-            useInMemoryPgpKeys(
-                System.getenv(mumuSigningKeyId) as String,
-                file(System.getenv(mumuSigningKey) as String).readText(),
-                System.getenv(mumuSigningPassword) as String
-            )
-            sign(tasks["jar"])
+
+        val keyId = System.getenv(mumuSigningKeyId)
+        val keyFile = System.getenv(mumuSigningKeyFilePath)
+        val password = System.getenv(mumuSigningPassword)
+        val keyContent = System.getenv(mumuSigningKeyContent)
+
+        if (keyId.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningKeyId' is not set.")
         }
+        if (keyFile.isNullOrBlank() && keyContent.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningKeyFilePath' or '$mumuSigningKeyContent' is not set.")
+        }
+        if (password.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningPassword' is not set.")
+        }
+
+        useInMemoryPgpKeys(
+            keyId,
+            if (keyContent.isNullOrBlank()) file(keyFile).readText() else keyContent,
+            password
+        )
+        sign(tasks["jar"])
     }
 
     tasks.register<Jar>("sourceJar") {

@@ -29,7 +29,9 @@ public class EnvironmentKeyConstants {
 
   public final String MUMU_SIGNING_KEY_ID = "MUMU_SIGNING_KEY_ID";
 
-  public final String MUMU_SIGNING_KEY = "MUMU_SIGNING_KEY";
+  public final String MUMU_SIGNING_KEY_FILE_PATH = "MUMU_SIGNING_KEY_FILE_PATH";
+
+  public final String MUMU_SIGNING_KEY_CONTENT = "MUMU_SIGNING_KEY_CONTENT";
 
   public final String MUMU_SIGNING_PASSWORD = "MUMU_SIGNING_PASSWORD";
 }
