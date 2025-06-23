@@ -89,11 +89,11 @@ Let’s make managing a joyride!
 mumu
 ├── mumu-services
 │   ├── mumu-iam
-│   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail
 │   ├── mumu-message
 │   ├── mumu-sms
+│   ├── mumu-storage
 │   └── mumu-unique
 ├── mumu-basis
 ├── mumu-benchmark
