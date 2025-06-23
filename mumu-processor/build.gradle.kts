@@ -1,4 +1,6 @@
-description = "Annotation processor"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_PROCESSOR.description
 
 dependencies {
     implementation(project(":mumu-basis"))

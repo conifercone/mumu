@@ -1,6 +1,6 @@
-import baby.mumu.build.enums.ServiceEnum
+import baby.mumu.build.enums.ModuleEnum
 
-description = ServiceEnum.MESSAGE.description
+description = ModuleEnum.MUMU_MESSAGE.description
 
 plugins {
     alias(libs.plugins.flyway)

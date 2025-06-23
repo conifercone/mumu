@@ -18,30 +18,38 @@ package baby.mumu.build.enums;
 
 
 /**
- * 服务枚举
+ * 组件枚举
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
-public enum ServiceEnum {
+public enum ModuleEnum {
 
-  IAM("Identity & Access Management Service"),
+  MUMU_BASIS("Basic module"),
 
-  LOG("Log Management Service"),
+  MUMU_BENCHMARK("Benchmark module"),
 
-  MAIL("Mail Management Service"),
+  MUMU_EXTENSION("Function expansion module"),
 
-  MESSAGE("Message Management Service"),
+  MUMU_PROCESSOR("Annotation processor"),
 
-  SMS("SMS Management Service"),
+  MUMU_IAM("Identity & Access Management Service"),
 
-  STORAGE("Storage Management Service"),
+  MUMU_LOG("Log Management Service"),
 
-  UNIQUE("Unique Management Service");
+  MUMU_MAIL("Mail Management Service"),
+
+  MUMU_MESSAGE("Message Management Service"),
+
+  MUMU_SMS("SMS Management Service"),
+
+  MUMU_STORAGE("Storage Management Service"),
+
+  MUMU_UNIQUE("Unique Management Service");
 
   private final String description;
 
-  ServiceEnum(String description) {
+  ModuleEnum(String description) {
     this.description = description;
   }
 
