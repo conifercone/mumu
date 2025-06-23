@@ -32,7 +32,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class StorageGrpcService {
 
-  public static final String GRPC_FILE = "file";
+  public static final String GRPC_STORAGE = "storage";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -48,7 +48,7 @@ class StorageGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + StorageGrpcService.GRPC_FILE)
+            "discovery-client://" + StorageGrpcService.GRPC_STORAGE)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,7 +57,7 @@ class StorageGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(StorageGrpcService.GRPC_FILE).isEmpty();
+    return !discoveryClient.getInstances(StorageGrpcService.GRPC_STORAGE).isEmpty();
   }
 
 }

@@ -39,7 +39,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class TokenGrpcService extends AuthenticationGrpcService implements DisposableBean {
+public class TokenGrpcService extends IAMGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 

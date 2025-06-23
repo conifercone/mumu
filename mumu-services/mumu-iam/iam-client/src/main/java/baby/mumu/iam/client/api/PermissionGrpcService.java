@@ -44,7 +44,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class PermissionGrpcService extends AuthenticationGrpcService implements
+public class PermissionGrpcService extends IAMGrpcService implements
   DisposableBean {
 
   private ManagedChannel channel;

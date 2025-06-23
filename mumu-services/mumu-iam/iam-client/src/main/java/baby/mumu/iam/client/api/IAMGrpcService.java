@@ -30,14 +30,14 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-class AuthenticationGrpcService {
+class IAMGrpcService {
 
-  public static final String GRPC_AUTHENTICATION = "authentication";
+  public static final String GRPC_IAM = "iam";
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
-  public AuthenticationGrpcService(DiscoveryClient discoveryClient,
+  public IAMGrpcService(DiscoveryClient discoveryClient,
     @NotNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
     this.discoveryClient = discoveryClient;
     this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
@@ -48,7 +48,7 @@ class AuthenticationGrpcService {
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + AuthenticationGrpcService.GRPC_AUTHENTICATION)
+            "discovery-client://" + IAMGrpcService.GRPC_IAM)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -57,6 +57,6 @@ class AuthenticationGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(AuthenticationGrpcService.GRPC_AUTHENTICATION).isEmpty();
+    return !discoveryClient.getInstances(IAMGrpcService.GRPC_IAM).isEmpty();
   }
 }
