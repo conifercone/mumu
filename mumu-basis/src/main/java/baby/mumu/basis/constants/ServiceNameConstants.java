@@ -17,17 +17,27 @@
 package baby.mumu.basis.constants;
 
 /**
- * springboot 相关常量
+ * 服务名称常量类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.3.0
+ * @since 2.11.0
  */
-public final class SpringBootConstants {
+public final class ServiceNameConstants {
 
-  public static final String APPLICATION_TITLE = "application.title";
-  public static final String SPRING_APPLICATION_NAME = "spring.application.name";
-  public static final String APPLICATION_FORMATTED_VERSION = "application.formatted-version";
-
-  private SpringBootConstants() {
+  private ServiceNameConstants() {
   }
+
+  public static final String IAM = "iam";
+
+  public static final String LOG = "log";
+
+  public static final String MAIL = "mail";
+
+  public static final String MESSAGE = "message";
+
+  public static final String SMS = "sms";
+
+  public static final String STORAGE = "storage";
+
+  public static final String UNIQUE = "unique";
 }

@@ -16,6 +16,7 @@
 
 package baby.mumu.log.client.api;
 
+import baby.mumu.basis.constants.ServiceNameConstants;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -32,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class LogGrpcService {
 
-  public static final String GRPC_LOG = "grpc-log";
+  public static final String GRPC_LOG = ServiceNameConstants.LOG;
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;

@@ -18,8 +18,6 @@ server:
   port: ${port:0}
   shutdown: graceful
 spring:
-  application:
-    name: sms
   config:
     import: 'optional:consul:'
   cloud:

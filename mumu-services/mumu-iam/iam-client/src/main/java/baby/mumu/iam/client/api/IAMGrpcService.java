@@ -16,6 +16,7 @@
 
 package baby.mumu.iam.client.api;
 
+import baby.mumu.basis.constants.ServiceNameConstants;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -32,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class IAMGrpcService {
 
-  public static final String GRPC_IAM = "iam";
+  public static final String GRPC_IAM = ServiceNameConstants.IAM;
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;

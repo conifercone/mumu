@@ -18,8 +18,6 @@ server:
   port: ${port:0}
   shutdown: graceful
 spring:
-  application:
-    name: mail
   config:
     import: 'optional:consul:'
   cloud:

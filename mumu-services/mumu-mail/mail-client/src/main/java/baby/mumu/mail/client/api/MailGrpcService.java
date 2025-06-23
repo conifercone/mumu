@@ -16,6 +16,7 @@
 
 package baby.mumu.mail.client.api;
 
+import baby.mumu.basis.constants.ServiceNameConstants;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -32,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class MailGrpcService {
 
-  public static final String GRPC_MAIL = "mail";
+  public static final String GRPC_MAIL = ServiceNameConstants.MAIL;
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
