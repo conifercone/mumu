@@ -20,8 +20,8 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
-import baby.mumu.basis.constants.ServiceNameConstants;
 import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class MuMuIAMApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuIAMApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
-      ServiceNameConstants.IAM);
+      ServiceEnum.IAM.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuIAMApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.client.api;
 
-import baby.mumu.basis.constants.ServiceNameConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -33,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class StorageGrpcService {
 
-  public static final String GRPC_STORAGE = ServiceNameConstants.STORAGE;
+  public static final String GRPC_STORAGE = ServiceEnum.STORAGE.getName();
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;

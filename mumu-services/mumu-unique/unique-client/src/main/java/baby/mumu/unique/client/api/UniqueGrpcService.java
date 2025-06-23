@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.client.api;
 
-import baby.mumu.basis.constants.ServiceNameConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -33,7 +33,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 class UniqueGrpcService {
 
-  public static final String GRPC_UNIQUE = ServiceNameConstants.UNIQUE;
+  public static final String GRPC_UNIQUE = ServiceEnum.UNIQUE.getName();
   private final DiscoveryClient discoveryClient;
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 

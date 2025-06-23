@@ -17,8 +17,8 @@
 package baby.mumu.storage;
 
 import baby.mumu.basis.annotations.Metamodel;
-import baby.mumu.basis.constants.ServiceNameConstants;
 import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
@@ -45,7 +45,7 @@ public class MuMuStorageApplication {
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuStorageApplicationMetamodel.projectName);
     defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
-      ServiceNameConstants.STORAGE);
+      ServiceEnum.STORAGE.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuStorageApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

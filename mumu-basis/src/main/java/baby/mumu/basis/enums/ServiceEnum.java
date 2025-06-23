@@ -14,30 +14,44 @@
  * limitations under the License.
  */
 
-package baby.mumu.basis.constants;
+package baby.mumu.basis.enums;
+
+import lombok.Getter;
 
 /**
- * 服务名称常量类
+ * 服务枚举
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.11.0
  */
-public final class ServiceNameConstants {
+@Getter
+public enum ServiceEnum {
 
-  private ServiceNameConstants() {
+  /**
+   * Identity & Access Management Service
+   */
+  IAM("iam", "Identity & Access Management Service"),
+
+  /**
+   * Log Service
+   */
+  LOG("log", "Log Management Service"),
+
+  MAIL("mail", "Mail Management Service"),
+
+  MESSAGE("message", "Message Management Service"),
+
+  SMS("sms", "SMS Management Service"),
+
+  STORAGE("storage", "Storage Management Service"),
+
+  UNIQUE("unique", "Unique Management Service");
+
+  private final String name;
+  private final String description;
+
+  ServiceEnum(String name, String description) {
+    this.name = name;
+    this.description = description;
   }
-
-  public static final String IAM = "iam";
-
-  public static final String LOG = "log";
-
-  public static final String MAIL = "mail";
-
-  public static final String MESSAGE = "message";
-
-  public static final String SMS = "sms";
-
-  public static final String STORAGE = "storage";
-
-  public static final String UNIQUE = "unique";
 }
