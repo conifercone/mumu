@@ -22,7 +22,7 @@ import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import java.io.InputStream;
 
 /**
- * 流式文件接口
+ * 文件接口
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

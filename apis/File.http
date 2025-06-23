@@ -1,4 +1,4 @@
-### 流式文件上传
+### 文件上传
 < {%
   import {generateHeaders} from "./utils"
 
@@ -39,7 +39,7 @@ Content-Type: application/json
   });
 %}
 
-### 流式文件下载
+### 文件下载
 < {%
   import {generateHeaders} from "./utils"
 
@@ -93,7 +93,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 流式文件获取字符串文件内容
+### 文件获取字符串文件内容
 < {%
   import {generateHeaders} from "./utils"
 

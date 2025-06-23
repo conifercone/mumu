@@ -55,7 +55,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @Validated
 @RequestMapping("/file")
-@Tag(name = "流式文件管理")
+@Tag(name = "文件管理")
 public class FileController {
 
   private final FileService fileService;

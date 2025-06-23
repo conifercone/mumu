@@ -19,7 +19,7 @@ package baby.mumu.storage.client.cmds;
 import lombok.Data;
 
 /**
- * 流式文件删除指令
+ * 文件删除指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
- * 流式文件转换类
+ * 文件转换类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

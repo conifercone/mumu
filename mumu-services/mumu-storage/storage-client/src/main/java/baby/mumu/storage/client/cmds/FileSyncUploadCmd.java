@@ -24,7 +24,7 @@ import lombok.Data;
 import org.springframework.util.ObjectUtils;
 
 /**
- * 流式文件异步上传指令
+ * 文件异步上传指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

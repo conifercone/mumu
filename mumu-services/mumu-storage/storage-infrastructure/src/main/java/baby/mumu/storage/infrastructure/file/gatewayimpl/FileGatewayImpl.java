@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
- * 流式文件领域网关实现类
+ * 文件领域网关实现类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

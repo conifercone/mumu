@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.Optional;
 
 /**
- * 流式文件领域网关
+ * 文件领域网关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

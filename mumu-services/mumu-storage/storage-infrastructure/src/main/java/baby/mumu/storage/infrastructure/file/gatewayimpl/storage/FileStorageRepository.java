@@ -119,7 +119,7 @@ public class FileStorageRepository {
   /**
    * 获取文件流
    *
-   * @param fileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 文件存储数据对象
    * @return 二进制流
    */
   @API(status = Status.STABLE, since = "1.0.1")
@@ -143,7 +143,7 @@ public class FileStorageRepository {
   /**
    * 判断文件是否存在
    *
-   * @param fileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 文件存储数据对象
    * @return 是否存在
    */
   @API(status = Status.STABLE, since = "1.0.1")
@@ -162,7 +162,7 @@ public class FileStorageRepository {
   /**
    * 删除文件
    *
-   * @param fileStoragePO 流式文件存储数据对象
+   * @param fileStoragePO 文件存储数据对象
    */
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(FileStoragePO fileStoragePO) {
