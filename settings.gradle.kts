@@ -7,7 +7,7 @@ pluginManagement {
 
 buildCache {
     local {
-        directory = file("${rootDir}/build-cache")
+        directory = file("${rootDir}/.gradle/build-cache")
     }
 }
 
