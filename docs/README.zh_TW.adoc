@@ -80,7 +80,7 @@ ____
 mumu
 ├── mumu-services
 │FEREnces
-│   ├── mumu-authentication
+│   ├── mumu-iam
 │   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail

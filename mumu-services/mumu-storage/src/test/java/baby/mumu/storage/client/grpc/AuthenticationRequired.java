@@ -42,7 +42,7 @@ public class AuthenticationRequired {
   public Optional<String> getToken() {
     RestTemplate restTemplate = new RestTemplate();
     ObjectMapper objectMapper = new ObjectMapper();
-    String url = "http://localhost:9080/api/mumu/authentication/oauth2/token";
+    String url = "http://localhost:9080/api/mumu/iam/oauth2/token";
     MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
     form.add("username", "admin");
     form.add("password", "Admin@5211314");

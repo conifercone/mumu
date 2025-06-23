@@ -32,10 +32,10 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
   @Bean
-  public OpenAPI authenticationOpenAPI() {
+  public OpenAPI iamOpenAPI() {
     return new OpenAPI()
-      .info(new Info().title("mumu authentication")
-        .description("mumu authentication API document")
+      .info(new Info().title("mumu IAM")
+        .description("mumu IAM API document")
         .version("v1")
         .license(new License().name("Apache 2.0")
           .url("https://www.apache.org/licenses/LICENSE-2.0")));

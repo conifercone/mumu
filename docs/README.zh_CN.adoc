@@ -79,7 +79,7 @@ ____
 ----
 mumu
 ├── mumu-services
-│   ├── mumu-authentication
+│   ├── mumu-iam
 │   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail

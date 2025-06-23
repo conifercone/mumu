@@ -89,7 +89,7 @@ Let’s make managing a joyride!
 ----
 mumu
 ├── mumu-services
-│   ├── mumu-authentication
+│   ├── mumu-iam
 │   ├── mumu-storage
 │   ├── mumu-log
 │   ├── mumu-mail

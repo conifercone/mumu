@@ -361,7 +361,7 @@ public class AuthorizationConfiguration {
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
     return AuthorizationServerSettings.builder()
-      .issuer("http://localhost:9080/api/mumu/authentication").build();
+      .issuer("http://localhost:9080/api/mumu/iam").build();
   }
 
   /**
