@@ -34,7 +34,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:permission")
+@Document(value = "mumu:iam:permission")
 public class PermissionCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
   @Serial

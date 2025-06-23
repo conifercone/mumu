@@ -44,7 +44,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:account")
+@Document(value = "mumu:iam:account")
 public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
   @Serial

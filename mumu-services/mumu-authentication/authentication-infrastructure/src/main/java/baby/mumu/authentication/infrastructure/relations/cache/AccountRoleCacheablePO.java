@@ -37,7 +37,7 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:authentication:account-role")
+@Document(value = "mumu:iam:account-role")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountRoleCacheablePO extends JpaCacheableBasisDefaultPersistentObject {

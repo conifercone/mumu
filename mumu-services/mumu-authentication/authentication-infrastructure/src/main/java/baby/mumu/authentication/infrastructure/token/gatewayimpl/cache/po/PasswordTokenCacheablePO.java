@@ -31,7 +31,7 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.0
  */
 @Data
-@Document(value = "mumu:authentication:password-token")
+@Document(value = "mumu:iam:password-token")
 public class PasswordTokenCacheablePO {
 
   @Id
