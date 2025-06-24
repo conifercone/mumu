@@ -18,7 +18,7 @@ package baby.mumu.message.configuration;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.message.infrastructure.config.MessageProperties;
+import baby.mumu.message.infra.config.MessageProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;

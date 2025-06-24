@@ -20,7 +20,7 @@ import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllWithSomeOneCm
 import baby.mumu.message.client.dto.SubscriptionTextMessageFindAllWithSomeOneDTO;
 import baby.mumu.message.domain.subscription.SubscriptionTextMessage;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
-import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
+import baby.mumu.message.infra.subscription.convertor.SubscriptionTextMessageConvertor;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;

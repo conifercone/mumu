@@ -18,7 +18,7 @@ package baby.mumu.message.application.subscription.executor;
 
 import baby.mumu.message.client.cmds.SubscriptionTextMessageForwardCmd;
 import baby.mumu.message.domain.subscription.gateway.SubscriptionTextMessageGateway;
-import baby.mumu.message.infrastructure.subscription.convertor.SubscriptionTextMessageConvertor;
+import baby.mumu.message.infra.subscription.convertor.SubscriptionTextMessageConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

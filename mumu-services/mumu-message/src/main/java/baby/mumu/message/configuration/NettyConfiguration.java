@@ -16,7 +16,7 @@
 
 package baby.mumu.message.configuration;
 
-import baby.mumu.message.infrastructure.config.MessageProperties;
+import baby.mumu.message.infra.config.MessageProperties;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

@@ -94,8 +94,8 @@ include("mumu-services:mumu-message:message-domain")
 findProject(":mumu-services:mumu-message:message-domain")?.name = "message-domain"
 include("mumu-services:mumu-message:message-client")
 findProject(":mumu-services:mumu-message:message-client")?.name = "message-client"
-include("mumu-services:mumu-message:message-infrastructure")
-findProject(":mumu-services:mumu-message:message-infrastructure")?.name = "message-infrastructure"
+include("mumu-services:mumu-message:message-infra")
+findProject(":mumu-services:mumu-message:message-infra")?.name = "message-infra"
 include("mumu-processor")
 include("mumu-services")
 include("mumu-benchmark")

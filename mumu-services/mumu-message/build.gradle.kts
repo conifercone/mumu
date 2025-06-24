@@ -8,7 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
-    implementation(project(":mumu-services:mumu-message:message-infrastructure"))
+    implementation(project(":mumu-services:mumu-message:message-infra"))
     implementation(project(":mumu-services:mumu-message:message-adapter"))
     implementation(project(":mumu-services:mumu-message:message-client"))
     implementation(project(":mumu-services:mumu-message:message-application"))

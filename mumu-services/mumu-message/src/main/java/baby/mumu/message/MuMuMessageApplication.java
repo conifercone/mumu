@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableConfigurationProperties
 @EnableJpaAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
-@EnableRedisDocumentRepositories(basePackages = "baby.mumu.message.infrastructure.**.cache.**")
+@EnableRedisDocumentRepositories(basePackages = "baby.mumu.message.infra.**.cache.**")
 @EnableMethodSecurity
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement

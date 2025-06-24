@@ -18,7 +18,7 @@ package baby.mumu.message.application.broadcast.executor;
 
 import baby.mumu.message.client.cmds.BroadcastTextMessageForwardCmd;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
-import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
+import baby.mumu.message.infra.broadcast.convertor.BroadcastTextMessageConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

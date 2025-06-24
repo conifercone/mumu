@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package baby.mumu.message.configuration;
+package baby.mumu.message.infra.broadcast.gatewayimpl.database;
 
-import io.hypersistence.utils.spring.repository.BaseJpaRepositoryImpl;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import baby.mumu.message.infra.broadcast.gatewayimpl.database.po.BroadcastTextMessagePO;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * jpa配置
+ * 广播文本消息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
-@Configuration
-@EnableJpaRepositories(
-  value = "baby.mumu.message.infra.**.database.**",
-  repositoryBaseClass = BaseJpaRepositoryImpl.class
-)
-public class JpaConfiguration {
+public interface BroadcastTextMessageRepository extends
+  BaseJpaRepository<BroadcastTextMessagePO, Long>,
+  JpaSpecificationExecutor<BroadcastTextMessagePO> {
 
+  Optional<BroadcastTextMessagePO> findByIdAndSenderId(Long id, Long senderId);
 }

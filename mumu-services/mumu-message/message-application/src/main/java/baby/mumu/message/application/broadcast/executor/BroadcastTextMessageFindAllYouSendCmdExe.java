@@ -20,7 +20,7 @@ import baby.mumu.message.client.cmds.BroadcastTextMessageFindAllYouSendCmd;
 import baby.mumu.message.client.dto.BroadcastTextMessageFindAllYouSendDTO;
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
 import baby.mumu.message.domain.broadcast.gateway.BroadcastTextMessageGateway;
-import baby.mumu.message.infrastructure.broadcast.convertor.BroadcastTextMessageConvertor;
+import baby.mumu.message.infra.broadcast.convertor.BroadcastTextMessageConvertor;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
