@@ -29,7 +29,7 @@ public class ProjectInfoConstants {
 
   public final String DESCRIPTION = "The Delightfully Clean & Ready-to-Go Management System!";
 
-  public final String VERSION = "2.11.0-dev";
+  public final String VERSION = "2.11.0";
 
   public final String GROUP = "baby.mumu";
 
