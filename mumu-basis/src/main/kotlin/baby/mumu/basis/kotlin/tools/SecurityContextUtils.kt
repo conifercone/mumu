@@ -35,9 +35,7 @@ import java.util.*
  */
 @API(status = API.Status.INTERNAL, since = "1.0.0")
 object SecurityContextUtils {
-    /**
-     * Account领域模型id属性名
-     */
+    
     private const val ID = "id"
     private const val TIMEZONE = "timezone"
     private const val LANGUAGE = "language"
