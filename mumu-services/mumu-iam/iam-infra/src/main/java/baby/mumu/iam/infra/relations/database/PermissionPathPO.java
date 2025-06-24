@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -60,11 +61,13 @@ public class PermissionPathPO extends JpaBasisDefaultPersistentObject {
   @MapsId("ancestorId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "ancestor_id", nullable = false)
+  @Exclude
   private PermissionPO ancestor;
 
   @MapsId("descendantId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "descendant_id", nullable = false)
+  @Exclude
   private PermissionPO descendant;
 
   @Override

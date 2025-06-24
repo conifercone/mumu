@@ -31,6 +31,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -57,11 +58,13 @@ public class RolePermissionPO extends JpaBasisDefaultPersistentObject {
   @MapsId("roleId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "role_id", nullable = false)
+  @Exclude
   private RolePO role;
 
   @MapsId("permissionId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "permission_id", nullable = false)
+  @Exclude
   private PermissionPO permission;
 
   @Override
