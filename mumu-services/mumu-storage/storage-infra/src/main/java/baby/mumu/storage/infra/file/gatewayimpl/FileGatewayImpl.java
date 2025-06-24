@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.file.gatewayimpl;
+package baby.mumu.storage.infra.file.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
-import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.FileStorageRepository;
-import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
+import baby.mumu.storage.infra.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.po.FileStoragePO;
 import io.micrometer.observation.annotation.Observed;
 import java.io.InputStream;
 import java.util.Optional;

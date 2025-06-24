@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po;
+package baby.mumu.storage.infra.file.gatewayimpl.storage.po;
 
 import java.io.InputStream;
 import lombok.Data;

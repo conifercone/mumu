@@ -18,7 +18,7 @@ package baby.mumu.storage.application.file.executor;
 
 import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.cmds.FileDownloadCmd;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import java.io.InputStream;
 import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;

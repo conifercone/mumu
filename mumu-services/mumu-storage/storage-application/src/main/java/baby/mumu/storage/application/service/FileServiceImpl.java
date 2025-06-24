@@ -32,7 +32,7 @@ import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceImplBase;
 import baby.mumu.storage.client.cmds.FileDownloadCmd;
 import baby.mumu.storage.client.cmds.FileRemoveCmd;
 import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
-import baby.mumu.storage.infrastructure.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.BytesValue;
 import com.google.protobuf.Empty;

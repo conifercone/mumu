@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.file.convertor;
+package baby.mumu.storage.infra.file.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.storage.client.api.grpc.FileRemoveGrpcCmd;
@@ -22,7 +22,7 @@ import baby.mumu.storage.client.cmds.FileDownloadCmd;
 import baby.mumu.storage.client.cmds.FileRemoveCmd;
 import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import baby.mumu.storage.domain.file.File;
-import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.po.FileStoragePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;

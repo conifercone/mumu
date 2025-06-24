@@ -72,8 +72,8 @@ include("mumu-services:mumu-storage:storage-client")
 findProject(":mumu-services:mumu-storage:storage-client")?.name = "storage-client"
 include("mumu-services:mumu-storage:storage-domain")
 findProject(":mumu-services:mumu-storage:storage-domain")?.name = "storage-domain"
-include("mumu-services:mumu-storage:storage-infrastructure")
-findProject(":mumu-services:mumu-storage:storage-infrastructure")?.name = "storage-infrastructure"
+include("mumu-services:mumu-storage:storage-infra")
+findProject(":mumu-services:mumu-storage:storage-infra")?.name = "storage-infra"
 include("mumu-services:mumu-sms")
 include("mumu-services:mumu-sms:sms-adapter")
 findProject(":mumu-services:mumu-sms:sms-adapter")?.name = "sms-adapter"

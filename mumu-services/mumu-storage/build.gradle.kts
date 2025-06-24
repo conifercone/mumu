@@ -5,7 +5,7 @@ description = ModuleEnum.MUMU_STORAGE.description
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-extension"))
-    implementation(project(":mumu-services:mumu-storage:storage-infrastructure"))
+    implementation(project(":mumu-services:mumu-storage:storage-infra"))
     implementation(project(":mumu-services:mumu-storage:storage-adapter"))
     implementation(project(":mumu-services:mumu-storage:storage-client"))
     implementation(project(":mumu-services:mumu-storage:storage-application"))

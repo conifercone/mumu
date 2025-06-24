@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infrastructure.file.gatewayimpl.storage;
+package baby.mumu.storage.infra.file.gatewayimpl.storage;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.storage.infrastructure.file.gatewayimpl.storage.po.FileStoragePO;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.po.FileStoragePO;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
