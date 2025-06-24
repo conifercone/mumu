@@ -19,6 +19,50 @@
 
 === ⚠️ 移除
 
+== [2.11.0] - 2025-06-24
+
+=== ⭐ 新增
+
+- 新增buildSrc
+- 删除账户的时候同步删除账户地址、系统设置、头像关联信息
+- 账号注册新增头像保存
+- 新增gitignore文件
+- 新增项目配置文件
+
+=== 🕸️ 变更
+
+- 更新 `Tess4j` 配置
+- 优化单元测试配置
+- `io.swagger.core.v3:swagger-annotations-jakarta` 升级至2.2.34
+- `org.jobrunr:jobrunr-spring-boot-3-starter` 升级至7.5.2
+- `com.opencsv:opencsv` 升级至5.11.2
+- `com.deepl.api:deepl-java` 升级至1.10.1
+- `io.freefair.lombok` 升级至8.14
+- `net.sourceforge.tess4j:tess4j` 升级至5.16.0
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.7
+- `flyway` 升级至11.9.1
+- `gradle` 升级至8.14.2
+- `protobuf` 升级至4.31.1
+- `grpc` 升级至1.73.0
+- `org.springframework.cloud:spring-cloud-dependencies` 升级至2025.0.0
+- `MinioConfiguration` 配置类设置为默认配置类
+- 增加 `junit jupiter` 测试依赖
+- 调整工作流配置
+- 优化国际化提示信息
+- 调整签名配置
+- 调整项目列表内容
+- 修改构建缓存位置
+- 禁用按需配置功能
+- 修改各服务启动端口号
+- authentication模块更名成iam
+- file模块更名成storage
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` 升级至2.8.9
+- `io.hypersistence:hypersistence-utils-hibernate-63` 升级至3.10.1
+
+=== ⚠️ 移除
+
+- 删除无用内容
+
 == [2.10.0] - 2025-05-27
 
 === ⭐ 新增
