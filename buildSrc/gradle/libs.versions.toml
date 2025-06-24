@@ -1,5 +1,5 @@
 [versions]
-lombokPluginVersion = '8.13.1'
+lombokPluginVersion = '8.14'
 
 [libraries]
 
