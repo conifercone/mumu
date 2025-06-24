@@ -61,8 +61,8 @@ include("mumu-services:mumu-mail:mail-client")
 findProject(":mumu-services:mumu-mail:mail-client")?.name = "mail-client"
 include("mumu-services:mumu-mail:mail-domain")
 findProject(":mumu-services:mumu-mail:mail-domain")?.name = "mail-domain"
-include("mumu-services:mumu-mail:mail-infrastructure")
-findProject(":mumu-services:mumu-mail:mail-infrastructure")?.name = "mail-infrastructure"
+include("mumu-services:mumu-mail:mail-infra")
+findProject(":mumu-services:mumu-mail:mail-infra")?.name = "mail-infra"
 include("mumu-services:mumu-storage")
 include("mumu-services:mumu-storage:storage-adapter")
 findProject(":mumu-services:mumu-storage:storage-adapter")?.name = "storage-adapter"

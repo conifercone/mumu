@@ -18,7 +18,7 @@ package baby.mumu.mail.application.template.executor;
 
 import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
-import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
+import baby.mumu.mail.infra.template.convertor.TemplateMailConvertor;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

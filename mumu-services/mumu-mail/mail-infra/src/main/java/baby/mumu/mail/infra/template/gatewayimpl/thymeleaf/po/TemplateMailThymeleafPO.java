@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po;
+package baby.mumu.mail.infra.template.gatewayimpl.thymeleaf.po;
 
 import java.util.Map;
 import lombok.Data;

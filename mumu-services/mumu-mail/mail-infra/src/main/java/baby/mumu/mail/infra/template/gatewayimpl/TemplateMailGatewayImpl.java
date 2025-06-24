@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package baby.mumu.mail.infrastructure.template.gatewayimpl;
+package baby.mumu.mail.infra.template.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.mail.domain.template.TemplateMail;
 import baby.mumu.mail.domain.template.gateway.TemplateMailGateway;
-import baby.mumu.mail.infrastructure.template.convertor.TemplateMailConvertor;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
+import baby.mumu.mail.infra.template.convertor.TemplateMailConvertor;
+import baby.mumu.mail.infra.template.gatewayimpl.thymeleaf.ThymeleafTemplateMailRepository;
+import baby.mumu.mail.infra.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import baby.mumu.storage.client.api.FileGrpcService;
 import baby.mumu.storage.client.api.grpc.FileDownloadGrpcCmd;
 import baby.mumu.storage.client.api.grpc.FileDownloadGrpcResult;

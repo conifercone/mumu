@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf;
+package baby.mumu.mail.infra.template.gatewayimpl.thymeleaf;
 
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
+import baby.mumu.mail.infra.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

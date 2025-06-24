@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package baby.mumu.mail.infrastructure.template.convertor;
+package baby.mumu.mail.infra.template.convertor;
 
 import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
 import baby.mumu.mail.domain.template.TemplateMail;
-import baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
+import baby.mumu.mail.infra.template.gatewayimpl.thymeleaf.po.TemplateMailThymeleafPO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
