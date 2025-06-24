@@ -51,7 +51,7 @@ public interface FileMapper extends GrpcMapper {
   File toEntity(FileDownloadCmd fileDownloadCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  FileStoragePO toStoragePO(File file);
+  FileStoragePO toFileStoragePO(File file);
 
   @API(status = Status.STABLE, since = "2.2.0")
   FileRemoveCmd toFileRemoveCmd(FileRemoveGrpcCmd fileRemoveGrpcCmd);

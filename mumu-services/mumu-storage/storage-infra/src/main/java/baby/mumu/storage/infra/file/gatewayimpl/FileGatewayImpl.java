@@ -57,7 +57,7 @@ public class FileGatewayImpl implements FileGateway {
   @API(status = Status.STABLE, since = "1.0.1")
   public void uploadFile(File file) {
     FileStoragePO fileStoragePO = Optional.ofNullable(file)
-      .flatMap(fileConvertor::toStoragePO)
+      .flatMap(fileConvertor::toFileStoragePO)
       .filter(storagePO -> storagePO.getContent() != null && StringUtils.isNotBlank(
         storagePO.getName()))
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
@@ -72,7 +72,7 @@ public class FileGatewayImpl implements FileGateway {
   @Override
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<InputStream> download(File file) {
-    return Optional.ofNullable(file).flatMap(fileConvertor::toStoragePO).filter(
+    return Optional.ofNullable(file).flatMap(fileConvertor::toFileStoragePO).filter(
       storagePO -> {
         if (ObjectUtils.isEmpty(storagePO.getStorageAddress())) {
           throw new MuMuException(ResponseCode.FILE_STORAGE_ADDRESS_CANNOT_BE_EMPTY);
@@ -94,7 +94,7 @@ public class FileGatewayImpl implements FileGateway {
   @API(status = Status.STABLE, since = "1.0.1")
   public void removeFile(File file) {
     FileStoragePO fileStoragePO = Optional.ofNullable(file)
-      .flatMap(fileConvertor::toStoragePO).filter(fileStorageRepository::existed)
+      .flatMap(fileConvertor::toFileStoragePO).filter(fileStorageRepository::existed)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
     fileStorageRepository.removeFile(fileStoragePO);
   }

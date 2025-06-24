@@ -86,10 +86,10 @@ public class FileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<FileStoragePO> toStoragePO(File file) {
+  public Optional<FileStoragePO> toFileStoragePO(File file) {
     return Optional.ofNullable(file)
       .map(fileNonNull -> {
-        FileStoragePO transform = FileMapper.INSTANCE.toStoragePO(fileNonNull);
+        FileStoragePO transform = FileMapper.INSTANCE.toFileStoragePO(fileNonNull);
         try (InputStream fileContent = file.getContent()) {
           if (fileContent != null) {
             transform.setContent(fileContent);
