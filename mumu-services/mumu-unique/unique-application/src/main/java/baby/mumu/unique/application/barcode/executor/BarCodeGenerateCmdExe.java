@@ -18,7 +18,7 @@ package baby.mumu.unique.application.barcode.executor;
 
 import baby.mumu.unique.client.cmds.BarCodeGenerateCmd;
 import baby.mumu.unique.domain.barcode.gateway.BarCodeGateway;
-import baby.mumu.unique.infrastructure.barcode.convertor.BarCodeConvertor;
+import baby.mumu.unique.infra.barcode.convertor.BarCodeConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;

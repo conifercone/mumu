@@ -21,7 +21,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
-import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
+import baby.mumu.unique.infra.captcha.convertor.CaptchaConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;

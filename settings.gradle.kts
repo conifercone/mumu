@@ -50,8 +50,8 @@ include("mumu-services:mumu-unique:unique-application")
 findProject(":mumu-services:mumu-unique:unique-application")?.name = "unique-application"
 include("mumu-services:mumu-unique:unique-domain")
 findProject(":mumu-services:mumu-unique:unique-domain")?.name = "unique-domain"
-include("mumu-services:mumu-unique:unique-infrastructure")
-findProject(":mumu-services:mumu-unique:unique-infrastructure")?.name = "unique-infrastructure"
+include("mumu-services:mumu-unique:unique-infra")
+findProject(":mumu-services:mumu-unique:unique-infra")?.name = "unique-infra"
 include("mumu-services:mumu-mail")
 include("mumu-services:mumu-mail:mail-adapter")
 findProject(":mumu-services:mumu-mail:mail-adapter")?.name = "mail-adapter"
