@@ -50,10 +50,10 @@ public class ProjectInfoConstants {
   /**
    * CheckStyle 工具版本号
    */
-  public final String CHECKSTYLE_TOOL_VERSION = "10.20.0";
+  public final String CHECKSTYLE_TOOL_VERSION = "10.25.1";
 
   /**
    * PMD 工具版本号
    */
-  public final String PMD_TOOL_VERSION = "7.0.0";
+  public final String PMD_TOOL_VERSION = "7.14.0";
 }
