@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -34,7 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
-@SpringJUnitConfig(FaceDetectionConfiguration.class)
+@SpringJUnitConfig({FaceDetectionConfiguration.class, MessageSourceAutoConfiguration.class})
 @TestPropertySource(properties = {
   "mumu.extension.fd.opencv.enabled=true"
 })
