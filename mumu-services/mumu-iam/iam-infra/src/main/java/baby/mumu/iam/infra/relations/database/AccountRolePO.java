@@ -31,7 +31,6 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.ToString.Exclude;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -59,13 +58,13 @@ public class AccountRolePO extends JpaBasisDefaultPersistentObject {
   @MapsId("accountId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "account_id", nullable = false)
-  @Exclude
+  @ToString.Exclude
   private AccountPO account;
 
   @MapsId("roleId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "role_id", nullable = false)
-  @Exclude
+  @ToString.Exclude
   private RolePO role;
 
   @Override

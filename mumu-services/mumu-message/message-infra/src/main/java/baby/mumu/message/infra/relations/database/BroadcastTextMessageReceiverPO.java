@@ -34,7 +34,6 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.ToString.Exclude;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
@@ -67,7 +66,7 @@ public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObj
   @MapsId("messageId")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "message_id", nullable = false)
-  @Exclude
+  @ToString.Exclude
   private BroadcastTextMessagePO broadcastTextMessage;
 
   @Override
