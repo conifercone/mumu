@@ -27,15 +27,33 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ProjectInfoConstants {
 
+  /**
+   * 项目描述
+   */
   public final String DESCRIPTION = "The Delightfully Clean & Ready-to-Go Management System!";
 
-  public final String VERSION = "2.12.0";
+  /**
+   * 项目版本
+   */
+  public final String VERSION = "2.12.0-dev";
 
+  /**
+   * 项目组织
+   */
   public final String GROUP = "baby.mumu";
 
+  /**
+   * java 主版本号
+   */
   public final int JAVA_MAJOR_VERSION = 23;
 
+  /**
+   * CheckStyle 工具版本号
+   */
   public final String CHECKSTYLE_TOOL_VERSION = "10.20.0";
 
+  /**
+   * PMD 工具版本号
+   */
   public final String PMD_TOOL_VERSION = "7.0.0";
 }
