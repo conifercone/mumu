@@ -23,9 +23,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * oauth 2 授权数据对象
@@ -154,4 +156,30 @@ public class Oauth2AuthorizationDO {
   @Column(name = "device_code_metadata", length = Integer.MAX_VALUE)
   private String deviceCodeMetadata;
 
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    Oauth2AuthorizationDO that = (Oauth2AuthorizationDO) o;
+    return getId() != null && Objects.equals(getId(), that.getId());
+  }
+
+  @Override
+  public final int hashCode() {
+    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass().hashCode() : getClass().hashCode();
+  }
 }

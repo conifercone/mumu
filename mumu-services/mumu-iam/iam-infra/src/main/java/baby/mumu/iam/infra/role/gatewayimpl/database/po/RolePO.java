@@ -25,10 +25,12 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 角色基本信息数据对象
@@ -76,4 +78,31 @@ public class RolePO extends JpaBasisArchivablePersistentObject {
   @ColumnDefault("''")
   @Column(name = "description", nullable = false, length = 500)
   private String description;
+
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    RolePO rolePO = (RolePO) o;
+    return getId() != null && Objects.equals(getId(), rolePO.getId());
+  }
+
+  @Override
+  public final int hashCode() {
+    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass().hashCode() : getClass().hashCode();
+  }
 }

@@ -27,7 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 账号角色关系数据对象联合主键
@@ -55,21 +55,29 @@ public class AccountRolePOId implements Serializable {
   private Long roleId;
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+    if (o == null) {
       return false;
     }
-    AccountRolePOId entity = (AccountRolePOId) o;
-    return Objects.equals(this.accountId, entity.accountId) &&
-      Objects.equals(this.roleId, entity.roleId);
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    AccountRolePOId that = (AccountRolePOId) o;
+    return getAccountId() != null && Objects.equals(getAccountId(), that.getAccountId())
+      && getRoleId() != null && Objects.equals(getRoleId(), that.getRoleId());
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return Objects.hash(accountId, roleId);
   }
-
 }

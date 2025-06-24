@@ -30,10 +30,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import java.io.Serial;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 文本广播消息接收者关系数据对象
@@ -63,4 +65,30 @@ public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObj
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "message_id", nullable = false)
   private BroadcastTextMessagePO broadcastTextMessage;
+
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null) {
+      return false;
+    }
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    BroadcastTextMessageReceiverPO that = (BroadcastTextMessageReceiverPO) o;
+    return getId() != null && Objects.equals(getId(), that.getId());
+  }
+
+  @Override
+  public final int hashCode() {
+    return Objects.hash(id);
+  }
 }

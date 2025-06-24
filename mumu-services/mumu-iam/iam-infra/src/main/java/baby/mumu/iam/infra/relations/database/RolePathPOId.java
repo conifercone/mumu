@@ -27,7 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 角色路径表主键实体
@@ -59,21 +59,31 @@ public class RolePathPOId implements Serializable {
   private Long depth;
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+    if (o == null) {
       return false;
     }
-    RolePathPOId entity = (RolePathPOId) o;
-    return Objects.equals(this.ancestorId, entity.ancestorId) &&
-      Objects.equals(this.descendantId, entity.descendantId) &&
-      Objects.equals(this.depth, entity.depth);
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    RolePathPOId that = (RolePathPOId) o;
+    return getAncestorId() != null && Objects.equals(getAncestorId(), that.getAncestorId())
+      && getDescendantId() != null && Objects.equals(getDescendantId(),
+      that.getDescendantId())
+      && getDepth() != null && Objects.equals(getDepth(), that.getDepth());
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return Objects.hash(ancestorId, descendantId, depth);
   }
 }

@@ -27,7 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 /**
  * 文本广播消息接收者关系联合主键
@@ -55,21 +55,29 @@ public class BroadcastTextMessageReceiverPOId implements Serializable {
   private Long receiverId;
 
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+    if (o == null) {
       return false;
     }
-    BroadcastTextMessageReceiverPOId entity = (BroadcastTextMessageReceiverPOId) o;
-    return Objects.equals(this.receiverId, entity.receiverId) &&
-      Objects.equals(this.messageId, entity.messageId);
+    Class<?> oEffectiveClass = o instanceof HibernateProxy
+      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+      : o.getClass();
+    Class<?> thisEffectiveClass = this instanceof HibernateProxy
+      ? ((HibernateProxy) this).getHibernateLazyInitializer()
+      .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass) {
+      return false;
+    }
+    BroadcastTextMessageReceiverPOId that = (BroadcastTextMessageReceiverPOId) o;
+    return getMessageId() != null && Objects.equals(getMessageId(), that.getMessageId())
+      && getReceiverId() != null && Objects.equals(getReceiverId(), that.getReceiverId());
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(receiverId, messageId);
+  public final int hashCode() {
+    return Objects.hash(messageId, receiverId);
   }
-
 }
