@@ -17,8 +17,8 @@
 package baby.mumu.iam.configuration;
 
 import baby.mumu.iam.domain.client.Client;
-import baby.mumu.iam.infrastructure.client.convertor.ClientConvertor;
-import baby.mumu.iam.infrastructure.client.gatewayimpl.database.ClientRepository;
+import baby.mumu.iam.infra.client.convertor.ClientConvertor;
+import baby.mumu.iam.infra.client.gatewayimpl.database.ClientRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;

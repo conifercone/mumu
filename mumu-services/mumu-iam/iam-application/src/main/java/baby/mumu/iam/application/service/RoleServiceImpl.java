@@ -61,7 +61,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
-import baby.mumu.iam.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindAllCmd;
 import baby.mumu.iam.client.dto.RoleFindAllDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;

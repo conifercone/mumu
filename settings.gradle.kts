@@ -22,9 +22,9 @@ findProject(":mumu-services:mumu-iam:iam-application")?.name =
 include("mumu-services:mumu-iam:iam-domain")
 findProject(":mumu-services:mumu-iam:iam-domain")?.name =
     "iam-domain"
-include("mumu-services:mumu-iam:iam-infrastructure")
-findProject(":mumu-services:mumu-iam:iam-infrastructure")?.name =
-    "iam-infrastructure"
+include("mumu-services:mumu-iam:iam-infra")
+findProject(":mumu-services:mumu-iam:iam-infra")?.name =
+    "iam-infra"
 include("mumu-services:mumu-iam:iam-client")
 findProject(":mumu-services:mumu-iam:iam-client")?.name =
     "iam-client"

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.AccountFindAllSliceCmd;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.infrastructure.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;

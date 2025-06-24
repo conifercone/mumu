@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.dto.PermissionArchivedFindAllDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;

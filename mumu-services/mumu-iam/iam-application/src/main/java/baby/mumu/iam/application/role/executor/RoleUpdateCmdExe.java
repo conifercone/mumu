@@ -18,7 +18,7 @@ package baby.mumu.iam.application.role.executor;
 
 import baby.mumu.iam.client.cmds.RoleUpdateCmd;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
