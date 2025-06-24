@@ -36,6 +36,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CompositeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
@@ -53,6 +54,7 @@ import org.javamoney.moneta.Money;
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
+@ToString
 public class AccountPO extends JpaBasisArchivablePersistentObject {
 
   @Serial
@@ -80,6 +82,7 @@ public class AccountPO extends JpaBasisArchivablePersistentObject {
   @Size(max = 500)
   @NotNull
   @Column(name = "password", nullable = false, length = 500)
+  @ToString.Exclude
   private String password;
 
   /**

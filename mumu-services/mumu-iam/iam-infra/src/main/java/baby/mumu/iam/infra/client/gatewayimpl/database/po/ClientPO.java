@@ -27,6 +27,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -42,6 +43,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Table(name = "oauth2_registered_client")
 @DynamicInsert
 @RequiredArgsConstructor
+@ToString
 public class ClientPO extends JpaBasisDefaultPersistentObject {
 
   @Serial
@@ -54,6 +56,7 @@ public class ClientPO extends JpaBasisDefaultPersistentObject {
 
   private Instant clientIdIssuedAt;
 
+  @ToString.Exclude
   private String clientSecret;
 
   private Instant clientSecretExpiresAt;

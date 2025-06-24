@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -39,6 +40,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Setter
 @Entity
 @Table(name = "oauth2_authorization")
+@ToString
 public class Oauth2AuthorizationDO {
 
   @Id
@@ -87,6 +89,7 @@ public class Oauth2AuthorizationDO {
   private String authorizationCodeMetadata;
 
   @Column(name = "access_token_value", length = Integer.MAX_VALUE)
+  @ToString.Exclude
   private String accessTokenValue;
 
   @Column(name = "access_token_issued_at")
@@ -109,6 +112,7 @@ public class Oauth2AuthorizationDO {
   private String accessTokenScopes;
 
   @Column(name = "oidc_id_token_value", length = Integer.MAX_VALUE)
+  @ToString.Exclude
   private String oidcIdTokenValue;
 
   @Column(name = "oidc_id_token_issued_at")
@@ -121,6 +125,7 @@ public class Oauth2AuthorizationDO {
   private String oidcIdTokenMetadata;
 
   @Column(name = "refresh_token_value", length = Integer.MAX_VALUE)
+  @ToString.Exclude
   private String refreshTokenValue;
 
   @Column(name = "refresh_token_issued_at")
@@ -145,6 +150,7 @@ public class Oauth2AuthorizationDO {
   private String userCodeMetadata;
 
   @Column(name = "device_code_value", length = Integer.MAX_VALUE)
+  @ToString.Exclude
   private String deviceCodeValue;
 
   @Column(name = "device_code_issued_at")

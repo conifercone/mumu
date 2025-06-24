@@ -32,6 +32,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
@@ -48,6 +49,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Table(name = "mumu_subscription_text_message")
 @RequiredArgsConstructor
 @DynamicInsert
+@ToString
 public class SubscriptionTextMessagePO extends JpaBasisArchivablePersistentObject {
 
   @Serial

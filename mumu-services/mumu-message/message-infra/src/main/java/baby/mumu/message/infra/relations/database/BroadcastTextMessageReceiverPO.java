@@ -33,6 +33,7 @@ import java.io.Serial;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
@@ -48,6 +49,7 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity
 @Table(name = "mumu_broadcast_text_message_receivers")
 @DynamicInsert
+@ToString
 public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObject {
 
   @Serial

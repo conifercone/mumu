@@ -77,6 +77,7 @@ public class Account extends BasisDomainModel implements UserDetails {
   /**
    * 账号密码
    */
+  @ToString.Exclude
   private String password;
 
   /**
