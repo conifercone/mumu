@@ -57,14 +57,15 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogKafkaPO> toKafkaPO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toKafkaPO);
+  public Optional<OperationLogKafkaPO> toOperationLogKafkaPO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+      .map(OperationLogMapper.INSTANCE::toOperationLogKafkaPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogEsPO> toEsPO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toEsPO);
+  public Optional<OperationLogEsPO> toOperationLogEsPO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toOperationLogEsPO);
   }
 
   @Contract("_ -> new")
@@ -112,8 +113,9 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogFindAllDTO> toFindAllDTO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toFindAllDTO);
+  public Optional<OperationLogFindAllDTO> toOperationLogFindAllDTO(OperationLog operationLog) {
+    return Optional.ofNullable(operationLog)
+      .map(OperationLogMapper.INSTANCE::toOperationLogFindAllDTO);
   }
 
   @Contract("_ -> new")
@@ -133,9 +135,9 @@ public class OperationLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<OperationLogQryDTO> toQryDTO(
+  public Optional<OperationLogQryDTO> toOperationLogQryDTO(
     OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
-      .map(OperationLogMapper.INSTANCE::toQryDTO);
+      .map(OperationLogMapper.INSTANCE::toOperationLogQryDTO);
   }
 }

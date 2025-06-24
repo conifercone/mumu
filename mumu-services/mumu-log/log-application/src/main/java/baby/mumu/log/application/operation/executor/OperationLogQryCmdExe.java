@@ -45,7 +45,8 @@ public class OperationLogQryCmdExe {
 
   public OperationLogQryDTO execute(OperationLogQryCmd operationLogQryCmd) {
     return Optional.ofNullable(operationLogQryCmd).map(OperationLogQryCmd::getId)
-      .flatMap(operationLogGateway::findOperationLogById).flatMap(operationLogConvertor::toQryDTO)
+      .flatMap(operationLogGateway::findOperationLogById)
+      .flatMap(operationLogConvertor::toOperationLogQryDTO)
       .orElse(null);
   }
 }

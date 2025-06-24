@@ -47,7 +47,8 @@ public interface SubscriptionTextMessageMapper extends DataTransferObjectMapper 
     SubscriptionTextMessageForwardCmd subscriptionTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  SubscriptionTextMessagePO toPO(SubscriptionTextMessage subscriptionTextMessage);
+  SubscriptionTextMessagePO toSubscriptionTextMessagePO(
+    SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
   SubscriptionTextMessage toEntity(SubscriptionTextMessagePO subscriptionTextMessagePO);
@@ -57,18 +58,18 @@ public interface SubscriptionTextMessageMapper extends DataTransferObjectMapper 
     SubscriptionTextMessageFindAllYouSendCmd subscriptionTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  SubscriptionTextMessageFindAllYouSendDTO toFindAllYouSendDTO(
+  SubscriptionTextMessageFindAllYouSendDTO toSubscriptionTextMessageFindAllYouSendDTO(
     SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  SubscriptionTextMessageFindAllWithSomeOneDTO toFindAllWithSomeOne(
+  SubscriptionTextMessageFindAllWithSomeOneDTO toSubscriptionTextMessageFindAllWithSomeOneDTO(
     SubscriptionTextMessage subscriptionTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  SubscriptionTextMessageArchivedPO toArchivePO(
+  SubscriptionTextMessageArchivedPO toSubscriptionTextMessageArchivedPO(
     SubscriptionTextMessagePO subscriptionTextMessagePO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  SubscriptionTextMessagePO toPO(
+  SubscriptionTextMessagePO toSubscriptionTextMessagePO(
     SubscriptionTextMessageArchivedPO subscriptionTextMessageArchivedPO);
 }

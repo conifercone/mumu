@@ -59,7 +59,7 @@ public class OperationLogFindAllCmdExe {
       operationLogFindAllCmd.getCurrent(),
       operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllDTO> operationLogFindAllDTOS = operationLogs.getContent().stream()
-      .map(operationLogConvertor::toFindAllDTO).filter(Optional::isPresent)
+      .map(operationLogConvertor::toOperationLogFindAllDTO).filter(Optional::isPresent)
       .map(Optional::get)
       .toList();
     return new PageImpl<>(operationLogFindAllDTOS, operationLogs.getPageable(),

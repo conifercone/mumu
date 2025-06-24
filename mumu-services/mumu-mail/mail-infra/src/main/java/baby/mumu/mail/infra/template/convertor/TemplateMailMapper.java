@@ -38,7 +38,7 @@ public interface TemplateMailMapper {
   TemplateMailMapper INSTANCE = Mappers.getMapper(TemplateMailMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  TemplateMailThymeleafPO toThymeleafPO(TemplateMail templateMail);
+  TemplateMailThymeleafPO toTemplateMailThymeleafPO(TemplateMail templateMail);
 
   @API(status = Status.STABLE, since = "1.0.1")
   TemplateMail toEntity(TemplateMailSendCmd templateMailSendCmd);

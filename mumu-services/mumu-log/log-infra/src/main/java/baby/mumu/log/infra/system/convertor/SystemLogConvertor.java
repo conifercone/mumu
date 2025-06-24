@@ -56,16 +56,16 @@ public class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogKafkaPO> toKafkaPO(SystemLog systemLog) {
+  public Optional<SystemLogKafkaPO> toSystemLogKafkaPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toKafkaPO);
+      .map(SystemLogMapper.INSTANCE::toSystemLogKafkaPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogEsPO> toEsPO(SystemLog systemLog) {
+  public Optional<SystemLogEsPO> toSystemLogEsPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toEsPO);
+      .map(SystemLogMapper.INSTANCE::toSystemLogEsPO);
   }
 
   @Contract("_ -> new")
@@ -112,9 +112,9 @@ public class SystemLogConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogFindAllDTO> toFindAllDTO(SystemLog systemLog) {
+  public Optional<SystemLogFindAllDTO> toSystemLogFindAllDTO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toFindAllDTO);
+      .map(SystemLogMapper.INSTANCE::toSystemLogFindAllDTO);
   }
 
   @Contract("_ -> new")

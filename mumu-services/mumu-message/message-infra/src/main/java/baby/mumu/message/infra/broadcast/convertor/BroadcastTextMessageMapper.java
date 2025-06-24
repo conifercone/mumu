@@ -46,7 +46,7 @@ public interface BroadcastTextMessageMapper extends DataTransferObjectMapper {
     BroadcastTextMessageForwardCmd broadcastTextMessageForwardCmd);
 
   @API(status = Status.STABLE, since = "1.0.2")
-  BroadcastTextMessagePO toPO(BroadcastTextMessage broadcastTextMessage);
+  BroadcastTextMessagePO toBroadcastTextMessagePO(BroadcastTextMessage broadcastTextMessage);
 
   @API(status = Status.STABLE, since = "1.0.3")
   BroadcastTextMessage toEntity(BroadcastTextMessagePO broadcastTextMessagePO);
@@ -56,13 +56,14 @@ public interface BroadcastTextMessageMapper extends DataTransferObjectMapper {
     BroadcastTextMessageFindAllYouSendCmd broadcastTextMessageFindAllYouSendCmd);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  BroadcastTextMessageArchivedPO toArchivePO(BroadcastTextMessagePO broadcastTextMessagePO);
+  BroadcastTextMessageArchivedPO toBroadcastTextMessageArchivedPO(
+    BroadcastTextMessagePO broadcastTextMessagePO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  BroadcastTextMessagePO toPO(
+  BroadcastTextMessagePO toBroadcastTextMessagePO(
     BroadcastTextMessageArchivedPO broadcastTextMessageArchivedPO);
 
   @API(status = Status.STABLE, since = "1.0.3")
-  BroadcastTextMessageFindAllYouSendDTO toFindAllYouSendDTO(
+  BroadcastTextMessageFindAllYouSendDTO toBroadcastTextMessageFindAllYouSendDTO(
     BroadcastTextMessage broadcastTextMessage);
 }

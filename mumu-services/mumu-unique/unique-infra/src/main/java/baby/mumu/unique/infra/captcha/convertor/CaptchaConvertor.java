@@ -40,8 +40,8 @@ public class CaptchaConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<SimpleCaptchaPO> toPO(SimpleCaptcha simpleCaptcha) {
-    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toPO);
+  public Optional<SimpleCaptchaPO> toSimpleCaptchaPO(SimpleCaptcha simpleCaptcha) {
+    return Optional.ofNullable(simpleCaptcha).map(CaptchaMapper.INSTANCE::toSimpleCaptchaPO);
   }
 
   @Contract("_ -> new")

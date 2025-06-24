@@ -208,8 +208,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<RolePO> toPO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toPO);
+  public Optional<RolePO> toRolePO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRolePO);
   }
 
 
@@ -268,19 +268,20 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<RoleFindAllDTO> toFindAllDTO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllDTO).map(roleFindAllCo -> {
-      Optional.ofNullable(simpleTextTranslation).flatMap(
-          simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-            roleFindAllCo.getName()))
-        .ifPresent(roleFindAllCo::setName);
-      return roleFindAllCo;
-    });
+  public Optional<RoleFindAllDTO> toRoleFindAllDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindAllDTO)
+      .map(roleFindAllCo -> {
+        Optional.ofNullable(simpleTextTranslation).flatMap(
+            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
+              roleFindAllCo.getName()))
+          .ifPresent(roleFindAllCo::setName);
+        return roleFindAllCo;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleFindAllSliceDTO> toFindAllSliceDTO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toFindAllSliceDTO)
+  public Optional<RoleFindAllSliceDTO> toRoleFindAllSliceDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindAllSliceDTO)
       .map(roleFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -323,8 +324,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleArchivedFindAllDTO> toArchivedFindAllDTO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllDTO)
+  public Optional<RoleArchivedFindAllDTO> toRoleArchivedFindAllDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedFindAllDTO)
       .map(roleArchivedFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -335,8 +336,8 @@ public class RoleConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleArchivedFindAllSliceDTO> toArchivedFindAllSliceDTO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedFindAllSliceDTO)
+  public Optional<RoleArchivedFindAllSliceDTO> toRoleArchivedFindAllSliceDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedFindAllSliceDTO)
       .map(roleArchivedFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -349,8 +350,8 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<RoleArchivedPO> toArchivedPO(RolePO rolePO) {
-    return Optional.ofNullable(rolePO).map(RoleMapper.INSTANCE::toArchivedPO);
+  public Optional<RoleArchivedPO> toRoleArchivedPO(RolePO rolePO) {
+    return Optional.ofNullable(rolePO).map(RoleMapper.INSTANCE::toRoleArchivedPO);
   }
 
   @Contract("_ -> new")
@@ -361,14 +362,14 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleArchivedPO> toArchivedPO(Role role) {
-    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toArchivedPO);
+  public Optional<RoleArchivedPO> toRoleArchivedPO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<RolePO> toPO(RoleArchivedPO roleArchivedPO) {
-    return Optional.ofNullable(roleArchivedPO).map(RoleMapper.INSTANCE::toPO);
+  public Optional<RolePO> toRolePO(RoleArchivedPO roleArchivedPO) {
+    return Optional.ofNullable(roleArchivedPO).map(RoleMapper.INSTANCE::toRolePO);
   }
 
   @Contract("_ -> new")

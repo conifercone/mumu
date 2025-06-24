@@ -55,7 +55,7 @@ public class RoleFindAllCmdExe {
     Page<Role> roles = roleGateway.findAll(role,
       roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
     List<RoleFindAllDTO> roleFindAllDTOList = roles.getContent().stream()
-      .map(roleConvertor::toFindAllDTO)
+      .map(roleConvertor::toRoleFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(roleFindAllDTOList, roles.getPageable(),
       roles.getTotalElements());

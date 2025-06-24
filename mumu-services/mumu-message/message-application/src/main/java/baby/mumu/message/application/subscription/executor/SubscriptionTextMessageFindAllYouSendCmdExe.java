@@ -61,7 +61,7 @@ public class SubscriptionTextMessageFindAllYouSendCmdExe {
       subscriptionTextMessageFindAllYouSendCmd.getPageSize());
     List<SubscriptionTextMessageFindAllYouSendDTO> subscriptionTextMessageFindAllYouSendDTOS = allYouSend.getContent()
       .stream()
-      .map(subscriptionTextMessageConvertor::toFindAllYouSendDTO)
+      .map(subscriptionTextMessageConvertor::toSubscriptionTextMessageFindAllYouSendDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllYouSendDTOS, allYouSend.getPageable(),
       allYouSend.getTotalElements());

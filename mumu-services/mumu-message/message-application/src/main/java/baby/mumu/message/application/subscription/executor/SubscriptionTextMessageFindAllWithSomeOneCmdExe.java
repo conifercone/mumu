@@ -60,7 +60,7 @@ public class SubscriptionTextMessageFindAllWithSomeOneCmdExe {
       subscriptionTextMessageFindAllWithSomeOneCmd.getReceiverId());
     List<SubscriptionTextMessageFindAllWithSomeOneDTO> subscriptionTextMessageFindAllWithSomeOneDTOS = allMessageRecordWithSomeone.getContent()
       .stream()
-      .map(subscriptionTextMessageConvertor::toFindAllWithSomeOne)
+      .map(subscriptionTextMessageConvertor::toSubscriptionTextMessageFindAllWithSomeOneDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(subscriptionTextMessageFindAllWithSomeOneDTOS,
       allMessageRecordWithSomeone.getPageable(),

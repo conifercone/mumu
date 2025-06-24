@@ -77,7 +77,7 @@ public class TemplateMailGatewayImpl implements TemplateMailGateway {
         FileDownloadGrpcResult fileDownloadGrpcResult = fileGrpcService.download(
           fileDownloadGrpcCmd,
           callCredentials);
-        Optional<TemplateMailThymeleafPO> thymeleafDo = templateMailConvertor.toThymeleafPO(
+        Optional<TemplateMailThymeleafPO> thymeleafDo = templateMailConvertor.toTemplateMailThymeleafPO(
           templateMailDomain);
         thymeleafDo.ifPresent(thDo -> {
           thDo.setContent(fileDownloadGrpcResult.getFileContent().getValue()

@@ -103,7 +103,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void add(Role role) {
     // 保存角色数据
-    Optional.ofNullable(role).flatMap(roleConvertor::toPO)
+    Optional.ofNullable(role).flatMap(roleConvertor::toRolePO)
       .filter(rolePO -> !roleRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())
         && !roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode()))
       .ifPresentOrElse(rolePO -> {
@@ -165,7 +165,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Role role) {
     Optional.ofNullable(role).ifPresent(roleDomain -> {
-      roleConvertor.toPO(roleDomain).ifPresent(roleRepository::merge);
+      roleConvertor.toRolePO(roleDomain).ifPresent(roleRepository::merge);
       // 删除权限关系数据重新添加
       rolePermissionRepository.deleteByRoleId(roleDomain.getId());
       saveRoleAuthorityRelationsData(roleDomain);
@@ -180,7 +180,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public Page<Role> findAll(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RolePO> rolePOPage = roleRepository.findAllPage(
-      roleConvertor.toPO(role).orElseGet(RolePO::new),
+      roleConvertor.toRolePO(role).orElseGet(RolePO::new),
       Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
           roleEntity.getPermissions()))
         .map(authorities -> authorities.stream().map(Permission::getId).collect(
@@ -196,7 +196,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public Slice<Role> findAllSlice(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RolePO> rolePOSlice = roleRepository.findAllSlice(
-      roleConvertor.toPO(role).orElseGet(RolePO::new),
+      roleConvertor.toRolePO(role).orElseGet(RolePO::new),
       Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
           roleEntity.getPermissions()))
         .map(authorities -> authorities.stream().map(Permission::getId).collect(
@@ -212,7 +212,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public Slice<Role> findArchivedAllSlice(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<RoleArchivedPO> roleArchivedPOS = roleArchivedRepository.findAllSlice(
-      roleConvertor.toArchivedPO(role).orElseGet(RoleArchivedPO::new),
+      roleConvertor.toRoleArchivedPO(role).orElseGet(RoleArchivedPO::new),
       Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
           roleEntity.getPermissions()))
         .map(authorities -> authorities.stream().map(Permission::getId).collect(
@@ -228,7 +228,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public Page<Role> findArchivedAll(Role role, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<RoleArchivedPO> roleArchivedPOPage = roleArchivedRepository.findAllPage(
-      roleConvertor.toArchivedPO(role).orElseGet(RoleArchivedPO::new),
+      roleConvertor.toRoleArchivedPO(role).orElseGet(RoleArchivedPO::new),
       Optional.ofNullable(role).flatMap(roleEntity -> Optional.ofNullable(
           roleEntity.getPermissions()))
         .map(authorities -> authorities.stream().map(Permission::getId).collect(
@@ -257,7 +257,7 @@ public class RoleGatewayImpl implements RoleGateway {
         allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
     Optional.ofNullable(id).flatMap(roleRepository::findById)
-      .flatMap(roleConvertor::toArchivedPO).ifPresent(roleArchivedPO -> {
+      .flatMap(roleConvertor::toRoleArchivedPO).ifPresent(roleArchivedPO -> {
         // noinspection DuplicatedCode
         roleArchivedPO.setArchived(true);
         roleArchivedRepository.persist(roleArchivedPO);
@@ -290,7 +290,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long id) {
     Optional.ofNullable(id).flatMap(roleArchivedRepository::findById)
-      .flatMap(roleConvertor::toPO).ifPresent(rolePO -> {
+      .flatMap(roleConvertor::toRolePO).ifPresent(rolePO -> {
         rolePO.setArchived(false);
         roleArchivedRepository.deleteById(rolePO.getId());
         roleRepository.persist(rolePO);

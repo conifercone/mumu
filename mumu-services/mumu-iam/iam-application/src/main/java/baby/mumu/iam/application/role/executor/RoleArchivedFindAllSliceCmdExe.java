@@ -57,7 +57,7 @@ public class RoleArchivedFindAllSliceCmdExe {
     Slice<Role> roles = roleGateway.findArchivedAllSlice(role,
       roleArchivedFindAllSliceCmd.getCurrent(), roleArchivedFindAllSliceCmd.getPageSize());
     List<RoleArchivedFindAllSliceDTO> roleArchivedFindAllSliceDTOS = roles.getContent().stream()
-      .map(roleConvertor::toArchivedFindAllSliceDTO)
+      .map(roleConvertor::toRoleArchivedFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(roleArchivedFindAllSliceDTOS, roles.getPageable(),
       roles.hasNext());

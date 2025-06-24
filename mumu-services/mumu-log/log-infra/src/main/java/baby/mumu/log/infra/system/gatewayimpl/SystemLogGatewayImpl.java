@@ -74,7 +74,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   public void submit(SystemLog systemLog) {
-    systemLogConvertor.toKafkaPO(systemLog).ifPresent(res -> {
+    systemLogConvertor.toSystemLogKafkaPO(systemLog).ifPresent(res -> {
       try {
         systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
           objectMapper.writeValueAsString(res));
@@ -86,7 +86,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   public void save(SystemLog systemLog) {
-    systemLogConvertor.toEsPO(systemLog).ifPresent(systemLogEsRepository::save);
+    systemLogConvertor.toSystemLogEsPO(systemLog).ifPresent(systemLogEsRepository::save);
   }
 
   @Override

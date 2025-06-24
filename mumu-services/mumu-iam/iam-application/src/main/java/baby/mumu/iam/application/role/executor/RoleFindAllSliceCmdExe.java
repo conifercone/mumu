@@ -54,7 +54,7 @@ public class RoleFindAllSliceCmdExe {
     Slice<Role> roles = roleGateway.findAllSlice(role,
       roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
     List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
-      .map(roleConvertor::toFindAllSliceDTO)
+      .map(roleConvertor::toRoleFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
       roles.hasNext());

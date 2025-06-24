@@ -59,7 +59,7 @@ public class SystemLogFindAllCmdExe {
       systemLogFindAllCmd.getCurrent(),
       systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllDTO> systemLogFindAllDTOS = systemLogs.getContent().stream()
-      .map(systemLogConvertor::toFindAllDTO).filter(Optional::isPresent).map(Optional::get)
+      .map(systemLogConvertor::toSystemLogFindAllDTO).filter(Optional::isPresent).map(Optional::get)
       .toList();
     return new PageImpl<>(systemLogFindAllDTOS, systemLogs.getPageable(),
       systemLogs.getTotalElements());

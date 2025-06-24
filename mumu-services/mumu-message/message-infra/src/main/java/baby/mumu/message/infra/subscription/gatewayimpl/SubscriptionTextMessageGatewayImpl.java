@@ -84,7 +84,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Transactional(rollbackFor = Exception.class)
   public void forwardMsg(SubscriptionTextMessage msg) {
     Optional.ofNullable(msg)
-      .flatMap(subscriptionTextMessageConvertor::toPO)
+      .flatMap(subscriptionTextMessageConvertor::toSubscriptionTextMessagePO)
       .ifPresent(subscriptionTextMessagePO -> Optional.ofNullable(
           messageProperties.getWebSocket().getAccountSubscriptionChannelMap()
             .get(subscriptionTextMessagePO.getReceiverId()))
@@ -162,16 +162,17 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
     // noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
-      .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchivePO(
-        subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedPO -> {
-        subscriptionTextMessageArchivedPO.setArchived(true);
-        subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
-        subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedPO);
-        GlobalProperties global = extensionProperties.getGlobal();
-        jobScheduler.schedule(Instant.now()
-            .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(subscriptionTextMessageArchivedPO.getId()));
-      }));
+      .ifPresent(
+        subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toSubscriptionTextMessageArchivedPO(
+          subscriptionTextMessageDo).ifPresent(subscriptionTextMessageArchivedPO -> {
+          subscriptionTextMessageArchivedPO.setArchived(true);
+          subscriptionTextMessageRepository.delete(subscriptionTextMessageDo);
+          subscriptionTextMessageArchivedRepository.persist(subscriptionTextMessageArchivedPO);
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+              .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+            () -> deleteArchivedDataJob(subscriptionTextMessageArchivedPO.getId()));
+        }));
   }
 
   @Job(name = "删除ID为：%0 的订阅消息归档数据")
@@ -190,7 +191,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
         accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .ifPresent(
-        subscriptionTextMessageArchivedPO -> subscriptionTextMessageConvertor.toPO(
+        subscriptionTextMessageArchivedPO -> subscriptionTextMessageConvertor.toSubscriptionTextMessagePO(
             subscriptionTextMessageArchivedPO)
           .ifPresent(subscriptionTextMessageDo -> {
             subscriptionTextMessageDo.setArchived(false);

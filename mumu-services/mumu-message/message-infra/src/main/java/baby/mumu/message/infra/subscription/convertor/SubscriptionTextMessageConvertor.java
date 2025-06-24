@@ -64,10 +64,10 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
-  public Optional<SubscriptionTextMessagePO> toPO(
+  public Optional<SubscriptionTextMessagePO> toSubscriptionTextMessagePO(
     SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toPO);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toSubscriptionTextMessagePO);
   }
 
   @Contract("_ -> new")
@@ -88,10 +88,10 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<SubscriptionTextMessageFindAllYouSendDTO> toFindAllYouSendDTO(
+  public Optional<SubscriptionTextMessageFindAllYouSendDTO> toSubscriptionTextMessageFindAllYouSendDTO(
     SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllYouSendDTO)
+      .map(SubscriptionTextMessageMapper.INSTANCE::toSubscriptionTextMessageFindAllYouSendDTO)
       .map(subscriptionTextMessageFindAllYouSendCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -103,10 +103,10 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<SubscriptionTextMessageFindAllWithSomeOneDTO> toFindAllWithSomeOne(
+  public Optional<SubscriptionTextMessageFindAllWithSomeOneDTO> toSubscriptionTextMessageFindAllWithSomeOneDTO(
     SubscriptionTextMessage subscriptionTextMessage) {
     return Optional.ofNullable(subscriptionTextMessage)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toFindAllWithSomeOne)
+      .map(SubscriptionTextMessageMapper.INSTANCE::toSubscriptionTextMessageFindAllWithSomeOneDTO)
       .map(subscriptionTextMessageFindAllWithSomeOneCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -118,17 +118,17 @@ public class SubscriptionTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<SubscriptionTextMessageArchivedPO> toArchivePO(
+  public Optional<SubscriptionTextMessageArchivedPO> toSubscriptionTextMessageArchivedPO(
     SubscriptionTextMessagePO subscriptionTextMessagePO) {
     return Optional.ofNullable(subscriptionTextMessagePO)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toArchivePO);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toSubscriptionTextMessageArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<SubscriptionTextMessagePO> toPO(
+  public Optional<SubscriptionTextMessagePO> toSubscriptionTextMessagePO(
     SubscriptionTextMessageArchivedPO subscriptionTextMessageArchivedPO) {
     return Optional.ofNullable(subscriptionTextMessageArchivedPO)
-      .map(SubscriptionTextMessageMapper.INSTANCE::toPO);
+      .map(SubscriptionTextMessageMapper.INSTANCE::toSubscriptionTextMessagePO);
   }
 }

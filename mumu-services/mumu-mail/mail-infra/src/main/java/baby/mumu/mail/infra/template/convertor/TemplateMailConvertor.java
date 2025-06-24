@@ -36,9 +36,9 @@ public class TemplateMailConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
-  public Optional<TemplateMailThymeleafPO> toThymeleafPO(TemplateMail templateMail) {
+  public Optional<TemplateMailThymeleafPO> toTemplateMailThymeleafPO(TemplateMail templateMail) {
     return Optional.ofNullable(templateMail)
-      .map(TemplateMailMapper.INSTANCE::toThymeleafPO);
+      .map(TemplateMailMapper.INSTANCE::toTemplateMailThymeleafPO);
   }
 
   @Contract("_ -> new")

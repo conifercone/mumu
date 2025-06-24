@@ -61,7 +61,7 @@ public class BroadcastTextMessageFindAllYouSendCmdExe {
       broadcastTextMessageFindAllYouSendCmd.getPageSize());
     List<BroadcastTextMessageFindAllYouSendDTO> broadcastTextMessageFindAllYouSendDTOS = allYouSend.getContent()
       .stream()
-      .map(broadcastTextMessageConvertor::toFindAllYouSendDTO)
+      .map(broadcastTextMessageConvertor::toBroadcastTextMessageFindAllYouSendDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(broadcastTextMessageFindAllYouSendDTOS, allYouSend.getPageable(),
       allYouSend.getTotalElements());

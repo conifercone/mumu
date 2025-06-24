@@ -94,7 +94,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   public void forwardMsg(BroadcastTextMessage msg) {
     Optional.ofNullable(msg).ifPresent(broadcastTextMessage -> Optional.ofNullable(
         messageProperties.getWebSocket().getAccountBroadcastChannelMap())
-      .ifPresent(allOnlineAccountChannels -> broadcastTextMessageConvertor.toPO(
+      .ifPresent(allOnlineAccountChannels -> broadcastTextMessageConvertor.toBroadcastTextMessagePO(
           broadcastTextMessage)
         .ifPresent(broadcastTextMessagePO -> {
           if (CollectionUtils.isNotEmpty(broadcastTextMessage.getReceiverIds())) {
@@ -191,16 +191,17 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
           accountId)))
-      .ifPresent(broadcastTextMessagePO -> broadcastTextMessageConvertor.toArchivePO(
-        broadcastTextMessagePO).ifPresent(broadcastTextMessageArchivedDo -> {
-        broadcastTextMessageArchivedDo.setArchived(true);
-        broadcastTextMessageRepository.delete(broadcastTextMessagePO);
-        broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
-        GlobalProperties global = extensionProperties.getGlobal();
-        jobScheduler.schedule(Instant.now()
-            .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(broadcastTextMessageArchivedDo.getId()));
-      }));
+      .ifPresent(
+        broadcastTextMessagePO -> broadcastTextMessageConvertor.toBroadcastTextMessageArchivedPO(
+          broadcastTextMessagePO).ifPresent(broadcastTextMessageArchivedDo -> {
+          broadcastTextMessageArchivedDo.setArchived(true);
+          broadcastTextMessageRepository.delete(broadcastTextMessagePO);
+          broadcastTextMessageArchivedRepository.persist(broadcastTextMessageArchivedDo);
+          GlobalProperties global = extensionProperties.getGlobal();
+          jobScheduler.schedule(Instant.now()
+              .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
+            () -> deleteArchivedDataJob(broadcastTextMessageArchivedDo.getId()));
+        }));
   }
 
   @Job(name = "删除ID为：%0 的广播消息归档数据")
@@ -221,7 +222,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
         accountId -> broadcastTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))
       .flatMap(
-        broadcastTextMessageConvertor::toPO)
+        broadcastTextMessageConvertor::toBroadcastTextMessagePO)
       .ifPresent(broadcastTextMessagePO -> {
         broadcastTextMessagePO.setArchived(false);
         broadcastTextMessageArchivedRepository.deleteById(broadcastTextMessagePO.getId());

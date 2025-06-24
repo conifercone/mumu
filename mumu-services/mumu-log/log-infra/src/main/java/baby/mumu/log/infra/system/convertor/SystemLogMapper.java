@@ -43,10 +43,10 @@ public interface SystemLogMapper {
   SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogKafkaPO toKafkaPO(SystemLog systemLog);
+  SystemLogKafkaPO toSystemLogKafkaPO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogEsPO toEsPO(SystemLog systemLog);
+  SystemLogEsPO toSystemLogEsPO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLog toEntity(SystemLogSubmitCmd systemLogSubmitCmd);
@@ -61,7 +61,7 @@ public interface SystemLogMapper {
   SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogFindAllDTO toFindAllDTO(SystemLog systemLog);
+  SystemLogFindAllDTO toSystemLogFindAllDTO(SystemLog systemLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaPO systemLogKafkaPO);

@@ -42,7 +42,7 @@ public interface CaptchaMapper extends GrpcMapper {
   CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptchaPO toPO(SimpleCaptcha simpleCaptcha);
+  SimpleCaptchaPO toSimpleCaptchaPO(SimpleCaptcha simpleCaptcha);
 
   @API(status = Status.STABLE, since = "1.0.1")
   SimpleCaptcha toEntity(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);

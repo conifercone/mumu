@@ -80,7 +80,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public void submit(OperationLog operationLog) {
-    operationLogConvertor.toKafkaPO(operationLog).ifPresent(res -> {
+    operationLogConvertor.toOperationLogKafkaPO(operationLog).ifPresent(res -> {
       try {
         operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
           objectMapper.writeValueAsString(
@@ -93,7 +93,8 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public void save(OperationLog operationLog) {
-    operationLogConvertor.toEsPO(operationLog).ifPresent(operationLogEsRepository::save);
+    operationLogConvertor.toOperationLogEsPO(operationLog)
+      .ifPresent(operationLogEsRepository::save);
   }
 
   @Override

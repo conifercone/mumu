@@ -44,9 +44,9 @@ public interface OperationLogMapper extends GrpcMapper {
 
   OperationLogMapper INSTANCE = Mappers.getMapper(OperationLogMapper.class);
 
-  OperationLogKafkaPO toKafkaPO(OperationLog operationLog);
+  OperationLogKafkaPO toOperationLogKafkaPO(OperationLog operationLog);
 
-  OperationLogEsPO toEsPO(OperationLog operationLog);
+  OperationLogEsPO toOperationLogEsPO(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLog toEntity(OperationLogSubmitCmd operationLogSubmitCmd);
@@ -61,10 +61,10 @@ public interface OperationLogMapper extends GrpcMapper {
   OperationLog toEntity(OperationLogFindAllCmd operationLogFindAllCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLogFindAllDTO toFindAllDTO(OperationLog operationLog);
+  OperationLogFindAllDTO toOperationLogFindAllDTO(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  OperationLogQryDTO toQryDTO(OperationLog operationLog);
+  OperationLogQryDTO toOperationLogQryDTO(OperationLog operationLog);
 
   @API(status = Status.STABLE, since = "1.0.1")
   OperationLogSaveCmd toOperationLogSaveCmd(OperationLogKafkaPO operationLogKafkaPO);

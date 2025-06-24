@@ -95,10 +95,10 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.2")
-  public Optional<BroadcastTextMessagePO> toPO(
+  public Optional<BroadcastTextMessagePO> toBroadcastTextMessagePO(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-      .map(BroadcastTextMessageMapper.INSTANCE::toPO);
+      .map(BroadcastTextMessageMapper.INSTANCE::toBroadcastTextMessagePO);
   }
 
   @Contract("_ -> new")
@@ -159,10 +159,10 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.3")
-  public Optional<BroadcastTextMessageFindAllYouSendDTO> toFindAllYouSendDTO(
+  public Optional<BroadcastTextMessageFindAllYouSendDTO> toBroadcastTextMessageFindAllYouSendDTO(
     BroadcastTextMessage broadcastTextMessage) {
     return Optional.ofNullable(broadcastTextMessage)
-      .map(BroadcastTextMessageMapper.INSTANCE::toFindAllYouSendDTO)
+      .map(BroadcastTextMessageMapper.INSTANCE::toBroadcastTextMessageFindAllYouSendDTO)
       .map(broadcastTextMessageFindAllYouSendCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -174,17 +174,17 @@ public class BroadcastTextMessageConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessageArchivedPO> toArchivePO(
+  public Optional<BroadcastTextMessageArchivedPO> toBroadcastTextMessageArchivedPO(
     BroadcastTextMessagePO broadcastTextMessagePO) {
     return Optional.ofNullable(broadcastTextMessagePO)
-      .map(BroadcastTextMessageMapper.INSTANCE::toArchivePO);
+      .map(BroadcastTextMessageMapper.INSTANCE::toBroadcastTextMessageArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BroadcastTextMessagePO> toPO(
+  public Optional<BroadcastTextMessagePO> toBroadcastTextMessagePO(
     BroadcastTextMessageArchivedPO broadcastTextMessageArchivedPO) {
     return Optional.ofNullable(broadcastTextMessageArchivedPO)
-      .map(BroadcastTextMessageMapper.INSTANCE::toPO);
+      .map(BroadcastTextMessageMapper.INSTANCE::toBroadcastTextMessagePO);
   }
 }

@@ -88,10 +88,10 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   void toEntity(RoleUpdateCmd roleUpdateCmd, @MappingTarget Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  RoleFindAllDTO toFindAllDTO(Role role);
+  RoleFindAllDTO toRoleFindAllDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllSliceDTO toFindAllSliceDTO(Role role);
+  RoleFindAllSliceDTO toRoleFindAllSliceDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdDTO toRoleFindByIdDTO(Role role);
@@ -106,22 +106,22 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   RoleFindDirectDTO toRoleFindDirectDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedFindAllDTO toArchivedFindAllDTO(Role role);
+  RoleArchivedFindAllDTO toRoleArchivedFindAllDTO(Role role);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Role role);
+  RoleArchivedFindAllSliceDTO toRoleArchivedFindAllSliceDTO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  RolePO toPO(Role role);
+  RolePO toRolePO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RoleArchivedPO toArchivedPO(RolePO rolePO);
+  RoleArchivedPO toRoleArchivedPO(RolePO rolePO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleArchivedPO toArchivedPO(Role role);
+  RoleArchivedPO toRoleArchivedPO(Role role);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  RolePO toPO(RoleArchivedPO roleArchivedPO);
+  RolePO toRolePO(RoleArchivedPO roleArchivedPO);
 
   @API(status = Status.STABLE, since = "1.0.4")
   Role toEntity(RoleArchivedPO roleArchivedPO);

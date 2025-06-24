@@ -56,7 +56,7 @@ public class RoleArchivedFindAllCmdExe {
     Page<Role> roles = roleGateway.findArchivedAll(role,
       roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
     List<RoleArchivedFindAllDTO> roleArchivedFindAllDTOS = roles.getContent().stream()
-      .map(roleConvertor::toArchivedFindAllDTO)
+      .map(roleConvertor::toRoleArchivedFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(roleArchivedFindAllDTOS, roles.getPageable(),
       roles.getTotalElements());
