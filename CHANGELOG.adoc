@@ -19,6 +19,12 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.11.1] - 2025-06-24
+
+=== 🕸️ Changed
+
+- Adjust workflow configuration
+
 == [2.11.0] - 2025-06-24
 
 === ⭐ Added
