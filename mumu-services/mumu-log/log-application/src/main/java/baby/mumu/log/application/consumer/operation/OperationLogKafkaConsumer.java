@@ -17,9 +17,9 @@
 package baby.mumu.log.application.consumer.operation;
 
 import baby.mumu.log.client.api.OperationLogService;
-import baby.mumu.log.infrastructure.config.LogProperties;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
-import baby.mumu.log.infrastructure.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
+import baby.mumu.log.infra.config.LogProperties;
+import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;

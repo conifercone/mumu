@@ -16,7 +16,7 @@
 
 package baby.mumu.log.configuration;
 
-import baby.mumu.log.infrastructure.config.LogProperties;
+import baby.mumu.log.infra.config.LogProperties;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

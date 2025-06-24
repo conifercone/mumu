@@ -20,7 +20,7 @@ import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
-import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
+import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;

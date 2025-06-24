@@ -32,7 +32,7 @@ import baby.mumu.log.client.cmds.OperationLogSaveCmd;
 import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;

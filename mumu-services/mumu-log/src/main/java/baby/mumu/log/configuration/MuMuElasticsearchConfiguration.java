@@ -16,7 +16,7 @@
 
 package baby.mumu.log.configuration;
 
-import baby.mumu.log.infrastructure.config.LogProperties;
+import baby.mumu.log.infra.config.LogProperties;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

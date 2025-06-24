@@ -18,7 +18,7 @@ package baby.mumu.log.application.operation.executor;
 
 import baby.mumu.log.client.cmds.OperationLogSaveCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

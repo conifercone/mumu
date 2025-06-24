@@ -38,8 +38,8 @@ include("mumu-services:mumu-log:log-client")
 findProject(":mumu-services:mumu-log:log-client")?.name = "log-client"
 include("mumu-services:mumu-log:log-domain")
 findProject(":mumu-services:mumu-log:log-domain")?.name = "log-domain"
-include("mumu-services:mumu-log:log-infrastructure")
-findProject(":mumu-services:mumu-log:log-infrastructure")?.name = "log-infrastructure"
+include("mumu-services:mumu-log:log-infra")
+findProject(":mumu-services:mumu-log:log-infra")?.name = "log-infra"
 include("mumu-basis")
 include("mumu-services:mumu-unique")
 include("mumu-services:mumu-unique:unique-adapter")
