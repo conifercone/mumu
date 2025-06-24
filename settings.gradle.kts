@@ -83,8 +83,8 @@ include("mumu-services:mumu-sms:sms-client")
 findProject(":mumu-services:mumu-sms:sms-client")?.name = "sms-client"
 include("mumu-services:mumu-sms:sms-domain")
 findProject(":mumu-services:mumu-sms:sms-domain")?.name = "sms-domain"
-include("mumu-services:mumu-sms:sms-infrastructure")
-findProject(":mumu-services:mumu-sms:sms-infrastructure")?.name = "sms-infrastructure"
+include("mumu-services:mumu-sms:sms-infra")
+findProject(":mumu-services:mumu-sms:sms-infra")?.name = "sms-infra"
 include("mumu-services:mumu-message")
 include("mumu-services:mumu-message:message-adapter")
 findProject(":mumu-services:mumu-message:message-adapter")?.name = "message-adapter"
