@@ -22,7 +22,6 @@ package baby.mumu.basis.enums;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-@SuppressWarnings("LombokGetterMayBeUsed")
 public enum TokenClaimsEnum {
 
   /**

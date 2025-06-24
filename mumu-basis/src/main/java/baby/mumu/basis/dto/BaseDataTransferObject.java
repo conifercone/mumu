@@ -27,7 +27,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-@SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
 public abstract class BaseDataTransferObject implements DataTransferObject {
 
   @Serial
