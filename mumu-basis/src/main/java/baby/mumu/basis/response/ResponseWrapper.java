@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.response;
 
 import baby.mumu.basis.filters.TraceIdFilter;
@@ -35,7 +36,7 @@ import org.springframework.http.MediaType;
 /**
  * 响应信息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data
@@ -122,7 +123,7 @@ public class ResponseWrapper<T> implements Serializable {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
-    applicationJsonResponse(response, jsonResult);
+    ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 
   private static void applicationJsonResponse(@NotNull HttpServletResponse response,
@@ -140,6 +141,6 @@ public class ResponseWrapper<T> implements Serializable {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
     String jsonResult = objectMapper.writeValueAsString(responseResult);
-    applicationJsonResponse(response, jsonResult);
+    ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 }

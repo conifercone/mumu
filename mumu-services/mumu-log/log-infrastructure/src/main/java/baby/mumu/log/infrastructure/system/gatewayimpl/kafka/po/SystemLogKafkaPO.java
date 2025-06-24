@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.infrastructure.system.gatewayimpl.kafka.po;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,7 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 系统日志数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data

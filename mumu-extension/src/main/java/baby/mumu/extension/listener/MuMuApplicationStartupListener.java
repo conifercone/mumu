@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.listener;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ import org.springframework.context.ApplicationListener;
 /**
  * 项目启动成功监听器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public class MuMuApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch;
 
 import baby.mumu.log.infrastructure.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
@@ -21,7 +22,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * 操作日志es存储操作对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface OperationLogEsRepository extends

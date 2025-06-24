@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.api;
 
 import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
@@ -25,7 +26,7 @@ import org.springframework.data.domain.Page;
 /**
  * 操作日志api
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface OperationLogService {

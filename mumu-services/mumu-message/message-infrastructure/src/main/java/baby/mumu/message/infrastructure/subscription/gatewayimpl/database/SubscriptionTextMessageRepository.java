@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.subscription.gatewayimpl.database;
 
 import baby.mumu.message.infrastructure.subscription.gatewayimpl.database.po.SubscriptionTextMessagePO;
@@ -24,7 +25,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 订阅文本消息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 public interface SubscriptionTextMessageRepository extends

@@ -1,7 +1,9 @@
-description = "邮件服务"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_MAIL.description
 
 dependencies {
-    implementation(project(":mumu-services:mumu-authentication:authentication-client"))
+    implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-services:mumu-mail:mail-infrastructure"))
     implementation(project(":mumu-services:mumu-mail:mail-adapter"))
     implementation(project(":mumu-services:mumu-mail:mail-client"))

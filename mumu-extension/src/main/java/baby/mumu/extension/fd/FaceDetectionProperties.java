@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.fd;
 
 import baby.mumu.extension.fd.opencv.OpencvProperties;
@@ -22,7 +23,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 人脸检测配置属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Data

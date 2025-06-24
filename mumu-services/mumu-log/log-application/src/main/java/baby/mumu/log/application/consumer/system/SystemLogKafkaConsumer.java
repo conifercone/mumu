@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.application.consumer.system;
 
 import baby.mumu.log.client.api.SystemLogService;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component;
 /**
  * 系统日志消费者
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

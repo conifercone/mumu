@@ -2,12 +2,12 @@
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{authentication-service-url}}/permission/add
+POST {{iam-service-url}}/permission/add
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -30,12 +30,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{authentication-service-url}}/permission/deleteById/620233337749509
+DELETE {{iam-service-url}}/permission/deleteById/620233337749509
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -54,12 +54,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{authentication-service-url}}/permission/deleteByCode/test2
+DELETE {{iam-service-url}}/permission/deleteByCode/test2
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -78,12 +78,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{authentication-service-url}}/permission/updateById
+PUT {{iam-service-url}}/permission/updateById
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -107,12 +107,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{authentication-service-url}}/permission/addAncestor
+PUT {{iam-service-url}}/permission/addAncestor
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -136,12 +136,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{authentication-service-url}}/permission/deletePath?descendantId=2&ancestorId=1
+DELETE {{iam-service-url}}/permission/deletePath?descendantId=2&ancestorId=1
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -160,12 +160,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{authentication-service-url}}/permission/archiveById/4
+PUT {{iam-service-url}}/permission/archiveById/4
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -184,12 +184,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{authentication-service-url}}/permission/recoverFromArchiveById/4
+PUT {{iam-service-url}}/permission/recoverFromArchiveById/4
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -208,12 +208,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findAll?current=1&pageSize=10&name=数据
+GET {{iam-service-url}}/permission/findAll?current=1&pageSize=10&name=数据
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -232,12 +232,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/downloadAll
+GET {{iam-service-url}}/permission/downloadAll
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -256,12 +256,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/downloadAllIncludePath
+GET {{iam-service-url}}/permission/downloadAllIncludePath
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -280,12 +280,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findAllSlice?current=1&pageSize=10&name=数据
+GET {{iam-service-url}}/permission/findAllSlice?current=1&pageSize=10&name=数据
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -304,12 +304,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findById/1
+GET {{iam-service-url}}/permission/findById/1
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -328,12 +328,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findByCode/test2
+GET {{iam-service-url}}/permission/findByCode/test2
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -352,12 +352,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findRoot?current=1&pageSize=10
+GET {{iam-service-url}}/permission/findRoot?current=1&pageSize=10
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -376,12 +376,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findDirect?current=1&pageSize=10&ancestorId=1
+GET {{iam-service-url}}/permission/findDirect?current=1&pageSize=10&ancestorId=1
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -400,12 +400,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findArchivedAll?current=1&pageSize=10
+GET {{iam-service-url}}/permission/findArchivedAll?current=1&pageSize=10
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -424,12 +424,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("authentication-service-url"))
+  const headers = generateHeaders(request.environment.get("iam-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{authentication-service-url}}/permission/findArchivedAllSlice?current=1&pageSize=10
+GET {{iam-service-url}}/permission/findArchivedAllSlice?current=1&pageSize=10
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

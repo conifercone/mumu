@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import org.springframework.context.annotation.Import;
 /**
  * 分布式主键生成服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SpringBootApplication
@@ -43,6 +45,8 @@ public class MuMuUniqueApplication {
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuUniqueApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
+      ServiceEnum.UNIQUE.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuUniqueApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import com.p6spy.engine.event.JdbcEventListener;
@@ -24,7 +25,7 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
 /**
  * P6Factory
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class MuMuSqlLogFactory implements P6Factory {

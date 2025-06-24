@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.kotlin.tools
 
 import org.slf4j.LoggerFactory
@@ -25,7 +26,7 @@ import java.util.*
 /**
  * spring上下文工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 class SpringContextUtils : ApplicationContextAware {

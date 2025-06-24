@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 日志服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SpringBootApplication
@@ -38,6 +40,8 @@ public class MuMuLogApplication {
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuLogApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
+      ServiceEnum.LOG.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuLogApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

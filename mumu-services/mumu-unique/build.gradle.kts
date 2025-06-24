@@ -1,4 +1,6 @@
-description = "特制服务"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_UNIQUE.description
 
 dependencies {
     implementation(project(":mumu-services:mumu-unique:unique-adapter"))

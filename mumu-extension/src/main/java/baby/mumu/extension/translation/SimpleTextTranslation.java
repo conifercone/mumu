@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.translation;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -25,7 +26,7 @@ import org.apiguardian.api.API.Status;
 /**
  * 简单文本翻译接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 public interface SimpleTextTranslation {

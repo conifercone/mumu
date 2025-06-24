@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl.database;
 
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessageArchivedPO;
@@ -23,7 +24,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 广播文本归档消息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 public interface BroadcastTextMessageArchivedRepository extends

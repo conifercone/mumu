@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.provider;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -24,7 +25,7 @@ import baby.mumu.basis.response.ResponseCode;
  * <p>使用此限流ID需要注意方法是否需要鉴权才能访问，如果不需要鉴权就可以访问那么此处会抛出UNAUTHORIZED</p>
  * <p>所以使用此种限流ID时需要保证该限流ID对应的方法是需要鉴权才能访问的方法</p>
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class RateLimitingAccountIdKeyProviderImpl implements RateLimitingKeyProvider {

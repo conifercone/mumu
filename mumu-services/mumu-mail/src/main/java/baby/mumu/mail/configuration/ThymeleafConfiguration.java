@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -25,7 +26,7 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 /**
  * thymeleaf模板引擎配置文件
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Configuration

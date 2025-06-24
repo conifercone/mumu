@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.api;
 
 import baby.mumu.unique.client.api.grpc.PrimaryKeyServiceGrpc;
@@ -33,7 +34,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 主键生成对外提供grpc调用实例
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Observed(name = "PrimaryKeyGrpcService")

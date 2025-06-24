@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.api;
 
 import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc;
@@ -28,7 +29,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 系统日志对外提供grpc调用实例
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class SystemLogGrpcService extends LogGrpcService implements DisposableBean {
@@ -59,7 +60,7 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
   private void syncSubmitFromGrpc(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     SystemLogServiceFutureStub systemLogServiceFutureStub = SystemLogServiceGrpc.newFutureStub(
       channel);
-    //noinspection ResultOfMethodCallIgnored
+    // noinspection ResultOfMethodCallIgnored
     systemLogServiceFutureStub.submit(systemLogSubmitGrpcCmd);
   }
 

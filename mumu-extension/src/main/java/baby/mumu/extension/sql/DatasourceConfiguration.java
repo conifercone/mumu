@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql;
 
 import baby.mumu.basis.constants.BeanNameConstants;
@@ -39,7 +40,7 @@ import org.springframework.context.annotation.Role;
 /**
  * 数据源配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

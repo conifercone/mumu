@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.constants;
 
 /**
  * springboot 相关常量
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public final class SpringBootConstants {
 
   public static final String APPLICATION_TITLE = "application.title";
+  public static final String SPRING_APPLICATION_NAME = "spring.application.name";
   public static final String APPLICATION_FORMATTED_VERSION = "application.formatted-version";
 
   private SpringBootConstants() {

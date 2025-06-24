@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.domain.broadcast.gateway;
 
 import baby.mumu.message.domain.broadcast.BroadcastTextMessage;
@@ -24,7 +25,7 @@ import org.springframework.data.domain.Page;
 /**
  * 广播文本消息领域网关
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 public interface BroadcastTextMessageGateway {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.configuration;
 
 import baby.mumu.message.infrastructure.config.MessageProperties;
@@ -41,7 +42,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * netty配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Configuration
@@ -97,7 +98,7 @@ public class NettyConfiguration {
                 */
         socketChannel.pipeline().addLast(
           new WebSocketServerProtocolHandler(messageProperties.getWebSocket().getPath(),
-            WEBSOCKET_PROTOCOL, true,
+            NettyConfiguration.WEBSOCKET_PROTOCOL, true,
             65536 * 10));
         // 自定义的handler，处理业务逻辑
         socketChannel.pipeline().addLast(webSocketHandler());
@@ -105,7 +106,8 @@ public class NettyConfiguration {
     });
     // 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
     ChannelFuture channelFuture = bootstrap.bind().sync();
-    log.info("Server started and listen on:{}", channelFuture.channel().localAddress());
+    NettyConfiguration.log.info("Server started and listen on:{}",
+      channelFuture.channel().localAddress());
     // 对关闭通道进行监听
     channelFuture.channel().closeFuture().sync();
   }

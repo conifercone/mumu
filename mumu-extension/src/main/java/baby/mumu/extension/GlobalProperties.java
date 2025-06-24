@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension;
 
 import java.time.temporal.ChronoUnit;
@@ -24,7 +25,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 全局配置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Data

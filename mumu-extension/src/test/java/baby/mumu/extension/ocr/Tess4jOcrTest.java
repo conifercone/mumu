@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr;
 
 import baby.mumu.extension.ocr.tess4j.Tess4jLanguageEnum;
@@ -24,6 +25,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestPropertySource;
@@ -32,10 +34,10 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 /**
  * ocr单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
-@SpringJUnitConfig(OcrConfiguration.class)
+@SpringJUnitConfig({OcrConfiguration.class, MessageSourceAutoConfiguration.class})
 @TestPropertySource(properties = {
   "mumu.extension.ocr.tess4j.enabled=true"
 })

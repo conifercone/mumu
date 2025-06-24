@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail;
 
 import baby.mumu.basis.enums.OAuth2Enum;
@@ -33,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 自动获取token
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public class AuthenticationRequired {
@@ -41,7 +42,7 @@ public class AuthenticationRequired {
   public Optional<String> getToken() {
     RestTemplate restTemplate = new RestTemplate();
     ObjectMapper objectMapper = new ObjectMapper();
-    String url = "http://localhost:9080/api/mumu/authentication/oauth2/token";
+    String url = "http://localhost:9080/api/mumu/iam/oauth2/token";
     MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
     form.add("username", "admin");
     form.add("password", "Admin@5211314");

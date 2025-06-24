@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.gson;
 
 import com.google.gson.GsonBuilder;
@@ -24,7 +25,7 @@ import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
 /**
  * gson 构建器定制器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class MuMuGsonBuilderCustomizer implements GsonBuilderCustomizer {

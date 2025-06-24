@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.config;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.IdGeneratorType;
 /**
  * 雪花算法ID生成器注解
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 @IdGeneratorType(SnowflakeIdentifierGenerator.class)

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.tools;
 
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Money 单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class MoneyTest {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.tools;
 
 import baby.mumu.basis.condition.ConditionalExecutor;
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Test;
 /**
  * ConditionalExecutor单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class ConditionalExecutorTest {

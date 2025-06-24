@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import baby.mumu.basis.kotlin.tools.SpringContextUtils;
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * 可以和ELK+logback日志系统集成
  * </p>
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomLogger extends FormattedLogger {
@@ -40,12 +41,12 @@ public class P6spyCustomLogger extends FormattedLogger {
 
   @Override
   public void logException(Exception e) {
-    log.info("", e);
+    P6spyCustomLogger.log.info("", e);
   }
 
   @Override
   public void logText(String text) {
-    log.info(text);
+    P6spyCustomLogger.log.info(text);
   }
 
   @Override
@@ -73,19 +74,19 @@ public class P6spyCustomLogger extends FormattedLogger {
         category.toString(), prepared, sql, url);
       stringBuilder.append(msg);
 
-      print(category, stringBuilder);
+      P6spyCustomLogger.print(category, stringBuilder);
     }
   }
 
   private static void print(Category category, StringBuilder stringBuilder) {
     if (Category.ERROR.equals(category)) {
-      log.error(stringBuilder.toString());
+      P6spyCustomLogger.log.error(stringBuilder.toString());
     } else if (Category.WARN.equals(category)) {
-      log.warn(stringBuilder.toString());
+      P6spyCustomLogger.log.warn(stringBuilder.toString());
     } else if (Category.DEBUG.equals(category)) {
-      log.debug(stringBuilder.toString());
+      P6spyCustomLogger.log.debug(stringBuilder.toString());
     } else {
-      log.info(stringBuilder.toString());
+      P6spyCustomLogger.log.info(stringBuilder.toString());
     }
   }
 
@@ -93,13 +94,13 @@ public class P6spyCustomLogger extends FormattedLogger {
   @Override
   public boolean isCategoryEnabled(Category category) {
     if (Category.ERROR.equals(category)) {
-      return log.isErrorEnabled();
+      return P6spyCustomLogger.log.isErrorEnabled();
     } else if (Category.WARN.equals(category)) {
-      return log.isWarnEnabled();
+      return P6spyCustomLogger.log.isWarnEnabled();
     } else if (Category.DEBUG.equals(category)) {
-      return log.isDebugEnabled();
+      return P6spyCustomLogger.log.isDebugEnabled();
     } else {
-      return log.isInfoEnabled();
+      return P6spyCustomLogger.log.isInfoEnabled();
     }
   }
 

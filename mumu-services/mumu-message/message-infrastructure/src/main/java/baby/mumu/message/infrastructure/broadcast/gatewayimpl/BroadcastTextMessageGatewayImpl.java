@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
@@ -56,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 广播文本消息领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Component
@@ -186,7 +187,7 @@ public class BroadcastTextMessageGatewayImpl implements BroadcastTextMessageGate
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> broadcastTextMessageRepository.findByIdAndSenderId(msgId,
           accountId)))

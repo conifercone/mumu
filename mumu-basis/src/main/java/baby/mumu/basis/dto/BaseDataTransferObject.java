@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,7 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * Base Data Transfer Object
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})

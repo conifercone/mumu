@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.processor.metamodel;
 
 import baby.mumu.basis.annotations.Meta;
@@ -66,7 +67,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 元模型生成器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @SuppressWarnings("unused")
@@ -147,7 +148,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       packageName = packageElement.getQualifiedName().toString();
       entityName = annotatedElement.getSimpleName().toString();
     }
-    genEntityName = entityName + GENERATE_DESCRIPTION_CLASS_SUFFIX;
+    genEntityName = entityName + MetamodelGenerator.GENERATE_DESCRIPTION_CLASS_SUFFIX;
 
     String qualifiedGenEntityName =
       (packageName.isEmpty() ? StringUtils.EMPTY : packageName + ".") + genEntityName;
@@ -225,7 +226,7 @@ public class MetamodelGenerator extends AbstractProcessor {
                   SingularAttribute.class.getSimpleName()),
                 TypeName.get(ObjectUtils.getEntityType(field).asType()),
                 fieldClassName),
-              field.getSimpleName().toString().concat(SINGULAR_FIELD_SUFFIX))
+              field.getSimpleName().toString().concat(MetamodelGenerator.SINGULAR_FIELD_SUFFIX))
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
             .addJavadoc(String.format(
               "@see %s#%s",
@@ -243,7 +244,7 @@ public class MetamodelGenerator extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer("$S", custom.value())
         .addJavadoc(String.format(
-          SEE_S_S_LINK_S,
+          MetamodelGenerator.SEE_S_S_LINK_S,
           packageName, entityName, Metamodel.class.getName()))
         .build();
       builder.addField(fieldSpec);
@@ -254,7 +255,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     Builder builder,
     @NotNull Metamodel annotation) {
     String seeDoc = String.format(
-      SEE_S_S_LINK_S,
+      MetamodelGenerator.SEE_S_S_LINK_S,
       packageName, entityName, Metamodel.class.getName());
     if (annotation.projectVersion()) {
       FieldSpec fieldSpec = FieldSpec.builder(String.class, annotation.projectVersionFiledName())

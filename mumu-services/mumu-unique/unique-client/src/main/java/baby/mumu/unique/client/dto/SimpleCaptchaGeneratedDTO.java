@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import lombok.Data;
@@ -24,12 +24,11 @@ import lombok.EqualsAndHashCode;
 /**
  * 简单验证码生成数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class SimpleCaptchaGeneratedDTO extends BaseDataTransferObject {
 
   @Serial

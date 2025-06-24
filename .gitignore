@@ -19,7 +19,6 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
 .jpb
 *.iws
 *.iml

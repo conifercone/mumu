@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache;
 
 import baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
@@ -21,7 +22,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 /**
  * 简单验证码操作类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public interface SimpleCaptchaCacheRepository extends

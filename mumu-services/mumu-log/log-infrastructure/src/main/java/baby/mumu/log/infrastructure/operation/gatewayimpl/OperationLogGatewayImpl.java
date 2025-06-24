@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.infrastructure.operation.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
@@ -51,7 +52,7 @@ import org.springframework.stereotype.Component;
 /**
  * 操作日志领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

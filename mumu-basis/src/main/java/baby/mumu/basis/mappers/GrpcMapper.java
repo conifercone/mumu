@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.mappers;
 
 import com.google.protobuf.BoolValue;
@@ -32,7 +33,7 @@ import org.apiguardian.api.API.Status;
 /**
  * grpc mapper
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public interface GrpcMapper {

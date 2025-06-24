@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource;
 
 import baby.mumu.extension.ExtensionProperties;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 /**
  * p6spy数据源过滤器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
@@ -36,12 +37,12 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
   @Override
   public DataSource afterCreate(DataSource dataSource,
     @NotNull ExtensionProperties extensionProperties) {
-    log.debug("P6spyDataSourceFilter afterCreate starting...");
+    P6spyDataSourceFilter.log.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
       extensionProperties.getSql().getLog().isEnabled();
     if (enableLog) {
       dataSource = new P6DataSource(dataSource);
-      log.debug("p6spy datasource wrapped datasource");
+      P6spyDataSourceFilter.log.debug("p6spy datasource wrapped datasource");
     }
 
     return dataSource;

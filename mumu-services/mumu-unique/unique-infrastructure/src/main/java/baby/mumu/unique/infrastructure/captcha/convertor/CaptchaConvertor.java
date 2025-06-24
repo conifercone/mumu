@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.infrastructure.captcha.convertor;
 
 import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component;
 /**
  * 验证码对象转换类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component

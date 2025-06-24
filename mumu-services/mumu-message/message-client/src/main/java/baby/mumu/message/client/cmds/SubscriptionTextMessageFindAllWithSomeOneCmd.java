@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.client.cmds;
 
 import jakarta.validation.constraints.Min;
@@ -22,7 +23,7 @@ import lombok.Data;
 /**
  * 文本订阅消息查询所有和某人的消息记录指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Data

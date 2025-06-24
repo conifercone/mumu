@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.client.config;
 
 import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * api配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Configuration

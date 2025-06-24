@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.domain.country.gateway;
 
 import baby.mumu.unique.domain.country.City;
@@ -24,7 +25,7 @@ import java.util.Optional;
 /**
  * 国家领域网关
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 public interface CountryGateway {

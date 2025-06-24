@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.api;
 
 import baby.mumu.unique.client.dto.CountryGetAllDTO;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * 国家
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 public interface CountryService {

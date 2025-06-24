@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
@@ -35,7 +36,7 @@ import java.lang.annotation.Target;
 /**
  * not blank or null
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Documented

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.client.api;
 
+import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -26,12 +28,12 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 邮件grpc服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 class MailGrpcService {
 
-  public static final String GRPC_MAIL = "mail";
+  public static final String GRPC_MAIL = ServiceEnum.MAIL.getName();
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -43,11 +45,11 @@ class MailGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_MAIL)
+            "discovery-client://" + MailGrpcService.GRPC_MAIL)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -56,7 +58,7 @@ class MailGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_MAIL).isEmpty();
+    return !discoveryClient.getInstances(MailGrpcService.GRPC_MAIL).isEmpty();
   }
 
 }

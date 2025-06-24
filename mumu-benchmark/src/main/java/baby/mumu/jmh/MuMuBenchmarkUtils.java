@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.jmh;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,7 @@ import org.openjdk.jmh.results.format.ResultFormatType;
 /**
  * 基准测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
 public class MuMuBenchmarkUtils {
@@ -30,7 +31,7 @@ public class MuMuBenchmarkUtils {
 
   public static @NotNull String getResultFilePath(@NotNull Class<?> clazz,
     @NotNull ResultFormatType format) {
-    return String.format(RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
+    return String.format(MuMuBenchmarkUtils.RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
       format.toString().toLowerCase());
   }
 }

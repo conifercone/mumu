@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.translation;
 
 import baby.mumu.extension.translation.aliyun.AliyunTranslationProperties;
@@ -23,7 +24,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 机器翻译属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Data

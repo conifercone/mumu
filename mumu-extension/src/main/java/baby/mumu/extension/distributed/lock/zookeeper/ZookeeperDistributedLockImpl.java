@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.distributed.lock.zookeeper;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * zookeeper分布式锁实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class ZookeeperDistributedLockImpl implements DistributedLock {
@@ -46,18 +47,19 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
   public ZookeeperDistributedLockImpl(CuratorFramework mumuCuratorFramework,
     @NotNull ZookeeperProperties zookeeperProperties) {
     this.curatorFramework = mumuCuratorFramework;
-    rootNode = ensureLeadingAndTrailingSlash(zookeeperProperties.getRootLockPath());
+    rootNode = ZookeeperDistributedLockImpl.ensureLeadingAndTrailingSlash(
+      zookeeperProperties.getRootLockPath());
   }
 
   private static @NotNull String ensureLeadingAndTrailingSlash(String input) {
     if (input == null) {
-      return PATH_SEPARATOR;
+      return ZookeeperDistributedLockImpl.PATH_SEPARATOR;
     }
-    if (!input.startsWith(PATH_SEPARATOR)) {
-      input = PATH_SEPARATOR + input;
+    if (!input.startsWith(ZookeeperDistributedLockImpl.PATH_SEPARATOR)) {
+      input = ZookeeperDistributedLockImpl.PATH_SEPARATOR + input;
     }
-    if (!input.endsWith(PATH_SEPARATOR)) {
-      input = input + PATH_SEPARATOR;
+    if (!input.endsWith(ZookeeperDistributedLockImpl.PATH_SEPARATOR)) {
+      input = input + ZookeeperDistributedLockImpl.PATH_SEPARATOR;
     }
     return input;
   }
@@ -67,7 +69,8 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
     try {
       return getInterProcessLock(lockName).acquire(-1, null);
     } catch (Exception e) {
-      log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
+      ZookeeperDistributedLockImpl.log.error(
+        ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;
     }
   }
@@ -76,7 +79,7 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
     if (StringUtils.isBlank(lockName)) {
       throw new MuMuException(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK);
     }
-    if (lockName.startsWith(PATH_SEPARATOR)) {
+    if (lockName.startsWith(ZookeeperDistributedLockImpl.PATH_SEPARATOR)) {
       lockName = lockName.substring(1);
     }
     // 使用 computeIfAbsent 来确保每个锁名只有一个锁实例
@@ -89,7 +92,8 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
     try {
       return getInterProcessLock(lockName).acquire(waitTime, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
-      log.error(ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
+      ZookeeperDistributedLockImpl.log.error(
+        ResponseCode.FAILED_TO_OBTAIN_DISTRIBUTED_LOCK.getMessage(), e);
       return false;
     }
   }
@@ -101,9 +105,10 @@ public class ZookeeperDistributedLockImpl implements DistributedLock {
       // 确保只有当前线程持有锁时才释放
       if (lock.isAcquiredInThisProcess()) {
         lock.release();
-        log.info("Lock released successfully for: {}", lockName);
+        ZookeeperDistributedLockImpl.log.info("Lock released successfully for: {}", lockName);
       } else {
-        log.warn("Lock {} was not acquired by the current process, skip releasing.", lockName);
+        ZookeeperDistributedLockImpl.log.warn(
+          "Lock {} was not acquired by the current process, skip releasing.", lockName);
       }
     } catch (Exception e) {
       throw new MuMuException(ResponseCode.FAILED_TO_RELEASE_DISTRIBUTED_LOCK);

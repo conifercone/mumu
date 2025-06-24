@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.po.ArchivablePersistentObject;
@@ -22,7 +23,7 @@ import lombok.Setter;
 /**
  * jpa 可缓存的基础可存档数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Setter

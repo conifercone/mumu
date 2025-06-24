@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.kotlin.tools
 
 import java.util.*
@@ -24,7 +25,7 @@ import java.util.function.Function
  *
  * 满载时淘汰最近最久未使用的数据
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 class ConcurrentCache<K, V>(private val size: Int) {

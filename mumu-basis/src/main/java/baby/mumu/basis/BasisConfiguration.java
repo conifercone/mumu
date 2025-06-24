@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
@@ -33,7 +34,7 @@ import org.springframework.core.annotation.Order;
 /**
  * 基础模块配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

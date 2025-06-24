@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.fd.opencv;
 
 import baby.mumu.extension.fd.FaceDetection;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * opencv人脸检测处理器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
@@ -46,7 +47,7 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   @Override
   public Long numberOfFaces(FaceDetection faceDetection) {
     return Optional.ofNullable(faceDetection).map(faceDetectionNonNull -> {
-      Result result = getResult(faceDetectionNonNull);
+      Result result = OpencvFaceDetectionProcessor.getResult(faceDetectionNonNull);
       faceDetector.detectMultiScale(result.grayImage, result.faces);
       return result.faces.size();
     }).orElse(0L);
@@ -55,7 +56,7 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
   @Override
   public void drawBorder(FaceDetection faceDetection) {
     Optional.ofNullable(faceDetection).ifPresent(faceDetectionNonNull -> {
-      Result result = getResult(
+      Result result = OpencvFaceDetectionProcessor.getResult(
         faceDetectionNonNull);
       // 绘制矩形框在检测到的人脸周围
       try (RectVector faces = result.faces()) {

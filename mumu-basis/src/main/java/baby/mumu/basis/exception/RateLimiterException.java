@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.exception;
 
 import baby.mumu.basis.response.ResponseCode;
@@ -22,7 +23,7 @@ import lombok.Getter;
 /**
  * 限流异常
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Getter

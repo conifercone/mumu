@@ -7,27 +7,27 @@ pluginManagement {
 
 buildCache {
     local {
-        directory = file("${rootDir}/build-cache")
+        directory = file("${rootDir}/.gradle/build-cache")
     }
 }
 
 rootProject.name = "mumu"
-include("mumu-services:mumu-authentication")
-include("mumu-services:mumu-authentication:authentication-adapter")
-findProject(":mumu-services:mumu-authentication:authentication-adapter")?.name =
-    "authentication-adapter"
-include("mumu-services:mumu-authentication:authentication-application")
-findProject(":mumu-services:mumu-authentication:authentication-application")?.name =
-    "authentication-application"
-include("mumu-services:mumu-authentication:authentication-domain")
-findProject(":mumu-services:mumu-authentication:authentication-domain")?.name =
-    "authentication-domain"
-include("mumu-services:mumu-authentication:authentication-infrastructure")
-findProject(":mumu-services:mumu-authentication:authentication-infrastructure")?.name =
-    "authentication-infrastructure"
-include("mumu-services:mumu-authentication:authentication-client")
-findProject(":mumu-services:mumu-authentication:authentication-client")?.name =
-    "authentication-client"
+include("mumu-services:mumu-iam")
+include("mumu-services:mumu-iam:iam-adapter")
+findProject(":mumu-services:mumu-iam:iam-adapter")?.name =
+    "iam-adapter"
+include("mumu-services:mumu-iam:iam-application")
+findProject(":mumu-services:mumu-iam:iam-application")?.name =
+    "iam-application"
+include("mumu-services:mumu-iam:iam-domain")
+findProject(":mumu-services:mumu-iam:iam-domain")?.name =
+    "iam-domain"
+include("mumu-services:mumu-iam:iam-infrastructure")
+findProject(":mumu-services:mumu-iam:iam-infrastructure")?.name =
+    "iam-infrastructure"
+include("mumu-services:mumu-iam:iam-client")
+findProject(":mumu-services:mumu-iam:iam-client")?.name =
+    "iam-client"
 include("mumu-extension")
 include("mumu-services:mumu-log")
 include("mumu-services:mumu-log:log-adapter")
@@ -63,17 +63,17 @@ include("mumu-services:mumu-mail:mail-domain")
 findProject(":mumu-services:mumu-mail:mail-domain")?.name = "mail-domain"
 include("mumu-services:mumu-mail:mail-infrastructure")
 findProject(":mumu-services:mumu-mail:mail-infrastructure")?.name = "mail-infrastructure"
-include("mumu-services:mumu-file")
-include("mumu-services:mumu-file:file-adapter")
-findProject(":mumu-services:mumu-file:file-adapter")?.name = "file-adapter"
-include("mumu-services:mumu-file:file-application")
-findProject(":mumu-services:mumu-file:file-application")?.name = "file-application"
-include("mumu-services:mumu-file:file-client")
-findProject(":mumu-services:mumu-file:file-client")?.name = "file-client"
-include("mumu-services:mumu-file:file-domain")
-findProject(":mumu-services:mumu-file:file-domain")?.name = "file-domain"
-include("mumu-services:mumu-file:file-infrastructure")
-findProject(":mumu-services:mumu-file:file-infrastructure")?.name = "file-infrastructure"
+include("mumu-services:mumu-storage")
+include("mumu-services:mumu-storage:storage-adapter")
+findProject(":mumu-services:mumu-storage:storage-adapter")?.name = "storage-adapter"
+include("mumu-services:mumu-storage:storage-application")
+findProject(":mumu-services:mumu-storage:storage-application")?.name = "storage-application"
+include("mumu-services:mumu-storage:storage-client")
+findProject(":mumu-services:mumu-storage:storage-client")?.name = "storage-client"
+include("mumu-services:mumu-storage:storage-domain")
+findProject(":mumu-services:mumu-storage:storage-domain")?.name = "storage-domain"
+include("mumu-services:mumu-storage:storage-infrastructure")
+findProject(":mumu-services:mumu-storage:storage-infrastructure")?.name = "storage-infrastructure"
 include("mumu-services:mumu-sms")
 include("mumu-services:mumu-sms:sms-adapter")
 findProject(":mumu-services:mumu-sms:sms-adapter")?.name = "sms-adapter"

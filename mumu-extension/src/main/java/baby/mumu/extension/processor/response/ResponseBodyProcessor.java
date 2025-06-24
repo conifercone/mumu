@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.processor.response;
 
 import baby.mumu.basis.dto.DataTransferObject;
@@ -54,7 +55,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /**
  * 响应处理器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @RestControllerAdvice(annotations = RestController.class)
@@ -82,9 +83,10 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setStatus(
       mumuException.getResponseCode() != null ? mumuException.getResponseCode().getStatus()
         : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    log.error(mumuException.getMessage(), mumuException);
+    ResponseBodyProcessor.log.error(mumuException.getMessage(), mumuException);
     if (mumuException.getThrowable() != null) {
-      log.error(mumuException.getThrowable().getMessage(), mumuException.getThrowable());
+      ResponseBodyProcessor.log.error(mumuException.getThrowable().getMessage(),
+        mumuException.getThrowable());
     }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(mumuException.getMessage())
@@ -105,7 +107,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(responseCode.getStatus());
-    log.error(rateLimiterException.getMessage(), rateLimiterException);
+    ResponseBodyProcessor.log.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(rateLimiterException.getMessage())
       .setCategory("rateLimiterException")
@@ -121,7 +123,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    log.error(validationException.getMessage(), validationException);
+    ResponseBodyProcessor.log.error(validationException.getMessage(), validationException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(validationException.getMessage())
       .setCategory("validationException")
@@ -139,7 +141,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.PARAMS_IS_INVALID.getStatus());
-    log.error(httpMessageNotReadableException.getMessage(), httpMessageNotReadableException);
+    ResponseBodyProcessor.log.error(httpMessageNotReadableException.getMessage(),
+      httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(httpMessageNotReadableException.getMessage())
       .setCategory("httpMessageNotReadableException")
@@ -155,7 +158,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    log.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
+    ResponseBodyProcessor.log.error(methodArgumentNotValidException.getMessage(),
+      methodArgumentNotValidException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(methodArgumentNotValidException.getMessage())
       .setCategory("methodArgumentNotValidException")
@@ -173,7 +177,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    log.error(illegalArgumentException.getMessage(), illegalArgumentException);
+    ResponseBodyProcessor.log.error(illegalArgumentException.getMessage(),
+      illegalArgumentException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(illegalArgumentException.getMessage())
       .setCategory("illegalArgumentException")
@@ -194,7 +199,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS.getStatus());
-    log.error(missingServletRequestParameterException.getMessage(),
+    ResponseBodyProcessor.log.error(missingServletRequestParameterException.getMessage(),
       missingServletRequestParameterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(missingServletRequestParameterException.getMessage())
@@ -211,7 +216,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.INTERNAL_SERVER_ERROR.getStatus());
-    log.error(exception.getMessage(), exception);
+    ResponseBodyProcessor.log.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(exception.getMessage())
       .setCategory("exception")
@@ -231,7 +236,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NotNull MediaType selectedContentType,
     @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
     @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
-    if (VOID.equals(getReturnName(returnType))) {
+    if (ResponseBodyProcessor.VOID.equals(getReturnName(returnType))) {
       return ResponseWrapper.success();
     }
     return switch (body) {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.infrastructure.country.gatewayimpl;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -37,7 +38,7 @@ import org.springframework.stereotype.Component;
 /**
  * 国家领域网关实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Component

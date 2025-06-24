@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension;
 
 import baby.mumu.extension.aspects.AspectConfiguration;
@@ -40,7 +41,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
 /**
  * 拓展模块配置
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

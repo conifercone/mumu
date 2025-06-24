@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.idempotent.request.id;
 
 import baby.mumu.basis.response.ResponseCode;
@@ -35,7 +36,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * request id 过滤器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 public class RequestIdFilter extends OncePerRequestFilter {
@@ -62,7 +63,7 @@ public class RequestIdFilter extends OncePerRequestFilter {
       extensionProperties.getIdempotent().getAllowlist())) && (
       StringUtils.isBlank(requestIdHeaderValue) || requestIdIdempotentProcessor.processed(
         requestIdHeaderValue))) {
-      log.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
+      RequestIdFilter.log.error(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getMessage());
       response.setStatus(ResponseCode.REQUEST_HAS_BEEN_PROCESSED.getStatus());
       ResponseWrapper.exceptionResponse(response, ResponseCode.REQUEST_HAS_BEEN_PROCESSED);
       return;

@@ -19,6 +19,50 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.11.0] - 2025-06-24
+
+=== ⭐ Added
+
+- Added buildSrc
+- When deleting an account, delete the account address, system settings, and avatar related information simultaneously
+- Account registration and new avatar saving
+- Added gitignore file
+- Added project configuration file
+
+=== 🕸️ Changed
+
+- Update `Tess4j` configuration
+- Optimize unit test configuration
+- `io.swagger.core.v3:swagger-annotations-jakarta` Upgrade to 2.2.34
+- `org.jobrunr:jobrunr-spring-boot-3-starter` Upgrade to 7.5.2
+- `com.opencsv:opencsv` upgrade to 5.11.2
+- `com.deepl.api:deepl-java` Upgrade to 1.10.1
+- `io.freefair.lombok` Upgrade to 8.14
+- `net.sourceforge.tess4j:tess4j` Upgrade to 5.16.0
+- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.7
+- `flyway` upgrade to 11.9.1
+- `gradle` upgrade to 8.14.2
+- `protobuf` upgrade to 4.31.1
+- `grpc` upgrade to 1.73.0
+- `org.springframework.cloud:spring-cloud-dependencies` Upgrade to 2025.0.0
+- `MinioConfiguration` configuration class is set to the default configuration class
+- Add `junit jupiter` test dependency
+- Adjust workflow configuration
+- Optimize internationalization prompt information
+- Adjust signature configuration
+- Adjust the content of the project list
+- Modify the build cache location
+- Disable on-demand configuration feature
+- Modify the startup port number of each service
+- Authentication module is renamed to IAM
+- File module is renamed to storage
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` Upgrade to 2.8.9
+- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.10.1
+
+=== ⚠️ Removed
+
+- Delete useless content
+
 == [2.10.0] - 2025-05-27
 
 === ⭐ Added

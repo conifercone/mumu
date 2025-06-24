@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.translation.aliyun;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 阿里云简单文本翻译
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 public class AliyunSimpleTextTranslation implements SimpleTextTranslation {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.application.system.executor;
 
 import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
@@ -32,7 +33,7 @@ import org.springframework.util.Assert;
 /**
  * 系统日志查询所有指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

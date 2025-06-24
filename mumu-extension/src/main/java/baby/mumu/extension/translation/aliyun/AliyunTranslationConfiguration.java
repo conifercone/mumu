@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.translation.aliyun;
 
 import baby.mumu.extension.ExtensionProperties;
@@ -30,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 阿里云机器翻译配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Configuration

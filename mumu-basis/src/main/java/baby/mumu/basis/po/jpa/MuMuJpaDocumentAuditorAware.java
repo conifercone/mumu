@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
@@ -23,7 +24,7 @@ import org.springframework.data.domain.AuditorAware;
 /**
  * 创建人&修改人自动填充
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public class MuMuJpaDocumentAuditorAware implements AuditorAware<Long> {

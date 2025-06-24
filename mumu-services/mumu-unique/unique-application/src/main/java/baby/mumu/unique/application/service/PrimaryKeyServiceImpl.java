@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Service;
 /**
  * 主键生成
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Service

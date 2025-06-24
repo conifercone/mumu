@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import com.google.common.base.Strings;
@@ -21,7 +22,7 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 /**
  * SQL打印策略
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class P6spyCustomStrategy implements MessageFormattingStrategy {
@@ -43,13 +44,13 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
     String prepared, String sql, String url) {
     String templateStart = "====>";
     String templateEnd = "\n";
-    //耗时格式化模板
+    // 耗时格式化模板
     String timeConsumingFormatTemplate = templateStart + "time-consuming:[%s]ms" + templateEnd;
-    //sql格式化模板
+    // sql格式化模板
     String sqlFormatTemplate = templateStart + "sql:[%s]" + templateEnd;
-    //数据源信息格式化模板
+    // 数据源信息格式化模板
     String datasourceFormatTemplate = templateStart + "datasource:[%s]" + templateEnd;
-    //当前时间
+    // 当前时间
     String nowFormatTemplate = templateStart + "now:[%s]" + templateEnd;
     return !Strings.isNullOrEmpty(sql) ? templateEnd + String.format(timeConsumingFormatTemplate,
       elapsed) + String.format(nowFormatTemplate,

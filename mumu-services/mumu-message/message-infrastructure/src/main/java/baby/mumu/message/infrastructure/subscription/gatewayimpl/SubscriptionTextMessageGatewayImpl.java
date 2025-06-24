@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.subscription.gatewayimpl;
 
 import static baby.mumu.basis.constants.CommonConstants.LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE;
@@ -52,7 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 文本订阅消息领域网关实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Component
@@ -158,7 +159,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void archiveMsgById(Long id) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageRepository.findByIdAndSenderId(msgId, accountId)))
       .ifPresent(subscriptionTextMessageDo -> subscriptionTextMessageConvertor.toArchivePO(
@@ -184,7 +185,7 @@ public class SubscriptionTextMessageGatewayImpl implements SubscriptionTextMessa
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverMsgFromArchiveById(Long id) {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     Optional.ofNullable(id).flatMap(msgId -> SecurityContextUtils.getLoginAccountId().flatMap(
         accountId -> subscriptionTextMessageArchivedRepository.findByIdAndSenderId(msgId,
           accountId)))

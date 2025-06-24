@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.dto.BaseDataTransferObject
@@ -26,7 +27,7 @@ import java.util.*
 /**
  * 时间工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.7.0
  */
 @API(status = API.Status.INTERNAL, since = "2.7.0")

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.application.subscription.executor;
 
 import baby.mumu.message.client.cmds.SubscriptionTextMessageFindAllYouSendCmd;
@@ -32,7 +33,7 @@ import org.springframework.util.Assert;
 /**
  * 文本订阅消息查询所有当前用户发送消息指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Component

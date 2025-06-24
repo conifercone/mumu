@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.infrastructure.template.gatewayimpl.thymeleaf.po;
 
-import baby.mumu.basis.annotations.Metamodel;
 import java.util.Map;
 import lombok.Data;
 
 /**
  * thymeleaf模板邮件数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
-@Metamodel
 public class TemplateMailThymeleafPO {
 
   private String content;

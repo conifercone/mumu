@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.application.template.executor;
 
 import baby.mumu.mail.client.cmds.TemplateMailSendCmd;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Component;
 /**
  * 模板邮件发送指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component

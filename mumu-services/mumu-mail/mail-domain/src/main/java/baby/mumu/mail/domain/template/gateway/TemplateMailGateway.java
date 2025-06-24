@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.domain.template.gateway;
 
 import baby.mumu.mail.domain.template.TemplateMail;
@@ -20,7 +21,7 @@ import baby.mumu.mail.domain.template.TemplateMail;
 /**
  * 模板邮件领域网关
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public interface TemplateMailGateway {

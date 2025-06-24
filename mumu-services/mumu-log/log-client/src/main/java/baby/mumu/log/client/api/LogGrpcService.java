@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.api;
 
+import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -26,12 +28,12 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 日志grpc服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 class LogGrpcService {
 
-  public static final String GRPC_LOG = "grpc-log";
+  public static final String GRPC_LOG = ServiceEnum.LOG.getName();
   private final DiscoveryClient discoveryClient;
 
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
@@ -43,11 +45,11 @@ class LogGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_LOG)
+            "discovery-client://" + LogGrpcService.GRPC_LOG)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -56,7 +58,7 @@ class LogGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_LOG).isEmpty();
+    return !discoveryClient.getInstances(LogGrpcService.GRPC_LOG).isEmpty();
   }
 
 }

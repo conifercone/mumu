@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.grpc;
 
 import baby.mumu.unique.client.api.CaptchaGrpcService;
@@ -37,7 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 /**
  * 验证码生成grpc接口单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -60,7 +61,8 @@ public class CaptchaGrpcServiceTest {
       .setTtl(500).build();
     SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
       simpleCaptchaGeneratedGrpcCmd);
-    log.info("simpleCaptchaGeneratedGrpcDTO : {}", simpleCaptchaGeneratedGrpcDTO);
+    CaptchaGrpcServiceTest.log.info("simpleCaptchaGeneratedGrpcDTO : {}",
+      simpleCaptchaGeneratedGrpcDTO);
     Assertions.assertNotNull(simpleCaptchaGeneratedGrpcDTO);
   }
 
@@ -75,7 +77,8 @@ public class CaptchaGrpcServiceTest {
     simpleCaptchaGeneratedGrpcDTOListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = simpleCaptchaGeneratedGrpcDTOListenableFuture.get();
-        log.info("Sync SimpleCaptchaGeneratedGrpcDTO : {}", simpleCaptchaGeneratedGrpcDTO);
+        CaptchaGrpcServiceTest.log.info("Sync SimpleCaptchaGeneratedGrpcDTO : {}",
+          simpleCaptchaGeneratedGrpcDTO);
         Assertions.assertNotNull(simpleCaptchaGeneratedGrpcDTO);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
@@ -98,7 +101,8 @@ public class CaptchaGrpcServiceTest {
       .setId(simpleCaptchaGeneratedGrpcDTO.getId()).build();
     SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = captchaGrpcService.verifySimpleCaptcha(
       simpleCaptchaVerifyGrpcCmd);
-    log.info("simpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
+    CaptchaGrpcServiceTest.log.info("simpleCaptchaVerifyGrpcResult : {}",
+      simpleCaptchaVerifyGrpcResult);
     Assertions.assertNotNull(simpleCaptchaVerifyGrpcResult);
     Assertions.assertTrue(simpleCaptchaVerifyGrpcResult.getResult());
   }
@@ -120,7 +124,8 @@ public class CaptchaGrpcServiceTest {
     simpleCaptchaVerifyGrpcResultListenableFuture.addListener(() -> {
       try {
         SimpleCaptchaVerifyGrpcResult simpleCaptchaVerifyGrpcResult = simpleCaptchaVerifyGrpcResultListenableFuture.get();
-        log.info("Sync SimpleCaptchaVerifyGrpcResult : {}", simpleCaptchaVerifyGrpcResult);
+        CaptchaGrpcServiceTest.log.info("Sync SimpleCaptchaVerifyGrpcResult : {}",
+          simpleCaptchaVerifyGrpcResult);
         Assertions.assertNotNull(simpleCaptchaVerifyGrpcResult);
         Assertions.assertTrue(simpleCaptchaVerifyGrpcResult.getResult());
         countDownLatch.countDown();

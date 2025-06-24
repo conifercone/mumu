@@ -1,4 +1,6 @@
-description = "功能拓展模块"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_EXTENSION.description
 
 dependencies {
     api(project(":mumu-basis"))

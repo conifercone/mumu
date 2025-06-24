@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.nosql;
 
 import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE;
@@ -24,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * document相关配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Configuration

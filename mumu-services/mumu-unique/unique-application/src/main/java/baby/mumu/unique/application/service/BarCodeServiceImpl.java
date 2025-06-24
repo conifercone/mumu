@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.service;
 
 import baby.mumu.unique.application.barcode.executor.BarCodeGenerateCmdExe;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 /**
  * 条形码service实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @Service

@@ -1,4 +1,6 @@
-description = "注解处理器"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_PROCESSOR.description
 
 dependencies {
     implementation(project(":mumu-basis"))

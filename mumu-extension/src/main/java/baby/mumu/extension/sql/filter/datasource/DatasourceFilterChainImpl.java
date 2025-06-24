@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource;
 
 import baby.mumu.extension.ExtensionProperties;
@@ -23,7 +24,7 @@ import javax.sql.DataSource;
 /**
  * 数据源过滤器链条接口实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class DatasourceFilterChainImpl implements DatasourceFilterChain {

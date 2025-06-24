@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr.tess4j;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -27,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * tess4j ocr处理器实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 public class Tess4jOcrProcessor implements OcrProcessor {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.relations.database;
 
 import baby.mumu.basis.enums.MessageStatusEnum;
@@ -25,7 +26,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * 文本广播消息接收者关系管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 public interface BroadcastTextMessageReceiverRepository extends

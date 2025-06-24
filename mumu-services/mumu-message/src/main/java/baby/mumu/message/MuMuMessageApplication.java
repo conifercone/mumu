@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
@@ -20,6 +21,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
 import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.basis.enums.ServiceEnum;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 消息服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @SpringBootApplication
@@ -53,6 +55,8 @@ public class MuMuMessageApplication {
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuMessageApplicationMetamodel.projectName);
+    defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
+      ServiceEnum.MESSAGE.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuMessageApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

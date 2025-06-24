@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.grpc.resolvers;
 
 import io.grpc.Attributes;
@@ -33,7 +34,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 服务发现客户端名称解析器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class DiscoveryClientNameResolver extends NameResolver {

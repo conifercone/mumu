@@ -1,3 +1,0 @@
-baby.mumu.authentication.client.config.JWTSecurityConfig
-baby.mumu.authentication.client.config.GrpcSecurityConfiguration
-baby.mumu.authentication.client.config.AuthenticationClientConfiguration

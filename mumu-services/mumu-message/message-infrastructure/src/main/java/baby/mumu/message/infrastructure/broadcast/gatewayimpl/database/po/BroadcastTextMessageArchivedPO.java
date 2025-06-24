@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po;
 
 import baby.mumu.basis.enums.MessageStatusEnum;
@@ -35,7 +36,7 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * 广播文本消息归档数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Getter

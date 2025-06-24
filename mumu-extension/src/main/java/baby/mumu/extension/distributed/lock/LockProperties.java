@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.distributed.lock;
 
 import baby.mumu.extension.distributed.lock.zookeeper.ZookeeperProperties;
@@ -22,7 +23,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 分布式锁配置属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data

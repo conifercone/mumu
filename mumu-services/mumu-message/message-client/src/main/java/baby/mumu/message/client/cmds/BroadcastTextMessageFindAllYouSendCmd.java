@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.client.cmds;
 
 import baby.mumu.basis.enums.MessageStatusEnum;
@@ -22,7 +23,7 @@ import lombok.Data;
 /**
  * 文本广播消息查询所有当前用户发送消息指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.3
  */
 @Data

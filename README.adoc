@@ -12,7 +12,7 @@
 :mumu-github-discussions-link: {mumu-github-homepage-link}/discussions
 :codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
 :email: kaiyu.shan@outlook.com
-:author: kaiyu.shan
+:author: Kaiyu Shan
 
 = mumu
 
@@ -46,7 +46,6 @@ image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contrib
 
 - <<project, Projects>>
 - <<module-introduction, Module Introduction>>
-- <<build, Build>>
 - <<dependency-statement, Dependency Statement>>
 - <<license, License>>
 - <<contributors, Contributors>>
@@ -89,39 +88,18 @@ Let’s make managing a joyride!
 ----
 mumu
 ├── mumu-services
-│   ├── mumu-authentication
-│   ├── mumu-file
+│   ├── mumu-iam
 │   ├── mumu-log
 │   ├── mumu-mail
 │   ├── mumu-message
 │   ├── mumu-sms
+│   ├── mumu-storage
 │   └── mumu-unique
 ├── mumu-basis
 ├── mumu-benchmark
 ├── mumu-extension
 └── mumu-processor
 ----
-
-[#build]
-== Build
-
-[#infrastructure]
-=== Infrastructure
-
-[cols="1,1",options="header"]
-|===
-| name          | releases
-| apisix        | 3.8.0
-| elasticsearch | 8.12.0
-| kafka         | 3.4
-| postgresql    | 16.8
-| redis         | latest
-| zookeeper     | 3.8
-| consul        | 1.15.4
-| minio         | RELEASE.2024-06-13T22-53-53Z
-| zipkin        | 3.19.0
-| mongodb       | 8.0.1
-|===
 
 [#dependency-statement]
 == Dependency Statement
@@ -136,4 +114,4 @@ link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 [#contributors]
 == Contributors
 
-image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="https://github.com/conifercone/mumu/graphs/contributors"]
+image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="{mumu-github-homepage-link}/graphs/contributors"]

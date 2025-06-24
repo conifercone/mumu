@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.annotations;
 
 import baby.mumu.basis.condition.Condition;
@@ -24,7 +25,7 @@ import java.lang.annotation.Target;
 /**
  * 条件注解
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Target(ElementType.METHOD)

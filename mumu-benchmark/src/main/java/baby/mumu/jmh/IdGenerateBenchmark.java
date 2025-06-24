@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.jmh;
 
 import static baby.mumu.jmh.MuMuBenchmarkUtils.getResultFilePath;
@@ -38,7 +39,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 /**
  * 常见ID生成方法基准测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
 @SuppressWarnings("unused")

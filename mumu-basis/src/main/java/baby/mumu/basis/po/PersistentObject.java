@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.po;
 
 import java.io.Serializable;
@@ -21,7 +22,7 @@ import java.time.OffsetDateTime;
 /**
  * 数据对象接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface PersistentObject extends Serializable {

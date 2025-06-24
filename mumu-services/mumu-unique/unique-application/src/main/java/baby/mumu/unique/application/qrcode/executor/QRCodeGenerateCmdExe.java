@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.qrcode.executor;
 
 import baby.mumu.unique.client.cmds.QRCodeGenerateCmd;
@@ -25,7 +26,7 @@ import org.springframework.util.Assert;
 /**
  * 二维码生成指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 @Component

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.relations.database;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import baby.mumu.message.infrastructure.broadcast.gatewayimpl.database.po.BroadcastTextMessagePO;
@@ -38,7 +38,7 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * 文本广播消息接收者关系数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Getter
@@ -46,7 +46,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "mumu_broadcast_text_message_receivers")
 @DynamicInsert
-@Metamodel
 public class BroadcastTextMessageReceiverPO extends JpaBasisDefaultPersistentObject {
 
   @Serial

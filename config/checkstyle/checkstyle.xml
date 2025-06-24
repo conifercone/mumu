@@ -5,7 +5,7 @@
 
 <!--
     Checkstyle configuration that checks the mumu coding conventions from mumu Java Style
-    Authors: kaiyu.shan
+    Authors: Kaiyu Shan
  -->
 
 <module name="Checker">

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.domain.captcha;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 /**
  * 验证码领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data
@@ -47,7 +47,6 @@ public class Captcha extends BasisDomainModel {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @Metamodel
   public static class SimpleCaptcha {
 
     /**

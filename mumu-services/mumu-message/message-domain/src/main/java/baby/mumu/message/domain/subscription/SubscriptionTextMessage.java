@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.domain.subscription;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.MessageStatusEnum;
 import java.io.Serial;
@@ -29,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 /**
  * 文本订阅消息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Data
@@ -38,7 +38,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Metamodel
 public class SubscriptionTextMessage extends BasisDomainModel {
 
   @Serial

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.grpc.interceptors;
 
 import io.grpc.Attributes;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 客户端IP拦截器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class ClientIpInterceptor implements ServerInterceptor {
@@ -51,11 +52,11 @@ public class ClientIpInterceptor implements ServerInterceptor {
       .map(socketAddress -> ((InetSocketAddress) socketAddress).getAddress().getHostAddress())
       .orElse(
         StringUtils.EMPTY);
-    Context context = Context.current().withValue(CLIENT_IP_KEY, clientIp);
+    Context context = Context.current().withValue(ClientIpInterceptor.CLIENT_IP_KEY, clientIp);
     return Contexts.interceptCall(context, call, headers, next);
   }
 
   public static String getClientIp() {
-    return CLIENT_IP_KEY.get();
+    return ClientIpInterceptor.CLIENT_IP_KEY.get();
   }
 }

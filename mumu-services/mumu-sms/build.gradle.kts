@@ -1,4 +1,6 @@
-description = "短信服务"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_SMS.description
 
 dependencies {
     implementation(project(":mumu-extension"))

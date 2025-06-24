@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension;
 
 import baby.mumu.extension.authentication.AuthenticationProperties;
@@ -30,7 +31,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 拓展属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data

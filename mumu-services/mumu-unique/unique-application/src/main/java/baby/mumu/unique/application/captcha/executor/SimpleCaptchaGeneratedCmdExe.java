@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.captcha.executor;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -28,7 +29,7 @@ import org.springframework.util.Assert;
 /**
  * 简单验证码生成指令执行器
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component

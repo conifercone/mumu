@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.application.pk.executor;
 
 import baby.mumu.unique.domain.pk.gateway.PrimaryKeyGateway;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Component;
 /**
  * 雪花算法主键生成
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component

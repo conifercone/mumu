@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.idempotent.request.id.redis;
 
 import baby.mumu.extension.ExtensionProperties;
@@ -28,7 +29,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 /**
  * redis request id 幂等配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 @Configuration

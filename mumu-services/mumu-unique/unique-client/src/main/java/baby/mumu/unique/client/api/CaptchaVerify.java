@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.api;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -23,7 +24,7 @@ import java.util.Optional;
 /**
  * 验证码校验
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
 public class CaptchaVerify {

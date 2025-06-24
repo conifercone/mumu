@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.api;
 
+import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
@@ -26,12 +28,12 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 /**
  * 唯一性数据生成grpc服务
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 class UniqueGrpcService {
 
-  public static final String GRPC_UNIQUE = "unique";
+  public static final String GRPC_UNIQUE = ServiceEnum.UNIQUE.getName();
   private final DiscoveryClient discoveryClient;
   private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
 
@@ -42,11 +44,11 @@ class UniqueGrpcService {
   }
 
   protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    //noinspection DuplicatedCode
+    // noinspection DuplicatedCode
     return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
       _ -> {
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + GRPC_UNIQUE)
+            "discovery-client://" + UniqueGrpcService.GRPC_UNIQUE)
           .defaultLoadBalancingPolicy("round_robin")
           .usePlaintext();
         Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
@@ -55,7 +57,7 @@ class UniqueGrpcService {
   }
 
   protected boolean serviceAvailable() {
-    return !discoveryClient.getInstances(GRPC_UNIQUE).isEmpty();
+    return !discoveryClient.getInstances(UniqueGrpcService.GRPC_UNIQUE).isEmpty();
   }
 
 }

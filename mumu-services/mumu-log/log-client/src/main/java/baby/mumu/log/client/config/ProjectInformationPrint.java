@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.config;
 
 import baby.mumu.basis.annotations.Metamodel;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 项目信息打印
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
 @Metamodel(projectVersion = true, projectName = true)

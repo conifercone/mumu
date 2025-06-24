@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.gson;
 
 import com.google.gson.JsonDeserializationContext;
@@ -28,7 +29,7 @@ import org.javamoney.moneta.Money;
 /**
  * Money 反序列化
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public class MoneyDeserializer implements JsonDeserializer<Money> {

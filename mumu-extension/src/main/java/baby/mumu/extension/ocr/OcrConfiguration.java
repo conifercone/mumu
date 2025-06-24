@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr;
 
 import baby.mumu.extension.ocr.aliyun.AliyunOcrConfiguration;
@@ -23,7 +24,7 @@ import org.springframework.context.annotation.Import;
 /**
  * ocr配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Configuration

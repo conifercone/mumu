@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.kotlin.tools
 
 import org.apache.commons.validator.routines.EmailValidator
@@ -21,7 +22,7 @@ import org.apiguardian.api.API
 /**
  * 邮箱工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.7.0
  */
 object EmailUtils {

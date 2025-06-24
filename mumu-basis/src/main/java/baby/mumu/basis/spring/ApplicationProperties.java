@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.spring;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * application配置属性
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.5.0
  */
 @Data

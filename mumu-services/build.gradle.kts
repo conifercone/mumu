@@ -1,10 +1,9 @@
+import baby.mumu.build.constants.SystemPropertyConstants
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-
-description = "服务模块"
 
 subprojects {
     if (this.parent?.parent == rootProject) {
@@ -21,8 +20,8 @@ subprojects {
                     "Implementation-Version" to archiveVersion.get(),
                     "Application-Version" to archiveVersion.get(),
                     "Built-Gradle" to gradle.gradleVersion,
-                    "Build-OS" to System.getProperty("os.name"),
-                    "Build-Jdk" to System.getProperty("java.version"),
+                    "Build-OS" to System.getProperty(SystemPropertyConstants.OS_NAME),
+                    "Build-Jdk" to System.getProperty(SystemPropertyConstants.JAVA_VERSION),
                     "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                 )

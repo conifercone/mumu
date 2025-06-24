@@ -1,11 +1,13 @@
-description = "消息服务"
+import baby.mumu.build.enums.ModuleEnum
+
+description = ModuleEnum.MUMU_MESSAGE.description
 
 plugins {
     alias(libs.plugins.flyway)
 }
 
 dependencies {
-    implementation(project(":mumu-services:mumu-authentication:authentication-client"))
+    implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-services:mumu-message:message-infrastructure"))
     implementation(project(":mumu-services:mumu-message:message-adapter"))
     implementation(project(":mumu-services:mumu-message:message-client"))

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.mappers;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
@@ -23,7 +24,7 @@ import org.mapstruct.MappingTarget;
 /**
  * client object mapper
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
 public interface DataTransferObjectMapper {

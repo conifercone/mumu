@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import com.p6spy.engine.common.StatementInformation;
@@ -22,7 +23,7 @@ import java.sql.SQLException;
 /**
  * LoggingEventListener
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public class MuMuSqlLoggingEventListener extends LoggingEventListener {
@@ -30,16 +31,16 @@ public class MuMuSqlLoggingEventListener extends LoggingEventListener {
   private static MuMuSqlLoggingEventListener instance;
 
   public static MuMuSqlLoggingEventListener getInstance() {
-    if (null == instance) {
-      instance = new MuMuSqlLoggingEventListener();
+    if (null == MuMuSqlLoggingEventListener.instance) {
+      MuMuSqlLoggingEventListener.instance = new MuMuSqlLoggingEventListener();
     }
-    return instance;
+    return MuMuSqlLoggingEventListener.instance;
   }
 
   @Override
   public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
     int[] updateCounts, SQLException e) {
-    //ignore batch execution results
+    // ignore batch execution results
   }
 
 }

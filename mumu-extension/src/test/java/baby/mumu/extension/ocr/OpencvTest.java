@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr;
 
 import baby.mumu.extension.fd.FaceDetection;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -30,10 +32,10 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 /**
  * opencv单元测试
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
-@SpringJUnitConfig(FaceDetectionConfiguration.class)
+@SpringJUnitConfig({FaceDetectionConfiguration.class, MessageSourceAutoConfiguration.class})
 @TestPropertySource(properties = {
   "mumu.extension.fd.opencv.enabled=true"
 })

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.aspects;
 
 import baby.mumu.basis.annotations.Conditional;
@@ -28,7 +29,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * 条件注解切面
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 @Aspect
@@ -53,7 +54,7 @@ public class ConditionalAspect extends AbstractAspect {
             throw new RuntimeException(e);
           }
         }, () -> {
-          log.warn("{} method execution conditions are not met",
+          ConditionalAspect.log.warn("{} method execution conditions are not met",
             joinPoint.getSignature().getName());
           return null;
         })).orElse(joinPoint.proceed());

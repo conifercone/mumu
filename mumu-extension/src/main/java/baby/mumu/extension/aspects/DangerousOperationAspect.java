@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.aspects;
 
 import static baby.mumu.basis.constants.CommonConstants.PERCENT_SIGN;
@@ -33,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 危险操作注解切面
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Aspect
@@ -59,7 +60,7 @@ public class DangerousOperationAspect extends AbstractAspect {
               .setContent(content)
               .setCategory("dangerousOperation")
               .build());
-            log.info(content);
+            DangerousOperationAspect.log.info(content);
           }));
   }
 

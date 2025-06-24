@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.infrastructure.system.gatewayimpl.elasticsearch.po;
 
 import baby.mumu.basis.annotations.Metamodel;
@@ -31,7 +32,7 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
 /**
  * 系统日志es数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Document(indexName = LogProperties.SYSTEM_LOG_ES_INDEX_NAME)

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.infrastructure.captcha.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
@@ -26,7 +27,7 @@ import org.springframework.data.redis.core.TimeToLive;
 /**
  * simple captcha redis数据对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data

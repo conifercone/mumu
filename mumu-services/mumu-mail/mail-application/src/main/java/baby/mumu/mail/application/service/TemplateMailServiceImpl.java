@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
@@ -40,7 +41,7 @@ import org.springframework.stereotype.Service;
 /**
  * 模板邮件service实现类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Service
@@ -71,7 +72,7 @@ public class TemplateMailServiceImpl extends TemplateMailServiceImplBase impleme
     templateMailSendCmd.setAddress(request.getAddress());
     templateMailSendCmd.setSubject(request.getSubject());
     try {
-      //noinspection unchecked
+      // noinspection unchecked
       templateMailSendCmd.setData((Map<String, Object>) objectMapper.readValue(
         request.getData(),
         Map.class));

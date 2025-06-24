@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.provider;
 
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 限流基本信息自动生成默认提供者接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class RateLimitingCustomGenerateDefaultProviderImpl implements

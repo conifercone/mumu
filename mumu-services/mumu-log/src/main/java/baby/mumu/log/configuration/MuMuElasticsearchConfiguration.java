@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.configuration;
 
 import baby.mumu.log.infrastructure.config.LogProperties;
@@ -27,7 +28,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 /**
  * es配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration

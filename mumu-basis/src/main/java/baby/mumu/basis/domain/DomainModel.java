@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.basis.domain;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 /**
  * 顶级领域模型接口
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 public interface DomainModel extends Serializable {

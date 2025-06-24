@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 模板邮件管理
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @RestController

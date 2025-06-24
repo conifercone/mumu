@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.processor.kotlin.tools
 
 import com.palantir.javapoet.ClassName
@@ -32,7 +33,7 @@ import javax.lang.model.util.Types
 /**
  * 对象工具类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
 object ObjectUtils {

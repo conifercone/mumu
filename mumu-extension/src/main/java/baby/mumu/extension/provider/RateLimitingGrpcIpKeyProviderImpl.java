@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.provider;
 
 import baby.mumu.basis.exception.MuMuException;
@@ -25,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * grpc ip实现
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.1.0
  */
 public class RateLimitingGrpcIpKeyProviderImpl implements RateLimitingKeyProvider {

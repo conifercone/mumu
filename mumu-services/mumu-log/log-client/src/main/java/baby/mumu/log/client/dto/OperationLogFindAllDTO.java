@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.dto;
 
-import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serial;
@@ -27,12 +27,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 操作日志查询所有数据传输对象
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Metamodel
 public class OperationLogFindAllDTO extends BaseDataTransferObject {
 
   @Serial

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.client.cmds;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 操作日志查询所有指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Data

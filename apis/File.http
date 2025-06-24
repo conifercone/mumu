@@ -1,13 +1,13 @@
-### 流式文件上传
+### 文件上传
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("file-service-url"))
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{file-service-url}}/stream/sync/upload
+POST {{storage-service-url}}/file/sync/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -39,16 +39,16 @@ Content-Type: application/json
   });
 %}
 
-### 流式文件下载
+### 文件下载
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("file-service-url"))
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{file-service-url}}/stream/download?storageAddress=mail&
+GET {{storage-service-url}}/file/download?storageAddress=mail&
     name=template/zh/verification_code.html&rename=verification_code.html
 Content-Type: application/json
 X-Request-ID: {{requestId}}
@@ -68,12 +68,12 @@ Authorization: Bearer {{$auth.token("admin")}}
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("file-service-url"))
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{file-service-url}}/stream/remove
+DELETE {{storage-service-url}}/file/remove
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -93,16 +93,16 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 流式文件获取字符串文件内容
+### 文件获取字符串文件内容
 < {%
   import {generateHeaders} from "./utils"
 
-  const headers = generateHeaders(request.environment.get("file-service-url"))
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
   request.variables.set("signature", headers.signature)
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{file-service-url}}/stream/stringContent?storageAddress=mail&
+GET {{storage-service-url}}/file/stringContent?storageAddress=mail&
     name=template/zh/verification_code.html
 Content-Type: application/json
 X-Request-ID: {{requestId}}

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.message.infrastructure.config;
 
 import io.netty.channel.Channel;
@@ -28,7 +29,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 /**
  * 消息服务全局配置信息
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
 @Data

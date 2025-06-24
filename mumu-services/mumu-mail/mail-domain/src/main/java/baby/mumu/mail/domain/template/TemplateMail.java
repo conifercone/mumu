@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.domain.template;
 
 import baby.mumu.basis.domain.BasisDomainModel;
@@ -24,7 +25,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 模板邮件领域模型
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Data

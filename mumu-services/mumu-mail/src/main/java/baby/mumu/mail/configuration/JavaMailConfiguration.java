@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.mail.configuration;
 
 import java.util.Properties;
@@ -26,7 +27,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 /**
  * java mail配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Configuration

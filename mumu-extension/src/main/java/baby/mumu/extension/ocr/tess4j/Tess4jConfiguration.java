@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.extension.ocr.tess4j;
 
 import baby.mumu.extension.ExtensionProperties;
@@ -31,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * tess4j配置类
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
 @Configuration
@@ -47,7 +48,7 @@ public class Tess4jConfiguration {
     Optional.ofNullable(extensionProperties.getOcr().getTess4j().getDataPath())
       .filter(StringUtils::isNotBlank)
       .ifPresentOrElse(tesseract::setDatapath,
-        () -> tesseract.setDatapath(System.getenv("TESS4J_DATA_PATH")));
+        () -> tesseract.setDatapath(System.getenv("TESSDATA_PREFIX")));
     return tesseract;
   }
 

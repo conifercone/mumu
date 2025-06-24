@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "baby.mumu.iam.client.api.grpc";
+option java_outer_classname = "TokenServiceProto";
+
+service TokenService {
+  rpc validity (TokenValidityGrpcCmd) returns (TokenValidityGrpcDTO);
+}
+
+message TokenValidityGrpcCmd {
+  string token = 1;
+}
+
+message TokenValidityGrpcDTO {
+  bool validity = 1;
+}

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.unique.client.api;
 
 import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
@@ -22,7 +23,7 @@ import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
 /**
  * 验证码service
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 public interface CaptchaService {

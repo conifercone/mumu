@@ -1,3 +1,7 @@
+import baby.mumu.build.constants.EnvironmentKeyConstants
+import baby.mumu.build.constants.ProjectInfoConstants
+import baby.mumu.build.constants.SystemPropertyConstants
+import baby.mumu.build.enums.ModuleEnum
 import java.nio.charset.StandardCharsets
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -17,6 +21,8 @@ plugins {
     alias(libs.plugins.pmd)
 }
 
+description = ProjectInfoConstants.DESCRIPTION
+
 val rootDirectory = project.rootDir
 
 // 安装git hook
@@ -26,17 +32,12 @@ tasks.register<Copy>("installGitHooks") {
     // 源文件路径
     val hooksDir = file("${rootDirectory}/.git/hooks")
     val sourceDir = file("${rootDirectory}/scripts/git/hooks")
-    val updateLicenseShell = file("${rootDirectory}/scripts/update_license.sh")
     // 将文件从源目录拷贝到目标目录
     from(sourceDir)
     // 目标目录
     into(hooksDir)
     // 设置执行权限（可选）
     doLast {
-        // 设置 update_license.sh 的执行权限
-        updateLicenseShell.setExecutable(true)
-        // 设置 pre-commit 的执行权限
-        hooksDir.resolve("pre-commit").setExecutable(true)
         // 设置 commit-msg 的执行权限
         hooksDir.resolve("commit-msg").setExecutable(true)
     }
@@ -57,14 +58,14 @@ fun endsWithAny(input: String, suffixes: List<String>): Boolean {
     return suffixes.any { input.endsWith(it, ignoreCase = true) }
 }
 
-val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
-val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
-val pmdToolVersion = findProperty("pmd.tool.version")!!.toString()
+val javaMajorVersion = ProjectInfoConstants.JAVA_MAJOR_VERSION
+val checkstyleToolVersion = ProjectInfoConstants.CHECKSTYLE_TOOL_VERSION
+val pmdToolVersion = ProjectInfoConstants.PMD_TOOL_VERSION
 
 allprojects {
 
-    group = findProperty("group")!! as String
-    val versionString = findProperty("version")!! as String
+    group = ProjectInfoConstants.GROUP
+    val versionString = ProjectInfoConstants.VERSION
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (endsWithAny(
@@ -80,7 +81,7 @@ allprojects {
 
     configurations.configureEach {
         resolutionStrategy {
-            cacheChangingModulesFor(1, TimeUnit.HOURS)
+            cacheChangingModulesFor(0, TimeUnit.MINUTES)
             cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
 
@@ -135,20 +136,32 @@ subprojects {
     }
 
     signing {
-        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
-        val mumuSigningKey = "MUMU_SIGNING_KEY"
-        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
-        if (!System.getenv(mumuSigningKeyId).isNullOrBlank() &&
-            !System.getenv(mumuSigningKey).isNullOrBlank() &&
-            !System.getenv(mumuSigningPassword).isNullOrBlank()
-        ) {
-            useInMemoryPgpKeys(
-                System.getenv(mumuSigningKeyId) as String,
-                file(System.getenv(mumuSigningKey) as String).readText(),
-                System.getenv(mumuSigningPassword) as String
-            )
-            sign(tasks["jar"])
+        val mumuSigningKeyId = EnvironmentKeyConstants.MUMU_SIGNING_KEY_ID
+        val mumuSigningKeyFilePath = EnvironmentKeyConstants.MUMU_SIGNING_KEY_FILE_PATH
+        val mumuSigningKeyContent = EnvironmentKeyConstants.MUMU_SIGNING_KEY_CONTENT
+        val mumuSigningPassword = EnvironmentKeyConstants.MUMU_SIGNING_PASSWORD
+
+        val keyId = System.getenv(mumuSigningKeyId)
+        val keyFile = System.getenv(mumuSigningKeyFilePath)
+        val password = System.getenv(mumuSigningPassword)
+        val keyContent = System.getenv(mumuSigningKeyContent)
+
+        if (keyId.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningKeyId' is not set.")
         }
+        if (keyFile.isNullOrBlank() && keyContent.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningKeyFilePath' or '$mumuSigningKeyContent' is not set.")
+        }
+        if (password.isNullOrBlank()) {
+            throw GradleException("Environment variable '$mumuSigningPassword' is not set.")
+        }
+
+        useInMemoryPgpKeys(
+            keyId,
+            if (keyContent.isNullOrBlank()) file(keyFile).readText() else keyContent,
+            password
+        )
+        sign(tasks["jar"])
     }
 
     tasks.register<Jar>("sourceJar") {
@@ -171,12 +184,12 @@ subprojects {
     val projectVersionStr = project.version.toString()
     val projectNameStr = project.name
     val gradleVersionStr = gradle.gradleVersion
-    val osName = System.getProperty("os.name")
-    val javaVersion = System.getProperty("java.version")
+    val osName = System.getProperty(SystemPropertyConstants.OS_NAME)
+    val javaVersion = System.getProperty(SystemPropertyConstants.JAVA_VERSION)
 
     val hasProcessorProvider = providers.provider {
         configurations["annotationProcessor"].dependencies
-            .any { it.name.contains("mumu-processor") }
+            .any { it.name.contains(ModuleEnum.MUMU_PROCESSOR.moduleName) }
     }
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
@@ -225,8 +238,8 @@ subprojects {
                 "Implementation-Version" to archiveVersion.get(),
                 "Application-Version" to archiveVersion.get(),
                 "Built-Gradle" to gradle.gradleVersion,
-                "Build-OS" to System.getProperty("os.name"),
-                "Build-Jdk" to System.getProperty("java.version"),
+                "Build-OS" to System.getProperty(SystemPropertyConstants.OS_NAME),
+                "Build-Jdk" to System.getProperty(SystemPropertyConstants.JAVA_VERSION),
                 "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
             )
@@ -261,6 +274,7 @@ subprojects {
         implementation(rootProject.libs.moneta)
         implementation(rootProject.libs.jackson.datatype.money)
         testImplementation(rootProject.libs.junit.jupiter)
+        testRuntimeOnly(rootProject.libs.junit.platform.launcher)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
         implementation(rootProject.libs.mapstruct)
         annotationProcessor(rootProject.libs.mapstruct.processor)

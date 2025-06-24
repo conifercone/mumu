@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package baby.mumu.log.application.operation.executor;
 
 import baby.mumu.log.client.cmds.OperationLogQryCmd;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Component;
 /**
  * 操作日志查询指令
  *
- * @author <a href="mailto:kaiyu.shan@outlook.com">kaiyu.shan</a>
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
