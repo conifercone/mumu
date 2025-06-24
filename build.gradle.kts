@@ -274,6 +274,7 @@ subprojects {
         implementation(rootProject.libs.moneta)
         implementation(rootProject.libs.jackson.datatype.money)
         testImplementation(rootProject.libs.junit.jupiter)
+        testRuntimeOnly(rootProject.libs.junit.platform.launcher)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
         implementation(rootProject.libs.mapstruct)
         annotationProcessor(rootProject.libs.mapstruct.processor)

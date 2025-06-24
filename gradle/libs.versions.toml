@@ -55,6 +55,8 @@ kotlinPluginVersion = '2.1.21'
 [libraries]
 # https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+# https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
