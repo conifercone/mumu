@@ -15,6 +15,10 @@ permissions:
 jobs:
   dependency-submission:
     runs-on: ubuntu-latest
+    env:
+      MUMU_SIGNING_KEY_ID: ${{ secrets.MUMU_SIGNING_KEY_ID }}
+      MUMU_SIGNING_KEY_CONTENT: ${{ secrets.MUMU_SIGNING_KEY_CONTENT }}
+      MUMU_SIGNING_PASSWORD: ${{ secrets.MUMU_SIGNING_PASSWORD }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
