@@ -27,6 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 /**
@@ -41,6 +42,7 @@ import org.hibernate.Hibernate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class RolePermissionPOId implements Serializable {
 
   @Serial
