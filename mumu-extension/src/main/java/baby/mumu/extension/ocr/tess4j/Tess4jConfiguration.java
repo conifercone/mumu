@@ -48,7 +48,7 @@ public class Tess4jConfiguration {
     Optional.ofNullable(extensionProperties.getOcr().getTess4j().getDataPath())
       .filter(StringUtils::isNotBlank)
       .ifPresentOrElse(tesseract::setDatapath,
-        () -> tesseract.setDatapath(System.getenv("TESS4J_DATA_PATH")));
+        () -> tesseract.setDatapath(System.getenv("TESSDATA_PREFIX")));
     return tesseract;
   }
 
