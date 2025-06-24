@@ -108,8 +108,8 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionPO> toPO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPO);
+  public Optional<PermissionPO> toPermissionPO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionPO);
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -167,11 +167,6 @@ public class PermissionConvertor {
     return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionCacheablePO);
   }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionPO> toPO(PermissionCacheablePO permissionCacheablePO) {
-    return Optional.ofNullable(permissionCacheablePO).map(PermissionMapper.INSTANCE::toPO);
-  }
-
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<Permission> toEntity(
     @Validated PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
@@ -187,8 +182,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionFindByIdDTO> toFindByIdDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByIdDTO)
+  public Optional<PermissionFindByIdDTO> toPermissionFindByIdDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionFindByIdDTO)
       .map(permissionFindByIdCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -199,8 +194,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
-  public Optional<PermissionFindByCodeDTO> toFindByCodeDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindByCodeDTO)
+  public Optional<PermissionFindByCodeDTO> toPermissionFindByCodeDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionFindByCodeDTO)
       .map(permissionFindByCodeCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -211,8 +206,8 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionFindAllDTO> toFindAllDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllDTO)
+  public Optional<PermissionFindAllDTO> toPermissionFindAllDTO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionFindAllDTO)
       .map(permissionFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -223,8 +218,9 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionFindAllSliceDTO> toFindAllSliceDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toFindAllSliceDTO)
+  public Optional<PermissionFindAllSliceDTO> toPermissionFindAllSliceDTO(Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionFindAllSliceDTO)
       .map(permissionFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -235,8 +231,10 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
-  public Optional<PermissionArchivedFindAllDTO> toArchivedFindAllDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllDTO)
+  public Optional<PermissionArchivedFindAllDTO> toPermissionArchivedFindAllDTO(
+    Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionArchivedFindAllDTO)
       .map(permissionArchivedFindAllCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -247,9 +245,10 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionArchivedFindAllSliceDTO> toArchivedFindAllSliceDTO(
+  public Optional<PermissionArchivedFindAllSliceDTO> toPermissionArchivedFindAllSliceDTO(
     Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedFindAllSliceDTO)
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionArchivedFindAllSliceDTO)
       .map(permissionArchivedFindAllSliceCo -> {
         Optional.ofNullable(simpleTextTranslation).flatMap(
             simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
@@ -261,20 +260,20 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<PermissionArchivedPO> toArchivedPO(PermissionPO permissionPO) {
-    return Optional.ofNullable(permissionPO).map(PermissionMapper.INSTANCE::toArchivedPO);
+  public Optional<PermissionArchivedPO> toPermissionArchivedPO(PermissionPO permissionPO) {
+    return Optional.ofNullable(permissionPO).map(PermissionMapper.INSTANCE::toPermissionArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionArchivedPO> toArchivedPO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toArchivedPO);
+  public Optional<PermissionArchivedPO> toPermissionArchivedPO(Permission permission) {
+    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionArchivedPO);
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<PermissionPO> toPO(PermissionArchivedPO permissionArchivedPO) {
-    return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toPO);
+  public Optional<PermissionPO> toPermissionPO(PermissionArchivedPO permissionArchivedPO) {
+    return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toPermissionPO);
   }
 
   @Contract("_ -> new")

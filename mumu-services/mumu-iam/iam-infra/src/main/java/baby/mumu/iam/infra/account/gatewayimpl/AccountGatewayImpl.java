@@ -140,7 +140,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void register(Account account) {
-    accountConvertor.toPO(account).filter(
+    accountConvertor.toAccountPO(account).filter(
       _ -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
         account.getUsername(), account.getEmail())
         && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
@@ -225,7 +225,7 @@ public class AccountGatewayImpl implements AccountGateway {
     Optional.ofNullable(account)
       .ifPresent(accountNotNull -> SecurityContextUtils.getLoginAccountId()
         .filter(res -> Objects.equals(res, accountNotNull.getId()))
-        .ifPresentOrElse((accountId) -> accountConvertor.toPO(accountNotNull)
+        .ifPresentOrElse((accountId) -> accountConvertor.toAccountPO(accountNotNull)
           .ifPresent(accountPO -> {
             accountRepository.merge(accountPO);
             accountCacheRepository.deleteById(accountId);
@@ -243,7 +243,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
     Optional.ofNullable(account).map(Account::getId).filter(accountRepository::existsById)
-      .ifPresent(accountId -> accountConvertor.toPO(account).ifPresent(_ -> {
+      .ifPresent(accountId -> accountConvertor.toAccountPO(account).ifPresent(_ -> {
         accountRoleRepository.deleteByAccountId(accountId);
         accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
         accountRoleCacheRepository.deleteById(accountId);
@@ -409,7 +409,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @DangerousOperation("根据ID归档账号ID为%0的账号")
   public void archiveById(Long accountId) {
     Optional.ofNullable(accountId).flatMap(accountRepository::findById)
-      .flatMap(accountConvertor::toArchivedPO).ifPresent(accountArchivedPO -> {
+      .flatMap(accountConvertor::toAccountArchivedPO).ifPresent(accountArchivedPO -> {
         if (accountArchivedPO.getBalance()
           .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
           throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
@@ -447,7 +447,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long accountId) {
     Optional.ofNullable(accountId).flatMap(accountArchivedRepository::findById)
-      .flatMap(accountConvertor::toPO).ifPresent(accountPO -> {
+      .flatMap(accountConvertor::toAccountPO).ifPresent(accountPO -> {
         accountPO.setArchived(false);
         accountArchivedRepository.deleteById(accountPO.getId());
         accountRepository.persist(accountPO);
@@ -618,7 +618,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public Page<Account> findAll(Account account, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Page<AccountPO> accountPOS = accountRepository.findAllPage(
-      accountConvertor.toPO(account).orElseGet(AccountPO::new),
+      accountConvertor.toAccountPO(account).orElseGet(AccountPO::new),
       Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
           accountEntity.getRoles()))
         .map(roles -> roles.stream().map(Role::getId).collect(
@@ -636,7 +636,7 @@ public class AccountGatewayImpl implements AccountGateway {
   public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<AccountPO> accountPOS = accountRepository.findAllSlice(
-      accountConvertor.toPO(account).orElseGet(AccountPO::new),
+      accountConvertor.toAccountPO(account).orElseGet(AccountPO::new),
       Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
           accountEntity.getRoles()))
         .map(roles -> roles.stream().map(Role::getId).collect(

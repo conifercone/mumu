@@ -49,7 +49,7 @@ public class PermissionFindByIdCmdExe {
   public PermissionFindByIdDTO execute(Long id) {
     return Optional.ofNullable(id)
       .flatMap(permissionGateway::findById).flatMap(
-        permissionConvertor::toFindByIdDTO)
+        permissionConvertor::toPermissionFindByIdDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
   }
 }

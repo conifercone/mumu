@@ -310,8 +310,8 @@ public class AccountConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AccountPO> toPO(Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toPO);
+  public Optional<AccountPO> toAccountPO(Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountPO);
   }
 
   @Contract("_ -> new")
@@ -403,27 +403,27 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<AccountCurrentLoginDTO> toCurrentLoginQueryDTO(
+  public Optional<AccountCurrentLoginDTO> toAccountCurrentLoginDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toCurrentLoginQueryDTO);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountCurrentLoginDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountBasicInfoDTO> toBasicInfoDTO(
+  public Optional<AccountBasicInfoDTO> toAccountBasicInfoDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toBasicInfoDTO);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountBasicInfoDTO);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<AccountArchivedPO> toArchivedPO(
+  public Optional<AccountArchivedPO> toAccountArchivedPO(
     AccountPO accountPO) {
-    return Optional.ofNullable(accountPO).map(AccountMapper.INSTANCE::toArchivedPO);
+    return Optional.ofNullable(accountPO).map(AccountMapper.INSTANCE::toAccountArchivedPO);
   }
 
   @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<AccountPO> toPO(
+  public Optional<AccountPO> toAccountPO(
     AccountArchivedPO accountArchivedPO) {
-    return Optional.ofNullable(accountArchivedPO).map(AccountMapper.INSTANCE::toPO);
+    return Optional.ofNullable(accountArchivedPO).map(AccountMapper.INSTANCE::toAccountPO);
   }
 
   @API(status = Status.STABLE, since = "2.0.0")
@@ -526,15 +526,15 @@ public class AccountConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountFindAllDTO> toFindAllDTO(
+  public Optional<AccountFindAllDTO> toAccountFindAllDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllDTO);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountFindAllDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<AccountFindAllSliceDTO> toFindAllSliceDTO(
+  public Optional<AccountFindAllSliceDTO> toAccountFindAllSliceDTO(
     Account account) {
-    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toFindAllSliceDTO);
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountFindAllSliceDTO);
   }
 
   @API(status = Status.STABLE, since = "2.2.0")

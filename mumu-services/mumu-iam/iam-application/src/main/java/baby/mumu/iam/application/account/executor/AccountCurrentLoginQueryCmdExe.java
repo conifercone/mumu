@@ -47,7 +47,7 @@ public class AccountCurrentLoginQueryCmdExe {
 
   public AccountCurrentLoginDTO execute() {
     return accountGateway.queryCurrentLoginAccount()
-      .flatMap(accountConvertor::toCurrentLoginQueryDTO)
+      .flatMap(accountConvertor::toAccountCurrentLoginDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

@@ -56,7 +56,7 @@ public class AccountFindAllCmdExe {
     Page<Account> accounts = accountGateway.findAll(account,
       accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
     List<AccountFindAllDTO> accountFindAllDTOS = accounts.getContent().stream()
-      .map(accountConvertor::toFindAllDTO)
+      .map(accountConvertor::toAccountFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(accountFindAllDTOS, accounts.getPageable(),
       accounts.getTotalElements());

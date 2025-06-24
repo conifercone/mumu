@@ -59,7 +59,7 @@ public class PermissionArchivedFindAllCmdExe {
       permissionArchivedFindAllCmd.getCurrent(), permissionArchivedFindAllCmd.getPageSize());
     List<PermissionArchivedFindAllDTO> permissionArchivedFindAllDTOList = permissions.getContent()
       .stream()
-      .map(permissionConvertor::toArchivedFindAllDTO)
+      .map(permissionConvertor::toPermissionArchivedFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(permissionArchivedFindAllDTOList, permissions.getPageable(),
       permissions.getTotalElements());

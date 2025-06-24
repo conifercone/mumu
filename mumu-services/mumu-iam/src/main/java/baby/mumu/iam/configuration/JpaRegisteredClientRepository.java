@@ -73,8 +73,8 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
     clientRepository.findById(registeredClient.getId()).flatMap(clientConvertor::toEntity)
       .ifPresentOrElse((client) -> {
         clientConvertor.toEntity(toEntity(registeredClient), client);
-        clientConvertor.toPO(client).ifPresent(clientRepository::merge);
-      }, () -> clientConvertor.toPO(toEntity(registeredClient))
+        clientConvertor.toClientPO(client).ifPresent(clientRepository::merge);
+      }, () -> clientConvertor.toClientPO(toEntity(registeredClient))
         .ifPresent(clientRepository::persist));
   }
 

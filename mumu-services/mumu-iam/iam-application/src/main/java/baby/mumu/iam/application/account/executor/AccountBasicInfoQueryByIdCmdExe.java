@@ -49,7 +49,7 @@ public class AccountBasicInfoQueryByIdCmdExe {
   public AccountBasicInfoDTO execute(Long id) {
     return Optional.ofNullable(id)
       .flatMap(accountGateway::getAccountBasicInfoById)
-      .flatMap(accountConvertor::toBasicInfoDTO)
+      .flatMap(accountConvertor::toAccountBasicInfoDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

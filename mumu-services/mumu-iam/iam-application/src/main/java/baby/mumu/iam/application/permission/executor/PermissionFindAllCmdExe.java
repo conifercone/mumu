@@ -57,7 +57,7 @@ public class PermissionFindAllCmdExe {
     Page<Permission> permissions = permissionGateway.findAll(permission,
       permissionFindAllCmd.getCurrent(), permissionFindAllCmd.getPageSize());
     List<PermissionFindAllDTO> permissionFindAllDTOList = permissions.getContent().stream()
-      .map(permissionConvertor::toFindAllDTO)
+      .map(permissionConvertor::toPermissionFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(permissionFindAllDTOList, permissions.getPageable(),
       permissions.getTotalElements());

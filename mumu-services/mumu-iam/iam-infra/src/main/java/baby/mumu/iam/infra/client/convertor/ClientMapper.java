@@ -41,7 +41,7 @@ public interface ClientMapper {
   Client toEntity(ClientPO clientPO);
 
   @API(status = Status.STABLE, since = "2.5.0")
-  ClientPO toPO(Client client);
+  ClientPO toClientPO(Client client);
 
   @API(status = Status.STABLE, since = "2.5.0")
   void toEntity(Client clientSource, @MappingTarget Client clientTarget);

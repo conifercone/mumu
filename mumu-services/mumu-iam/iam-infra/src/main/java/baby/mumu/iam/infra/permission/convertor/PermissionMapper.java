@@ -83,9 +83,6 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   PermissionCacheablePO toPermissionCacheablePO(Permission permission);
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  PermissionPO toPO(PermissionCacheablePO permissionCacheablePO);
-
   @API(status = Status.STABLE, since = "2.0.0")
   Permission toEntity(PermissionArchivedFindAllCmd permissionArchivedFindAllCmd);
 
@@ -96,34 +93,34 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   void toEntity(PermissionUpdateCmd permissionUpdateCmd, @MappingTarget Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionFindByIdDTO toFindByIdDTO(Permission permission);
+  PermissionFindByIdDTO toPermissionFindByIdDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.4.0")
-  PermissionFindByCodeDTO toFindByCodeDTO(Permission permission);
+  PermissionFindByCodeDTO toPermissionFindByCodeDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionFindAllDTO toFindAllDTO(Permission permission);
+  PermissionFindAllDTO toPermissionFindAllDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionFindAllSliceDTO toFindAllSliceDTO(Permission permission);
+  PermissionFindAllSliceDTO toPermissionFindAllSliceDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.0.0")
-  PermissionArchivedFindAllDTO toArchivedFindAllDTO(Permission permission);
+  PermissionArchivedFindAllDTO toPermissionArchivedFindAllDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionArchivedFindAllSliceDTO toArchivedFindAllSliceDTO(Permission permission);
+  PermissionArchivedFindAllSliceDTO toPermissionArchivedFindAllSliceDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  PermissionPO toPO(Permission permission);
+  PermissionPO toPermissionPO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  PermissionArchivedPO toArchivedPO(PermissionPO permissionPO);
+  PermissionArchivedPO toPermissionArchivedPO(PermissionPO permissionPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionArchivedPO toArchivedPO(Permission permission);
+  PermissionArchivedPO toPermissionArchivedPO(Permission permission);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  PermissionPO toPO(PermissionArchivedPO permissionArchivedPO);
+  PermissionPO toPermissionPO(PermissionArchivedPO permissionArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);

@@ -121,7 +121,7 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   AccountAddress toAccountAddress(AccountAddAddressCmd accountAddAddressCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  AccountPO toPO(Account account);
+  AccountPO toAccountPO(Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Account toEntity(AccountRegisterCmd accountRegisterCmd);
@@ -138,22 +138,22 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   void toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd, @MappingTarget Account account);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  AccountCurrentLoginDTO toCurrentLoginQueryDTO(Account account);
+  AccountCurrentLoginDTO toAccountCurrentLoginDTO(Account account);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountBasicInfoDTO toBasicInfoDTO(Account account);
+  AccountBasicInfoDTO toAccountBasicInfoDTO(Account account);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  AccountArchivedPO toArchivedPO(AccountPO accountPO);
+  AccountArchivedPO toAccountArchivedPO(AccountPO accountPO);
 
   @API(status = Status.STABLE, since = "1.0.4")
-  AccountPO toPO(AccountArchivedPO accountArchivedPO);
+  AccountPO toAccountPO(AccountArchivedPO accountArchivedPO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountFindAllDTO toFindAllDTO(Account account);
+  AccountFindAllDTO toAccountFindAllDTO(Account account);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountFindAllSliceDTO toFindAllSliceDTO(Account account);
+  AccountFindAllSliceDTO toAccountFindAllSliceDTO(Account account);
 
   @API(status = Status.STABLE, since = "2.2.0")
   Account toEntity(AccountFindAllCmd accountFindAllCmd);

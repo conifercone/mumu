@@ -59,7 +59,7 @@ public class PermissionFindAllSliceCmdExe {
       permissionFindAllSliceCmd.getCurrent(), permissionFindAllSliceCmd.getPageSize());
     List<PermissionFindAllSliceDTO> permissionFindAllSliceDTOList = permissions.getContent()
       .stream()
-      .map(permissionConvertor::toFindAllSliceDTO)
+      .map(permissionConvertor::toPermissionFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(permissionFindAllSliceDTOList, permissions.getPageable(),
       permissions.hasNext());

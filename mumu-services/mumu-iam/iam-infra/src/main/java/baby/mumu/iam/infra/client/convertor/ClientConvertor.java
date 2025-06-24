@@ -39,9 +39,9 @@ public class ClientConvertor {
   }
 
   @API(status = Status.STABLE, since = "2.5.0")
-  public Optional<ClientPO> toPO(
+  public Optional<ClientPO> toClientPO(
     Client client) {
-    return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toPO);
+    return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toClientPO);
   }
 
   @API(status = Status.STABLE, since = "2.5.0")
