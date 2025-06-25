@@ -28,4 +28,5 @@ public interface FileStorageRepository {
 
   void upload(File file) throws Exception;
 
+  void delete(File file) throws Exception;
 }

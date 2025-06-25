@@ -61,12 +61,17 @@ public class FileGatewayImpl implements FileGateway {
       // 保存文件元数据
       fileConvertor.toFileMetadataPO(fileNonNull.getMetadata())
           .ifPresent(fileMetadataPO -> {
-            fileMetadataRepository.persist(fileMetadataPO);
-            fileNonNull.getMetadata().setId(fileMetadataPO.getId());
-            // 文件上传
             try {
+              fileMetadataRepository.persist(fileMetadataPO);
+              fileNonNull.getMetadata().setId(fileMetadataPO.getId());
+              // 文件上传
               fileStorageRepository.upload(fileNonNull);
             } catch (Exception e) {
+              try {
+                fileStorageRepository.delete(fileNonNull);
+              } catch (Exception ex) {
+                throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+              }
               throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
             }
           });

@@ -24,6 +24,7 @@ import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,17 @@ public class FileMinioStorageRepository implements FileStorageRepository {
           .getStoredFilename())
         .stream(file.getContent(), file.getMetadata().getSize(), -1)
         .contentType(file.getMetadata().getContentType())
+        .build()
+    );
+  }
+
+  @Override
+  public void delete(@NotNull File file) throws Exception {
+    minioClient.removeObject(
+      RemoveObjectArgs.builder()
+        .bucket(file.getMetadata().getStorageZone())
+        .object(file.getMetadata().getId() + "/" + file.getMetadata()
+          .getStoredFilename())
         .build()
     );
   }
