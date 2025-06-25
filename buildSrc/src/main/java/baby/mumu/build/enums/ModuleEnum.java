@@ -40,12 +40,6 @@ public enum ModuleEnum {
 
   MUMU_LOG("mumu-log", "Log Management Service"),
 
-  MUMU_MAIL("mumu-mail", "Mail Management Service"),
-
-  MUMU_MESSAGE("mumu-message", "Message Management Service"),
-
-  MUMU_SMS("mumu-sms", "SMS Management Service"),
-
   MUMU_STORAGE("mumu-storage", "Storage Management Service"),
 
   MUMU_UNIQUE("mumu-unique", "Unique Management Service");

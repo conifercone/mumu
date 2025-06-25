@@ -52,17 +52,6 @@ include("mumu-services:mumu-unique:unique-domain")
 findProject(":mumu-services:mumu-unique:unique-domain")?.name = "unique-domain"
 include("mumu-services:mumu-unique:unique-infra")
 findProject(":mumu-services:mumu-unique:unique-infra")?.name = "unique-infra"
-include("mumu-services:mumu-mail")
-include("mumu-services:mumu-mail:mail-adapter")
-findProject(":mumu-services:mumu-mail:mail-adapter")?.name = "mail-adapter"
-include("mumu-services:mumu-mail:mail-application")
-findProject(":mumu-services:mumu-mail:mail-application")?.name = "mail-application"
-include("mumu-services:mumu-mail:mail-client")
-findProject(":mumu-services:mumu-mail:mail-client")?.name = "mail-client"
-include("mumu-services:mumu-mail:mail-domain")
-findProject(":mumu-services:mumu-mail:mail-domain")?.name = "mail-domain"
-include("mumu-services:mumu-mail:mail-infra")
-findProject(":mumu-services:mumu-mail:mail-infra")?.name = "mail-infra"
 include("mumu-services:mumu-storage")
 include("mumu-services:mumu-storage:storage-adapter")
 findProject(":mumu-services:mumu-storage:storage-adapter")?.name = "storage-adapter"
@@ -74,28 +63,6 @@ include("mumu-services:mumu-storage:storage-domain")
 findProject(":mumu-services:mumu-storage:storage-domain")?.name = "storage-domain"
 include("mumu-services:mumu-storage:storage-infra")
 findProject(":mumu-services:mumu-storage:storage-infra")?.name = "storage-infra"
-include("mumu-services:mumu-sms")
-include("mumu-services:mumu-sms:sms-adapter")
-findProject(":mumu-services:mumu-sms:sms-adapter")?.name = "sms-adapter"
-include("mumu-services:mumu-sms:sms-application")
-findProject(":mumu-services:mumu-sms:sms-application")?.name = "sms-application"
-include("mumu-services:mumu-sms:sms-client")
-findProject(":mumu-services:mumu-sms:sms-client")?.name = "sms-client"
-include("mumu-services:mumu-sms:sms-domain")
-findProject(":mumu-services:mumu-sms:sms-domain")?.name = "sms-domain"
-include("mumu-services:mumu-sms:sms-infra")
-findProject(":mumu-services:mumu-sms:sms-infra")?.name = "sms-infra"
-include("mumu-services:mumu-message")
-include("mumu-services:mumu-message:message-adapter")
-findProject(":mumu-services:mumu-message:message-adapter")?.name = "message-adapter"
-include("mumu-services:mumu-message:message-application")
-findProject(":mumu-services:mumu-message:message-application")?.name = "message-application"
-include("mumu-services:mumu-message:message-domain")
-findProject(":mumu-services:mumu-message:message-domain")?.name = "message-domain"
-include("mumu-services:mumu-message:message-client")
-findProject(":mumu-services:mumu-message:message-client")?.name = "message-client"
-include("mumu-services:mumu-message:message-infra")
-findProject(":mumu-services:mumu-message:message-infra")?.name = "message-infra"
 include("mumu-processor")
 include("mumu-services")
 include("mumu-benchmark")

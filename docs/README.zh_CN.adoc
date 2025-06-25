@@ -80,9 +80,6 @@ mumu
 ├── mumu-services
 │   ├── mumu-iam
 │   ├── mumu-log
-│   ├── mumu-mail
-│   ├── mumu-message
-│   ├── mumu-sms
 │   ├── mumu-storage
 │   └── mumu-unique
 ├── mumu-basis
