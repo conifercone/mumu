@@ -16,14 +16,20 @@
 
 package baby.mumu.storage.infra.file.gatewayimpl;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
 import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 文件领域网关实现类
@@ -37,17 +43,30 @@ public class FileGatewayImpl implements FileGateway {
 
   private final FileMetadataRepository fileMetadataRepository;
   private final FileConvertor fileConvertor;
+  private final FileStorageRepository fileStorageRepository;
 
   @Autowired
   public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
-      FileConvertor fileConvertor) {
+      FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
     this.fileMetadataRepository = fileMetadataRepository;
     this.fileConvertor = fileConvertor;
+    this.fileStorageRepository = fileStorageRepository;
   }
 
   @Override
-  public void upload(@NotNull File file) {
-    // 保存文件元数据
-    fileConvertor.toFileMetadataPO(file.getMetadata()).ifPresent(fileMetadataRepository::persist);
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void upload(File file) {
+    Optional.ofNullable(file).ifPresent(fileNonNull -> {
+      // 文件上传
+      try {
+        fileStorageRepository.upload(fileNonNull);
+      } catch (Exception e) {
+        throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
+      }
+      // 保存文件元数据
+      fileConvertor.toFileMetadataPO(fileNonNull.getMetadata())
+          .ifPresent(fileMetadataRepository::persist);
+    });
   }
 }
