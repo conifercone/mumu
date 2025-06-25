@@ -16,8 +16,13 @@
 
 package baby.mumu.storage.infra.file.gatewayimpl;
 
+import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
+import baby.mumu.storage.infra.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
 import io.micrometer.observation.annotation.Observed;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,4 +35,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "FileGatewayImpl")
 public class FileGatewayImpl implements FileGateway {
 
+  private final FileMetadataRepository fileMetadataRepository;
+  private final FileConvertor fileConvertor;
+
+  @Autowired
+  public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
+      FileConvertor fileConvertor) {
+    this.fileMetadataRepository = fileMetadataRepository;
+    this.fileConvertor = fileConvertor;
+  }
+
+  @Override
+  public boolean upload(@NotNull File file) {
+    // 保存文件元数据
+    fileConvertor.toFileMetadataPO(file.getMetadata()).ifPresent(fileMetadataRepository::persist);
+    return true;
+  }
 }

@@ -17,25 +17,34 @@
 package baby.mumu.storage.domain.file;
 
 import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.InputStream;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 文件领域模型
+ * 文件元数据
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class File extends BasisDomainModel {
+public class FileMetadata extends BasisDomainModel {
 
   @Serial
-  private static final long serialVersionUID = 6631248471227046233L;
+  private static final long serialVersionUID = 3338110566710044568L;
 
-  private InputStream content;
+  private Long id;
 
-  private FileMetadata metadata;
+  private String originalFilename;
+
+  private String storedFilename;
+
+  private String contentType;
+
+  private Long size;
+
+  private String storageZone;
+
+  private String storagePath;
 }

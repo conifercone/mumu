@@ -16,6 +16,8 @@
 
 package baby.mumu.storage.domain.file.gateway;
 
+import baby.mumu.storage.domain.file.File;
+
 /**
  * 文件领域网关
  *
@@ -23,5 +25,7 @@ package baby.mumu.storage.domain.file.gateway;
  * @since 2.12.0
  */
 public interface FileGateway {
+
+  boolean upload(File file);
 
 }

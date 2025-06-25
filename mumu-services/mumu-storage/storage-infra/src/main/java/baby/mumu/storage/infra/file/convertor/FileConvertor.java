@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
+package baby.mumu.storage.infra.file.convertor;
 
-import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.InputStream;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import baby.mumu.storage.domain.file.FileMetadata;
+import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
- * 文件领域模型
+ * 文件信息转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class File extends BasisDomainModel {
+@Component
+public class FileConvertor {
 
-  @Serial
-  private static final long serialVersionUID = 6631248471227046233L;
 
-  private InputStream content;
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.12.0")
+  public Optional<FileMetadataPO> toFileMetadataPO(FileMetadata fileMetadata) {
+    return Optional.ofNullable(fileMetadata)
+      .map(FileMapper.INSTANCE::toFileMetadataPO);
+  }
 
-  private FileMetadata metadata;
 }
