@@ -26,6 +26,6 @@ import baby.mumu.storage.domain.file.File;
  */
 public interface FileGateway {
 
-  boolean upload(File file);
+  void upload(File file);
 
 }

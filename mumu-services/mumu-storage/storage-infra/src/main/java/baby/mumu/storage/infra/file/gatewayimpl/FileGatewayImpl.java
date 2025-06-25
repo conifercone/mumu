@@ -46,9 +46,8 @@ public class FileGatewayImpl implements FileGateway {
   }
 
   @Override
-  public boolean upload(@NotNull File file) {
+  public void upload(@NotNull File file) {
     // 保存文件元数据
     fileConvertor.toFileMetadataPO(file.getMetadata()).ifPresent(fileMetadataRepository::persist);
-    return true;
   }
 }
