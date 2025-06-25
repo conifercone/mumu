@@ -7,4 +7,6 @@ dependencies {
     implementation(libs.grpc.server.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.security.core)
+    implementation(libs.spring.web)
+    implementation(libs.spring.tx)
 }

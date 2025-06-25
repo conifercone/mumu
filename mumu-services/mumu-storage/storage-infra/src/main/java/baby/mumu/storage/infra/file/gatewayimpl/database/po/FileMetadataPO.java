@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.infra.file.gatewayimpl.database.po;
 
-import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
+import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,7 +46,7 @@ import org.hibernate.proxy.HibernateProxy;
 @RequiredArgsConstructor
 @DynamicInsert
 @ToString
-public class FileMetadataPO extends JpaBasisArchivablePersistentObject {
+public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = -1394204529891009898L;
@@ -82,11 +82,6 @@ public class FileMetadataPO extends JpaBasisArchivablePersistentObject {
   @NotNull
   @Column(name = "storage_zone", nullable = false)
   private String storageZone;
-
-  @Size(max = 255)
-  @NotNull
-  @Column(name = "storage_path", nullable = false)
-  private String storagePath;
 
   @Override
   public final boolean equals(Object o) {

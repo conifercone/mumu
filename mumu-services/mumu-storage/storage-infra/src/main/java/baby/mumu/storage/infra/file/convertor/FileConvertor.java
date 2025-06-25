@@ -16,13 +16,20 @@
 
 package baby.mumu.storage.infra.file.convertor;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Optional;
+import org.apache.tika.Tika;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件信息转换器
@@ -33,6 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileConvertor {
 
+  private final Tika tika = new Tika();
+
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.12.0")
@@ -41,4 +50,24 @@ public class FileConvertor {
       .map(FileMapper.INSTANCE::toFileMetadataPO);
   }
 
+  @API(status = Status.STABLE, since = "2.12.0")
+  public Optional<File> toEntity(String storageZone, MultipartFile multipartFile) {
+    return Optional.ofNullable(multipartFile).map(_ -> {
+      File file = new File();
+      try {
+        byte[] fileBytes = multipartFile.getBytes();
+        file.setContent(new ByteArrayInputStream(fileBytes));
+        FileMetadata fileMetadata = new FileMetadata();
+        fileMetadata.setStorageZone(storageZone);
+        fileMetadata.setSize(multipartFile.getSize());
+        fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
+        fileMetadata.setOriginalFilename(multipartFile.getOriginalFilename());
+        fileMetadata.setStoredFilename(multipartFile.getOriginalFilename());
+        file.setMetadata(fileMetadata);
+      } catch (IOException e) {
+        throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+      }
+      return file;
+    });
+  }
 }

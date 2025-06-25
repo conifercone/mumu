@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.jakarta.validation.api)
     annotationProcessor(libs.hibernate.jpamodelgen)
+    implementation(libs.tika.core)
 }

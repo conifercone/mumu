@@ -58,15 +58,18 @@ public class FileGatewayImpl implements FileGateway {
   @API(status = Status.STABLE, since = "2.12.0")
   public void upload(File file) {
     Optional.ofNullable(file).ifPresent(fileNonNull -> {
-      // 文件上传
-      try {
-        fileStorageRepository.upload(fileNonNull);
-      } catch (Exception e) {
-        throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
-      }
       // 保存文件元数据
       fileConvertor.toFileMetadataPO(fileNonNull.getMetadata())
-          .ifPresent(fileMetadataRepository::persist);
+          .ifPresent(fileMetadataPO -> {
+            fileMetadataRepository.persist(fileMetadataPO);
+            fileNonNull.getMetadata().setId(fileMetadataPO.getId());
+            // 文件上传
+            try {
+              fileStorageRepository.upload(fileNonNull);
+            } catch (Exception e) {
+              throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
+            }
+          });
     });
   }
 }

@@ -14,36 +14,17 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
+package baby.mumu.storage.client.api;
 
-import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文件元数据
+ * 文件管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class FileMetadata extends BasisDomainModel {
+public interface FileService {
 
-  @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
-
-  private Long id;
-
-  private String originalFilename;
-
-  private String storedFilename;
-
-  private String contentType;
-
-  private Long size;
-
-  private String storageZone;
-
+  void upload(String storageZone, MultipartFile multipartFile);
 }

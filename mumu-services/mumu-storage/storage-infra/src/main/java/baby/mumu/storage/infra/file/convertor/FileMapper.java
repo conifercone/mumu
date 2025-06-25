@@ -18,8 +18,6 @@ package baby.mumu.storage.infra.file.convertor;
 
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
-import baby.mumu.basis.mappers.GeoGrpcMapper;
-import baby.mumu.basis.mappers.GeoMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
@@ -37,8 +35,7 @@ import org.mapstruct.factory.Mappers;
  * @since 2.12.0
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper, GeoMapper,
-  GeoGrpcMapper {
+public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper {
 
   FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
 
