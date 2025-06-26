@@ -47,7 +47,7 @@ public class FileGatewayImpl implements FileGateway {
 
   @Autowired
   public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
-      FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
+    FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
     this.fileMetadataRepository = fileMetadataRepository;
     this.fileConvertor = fileConvertor;
     this.fileStorageRepository = fileStorageRepository;
@@ -57,24 +57,21 @@ public class FileGatewayImpl implements FileGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "2.12.0")
   public void upload(File file) {
-    Optional.ofNullable(file).ifPresent(fileNonNull -> {
-      // 保存文件元数据
-      fileConvertor.toFileMetadataPO(fileNonNull.getMetadata())
-          .ifPresent(fileMetadataPO -> {
-            try {
-              fileMetadataRepository.persist(fileMetadataPO);
-              fileNonNull.getMetadata().setId(fileMetadataPO.getId());
-              // 文件上传
-              fileStorageRepository.upload(fileNonNull);
-            } catch (Exception e) {
-              try {
-                fileStorageRepository.delete(fileNonNull);
-              } catch (Exception ex) {
-                throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
-              }
-              throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
-            }
-          });
-    });
+    // 保存文件元数据
+    Optional.ofNullable(file).flatMap(_ -> fileConvertor.toFileMetadataPO(file.getMetadata()))
+      .ifPresent(fileMetadataPO -> {
+        try {
+          // 文件上传
+          fileStorageRepository.upload(file);
+          fileMetadataRepository.persist(fileMetadataPO);
+        } catch (Exception e) {
+          try {
+            fileStorageRepository.delete(file);
+          } catch (Exception ex) {
+            throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+          }
+          throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
+        }
+      });
   }
 }

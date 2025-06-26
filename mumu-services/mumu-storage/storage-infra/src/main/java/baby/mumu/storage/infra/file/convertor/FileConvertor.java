@@ -21,6 +21,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
@@ -41,6 +42,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileConvertor {
 
   private final Tika tika = new Tika();
+  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+
+  public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+    this.primaryKeyGrpcService = primaryKeyGrpcService;
+  }
 
 
   @Contract("_ -> new")
@@ -58,11 +64,13 @@ public class FileConvertor {
         byte[] fileBytes = multipartFile.getBytes();
         file.setContent(new ByteArrayInputStream(fileBytes));
         FileMetadata fileMetadata = new FileMetadata();
+        fileMetadata.setId(primaryKeyGrpcService.snowflake());
         fileMetadata.setStorageZone(storageZone);
         fileMetadata.setSize(multipartFile.getSize());
         fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
         fileMetadata.setOriginalFilename(multipartFile.getOriginalFilename());
         fileMetadata.setStoredFilename(multipartFile.getOriginalFilename());
+        fileMetadata.setStoragePath(fileMetadata.getId() + "/" + fileMetadata.getStoredFilename());
         file.setMetadata(fileMetadata);
       } catch (IOException e) {
         throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);

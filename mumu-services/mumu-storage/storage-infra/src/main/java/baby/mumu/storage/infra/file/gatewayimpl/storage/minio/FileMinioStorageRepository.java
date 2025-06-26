@@ -70,8 +70,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
     minioClient.putObject(
       PutObjectArgs.builder()
         .bucket(file.getMetadata().getStorageZone())
-        .object(file.getMetadata().getId() + "/" + file.getMetadata()
-          .getStoredFilename())
+        .object(file.getMetadata().getStoragePath())
         .stream(file.getContent(), file.getMetadata().getSize(), -1)
         .contentType(file.getMetadata().getContentType())
         .build()
@@ -83,8 +82,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
     minioClient.removeObject(
       RemoveObjectArgs.builder()
         .bucket(file.getMetadata().getStorageZone())
-        .object(file.getMetadata().getId() + "/" + file.getMetadata()
-          .getStoredFilename())
+        .object(file.getMetadata().getStoragePath())
         .build()
     );
   }

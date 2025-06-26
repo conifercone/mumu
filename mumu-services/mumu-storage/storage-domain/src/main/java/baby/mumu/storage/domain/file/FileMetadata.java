@@ -46,4 +46,6 @@ public class FileMetadata extends BasisDomainModel {
 
   private String storageZone;
 
+  private String storagePath;
+
 }

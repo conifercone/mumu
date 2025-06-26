@@ -17,7 +17,6 @@
 package baby.mumu.storage.infra.file.gatewayimpl.database.po;
 
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -55,7 +54,6 @@ public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
    * 文件元数据id
    */
   @Id
-  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 
@@ -82,6 +80,11 @@ public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
   @NotNull
   @Column(name = "storage_zone", nullable = false)
   private String storageZone;
+
+  @Size(max = 255)
+  @NotNull
+  @Column(name = "storage_path", nullable = false)
+  private String storagePath;
 
   @Override
   public final boolean equals(Object o) {
