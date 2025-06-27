@@ -68,6 +68,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -588,19 +589,27 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void logout() {
-    SecurityContextUtils.getLoginAccountId().ifPresent(accountId -> {
-      passwordTokenCacheRepository.deleteById(accountId);
-      oidcIdTokenCacheRepository.deleteById(accountId);
-      accountCacheRepository.deleteById(accountId);
-      accountRoleCacheRepository.deleteById(accountId);
-      applicationEventPublisher.publishEvent(new LogoutSuccessEvent(
-        SecurityContextHolder.getContext().getAuthentication()));
-      SecurityContextUtils.getLoginAccountName().ifPresent(
-        accountName -> operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-          .setContent("User logout")
-          .setBizNo(accountName)
-          .setSuccess(String.format("User %s successfully logged out", accountName))
-          .build()));
+    Optional<Long> optionalAccountId = SecurityContextUtils.getLoginAccountId();
+    if (optionalAccountId.isEmpty()) {
+      return;
+    }
+    Long accountId = optionalAccountId.get();
+    // 清除缓存
+    passwordTokenCacheRepository.deleteById(accountId);
+    oidcIdTokenCacheRepository.deleteById(accountId);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
+    // 发布登出成功事件
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    applicationEventPublisher.publishEvent(new LogoutSuccessEvent(authentication));
+    // 提交操作日志（如果有账号名）
+    SecurityContextUtils.getLoginAccountName().ifPresent(accountName -> {
+      OperationLogSubmitGrpcCmd cmd = OperationLogSubmitGrpcCmd.newBuilder()
+        .setContent("User logout")
+        .setBizNo(accountName)
+        .setSuccess(String.format("User %s successfully logged out", accountName))
+        .build();
+      operationLogGrpcService.syncSubmit(cmd);
     });
   }
 
