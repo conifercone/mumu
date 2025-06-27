@@ -34,6 +34,7 @@ import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import baby.mumu.iam.infra.account.gatewayimpl.cache.AccountCacheRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.database.AccountRepository;
+import baby.mumu.iam.infra.account.gatewayimpl.database.po.AccountArchivedPO;
 import baby.mumu.iam.infra.account.gatewayimpl.database.po.AccountPO;
 import baby.mumu.iam.infra.account.gatewayimpl.document.AccountAddressDocumentRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.document.AccountAvatarDocumentRepository;
@@ -71,7 +72,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 /**
  * 用户领域网关实现
@@ -189,14 +189,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByUsername(String username) {
-    return accountCacheRepository.findByUsername(username).flatMap(accountConvertor::toEntity)
-      .or(() -> {
-        Optional<Account> account = accountRepository.findByUsername(username)
-          .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountCacheablePO)
-          .ifPresent(accountCacheRepository::save);
-        return account;
-      });
+    Optional<Account> cachedAccount = accountCacheRepository.findByUsername(username)
+      .flatMap(accountConvertor::toEntity);
+    if (cachedAccount.isPresent()) {
+      return cachedAccount;
+    }
+    Optional<Account> dbAccount = accountRepository.findByUsername(username)
+      .flatMap(accountConvertor::toEntity);
+    dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+      .ifPresent(accountCacheRepository::save);
+    return dbAccount;
+
   }
 
   /**
@@ -206,13 +209,16 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> findAccountByEmail(String email) {
-    return accountCacheRepository.findByEmail(email).flatMap(accountConvertor::toEntity).or(() -> {
-      Optional<Account> account = accountRepository.findByEmail(email)
-        .flatMap(accountConvertor::toEntity);
-      account.flatMap(accountConvertor::toAccountCacheablePO)
-        .ifPresent(accountCacheRepository::save);
-      return account;
-    });
+    Optional<Account> cached = accountCacheRepository.findByEmail(email)
+      .flatMap(accountConvertor::toEntity);
+    if (cached.isPresent()) {
+      return cached;
+    }
+    Optional<Account> dbAccount = accountRepository.findByEmail(email)
+      .flatMap(accountConvertor::toEntity);
+    dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+      .ifPresent(accountCacheRepository::save);
+    return dbAccount;
   }
 
   /**
@@ -222,17 +228,18 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateById(Account account) {
-    Optional.ofNullable(account)
-      .ifPresent(accountNotNull -> SecurityContextUtils.getLoginAccountId()
-        .filter(res -> Objects.equals(res, accountNotNull.getId()))
-        .ifPresentOrElse((accountId) -> accountConvertor.toAccountPO(accountNotNull)
-          .ifPresent(accountPO -> {
-            accountRepository.merge(accountPO);
-            accountCacheRepository.deleteById(accountId);
-            accountRoleCacheRepository.deleteById(accountId);
-          }), () -> {
-          throw new MuMuException(ResponseCode.UNAUTHORIZED);
-        }));
+    if (account == null) {
+      return;
+    }
+    Long loginAccountId = SecurityContextUtils.getLoginAccountId()
+      .filter(id -> Objects.equals(id, account.getId()))
+      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+    accountConvertor.toAccountPO(account)
+      .ifPresent(accountPO -> {
+        accountRepository.merge(accountPO);
+        accountCacheRepository.deleteById(loginAccountId);
+        accountRoleCacheRepository.deleteById(loginAccountId);
+      });
   }
 
   /**
@@ -242,12 +249,19 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void updateRoleById(Account account) {
-    Optional.ofNullable(account).map(Account::getId).filter(accountRepository::existsById)
-      .ifPresent(accountId -> accountConvertor.toAccountPO(account).ifPresent(_ -> {
-        accountRoleRepository.deleteByAccountId(accountId);
-        accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-        accountRoleCacheRepository.deleteById(accountId);
-      }));
+    if (account == null) {
+      return;
+    }
+    Long accountId = account.getId();
+    if (!accountRepository.existsById(accountId)) {
+      return;
+    }
+    Optional<AccountPO> accountPO = accountConvertor.toAccountPO(account);
+    if (accountPO.isPresent()) {
+      accountRoleRepository.deleteByAccountId(accountId);
+      accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+      accountRoleCacheRepository.deleteById(accountId);
+    }
   }
 
   /**
@@ -257,15 +271,13 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long accountId) {
-    accountRepository.findById(accountId).ifPresentOrElse((accountPO) -> {
-      accountPO.setEnabled(false);
-      accountRepository.merge(accountPO);
-      passwordTokenCacheRepository.deleteById(accountId);
-      accountCacheRepository.deleteById(accountId);
-      accountRoleCacheRepository.deleteById(accountId);
-    }, () -> {
-      throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
-    });
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    accountPO.setEnabled(false);
+    accountRepository.merge(accountPO);
+    passwordTokenCacheRepository.deleteById(accountId);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
   }
 
   /**
@@ -275,15 +287,24 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @Transactional(rollbackFor = Exception.class)
   public Optional<Account> queryCurrentLoginAccount() {
-    return SecurityContextUtils.getLoginAccountId().flatMap(accountCacheRepository::findById)
-      .flatMap(accountConvertor::toEntity).or(() -> {
-        Optional<Account> account = accountRepository.findById(
-            SecurityContextUtils.getLoginAccountId().get())
-          .flatMap(accountConvertor::toEntity);
-        account.flatMap(accountConvertor::toAccountCacheablePO)
-          .ifPresent(accountCacheRepository::save);
-        return account;
-      });
+    Optional<Long> optionalAccountId = SecurityContextUtils.getLoginAccountId();
+    if (optionalAccountId.isEmpty()) {
+      return Optional.empty();
+    }
+    Long accountId = optionalAccountId.get();
+    // 优先查缓存
+    Optional<Account> cachedAccount = accountCacheRepository.findById(accountId)
+      .flatMap(accountConvertor::toEntity);
+    if (cachedAccount.isPresent()) {
+      return cachedAccount;
+    }
+    // 缓存未命中，查数据库
+    Optional<Account> dbAccount = accountRepository.findById(accountId)
+      .flatMap(accountConvertor::toEntity);
+    // 写入缓存
+    dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+      .ifPresent(accountCacheRepository::save);
+    return dbAccount;
   }
 
   /**
@@ -302,17 +323,16 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long accountId) {
-    accountRepository.findById(accountId).ifPresentOrElse((accountPO) -> {
-      String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
-      Assert.isTrue(StringUtils.isNotBlank(initialPassword),
-        ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY.getMessage());
-      accountPO.setPassword(passwordEncoder.encode(initialPassword));
-      accountRepository.merge(accountPO);
-      accountCacheRepository.deleteById(accountPO.getId());
-      accountRoleCacheRepository.deleteById(accountPO.getId());
-    }, () -> {
-      throw new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST);
-    });
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
+    if (StringUtils.isBlank(initialPassword)) {
+      throw new MuMuException(ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY);
+    }
+    accountPO.setPassword(passwordEncoder.encode(initialPassword));
+    accountRepository.merge(accountPO);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
   }
 
   /**
@@ -323,32 +343,24 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("删除当前账号")
   public void deleteCurrentAccount() {
-    SecurityContextUtils.getLoginAccountId().flatMap(accountRepository::findById)
-      .ifPresentOrElse(accountPO -> {
-        // 账号存在未使用的余额时不允许删除
-        if (accountPO.getBalance()
-          .isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
-          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
-        }
-        // 删除账号基本信息
-        accountRepository.deleteById(accountPO.getId());
-        // 删除账号地址信息
-        accountAddressDocumentRepository.deleteByAccountId(accountPO.getId());
-        // 删除账号系统设置
-        accountSystemSettingsDocumentRepository.deleteByAccountId(accountPO.getId());
-        // 删除账号头像信息，头像如果存在关联文件需要同步删除文件
-        accountAvatarDocumentRepository.deleteByAccountId(accountPO.getId());
-        // 删除账号令牌缓存
-        passwordTokenCacheRepository.deleteById(accountPO.getId());
-        // 删除账号角色关联信息
-        accountRoleRepository.deleteByAccountId(accountPO.getId());
-        // 删除账号缓存
-        accountCacheRepository.deleteById(accountPO.getId());
-        // 删除账号角色缓存
-        accountRoleCacheRepository.deleteById(accountPO.getId());
-      }, () -> {
-        throw new MuMuException(ResponseCode.UNAUTHORIZED);
-      });
+    Long accountId = SecurityContextUtils.getLoginAccountId()
+      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    // 若账号还有余额，不允许删除
+    if (accountPO.getBalance().isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
+      throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+    }
+    // 删除数据库中的信息
+    accountRepository.deleteById(accountId);
+    accountAddressDocumentRepository.deleteByAccountId(accountId);
+    accountSystemSettingsDocumentRepository.deleteByAccountId(accountId);
+    accountAvatarDocumentRepository.deleteByAccountId(accountId);
+    accountRoleRepository.deleteByAccountId(accountId);
+    // 删除缓存
+    passwordTokenCacheRepository.deleteById(accountId);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
   }
 
   /**
@@ -372,11 +384,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public boolean verifyPassword(String password) {
-    return SecurityContextUtils.getLoginAccountId()
-      .map(accountId -> accountRepository.findById(accountId)
-        .map(accountPO -> passwordEncoder.matches(password, accountPO.getPassword()))
-        .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
+    Long accountId = SecurityContextUtils.getLoginAccountId()
       .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    return passwordEncoder.matches(password, accountPO.getPassword());
   }
 
   /**
@@ -386,19 +398,17 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(String originalPassword, String newPassword) {
-    if (verifyPassword(originalPassword)) {
-      AccountPO newAccountPO = SecurityContextUtils.getLoginAccountId()
-        .map(accountId -> accountRepository.findById(accountId)
-          .stream()
-          .peek(accountPO -> accountPO.setPassword(passwordEncoder.encode(newPassword)))
-          .findAny().orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST)))
-        .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
-      accountRepository.merge(newAccountPO);
-      accountCacheRepository.deleteById(newAccountPO.getId());
-      accountRoleCacheRepository.deleteById(newAccountPO.getId());
-    } else {
+    Long accountId = SecurityContextUtils.getLoginAccountId()
+      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    if (!passwordEncoder.matches(originalPassword, accountPO.getPassword())) {
       throw new MuMuException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
+    accountPO.setPassword(passwordEncoder.encode(newPassword));
+    accountRepository.merge(accountPO);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
   }
 
   /**
@@ -408,36 +418,42 @@ public class AccountGatewayImpl implements AccountGateway {
   @Transactional(rollbackFor = Exception.class)
   @DangerousOperation("根据ID归档账号ID为%0的账号")
   public void archiveById(Long accountId) {
-    Optional.ofNullable(accountId).flatMap(accountRepository::findById)
-      .flatMap(accountConvertor::toAccountArchivedPO).ifPresent(accountArchivedPO -> {
-        if (accountArchivedPO.getBalance()
-          .isGreaterThan(Money.of(0, accountArchivedPO.getBalance().getCurrency()))) {
-          throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
-        }
-        // noinspection DuplicatedCode
-        accountArchivedPO.setArchived(true);
-        accountArchivedRepository.persist(accountArchivedPO);
-        accountRepository.deleteById(accountArchivedPO.getId());
-        accountCacheRepository.deleteById(accountArchivedPO.getId());
-        accountRoleCacheRepository.deleteById(accountArchivedPO.getId());
-        GlobalProperties global = extensionProperties.getGlobal();
-        jobScheduler.schedule(Instant.now()
-            .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit()),
-          () -> deleteArchivedDataJob(accountArchivedPO.getId()));
-      });
+    if (accountId == null) {
+      return;
+    }
+    AccountPO accountPO = accountRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+    AccountArchivedPO archivedPO = accountConvertor.toAccountArchivedPO(accountPO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
+    // 禁止归档有余额的账户
+    if (archivedPO.getBalance().isGreaterThan(Money.of(0, archivedPO.getBalance().getCurrency()))) {
+      throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+    }
+    archivedPO.setArchived(true);
+    accountArchivedRepository.persist(archivedPO);
+    // 删除主表和缓存
+    accountRepository.deleteById(accountId);
+    accountCacheRepository.deleteById(accountId);
+    accountRoleCacheRepository.deleteById(accountId);
+    // 安排归档后的延迟清理任务
+    GlobalProperties global = extensionProperties.getGlobal();
+    Instant triggerTime = Instant.now()
+      .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit());
+    jobScheduler.schedule(triggerTime, () -> deleteArchivedDataJob(accountId));
   }
 
   @Job(name = "删除ID为：%0 的账号归档数据")
   @DangerousOperation("根据ID删除ID为%0的账号归档数据定时任务")
   @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
-    Optional.ofNullable(id).ifPresent(accountIdNonNull -> {
-      accountArchivedRepository.deleteById(accountIdNonNull);
-      accountAddressDocumentRepository.deleteByAccountId(accountIdNonNull);
-      accountRoleRepository.deleteByAccountId(accountIdNonNull);
-      accountCacheRepository.deleteById(accountIdNonNull);
-      accountRoleCacheRepository.deleteById(accountIdNonNull);
-    });
+    if (id == null) {
+      return;
+    }
+    accountArchivedRepository.deleteById(id);
+    accountAddressDocumentRepository.deleteByAccountId(id);
+    accountRoleRepository.deleteByAccountId(id);
+    accountCacheRepository.deleteById(id);
+    accountRoleCacheRepository.deleteById(id);
   }
 
   /**
@@ -446,12 +462,16 @@ public class AccountGatewayImpl implements AccountGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void recoverFromArchiveById(Long accountId) {
-    Optional.ofNullable(accountId).flatMap(accountArchivedRepository::findById)
-      .flatMap(accountConvertor::toAccountPO).ifPresent(accountPO -> {
-        accountPO.setArchived(false);
-        accountArchivedRepository.deleteById(accountPO.getId());
-        accountRepository.persist(accountPO);
-      });
+    if (accountId == null) {
+      return;
+    }
+    AccountArchivedPO archivedPO = accountArchivedRepository.findById(accountId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_ARCHIVE_NOT_FOUND));
+    AccountPO accountPO = accountConvertor.toAccountPO(archivedPO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
+    accountPO.setArchived(false);
+    accountArchivedRepository.deleteById(accountId);
+    accountRepository.persist(accountPO);
   }
 
   /**
