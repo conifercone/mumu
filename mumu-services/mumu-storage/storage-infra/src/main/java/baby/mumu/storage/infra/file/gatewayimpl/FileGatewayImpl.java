@@ -22,9 +22,9 @@ import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
 import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
+import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +57,32 @@ public class FileGatewayImpl implements FileGateway {
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "2.12.0")
   public void upload(File file) {
-    // 保存文件元数据
-    Optional.ofNullable(file).flatMap(_ -> fileConvertor.toFileMetadataPO(file.getMetadata()))
-      .ifPresent(fileMetadataPO -> {
-        try {
-          // 文件上传
-          fileStorageRepository.upload(file);
-          fileMetadataRepository.persist(fileMetadataPO);
-        } catch (Exception e) {
-          try {
-            fileStorageRepository.delete(file);
-          } catch (Exception ex) {
-            throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
-          }
-          throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
-        }
-      });
+    if (file == null || file.getMetadata() == null) {
+      return;
+    }
+
+    FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+
+    try {
+      // 上传文件
+      fileStorageRepository.upload(file);
+    } catch (Exception e) {
+      throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED, e);
+    }
+
+    try {
+      // 保存元数据（数据库操作）
+      fileMetadataRepository.persist(fileMetadataPO);
+    } catch (Exception e) {
+      // 元数据保存失败，尝试回滚上传
+      try {
+        fileStorageRepository.delete(file);
+      } catch (Exception ex) {
+        throw new MuMuException(ResponseCode.FILE_DELETION_FAILED, ex);
+      }
+      throw new MuMuException(ResponseCode.FILE_METADATA_PERSIST_FAILED, e);
+    }
   }
+
 }
