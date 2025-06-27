@@ -26,6 +26,11 @@ import baby.mumu.storage.domain.file.File;
  */
 public interface FileGateway {
 
+  /**
+   * 文件上传
+   *
+   * @param file 源文件
+   */
   void upload(File file);
 
 }

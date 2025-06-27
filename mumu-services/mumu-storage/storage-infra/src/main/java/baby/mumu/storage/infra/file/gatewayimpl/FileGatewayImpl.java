@@ -53,6 +53,9 @@ public class FileGatewayImpl implements FileGateway {
     this.fileStorageRepository = fileStorageRepository;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "2.12.0")
@@ -68,7 +71,7 @@ public class FileGatewayImpl implements FileGateway {
       // 上传文件
       fileStorageRepository.upload(file);
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED, e);
+      throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
     }
 
     try {
@@ -79,9 +82,9 @@ public class FileGatewayImpl implements FileGateway {
       try {
         fileStorageRepository.delete(file);
       } catch (Exception ex) {
-        throw new MuMuException(ResponseCode.FILE_DELETION_FAILED, ex);
+        throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
       }
-      throw new MuMuException(ResponseCode.FILE_METADATA_PERSIST_FAILED, e);
+      throw new MuMuException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
     }
   }
 
