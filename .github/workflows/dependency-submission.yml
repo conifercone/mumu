@@ -7,7 +7,6 @@ on:
     paths:
       - '**/build.gradle.kts'
       - 'gradle/libs.versions.toml'
-      - 'buildSrc/gradle/libs.versions.toml'
     branches:
       - main
 

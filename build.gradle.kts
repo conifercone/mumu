@@ -1,7 +1,3 @@
-import baby.mumu.build.constants.EnvironmentKeyConstants
-import baby.mumu.build.constants.ProjectInfoConstants
-import baby.mumu.build.constants.SystemPropertyConstants
-import baby.mumu.build.enums.ModuleEnum
 import java.nio.charset.StandardCharsets
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -21,7 +17,7 @@ plugins {
     alias(libs.plugins.pmd)
 }
 
-description = ProjectInfoConstants.DESCRIPTION
+description = "The Delightfully Clean & Ready-to-Go Management System!"
 
 val rootDirectory = project.rootDir
 
@@ -58,14 +54,14 @@ fun endsWithAny(input: String, suffixes: List<String>): Boolean {
     return suffixes.any { input.endsWith(it, ignoreCase = true) }
 }
 
-val javaMajorVersion = ProjectInfoConstants.JAVA_MAJOR_VERSION
-val checkstyleToolVersion = ProjectInfoConstants.CHECKSTYLE_TOOL_VERSION
-val pmdToolVersion = ProjectInfoConstants.PMD_TOOL_VERSION
+val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
+val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
+val pmdToolVersion = findProperty("pmd.tool.version")!!.toString()
 
 allprojects {
 
-    group = ProjectInfoConstants.GROUP
-    val versionString = ProjectInfoConstants.VERSION
+    group = findProperty("group")!! as String
+    val versionString = findProperty("version")!! as String
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (endsWithAny(
@@ -136,10 +132,10 @@ subprojects {
     }
 
     signing {
-        val mumuSigningKeyId = EnvironmentKeyConstants.MUMU_SIGNING_KEY_ID
-        val mumuSigningKeyFilePath = EnvironmentKeyConstants.MUMU_SIGNING_KEY_FILE_PATH
-        val mumuSigningKeyContent = EnvironmentKeyConstants.MUMU_SIGNING_KEY_CONTENT
-        val mumuSigningPassword = EnvironmentKeyConstants.MUMU_SIGNING_PASSWORD
+        val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
+        val mumuSigningKeyFilePath = "MUMU_SIGNING_KEY_FILE_PATH"
+        val mumuSigningKeyContent = "MUMU_SIGNING_KEY_CONTENT"
+        val mumuSigningPassword = "MUMU_SIGNING_PASSWORD"
 
         val keyId = System.getenv(mumuSigningKeyId)
         val keyFile = System.getenv(mumuSigningKeyFilePath)
@@ -184,12 +180,12 @@ subprojects {
     val projectVersionStr = project.version.toString()
     val projectNameStr = project.name
     val gradleVersionStr = gradle.gradleVersion
-    val osName = System.getProperty(SystemPropertyConstants.OS_NAME)
-    val javaVersion = System.getProperty(SystemPropertyConstants.JAVA_VERSION)
+    val osName = System.getProperty("os.name")
+    val javaVersion = System.getProperty("java.version")
 
     val hasProcessorProvider = providers.provider {
         configurations["annotationProcessor"].dependencies
-            .any { it.name.contains(ModuleEnum.MUMU_PROCESSOR.moduleName) }
+            .any { it.name.contains("mumu-processor") }
     }
     tasks.named<JavaCompile>("compileJava") {
         dependsOn(tasks.named("processResources"))
@@ -238,8 +234,8 @@ subprojects {
                 "Implementation-Version" to archiveVersion.get(),
                 "Application-Version" to archiveVersion.get(),
                 "Built-Gradle" to gradle.gradleVersion,
-                "Build-OS" to System.getProperty(SystemPropertyConstants.OS_NAME),
-                "Build-Jdk" to System.getProperty(SystemPropertyConstants.JAVA_VERSION),
+                "Build-OS" to System.getProperty("os.name"),
+                "Build-Jdk" to System.getProperty("java.version"),
                 "Build-Timestamp" to OffsetDateTime.now(ZoneOffset.UTC)
                     .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
             )

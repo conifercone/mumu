@@ -1,6 +1,4 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_IAM.description
+description = "Identity & Access Management Service"
 
 plugins {
     alias(libs.plugins.flyway)

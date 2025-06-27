@@ -1,6 +1,4 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_STORAGE.description
+description = "Storage Management Service"
 
 plugins {
     alias(libs.plugins.flyway)
