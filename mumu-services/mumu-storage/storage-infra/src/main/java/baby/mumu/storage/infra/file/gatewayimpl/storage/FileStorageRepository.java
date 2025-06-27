@@ -26,7 +26,17 @@ import baby.mumu.storage.domain.file.File;
  */
 public interface FileStorageRepository {
 
+  /**
+   * 文件上传
+   *
+   * @param file 源文件
+   */
   void upload(File file) throws Exception;
 
+  /**
+   * 文件删除
+   *
+   * @param file 目标文件
+   */
   void delete(File file) throws Exception;
 }
