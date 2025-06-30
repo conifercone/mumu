@@ -17,6 +17,7 @@
 package baby.mumu.storage.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.storage.client.api.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -59,10 +60,10 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.12.0")
-  public void upload(
+  public ResponseWrapper<Long> upload(
     @Parameter(description = "文件存储区域", required = true) @RequestParam("storageZone") @NotNull String storageZone,
     @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
-    fileService.upload(storageZone, file);
+    return ResponseWrapper.success(fileService.upload(storageZone, file));
   }
 
   @Operation(summary = "文件根据元数据ID删除")

@@ -30,8 +30,9 @@ public interface FileGateway {
    * 文件上传
    *
    * @param file 源文件
+   * @return 文件元数据ID
    */
-  void upload(File file);
+  Long upload(File file);
 
   /**
    * 根据文件元数据ID删除文件

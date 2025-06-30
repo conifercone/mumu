@@ -56,13 +56,15 @@ public class FileGatewayImpl implements FileGateway {
 
   /**
    * {@inheritDoc}
+   *
+   * @return
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "2.12.0")
-  public void upload(File file) {
+  public Long upload(File file) {
     if (file == null || file.getMetadata() == null) {
-      return;
+      return null;
     }
 
     FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
@@ -87,6 +89,7 @@ public class FileGatewayImpl implements FileGateway {
       }
       throw new MuMuException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
     }
+    return fileMetadataPO.getId();
   }
 
   /**

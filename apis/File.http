@@ -31,6 +31,8 @@ Content-Type: application/json
 > {%
   client.test("Request executed successfully", function () {
     client.assert(response.status === 200, "Response status is not 200");
+    // noinspection JSUnresolvedReference
+    client.global.set("fileMetadataId", response.body.data);
   });
 %}
 
@@ -43,7 +45,7 @@ Content-Type: application/json
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{storage-service-url}}/file/deleteByMetadataId/691645473439749
+DELETE {{storage-service-url}}/file/deleteByMetadataId/{{fileMetadataId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

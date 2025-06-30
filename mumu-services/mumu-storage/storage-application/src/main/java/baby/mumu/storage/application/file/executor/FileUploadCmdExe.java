@@ -42,7 +42,7 @@ public class FileUploadCmdExe {
     this.fileConvertor = fileConvertor;
   }
 
-  public void execute(String storageZone, MultipartFile multipartFile) {
-    fileConvertor.toEntity(storageZone, multipartFile).ifPresent(fileGateway::upload);
+  public Long execute(String storageZone, MultipartFile multipartFile) {
+    return fileConvertor.toEntity(storageZone, multipartFile).map(fileGateway::upload).orElse(null);
   }
 }

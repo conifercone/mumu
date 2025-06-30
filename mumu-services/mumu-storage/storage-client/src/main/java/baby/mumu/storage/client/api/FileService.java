@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface FileService {
 
-  void upload(String storageZone, MultipartFile multipartFile);
+  Long upload(String storageZone, MultipartFile multipartFile);
 
   void deleteByMetadataId(Long metadataId);
 }
