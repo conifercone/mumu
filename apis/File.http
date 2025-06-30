@@ -33,3 +33,27 @@ Content-Type: application/json
     client.assert(response.status === 200, "Response status is not 200");
   });
 %}
+
+### 根据文件元数据ID删除指定文件
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{storage-service-url}}/file/deleteByMetadataId/691645473439749
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}

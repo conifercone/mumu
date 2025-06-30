@@ -33,4 +33,11 @@ public interface FileGateway {
    */
   void upload(File file);
 
+  /**
+   * 根据文件元数据ID删除文件
+   *
+   * @param fileMetadataId 目标文件元数据ID
+   */
+  void deleteByMetadataId(Long fileMetadataId);
+
 }

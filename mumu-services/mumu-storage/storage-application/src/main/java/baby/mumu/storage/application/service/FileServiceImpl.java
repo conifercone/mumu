@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.application.service;
 
+import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
 import io.micrometer.observation.annotation.Observed;
@@ -34,9 +35,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileServiceImpl implements FileService {
 
   private final FileUploadCmdExe fileUploadCmdExe;
+  private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
 
-  public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe) {
+  public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
+    FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe) {
     this.fileUploadCmdExe = fileUploadCmdExe;
+    this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
   }
 
   @Override
@@ -44,5 +48,11 @@ public class FileServiceImpl implements FileService {
   public void upload(String storageZone,
     MultipartFile multipartFile) {
     fileUploadCmdExe.execute(storageZone, multipartFile);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteByMetadataId(Long metadataId) {
+    fileDeleteByMetadataIdCmdExe.execute(metadataId);
   }
 }

@@ -42,4 +42,6 @@ public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMa
   @API(status = Status.STABLE, since = "2.12.0")
   FileMetadataPO toFileMetadataPO(FileMetadata fileMetadata);
 
+  @API(status = Status.STABLE, since = "2.12.0")
+  FileMetadata toEntity(FileMetadataPO fileMetadataPO);
 }

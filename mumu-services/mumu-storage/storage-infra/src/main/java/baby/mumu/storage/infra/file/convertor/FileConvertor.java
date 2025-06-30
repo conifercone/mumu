@@ -56,6 +56,13 @@ public class FileConvertor {
       .map(FileMapper.INSTANCE::toFileMetadataPO);
   }
 
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.12.0")
+  public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
+    return Optional.ofNullable(fileMetadataPO)
+      .map(FileMapper.INSTANCE::toEntity);
+  }
+
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<File> toEntity(String storageZone, MultipartFile multipartFile) {
     return Optional.ofNullable(multipartFile).map(_ -> {

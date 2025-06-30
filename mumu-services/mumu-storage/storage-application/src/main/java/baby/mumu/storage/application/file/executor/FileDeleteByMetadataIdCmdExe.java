@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.client.api;
+package baby.mumu.storage.application.file.executor;
 
-import org.springframework.web.multipart.MultipartFile;
+import baby.mumu.storage.domain.file.gateway.FileGateway;
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * 文件管理
+ * 文件根据元数据ID删除指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
  */
-public interface FileService {
+@Component
+@Observed(name = "FileDeleteByMetadataIdCmdExe")
+public class FileDeleteByMetadataIdCmdExe {
 
-  void upload(String storageZone, MultipartFile multipartFile);
+  private final FileGateway fileGateway;
 
-  void deleteByMetadataId(Long metadataId);
+  @Autowired
+  public FileDeleteByMetadataIdCmdExe(FileGateway fileGateway) {
+    this.fileGateway = fileGateway;
+  }
+
+  public void execute(Long metadataId) {
+    fileGateway.deleteByMetadataId(metadataId);
+  }
 }
