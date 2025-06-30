@@ -20,7 +20,7 @@ import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
-import baby.mumu.log.infrastructure.system.convertor.SystemLogConvertor;
+import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +59,7 @@ public class SystemLogFindAllCmdExe {
       systemLogFindAllCmd.getCurrent(),
       systemLogFindAllCmd.getPageSize());
     List<SystemLogFindAllDTO> systemLogFindAllDTOS = systemLogs.getContent().stream()
-      .map(systemLogConvertor::toFindAllDTO).filter(Optional::isPresent).map(Optional::get)
+      .map(systemLogConvertor::toSystemLogFindAllDTO).filter(Optional::isPresent).map(Optional::get)
       .toList();
     return new PageImpl<>(systemLogFindAllDTOS, systemLogs.getPageable(),
       systemLogs.getTotalElements());

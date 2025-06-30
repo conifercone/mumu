@@ -1,10 +1,8 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_LOG.description
+description = "Log Management Service"
 
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
-    implementation(project(":mumu-services:mumu-log:log-infrastructure"))
+    implementation(project(":mumu-services:mumu-log:log-infra"))
     implementation(project(":mumu-services:mumu-log:log-application"))
     implementation(project(":mumu-extension"))
     implementation(project(":mumu-services:mumu-log:log-adapter"))

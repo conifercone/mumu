@@ -17,29 +17,21 @@
 package baby.mumu.storage.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.storage.client.api.FileService;
-import baby.mumu.storage.client.cmds.FileDownloadCmd;
-import baby.mumu.storage.client.cmds.FileRemoveCmd;
-import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import org.apache.commons.io.IOUtils;
+import jakarta.validation.constraints.NotNull;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,7 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 文件管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.12.0
  */
 @RestController
 @Validated
@@ -65,51 +57,35 @@ public class FileController {
     this.fileService = fileService;
   }
 
-  @Operation(summary = "异步文件上传")
-  @PostMapping("/sync/upload")
+  @Operation(summary = "文件上传")
+  @PostMapping("/upload")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public void syncUpload(@ModelAttribute FileSyncUploadCmd fileUploadCmd,
-    @RequestParam("file") MultipartFile file) throws IOException {
-    fileUploadCmd.setContent(new ByteArrayInputStream(file.getBytes()));
-    fileUploadCmd.setOriginName(file.getOriginalFilename());
-    fileUploadCmd.setSize(file.getSize());
-    fileService.syncUploadFile(fileUploadCmd);
+  @API(status = Status.STABLE, since = "2.12.0")
+  public ResponseWrapper<Long> upload(
+    @Parameter(description = "文件存储区域", required = true) @RequestParam("storageZone") @NotNull String storageZone,
+    @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
+    return ResponseWrapper.success(fileService.upload(storageZone, file));
   }
 
-  @Operation(summary = "文件下载")
-  @GetMapping("/download")
+  @Operation(summary = "文件根据元数据ID删除")
+  @DeleteMapping("/deleteByMetadataId/{metadataId}")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public void download(@ModelAttribute FileDownloadCmd fileDownloadCmd,
-    HttpServletResponse response) {
-    Assert.notNull(fileDownloadCmd, "FileDownloadCmd cannot be null");
-    FileDownloadUtils.download(response, ObjectUtils.isEmpty(
-        fileDownloadCmd.getRename())
-        ? fileDownloadCmd.getName()
-        : fileDownloadCmd.getRename(), fileService.download(fileDownloadCmd),
-      "application/force-download");
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void deleteByMetadataId(
+    @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId) {
+    fileService.deleteByMetadataId(metadataId);
   }
 
-  @Operation(summary = "获取字符串格式的文件内容")
-  @GetMapping("/stringContent")
+  @Operation(summary = "文件根据元数据ID下载")
+  @GetMapping("/downloadByMetadataId/{metadataId}")
   @ResponseBody
   @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public String getStringContent(@ModelAttribute FileDownloadCmd fileDownloadCmd)
-    throws IOException {
-    return IOUtils.toString(fileService.download(fileDownloadCmd),
-      StandardCharsets.UTF_8);
-  }
-
-  @Operation(summary = "删除文件")
-  @DeleteMapping("/remove")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public void removeFile(@RequestBody FileRemoveCmd fileRemoveCmd) {
-    fileService.removeFile(fileRemoveCmd);
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void downloadByMetadataId(
+    @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId,
+    HttpServletResponse httpServletResponse) {
+    fileService.downloadByMetadataId(metadataId, httpServletResponse);
   }
 }

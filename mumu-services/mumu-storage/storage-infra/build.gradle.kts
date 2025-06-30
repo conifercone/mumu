@@ -1,0 +1,18 @@
+dependencies {
+    implementation(project(":mumu-services:mumu-storage:storage-domain"))
+    implementation(project(":mumu-services:mumu-storage:storage-client"))
+    implementation(project(":mumu-services:mumu-log:log-client"))
+    implementation(project(":mumu-services:mumu-unique:unique-client"))
+    implementation(project(":mumu-extension"))
+    annotationProcessor(project(":mumu-processor"))
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.protobuf.java)
+    implementation(libs.grpc.protobuf)
+    implementation(libs.minio)
+    implementation(libs.spring.web)
+    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.postgresql)
+    implementation(libs.jakarta.validation.api)
+    annotationProcessor(libs.hibernate.jpamodelgen)
+    implementation(libs.tika.core)
+}

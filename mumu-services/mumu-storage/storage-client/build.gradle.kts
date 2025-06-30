@@ -6,6 +6,7 @@ plugins {
 
 
 dependencies {
+    implementation(project(":mumu-services:mumu-storage:storage-domain"))
     implementation(project(":mumu-basis"))
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.web)

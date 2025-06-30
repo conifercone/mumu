@@ -1,6 +1,4 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_IAM.description
+description = "Identity & Access Management Service"
 
 plugins {
     alias(libs.plugins.flyway)
@@ -10,7 +8,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-adapter"))
     implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-services:mumu-iam:iam-application"))
-    implementation(project(":mumu-services:mumu-iam:iam-infrastructure"))
+    implementation(project(":mumu-services:mumu-iam:iam-infra"))
     implementation(project(":mumu-services:mumu-iam:iam-domain"))
     implementation(project(":mumu-extension"))
     implementation(project(":mumu-services:mumu-log:log-client"))

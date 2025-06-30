@@ -2,7 +2,7 @@ dependencies {
     implementation(project(":mumu-basis"))
     implementation(project(":mumu-services:mumu-unique:unique-client"))
     implementation(project(":mumu-services:mumu-unique:unique-domain"))
-    implementation(project(":mumu-services:mumu-unique:unique-infrastructure"))
+    implementation(project(":mumu-services:mumu-unique:unique-infra"))
     implementation(project(":mumu-extension"))
     implementation(libs.grpc.stub)
     implementation(libs.grpc.server.spring.boot.starter)

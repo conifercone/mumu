@@ -35,11 +35,8 @@ import java.util.*
  */
 @API(status = API.Status.INTERNAL, since = "1.0.0")
 object SecurityContextUtils {
-    /**
-     * Account领域模型id属性名
-     */
+    
     private const val ID = "id"
-    private const val USERNAME = "username"
     private const val TIMEZONE = "timezone"
     private const val LANGUAGE = "language"
 
@@ -84,10 +81,7 @@ object SecurityContextUtils {
                 if (authentication.isAuthenticated) {
                     val principal = authentication.principal
                     if (principal is UserDetails) {
-                        val beanMap = BeanMap.create(principal)
-                        if (beanMap.containsKey(USERNAME)) {
-                            return@map beanMap[USERNAME].toString()
-                        }
+                        return@map principal.username
                     } else if (principal is ClaimAccessor) {
                         val claims: Map<String, Any> = principal.claims
                         if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.claimName)) {

@@ -18,8 +18,8 @@ package baby.mumu.iam.mapstruct;
 
 import baby.mumu.iam.client.cmds.PermissionUpdateCmd;
 import baby.mumu.iam.domain.permission.Permission;
-import baby.mumu.iam.infrastructure.permission.convertor.PermissionMapper;
-import baby.mumu.iam.infrastructure.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.iam.infra.permission.convertor.PermissionMapper;
+import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
 import com.google.protobuf.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;

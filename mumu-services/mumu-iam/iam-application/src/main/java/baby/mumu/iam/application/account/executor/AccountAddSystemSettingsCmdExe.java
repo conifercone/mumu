@@ -18,7 +18,7 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.infrastructure.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

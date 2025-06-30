@@ -26,32 +26,16 @@ import lombok.EqualsAndHashCode;
  * 文件领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.12.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class File extends BasisDomainModel {
 
   @Serial
-  private static final long serialVersionUID = 7195498751838257468L;
+  private static final long serialVersionUID = 6631248471227046233L;
 
-  /**
-   * 文件内容
-   */
   private InputStream content;
 
-  /**
-   * 存储地址
-   */
-  private String storageAddress;
-
-  /**
-   * 文件名
-   */
-  private String name;
-
-  /**
-   * 文件大小
-   */
-  private Long size;
+  private FileMetadata metadata;
 }

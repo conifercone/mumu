@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +56,7 @@ public class RoleArchivedFindAllCmdExe {
     Page<Role> roles = roleGateway.findArchivedAll(role,
       roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
     List<RoleArchivedFindAllDTO> roleArchivedFindAllDTOS = roles.getContent().stream()
-      .map(roleConvertor::toArchivedFindAllDTO)
+      .map(roleConvertor::toRoleArchivedFindAllDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new PageImpl<>(roleArchivedFindAllDTOS, roles.getPageable(),
       roles.getTotalElements());

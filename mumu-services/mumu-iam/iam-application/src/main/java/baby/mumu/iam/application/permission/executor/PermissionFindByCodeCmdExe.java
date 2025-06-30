@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class PermissionFindByCodeCmdExe {
   public PermissionFindByCodeDTO execute(String code) {
     return Optional.ofNullable(code)
       .flatMap(permissionGateway::findByCode).flatMap(
-        permissionConvertor::toFindByCodeDTO)
+        permissionConvertor::toPermissionFindByCodeDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
   }
 }

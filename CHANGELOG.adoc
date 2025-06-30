@@ -19,6 +19,25 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.12.0] - 2025-06-30
+
+=== ⭐ Added
+
+- Added equals & hashCode method to JPA entity class
+
+=== 🕸️ Changed
+
+- Optimize file service code
+- `CheckStyle` upgrade to 10.25.1
+- `PMD` upgrade to 7.14.0
+- `kotlin` upgrade to 2.2.0
+- `io.freefair.lombok` Upgrade to 8.14
+- Adjust the `Github` workflow configuration
+
+=== ⚠️ Removed
+
+- Delete useless content
+
 == [2.11.1] - 2025-06-24
 
 === 🕸️ Changed

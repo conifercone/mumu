@@ -31,7 +31,7 @@ import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcResult;
 import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
 import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
-import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
+import baby.mumu.unique.infra.captcha.convertor.CaptchaConvertor;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;

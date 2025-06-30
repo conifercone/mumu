@@ -20,7 +20,7 @@ import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
-import baby.mumu.log.infrastructure.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +59,7 @@ public class OperationLogFindAllCmdExe {
       operationLogFindAllCmd.getCurrent(),
       operationLogFindAllCmd.getPageSize());
     List<OperationLogFindAllDTO> operationLogFindAllDTOS = operationLogs.getContent().stream()
-      .map(operationLogConvertor::toFindAllDTO).filter(Optional::isPresent)
+      .map(operationLogConvertor::toOperationLogFindAllDTO).filter(Optional::isPresent)
       .map(Optional::get)
       .toList();
     return new PageImpl<>(operationLogFindAllDTOS, operationLogs.getPageable(),

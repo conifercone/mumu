@@ -67,7 +67,7 @@ import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
 import baby.mumu.iam.client.dto.AccountOnlineStatisticsDTO;
-import baby.mumu.iam.infrastructure.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;

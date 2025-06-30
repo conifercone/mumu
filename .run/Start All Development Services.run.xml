@@ -3,9 +3,6 @@
     type="CompoundRunConfigurationType">
     <toRun name="MuMuIAMApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuLogApplication-dev" type="SpringBootApplicationConfigurationType"/>
-    <toRun name="MuMuMailApplication-dev" type="SpringBootApplicationConfigurationType"/>
-    <toRun name="MuMuMessageApplication-dev" type="SpringBootApplicationConfigurationType"/>
-    <toRun name="MuMuSmsApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuStorageApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="MuMuUniqueApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <method v="2"/>

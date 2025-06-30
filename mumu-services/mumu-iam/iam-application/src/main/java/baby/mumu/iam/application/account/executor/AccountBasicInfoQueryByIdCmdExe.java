@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.AccountBasicInfoDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.infrastructure.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class AccountBasicInfoQueryByIdCmdExe {
   public AccountBasicInfoDTO execute(Long id) {
     return Optional.ofNullable(id)
       .flatMap(accountGateway::getAccountBasicInfoById)
-      .flatMap(accountConvertor::toBasicInfoDTO)
+      .flatMap(accountConvertor::toAccountBasicInfoDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

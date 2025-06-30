@@ -16,38 +16,20 @@
 
 package baby.mumu.storage.client.api;
 
-import baby.mumu.storage.client.cmds.FileDownloadCmd;
-import baby.mumu.storage.client.cmds.FileRemoveCmd;
-import baby.mumu.storage.client.cmds.FileSyncUploadCmd;
-import java.io.InputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文件接口
+ * 文件管理
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.12.0
  */
 public interface FileService {
 
-  /**
-   * 异步文件上传
-   *
-   * @param fileSyncUploadCmd 流文件异步上传指令
-   */
-  void syncUploadFile(FileSyncUploadCmd fileSyncUploadCmd);
+  Long upload(String storageZone, MultipartFile multipartFile);
 
-  /**
-   * 下载
-   *
-   * @param fileDownloadCmd 流文件下载指令
-   * @return 文件流
-   */
-  InputStream download(FileDownloadCmd fileDownloadCmd);
+  void deleteByMetadataId(Long metadataId);
 
-  /**
-   * 删除文件
-   *
-   * @param fileRemoveCmd 流文件删除指令
-   */
-  void removeFile(FileRemoveCmd fileRemoveCmd);
+  void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse);
 }

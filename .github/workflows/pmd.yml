@@ -1,3 +1,5 @@
+#file: noinspection UndefinedAction,UndefinedParamsPresent
+
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
@@ -37,7 +39,7 @@ jobs:
 
       # 配置 Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/setup-gradle@v4
 
       # 执行 PMD 脚本
       - name: PMD with Gradle Wrapper

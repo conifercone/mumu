@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(
-  value = "baby.mumu.iam.infrastructure.**.database.**",
+  value = "baby.mumu.iam.infra.**.database.**",
   repositoryBaseClass = BaseJpaRepositoryImpl.class
 )
 public class JpaConfiguration {

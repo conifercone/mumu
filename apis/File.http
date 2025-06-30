@@ -7,7 +7,7 @@
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{storage-service-url}}/file/sync/upload
+POST {{storage-service-url}}/file/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -17,12 +17,7 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 --WebAppBoundary
-Content-Disposition: form-data; name="storageAddress"
-Content-Type: text/plain
-
-test
---WebAppBoundary
-Content-Disposition: form-data; name="name"
+Content-Disposition: form-data; name="storageZone"
 Content-Type: text/plain
 
 test
@@ -36,10 +31,12 @@ Content-Type: application/json
 > {%
   client.test("Request executed successfully", function () {
     client.assert(response.status === 200, "Response status is not 200");
+    // noinspection JSUnresolvedReference
+    client.global.set("fileMetadataId", response.body.data);
   });
 %}
 
-### 文件下载
+### 根据文件元数据ID删除指定文件
 < {%
   import {generateHeaders} from "./utils"
 
@@ -48,8 +45,7 @@ Content-Type: application/json
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{storage-service-url}}/file/download?storageAddress=mail&
-    name=template/zh/verification_code.html&rename=verification_code.html
+DELETE {{storage-service-url}}/file/deleteByMetadataId/{{fileMetadataId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -64,7 +60,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 文件删除
+### 根据文件元数据ID下载指定文件
 < {%
   import {generateHeaders} from "./utils"
 
@@ -73,37 +69,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{storage-service-url}}/file/remove
-Content-Type: application/json
-X-Request-ID: {{requestId}}
-X-Signature: {{signature}}
-X-Timestamp: {{timestamp}}
-Connection: keep-alive
-Accept: */*
-Authorization: Bearer {{$auth.token("admin")}}
-
-{
-  "storageAddress": "test",
-  "name": "test2.log"
-}
-
-> {%
-  client.test("Request executed successfully", function () {
-    client.assert(response.status === 200, "Response status is not 200");
-  });
-%}
-
-### 文件获取字符串文件内容
-< {%
-  import {generateHeaders} from "./utils"
-
-  const headers = generateHeaders(request.environment.get("storage-service-url"))
-  request.variables.set("signature", headers.signature)
-  request.variables.set("timestamp", headers.timestamp)
-  request.variables.set("requestId", headers.requestId)
-%}
-GET {{storage-service-url}}/file/stringContent?storageAddress=mail&
-    name=template/zh/verification_code.html
+GET {{storage-service-url}}/file/downloadByMetadataId/{{fileMetadataId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

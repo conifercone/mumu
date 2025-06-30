@@ -18,7 +18,7 @@ package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,4 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_BENCHMARK.description
+description = "Benchmark module"
 
 dependencies {
     implementation(libs.jmh.core)

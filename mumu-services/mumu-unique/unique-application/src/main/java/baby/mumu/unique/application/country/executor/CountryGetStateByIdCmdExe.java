@@ -18,7 +18,7 @@ package baby.mumu.unique.application.country.executor;
 
 import baby.mumu.unique.client.dto.CountryGetStateByIdDTO;
 import baby.mumu.unique.domain.country.gateway.CountryGateway;
-import baby.mumu.unique.infrastructure.country.convertor.CountryConvertor;
+import baby.mumu.unique.infra.country.convertor.CountryConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

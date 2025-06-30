@@ -1,8 +1,0 @@
--- @formatter:off
--- noinspection SqlConstantExpressionForFile
--- noinspection SqlResolveForFile
-ALTER TABLE broadcast_text_message RENAME TO mumu_broadcast_text_message;
-ALTER TABLE broadcast_text_message_archived RENAME TO mumu_broadcast_text_message_archived;
-ALTER TABLE broadcast_text_message_receivers RENAME TO mumu_broadcast_text_message_receivers;
-ALTER TABLE subscription_text_message RENAME TO mumu_subscription_text_message;
-ALTER TABLE subscription_text_message_archived RENAME TO mumu_subscription_text_message_archived;

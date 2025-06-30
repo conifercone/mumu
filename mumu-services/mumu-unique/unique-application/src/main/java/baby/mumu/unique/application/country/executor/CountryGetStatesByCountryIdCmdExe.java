@@ -18,7 +18,7 @@ package baby.mumu.unique.application.country.executor;
 
 import baby.mumu.unique.client.dto.CountryGetStatesByCountryIdDTO;
 import baby.mumu.unique.domain.country.gateway.CountryGateway;
-import baby.mumu.unique.infrastructure.country.convertor.CountryConvertor;
+import baby.mumu.unique.infra.country.convertor.CountryConvertor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

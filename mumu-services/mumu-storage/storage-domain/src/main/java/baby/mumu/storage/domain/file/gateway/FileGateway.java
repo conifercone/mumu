@@ -17,20 +17,35 @@
 package baby.mumu.storage.domain.file.gateway;
 
 import baby.mumu.storage.domain.file.File;
-import java.io.InputStream;
 import java.util.Optional;
 
 /**
  * 文件领域网关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.12.0
  */
 public interface FileGateway {
 
-  void uploadFile(File file);
+  /**
+   * 文件上传
+   *
+   * @param file 源文件
+   * @return 文件元数据ID
+   */
+  Long upload(File file);
 
-  Optional<InputStream> download(File file);
+  /**
+   * 根据文件元数据ID删除文件
+   *
+   * @param fileMetadataId 目标文件元数据ID
+   */
+  void deleteByMetadataId(Long fileMetadataId);
 
-  void removeFile(File file);
+  /**
+   * 根据文件元数据ID下载文件
+   *
+   * @param fileMetadataId 目标文件元数据ID
+   */
+  Optional<File> downloadByMetadataId(Long fileMetadataId);
 }

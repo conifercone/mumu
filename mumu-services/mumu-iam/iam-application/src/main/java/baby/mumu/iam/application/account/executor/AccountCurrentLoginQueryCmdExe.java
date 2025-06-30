@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.infrastructure.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +47,7 @@ public class AccountCurrentLoginQueryCmdExe {
 
   public AccountCurrentLoginDTO execute() {
     return accountGateway.queryCurrentLoginAccount()
-      .flatMap(accountConvertor::toCurrentLoginQueryDTO)
+      .flatMap(accountConvertor::toAccountCurrentLoginDTO)
       .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

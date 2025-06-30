@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionFindAllSliceCmd;
 import baby.mumu.iam.client.dto.PermissionFindAllSliceDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infrastructure.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +59,7 @@ public class PermissionFindAllSliceCmdExe {
       permissionFindAllSliceCmd.getCurrent(), permissionFindAllSliceCmd.getPageSize());
     List<PermissionFindAllSliceDTO> permissionFindAllSliceDTOList = permissions.getContent()
       .stream()
-      .map(permissionConvertor::toFindAllSliceDTO)
+      .map(permissionConvertor::toPermissionFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(permissionFindAllSliceDTOList, permissions.getPageable(),
       permissions.hasNext());

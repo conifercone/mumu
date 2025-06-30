@@ -18,7 +18,7 @@ package baby.mumu.unique.application.captcha.executor;
 
 import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
 import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
-import baby.mumu.unique.infrastructure.captcha.convertor.CaptchaConvertor;
+import baby.mumu.unique.infra.captcha.convertor.CaptchaConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

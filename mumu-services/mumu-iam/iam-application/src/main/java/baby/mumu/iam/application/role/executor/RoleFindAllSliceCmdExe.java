@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindAllSliceCmd;
 import baby.mumu.iam.client.dto.RoleFindAllSliceDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infrastructure.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class RoleFindAllSliceCmdExe {
     Slice<Role> roles = roleGateway.findAllSlice(role,
       roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
     List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
-      .map(roleConvertor::toFindAllSliceDTO)
+      .map(roleConvertor::toRoleFindAllSliceDTO)
       .filter(Optional::isPresent).map(Optional::get).toList();
     return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
       roles.hasNext());

@@ -1,6 +1,4 @@
-import baby.mumu.build.enums.ModuleEnum
-
-description = ModuleEnum.MUMU_BASIS.description
+description = "Basic module"
 
 dependencies {
     implementation(libs.spring.security.core)

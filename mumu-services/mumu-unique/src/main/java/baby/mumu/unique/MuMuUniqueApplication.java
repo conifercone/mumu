@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication
 @Import(LeafAutoConfiguration.class)
-@EnableRedisDocumentRepositories(basePackages = "baby.mumu.unique.infrastructure.**")
+@EnableRedisDocumentRepositories(basePackages = "baby.mumu.unique.infra.**.cache.**")
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class MuMuUniqueApplication {
 
