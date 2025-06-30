@@ -19,6 +19,7 @@ package baby.mumu.storage.infra.file.gatewayimpl;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
+import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
 import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
@@ -88,4 +89,35 @@ public class FileGatewayImpl implements FileGateway {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void deleteByMetadataId(Long fileMetadataId) {
+    if (fileMetadataId == null) {
+      return;
+    }
+    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+    FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+
+    try {
+      // 删除文件
+      File file = new File();
+      file.setMetadata(fileMetadata);
+      fileStorageRepository.delete(file);
+    } catch (Exception e) {
+      throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+    }
+
+    try {
+      // 删除文件元数据
+      fileMetadataRepository.deleteById(fileMetadataId);
+    } catch (Exception e) {
+      throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+    }
+  }
 }

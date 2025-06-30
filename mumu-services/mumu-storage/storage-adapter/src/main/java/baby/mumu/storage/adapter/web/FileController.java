@@ -19,11 +19,15 @@ package baby.mumu.storage.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.storage.client.api.FileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,9 +59,19 @@ public class FileController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.12.0")
-  public void upload(@RequestParam("storageZone") String storageZone,
-    @RequestParam("file") MultipartFile file) {
+  public void upload(
+    @Parameter(description = "文件存储区域", required = true) @RequestParam("storageZone") @NotNull String storageZone,
+    @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
     fileService.upload(storageZone, file);
   }
 
+  @Operation(summary = "文件根据元数据ID删除")
+  @DeleteMapping("/deleteByMetadataId/{metadataId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void deleteByMetadataId(
+    @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId) {
+    fileService.deleteByMetadataId(metadataId);
+  }
 }
