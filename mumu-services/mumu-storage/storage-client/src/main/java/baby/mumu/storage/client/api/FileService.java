@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.client.api;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -29,4 +30,6 @@ public interface FileService {
   Long upload(String storageZone, MultipartFile multipartFile);
 
   void deleteByMetadataId(Long metadataId);
+
+  void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse);
 }

@@ -22,12 +22,14 @@ import baby.mumu.storage.client.api.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,5 +76,16 @@ public class FileController {
   public void deleteByMetadataId(
     @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId) {
     fileService.deleteByMetadataId(metadataId);
+  }
+
+  @Operation(summary = "文件根据元数据ID下载")
+  @GetMapping("/downloadByMetadataId/{metadataId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.12.0")
+  public void downloadByMetadataId(
+    @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId,
+    HttpServletResponse httpServletResponse) {
+    fileService.downloadByMetadataId(metadataId, httpServletResponse);
   }
 }

@@ -17,9 +17,11 @@
 package baby.mumu.storage.application.service;
 
 import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
+import baby.mumu.storage.application.file.executor.FileDownloadByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,11 +38,14 @@ public class FileServiceImpl implements FileService {
 
   private final FileUploadCmdExe fileUploadCmdExe;
   private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
+  private final FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe;
 
   public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
-    FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe) {
+    FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe,
+    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe) {
     this.fileUploadCmdExe = fileUploadCmdExe;
     this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
+    this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
   }
 
   @Override
@@ -54,5 +59,11 @@ public class FileServiceImpl implements FileService {
   @Transactional(rollbackFor = Exception.class)
   public void deleteByMetadataId(Long metadataId) {
     fileDeleteByMetadataIdCmdExe.execute(metadataId);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
+    fileDownloadByMetadataIdCmdExe.execute(metadataId, httpServletResponse);
   }
 }

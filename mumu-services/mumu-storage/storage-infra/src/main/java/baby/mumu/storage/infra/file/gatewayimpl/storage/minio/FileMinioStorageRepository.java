@@ -21,10 +21,12 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
+import java.io.InputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +87,12 @@ public class FileMinioStorageRepository implements FileStorageRepository {
         .object(file.getMetadata().getStoragePath())
         .build()
     );
+  }
+
+  @Override
+  public InputStream download(@NotNull File file) throws Exception {
+    return minioClient.getObject(
+      GetObjectArgs.builder().bucket(file.getMetadata().getStorageZone())
+        .object(file.getMetadata().getStoragePath()).build());
   }
 }

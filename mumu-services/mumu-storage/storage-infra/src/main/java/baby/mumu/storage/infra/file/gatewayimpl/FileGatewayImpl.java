@@ -26,6 +26,7 @@ import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,5 +123,28 @@ public class FileGatewayImpl implements FileGateway {
     } catch (Exception e) {
       throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Optional<File> downloadByMetadataId(Long fileMetadataId) {
+    if (fileMetadataId == null) {
+      return Optional.empty();
+    }
+    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+    FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+    File file = new File();
+    file.setMetadata(fileMetadata);
+    try {
+      file.setContent(fileStorageRepository.download(file));
+    } catch (Exception e) {
+      throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
+    }
+    return Optional.of(file);
   }
 }

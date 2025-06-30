@@ -17,6 +17,7 @@
 package baby.mumu.storage.infra.file.gatewayimpl.storage;
 
 import baby.mumu.storage.domain.file.File;
+import java.io.InputStream;
 
 /**
  * 文件存储
@@ -39,4 +40,11 @@ public interface FileStorageRepository {
    * @param file 目标文件
    */
   void delete(File file) throws Exception;
+
+  /**
+   * 文件下载
+   *
+   * @param file 目标文件
+   */
+  InputStream download(File file) throws Exception;
 }
