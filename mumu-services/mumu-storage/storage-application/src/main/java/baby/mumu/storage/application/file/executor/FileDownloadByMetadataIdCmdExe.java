@@ -45,7 +45,7 @@ public class FileDownloadByMetadataIdCmdExe {
   public void execute(Long metadataId, HttpServletResponse httpServletResponse) {
     File file = fileGateway.downloadByMetadataId(metadataId);
     FileMetadata metadata = file.getMetadata();
-    FileDownloadUtils.download(httpServletResponse, metadata.getOriginalFilename(),
+    FileDownloadUtils.download(httpServletResponse, metadata.getStoredFilename(),
       file.getContent(), metadata.getContentType());
   }
 }
