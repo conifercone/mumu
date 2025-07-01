@@ -147,4 +147,17 @@ public class FileGatewayImpl implements FileGateway {
     }
     return Optional.of(file);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Optional<FileMetadata> findFileMetadataByMetadataId(Long fileMetadataId) {
+    if (fileMetadataId == null) {
+      return Optional.empty();
+    }
+    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+    return fileConvertor.toEntity(fileMetadataPO);
+  }
 }

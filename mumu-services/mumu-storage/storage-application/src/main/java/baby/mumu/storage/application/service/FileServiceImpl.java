@@ -18,8 +18,10 @@ package baby.mumu.storage.application.service;
 
 import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileDownloadByMetadataIdCmdExe;
+import baby.mumu.storage.application.file.executor.FileFindFileMetadataByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
+import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
@@ -39,13 +41,16 @@ public class FileServiceImpl implements FileService {
   private final FileUploadCmdExe fileUploadCmdExe;
   private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
   private final FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe;
+  private final FileFindFileMetadataByMetadataIdCmdExe fileFindFileMetadataByMetadataIdCmdExe;
 
   public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
     FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe,
-    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe) {
+    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe,
+    FileFindFileMetadataByMetadataIdCmdExe fileFindFileMetadataByMetadataIdCmdExe) {
     this.fileUploadCmdExe = fileUploadCmdExe;
     this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
     this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
+    this.fileFindFileMetadataByMetadataIdCmdExe = fileFindFileMetadataByMetadataIdCmdExe;
   }
 
   /**
@@ -74,5 +79,13 @@ public class FileServiceImpl implements FileService {
   @Transactional(rollbackFor = Exception.class)
   public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
     fileDownloadByMetadataIdCmdExe.execute(metadataId, httpServletResponse);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FileFindFileMetadataByMetadataIdDTO findFileMetadataByMetadataId(Long metadataId) {
+    return fileFindFileMetadataByMetadataIdCmdExe.execute(metadataId);
   }
 }

@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.client.api;
 
+import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,4 +51,11 @@ public interface FileService {
    * @param httpServletResponse 响应
    */
   void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse);
+
+  /**
+   * 根据文件元数据ID获取文件元数据信息
+   *
+   * @param metadataId 文件元数据ID
+   */
+  FileFindFileMetadataByMetadataIdDTO findFileMetadataByMetadataId(Long metadataId);
 }
