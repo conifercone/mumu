@@ -130,9 +130,9 @@ public class FileGatewayImpl implements FileGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Optional<File> downloadByMetadataId(Long fileMetadataId) {
+  public File downloadByMetadataId(Long fileMetadataId) {
     if (fileMetadataId == null) {
-      return Optional.empty();
+      throw new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST);
     }
     FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
@@ -145,7 +145,7 @@ public class FileGatewayImpl implements FileGateway {
     } catch (Exception e) {
       throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
     }
-    return Optional.of(file);
+    return file;
   }
 
   /**
@@ -156,8 +156,6 @@ public class FileGatewayImpl implements FileGateway {
     if (fileMetadataId == null) {
       return Optional.empty();
     }
-    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
-    return fileConvertor.toEntity(fileMetadataPO);
+    return fileMetadataRepository.findById(fileMetadataId).flatMap(fileConvertor::toEntity);
   }
 }

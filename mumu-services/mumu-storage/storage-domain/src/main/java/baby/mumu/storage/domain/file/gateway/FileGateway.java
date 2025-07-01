@@ -48,7 +48,7 @@ public interface FileGateway {
    *
    * @param fileMetadataId 目标文件元数据ID
    */
-  Optional<File> downloadByMetadataId(Long fileMetadataId);
+  File downloadByMetadataId(Long fileMetadataId);
 
   /**
    * 根据文件元数据ID获取文件元数据信息

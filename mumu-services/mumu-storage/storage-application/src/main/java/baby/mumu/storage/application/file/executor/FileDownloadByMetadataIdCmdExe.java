@@ -16,9 +16,7 @@
 
 package baby.mumu.storage.application.file.executor;
 
-import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
-import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
@@ -45,8 +43,7 @@ public class FileDownloadByMetadataIdCmdExe {
   }
 
   public void execute(Long metadataId, HttpServletResponse httpServletResponse) {
-    File file = fileGateway.downloadByMetadataId(metadataId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED));
+    File file = fileGateway.downloadByMetadataId(metadataId);
     FileMetadata metadata = file.getMetadata();
     FileDownloadUtils.download(httpServletResponse, metadata.getOriginalFilename(),
       file.getContent(), metadata.getContentType());
