@@ -75,12 +75,15 @@ allprojects {
             cacheChangingModulesFor(0, TimeUnit.MINUTES)
             cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
-
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
-        exclude(group = "ch.qos.logback", module = "logback-classic")
-        exclude(group = "ch.qos.logback", module = "logback-core")
-        exclude(group = "pull-parser", module = "pull-parser")
+        listOf(
+            "org.springframework.boot" to "spring-boot-starter-logging",
+            "org.springframework.boot" to "spring-boot-starter-tomcat",
+            "ch.qos.logback" to "logback-classic",
+            "ch.qos.logback" to "logback-core",
+            "pull-parser" to "pull-parser"
+        ).forEach { (group, module) ->
+            exclude(group = group, module = module)
+        }
     }
 
 }
@@ -108,12 +111,13 @@ subprojects {
         toolVersion = checkstyleToolVersion
     }
 
+    val pmdConfigDir = rootDir.resolve("config/pmd/category/java")
     pmd {
         isConsoleOutput = true
         toolVersion = pmdToolVersion
         ruleSetFiles = files(
-            rootProject.file("config/pmd/category/java/errorprone.xml"),
-            rootProject.file("config/pmd/category/java/bestpractices.xml")
+            pmdConfigDir.resolve("errorprone.xml"),
+            pmdConfigDir.resolve("bestpractices.xml")
         )
     }
 
