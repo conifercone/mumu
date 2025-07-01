@@ -44,15 +44,13 @@ val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()
 // 版本号后缀集合
-val suffixes = listOf("-alpha", "-beta", "-snapshot", "-dev", "-test", "-pre")
+val suffixes = listOf("alpha", "beta", "snapshot", "dev", "test", "pre")
 // 当前UTC时间
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
 val formattedTime: String = now.format(formatter)
-fun endsWithAny(input: String, suffixes: List<String>): Boolean {
-    return suffixes.any { input.endsWith(it, ignoreCase = true) }
-}
+
 
 val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
 val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
@@ -62,14 +60,11 @@ allprojects {
 
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
+    val versionSuffixString = findProperty("version.suffix")!! as String
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
-        if (endsWithAny(
-                versionString,
-                suffixes
-            )
-        ) "$versionString-$gitHash-$formattedTime" else versionString
-
+        if (versionSuffixString.isNotBlank() && suffixes.contains(versionSuffixString)
+        ) "$versionString-$versionSuffixString-$gitHash-$formattedTime" else if (versionSuffixString.isBlank()) versionString else "$versionString-$versionSuffixString"
     repositories {
         mavenCentral()
         maven("https://repo.spring.io/milestone")
