@@ -48,6 +48,9 @@ public class FileServiceImpl implements FileService {
     this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Long upload(String storageZone,
@@ -55,12 +58,18 @@ public class FileServiceImpl implements FileService {
     return fileUploadCmdExe.execute(storageZone, multipartFile);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteByMetadataId(Long metadataId) {
     fileDeleteByMetadataIdCmdExe.execute(metadataId);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
