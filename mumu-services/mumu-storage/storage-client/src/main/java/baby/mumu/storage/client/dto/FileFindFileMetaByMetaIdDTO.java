@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class FileFindFileMetadataByMetadataIdDTO extends BaseDataTransferObject {
+public class FileFindFileMetaByMetaIdDTO extends BaseDataTransferObject {
 
   @Serial
   private static final long serialVersionUID = 3129993903612543075L;
@@ -45,12 +45,12 @@ public class FileFindFileMetadataByMetadataIdDTO extends BaseDataTransferObject 
 
   private Long size;
 
-  private FileFindFileMetadataByMetadataIdStorageZoneDTO storageZone;
+  private FileFindFileMetaByMetaIdStorageZoneDTO storageZone;
 
   private String storagePath;
 
   @Data
-  public static class FileFindFileMetadataByMetadataIdStorageZoneDTO {
+  public static class FileFindFileMetaByMetaIdStorageZoneDTO {
 
     private Long id;
 

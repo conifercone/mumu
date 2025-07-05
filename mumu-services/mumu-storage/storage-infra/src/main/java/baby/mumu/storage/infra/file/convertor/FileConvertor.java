@@ -18,7 +18,7 @@ package baby.mumu.storage.infra.file.convertor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
+import baby.mumu.storage.client.dto.FileFindFileMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
@@ -117,9 +117,9 @@ public class FileConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
-  public Optional<FileFindFileMetadataByMetadataIdDTO> toFileFindFileMetadataByMetadataIdDTO(
+  public Optional<FileFindFileMetaByMetaIdDTO> toFileFindFileMetaByMetaIdDTO(
     FileMetadata fileMetadata) {
     return Optional.ofNullable(fileMetadata)
-      .map(FileMapper.INSTANCE::toFileFindFileMetadataByMetadataIdDTO);
+      .map(FileMapper.INSTANCE::toFileFindFileMetaByMetaIdDTO);
   }
 }

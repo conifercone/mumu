@@ -56,5 +56,5 @@ public interface FileGateway {
    * @param fileMetadataId 文件元数据ID
    * @return 文件元数据
    */
-  Optional<FileMetadata> findFileMetadataByMetadataId(Long fileMetadataId);
+  Optional<FileMetadata> findFileMetaByMetaId(Long fileMetadataId);
 }

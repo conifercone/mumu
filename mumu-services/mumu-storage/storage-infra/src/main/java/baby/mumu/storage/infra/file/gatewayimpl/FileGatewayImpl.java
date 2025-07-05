@@ -152,7 +152,7 @@ public class FileGatewayImpl implements FileGateway {
    * {@inheritDoc}
    */
   @Override
-  public Optional<FileMetadata> findFileMetadataByMetadataId(Long fileMetadataId) {
+  public Optional<FileMetadata> findFileMetaByMetaId(Long fileMetadataId) {
     if (fileMetadataId == null) {
       return Optional.empty();
     }
