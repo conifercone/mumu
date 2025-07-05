@@ -302,41 +302,41 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void addAncestor(Long descendantId, Long ancestorId) {
-    Optional<RolePO> ancestorRolePOOptional = roleRepository.findById(ancestorId);
-    Optional<RolePO> descendantRolePOOptional = roleRepository.findById(
-      descendantId);
-    if (ancestorRolePOOptional.isPresent() && descendantRolePOOptional.isPresent()) {
-      // 后代角色
-      RolePO descendantRolePO = descendantRolePOOptional.get();
-      // 为节点添加从所有祖先到自身的路径
-      List<RolePathPO> ancestorRoles = rolePathRepository.findByDescendantId(
-        ancestorId);
-      // 成环检测
-      Set<Long> ancestorIds = ancestorRoles.stream()
-        .map(rolePathPO -> rolePathPO.getId().getAncestorId())
-        .collect(
-          Collectors.toSet());
-      if (ancestorIds.contains(descendantId)) {
-        throw new MuMuException(ResponseCode.ROLE_CYCLE);
-      }
-      if (rolePathRepository.existsById(
-        new RolePathPOId(ancestorId, descendantId, 1L))) {
-        throw new MuMuException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
-      }
-      List<RolePathPO> rolePathPOS = ancestorRoles.stream()
-        .map(rolePathPO -> new RolePathPO(
-          new RolePathPOId(rolePathPO.getId().getAncestorId(), descendantId,
-            rolePathPO.getId().getDepth() + 1),
-          rolePathPO.getAncestor(), descendantRolePO))
-        .filter(
-          rolePathPO -> !rolePathRepository.existsById(rolePathPO.getId())
-        )
-        .collect(
-          Collectors.toList());
-      rolePathRepository.persistAll(rolePathPOS);
-      roleCacheRepository.deleteById(ancestorId);
-      roleCacheRepository.deleteById(descendantId);
+    if (!roleRepository.existsById(ancestorId)) {
+      throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST, ancestorId);
     }
+    // 后代角色
+    RolePO descendantRolePO = roleRepository.findById(
+        descendantId)
+      .orElseThrow(() -> new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST, descendantId));
+    // 为节点添加从所有祖先到自身的路径
+    List<RolePathPO> ancestorRoles = rolePathRepository.findByDescendantId(
+      ancestorId);
+    // 成环检测
+    Set<Long> ancestorIds = ancestorRoles.stream()
+      .map(rolePathPO -> rolePathPO.getId().getAncestorId())
+      .collect(
+        Collectors.toSet());
+    if (ancestorIds.contains(descendantId)) {
+      throw new MuMuException(ResponseCode.ROLE_CYCLE);
+    }
+    if (rolePathRepository.existsById(
+      new RolePathPOId(ancestorId, descendantId, 1L))) {
+      throw new MuMuException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
+    }
+    List<RolePathPO> rolePathPOS = ancestorRoles.stream()
+      .map(rolePathPO -> new RolePathPO(
+        new RolePathPOId(rolePathPO.getId().getAncestorId(), descendantId,
+          rolePathPO.getId().getDepth() + 1),
+        rolePathPO.getAncestor(), descendantRolePO))
+      .filter(
+        rolePathPO -> !rolePathRepository.existsById(rolePathPO.getId())
+      )
+      .collect(
+        Collectors.toList());
+    rolePathRepository.persistAll(rolePathPOS);
+    roleCacheRepository.deleteById(ancestorId);
+    roleCacheRepository.deleteById(descendantId);
   }
 
   @Override
