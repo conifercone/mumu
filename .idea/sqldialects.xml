@@ -53,5 +53,6 @@
     <file url="file://$PROJECT_DIR$/mumu-services/mumu-storage/src/main/resources/db/migration/postgresql/V1.0.0__db_init.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/mumu-services/mumu-storage/src/main/resources/db/migration/postgresql/V1.0.1__drop_column.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/mumu-services/mumu-storage/src/main/resources/db/migration/postgresql/V1.0.2__add_column.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/mumu-services/mumu-storage/src/main/resources/db/migration/postgresql/V1.0.3__add_tables.sql" dialect="PostgreSQL" />
   </component>
 </project>

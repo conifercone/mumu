@@ -17,6 +17,7 @@
 package baby.mumu.storage.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,7 +45,22 @@ public class FileFindFileMetadataByMetadataIdDTO extends BaseDataTransferObject 
 
   private Long size;
 
-  private String storageZone;
+  private FileFindFileMetadataByMetadataIdStorageZoneDTO storageZone;
 
   private String storagePath;
+
+  @Data
+  public static class FileFindFileMetadataByMetadataIdStorageZoneDTO {
+
+    private Long id;
+
+    private String code;
+
+    private String name;
+
+    private String description;
+
+    private StorageZonePolicyEnum policy;
+
+  }
 }

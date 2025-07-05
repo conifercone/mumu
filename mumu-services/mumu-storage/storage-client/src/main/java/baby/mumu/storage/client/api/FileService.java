@@ -31,11 +31,11 @@ public interface FileService {
   /**
    * 文件上传
    *
-   * @param storageZone   存储区域
+   * @param storageZoneId 存储区域ID
    * @param multipartFile 源文件
    * @return 文件元数据ID
    */
-  Long upload(String storageZone, MultipartFile multipartFile);
+  Long upload(Long storageZoneId, MultipartFile multipartFile);
 
   /**
    * 根据文件元数据ID删除文件

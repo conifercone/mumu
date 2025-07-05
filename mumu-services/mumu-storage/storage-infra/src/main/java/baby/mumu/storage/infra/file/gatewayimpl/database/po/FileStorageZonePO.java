@@ -16,9 +16,13 @@
 
 package baby.mumu.storage.infra.file.gatewayimpl.database.po;
 
+import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
+import baby.mumu.unique.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -32,53 +36,46 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
 /**
- * 文件元数据基本信息
+ * 文件存储区域基本信息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
 @Entity
-@Table(name = "mumu_file_metadata")
+@Table(name = "mumu_file_storage_zones")
 @Getter
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
 @ToString
-public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
+public class FileStorageZonePO extends JpaBasisDefaultPersistentObject {
 
   @Serial
-  private static final long serialVersionUID = -1394204529891009898L;
-
+  private static final long serialVersionUID = -7565120351243730127L;
   /**
    * 文件元数据id
    */
   @Id
+  @SnowflakeIdGenerator
   @Column(name = "id", nullable = false)
   private Long id;
 
   @NotNull
-  @Column(name = "original_filename", nullable = false)
-  private String originalFilename;
+  @Column(name = "code", nullable = false)
+  private String code;
 
   @NotNull
-  @Column(name = "stored_filename", nullable = false)
-  private String storedFilename;
+  @Column(name = "name", nullable = false)
+  private String name;
 
   @NotNull
-  @Column(name = "content_type", nullable = false)
-  private String contentType;
+  @Column(name = "description", nullable = false)
+  private String description;
 
   @NotNull
-  @Column(name = "size", nullable = false)
-  private Long size;
-
-  @NotNull
-  @Column(name = "storage_zone_id", nullable = false)
-  private Long storageZoneId;
-
-  @NotNull
-  @Column(name = "storage_path", nullable = false)
-  private String storagePath;
+  @Column(name = "policy", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private StorageZonePolicyEnum policy;
 
   @Override
   public final boolean equals(Object o) {
@@ -97,7 +94,7 @@ public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    FileMetadataPO that = (FileMetadataPO) o;
+    FileStorageZonePO that = (FileStorageZonePO) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }
 
