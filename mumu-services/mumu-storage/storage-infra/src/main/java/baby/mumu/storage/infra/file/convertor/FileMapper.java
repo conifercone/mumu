@@ -19,7 +19,7 @@ package baby.mumu.storage.infra.file.convertor;
 import baby.mumu.basis.mappers.BaseMapper;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.storage.client.dto.FileFindFileMetaByMetaIdDTO;
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import org.apiguardian.api.API;
@@ -47,6 +47,6 @@ public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMa
   FileMetadata toEntity(FileMetadataPO fileMetadataPO);
 
   @API(status = Status.STABLE, since = "2.13.0")
-  FileFindFileMetaByMetaIdDTO toFileFindFileMetaByMetaIdDTO(
+  FileFindMetaByMetaIdDTO toFileFindMetaByMetaIdDTO(
     FileMetadata fileMetadata);
 }

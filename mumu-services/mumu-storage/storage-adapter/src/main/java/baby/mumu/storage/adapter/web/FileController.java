@@ -19,7 +19,7 @@ package baby.mumu.storage.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.storage.client.api.FileService;
-import baby.mumu.storage.client.dto.FileFindFileMetaByMetaIdDTO;
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -91,12 +91,12 @@ public class FileController {
   }
 
   @Operation(summary = "文件根据元数据ID获取文件元数据信息")
-  @GetMapping("/findFileMetaByMetaId/{metadataId}")
+  @GetMapping("/findMetaByMetaId/{metadataId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.13.0")
-  public FileFindFileMetaByMetaIdDTO findFileMetaByMetaId(
+  public FileFindMetaByMetaIdDTO findMetaByMetaId(
     @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId) {
-    return fileService.findFileMetaByMetaId(metadataId);
+    return fileService.findMetaByMetaId(metadataId);
   }
 }

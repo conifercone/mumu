@@ -88,7 +88,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{storage-service-url}}/file/findFileMetaByMetaId/{{fileMetadataId}}
+GET {{storage-service-url}}/file/findMetaByMetaId/{{fileMetadataId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
