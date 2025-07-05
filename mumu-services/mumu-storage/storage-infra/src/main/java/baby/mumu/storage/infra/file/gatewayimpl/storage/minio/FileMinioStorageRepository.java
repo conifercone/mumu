@@ -21,7 +21,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
-import baby.mumu.storage.domain.file.FileStorageZone;
+import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
@@ -59,8 +59,8 @@ public class FileMinioStorageRepository implements FileStorageRepository {
   public void upload(@NotNull File file) throws Exception {
     FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
-    FileStorageZone fileStorageZone = Optional.ofNullable(fileMetadata.getStorageZone())
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
+    StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
+      .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_CANNOT_BE_EMPTY));
     Long fileSize = Optional.ofNullable(fileMetadata.getSize())
       .filter(size -> size > 0)
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
@@ -68,8 +68,8 @@ public class FileMinioStorageRepository implements FileStorageRepository {
       throw new MuMuException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
     }
     // 确保 Bucket 存在
-    String storageZoneCode = fileStorageZone.getCode();
-    createBucketIfNeeded(storageZoneCode, fileStorageZone.getPolicy());
+    String storageZoneCode = storageZone.getCode();
+    createBucketIfNeeded(storageZoneCode, storageZone.getPolicy());
     // 上传
     minioClient.putObject(
       PutObjectArgs.builder()

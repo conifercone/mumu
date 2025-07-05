@@ -14,39 +14,29 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
+package baby.mumu.storage.infra.zone.convertor;
 
-import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.storage.domain.zone.StorageZone;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 /**
- * 文件元数据
+ * 存储区域转换类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class FileMetadata extends BasisDomainModel {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface StorageZoneMapper {
 
-  @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
+  StorageZoneMapper INSTANCE = Mappers.getMapper(StorageZoneMapper.class);
 
-  private Long id;
-
-  private String originalFilename;
-
-  private String storedFilename;
-
-  private String contentType;
-
-  private Long size;
-
-  private StorageZone storageZone;
-
-  private String storagePath;
-
+  @API(status = Status.STABLE, since = "2.13.0")
+  StorageZone toEntity(
+    StorageZonePO storageZonePO);
 }

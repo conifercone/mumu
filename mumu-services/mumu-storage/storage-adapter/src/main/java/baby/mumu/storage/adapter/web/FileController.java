@@ -64,7 +64,7 @@ public class FileController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.12.0")
   public ResponseWrapper<Long> upload(
-    @Parameter(description = "文件存储区域ID", required = true) @PathVariable("storageZoneId") @NotNull Long storageZoneId,
+    @Parameter(description = "存储区域ID", required = true) @PathVariable("storageZoneId") @NotNull Long storageZoneId,
     @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
     return ResponseWrapper.success(fileService.upload(storageZoneId, file));
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infra.file.gatewayimpl.database.po;
+package baby.mumu.storage.infra.zone.gatewayimpl.database.po;
 
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
@@ -36,19 +36,19 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
 
 /**
- * 文件存储区域基本信息
+ * 存储区域基本信息
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.13.0
  */
 @Entity
-@Table(name = "mumu_file_storage_zones")
+@Table(name = "mumu_storage_zones")
 @Getter
 @Setter
 @RequiredArgsConstructor
 @DynamicInsert
 @ToString
-public class FileStorageZonePO extends JpaBasisDefaultPersistentObject {
+public class StorageZonePO extends JpaBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = -7565120351243730127L;
@@ -94,7 +94,7 @@ public class FileStorageZonePO extends JpaBasisDefaultPersistentObject {
     if (thisEffectiveClass != oEffectiveClass) {
       return false;
     }
-    FileStorageZonePO that = (FileStorageZonePO) o;
+    StorageZonePO that = (StorageZonePO) o;
     return getId() != null && Objects.equals(getId(), that.getId());
   }
 

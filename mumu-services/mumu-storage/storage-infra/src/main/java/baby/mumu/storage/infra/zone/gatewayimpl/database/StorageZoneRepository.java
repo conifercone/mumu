@@ -14,39 +14,19 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
+package baby.mumu.storage.infra.zone.gatewayimpl.database;
 
-import baby.mumu.basis.domain.BasisDomainModel;
-import baby.mumu.storage.domain.zone.StorageZone;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 文件元数据
+ * 存储区域
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class FileMetadata extends BasisDomainModel {
-
-  @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
-
-  private Long id;
-
-  private String originalFilename;
-
-  private String storedFilename;
-
-  private String contentType;
-
-  private Long size;
-
-  private StorageZone storageZone;
-
-  private String storagePath;
+public interface StorageZoneRepository extends BaseJpaRepository<StorageZonePO, Long>,
+  JpaSpecificationExecutor<StorageZonePO> {
 
 }

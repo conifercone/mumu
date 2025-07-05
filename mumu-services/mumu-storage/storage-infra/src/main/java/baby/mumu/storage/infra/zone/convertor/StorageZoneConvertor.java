@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
+package baby.mumu.storage.infra.zone.convertor;
 
-import baby.mumu.basis.domain.BasisDomainModel;
-import baby.mumu.basis.enums.StorageZonePolicyEnum;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import baby.mumu.storage.domain.zone.StorageZone;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
+import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 /**
- * 文件存储区域
+ * 存储区域转换类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.13.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class FileStorageZone extends BasisDomainModel {
+@Component
+public class StorageZoneConvertor {
 
-  @Serial
-  private static final long serialVersionUID = -2521021036158309159L;
-
-  private Long id;
-
-  private String code;
-
-  private String name;
-
-  private String description;
-
-  private StorageZonePolicyEnum policy;
-
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<StorageZone> toEntity(
+    StorageZonePO storageZonePO) {
+    return Optional.ofNullable(storageZonePO)
+      .map(StorageZoneMapper.INSTANCE::toEntity);
+  }
 }

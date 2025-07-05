@@ -21,10 +21,11 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
-import baby.mumu.storage.domain.file.FileStorageZone;
-import baby.mumu.storage.infra.file.gatewayimpl.database.FileStorageZoneRepository;
+import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
-import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileStorageZonePO;
+import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,12 +48,15 @@ public class FileConvertor {
 
   private final Tika tika = new Tika();
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
-  private final FileStorageZoneRepository fileStorageZoneRepository;
+  private final StorageZoneRepository storageZoneRepository;
+  private final StorageZoneConvertor storageZoneConvertor;
 
   public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-    FileStorageZoneRepository fileStorageZoneRepository) {
+    StorageZoneRepository storageZoneRepository,
+    StorageZoneConvertor storageZoneConvertor) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
-    this.fileStorageZoneRepository = fileStorageZoneRepository;
+    this.storageZoneRepository = storageZoneRepository;
+    this.storageZoneConvertor = storageZoneConvertor;
   }
 
 
@@ -62,8 +66,8 @@ public class FileConvertor {
     return Optional.ofNullable(fileMetadata)
       .map(FileMapper.INSTANCE::toFileMetadataPO).map(fileMetadataPO -> {
         Long storageZoneId = Optional.ofNullable(fileMetadata.getStorageZone())
-          .map(FileStorageZone::getId)
-          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
+          .map(StorageZone::getId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
         fileMetadataPO.setStorageZoneId(storageZoneId);
         return fileMetadataPO;
       });
@@ -74,10 +78,12 @@ public class FileConvertor {
   public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
     return Optional.ofNullable(fileMetadataPO)
       .map(FileMapper.INSTANCE::toEntity).map(fileMetadata -> {
-        FileStorageZonePO fileStorageZonePO = fileStorageZoneRepository.findById(
+        StorageZonePO storageZonePO = storageZoneRepository.findById(
             fileMetadataPO.getStorageZoneId())
-          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
-        fileMetadata.setStorageZone(FileMapper.INSTANCE.toFileStorageZone(fileStorageZonePO));
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+        StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
+          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+        fileMetadata.setStorageZone(storageZone);
         return fileMetadata;
       });
   }
@@ -91,9 +97,11 @@ public class FileConvertor {
         file.setContent(new ByteArrayInputStream(fileBytes));
         FileMetadata fileMetadata = new FileMetadata();
         fileMetadata.setId(primaryKeyGrpcService.snowflake());
-        FileStorageZonePO fileStorageZonePO = fileStorageZoneRepository.findById(storageZoneId)
-          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
-        fileMetadata.setStorageZone(FileMapper.INSTANCE.toFileStorageZone(fileStorageZonePO));
+        StorageZonePO storageZonePO = storageZoneRepository.findById(storageZoneId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+        StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
+          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+        fileMetadata.setStorageZone(storageZone);
         fileMetadata.setSize(multipartFile.getSize());
         fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
         fileMetadata.setOriginalFilename(multipartFile.getOriginalFilename());

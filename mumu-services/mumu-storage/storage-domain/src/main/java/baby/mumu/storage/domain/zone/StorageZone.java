@@ -14,19 +14,35 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infra.file.gatewayimpl.database;
+package baby.mumu.storage.domain.zone;
 
-import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileStorageZonePO;
-import io.hypersistence.utils.spring.repository.BaseJpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.basis.enums.StorageZonePolicyEnum;
+import java.io.Serial;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 文件存储区域
+ * 存储区域
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.13.0
  */
-public interface FileStorageZoneRepository extends BaseJpaRepository<FileStorageZonePO, Long>,
-  JpaSpecificationExecutor<FileStorageZonePO> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class StorageZone extends BasisDomainModel {
+
+  @Serial
+  private static final long serialVersionUID = -2521021036158309159L;
+
+  private Long id;
+
+  private String code;
+
+  private String name;
+
+  private String description;
+
+  private StorageZonePolicyEnum policy;
 
 }
