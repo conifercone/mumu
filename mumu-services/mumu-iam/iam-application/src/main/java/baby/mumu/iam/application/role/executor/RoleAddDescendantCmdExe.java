@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package baby.mumu.iam.application.permission.executor;
+package baby.mumu.iam.application.role.executor;
 
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
-import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
+import baby.mumu.iam.domain.role.gateway.RoleGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 给指定后代权限添加祖先权限指令执行器
+ * 给指定祖先角色添加后代角色指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.3.0
+ * @since 2.4.0
  */
 @Component
-@Observed(name = "PermissionAddAncestorCmdExe")
-public class PermissionAddAncestorCmdExe {
+@Observed(name = "RoleAddDescendantCmdExe")
+public class RoleAddDescendantCmdExe {
 
-  private final PermissionGateway permissionGateway;
+  private final RoleGateway roleGateway;
 
   @Autowired
-  public PermissionAddAncestorCmdExe(PermissionGateway permissionGateway) {
-    this.permissionGateway = permissionGateway;
+  public RoleAddDescendantCmdExe(RoleGateway roleGateway) {
+    this.roleGateway = roleGateway;
   }
 
   public void execute(
-    PermissionAddAncestorCmd permissionAddAncestorCmd) {
-    Optional.ofNullable(permissionAddAncestorCmd)
-      .ifPresent(_ -> permissionGateway.addAncestor(
-        permissionAddAncestorCmd.getDescendantId(), permissionAddAncestorCmd.getAncestorId()));
+    RoleAddDescendantCmd roleAddDescendantCmd) {
+    Optional.ofNullable(roleAddDescendantCmd)
+      .ifPresent(_ -> roleGateway.addDescendant(
+        roleAddDescendantCmd.getDescendantId(), roleAddDescendantCmd.getAncestorId()));
   }
 }

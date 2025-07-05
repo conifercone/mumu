@@ -255,7 +255,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 添加祖先角色
+### 添加后代角色
 < {%
   import {generateHeaders} from "./utils"
 
@@ -264,7 +264,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{iam-service-url}}/role/addAncestor
+PUT {{iam-service-url}}/role/addDescendant
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

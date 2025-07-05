@@ -115,12 +115,12 @@ public interface PermissionGateway {
   void recoverFromArchiveById(Long id);
 
   /**
-   * 给指定后代权限添加祖先权限
+   * 给指定祖先权限添加后代权限
    *
    * @param descendantId 后代权限ID
    * @param ancestorId   祖先权限ID
    */
-  void addAncestor(Long descendantId, Long ancestorId);
+  void addDescendant(Long descendantId, Long ancestorId);
 
   /**
    * 获取所有根权限

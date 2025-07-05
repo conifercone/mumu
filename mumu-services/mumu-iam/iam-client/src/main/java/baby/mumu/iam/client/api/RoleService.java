@@ -16,8 +16,8 @@
 
 package baby.mumu.iam.client.api;
 
-import baby.mumu.iam.client.cmds.RoleAddAncestorCmd;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
@@ -121,11 +121,11 @@ public interface RoleService {
     Long id);
 
   /**
-   * 添加祖先角色
+   * 添加后代角色
    *
-   * @param roleAddAncestorCmd 添加祖先角色指令
+   * @param roleAddDescendantCmd 添加后代角色指令
    */
-  void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd);
+  void addDescendant(RoleAddDescendantCmd roleAddDescendantCmd);
 
   /**
    * 获取所有根角色

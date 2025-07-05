@@ -21,8 +21,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
-import baby.mumu.iam.application.permission.executor.PermissionAddAncestorCmdExe;
 import baby.mumu.iam.application.permission.executor.PermissionAddCmdExe;
+import baby.mumu.iam.application.permission.executor.PermissionAddDescendantCmdExe;
 import baby.mumu.iam.application.permission.executor.PermissionArchiveByIdCmdExe;
 import baby.mumu.iam.application.permission.executor.PermissionArchivedFindAllCmdExe;
 import baby.mumu.iam.application.permission.executor.PermissionArchivedFindAllSliceCmdExe;
@@ -46,8 +46,8 @@ import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
@@ -100,7 +100,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   private final PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe;
   private final PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe;
   private final PermissionConvertor permissionConvertor;
-  private final PermissionAddAncestorCmdExe permissionAddAncestorCmdExe;
+  private final PermissionAddDescendantCmdExe permissionAddDescendantCmdExe;
   private final PermissionFindRootCmdExe permissionFindRootCmdExe;
   private final PermissionFindDirectCmdExe permissionFindDirectCmdExe;
   private final PermissionDeletePathCmdExe permissionDeletePathCmdExe;
@@ -121,7 +121,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe,
     PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe,
     PermissionConvertor permissionConvertor,
-    PermissionAddAncestorCmdExe permissionAddAncestorCmdExe,
+    PermissionAddDescendantCmdExe permissionAddDescendantCmdExe,
     PermissionFindRootCmdExe permissionFindRootCmdExe,
     PermissionFindDirectCmdExe permissionFindDirectCmdExe,
     PermissionDeletePathCmdExe permissionDeletePathCmdExe,
@@ -140,7 +140,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     this.permissionFindAllSliceCmdExe = permissionFindAllSliceCmdExe;
     this.permissionArchivedFindAllSliceCmdExe = permissionArchivedFindAllSliceCmdExe;
     this.permissionConvertor = permissionConvertor;
-    this.permissionAddAncestorCmdExe = permissionAddAncestorCmdExe;
+    this.permissionAddDescendantCmdExe = permissionAddDescendantCmdExe;
     this.permissionFindRootCmdExe = permissionFindRootCmdExe;
     this.permissionFindDirectCmdExe = permissionFindDirectCmdExe;
     this.permissionDeletePathCmdExe = permissionDeletePathCmdExe;
@@ -263,8 +263,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void addAncestor(PermissionAddAncestorCmd permissionAddAncestorCmd) {
-    permissionAddAncestorCmdExe.execute(permissionAddAncestorCmd);
+  public void addDescendant(PermissionAddDescendantCmd permissionAddDescendantCmd) {
+    permissionAddDescendantCmdExe.execute(permissionAddDescendantCmd);
   }
 
   @Override

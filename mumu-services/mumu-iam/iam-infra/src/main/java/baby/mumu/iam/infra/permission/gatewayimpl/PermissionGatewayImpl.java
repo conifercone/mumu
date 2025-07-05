@@ -257,7 +257,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void addAncestor(Long descendantId, Long ancestorId) {
+  public void addDescendant(Long descendantId, Long ancestorId) {
     Optional<PermissionPO> ancestorPermissionPOOptional = permissionRepository.findById(ancestorId);
     Optional<PermissionPO> descendantPermissionPOOptional = permissionRepository.findById(
       descendantId);

@@ -18,8 +18,8 @@ package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.iam.client.api.PermissionService;
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
@@ -186,14 +186,14 @@ public class PermissionController {
     permissionService.recoverFromArchiveById(id);
   }
 
-  @Operation(summary = "添加祖先权限")
-  @PutMapping("/addAncestor")
+  @Operation(summary = "添加后代权限")
+  @PutMapping("/addDescendant")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public void addAncestor(
-    @RequestBody @Validated PermissionAddAncestorCmd permissionAddAncestorCmd) {
-    permissionService.addAncestor(permissionAddAncestorCmd);
+  public void addDescendant(
+    @RequestBody @Validated PermissionAddDescendantCmd permissionAddDescendantCmd) {
+    permissionService.addDescendant(permissionAddDescendantCmd);
   }
 
   @Operation(summary = "获取所有根权限")

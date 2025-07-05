@@ -103,7 +103,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   });
 %}
 
-### 添加祖先权限
+### 添加后代权限
 < {%
   import {generateHeaders} from "./utils"
 
@@ -112,7 +112,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{iam-service-url}}/permission/addAncestor
+PUT {{iam-service-url}}/permission/addDescendant
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

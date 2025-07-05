@@ -16,8 +16,8 @@
 
 package baby.mumu.iam.client.api;
 
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
@@ -140,11 +140,11 @@ public interface PermissionService {
     Long id);
 
   /**
-   * 添加祖先权限
+   * 添加后代权限
    *
-   * @param permissionAddAncestorCmd 添加祖先权限指令
+   * @param permissionAddDescendantCmd 添加后代权限指令
    */
-  void addAncestor(PermissionAddAncestorCmd permissionAddAncestorCmd);
+  void addDescendant(PermissionAddDescendantCmd permissionAddDescendantCmd);
 
   /**
    * 获取所有根权限

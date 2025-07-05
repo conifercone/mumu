@@ -18,8 +18,8 @@ package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.iam.client.api.RoleService;
-import baby.mumu.iam.client.cmds.RoleAddAncestorCmd;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
@@ -166,13 +166,13 @@ public class RoleController {
     roleService.recoverFromArchiveById(id);
   }
 
-  @Operation(summary = "添加祖先角色")
-  @PutMapping("/addAncestor")
+  @Operation(summary = "添加后代角色")
+  @PutMapping("/addDescendant")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void addAncestor(@RequestBody @Validated RoleAddAncestorCmd roleAddAncestorCmd) {
-    roleService.addAncestor(roleAddAncestorCmd);
+  public void addDescendant(@RequestBody @Validated RoleAddDescendantCmd roleAddDescendantCmd) {
+    roleService.addDescendant(roleAddDescendantCmd);
   }
 
   @Operation(summary = "获取所有根角色")

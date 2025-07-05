@@ -301,7 +301,7 @@ public class RoleGatewayImpl implements RoleGateway {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void addAncestor(Long descendantId, Long ancestorId) {
+  public void addDescendant(Long descendantId, Long ancestorId) {
     if (!roleRepository.existsById(ancestorId)) {
       throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST, ancestorId);
     }

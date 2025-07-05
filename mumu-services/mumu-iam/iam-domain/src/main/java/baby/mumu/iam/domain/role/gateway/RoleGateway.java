@@ -121,12 +121,12 @@ public interface RoleGateway {
   void recoverFromArchiveById(Long id);
 
   /**
-   * 给指定后代角色添加祖先角色
+   * 给指定祖先角色添加后代角色
    *
    * @param descendantId 后代角色ID
    * @param ancestorId   祖先角色ID
    */
-  void addAncestor(Long descendantId, Long ancestorId);
+  void addDescendant(Long descendantId, Long ancestorId);
 
   /**
    * 获取所有根角色

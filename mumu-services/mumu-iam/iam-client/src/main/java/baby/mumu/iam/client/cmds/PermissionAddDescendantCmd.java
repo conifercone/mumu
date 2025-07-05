@@ -20,13 +20,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * 给指定后代权限添加祖先权限指令
+ * 给指定祖先权限添加后代权限指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
 @Data
-public class PermissionAddAncestorCmd {
+public class PermissionAddDescendantCmd {
 
   /**
    * 后代权限ID
