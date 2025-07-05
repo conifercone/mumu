@@ -59,14 +59,14 @@ public class FileController {
   }
 
   @Operation(summary = "文件上传")
-  @PostMapping("/upload")
+  @PostMapping("/upload/{storageZoneId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.12.0")
   public ResponseWrapper<Long> upload(
-    @Parameter(description = "文件存储区域", required = true) @RequestParam("storageZone") @NotNull String storageZone,
+    @Parameter(description = "文件存储区域ID", required = true) @PathVariable("storageZoneId") @NotNull Long storageZoneId,
     @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
-    return ResponseWrapper.success(fileService.upload(storageZone, file));
+    return ResponseWrapper.success(fileService.upload(storageZoneId, file));
   }
 
   @Operation(summary = "文件根据元数据ID删除")

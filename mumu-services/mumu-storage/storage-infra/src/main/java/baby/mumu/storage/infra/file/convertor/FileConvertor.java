@@ -21,7 +21,10 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
+import baby.mumu.storage.domain.file.FileStorageZone;
+import baby.mumu.storage.infra.file.gatewayimpl.database.FileStorageZoneRepository;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileStorageZonePO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,9 +47,12 @@ public class FileConvertor {
 
   private final Tika tika = new Tika();
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final FileStorageZoneRepository fileStorageZoneRepository;
 
-  public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+  public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
+    FileStorageZoneRepository fileStorageZoneRepository) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.fileStorageZoneRepository = fileStorageZoneRepository;
   }
 
 
@@ -54,18 +60,30 @@ public class FileConvertor {
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadataPO> toFileMetadataPO(FileMetadata fileMetadata) {
     return Optional.ofNullable(fileMetadata)
-      .map(FileMapper.INSTANCE::toFileMetadataPO);
+      .map(FileMapper.INSTANCE::toFileMetadataPO).map(fileMetadataPO -> {
+        Long storageZoneId = Optional.ofNullable(fileMetadata.getStorageZone())
+          .map(FileStorageZone::getId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
+        fileMetadataPO.setStorageZoneId(storageZoneId);
+        return fileMetadataPO;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
     return Optional.ofNullable(fileMetadataPO)
-      .map(FileMapper.INSTANCE::toEntity);
+      .map(FileMapper.INSTANCE::toEntity).map(fileMetadata -> {
+        FileStorageZonePO fileStorageZonePO = fileStorageZoneRepository.findById(
+            fileMetadataPO.getStorageZoneId())
+          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
+        fileMetadata.setStorageZone(FileMapper.INSTANCE.toFileStorageZone(fileStorageZonePO));
+        return fileMetadata;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.12.0")
-  public Optional<File> toEntity(String storageZone, MultipartFile multipartFile) {
+  public Optional<File> toEntity(Long storageZoneId, MultipartFile multipartFile) {
     return Optional.ofNullable(multipartFile).map(_ -> {
       File file = new File();
       try {
@@ -73,7 +91,9 @@ public class FileConvertor {
         file.setContent(new ByteArrayInputStream(fileBytes));
         FileMetadata fileMetadata = new FileMetadata();
         fileMetadata.setId(primaryKeyGrpcService.snowflake());
-        fileMetadata.setStorageZone(storageZone);
+        FileStorageZonePO fileStorageZonePO = fileStorageZoneRepository.findById(storageZoneId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.FILE_STORAGE_ZONE_CANNOT_BE_EMPTY));
+        fileMetadata.setStorageZone(FileMapper.INSTANCE.toFileStorageZone(fileStorageZonePO));
         fileMetadata.setSize(multipartFile.getSize());
         fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
         fileMetadata.setOriginalFilename(multipartFile.getOriginalFilename());

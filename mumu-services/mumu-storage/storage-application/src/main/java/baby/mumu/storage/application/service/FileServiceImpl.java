@@ -58,9 +58,9 @@ public class FileServiceImpl implements FileService {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Long upload(String storageZone,
+  public Long upload(Long storageZoneId,
     MultipartFile multipartFile) {
-    return fileUploadCmdExe.execute(storageZone, multipartFile);
+    return fileUploadCmdExe.execute(storageZoneId, multipartFile);
   }
 
   /**

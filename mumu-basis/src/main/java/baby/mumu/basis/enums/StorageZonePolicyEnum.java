@@ -14,38 +14,16 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.file;
-
-import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+package baby.mumu.basis.enums;
 
 /**
- * 文件元数据
+ * 存储区域策略枚举
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class FileMetadata extends BasisDomainModel {
+public enum StorageZonePolicyEnum {
 
-  @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
-
-  private Long id;
-
-  private String originalFilename;
-
-  private String storedFilename;
-
-  private String contentType;
-
-  private Long size;
-
-  private FileStorageZone storageZone;
-
-  private String storagePath;
-
+  PRIVATE,
+  PUBLIC
 }

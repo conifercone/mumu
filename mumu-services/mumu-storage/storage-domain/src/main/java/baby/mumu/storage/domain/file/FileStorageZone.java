@@ -17,35 +17,32 @@
 package baby.mumu.storage.domain.file;
 
 import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 文件元数据
+ * 文件存储区域
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class FileMetadata extends BasisDomainModel {
+public class FileStorageZone extends BasisDomainModel {
 
   @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
+  private static final long serialVersionUID = -2521021036158309159L;
 
   private Long id;
 
-  private String originalFilename;
+  private String code;
 
-  private String storedFilename;
+  private String name;
 
-  private String contentType;
+  private String description;
 
-  private Long size;
-
-  private FileStorageZone storageZone;
-
-  private String storagePath;
+  private StorageZonePolicyEnum policy;
 
 }

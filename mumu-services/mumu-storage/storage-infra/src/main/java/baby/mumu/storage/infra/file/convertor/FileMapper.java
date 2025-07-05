@@ -21,7 +21,9 @@ import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.storage.client.dto.FileFindFileMetadataByMetadataIdDTO;
 import baby.mumu.storage.domain.file.FileMetadata;
+import baby.mumu.storage.domain.file.FileStorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileStorageZonePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -49,4 +51,8 @@ public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMa
   @API(status = Status.STABLE, since = "2.13.0")
   FileFindFileMetadataByMetadataIdDTO toFileFindFileMetadataByMetadataIdDTO(
     FileMetadata fileMetadata);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  FileStorageZone toFileStorageZone(
+    FileStorageZonePO fileStorageZonePO);
 }
