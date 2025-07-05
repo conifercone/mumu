@@ -44,6 +44,6 @@ public class PermissionAddDescendantCmdExe {
     PermissionAddDescendantCmd permissionAddDescendantCmd) {
     Optional.ofNullable(permissionAddDescendantCmd)
       .ifPresent(_ -> permissionGateway.addDescendant(
-        permissionAddDescendantCmd.getDescendantId(), permissionAddDescendantCmd.getAncestorId()));
+        permissionAddDescendantCmd.getAncestorId(), permissionAddDescendantCmd.getDescendantId()));
   }
 }

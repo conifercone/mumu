@@ -29,15 +29,14 @@ import lombok.Data;
 public class PermissionAddDescendantCmd {
 
   /**
-   * 后代权限ID
-   */
-  @NotNull
-  private Long descendantId;
-
-  /**
    * 祖先权限ID
    */
   @NotNull
   private Long ancestorId;
 
+  /**
+   * 后代权限ID
+   */
+  @NotNull
+  private Long descendantId;
 }

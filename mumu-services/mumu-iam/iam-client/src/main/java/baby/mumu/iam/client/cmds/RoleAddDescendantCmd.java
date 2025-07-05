@@ -29,15 +29,14 @@ import lombok.Data;
 public class RoleAddDescendantCmd {
 
   /**
-   * 后代角色ID
-   */
-  @NotNull
-  private Long descendantId;
-
-  /**
    * 祖先角色ID
    */
   @NotNull
   private Long ancestorId;
 
+  /**
+   * 后代角色ID
+   */
+  @NotNull
+  private Long descendantId;
 }

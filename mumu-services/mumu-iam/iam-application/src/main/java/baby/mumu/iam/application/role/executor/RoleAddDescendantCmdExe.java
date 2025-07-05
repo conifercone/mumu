@@ -44,6 +44,6 @@ public class RoleAddDescendantCmdExe {
     RoleAddDescendantCmd roleAddDescendantCmd) {
     Optional.ofNullable(roleAddDescendantCmd)
       .ifPresent(_ -> roleGateway.addDescendant(
-        roleAddDescendantCmd.getDescendantId(), roleAddDescendantCmd.getAncestorId()));
+        roleAddDescendantCmd.getAncestorId(), roleAddDescendantCmd.getDescendantId()));
   }
 }

@@ -117,10 +117,10 @@ public interface PermissionGateway {
   /**
    * 给指定祖先权限添加后代权限
    *
-   * @param descendantId 后代权限ID
    * @param ancestorId   祖先权限ID
+   * @param descendantId 后代权限ID
    */
-  void addDescendant(Long descendantId, Long ancestorId);
+  void addDescendant(Long ancestorId, Long descendantId);
 
   /**
    * 获取所有根权限

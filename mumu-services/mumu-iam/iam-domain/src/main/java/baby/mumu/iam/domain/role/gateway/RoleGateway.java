@@ -123,10 +123,10 @@ public interface RoleGateway {
   /**
    * 给指定祖先角色添加后代角色
    *
-   * @param descendantId 后代角色ID
    * @param ancestorId   祖先角色ID
+   * @param descendantId 后代角色ID
    */
-  void addDescendant(Long descendantId, Long ancestorId);
+  void addDescendant(Long ancestorId, Long descendantId);
 
   /**
    * 获取所有根角色
