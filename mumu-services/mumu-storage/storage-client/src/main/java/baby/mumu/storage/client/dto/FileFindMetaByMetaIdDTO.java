@@ -45,12 +45,12 @@ public class FileFindMetaByMetaIdDTO extends BaseDataTransferObject {
 
   private Long size;
 
-  private FileFindMetaByMetaIdStorageZoneDTO storageZone;
+  private FileStorageZoneDTO storageZone;
 
   private String storagePath;
 
   @Data
-  public static class FileFindMetaByMetaIdStorageZoneDTO {
+  public static class FileStorageZoneDTO {
 
     private Long id;
 
