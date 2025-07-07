@@ -42,6 +42,13 @@ public class FileUploadCmdExe {
     this.fileConvertor = fileConvertor;
   }
 
+  /**
+   * 文件上传
+   *
+   * @param storageZoneId 存储区域Id
+   * @param multipartFile 源文件
+   * @return 文件元数据Id
+   */
   public Long execute(Long storageZoneId, MultipartFile multipartFile) {
     return fileConvertor.toEntity(storageZoneId, multipartFile).map(fileGateway::upload)
       .orElse(null);
