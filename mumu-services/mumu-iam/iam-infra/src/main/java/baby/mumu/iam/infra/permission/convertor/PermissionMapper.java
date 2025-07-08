@@ -19,8 +19,8 @@ package baby.mumu.iam.infra.permission.convertor;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
@@ -37,7 +37,7 @@ import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
 import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO;
-import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO.PermissionIncludePathDTO;
+import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO.PermissionPathDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
@@ -126,7 +126,7 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  PermissionFindAllGrpcDTO toPermissionFindAllGrpcDTO(PermissionFindAllDTO permissionFindAllDTO);
+  PermissionGrpcDTO toPermissionGrpcDTO(PermissionFindAllDTO permissionFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.3.0")
   PermissionFindByIdGrpcDTO toPermissionFindByIdGrpcDTO(
@@ -145,5 +145,5 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   PermissionIncludePathDownloadAllDTO toPermissionIncludePathDownloadAllDTO(Permission permission);
 
   @API(status = Status.STABLE, since = "2.6.0")
-  PermissionIncludePathDTO toPermissionIncludePathDTO(PermissionPathPOId permissionPathPOId);
+  PermissionPathDTO toPermissionPathDTO(PermissionPathPOId permissionPathPOId);
 }

@@ -19,9 +19,9 @@ package baby.mumu.iam.infra.role.convertor;
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcDTO;
-import baby.mumu.iam.client.api.grpc.RoleFindAllPermissionGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
+import baby.mumu.iam.client.api.grpc.RolePermissionGrpcDTO;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
@@ -31,7 +31,7 @@ import baby.mumu.iam.client.cmds.RoleUpdateCmd;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.iam.client.dto.RoleFindAllDTO;
-import baby.mumu.iam.client.dto.RoleFindAllDTO.RoleFindAllPermissionCo;
+import baby.mumu.iam.client.dto.RoleFindAllDTO.RolePermissionDTO;
 import baby.mumu.iam.client.dto.RoleFindAllSliceDTO;
 import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
@@ -130,11 +130,11 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllGrpcDTO toRoleFindAllGrpcDTO(RoleFindAllDTO roleFindAllDTO);
+  RoleGrpcDTO toRoleGrpcDTO(RoleFindAllDTO roleFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  RoleFindAllPermissionGrpcDTO toRoleFindAllPermissionGrpcDTO(
-    RoleFindAllPermissionCo roleFindAllPermissionCo);
+  RolePermissionGrpcDTO toRolePermissionGrpcDTO(
+    RolePermissionDTO rolePermissionDTO);
 
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdGrpcDTO toRoleFindByIdGrpcDTO(

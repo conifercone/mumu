@@ -38,10 +38,10 @@ public class PermissionIncludePathDownloadAllDTO {
 
   private boolean hasDescendant;
 
-  private List<PermissionIncludePathDTO> descendants;
+  private List<PermissionPathDTO> descendants;
 
   @Data
-  public static class PermissionIncludePathDTO {
+  public static class PermissionPathDTO {
 
     private Long ancestorId;
 

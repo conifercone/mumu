@@ -41,8 +41,8 @@ import baby.mumu.iam.client.api.RoleService;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO.Builder;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
@@ -191,8 +191,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       Builder builder = PageOfRoleFindAllGrpcDTO.newBuilder();
       Page<RoleFindAllDTO> roleFindAllCos = roleFindAllCmdExe.execute(
         roleFindAllCmdNotNull);
-      List<RoleFindAllGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
-        .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcDTO(roleFindAllCo).stream())
+      List<RoleGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
+        .flatMap(roleFindAllCo -> roleConvertor.toRoleGrpcDTO(roleFindAllCo).stream())
         .toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());

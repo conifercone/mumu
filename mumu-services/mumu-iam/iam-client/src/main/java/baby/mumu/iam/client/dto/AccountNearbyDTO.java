@@ -44,7 +44,7 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
   /**
    * 头像地址
    */
-  private AccountNearbyAvatarDTO avatar;
+  private AccountAvatarDTO avatar;
 
   /**
    * 时区
@@ -67,7 +67,7 @@ public class AccountNearbyDTO extends BaseDataTransferObject {
   private String nickName;
 
   @Data
-  public static class AccountNearbyAvatarDTO {
+  public static class AccountAvatarDTO {
 
     /**
      * 唯一主键

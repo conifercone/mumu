@@ -21,11 +21,11 @@ import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GeoGrpcMapper;
 import baby.mumu.basis.mappers.GeoMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.iam.client.api.grpc.AccountAddressCurrentLoginQueryGrpcDTO;
+import baby.mumu.iam.client.api.grpc.AccountAddressGrpcDTO;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.iam.client.api.grpc.AccountRoleCurrentLoginQueryGrpcDTO;
-import baby.mumu.iam.client.api.grpc.AccountRolePermissionCurrentLoginQueryGrpcDTO;
-import baby.mumu.iam.client.api.grpc.AccountSystemSettingsCurrentLoginQueryGrpcDTO;
+import baby.mumu.iam.client.api.grpc.AccountRoleGrpcDTO;
+import baby.mumu.iam.client.api.grpc.AccountRolePermissionGrpcDTO;
+import baby.mumu.iam.client.api.grpc.AccountSystemSettingsGrpcDTO;
 import baby.mumu.iam.client.cmds.AccountAddAddressCmd;
 import baby.mumu.iam.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.iam.client.cmds.AccountFindAllCmd;
@@ -37,10 +37,10 @@ import baby.mumu.iam.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.iam.client.dto.AccountBasicInfoDTO;
 import baby.mumu.iam.client.dto.AccountCurrentLoginDTO;
-import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountAddressCurrentLoginQueryDTO;
-import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountRoleCurrentLoginQueryDTO;
-import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountRolePermissionCurrentLoginQueryDTO;
-import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountSystemSettingsCurrentLoginQueryDTO;
+import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountAddressDTO;
+import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountPermissionDTO;
+import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountRoleDTO;
+import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountSystemSettingDTO;
 import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
@@ -166,20 +166,20 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
     AccountCurrentLoginDTO accountCurrentLoginDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountAddressCurrentLoginQueryGrpcDTO toAccountAddressCurrentLoginQueryGrpcDTO(
-    AccountAddressCurrentLoginQueryDTO accountAddressCurrentLoginQueryDTO);
+  AccountAddressGrpcDTO toAccountAddressGrpcDTO(
+    AccountAddressDTO accountAddressDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRoleCurrentLoginQueryGrpcDTO toAccountRoleCurrentLoginQueryGrpcDTO(
-    AccountRoleCurrentLoginQueryDTO accountRoleCurrentLoginQueryDTO);
+  AccountRoleGrpcDTO toAccountRoleGrpcDTO(
+    AccountRoleDTO accountRoleDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountRolePermissionCurrentLoginQueryGrpcDTO toAccountRolePermissionCurrentLoginQueryGrpcDTO(
-    AccountRolePermissionCurrentLoginQueryDTO accountRolePermissionCurrentLoginQueryDTO);
+  AccountRolePermissionGrpcDTO toAccountRolePermissionGrpcDTO(
+    AccountPermissionDTO accountPermissionDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  AccountSystemSettingsCurrentLoginQueryGrpcDTO toAccountSystemSettingsCurrentLoginQueryGrpcDTO(
-    AccountSystemSettingsCurrentLoginQueryDTO accountSystemSettingsCurrentLoginQueryDTO);
+  AccountSystemSettingsGrpcDTO toAccountSystemSettingsGrpcDTO(
+    AccountSystemSettingDTO accountSystemSettingDTO);
 
   @API(status = Status.STABLE, since = "2.6.0")
   AccountNearbyDTO toAccountNearbyDTO(Account account);

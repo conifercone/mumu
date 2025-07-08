@@ -20,8 +20,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
@@ -294,10 +294,10 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionFindAllGrpcDTO> toPermissionFindAllGrpcDTO(
+  public Optional<PermissionGrpcDTO> toPermissionGrpcDTO(
     PermissionFindAllDTO permissionFindAllDTO) {
     return Optional.ofNullable(permissionFindAllDTO)
-      .map(PermissionMapper.INSTANCE::toPermissionFindAllGrpcDTO);
+      .map(PermissionMapper.INSTANCE::toPermissionGrpcDTO);
   }
 
   @Contract("_ -> new")
@@ -344,7 +344,7 @@ public class PermissionConvertor {
             Collections.singleton(permissionIncludePathDownloadAllDTO.getId()));
           permissionIncludePathDownloadAllDTO.setDescendants(
             byAncestorIdIn.stream().map(PermissionPathPO::getId)
-              .map(PermissionMapper.INSTANCE::toPermissionIncludePathDTO)
+              .map(PermissionMapper.INSTANCE::toPermissionPathDTO)
               .collect(Collectors.toList()));
         }
         return permissionIncludePathDownloadAllDTO;

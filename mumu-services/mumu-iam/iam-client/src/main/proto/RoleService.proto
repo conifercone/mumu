@@ -28,16 +28,16 @@ message RoleFindByIdGrpcDTO {
   bool hasDescendant = 5;
 }
 
-message RoleFindAllGrpcDTO {
+message RoleGrpcDTO {
   int64 id = 1;
   string code = 2;
   string name = 3;
-  repeated RoleFindAllPermissionGrpcDTO permissions = 4;
+  repeated RolePermissionGrpcDTO permissions = 4;
   string description = 5;
   bool hasDescendant = 6;
 }
 
-message RoleFindAllPermissionGrpcDTO {
+message RolePermissionGrpcDTO {
   int64 id = 1;
   string code = 2;
   string name = 3;
@@ -46,6 +46,6 @@ message RoleFindAllPermissionGrpcDTO {
 }
 
 message PageOfRoleFindAllGrpcDTO {
-  repeated RoleFindAllGrpcDTO content = 1;
+  repeated RoleGrpcDTO content = 1;
   int32 total_pages = 2;
 }

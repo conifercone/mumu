@@ -43,8 +43,8 @@ import baby.mumu.iam.client.api.PermissionService;
 import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO.Builder;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
@@ -232,9 +232,9 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         Builder builder = PageOfPermissionFindAllGrpcDTO.newBuilder();
         Page<PermissionFindAllDTO> permissionFindAllCos = permissionFindAllCmdExe.execute(
           permissionFindAllCmdNotNull);
-        List<PermissionFindAllGrpcDTO> findAllGrpcCos = permissionFindAllCos.getContent().stream()
+        List<PermissionGrpcDTO> findAllGrpcCos = permissionFindAllCos.getContent().stream()
           .flatMap(
-            permissionFindAllCo -> permissionConvertor.toPermissionFindAllGrpcDTO(
+            permissionFindAllCo -> permissionConvertor.toPermissionGrpcDTO(
                 permissionFindAllCo)
               .stream()).toList();
         builder.addAllContent(findAllGrpcCos);

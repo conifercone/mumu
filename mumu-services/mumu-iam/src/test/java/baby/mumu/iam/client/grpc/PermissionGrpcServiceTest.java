@@ -22,8 +22,8 @@ import baby.mumu.iam.AuthenticationRequired;
 import baby.mumu.iam.client.api.PermissionGrpcService;
 import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
@@ -71,15 +71,15 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
       () -> getToken(mockMvc).orElseThrow(
         () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = permissionGrpcService.findAll(
+    PageOfPermissionFindAllGrpcDTO pageOfPermissionGrpcDTO = permissionGrpcService.findAll(
       permissionFindAllGrpcCmd,
       callCredentials);
     PermissionGrpcServiceTest.log.info("PageOfPermissionFindAllGrpcDTO: {}",
-      pageOfPermissionFindAllGrpcDTO);
-    pageOfPermissionFindAllGrpcDTO.getContentList().stream().map(PermissionFindAllGrpcDTO::getName)
+      pageOfPermissionGrpcDTO);
+    pageOfPermissionGrpcDTO.getContentList().stream().map(PermissionGrpcDTO::getName)
       .forEach(PermissionGrpcServiceTest.log::info);
-    Assertions.assertNotNull(pageOfPermissionFindAllGrpcDTO);
-    Assertions.assertFalse(pageOfPermissionFindAllGrpcDTO.getContentList().isEmpty());
+    Assertions.assertNotNull(pageOfPermissionGrpcDTO);
+    Assertions.assertFalse(pageOfPermissionGrpcDTO.getContentList().isEmpty());
   }
 
   @Test

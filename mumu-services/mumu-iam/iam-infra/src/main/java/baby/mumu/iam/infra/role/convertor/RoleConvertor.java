@@ -20,8 +20,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
@@ -403,13 +403,13 @@ public class RoleConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<RoleFindAllGrpcDTO> toRoleFindAllGrpcDTO(RoleFindAllDTO roleFindAllDTO) {
-    return Optional.ofNullable(roleFindAllDTO).map(RoleMapper.INSTANCE::toRoleFindAllGrpcDTO)
+  public Optional<RoleGrpcDTO> toRoleGrpcDTO(RoleFindAllDTO roleFindAllDTO) {
+    return Optional.ofNullable(roleFindAllDTO).map(RoleMapper.INSTANCE::toRoleGrpcDTO)
       .map(roleFindAllGrpcCo ->
         roleFindAllGrpcCo.toBuilder().addAllPermissions(
           Optional.ofNullable(roleFindAllDTO.getPermissions()).map(
             permissions -> permissions.stream()
-              .map(RoleMapper.INSTANCE::toRoleFindAllPermissionGrpcDTO)
+              .map(RoleMapper.INSTANCE::toRolePermissionGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
       );
   }

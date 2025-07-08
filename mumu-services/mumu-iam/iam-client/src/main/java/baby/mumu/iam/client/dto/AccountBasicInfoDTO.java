@@ -74,7 +74,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   /**
    * 头像
    */
-  private AccountAvatarBasicInfoDTO avatar;
+  private AccountAvatarDTO avatar;
 
   /**
    * 国际电话区号
@@ -129,7 +129,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountAddressBasicInfoDTO> addresses;
+  private List<AccountAddressDTO> addresses;
 
   /**
    * 手机号已验证
@@ -143,7 +143,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
 
 
   @Data
-  public static class AccountAddressBasicInfoDTO {
+  public static class AccountAddressDTO {
 
     /**
      * 唯一主键
@@ -192,7 +192,7 @@ public class AccountBasicInfoDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountAvatarBasicInfoDTO {
+  public static class AccountAvatarDTO {
 
     /**
      * 唯一主键
