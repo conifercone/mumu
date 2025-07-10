@@ -95,22 +95,22 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(Permission permission) {
-    Optional.ofNullable(permission).flatMap(permissionConvertor::toPermissionPO)
-      .filter(permissionPO -> !permissionRepository.existsByIdOrCode(permissionPO.getId(),
-        permissionPO.getCode()) && !permissionArchivedRepository.existsByIdOrCode(
-        permissionPO.getId(),
-        permissionPO.getCode()))
-      .ifPresentOrElse(permissionPO -> {
-        permissionRepository.persist(permissionPO);
-        permissionPathRepository.persist(
-          new PermissionPathPO(
-            new PermissionPathPOId(permissionPO.getId(), permissionPO.getId(), 0L),
-            permissionPO, permissionPO));
-        permissionCacheRepository.deleteById(permissionPO.getId());
-      }, () -> {
-        throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
-      });
+  public Long add(Permission permission) {
+    PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+    if (!permissionRepository.existsByIdOrCode(permissionPO.getId(),
+      permissionPO.getCode()) && !permissionArchivedRepository.existsByIdOrCode(
+      permissionPO.getId(),
+      permissionPO.getCode())) {
+      throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
+    }
+    PermissionPO persisted = permissionRepository.persist(permissionPO);
+    permissionPathRepository.persist(
+      new PermissionPathPO(
+        new PermissionPathPOId(persisted.getId(), persisted.getId(), 0L),
+        permissionPO, permissionPO));
+    permissionCacheRepository.deleteById(persisted.getId());
+    return persisted.getId();
   }
 
   @Override

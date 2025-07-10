@@ -16,11 +16,13 @@
 
 package baby.mumu.iam.application.permission.executor;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,8 +46,9 @@ public class PermissionAddCmdExe {
     this.permissionConvertor = permissionConvertor;
   }
 
-  public void execute(PermissionAddCmd permissionAddCmd) {
-    Optional.ofNullable(permissionAddCmd).flatMap(permissionConvertor::toEntity)
-      .ifPresent(permissionGateway::add);
+  public Long execute(PermissionAddCmd permissionAddCmd) {
+    Permission permission = permissionConvertor.toEntity(permissionAddCmd)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+    return permissionGateway.add(permission);
   }
 }

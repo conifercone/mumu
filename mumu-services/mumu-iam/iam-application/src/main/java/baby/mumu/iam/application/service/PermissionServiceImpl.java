@@ -152,8 +152,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void add(PermissionAddCmd permissionAddCmd) {
-    permissionAddCmdExe.execute(permissionAddCmd);
+  public Long add(PermissionAddCmd permissionAddCmd) {
+    return permissionAddCmdExe.execute(permissionAddCmd);
   }
 
   @Override

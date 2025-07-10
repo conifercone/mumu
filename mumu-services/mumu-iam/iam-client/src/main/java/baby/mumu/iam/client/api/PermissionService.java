@@ -49,8 +49,9 @@ public interface PermissionService {
    * 新增权限
    *
    * @param permissionAddCmd 权限新增指令
+   * @return 权限ID
    */
-  void add(PermissionAddCmd permissionAddCmd);
+  Long add(PermissionAddCmd permissionAddCmd);
 
   /**
    * 根据id删除权限

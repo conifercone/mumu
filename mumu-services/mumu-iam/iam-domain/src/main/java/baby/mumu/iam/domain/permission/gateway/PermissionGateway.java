@@ -34,8 +34,9 @@ public interface PermissionGateway {
    * 添加权限
    *
    * @param permission 权限信息
+   * @return 权限ID
    */
-  void add(Permission permission);
+  Long add(Permission permission);
 
   /**
    * 根据id删除权限

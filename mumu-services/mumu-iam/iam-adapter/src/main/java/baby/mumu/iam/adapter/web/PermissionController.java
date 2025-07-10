@@ -17,6 +17,7 @@
 package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.PermissionService;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
@@ -79,8 +80,8 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
-    permissionService.add(permissionAddCmd);
+  public ResponseWrapper<Long> add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
+    return ResponseWrapper.success(permissionService.add(permissionAddCmd));
   }
 
   @Operation(summary = "根据主键删除权限")
