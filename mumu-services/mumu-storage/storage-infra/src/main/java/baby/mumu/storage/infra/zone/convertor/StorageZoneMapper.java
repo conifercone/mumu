@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.infra.zone.convertor;
 
+import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import org.apiguardian.api.API;
@@ -39,4 +40,12 @@ public interface StorageZoneMapper {
   @API(status = Status.STABLE, since = "2.13.0")
   StorageZone toEntity(
     StorageZonePO storageZonePO);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  StorageZonePO toStorageZonePO(
+    StorageZone storageZone);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  StorageZone toEntity(
+    StorageZoneAddCmd storageZoneAddCmd);
 }

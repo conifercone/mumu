@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.infra.zone.convertor;
 
+import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import java.util.Optional;
@@ -38,6 +39,22 @@ public class StorageZoneConvertor {
   public Optional<StorageZone> toEntity(
     StorageZonePO storageZonePO) {
     return Optional.ofNullable(storageZonePO)
+      .map(StorageZoneMapper.INSTANCE::toEntity);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<StorageZonePO> toStorageZonePO(
+    StorageZone storageZone) {
+    return Optional.ofNullable(storageZone)
+      .map(StorageZoneMapper.INSTANCE::toStorageZonePO);
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<StorageZone> toEntity(
+    StorageZoneAddCmd storageZoneAddCmd) {
+    return Optional.ofNullable(storageZoneAddCmd)
       .map(StorageZoneMapper.INSTANCE::toEntity);
   }
 }
