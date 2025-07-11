@@ -37,6 +37,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.role.gatewayimpl.cache.po.RoleCacheablePO;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RoleArchivedPO;
@@ -139,4 +140,7 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   @API(status = Status.STABLE, since = "2.4.0")
   RoleFindByIdGrpcDTO toRoleFindByIdGrpcDTO(
     RoleFindByIdDTO roleFindByIdDTO);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  RoleUpdatedDataDTO toRoleUpdatedDataDTO(Role role);
 }

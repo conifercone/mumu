@@ -163,15 +163,16 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(Role role) {
-    Optional.ofNullable(role).ifPresent(roleDomain -> {
-      roleConvertor.toRolePO(roleDomain).ifPresent(roleRepository::merge);
-      // 删除权限关系数据重新添加
-      rolePermissionRepository.deleteByRoleId(roleDomain.getId());
-      saveRoleAuthorityRelationsData(roleDomain);
-      roleCacheRepository.deleteById(roleDomain.getId());
-      rolePermissionCacheRepository.deleteById(roleDomain.getId());
-    });
+  public Optional<Role> updateById(Role role) {
+    RolePO rolePO = roleConvertor.toRolePO(role)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+    RolePO merged = roleRepository.merge(rolePO);
+    // 删除权限关系数据重新添加
+    rolePermissionRepository.deleteByRoleId(merged.getId());
+    saveRoleAuthorityRelationsData(role);
+    roleCacheRepository.deleteById(merged.getId());
+    rolePermissionCacheRepository.deleteById(merged.getId());
+    return roleConvertor.toEntity(merged);
   }
 
   @Override

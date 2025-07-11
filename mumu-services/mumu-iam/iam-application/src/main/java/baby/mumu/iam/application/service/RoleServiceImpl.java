@@ -61,6 +61,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
@@ -155,8 +156,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void updateById(RoleUpdateCmd roleUpdateCmd) {
-    roleUpdateCmdExe.execute(roleUpdateCmd);
+  public RoleUpdatedDataDTO updateById(RoleUpdateCmd roleUpdateCmd) {
+    return roleUpdateCmdExe.execute(roleUpdateCmd);
   }
 
   @Override

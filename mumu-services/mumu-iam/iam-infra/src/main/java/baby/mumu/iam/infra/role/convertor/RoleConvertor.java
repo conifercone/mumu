@@ -36,6 +36,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
@@ -442,5 +443,10 @@ public class RoleConvertor {
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindByIdGrpcDTO> toRoleFindByIdGrpcDTO(RoleFindByIdDTO roleFindByIdDTO) {
     return Optional.ofNullable(roleFindByIdDTO).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcDTO);
+  }
+
+  @API(status = Status.STABLE, since = "1.0.0")
+  public Optional<RoleUpdatedDataDTO> toRoleUpdatedDataDTO(Role role) {
+    return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleUpdatedDataDTO);
   }
 }

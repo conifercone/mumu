@@ -16,11 +16,14 @@
 
 package baby.mumu.iam.application.role.executor;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.RoleUpdateCmd;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
+import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,8 +46,10 @@ public class RoleUpdateCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public void execute(RoleUpdateCmd roleUpdateCmd) {
-    Optional.ofNullable(roleUpdateCmd).flatMap(roleConvertor::toEntity)
-      .ifPresent(roleGateway::updateById);
+  public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
+    Role role = roleConvertor.toEntity(roleUpdateCmd)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+    return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
   }
 }

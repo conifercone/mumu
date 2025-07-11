@@ -35,6 +35,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -105,8 +106,8 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
-    roleService.updateById(roleUpdateCmd);
+  public RoleUpdatedDataDTO updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
+    return roleService.updateById(roleUpdateCmd);
   }
 
   @Operation(summary = "查询角色")

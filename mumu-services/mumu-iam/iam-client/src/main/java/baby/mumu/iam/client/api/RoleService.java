@@ -33,6 +33,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -69,8 +70,9 @@ public interface RoleService {
    * 根据id更新角色
    *
    * @param roleUpdateCmd 根据id更新角色指令
+   * @return 角色修改后数据
    */
-  void updateById(RoleUpdateCmd roleUpdateCmd);
+  RoleUpdatedDataDTO updateById(RoleUpdateCmd roleUpdateCmd);
 
   /**
    * 分页查询角色

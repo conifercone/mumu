@@ -55,8 +55,9 @@ public interface RoleGateway {
    * 根据id更新角色
    *
    * @param role 目标角色信息
+   * @return 角色更新后数据
    */
-  void updateById(Role role);
+  Optional<Role> updateById(Role role);
 
   /**
    * 分页查询角色

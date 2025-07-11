@@ -123,7 +123,8 @@ public enum ResponseCode implements BaseResponse {
   ACCOUNT_ARCHIVE_NOT_FOUND("6053", 500),
   STORAGE_ZONE_INVALID("6054", 500),
   THE_STORAGE_ZONE_DOES_NOT_EXIST("6055", 500),
-  INVALID_PERMISSION_FORMAT("6056", 500);
+  INVALID_PERMISSION_FORMAT("6056", 500),
+  INVALID_ROLE_FORMAT("6057", 500);
   private final String code;
   @Getter
   private final int status;
