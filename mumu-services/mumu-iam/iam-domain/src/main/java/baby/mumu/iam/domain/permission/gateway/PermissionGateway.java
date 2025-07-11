@@ -49,8 +49,9 @@ public interface PermissionGateway {
    * 根据id更新权限
    *
    * @param permission 目标权限信息
+   * @return 修改后数据
    */
-  void updateById(Permission permission);
+  Optional<Permission> updateById(Permission permission);
 
   /**
    * 分页查询权限

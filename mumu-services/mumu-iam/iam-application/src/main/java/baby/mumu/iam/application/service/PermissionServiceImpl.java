@@ -63,6 +63,7 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
@@ -170,8 +171,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void updateById(PermissionUpdateCmd permissionUpdateCmd) {
-    permissionUpdateCmdExe.execute(permissionUpdateCmd);
+  public PermissionUpdatedDataDTO updateById(PermissionUpdateCmd permissionUpdateCmd) {
+    return permissionUpdateCmdExe.execute(permissionUpdateCmd);
   }
 
   @Override

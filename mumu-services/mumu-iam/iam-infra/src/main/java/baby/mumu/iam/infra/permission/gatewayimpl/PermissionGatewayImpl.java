@@ -134,12 +134,12 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(Permission permission) {
-    Optional.ofNullable(permission).flatMap(permissionConvertor::toPermissionPO)
-      .ifPresent(dataObject -> {
-        permissionRepository.merge(dataObject);
-        permissionCacheRepository.deleteById(dataObject.getId());
-      });
+  public Optional<Permission> updateById(Permission permission) {
+    PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+    PermissionPO merged = permissionRepository.merge(permissionPO);
+    permissionCacheRepository.deleteById(permissionPO.getId());
+    return permissionConvertor.toEntity(merged);
   }
 
   @Override

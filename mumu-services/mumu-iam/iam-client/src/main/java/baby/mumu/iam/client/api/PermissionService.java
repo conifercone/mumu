@@ -33,6 +33,7 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -71,8 +72,9 @@ public interface PermissionService {
    * 根据id更新权限
    *
    * @param permissionUpdateCmd 权限更新指令
+   * @return 更新后数据
    */
-  void updateById(PermissionUpdateCmd permissionUpdateCmd);
+  PermissionUpdatedDataDTO updateById(PermissionUpdateCmd permissionUpdateCmd);
 
   /**
    * 分页查询权限

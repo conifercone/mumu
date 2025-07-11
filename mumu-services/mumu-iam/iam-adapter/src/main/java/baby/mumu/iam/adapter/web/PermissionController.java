@@ -36,6 +36,7 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -107,8 +108,9 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Validated PermissionUpdateCmd permissionUpdateCmd) {
-    permissionService.updateById(permissionUpdateCmd);
+  public PermissionUpdatedDataDTO updateById(
+    @RequestBody @Validated PermissionUpdateCmd permissionUpdateCmd) {
+    return permissionService.updateById(permissionUpdateCmd);
   }
 
   @Operation(summary = "查询权限")

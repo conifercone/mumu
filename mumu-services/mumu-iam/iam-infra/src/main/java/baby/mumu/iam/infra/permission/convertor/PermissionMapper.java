@@ -38,6 +38,7 @@ import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
 import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO;
 import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO.PermissionPathDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
@@ -146,4 +147,7 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
 
   @API(status = Status.STABLE, since = "2.6.0")
   PermissionPathDTO toPermissionPathDTO(PermissionPathPOId permissionPathPOId);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  PermissionUpdatedDataDTO toPermissionUpdatedDataDTO(Permission permission);
 }
