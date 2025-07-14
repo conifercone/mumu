@@ -28,6 +28,9 @@ Authorization: Bearer {{$auth.token("admin")}}
 > {%
   client.test("Request executed successfully", function () {
     client.assert(response.status === 200, "Response status is not 200");
+    // noinspection JSUnresolvedReference
+    client.global.set("roleId", response.body.data);
+    client.global.set("roleCode", "test2");
   });
 %}
 
@@ -50,7 +53,7 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "id": 3,
+  "id": {{roleId}},
   "name": "updated",
   "permissionIds": [
     1
@@ -168,7 +171,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{iam-service-url}}/role/deleteById/3
+DELETE {{iam-service-url}}/role/deleteById/{{roleId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -192,7 +195,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-DELETE {{iam-service-url}}/role/deleteByCode/test2
+DELETE {{iam-service-url}}/role/deleteByCode/{{roleCode}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -216,7 +219,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{iam-service-url}}/role/archiveById/3
+PUT {{iam-service-url}}/role/archiveById/{{roleId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -240,7 +243,7 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-PUT {{iam-service-url}}/role/recoverFromArchiveById/3
+PUT {{iam-service-url}}/role/recoverFromArchiveById/{{roleId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
