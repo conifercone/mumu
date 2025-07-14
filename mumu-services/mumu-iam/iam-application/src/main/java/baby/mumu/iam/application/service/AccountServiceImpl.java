@@ -179,8 +179,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void register(AccountRegisterCmd accountRegisterCmd) {
-    accountRegisterCmdExe.execute(accountRegisterCmd);
+  public Long register(AccountRegisterCmd accountRegisterCmd) {
+    return accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 
   @Override

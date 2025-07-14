@@ -50,8 +50,9 @@ public interface AccountService {
    * 账号注册
    *
    * @param accountRegisterCmd 账号注册指令
+   * @return 账号ID
    */
-  void register(AccountRegisterCmd accountRegisterCmd);
+  Long register(AccountRegisterCmd accountRegisterCmd);
 
   /**
    * 根据id更新账号基本信息

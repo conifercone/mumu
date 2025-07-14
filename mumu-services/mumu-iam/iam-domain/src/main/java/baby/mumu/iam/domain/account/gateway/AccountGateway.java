@@ -36,8 +36,9 @@ public interface AccountGateway {
    * 账号注册
    *
    * @param account 账号信息
+   * @return 账号ID
    */
-  void register(Account account);
+  Long register(Account account);
 
   /**
    * 根据用户名查找账号

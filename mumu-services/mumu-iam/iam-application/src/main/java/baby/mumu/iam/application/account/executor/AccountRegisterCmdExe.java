@@ -16,13 +16,15 @@
 
 package baby.mumu.iam.application.account.executor;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd;
+import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.CaptchaVerify;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,11 +49,10 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
     this.accountConvertor = accountConvertor;
   }
 
-  public void execute(AccountRegisterCmd accountRegisterCmd) {
-    Optional.ofNullable(accountRegisterCmd).flatMap(accountConvertor::toEntity)
-      .ifPresent(account -> {
-        verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
-        accountGateway.register(account);
-      });
+  public Long execute(AccountRegisterCmd accountRegisterCmd) {
+    Account account = accountConvertor.toEntity(accountRegisterCmd)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
+    return accountGateway.register(account);
   }
 }

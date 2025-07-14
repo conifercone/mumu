@@ -84,9 +84,9 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void register(
+  public ResponseWrapper<Long> register(
     @Parameter(description = "账号注册指令", required = true) @RequestBody @Validated AccountRegisterCmd accountRegisterCmd) {
-    accountService.register(accountRegisterCmd);
+    return ResponseWrapper.success(accountService.register(accountRegisterCmd));
   }
 
   @Operation(summary = "账号基本信息更新")
