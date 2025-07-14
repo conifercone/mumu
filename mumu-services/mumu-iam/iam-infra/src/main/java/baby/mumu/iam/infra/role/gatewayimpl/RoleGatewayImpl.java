@@ -113,8 +113,8 @@ public class RoleGatewayImpl implements RoleGateway {
     role.setId(persisted.getId());
     saveRoleAuthorityRelationsData(role);
     rolePathRepository.persist(
-      new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
-    roleCacheRepository.deleteById(rolePO.getId());
+      new RolePathPO(new RolePathPOId(persisted.getId(), persisted.getId(), 0L), rolePO, rolePO));
+    roleCacheRepository.deleteById(persisted.getId());
     return persisted.getId();
   }
 
