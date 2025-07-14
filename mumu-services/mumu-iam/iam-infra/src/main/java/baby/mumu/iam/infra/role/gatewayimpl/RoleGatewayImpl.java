@@ -109,8 +109,9 @@ public class RoleGatewayImpl implements RoleGateway {
       throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
     }
     RolePO persisted = roleRepository.persist(rolePO);
+    // 回填ID
+    role.setId(persisted.getId());
     saveRoleAuthorityRelationsData(role);
-    Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
     rolePathRepository.persist(
       new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
     roleCacheRepository.deleteById(rolePO.getId());
