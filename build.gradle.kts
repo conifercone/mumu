@@ -64,7 +64,7 @@ allprojects {
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
         if (versionSuffixString.isNotBlank() && suffixes.contains(versionSuffixString)
-        ) "$versionString-$versionSuffixString-$gitHash-$formattedTime" else if (versionSuffixString.isBlank()) versionString else "$versionString-$versionSuffixString"
+        ) "$versionString-$versionSuffixString-$gitHash+$formattedTime" else if (versionSuffixString.isBlank()) versionString else "$versionString-$versionSuffixString"
     repositories {
         mavenCentral()
         maven("https://repo.spring.io/milestone")
