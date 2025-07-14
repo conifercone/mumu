@@ -98,8 +98,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public Long add(Permission permission) {
     PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
       .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
-    if (!permissionRepository.existsByIdOrCode(permissionPO.getId(),
-      permissionPO.getCode()) && !permissionArchivedRepository.existsByIdOrCode(
+    if (permissionRepository.existsByIdOrCode(permissionPO.getId(),
+      permissionPO.getCode()) || permissionArchivedRepository.existsByIdOrCode(
       permissionPO.getId(),
       permissionPO.getCode())) {
       throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
