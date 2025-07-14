@@ -101,21 +101,20 @@ public class RoleGatewayImpl implements RoleGateway {
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(Role role) {
-    // 保存角色数据
-    Optional.ofNullable(role).flatMap(roleConvertor::toRolePO)
-      .filter(rolePO -> !roleRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())
-        && !roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode()))
-      .ifPresentOrElse(rolePO -> {
-        roleRepository.persist(rolePO);
-        saveRoleAuthorityRelationsData(role);
-        Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
-        rolePathRepository.persist(
-          new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
-        roleCacheRepository.deleteById(rolePO.getId());
-      }, () -> {
-        throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
-      });
+  public Long add(Role role) {
+    RolePO rolePO = roleConvertor.toRolePO(role)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+    if (roleRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())
+      || roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())) {
+      throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
+    }
+    RolePO persisted = roleRepository.persist(rolePO);
+    saveRoleAuthorityRelationsData(role);
+    Optional.ofNullable(role).ifPresent(roleNonNull -> roleNonNull.setId(rolePO.getId()));
+    rolePathRepository.persist(
+      new RolePathPO(new RolePathPOId(rolePO.getId(), rolePO.getId(), 0L), rolePO, rolePO));
+    roleCacheRepository.deleteById(rolePO.getId());
+    return persisted.getId();
   }
 
   @Transactional(rollbackFor = Exception.class)

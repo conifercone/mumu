@@ -34,8 +34,9 @@ public interface RoleGateway {
    * 添加角色
    *
    * @param role 角色信息
+   * @return 角色ID
    */
-  void add(Role role);
+  Long add(Role role);
 
   /**
    * 根据id删除角色

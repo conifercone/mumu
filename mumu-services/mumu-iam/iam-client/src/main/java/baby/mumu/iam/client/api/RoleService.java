@@ -49,8 +49,9 @@ public interface RoleService {
    * 新增角色
    *
    * @param roleAddCmd 角色新增指令
+   * @return 角色ID
    */
-  void add(RoleAddCmd roleAddCmd);
+  Long add(RoleAddCmd roleAddCmd);
 
   /**
    * 根据id删除角色

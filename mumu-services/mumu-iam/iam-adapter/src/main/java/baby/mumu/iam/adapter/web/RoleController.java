@@ -17,6 +17,7 @@
 package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.RoleService;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
@@ -79,8 +80,8 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
-    roleService.add(roleAddCmd);
+  public ResponseWrapper<Long> add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
+    return ResponseWrapper.success(roleService.add(roleAddCmd));
   }
 
   @Operation(summary = "根据id删除角色")

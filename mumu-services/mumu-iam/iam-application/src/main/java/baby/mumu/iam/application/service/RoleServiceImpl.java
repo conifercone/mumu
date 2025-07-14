@@ -138,8 +138,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void add(RoleAddCmd roleAddCmd) {
-    roleAddCmdExe.execute(roleAddCmd);
+  public Long add(RoleAddCmd roleAddCmd) {
+    return roleAddCmdExe.execute(roleAddCmd);
   }
 
   @Override
