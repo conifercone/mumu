@@ -226,23 +226,25 @@ public class AccountGatewayImpl implements AccountGateway {
 
   /**
    * {@inheritDoc}
+   *
+   * @return 账号修改后数据
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(Account account) {
+  public Optional<Account> updateById(Account account) {
     if (account == null) {
-      return;
+      return Optional.empty();
     }
     Long loginAccountId = SecurityContextUtils.getLoginAccountId()
       .filter(id -> Objects.equals(id, account.getId()))
       .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
-    accountConvertor.toAccountPO(account)
-      .ifPresent(accountPO -> {
-        accountRepository.merge(accountPO);
-        accountCacheRepository.deleteById(loginAccountId);
-        accountRoleCacheRepository.deleteById(loginAccountId);
-      });
+    AccountPO accountPO = accountConvertor.toAccountPO(account)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    AccountPO merged = accountRepository.merge(accountPO);
+    accountCacheRepository.deleteById(loginAccountId);
+    accountRoleCacheRepository.deleteById(loginAccountId);
+    return accountConvertor.toEntity(merged);
   }
 
   /**

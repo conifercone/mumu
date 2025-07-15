@@ -60,8 +60,9 @@ public interface AccountGateway {
    * 根据id更新账号信息
    *
    * @param account 目标账号信息
+   * @return 修改后账号信息
    */
-  void updateById(Account account);
+  Optional<Account> updateById(Account account);
 
   /**
    * 根据id更新账号角色

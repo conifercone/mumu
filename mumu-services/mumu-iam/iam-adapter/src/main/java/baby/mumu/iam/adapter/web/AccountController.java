@@ -37,6 +37,7 @@ import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
 import baby.mumu.iam.client.dto.AccountOnlineStatisticsDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -94,9 +95,9 @@ public class AccountController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(
+  public AccountUpdatedDataDTO updateById(
     @Parameter(description = "根据账号ID更新账号基本信息指令", required = true) @RequestBody @Validated AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    accountService.updateById(accountUpdateByIdCmd);
+    return accountService.updateById(accountUpdateByIdCmd);
   }
 
   @Operation(summary = "账号角色更新")

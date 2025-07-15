@@ -36,6 +36,7 @@ import baby.mumu.iam.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.AccountAddress;
 import baby.mumu.iam.domain.account.AccountAvatar;
@@ -593,6 +594,12 @@ public class AccountConvertor {
   public Optional<AccountNearbyDTO> toAccountNearbyDTO(
     Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountNearbyDTO);
+  }
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<AccountUpdatedDataDTO> toAccountUpdatedDataDTO(
+    Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountUpdatedDataDTO);
   }
 
   @API(status = Status.STABLE, since = "2.6.0")

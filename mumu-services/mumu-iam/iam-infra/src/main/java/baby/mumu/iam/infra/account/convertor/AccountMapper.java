@@ -44,6 +44,7 @@ import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountSystemSettingDTO;
 import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.AccountAddress;
 import baby.mumu.iam.domain.account.AccountAvatar;
@@ -183,4 +184,7 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
 
   @API(status = Status.STABLE, since = "2.6.0")
   AccountNearbyDTO toAccountNearbyDTO(Account account);
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  AccountUpdatedDataDTO toAccountUpdatedDataDTO(Account account);
 }
