@@ -1,9 +1,5 @@
 description = "Storage Management Service"
 
-plugins {
-    alias(libs.plugins.flyway)
-}
-
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-extension"))
@@ -29,15 +25,4 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.minio)
     annotationProcessor(project(":mumu-processor"))
-}
-
-buildscript {
-    dependencies {
-        classpath(libs.flyway.database.postgresql)
-    }
-}
-
-flyway {
-    configFiles = arrayOf("config/flyway-secrets.properties")
-    locations = arrayOf("classpath:db/migration/postgresql")
 }

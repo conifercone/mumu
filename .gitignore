@@ -85,5 +85,3 @@ rebel.xml
 
 ### kotlin ###
 .kotlin/
-
-flyway-secrets.properties

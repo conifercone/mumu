@@ -1,9 +1,5 @@
 description = "Identity & Access Management Service"
 
-plugins {
-    alias(libs.plugins.flyway)
-}
-
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-adapter"))
     implementation(project(":mumu-services:mumu-iam:iam-client"))
@@ -36,15 +32,4 @@ dependencies {
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
     implementation(libs.spring.security.rsa)
-}
-
-buildscript {
-    dependencies {
-        classpath(libs.flyway.database.postgresql)
-    }
-}
-
-flyway {
-    configFiles = arrayOf("config/flyway-secrets.properties")
-    locations = arrayOf("classpath:db/migration/postgresql")
 }
