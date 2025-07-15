@@ -64,7 +64,8 @@ public class IamResourceServerConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, JwtDecoder jwtDecoder,
+  public SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
+    JwtDecoder jwtDecoder,
     TokenGrpcService tokenGrpcService, ObjectProvider<Tracer> tracers) throws Exception {
     // noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
