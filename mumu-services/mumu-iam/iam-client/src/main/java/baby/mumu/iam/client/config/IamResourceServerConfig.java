@@ -46,7 +46,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.util.Assert;
 
 /**
- * jwt类型资源服务器配置类
+ * IAM资源服务器配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -54,12 +54,12 @@ import org.springframework.util.Assert;
 @Configuration
 @EnableConfigurationProperties(ResourcePoliciesProperties.class)
 @EnableWebSecurity
-public class JWTSecurityConfig {
+public class IamResourceServerConfig {
 
   private final ResourcePoliciesProperties resourcePoliciesProperties;
 
   @Autowired
-  public JWTSecurityConfig(ResourcePoliciesProperties resourcePoliciesProperties) {
+  public IamResourceServerConfig(ResourcePoliciesProperties resourcePoliciesProperties) {
     this.resourcePoliciesProperties = resourcePoliciesProperties;
   }
 
