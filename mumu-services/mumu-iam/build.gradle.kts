@@ -45,5 +45,6 @@ buildscript {
 }
 
 flyway {
+    configFiles = arrayOf("config/flyway-secrets.properties")
     locations = arrayOf("classpath:db/migration/postgresql")
 }
