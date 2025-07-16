@@ -22,7 +22,6 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryNTimes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -61,10 +60,9 @@ public class ZookeeperConfiguration {
   }
 
   @Bean
-  @ConditionalOnMissingBean(DistributedLock.class)
-  @ConditionalOnBean({CuratorFramework.class, ZookeeperProperties.class})
   public DistributedLock zookeeperDistributedLock(CuratorFramework mumuCuratorFramework,
-    ZookeeperProperties zookeeperProperties) {
-    return new ZookeeperDistributedLockImpl(mumuCuratorFramework, zookeeperProperties);
+    ExtensionProperties extensionProperties) {
+    ZookeeperProperties zookeeper = extensionProperties.getDistributed().getLock().getZookeeper();
+    return new ZookeeperDistributedLockImpl(mumuCuratorFramework, zookeeper);
   }
 }
