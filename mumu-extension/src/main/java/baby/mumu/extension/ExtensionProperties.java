@@ -17,7 +17,6 @@
 package baby.mumu.extension;
 
 import baby.mumu.extension.authentication.AuthenticationProperties;
-import baby.mumu.extension.distributed.DistributedProperties;
 import baby.mumu.extension.fd.FaceDetectionProperties;
 import baby.mumu.extension.idempotent.IdempotentProperties;
 import baby.mumu.extension.ocr.OcrProperties;
@@ -43,12 +42,6 @@ public class ExtensionProperties {
    */
   @NestedConfigurationProperty
   private GlobalProperties global = new GlobalProperties();
-
-  /**
-   * 分布式相关配置
-   */
-  @NestedConfigurationProperty
-  private DistributedProperties distributed = new DistributedProperties();
 
   /**
    * sql相关配置

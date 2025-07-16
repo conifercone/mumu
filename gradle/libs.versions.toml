@@ -15,7 +15,6 @@ leafVersion = "1.0.2"
 zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.10.3"
-curatorRecipesVersion = "5.8.0"
 flywayVersion = "11.10.2"
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
@@ -178,8 +177,6 @@ spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" 
 spring-web = { module = "org.springframework:spring-web" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
-# https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
-curator-recipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
