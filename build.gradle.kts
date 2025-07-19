@@ -47,7 +47,7 @@ val gitHash = providers.exec {
 val suffixes = listOf("alpha", "beta", "snapshot", "dev", "test", "pre")
 // 当前UTC时间
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
-
+// 版本时间元数据格式
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
 val formattedTime: String = now.format(formatter)
 
