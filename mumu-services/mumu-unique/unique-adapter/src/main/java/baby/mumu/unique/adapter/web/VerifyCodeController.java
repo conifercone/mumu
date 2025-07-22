@@ -18,10 +18,9 @@ package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
-import baby.mumu.unique.client.api.CaptchaService;
-import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
+import baby.mumu.unique.client.api.VerifyCodeService;
+import baby.mumu.unique.client.cmds.VerifyCodeGeneratedCmd;
+import baby.mumu.unique.client.cmds.VerifyCodeVerifyCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -44,34 +43,34 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/captcha")
+@RequestMapping("/verifyCode")
 @Tag(name = "验证码管理")
-public class CaptchaController {
+public class VerifyCodeController {
 
-  private final CaptchaService captchaService;
+  private final VerifyCodeService verifyCodeService;
 
   @Autowired
-  public CaptchaController(CaptchaService captchaService) {
-    this.captchaService = captchaService;
+  public VerifyCodeController(VerifyCodeService verifyCodeService) {
+    this.verifyCodeService = verifyCodeService;
   }
 
   @Operation(summary = "获取简单验证码")
-  @GetMapping("/simple")
+  @GetMapping("/generate")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public SimpleCaptchaGeneratedDTO simple(
-    @ModelAttribute @Validated SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
-    return captchaService.generateSimpleCaptcha(simpleCaptchaGeneratedCmd);
+  public ResponseWrapper<Long> generate(
+    @ModelAttribute @Validated VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
+    return ResponseWrapper.success(verifyCodeService.generate(verifyCodeGeneratedCmd));
   }
 
   @Operation(summary = "验证简单验证码")
-  @PostMapping("/simple/verify")
+  @PostMapping("/verify")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public ResponseWrapper<Boolean> verifySimple(
-    @RequestBody SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
-    return ResponseWrapper.success(captchaService.verifySimpleCaptcha(simpleCaptchaVerifyCmd));
+  public ResponseWrapper<Boolean> verify(
+    @RequestBody VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
+    return ResponseWrapper.success(verifyCodeService.verify(verifyCodeVerifyCmd));
   }
 }

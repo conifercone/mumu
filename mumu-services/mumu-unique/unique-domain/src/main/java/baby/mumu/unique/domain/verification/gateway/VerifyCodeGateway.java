@@ -14,22 +14,33 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.client.api;
+package baby.mumu.unique.domain.verification.gateway;
 
-import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
+import baby.mumu.unique.domain.verification.VerifyCode;
 
 /**
- * 验证码service
+ * 验证码领域网关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface CaptchaService {
+public interface VerifyCodeGateway {
 
-  SimpleCaptchaGeneratedDTO generateSimpleCaptcha(
-    SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
+  /**
+   * 生成指定长度的简单验证码
+   *
+   * @param verifyCode 简单验证码
+   * @return 验证码ID
+   */
+  Long generate(VerifyCode verifyCode);
 
-  boolean verifySimpleCaptcha(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);
+
+  /**
+   * 验证简单验证码
+   *
+   * @param verifyCode 简单验证码
+   * @return 验证结果
+   */
+  boolean verify(VerifyCode verifyCode);
+
 }

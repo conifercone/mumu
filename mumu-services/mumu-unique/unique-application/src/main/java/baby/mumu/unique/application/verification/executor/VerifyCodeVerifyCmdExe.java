@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.application.captcha.executor;
+package baby.mumu.unique.application.verification.executor;
 
-import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
-import baby.mumu.unique.infra.captcha.convertor.CaptchaConvertor;
+import baby.mumu.unique.client.cmds.VerifyCodeVerifyCmd;
+import baby.mumu.unique.infra.verification.convertor.VerifyCodeConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,21 +29,22 @@ import org.springframework.stereotype.Component;
  * @since 1.0.1
  */
 @Component
-public class SimpleCaptchaVerifyCmdExe {
+public class VerifyCodeVerifyCmdExe {
 
-  private final CaptchaGateway captchaGateway;
-  private final CaptchaConvertor captchaConvertor;
+  private final baby.mumu.unique.domain.verification.gateway.VerifyCodeGateway verifyCodeGateway;
+  private final VerifyCodeConvertor verifyCodeConvertor;
 
   @Autowired
-  public SimpleCaptchaVerifyCmdExe(CaptchaGateway captchaGateway,
-    CaptchaConvertor captchaConvertor) {
-    this.captchaGateway = captchaGateway;
-    this.captchaConvertor = captchaConvertor;
+  public VerifyCodeVerifyCmdExe(
+    baby.mumu.unique.domain.verification.gateway.VerifyCodeGateway verifyCodeGateway,
+    VerifyCodeConvertor verifyCodeConvertor) {
+    this.verifyCodeGateway = verifyCodeGateway;
+    this.verifyCodeConvertor = verifyCodeConvertor;
   }
 
-  public boolean execute(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd) {
-    return Optional.ofNullable(simpleCaptchaVerifyCmd).flatMap(captchaConvertor::toEntity)
-      .map(captchaGateway::verifySimpleCaptcha)
+  public boolean execute(VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
+    return Optional.ofNullable(verifyCodeVerifyCmd).flatMap(verifyCodeConvertor::toEntity)
+      .map(verifyCodeGateway::verify)
       .orElse(false);
   }
 }

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.application.captcha.executor;
+package baby.mumu.unique.application.verification.executor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
-import baby.mumu.unique.domain.captcha.gateway.CaptchaGateway;
-import baby.mumu.unique.infra.captcha.convertor.CaptchaConvertor;
+import baby.mumu.unique.client.cmds.VerifyCodeGeneratedCmd;
+import baby.mumu.unique.infra.verification.convertor.VerifyCodeConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -33,24 +31,24 @@ import org.springframework.util.Assert;
  * @since 1.0.1
  */
 @Component
-public class SimpleCaptchaGeneratedCmdExe {
+public class VerifyCodeGeneratedCmdExe {
 
-  private final CaptchaGateway captchaGateway;
-  private final CaptchaConvertor captchaConvertor;
+  private final baby.mumu.unique.domain.verification.gateway.VerifyCodeGateway verifyCodeGateway;
+  private final VerifyCodeConvertor verifyCodeConvertor;
 
   @Autowired
-  public SimpleCaptchaGeneratedCmdExe(CaptchaGateway captchaGateway,
-    CaptchaConvertor captchaConvertor) {
-    this.captchaGateway = captchaGateway;
-    this.captchaConvertor = captchaConvertor;
+  public VerifyCodeGeneratedCmdExe(
+    baby.mumu.unique.domain.verification.gateway.VerifyCodeGateway verifyCodeGateway,
+    VerifyCodeConvertor verifyCodeConvertor) {
+    this.verifyCodeGateway = verifyCodeGateway;
+    this.verifyCodeConvertor = verifyCodeConvertor;
   }
 
-  public SimpleCaptchaGeneratedDTO execute(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd) {
-    Assert.notNull(simpleCaptchaGeneratedCmd, "SimpleCaptchaGeneratedCmd cannot be null");
-    return captchaConvertor.toEntity(simpleCaptchaGeneratedCmd)
-      .map(captchaGateway::generateSimpleCaptcha)
-      .flatMap(captchaConvertor::toSimpleCaptchaGeneratedDTO)
+  public Long execute(VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
+    Assert.notNull(verifyCodeGeneratedCmd, "VerifyCodeGeneratedCmd cannot be null");
+    return verifyCodeConvertor.toEntity(verifyCodeGeneratedCmd)
+      .map(verifyCodeGateway::generate)
       .orElseThrow(() -> new MuMuException(
-        ResponseCode.SIMPLE_CAPTCHA_GENERATION_FAILED));
+        ResponseCode.VERIFICATION_CODE_GENERATION_FAILED));
   }
 }

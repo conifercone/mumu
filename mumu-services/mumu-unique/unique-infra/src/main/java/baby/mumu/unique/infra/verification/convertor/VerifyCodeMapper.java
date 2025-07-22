@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.infra.captcha.convertor;
+package baby.mumu.unique.infra.verification.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
-import baby.mumu.unique.client.cmds.SimpleCaptchaGeneratedCmd;
-import baby.mumu.unique.client.cmds.SimpleCaptchaVerifyCmd;
-import baby.mumu.unique.client.dto.SimpleCaptchaGeneratedDTO;
-import baby.mumu.unique.domain.captcha.Captcha.SimpleCaptcha;
-import baby.mumu.unique.infra.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
+import baby.mumu.unique.client.api.grpc.VerifyCodeVerifyGrpcCmd;
+import baby.mumu.unique.client.cmds.VerifyCodeGeneratedCmd;
+import baby.mumu.unique.client.cmds.VerifyCodeVerifyCmd;
+import baby.mumu.unique.domain.verification.VerifyCode;
+import baby.mumu.unique.infra.verification.gatewayimpl.cache.po.VerifyCodeCacheablePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -31,30 +30,27 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * Captcha mapstruct转换器
+ * VerifyCode mapstruct转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CaptchaMapper extends GrpcMapper {
+public interface VerifyCodeMapper extends GrpcMapper {
 
-  CaptchaMapper INSTANCE = Mappers.getMapper(CaptchaMapper.class);
-
-  @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptchaPO toSimpleCaptchaPO(SimpleCaptcha simpleCaptcha);
+  VerifyCodeMapper INSTANCE = Mappers.getMapper(VerifyCodeMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptcha toEntity(SimpleCaptchaGeneratedCmd simpleCaptchaGeneratedCmd);
+  VerifyCodeCacheablePO toVerifyCodeCacheablePO(VerifyCode verifyCode);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptcha toEntity(SimpleCaptchaVerifyCmd simpleCaptchaVerifyCmd);
+  VerifyCode toEntity(VerifyCodeGeneratedCmd verifyCodeGeneratedCmd);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  SimpleCaptchaGeneratedDTO toSimpleCaptchaGeneratedDTO(SimpleCaptcha simpleCaptcha);
+  VerifyCode toEntity(VerifyCodeVerifyCmd verifyCodeVerifyCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  SimpleCaptchaVerifyCmd toSimpleCaptchaVerifyCmd(
-    SimpleCaptchaVerifyGrpcCmd simpleCaptchaVerifyGrpcCmd);
+  VerifyCodeVerifyCmd toVerifyCodeVerifyCmd(
+    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd);
 
 }

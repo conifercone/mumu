@@ -14,43 +14,21 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.client.dto;
+package baby.mumu.unique.client.api;
 
-import baby.mumu.basis.dto.BaseDataTransferObject;
-import java.io.Serial;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import baby.mumu.unique.client.cmds.VerifyCodeGeneratedCmd;
+import baby.mumu.unique.client.cmds.VerifyCodeVerifyCmd;
 
 /**
- * 简单验证码生成数据传输对象
+ * 验证码service
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class SimpleCaptchaGeneratedDTO extends BaseDataTransferObject {
+public interface VerifyCodeService {
 
-  @Serial
-  private static final long serialVersionUID = 2364403958860562068L;
+  Long generate(
+    VerifyCodeGeneratedCmd verifyCodeGeneratedCmd);
 
-  /**
-   * 验证码id
-   */
-  private Long id;
-
-  /**
-   * 验证码目标值
-   */
-  private String target;
-
-  /**
-   * 有效期
-   */
-  private Long ttl;
-
-  /**
-   * 验证码长度
-   */
-  private Integer length;
+  boolean verify(VerifyCodeVerifyCmd verifyCodeVerifyCmd);
 }

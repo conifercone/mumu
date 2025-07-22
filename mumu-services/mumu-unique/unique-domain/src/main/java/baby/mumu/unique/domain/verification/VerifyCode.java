@@ -14,39 +14,52 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.infra.captcha.gatewayimpl.cache.po;
+package baby.mumu.unique.domain.verification;
 
-import baby.mumu.basis.enums.CacheLevelEnum;
-import com.redis.om.spring.annotations.Document;
-import com.redis.om.spring.annotations.Indexed;
-import com.redis.om.spring.annotations.TextIndexed;
+import baby.mumu.basis.domain.BasisDomainModel;
+import java.io.Serial;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.TimeToLive;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
- * simple captcha redis数据对象
+ * 验证码领域模型
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.13.0
  */
 @Data
-@Document(value = "mumu:unique:simple-captcha")
-public class SimpleCaptchaPO {
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class VerifyCode extends BasisDomainModel {
 
-  @Id
-  @Indexed
+  @Serial
+  private static final long serialVersionUID = 5903194159824109581L;
+
+  /**
+   * 验证码id
+   */
   private Long id;
 
   /**
-   * 验证码内容
+   * 验证码来源值
    */
-  @TextIndexed
+  private String source;
+
+  /**
+   * 验证码目标值
+   */
   private String target;
 
   /**
-   * 存活时间
+   * 有效期
    */
-  @TimeToLive
-  private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
+  private Long ttl;
+
+  /**
+   * 验证码长度
+   */
+  private Integer length;
 }

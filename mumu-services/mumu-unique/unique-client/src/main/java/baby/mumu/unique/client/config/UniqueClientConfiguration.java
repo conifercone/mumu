@@ -17,8 +17,8 @@
 package baby.mumu.unique.client.config;
 
 import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
-import baby.mumu.unique.client.api.CaptchaGrpcService;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
+import baby.mumu.unique.client.api.VerifyCodeGrpcService;
 import io.grpc.NameResolverRegistry;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import org.springframework.beans.factory.ObjectProvider;
@@ -53,9 +53,9 @@ public class UniqueClientConfiguration {
   }
 
   @Bean
-  public CaptchaGrpcService captchaGrpcService(DiscoveryClient discoveryClient,
+  public VerifyCodeGrpcService verifyCodeGrpcService(DiscoveryClient discoveryClient,
     ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new CaptchaGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    return new VerifyCodeGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
   }
 
   @Bean

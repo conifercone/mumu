@@ -98,7 +98,7 @@
 
 - `springboot` 升级至3.4.6
 - `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.6
-- `CaptchaVerify` 移动至 `unique client`
+- `VerifyCodeVerify` 移动至 `unique client`
 - 修改LICENSE
 - 账户更正为账号
 - 修改行注释自动生成方式

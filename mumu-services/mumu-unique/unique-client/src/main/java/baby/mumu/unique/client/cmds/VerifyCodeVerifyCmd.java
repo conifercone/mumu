@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique.infra.captcha.gatewayimpl.cache;
+package baby.mumu.unique.client.cmds;
 
-import baby.mumu.unique.infra.captcha.gatewayimpl.cache.po.SimpleCaptchaPO;
-import com.redis.om.spring.repository.RedisDocumentRepository;
+import lombok.Data;
 
 /**
- * 简单验证码操作类
+ * 简单验证码验证指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface SimpleCaptchaCacheRepository extends
-  RedisDocumentRepository<SimpleCaptchaPO, Long> {
+@Data
+public class VerifyCodeVerifyCmd {
 
+  /**
+   * 验证码id
+   */
+  private Long id;
+
+  /**
+   * 验证码内容
+   */
+  private String source;
 }

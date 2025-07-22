@@ -19,22 +19,11 @@ package baby.mumu.iam.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import baby.mumu.basis.enums.AccountAvatarSourceEnum;
-import baby.mumu.basis.enums.GenderEnum;
-import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.iam.client.cmds.AccountChangePasswordCmd;
-import baby.mumu.iam.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.iam.client.cmds.AccountPasswordVerifyCmd;
-import baby.mumu.iam.client.cmds.AccountRegisterCmd;
-import baby.mumu.iam.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
-import baby.mumu.iam.client.cmds.AccountRegisterCmd.AccountAvatarRegisterCmd;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.iam.client.cmds.AccountUpdateRoleCmd;
-import baby.mumu.unique.client.api.CaptchaGrpcService;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcCmd;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaGeneratedGrpcDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,58 +55,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountControllerTest {
 
   private final MockMvc mockMvc;
-  private final CaptchaGrpcService captchaGrpcService;
   private final ObjectMapper objectMapper;
 
   @Autowired
-  public AccountControllerTest(MockMvc mockMvc, CaptchaGrpcService captchaGrpcService,
+  public AccountControllerTest(MockMvc mockMvc,
     ObjectMapper objectMapper) {
     this.mockMvc = mockMvc;
-    this.captchaGrpcService = captchaGrpcService;
     this.objectMapper = objectMapper;
-  }
-
-  @Test
-  @Transactional(rollbackFor = Exception.class)
-  public void register() throws Exception {
-    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(4)
-      .setTtl(500).build();
-    SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
-      simpleCaptchaGeneratedGrpcCmd);
-    AccountRegisterCmd accountRegisterCmd = new AccountRegisterCmd();
-    accountRegisterCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
-    accountRegisterCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
-    accountRegisterCmd.setUsername("test1");
-    accountRegisterCmd.setPassword("Test@123456");
-    accountRegisterCmd.setRoleCodes(Collections.singletonList("admin"));
-    AccountAvatarRegisterCmd accountAvatarRegisterCmd = new AccountAvatarRegisterCmd();
-    accountAvatarRegisterCmd.setUrl(
-      "https://s.gravatar.com/avatar/0d8f419ee8a9a62d9517544e647e0c99a7222cbcc3e299daff146a0fc0468b5d");
-    accountAvatarRegisterCmd.setSource(AccountAvatarSourceEnum.URL);
-    accountRegisterCmd.setAvatar(accountAvatarRegisterCmd);
-    accountRegisterCmd.setPhone("13031723736");
-    accountRegisterCmd.setGender(GenderEnum.MALE);
-    accountRegisterCmd.setLanguage(LanguageEnum.ZH);
-    accountRegisterCmd.setTimezone("Asia/Shanghai");
-    accountRegisterCmd.setEmail("547913250@qq.com");
-    accountRegisterCmd.setBirthday(LocalDate.of(1995, 8, 2));
-    AccountAddressRegisterCmd accountAddressRegisterCmd = new AccountAddressRegisterCmd();
-    accountAddressRegisterCmd.setStreet("历城区");
-    accountAddressRegisterCmd.setCity("济南市");
-    accountAddressRegisterCmd.setState("山东省");
-    accountAddressRegisterCmd.setPostalCode("250000");
-    accountAddressRegisterCmd.setCountry("中国");
-    accountRegisterCmd.setAddresses(Collections.singletonList(accountAddressRegisterCmd));
-    mockMvc.perform(MockMvcRequestBuilders
-        .post("/account/register").with(csrf())
-        .content(objectMapper.writeValueAsString(accountRegisterCmd).getBytes())
-        .header("X-Forwarded-For", "123.123.123.123")
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-      )
-      .andExpect(MockMvcResultMatchers.status().isOk())
-      .andDo(print());
   }
 
   @Test
@@ -205,28 +149,6 @@ public class AccountControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/changePassword").with(csrf())
         .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
-        .header("X-Forwarded-For", "123.123.123.123")
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-      )
-      .andExpect(MockMvcResultMatchers.status().isOk())
-      .andDo(print());
-  }
-
-  @Test
-  @Transactional(rollbackFor = Exception.class)
-  public void deleteCurrent() throws Exception {
-    SimpleCaptchaGeneratedGrpcCmd simpleCaptchaGeneratedGrpcCmd = SimpleCaptchaGeneratedGrpcCmd.newBuilder()
-      .setLength(4)
-      .setTtl(500).build();
-    SimpleCaptchaGeneratedGrpcDTO simpleCaptchaGeneratedGrpcDTO = captchaGrpcService.generateSimpleCaptcha(
-      simpleCaptchaGeneratedGrpcCmd);
-    AccountDeleteCurrentCmd accountDeleteCurrentCmd = new AccountDeleteCurrentCmd();
-    accountDeleteCurrentCmd.setCaptchaId(simpleCaptchaGeneratedGrpcDTO.getId());
-    accountDeleteCurrentCmd.setCaptcha(simpleCaptchaGeneratedGrpcDTO.getTarget());
-    mockMvc.perform(MockMvcRequestBuilders
-        .delete("/account/deleteCurrent").with(csrf())
-        .content(objectMapper.writeValueAsString(accountDeleteCurrentCmd).getBytes())
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)

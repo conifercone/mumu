@@ -18,7 +18,7 @@ package baby.mumu.unique.client.api;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.unique.client.api.grpc.SimpleCaptchaVerifyGrpcCmd;
+import baby.mumu.unique.client.api.grpc.VerifyCodeVerifyGrpcCmd;
 import java.util.Optional;
 
 /**
@@ -27,28 +27,28 @@ import java.util.Optional;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
-public class CaptchaVerify {
+public class VerifyCodeVerify {
 
-  private final CaptchaGrpcService captchaGrpcService;
+  private final VerifyCodeGrpcService verifyCodeGrpcService;
 
-  public CaptchaVerify(CaptchaGrpcService captchaGrpcService) {
-    this.captchaGrpcService = captchaGrpcService;
+  public VerifyCodeVerify(VerifyCodeGrpcService verifyCodeGrpcService) {
+    this.verifyCodeGrpcService = verifyCodeGrpcService;
   }
 
-  public void verifyCaptcha(Long captchaId, String captcha) {
-    Long captchaIdNotNull = Optional.ofNullable(captchaId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.CAPTCHA_ID_CANNOT_BE_EMPTY));
-    String captchaNotNull = Optional.ofNullable(captcha)
-      .orElseThrow(() -> new MuMuException(ResponseCode.CAPTCHA_CANNOT_BE_EMPTY));
+  public void verify(Long id, String verifyCode) {
+    Long verifyCodeId = Optional.ofNullable(id)
+      .orElseThrow(() -> new MuMuException(ResponseCode.VERIFICATION_CODE_ID_CANNOT_BE_EMPTY));
+    String code = Optional.ofNullable(verifyCode)
+      .orElseThrow(() -> new MuMuException(ResponseCode.VERIFICATION_CODE_CANNOT_BE_EMPTY));
     try {
-      if (!captchaGrpcService.verifySimpleCaptcha(
-          SimpleCaptchaVerifyGrpcCmd.newBuilder().setId(captchaIdNotNull).setSource(
-            captchaNotNull).build())
-        .getResult()) {
-        throw new MuMuException(ResponseCode.CAPTCHA_INCORRECT);
+      if (!verifyCodeGrpcService.verify(
+          VerifyCodeVerifyGrpcCmd.newBuilder().setId(verifyCodeId).setSource(
+            code).build())
+        .getValue()) {
+        throw new MuMuException(ResponseCode.VERIFICATION_CODE_INCORRECT);
       }
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.CAPTCHA_VERIFICATION_EXCEPTION);
+      throw new MuMuException(ResponseCode.VERIFICATION_CODE_VERIFICATION_EXCEPTION);
     }
   }
 }

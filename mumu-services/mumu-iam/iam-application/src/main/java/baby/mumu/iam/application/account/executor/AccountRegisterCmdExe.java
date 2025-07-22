@@ -22,8 +22,8 @@ import baby.mumu.iam.client.cmds.AccountRegisterCmd;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
-import baby.mumu.unique.client.api.CaptchaGrpcService;
-import baby.mumu.unique.client.api.CaptchaVerify;
+import baby.mumu.unique.client.api.VerifyCodeGrpcService;
+import baby.mumu.unique.client.api.VerifyCodeVerify;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,15 +36,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Observed(name = "AccountRegisterCmdExe")
-public class AccountRegisterCmdExe extends CaptchaVerify {
+public class AccountRegisterCmdExe extends VerifyCodeVerify {
 
   private final AccountGateway accountGateway;
   private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountRegisterCmdExe(AccountGateway accountGateway,
-    CaptchaGrpcService captchaGrpcService, AccountConvertor accountConvertor) {
-    super(captchaGrpcService);
+    VerifyCodeGrpcService verifyCodeGrpcService, AccountConvertor accountConvertor) {
+    super(verifyCodeGrpcService);
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
@@ -52,7 +52,7 @@ public class AccountRegisterCmdExe extends CaptchaVerify {
   public Long execute(AccountRegisterCmd accountRegisterCmd) {
     Account account = accountConvertor.toEntity(accountRegisterCmd)
       .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-    verifyCaptcha(accountRegisterCmd.getCaptchaId(), accountRegisterCmd.getCaptcha());
+    verify(accountRegisterCmd.getVerifyCodeId(), accountRegisterCmd.getVerifyCode());
     return accountGateway.register(account);
   }
 }
