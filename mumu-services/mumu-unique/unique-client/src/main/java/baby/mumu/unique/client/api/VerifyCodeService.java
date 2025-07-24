@@ -27,8 +27,20 @@ import baby.mumu.unique.client.cmds.VerifyCodeVerifyCmd;
  */
 public interface VerifyCodeService {
 
+  /**
+   * 验证码生成
+   *
+   * @param verifyCodeGeneratedCmd 验证码生成指令
+   * @return 验证码ID
+   */
   Long generate(
     VerifyCodeGeneratedCmd verifyCodeGeneratedCmd);
 
+  /**
+   * 验证码校验
+   *
+   * @param verifyCodeVerifyCmd 验证码校验指令
+   * @return 校验结果
+   */
   boolean verify(VerifyCodeVerifyCmd verifyCodeVerifyCmd);
 }

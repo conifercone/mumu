@@ -61,12 +61,18 @@ public class VerifyCodeServiceImpl extends VerifyCodeServiceImplBase implements 
     this.verifyCodeConvertor = verifyCodeConvertor;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Long generate(
     VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
     return verifyCodeGeneratedCmdExe.execute(verifyCodeGeneratedCmd);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean verify(VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
     return verifyCodeVerifyCmdExe.execute(verifyCodeVerifyCmd);
