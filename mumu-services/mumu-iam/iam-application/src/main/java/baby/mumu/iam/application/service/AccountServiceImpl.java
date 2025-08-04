@@ -67,6 +67,7 @@ import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
 import baby.mumu.iam.client.dto.AccountOnlineStatisticsDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
@@ -179,14 +180,14 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void register(AccountRegisterCmd accountRegisterCmd) {
-    accountRegisterCmdExe.execute(accountRegisterCmd);
+  public Long register(AccountRegisterCmd accountRegisterCmd) {
+    return accountRegisterCmdExe.execute(accountRegisterCmd);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
+  public AccountUpdatedDataDTO updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    return accountUpdateByIdCmdExe.execute(accountUpdateByIdCmd);
   }
 
 

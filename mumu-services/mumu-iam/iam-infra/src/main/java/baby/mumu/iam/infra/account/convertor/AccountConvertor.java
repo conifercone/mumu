@@ -21,7 +21,7 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.kotlin.tools.PhoneUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.iam.client.api.grpc.AccountRoleCurrentLoginQueryGrpcDTO;
+import baby.mumu.iam.client.api.grpc.AccountRoleGrpcDTO;
 import baby.mumu.iam.client.cmds.AccountAddAddressCmd;
 import baby.mumu.iam.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.iam.client.cmds.AccountFindAllCmd;
@@ -36,6 +36,7 @@ import baby.mumu.iam.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.AccountAddress;
 import baby.mumu.iam.domain.account.AccountAvatar;
@@ -567,25 +568,25 @@ public class AccountConvertor {
       .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
         .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
           .map(roles -> roles.stream().map(role -> {
-            AccountRoleCurrentLoginQueryGrpcDTO accountRoleCurrentLoginQueryGrpcDTO = AccountMapper.INSTANCE.toAccountRoleCurrentLoginQueryGrpcDTO(
+            AccountRoleGrpcDTO accountRoleCurrentLoginQueryGrpcDTO = AccountMapper.INSTANCE.toAccountRoleGrpcDTO(
               role);
             return accountRoleCurrentLoginQueryGrpcDTO.toBuilder().addAllPermissions(
               Optional.ofNullable(role.getPermissions()).map(
                 accountRolePermissionCurrentLoginQueryDTOS -> accountRolePermissionCurrentLoginQueryDTOS.stream()
                   .map(
-                    AccountMapper.INSTANCE::toAccountRolePermissionCurrentLoginQueryGrpcDTO)
+                    AccountMapper.INSTANCE::toAccountRolePermissionGrpcDTO)
                   .collect(Collectors.toList())).orElse(new ArrayList<>())).build();
           }).collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllAddresses(Optional.ofNullable(accountCurrentLoginDTO.getAddresses())
           .map(
             accountAddressCurrentLoginQueryDTOS -> accountAddressCurrentLoginQueryDTOS.stream()
-              .map(AccountMapper.INSTANCE::toAccountAddressCurrentLoginQueryGrpcDTO)
+              .map(AccountMapper.INSTANCE::toAccountAddressGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>()))
         .addAllSystemSettings(Optional.ofNullable(accountCurrentLoginDTO.getSystemSettings())
           .map(
             accountSystemSettingsCurrentLoginQueryDTOS -> accountSystemSettingsCurrentLoginQueryDTOS.stream()
               .map(
-                AccountMapper.INSTANCE::toAccountSystemSettingsCurrentLoginQueryGrpcDTO)
+                AccountMapper.INSTANCE::toAccountSystemSettingsGrpcDTO)
               .collect(Collectors.toList())).orElse(new ArrayList<>())).build());
   }
 
@@ -593,6 +594,12 @@ public class AccountConvertor {
   public Optional<AccountNearbyDTO> toAccountNearbyDTO(
     Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountNearbyDTO);
+  }
+
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<AccountUpdatedDataDTO> toAccountUpdatedDataDTO(
+    Account account) {
+    return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountUpdatedDataDTO);
   }
 
   @API(status = Status.STABLE, since = "2.6.0")

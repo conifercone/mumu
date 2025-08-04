@@ -55,7 +55,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   /**
    * 头像
    */
-  private AccountAvatarCurrentLoginQueryDTO avatar;
+  private AccountAvatarDTO avatar;
 
   /**
    * 国际电话区号
@@ -130,20 +130,20 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   /**
    * 账号所属角色
    */
-  private List<AccountRoleCurrentLoginQueryDTO> roles;
+  private List<AccountRoleDTO> roles;
 
   /**
    * 账号地址
    */
-  private List<AccountAddressCurrentLoginQueryDTO> addresses;
+  private List<AccountAddressDTO> addresses;
 
   /**
    * 账号系统设置
    */
-  private List<AccountSystemSettingsCurrentLoginQueryDTO> systemSettings;
+  private List<AccountSystemSettingDTO> systemSettings;
 
   @Data
-  public static class AccountAddressCurrentLoginQueryDTO {
+  public static class AccountAddressDTO {
 
     /**
      * 唯一主键
@@ -192,7 +192,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountRoleCurrentLoginQueryDTO {
+  public static class AccountRoleDTO {
 
     /**
      * 角色id
@@ -217,11 +217,11 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
     /**
      * 角色权限
      */
-    private List<AccountRolePermissionCurrentLoginQueryDTO> permissions;
+    private List<AccountPermissionDTO> permissions;
   }
 
   @Data
-  public static class AccountRolePermissionCurrentLoginQueryDTO {
+  public static class AccountPermissionDTO {
 
     /**
      * 权限id
@@ -245,7 +245,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountSystemSettingsCurrentLoginQueryDTO {
+  public static class AccountSystemSettingDTO {
 
     /**
      * 唯一主键
@@ -285,7 +285,7 @@ public class AccountCurrentLoginDTO extends BaseDataTransferObject {
 
 
   @Data
-  public static class AccountAvatarCurrentLoginQueryDTO {
+  public static class AccountAvatarDTO {
 
     /**
      * 唯一主键

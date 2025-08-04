@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "3.5.3"
+springbootVersion = "3.5.4"
 springCloudVersion = "2025.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
@@ -14,23 +14,22 @@ redisOmSpringVersion = "1.0.0-RC3"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.3"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.10.1"
-curatorRecipesVersion = "5.8.0"
-flywayVersion = "11.9.1"
+hypersistenceUtilsVersion = "3.10.3"
+flywayVersion = "11.10.2"
 disruptorVersion = '4.0.0'
 minioVersion = '8.5.17'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.19.0'
 commonsTextVersion = '1.13.1'
-jobrunrSpringBoot3StarterVersion = '7.5.2'
+jobrunrSpringBoot3StarterVersion = '8.0.1'
 alimtVersion = '1.5.0'
-deeplVersion = '1.10.1'
+deeplVersion = '1.10.2'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.3'
 javapoetVersion = '0.7.0'
 autoServiceVersion = '1.1.1'
 tess4jVersion = '5.16.0'
-javacvVersion = '1.5.11'
+javacvVersion = '1.5.12'
 aliyunOcrVersion = '3.1.3'
 bucket4jVersion = '8.14.0'
 commonsCollections4Version = '4.5.0'
@@ -40,10 +39,10 @@ springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.11.2'
 monetaVersion = '1.4.5'
 jacksonDatatypeMoneyVersion = '1.3.0'
-libphonenumberVersion = '9.0.7'
-commonsValidatorVersion = '1.9.0'
+libphonenumberVersion = '9.0.9'
+commonsValidatorVersion = '1.10.0'
 jmhVersion = '1.37'
-tikaVersion = '3.2.0'
+tikaVersion = '3.2.1'
 # bom version
 grpcBomVersion = '1.73.0'
 guavaBomVersion = '33.4.8-jre'
@@ -178,8 +177,6 @@ spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" 
 spring-web = { module = "org.springframework:spring-web" }
 # https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
-# https://mvnrepository.com/artifact/org.apache.curator/curator-recipes
-curator-recipes = { module = "org.apache.curator:curator-recipes", version.ref = "curatorRecipesVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
 # https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
@@ -293,4 +290,3 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPluginVersion" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinPluginVersion" }
 kotlinPluginJpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlinPluginVersion" }
-flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion" }

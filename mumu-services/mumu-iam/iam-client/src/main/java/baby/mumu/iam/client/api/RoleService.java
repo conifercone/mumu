@@ -16,8 +16,8 @@
 
 package baby.mumu.iam.client.api;
 
-import baby.mumu.iam.client.cmds.RoleAddAncestorCmd;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
@@ -33,6 +33,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -48,8 +49,9 @@ public interface RoleService {
    * 新增角色
    *
    * @param roleAddCmd 角色新增指令
+   * @return 角色ID
    */
-  void add(RoleAddCmd roleAddCmd);
+  Long add(RoleAddCmd roleAddCmd);
 
   /**
    * 根据id删除角色
@@ -69,8 +71,9 @@ public interface RoleService {
    * 根据id更新角色
    *
    * @param roleUpdateCmd 根据id更新角色指令
+   * @return 角色修改后数据
    */
-  void updateById(RoleUpdateCmd roleUpdateCmd);
+  RoleUpdatedDataDTO updateById(RoleUpdateCmd roleUpdateCmd);
 
   /**
    * 分页查询角色
@@ -121,11 +124,11 @@ public interface RoleService {
     Long id);
 
   /**
-   * 添加祖先角色
+   * 添加后代角色
    *
-   * @param roleAddAncestorCmd 添加祖先角色指令
+   * @param roleAddDescendantCmd 添加后代角色指令
    */
-  void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd);
+  void addDescendant(RoleAddDescendantCmd roleAddDescendantCmd);
 
   /**
    * 获取所有根角色

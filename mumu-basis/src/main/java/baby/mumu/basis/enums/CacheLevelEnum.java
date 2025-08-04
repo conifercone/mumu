@@ -16,6 +16,7 @@
 
 package baby.mumu.basis.enums;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.DurationUtils;
 
@@ -40,6 +41,9 @@ public enum CacheLevelEnum {
   }
 
   public long getSecondTtl() {
-    return DurationUtils.toDuration(ttl, ttlUnit).getSeconds();
+    // 添加TTL抖动值防止缓存雪崩
+    int ttlJitter = new Random().nextInt(120);
+    long baseTTL = DurationUtils.toDuration(ttl, ttlUnit).getSeconds();
+    return baseTTL + ttlJitter;
   }
 }

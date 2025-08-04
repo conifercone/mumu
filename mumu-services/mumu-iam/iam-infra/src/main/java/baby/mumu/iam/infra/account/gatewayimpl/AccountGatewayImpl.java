@@ -136,51 +136,53 @@ public class AccountGatewayImpl implements AccountGateway {
 
   /**
    * {@inheritDoc}
+   *
+   * @return 账号ID
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void register(Account account) {
-    accountConvertor.toAccountPO(account).filter(
-      _ -> !accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
-        account.getUsername(), account.getEmail())
-        && !accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
-        account.getUsername(), account.getEmail())).ifPresentOrElse(accountPO -> {
-      // 验证时区是否为有效时区类型
-      if (StringUtils.isNotBlank(accountPO.getTimezone()) && !TimeUtils.isValidTimeZone(
-        accountPO.getTimezone())) {
-        throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
-      }
-      accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
-      accountRepository.persist(accountPO);
-      account.setId(accountPO.getId());
-      Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
-          accountAddresses -> accountAddresses.stream()
-            .flatMap(accountAddress -> accountConvertor.toAccountAddressDocumentPO(accountAddress)
-              .stream())
-            .collect(
-              Collectors.toList())).filter(CollectionUtils::isNotEmpty)
-        .ifPresent(accountAddressDocumentRepository::saveAll);
-      Optional.ofNullable(account.getAvatar())
-        .flatMap(accountConvertor::toAccountAvatarDocumentPO)
-        .ifPresent(accountAvatarDocumentRepository::save);
-      accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
-      accountCacheRepository.deleteById(account.getId());
-      accountRoleCacheRepository.deleteById(account.getId());
-      operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-        .setContent("User registration")
-        .setBizNo(account.getUsername())
-        .setSuccess(String.format("User %s registration successfully", account.getUsername()))
-        .build());
-    }, () -> {
+  public Long register(Account account) {
+    AccountPO accountPO = accountConvertor.toAccountPO(account)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    if (accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
+      account.getUsername(), account.getEmail())
+      || accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
+      account.getUsername(), account.getEmail())) {
       operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
         .setContent("User registration")
         .setBizNo(account.getUsername())
         .setFail(ResponseCode.ACCOUNT_ALREADY_EXISTS.getMessage())
         .build());
       throw new AccountAlreadyExistsException(account.getUsername());
-    });
-
+    }
+    // 验证时区是否为有效时区类型
+    if (StringUtils.isNotBlank(accountPO.getTimezone()) && !TimeUtils.isValidTimeZone(
+      accountPO.getTimezone())) {
+      throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+    }
+    accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
+    AccountPO persisted = accountRepository.persist(accountPO);
+    account.setId(persisted.getId());
+    Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
+        accountAddresses -> accountAddresses.stream()
+          .flatMap(accountAddress -> accountConvertor.toAccountAddressDocumentPO(accountAddress)
+            .stream())
+          .collect(
+            Collectors.toList())).filter(CollectionUtils::isNotEmpty)
+      .ifPresent(accountAddressDocumentRepository::saveAll);
+    Optional.ofNullable(account.getAvatar())
+      .flatMap(accountConvertor::toAccountAvatarDocumentPO)
+      .ifPresent(accountAvatarDocumentRepository::save);
+    accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+    accountCacheRepository.deleteById(persisted.getId());
+    accountRoleCacheRepository.deleteById(persisted.getId());
+    operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
+      .setContent("User registration")
+      .setBizNo(account.getUsername())
+      .setSuccess(String.format("User %s registration successfully", account.getUsername()))
+      .build());
+    return persisted.getId();
   }
 
   /**
@@ -224,23 +226,25 @@ public class AccountGatewayImpl implements AccountGateway {
 
   /**
    * {@inheritDoc}
+   *
+   * @return 账号修改后数据
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(Account account) {
+  public Optional<Account> updateById(Account account) {
     if (account == null) {
-      return;
+      return Optional.empty();
     }
     Long loginAccountId = SecurityContextUtils.getLoginAccountId()
       .filter(id -> Objects.equals(id, account.getId()))
       .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
-    accountConvertor.toAccountPO(account)
-      .ifPresent(accountPO -> {
-        accountRepository.merge(accountPO);
-        accountCacheRepository.deleteById(loginAccountId);
-        accountRoleCacheRepository.deleteById(loginAccountId);
-      });
+    AccountPO accountPO = accountConvertor.toAccountPO(account)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    AccountPO merged = accountRepository.merge(accountPO);
+    accountCacheRepository.deleteById(loginAccountId);
+    accountRoleCacheRepository.deleteById(loginAccountId);
+    return accountConvertor.toEntity(merged);
   }
 
   /**

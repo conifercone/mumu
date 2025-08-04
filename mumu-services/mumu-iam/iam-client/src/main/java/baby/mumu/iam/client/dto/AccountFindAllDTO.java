@@ -75,12 +75,12 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   /**
    * 账号角色
    */
-  private List<AccountFindAllRoleDTO> roles;
+  private List<AccountRoleDTO> roles;
 
   /**
    * 头像
    */
-  private AccountFindAllAvatarDTO avatar;
+  private AccountAvatarDTO avatar;
 
   /**
    * 国际电话区号
@@ -145,10 +145,10 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   /**
    * 地址
    */
-  private List<AccountFindAllAddressDTO> addresses;
+  private List<AccountAddressDTO> addresses;
 
   @Data
-  public static class AccountFindAllAddressDTO {
+  public static class AccountAddressDTO {
 
     /**
      * 唯一主键
@@ -200,7 +200,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
 
 
   @Data
-  public static class AccountFindAllRoleDTO {
+  public static class AccountRoleDTO {
 
     private Long id;
 
@@ -210,11 +210,11 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
 
     private String description;
 
-    private List<AccountFindAllPermissionDTO> permissions;
+    private List<AccountPermissionDTO> permissions;
   }
 
   @Data
-  public static class AccountFindAllPermissionDTO {
+  public static class AccountPermissionDTO {
 
     /**
      * 权限id
@@ -235,7 +235,7 @@ public class AccountFindAllDTO extends BaseDataTransferObject {
   }
 
   @Data
-  public static class AccountFindAllAvatarDTO {
+  public static class AccountAvatarDTO {
 
     /**
      * 唯一主键

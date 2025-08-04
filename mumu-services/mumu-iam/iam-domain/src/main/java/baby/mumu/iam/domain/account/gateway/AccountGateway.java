@@ -36,8 +36,9 @@ public interface AccountGateway {
    * 账号注册
    *
    * @param account 账号信息
+   * @return 账号ID
    */
-  void register(Account account);
+  Long register(Account account);
 
   /**
    * 根据用户名查找账号
@@ -59,8 +60,9 @@ public interface AccountGateway {
    * 根据id更新账号信息
    *
    * @param account 目标账号信息
+   * @return 修改后账号信息
    */
-  void updateById(Account account);
+  Optional<Account> updateById(Account account);
 
   /**
    * 根据id更新账号角色

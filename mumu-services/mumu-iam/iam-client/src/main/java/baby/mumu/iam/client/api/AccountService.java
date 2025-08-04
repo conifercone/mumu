@@ -34,6 +34,7 @@ import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
 import baby.mumu.iam.client.dto.AccountOnlineStatisticsDTO;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -50,15 +51,17 @@ public interface AccountService {
    * 账号注册
    *
    * @param accountRegisterCmd 账号注册指令
+   * @return 账号ID
    */
-  void register(AccountRegisterCmd accountRegisterCmd);
+  Long register(AccountRegisterCmd accountRegisterCmd);
 
   /**
    * 根据id更新账号基本信息
    *
    * @param accountUpdateByIdCmd 根据id更新账号基本信息指令
+   * @return 账号修改后数据
    */
-  void updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
+  AccountUpdatedDataDTO updateById(AccountUpdateByIdCmd accountUpdateByIdCmd);
 
   /**
    * 根据id更新账号角色信息

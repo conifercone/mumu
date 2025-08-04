@@ -22,7 +22,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.util.Objects;
 import lombok.Getter;
@@ -57,17 +56,14 @@ public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Size(max = 255)
   @NotNull
   @Column(name = "original_filename", nullable = false)
   private String originalFilename;
 
-  @Size(max = 255)
   @NotNull
   @Column(name = "stored_filename", nullable = false)
   private String storedFilename;
 
-  @Size(max = 255)
   @NotNull
   @Column(name = "content_type", nullable = false)
   private String contentType;
@@ -76,12 +72,10 @@ public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
   @Column(name = "size", nullable = false)
   private Long size;
 
-  @Size(max = 255)
   @NotNull
-  @Column(name = "storage_zone", nullable = false)
-  private String storageZone;
+  @Column(name = "storage_zone_id", nullable = false)
+  private Long storageZoneId;
 
-  @Size(max = 255)
   @NotNull
   @Column(name = "storage_path", nullable = false)
   private String storagePath;

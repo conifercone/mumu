@@ -44,15 +44,13 @@ val gitHash = providers.exec {
     commandLine("git", "rev-parse", "--short", "HEAD")
 }.standardOutput.asText.get().trim()
 // 版本号后缀集合
-val suffixes = listOf("-alpha", "-beta", "-snapshot", "-dev", "-test", "-pre")
+val suffixes = listOf("alpha", "beta", "snapshot", "dev", "test", "pre")
 // 当前UTC时间
 val now: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
-
+// 版本时间元数据格式
 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXXX")
 val formattedTime: String = now.format(formatter)
-fun endsWithAny(input: String, suffixes: List<String>): Boolean {
-    return suffixes.any { input.endsWith(it, ignoreCase = true) }
-}
+
 
 val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
 val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
@@ -62,14 +60,11 @@ allprojects {
 
     group = findProperty("group")!! as String
     val versionString = findProperty("version")!! as String
+    val versionSuffixString = findProperty("version.suffix")!! as String
     // suffixes中包含的版本后缀追加gitHash，时间戳
     version =
-        if (endsWithAny(
-                versionString,
-                suffixes
-            )
-        ) "$versionString-$gitHash-$formattedTime" else versionString
-
+        if (versionSuffixString.isNotBlank() && suffixes.contains(versionSuffixString)
+        ) "$versionString-$versionSuffixString-$gitHash+$formattedTime" else if (versionSuffixString.isBlank()) versionString else "$versionString-$versionSuffixString"
     repositories {
         mavenCentral()
         maven("https://repo.spring.io/milestone")
@@ -80,12 +75,15 @@ allprojects {
             cacheChangingModulesFor(0, TimeUnit.MINUTES)
             cacheDynamicVersionsFor(1, TimeUnit.HOURS)
         }
-
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
-        exclude(group = "ch.qos.logback", module = "logback-classic")
-        exclude(group = "ch.qos.logback", module = "logback-core")
-        exclude(group = "pull-parser", module = "pull-parser")
+        listOf(
+            "org.springframework.boot" to "spring-boot-starter-logging",
+            "org.springframework.boot" to "spring-boot-starter-tomcat",
+            "ch.qos.logback" to "logback-classic",
+            "ch.qos.logback" to "logback-core",
+            "pull-parser" to "pull-parser"
+        ).forEach { (group, module) ->
+            exclude(group = group, module = module)
+        }
     }
 
 }
@@ -113,12 +111,13 @@ subprojects {
         toolVersion = checkstyleToolVersion
     }
 
+    val pmdConfigDir = rootDir.resolve("config/pmd/category/java")
     pmd {
         isConsoleOutput = true
         toolVersion = pmdToolVersion
         ruleSetFiles = files(
-            rootProject.file("config/pmd/category/java/errorprone.xml"),
-            rootProject.file("config/pmd/category/java/bestpractices.xml")
+            pmdConfigDir.resolve("errorprone.xml"),
+            pmdConfigDir.resolve("bestpractices.xml")
         )
     }
 

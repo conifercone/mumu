@@ -17,9 +17,10 @@
 package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.PermissionService;
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
@@ -35,6 +36,7 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -79,8 +81,8 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
-    permissionService.add(permissionAddCmd);
+  public ResponseWrapper<Long> add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
+    return ResponseWrapper.success(permissionService.add(permissionAddCmd));
   }
 
   @Operation(summary = "根据主键删除权限")
@@ -106,8 +108,9 @@ public class PermissionController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Validated PermissionUpdateCmd permissionUpdateCmd) {
-    permissionService.updateById(permissionUpdateCmd);
+  public PermissionUpdatedDataDTO updateById(
+    @RequestBody @Validated PermissionUpdateCmd permissionUpdateCmd) {
+    return permissionService.updateById(permissionUpdateCmd);
   }
 
   @Operation(summary = "查询权限")
@@ -186,14 +189,14 @@ public class PermissionController {
     permissionService.recoverFromArchiveById(id);
   }
 
-  @Operation(summary = "添加祖先权限")
-  @PutMapping("/addAncestor")
+  @Operation(summary = "添加后代权限")
+  @PutMapping("/addDescendant")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.3.0")
-  public void addAncestor(
-    @RequestBody @Validated PermissionAddAncestorCmd permissionAddAncestorCmd) {
-    permissionService.addAncestor(permissionAddAncestorCmd);
+  public void addDescendant(
+    @RequestBody @Validated PermissionAddDescendantCmd permissionAddDescendantCmd) {
+    permissionService.addDescendant(permissionAddDescendantCmd);
   }
 
   @Operation(summary = "获取所有根权限")

@@ -17,6 +17,7 @@
 package baby.mumu.storage.domain.file.gateway;
 
 import baby.mumu.storage.domain.file.File;
+import baby.mumu.storage.domain.file.FileMetadata;
 import java.util.Optional;
 
 /**
@@ -47,5 +48,13 @@ public interface FileGateway {
    *
    * @param fileMetadataId 目标文件元数据ID
    */
-  Optional<File> downloadByMetadataId(Long fileMetadataId);
+  File downloadByMetadataId(Long fileMetadataId);
+
+  /**
+   * 根据文件元数据ID获取文件元数据信息
+   *
+   * @param fileMetadataId 文件元数据ID
+   * @return 文件元数据
+   */
+  Optional<FileMetadata> findMetaByMetaId(Long fileMetadataId);
 }

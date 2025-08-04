@@ -19,6 +19,7 @@ package baby.mumu.storage.adapter.web;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.storage.client.api.FileService;
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,14 +59,14 @@ public class FileController {
   }
 
   @Operation(summary = "文件上传")
-  @PostMapping("/upload")
+  @PostMapping("/upload/{storageZoneId}")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.12.0")
   public ResponseWrapper<Long> upload(
-    @Parameter(description = "文件存储区域", required = true) @RequestParam("storageZone") @NotNull String storageZone,
+    @Parameter(description = "存储区域ID", required = true) @PathVariable("storageZoneId") @NotNull Long storageZoneId,
     @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
-    return ResponseWrapper.success(fileService.upload(storageZone, file));
+    return ResponseWrapper.success(fileService.upload(storageZoneId, file));
   }
 
   @Operation(summary = "文件根据元数据ID删除")
@@ -87,5 +88,15 @@ public class FileController {
     @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId,
     HttpServletResponse httpServletResponse) {
     fileService.downloadByMetadataId(metadataId, httpServletResponse);
+  }
+
+  @Operation(summary = "文件根据元数据ID获取文件元数据信息")
+  @GetMapping("/findMetaByMetaId/{metadataId}")
+  @ResponseBody
+  @RateLimiter
+  @API(status = Status.STABLE, since = "2.13.0")
+  public FileFindMetaByMetaIdDTO findMetaByMetaId(
+    @Parameter(description = "文件元数据ID", required = true) @NotNull @PathVariable("metadataId") Long metadataId) {
+    return fileService.findMetaByMetaId(metadataId);
   }
 }

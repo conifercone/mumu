@@ -21,8 +21,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
-import baby.mumu.iam.application.role.executor.RoleAddAncestorCmdExe;
 import baby.mumu.iam.application.role.executor.RoleAddCmdExe;
+import baby.mumu.iam.application.role.executor.RoleAddDescendantCmdExe;
 import baby.mumu.iam.application.role.executor.RoleArchiveByIdCmdExe;
 import baby.mumu.iam.application.role.executor.RoleArchivedFindAllCmdExe;
 import baby.mumu.iam.application.role.executor.RoleArchivedFindAllSliceCmdExe;
@@ -41,11 +41,11 @@ import baby.mumu.iam.client.api.RoleService;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO.Builder;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
-import baby.mumu.iam.client.cmds.RoleAddAncestorCmd;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
@@ -61,6 +61,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
@@ -97,7 +98,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
   private final RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe;
   private final RoleConvertor roleConvertor;
   private final RoleFindByIdCmdExe roleFindByIdCmdExe;
-  private final RoleAddAncestorCmdExe roleAddAncestorCmdExe;
+  private final RoleAddDescendantCmdExe roleAddDescendantCmdExe;
   private final RoleFindRootCmdExe roleFindRootCmdExe;
   private final RoleFindDirectCmdExe roleFindDirectCmdExe;
   private final RoleDeletePathCmdExe roleDeletePathCmdExe;
@@ -112,7 +113,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
     RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
     RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor,
-    RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddAncestorCmdExe roleAddAncestorCmdExe,
+    RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddDescendantCmdExe roleAddDescendantCmdExe,
     RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
     RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe,
     RoleFindByCodeCmdExe roleFindByCodeCmdExe) {
@@ -127,7 +128,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     this.roleArchivedFindAllSliceCmdExe = roleArchivedFindAllSliceCmdExe;
     this.roleConvertor = roleConvertor;
     this.roleFindByIdCmdExe = roleFindByIdCmdExe;
-    this.roleAddAncestorCmdExe = roleAddAncestorCmdExe;
+    this.roleAddDescendantCmdExe = roleAddDescendantCmdExe;
     this.roleFindRootCmdExe = roleFindRootCmdExe;
     this.roleFindDirectCmdExe = roleFindDirectCmdExe;
     this.roleDeletePathCmdExe = roleDeletePathCmdExe;
@@ -137,8 +138,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void add(RoleAddCmd roleAddCmd) {
-    roleAddCmdExe.execute(roleAddCmd);
+  public Long add(RoleAddCmd roleAddCmd) {
+    return roleAddCmdExe.execute(roleAddCmd);
   }
 
   @Override
@@ -155,8 +156,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void updateById(RoleUpdateCmd roleUpdateCmd) {
-    roleUpdateCmdExe.execute(roleUpdateCmd);
+  public RoleUpdatedDataDTO updateById(RoleUpdateCmd roleUpdateCmd) {
+    return roleUpdateCmdExe.execute(roleUpdateCmd);
   }
 
   @Override
@@ -191,8 +192,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
       Builder builder = PageOfRoleFindAllGrpcDTO.newBuilder();
       Page<RoleFindAllDTO> roleFindAllCos = roleFindAllCmdExe.execute(
         roleFindAllCmdNotNull);
-      List<RoleFindAllGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
-        .flatMap(roleFindAllCo -> roleConvertor.toRoleFindAllGrpcDTO(roleFindAllCo).stream())
+      List<RoleGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
+        .flatMap(roleFindAllCo -> roleConvertor.toRoleGrpcDTO(roleFindAllCo).stream())
         .toList();
       builder.addAllContent(findAllGrpcCos);
       builder.setTotalPages(roleFindAllCos.getTotalPages());
@@ -231,8 +232,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void addAncestor(RoleAddAncestorCmd roleAddAncestorCmd) {
-    roleAddAncestorCmdExe.execute(roleAddAncestorCmd);
+  public void addDescendant(RoleAddDescendantCmd roleAddDescendantCmd) {
+    roleAddDescendantCmdExe.execute(roleAddDescendantCmd);
   }
 
   @Override

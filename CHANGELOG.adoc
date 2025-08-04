@@ -19,6 +19,52 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.13.0] - 2025-08-04
+
+=== ⭐ Added
+
+- Added equals & hashCode method to JPA entity class
+- Add new interfaces for storage areas
+- Added storage area management function #228
+- Add TTL jitter value to prevent cache avalanche
+- Added file metadata interface #227
+
+=== 🐞 Fixed
+
+- Fixed the error judgment logic for permissions
+- Fix NPE
+
+=== 🕸️ Changed
+
+- `gradle` version upgrade to 9.0.0
+- `springboot` upgrade to 3.5.4
+- Refactoring verification code function #240
+- Optimize zookeeper configuration class
+- The account modification interface returns the modified data
+- Configuration class renaming
+- `com.deepl.api:deepl-java` upgrade to 1.10.2
+- `flyway` upgrade to 11.10.2
+- `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.9
+- `commons-validator:commons-validator` Upgrade to 1.10.0
+- `org.bytedeco:javacv-platform` Upgrade to 1.5.12
+- `io.hypersistence:hypersistence-utils-hibernate-63` Upgrade to 3.10.3
+- `org.jobrunr:jobrunr-spring-boot-3-starter` Upgrade to 8.0.1
+- `org.apache.tika:tika-core` Upgrade to 3.2.1
+- Account registration adds primary key to return value
+- Optimize version number format
+- Optimize variable references
+- The role adds the interface to return the primary key value #231
+- Role modification interface returns modified data #230
+- Permission modification interface returns modified data
+- Permissions new interface returns permission ID
+- Simplified class name
+
+=== ⚠️ Removed
+
+- Remove useless ignore items
+- Remove temporarily useless features and gradually remove dependencies on zookeeper
+- Remove flyway plugin
+
 == [2.12.0] - 2025-06-30
 
 === ⭐ Added
@@ -98,7 +144,7 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 - `springboot` upgrade to 3.4.6
 - `com.googlecode.libphonenumber:libphonenumber` Upgrade to 9.0.6
-- `CaptchaVerify` Move to `unique client`
+- `VerifyCodeVerify` Move to `unique client`
 - Modify LICENSE
 - Account correction to account number
 - Automatically generate line comments

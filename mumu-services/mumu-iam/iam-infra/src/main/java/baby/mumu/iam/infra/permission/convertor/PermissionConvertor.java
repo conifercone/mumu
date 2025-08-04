@@ -20,8 +20,8 @@ import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
+import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
@@ -38,6 +38,7 @@ import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
 import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionArchivedRepository;
@@ -294,10 +295,10 @@ public class PermissionConvertor {
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<PermissionFindAllGrpcDTO> toPermissionFindAllGrpcDTO(
+  public Optional<PermissionGrpcDTO> toPermissionGrpcDTO(
     PermissionFindAllDTO permissionFindAllDTO) {
     return Optional.ofNullable(permissionFindAllDTO)
-      .map(PermissionMapper.INSTANCE::toPermissionFindAllGrpcDTO);
+      .map(PermissionMapper.INSTANCE::toPermissionGrpcDTO);
   }
 
   @Contract("_ -> new")
@@ -344,10 +345,18 @@ public class PermissionConvertor {
             Collections.singleton(permissionIncludePathDownloadAllDTO.getId()));
           permissionIncludePathDownloadAllDTO.setDescendants(
             byAncestorIdIn.stream().map(PermissionPathPO::getId)
-              .map(PermissionMapper.INSTANCE::toPermissionIncludePathDTO)
+              .map(PermissionMapper.INSTANCE::toPermissionPathDTO)
               .collect(Collectors.toList()));
         }
         return permissionIncludePathDownloadAllDTO;
       });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<PermissionUpdatedDataDTO> toPermissionUpdatedDataDTO(
+    Permission permission) {
+    return Optional.ofNullable(permission)
+      .map(PermissionMapper.INSTANCE::toPermissionUpdatedDataDTO);
   }
 }

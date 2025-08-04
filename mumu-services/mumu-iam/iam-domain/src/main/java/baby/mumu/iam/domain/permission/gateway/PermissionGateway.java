@@ -34,8 +34,9 @@ public interface PermissionGateway {
    * 添加权限
    *
    * @param permission 权限信息
+   * @return 权限ID
    */
-  void add(Permission permission);
+  Long add(Permission permission);
 
   /**
    * 根据id删除权限
@@ -48,8 +49,9 @@ public interface PermissionGateway {
    * 根据id更新权限
    *
    * @param permission 目标权限信息
+   * @return 修改后数据
    */
-  void updateById(Permission permission);
+  Optional<Permission> updateById(Permission permission);
 
   /**
    * 分页查询权限
@@ -115,12 +117,12 @@ public interface PermissionGateway {
   void recoverFromArchiveById(Long id);
 
   /**
-   * 给指定后代权限添加祖先权限
+   * 给指定祖先权限添加后代权限
    *
-   * @param descendantId 后代权限ID
    * @param ancestorId   祖先权限ID
+   * @param descendantId 后代权限ID
    */
-  void addAncestor(Long descendantId, Long ancestorId);
+  void addDescendant(Long ancestorId, Long descendantId);
 
   /**
    * 获取所有根权限

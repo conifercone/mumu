@@ -7,7 +7,7 @@
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{storage-service-url}}/file/upload
+POST {{storage-service-url}}/file/upload/0
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -16,11 +16,6 @@ Connection: keep-alive
 Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
---WebAppBoundary
-Content-Disposition: form-data; name="storageZone"
-Content-Type: text/plain
-
-test
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="test.txt"
 Content-Type: application/json
@@ -70,6 +65,30 @@ Authorization: Bearer {{$auth.token("admin")}}
   request.variables.set("requestId", headers.requestId)
 %}
 GET {{storage-service-url}}/file/downloadByMetadataId/{{fileMetadataId}}
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+  client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### 根据文件元数据ID获取元数据信息
+< {%
+  import {generateHeaders} from "./utils"
+
+  const headers = generateHeaders(request.environment.get("storage-service-url"))
+  request.variables.set("signature", headers.signature)
+  request.variables.set("timestamp", headers.timestamp)
+  request.variables.set("requestId", headers.requestId)
+%}
+GET {{storage-service-url}}/file/findMetaByMetaId/{{fileMetadataId}}
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

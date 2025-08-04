@@ -16,8 +16,8 @@
 
 package baby.mumu.iam.client.api;
 
-import baby.mumu.iam.client.cmds.PermissionAddAncestorCmd;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
+import baby.mumu.iam.client.cmds.PermissionAddDescendantCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.PermissionArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
@@ -33,6 +33,7 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
+import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -49,8 +50,9 @@ public interface PermissionService {
    * 新增权限
    *
    * @param permissionAddCmd 权限新增指令
+   * @return 权限ID
    */
-  void add(PermissionAddCmd permissionAddCmd);
+  Long add(PermissionAddCmd permissionAddCmd);
 
   /**
    * 根据id删除权限
@@ -70,8 +72,9 @@ public interface PermissionService {
    * 根据id更新权限
    *
    * @param permissionUpdateCmd 权限更新指令
+   * @return 更新后数据
    */
-  void updateById(PermissionUpdateCmd permissionUpdateCmd);
+  PermissionUpdatedDataDTO updateById(PermissionUpdateCmd permissionUpdateCmd);
 
   /**
    * 分页查询权限
@@ -140,11 +143,11 @@ public interface PermissionService {
     Long id);
 
   /**
-   * 添加祖先权限
+   * 添加后代权限
    *
-   * @param permissionAddAncestorCmd 添加祖先权限指令
+   * @param permissionAddDescendantCmd 添加后代权限指令
    */
-  void addAncestor(PermissionAddAncestorCmd permissionAddAncestorCmd);
+  void addDescendant(PermissionAddDescendantCmd permissionAddDescendantCmd);
 
   /**
    * 获取所有根权限

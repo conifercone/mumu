@@ -156,13 +156,13 @@ public class AccountRegisterCmd {
    * 验证码ID
    */
   @Schema(description = "验证码ID", requiredMode = RequiredMode.REQUIRED)
-  @NotNull(message = "{captcha.id.validation.not.null}")
-  private Long captchaId;
+  @NotNull(message = "{verification.code.id.validation.not.null}")
+  private Long verifyCodeId;
 
   /**
    * 验证码内容
    */
   @Schema(description = "验证码内容", requiredMode = RequiredMode.REQUIRED)
-  @NotBlank(message = "{captcha.validation.not.blank}")
-  private String captcha;
+  @NotBlank(message = "{verification.code.validation.not.blank}")
+  private String verifyCode;
 }

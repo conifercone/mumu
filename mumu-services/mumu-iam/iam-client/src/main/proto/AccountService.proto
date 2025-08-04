@@ -15,29 +15,29 @@ service AccountService {
 message AccountCurrentLoginGrpcDTO{
   int64 id = 1;
   string username = 2;
-  AccountAvatarCurrentLoginQueryGrpcDTO avatar = 3;
+  AccountAvatarGrpcDTO avatar = 3;
   string phone = 4;
   GenderEnum gender = 5;
   string email = 6;
   string timezone = 7;
   LanguageEnum language = 8;
   google.protobuf.Timestamp birthday = 9;
-  repeated AccountRoleCurrentLoginQueryGrpcDTO roles = 10;
-  repeated AccountAddressCurrentLoginQueryGrpcDTO addresses = 11;
-  repeated AccountSystemSettingsCurrentLoginQueryGrpcDTO systemSettings = 12;
+  repeated AccountRoleGrpcDTO roles = 10;
+  repeated AccountAddressGrpcDTO addresses = 11;
+  repeated AccountSystemSettingsGrpcDTO systemSettings = 12;
   string phoneCountryCode = 13;
   bool phoneVerified = 14;
   bool emailVerified = 15;
 }
 
-message AccountRoleCurrentLoginQueryGrpcDTO {
+message AccountRoleGrpcDTO {
   int64 id = 1;
   string code = 2;
   string name = 3;
-  repeated AccountRolePermissionCurrentLoginQueryGrpcDTO permissions = 4;
+  repeated AccountRolePermissionGrpcDTO permissions = 4;
 }
 
-message AccountAddressCurrentLoginQueryGrpcDTO {
+message AccountAddressGrpcDTO {
   string id = 1;
   string street = 2;
   string city = 3;
@@ -48,7 +48,7 @@ message AccountAddressCurrentLoginQueryGrpcDTO {
   bool defaultAddress = 8;
 }
 
-message AccountSystemSettingsCurrentLoginQueryGrpcDTO {
+message AccountSystemSettingsGrpcDTO {
   string id = 1;
   string profile = 2;
   string name = 3;
@@ -58,13 +58,13 @@ message AccountSystemSettingsCurrentLoginQueryGrpcDTO {
 }
 
 
-message AccountRolePermissionCurrentLoginQueryGrpcDTO{
+message AccountRolePermissionGrpcDTO{
   int64 id = 1;
   string code = 2;
   string name = 3;
 }
 
-message AccountAvatarCurrentLoginQueryGrpcDTO{
+message AccountAvatarGrpcDTO{
   string id = 1;
   AccountAvatarSourceEnum source = 2;
   string fileId = 3;

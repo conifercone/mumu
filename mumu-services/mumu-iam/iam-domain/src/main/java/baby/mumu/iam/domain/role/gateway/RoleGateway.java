@@ -34,8 +34,9 @@ public interface RoleGateway {
    * 添加角色
    *
    * @param role 角色信息
+   * @return 角色ID
    */
-  void add(Role role);
+  Long add(Role role);
 
   /**
    * 根据id删除角色
@@ -55,8 +56,9 @@ public interface RoleGateway {
    * 根据id更新角色
    *
    * @param role 目标角色信息
+   * @return 角色更新后数据
    */
-  void updateById(Role role);
+  Optional<Role> updateById(Role role);
 
   /**
    * 分页查询角色
@@ -121,12 +123,12 @@ public interface RoleGateway {
   void recoverFromArchiveById(Long id);
 
   /**
-   * 给指定后代角色添加祖先角色
+   * 给指定祖先角色添加后代角色
    *
-   * @param descendantId 后代角色ID
    * @param ancestorId   祖先角色ID
+   * @param descendantId 后代角色ID
    */
-  void addAncestor(Long descendantId, Long ancestorId);
+  void addDescendant(Long ancestorId, Long descendantId);
 
   /**
    * 获取所有根角色

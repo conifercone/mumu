@@ -16,11 +16,14 @@
 
 package baby.mumu.iam.application.account.executor;
 
+import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
+import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
+import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,8 +46,11 @@ public class AccountUpdateByIdCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public void execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    Optional.ofNullable(accountUpdateByIdCmd).flatMap(accountConvertor::toEntity)
-      .ifPresent(accountGateway::updateById);
+  public AccountUpdatedDataDTO execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+    Account account = accountConvertor.toEntity(accountUpdateByIdCmd)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    return accountGateway.updateById(account)
+      .flatMap(accountConvertor::toAccountUpdatedDataDTO)
+      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
   }
 }

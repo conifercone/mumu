@@ -1,3 +1,3 @@
-baby.mumu.iam.client.config.JWTSecurityConfig
+baby.mumu.iam.client.config.IamResourceServerConfig
 baby.mumu.iam.client.config.GrpcSecurityConfiguration
 baby.mumu.iam.client.config.AuthenticationClientConfiguration

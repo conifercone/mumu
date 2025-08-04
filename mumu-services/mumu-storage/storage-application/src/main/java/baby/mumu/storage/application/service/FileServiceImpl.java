@@ -18,8 +18,10 @@ package baby.mumu.storage.application.service;
 
 import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileDownloadByMetadataIdCmdExe;
+import baby.mumu.storage.application.file.executor.FileFindMetaByMetaIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
@@ -39,31 +41,51 @@ public class FileServiceImpl implements FileService {
   private final FileUploadCmdExe fileUploadCmdExe;
   private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
   private final FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe;
+  private final FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe;
 
   public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
     FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe,
-    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe) {
+    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe,
+    FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe) {
     this.fileUploadCmdExe = fileUploadCmdExe;
     this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
     this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
+    this.fileFindMetaByMetaIdCmdExe = fileFindMetaByMetaIdCmdExe;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Long upload(String storageZone,
+  public Long upload(Long storageZoneId,
     MultipartFile multipartFile) {
-    return fileUploadCmdExe.execute(storageZone, multipartFile);
+    return fileUploadCmdExe.execute(storageZoneId, multipartFile);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteByMetadataId(Long metadataId) {
     fileDeleteByMetadataIdCmdExe.execute(metadataId);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
     fileDownloadByMetadataIdCmdExe.execute(metadataId, httpServletResponse);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public FileFindMetaByMetaIdDTO findMetaByMetaId(Long metadataId) {
+    return fileFindMetaByMetaIdCmdExe.execute(metadataId);
   }
 }

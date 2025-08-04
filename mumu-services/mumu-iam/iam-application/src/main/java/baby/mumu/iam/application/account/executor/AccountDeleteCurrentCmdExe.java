@@ -18,8 +18,8 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.unique.client.api.CaptchaGrpcService;
-import baby.mumu.unique.client.api.CaptchaVerify;
+import baby.mumu.unique.client.api.VerifyCodeGrpcService;
+import baby.mumu.unique.client.api.VerifyCodeVerify;
 import io.micrometer.observation.annotation.Observed;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +33,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Observed(name = "AccountDeleteCurrentCmdExe")
-public class AccountDeleteCurrentCmdExe extends CaptchaVerify {
+public class AccountDeleteCurrentCmdExe extends VerifyCodeVerify {
 
   private final AccountGateway accountGateway;
 
   @Autowired
   public AccountDeleteCurrentCmdExe(AccountGateway accountGateway,
-    CaptchaGrpcService captchaGrpcService) {
-    super(captchaGrpcService);
+    VerifyCodeGrpcService verifyCodeGrpcService) {
+    super(verifyCodeGrpcService);
     this.accountGateway = accountGateway;
   }
 
   public void execute(@NotNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
-    verifyCaptcha(accountDeleteCurrentCmd.getCaptchaId(), accountDeleteCurrentCmd.getCaptcha());
+    verify(accountDeleteCurrentCmd.getVerifyCodeId(), accountDeleteCurrentCmd.getVerifyCode());
     accountGateway.deleteCurrentAccount();
   }
 }

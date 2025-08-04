@@ -20,7 +20,7 @@ message PermissionFindAllGrpcCmd {
   int32 page_size = 6;
 }
 
-message PermissionFindAllGrpcDTO {
+message PermissionGrpcDTO {
   int64 id = 1;
   string code = 2;
   string name = 3;
@@ -37,6 +37,6 @@ message PermissionFindByIdGrpcDTO {
 }
 
 message PageOfPermissionFindAllGrpcDTO {
-  repeated PermissionFindAllGrpcDTO content = 1;
+  repeated PermissionGrpcDTO content = 1;
   int32 total_pages = 2;
 }

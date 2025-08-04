@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.client.api;
 
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,9 +28,34 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface FileService {
 
-  Long upload(String storageZone, MultipartFile multipartFile);
+  /**
+   * 文件上传
+   *
+   * @param storageZoneId 存储区域ID
+   * @param multipartFile 源文件
+   * @return 文件元数据ID
+   */
+  Long upload(Long storageZoneId, MultipartFile multipartFile);
 
+  /**
+   * 根据文件元数据ID删除文件
+   *
+   * @param metadataId 文件元数据ID
+   */
   void deleteByMetadataId(Long metadataId);
 
+  /**
+   * 根据文件元数据ID下载文件
+   *
+   * @param metadataId          文件元数据ID
+   * @param httpServletResponse 响应
+   */
   void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse);
+
+  /**
+   * 根据文件元数据ID获取文件元数据信息
+   *
+   * @param metadataId 文件元数据ID
+   */
+  FileFindMetaByMetaIdDTO findMetaByMetaId(Long metadataId);
 }

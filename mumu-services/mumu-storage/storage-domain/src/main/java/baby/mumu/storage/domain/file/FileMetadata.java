@@ -17,6 +17,7 @@
 package baby.mumu.storage.domain.file;
 
 import baby.mumu.basis.domain.BasisDomainModel;
+import baby.mumu.storage.domain.zone.StorageZone;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,7 +45,7 @@ public class FileMetadata extends BasisDomainModel {
 
   private Long size;
 
-  private String storageZone;
+  private StorageZone storageZone;
 
   private String storagePath;
 

@@ -5,7 +5,6 @@ dependencies {
     implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.grpc.server.spring.boot.starter)
-    implementation(libs.curator.recipes)
     implementation(libs.spring.data.commons)
     implementation(libs.spring.security.core)
     implementation(libs.p6spy)

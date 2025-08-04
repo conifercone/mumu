@@ -18,9 +18,14 @@ package baby.mumu.storage.infra.file.convertor;
 
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
+import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
+import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
+import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,9 +48,15 @@ public class FileConvertor {
 
   private final Tika tika = new Tika();
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
+  private final StorageZoneRepository storageZoneRepository;
+  private final StorageZoneConvertor storageZoneConvertor;
 
-  public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+  public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
+    StorageZoneRepository storageZoneRepository,
+    StorageZoneConvertor storageZoneConvertor) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
+    this.storageZoneRepository = storageZoneRepository;
+    this.storageZoneConvertor = storageZoneConvertor;
   }
 
 
@@ -53,18 +64,32 @@ public class FileConvertor {
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadataPO> toFileMetadataPO(FileMetadata fileMetadata) {
     return Optional.ofNullable(fileMetadata)
-      .map(FileMapper.INSTANCE::toFileMetadataPO);
+      .map(FileMapper.INSTANCE::toFileMetadataPO).map(fileMetadataPO -> {
+        Long storageZoneId = Optional.ofNullable(fileMetadata.getStorageZone())
+          .map(StorageZone::getId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+        fileMetadataPO.setStorageZoneId(storageZoneId);
+        return fileMetadataPO;
+      });
   }
 
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
     return Optional.ofNullable(fileMetadataPO)
-      .map(FileMapper.INSTANCE::toEntity);
+      .map(FileMapper.INSTANCE::toEntity).map(fileMetadata -> {
+        StorageZonePO storageZonePO = storageZoneRepository.findById(
+            fileMetadataPO.getStorageZoneId())
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+        StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
+          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+        fileMetadata.setStorageZone(storageZone);
+        return fileMetadata;
+      });
   }
 
   @API(status = Status.STABLE, since = "2.12.0")
-  public Optional<File> toEntity(String storageZone, MultipartFile multipartFile) {
+  public Optional<File> toEntity(Long storageZoneId, MultipartFile multipartFile) {
     return Optional.ofNullable(multipartFile).map(_ -> {
       File file = new File();
       try {
@@ -72,6 +97,10 @@ public class FileConvertor {
         file.setContent(new ByteArrayInputStream(fileBytes));
         FileMetadata fileMetadata = new FileMetadata();
         fileMetadata.setId(primaryKeyGrpcService.snowflake());
+        StorageZonePO storageZonePO = storageZoneRepository.findById(storageZoneId)
+          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+        StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
+          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
         fileMetadata.setStorageZone(storageZone);
         fileMetadata.setSize(multipartFile.getSize());
         fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
@@ -84,5 +113,13 @@ public class FileConvertor {
       }
       return file;
     });
+  }
+
+  @Contract("_ -> new")
+  @API(status = Status.STABLE, since = "2.13.0")
+  public Optional<FileFindMetaByMetaIdDTO> toFileFindMetaByMetaIdDTO(
+    FileMetadata fileMetadata) {
+    return Optional.ofNullable(fileMetadata)
+      .map(FileMapper.INSTANCE::toFileFindMetaByMetaIdDTO);
   }
 }

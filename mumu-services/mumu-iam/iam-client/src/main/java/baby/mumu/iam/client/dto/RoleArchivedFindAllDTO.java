@@ -43,7 +43,7 @@ public class RoleArchivedFindAllDTO extends BaseDataTransferObject {
 
   private String description;
 
-  private List<RoleArchivedFindAllPermissionCo> permissions;
+  private List<RoleArchivedPermissionDTO> permissions;
 
   /**
    * 有后代角色
@@ -51,7 +51,7 @@ public class RoleArchivedFindAllDTO extends BaseDataTransferObject {
   private boolean hasDescendant;
 
   @Data
-  public static class RoleArchivedFindAllPermissionCo {
+  public static class RoleArchivedPermissionDTO {
 
     /**
      * 权限id

@@ -17,9 +17,10 @@
 package baby.mumu.iam.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
+import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.RoleService;
-import baby.mumu.iam.client.cmds.RoleAddAncestorCmd;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
+import baby.mumu.iam.client.cmds.RoleAddDescendantCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
@@ -35,6 +36,7 @@ import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
+import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -78,8 +80,8 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
-    roleService.add(roleAddCmd);
+  public ResponseWrapper<Long> add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
+    return ResponseWrapper.success(roleService.add(roleAddCmd));
   }
 
   @Operation(summary = "根据id删除角色")
@@ -105,8 +107,8 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
-    roleService.updateById(roleUpdateCmd);
+  public RoleUpdatedDataDTO updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
+    return roleService.updateById(roleUpdateCmd);
   }
 
   @Operation(summary = "查询角色")
@@ -166,13 +168,13 @@ public class RoleController {
     roleService.recoverFromArchiveById(id);
   }
 
-  @Operation(summary = "添加祖先角色")
-  @PutMapping("/addAncestor")
+  @Operation(summary = "添加后代角色")
+  @PutMapping("/addDescendant")
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void addAncestor(@RequestBody @Validated RoleAddAncestorCmd roleAddAncestorCmd) {
-    roleService.addAncestor(roleAddAncestorCmd);
+  public void addDescendant(@RequestBody @Validated RoleAddDescendantCmd roleAddDescendantCmd) {
+    roleService.addDescendant(roleAddDescendantCmd);
   }
 
   @Operation(summary = "获取所有根角色")
