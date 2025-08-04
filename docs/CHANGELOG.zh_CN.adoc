@@ -19,6 +19,52 @@
 
 === ⚠️ 移除
 
+== [2.13.0] - 2025-08-04
+
+=== ⭐ 新增
+
+- JPA实体类新增 equals & hashCode 方法
+- 新增存储区域新增接口
+- 新增存储区域管理功能 #228
+- 添加TTL抖动值防止缓存雪崩
+- 新增获取文件元数据接口 #227
+
+=== 🐞 修复
+
+- 修复权限是否存在错误判断逻辑
+- 修复NPE
+
+=== 🕸️ 变更
+
+- `gradle` 版本升级至9.0.0
+- `springboot` 升级至3.5.4
+- 重构验证码功能 #240
+- 优化zookeeper配置类
+- 账号修改接口返回修改后数据
+- 配置类重命名
+- `com.deepl.api:deepl-java` 升级至1.10.2
+- `flyway` 升级至11.10.2
+- `com.googlecode.libphonenumber:libphonenumber` 升级至9.0.9
+- `commons-validator:commons-validator` 升级至1.10.0
+- `org.bytedeco:javacv-platform` 升级至1.5.12
+- `io.hypersistence:hypersistence-utils-hibernate-63` 升级至3.10.3
+- `org.jobrunr:jobrunr-spring-boot-3-starter` 升级至8.0.1
+- `org.apache.tika:tika-core` 升级至3.2.1
+- 账号注册增加主键返回值
+- 优化版本号格式
+- 优化变量引用
+- 角色新增接口返回主键值 #231
+- 角色修改接口返回修改后数据 #230
+- 权限修改接口返回修改后数据
+- 权限新增接口返回权限ID
+- 精简类名
+
+=== ⚠️ 移除
+
+- 移除无用忽略项
+- 删除暂时无用的功能并逐渐移除对zookeeper的依赖
+- 移除flyway插件
+
 == [2.12.0] - 2025-06-30
 
 === ⭐ 新增
