@@ -27,7 +27,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,12 +64,12 @@ public class DangerousOperationAspect extends AbstractAspect {
           }));
   }
 
-  private String resolveParameters(@NotNull String value, @NotNull JoinPoint joinPoint) {
+  private String resolveParameters(@NonNull String value, @NonNull JoinPoint joinPoint) {
     return ConditionalExecutor.of(value.contains(PERCENT_SIGN))
       .orElseGet(() -> replaceParameters(value, joinPoint.getArgs()), () -> value);
   }
 
-  private String replaceParameters(@NotNull String value, Object[] args) {
+  private String replaceParameters(@NonNull String value, Object[] args) {
     String finalValue = value;
 
     if (finalValue.contains(PERCENT_SIGN) && ArrayUtils.isNotEmpty(args)) {

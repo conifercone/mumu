@@ -21,7 +21,7 @@ import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.unique.client.api.VerifyCodeGrpcService;
 import baby.mumu.unique.client.api.VerifyCodeVerify;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +44,7 @@ public class AccountDeleteCurrentCmdExe extends VerifyCodeVerify {
     this.accountGateway = accountGateway;
   }
 
-  public void execute(@NotNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
+  public void execute(@NonNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
     verify(accountDeleteCurrentCmd.getVerifyCodeId(), accountDeleteCurrentCmd.getVerifyCode());
     accountGateway.deleteCurrentAccount();
   }

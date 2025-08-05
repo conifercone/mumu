@@ -3,6 +3,7 @@ springbootVersion = "3.5.4"
 springCloudVersion = "2025.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
+jspecifyVersion = '1.0.0'
 jetbrainsAnnotationsVersion = '26.0.2'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.8.9'
@@ -63,6 +64,8 @@ spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" 
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 # https://mvnrepository.com/artifact/org.apiguardian/apiguardian-api
 apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
+# https://mvnrepository.com/artifact/org.jspecify/jspecify
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecifyVersion" }
 # https://mvnrepository.com/artifact/org.jetbrains/annotations
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies

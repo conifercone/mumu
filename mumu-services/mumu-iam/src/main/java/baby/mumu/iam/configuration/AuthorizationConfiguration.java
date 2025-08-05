@@ -67,7 +67,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -141,7 +141,7 @@ public class AuthorizationConfiguration {
    */
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
-  public SecurityFilterChain authorizationServerSecurityFilterChain(@NotNull HttpSecurity http,
+  public SecurityFilterChain authorizationServerSecurityFilterChain(@NonNull HttpSecurity http,
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
     MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
@@ -429,7 +429,7 @@ public class AuthorizationConfiguration {
 
   private static String getOriginAuthorizationGrantTypeValue(
     Oauth2AuthenticationRepository oauth2AuthenticationRepository,
-    @NotNull OAuth2TokenContext context) {
+    @NonNull OAuth2TokenContext context) {
     // noinspection DuplicatedCode
     if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
       OAuth2Authorization authorization = context.getAuthorization();
@@ -443,9 +443,9 @@ public class AuthorizationConfiguration {
     return context.getAuthorizationGrantType().getValue();
   }
 
-  private static @NotNull Set<String> getFullScopes(@NotNull RoleRepository roleRepository,
-    RoleConvertor roleConvertor, @NotNull PermissionRepository permissionRepository,
-    PermissionConvertor permissionConvertor, @NotNull Set<String> scopes) {
+  private static @NonNull Set<String> getFullScopes(@NonNull RoleRepository roleRepository,
+    RoleConvertor roleConvertor, @NonNull PermissionRepository permissionRepository,
+    PermissionConvertor permissionConvertor, @NonNull Set<String> scopes) {
     Set<String> roles = scopes.stream()
       .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
       .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
@@ -487,7 +487,7 @@ public class AuthorizationConfiguration {
     return new JavaTimeModule();
   }
 
-  private KeyPair loadKeyPair(String keyPath, @NotNull String keyPassword, String keyPair) {
+  private KeyPair loadKeyPair(String keyPath, @NonNull String keyPassword, String keyPair) {
     KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
       new FileSystemResource(keyPath), keyPassword.toCharArray());
     return keyStoreKeyFactory.getKeyPair(keyPair, keyPassword.toCharArray());

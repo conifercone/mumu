@@ -18,8 +18,8 @@ package baby.mumu.iam.configuration;
 
 import java.time.Instant;
 import java.util.Base64;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.crypto.keygen.Base64StringKeyGenerator;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -44,7 +44,7 @@ public class MuMuOAuth2RefreshTokenGenerator implements
 
   @Nullable
   @Override
-  public OAuth2RefreshToken generate(@NotNull OAuth2TokenContext context) {
+  public OAuth2RefreshToken generate(@NonNull OAuth2TokenContext context) {
 
     if (!OAuth2TokenType.REFRESH_TOKEN.equals(context.getTokenType())) {
       return null;
@@ -63,7 +63,7 @@ public class MuMuOAuth2RefreshTokenGenerator implements
   }
 
   private static boolean isPublicClientForAuthorizationCodeGrant(
-    @NotNull OAuth2TokenContext context) {
+    @NonNull OAuth2TokenContext context) {
     // @formatter:off
     if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType()) &&
         (context.getAuthorizationGrant().getPrincipal() instanceof OAuth2ClientAuthenticationToken clientPrincipal)) {

@@ -62,7 +62,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 元模型生成器
@@ -110,7 +110,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   }
 
   @Override
-  public boolean process(@NotNull Set<? extends TypeElement> annotations,
+  public boolean process(@NonNull Set<? extends TypeElement> annotations,
     RoundEnvironment roundEnv) {
     if (annotations.isEmpty() || roundEnv.processingOver()) {
       // Allow other processors to run
@@ -130,7 +130,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     return true;
   }
 
-  void generateMetaModelClass(final @NotNull Element annotatedElement)
+  void generateMetaModelClass(final @NonNull Element annotatedElement)
     throws IOException {
     String qualifiedName = annotatedElement.asType().toString();
 
@@ -187,7 +187,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     writer.close();
   }
 
-  private void generateFields(@NotNull Element annotatedElement, String packageName,
+  private void generateFields(@NonNull Element annotatedElement, String packageName,
     String entityName,
     Builder builder) {
     Metamodel annotation = annotatedElement.getAnnotation(Metamodel.class);
@@ -253,7 +253,7 @@ public class MetamodelGenerator extends AbstractProcessor {
 
   private void generateBasicProjectInformation(String packageName, String entityName,
     Builder builder,
-    @NotNull Metamodel annotation) {
+    @NonNull Metamodel annotation) {
     String seeDoc = String.format(
       MetamodelGenerator.SEE_S_S_LINK_S,
       packageName, entityName, Metamodel.class.getName());

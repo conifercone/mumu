@@ -19,7 +19,7 @@ package baby.mumu.iam.configuration;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -43,7 +43,7 @@ public class MuMuOfflineSuccessListener {
   }
 
   @EventListener
-  public void onOfflineSuccess(@NotNull OfflineSuccessEvent event) {
+  public void onOfflineSuccess(@NonNull OfflineSuccessEvent event) {
     String tokenValue = event.getTokenValue();
     if (StringUtils.isNotBlank(tokenValue)) {
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,

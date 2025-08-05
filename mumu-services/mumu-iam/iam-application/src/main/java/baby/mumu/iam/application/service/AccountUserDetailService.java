@@ -22,7 +22,7 @@ import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
 import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,7 +46,7 @@ public class AccountUserDetailService implements UserDetailsService {
   }
 
   @Override
-  public @NotNull UserDetails loadUserByUsername(String usernameOrEmail)
+  public @NonNull UserDetails loadUserByUsername(String usernameOrEmail)
     throws UsernameNotFoundException {
     Assert.hasText(usernameOrEmail, "username or email is required");
     Supplier<OAuth2AuthenticationException> usernameNotFoundExceptionSupplier = () -> {

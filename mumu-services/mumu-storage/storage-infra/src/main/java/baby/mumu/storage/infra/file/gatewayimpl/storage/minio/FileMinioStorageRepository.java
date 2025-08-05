@@ -33,7 +33,7 @@ import io.minio.SetBucketPolicyArgs;
 import java.io.InputStream;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -56,7 +56,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
   }
 
   @Override
-  public void upload(@NotNull File file) throws Exception {
+  public void upload(@NonNull File file) throws Exception {
     FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
       .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
     StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
@@ -139,7 +139,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
   }
 
   @Override
-  public void delete(@NotNull File file) throws Exception {
+  public void delete(@NonNull File file) throws Exception {
     minioClient.removeObject(
       RemoveObjectArgs.builder()
         .bucket(file.getMetadata().getStorageZone().getCode())
@@ -149,7 +149,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
   }
 
   @Override
-  public InputStream download(@NotNull File file) throws Exception {
+  public InputStream download(@NonNull File file) throws Exception {
     return minioClient.getObject(
       GetObjectArgs.builder().bucket(file.getMetadata().getStorageZone().getCode())
         .object(file.getMetadata().getStoragePath()).build());

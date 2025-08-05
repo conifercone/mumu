@@ -25,7 +25,7 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 雪花算法ID生成器
@@ -41,7 +41,7 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
   private Class<?> idType;
 
   @Override
-  public Object generate(@NotNull SharedSessionContractImplementor session, Object object) {
+  public Object generate(@NonNull SharedSessionContractImplementor session, Object object) {
     PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtils.getBean(
         PrimaryKeyGrpcService.class)
       .orElseThrow(() -> new IllegalArgumentException("PrimaryKeyGrpcService bean not found"));
@@ -56,7 +56,7 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
   }
 
   @Override
-  public void configure(@NotNull Type type, Properties parameters,
+  public void configure(@NonNull Type type, Properties parameters,
     ServiceRegistry serviceRegistry) {
     idType = type.getReturnedClass();
   }

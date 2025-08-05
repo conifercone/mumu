@@ -31,7 +31,7 @@ import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -110,7 +110,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
     return verifyCodeServiceBlockingStub.generate(verifyCodeGeneratedGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
+  private @NonNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
     VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
     VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
       channel);
@@ -125,7 +125,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
     return verifyCodeServiceBlockingStub.verify(verifyCodeVerifyGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
+  private @NonNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
     VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
     VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
       channel);

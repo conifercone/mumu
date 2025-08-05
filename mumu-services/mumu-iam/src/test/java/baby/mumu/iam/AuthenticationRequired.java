@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,11 +41,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
  */
 public class AuthenticationRequired {
 
-  public Optional<String> getToken(@NotNull MockMvc mockMvc) {
+  public Optional<String> getToken(@NonNull MockMvc mockMvc) {
     return getToken(mockMvc, "admin", "Admin@5211314");
   }
 
-  public Optional<String> getToken(@NotNull MockMvc mockMvc, String username, String password) {
+  public Optional<String> getToken(@NonNull MockMvc mockMvc, String username, String password) {
     ObjectMapper objectMapper = new ObjectMapper();
     MvcResult mvcResult;
     try {

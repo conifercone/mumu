@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * you may obtain a copy of the License at
+ * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 条件执行器
@@ -38,18 +38,18 @@ public class ConditionalExecutor {
   }
 
   @Contract(value = "_ -> new", pure = true)
-  public static @NotNull ConditionalExecutor of(boolean condition) {
+  public static @NonNull ConditionalExecutor of(boolean condition) {
     return new ConditionalExecutor(condition);
   }
 
   @Contract("_, _ -> new")
-  public static <T> @NotNull ConditionalExecutor of(@NotNull Predicate<T> predicate,
-    @NotNull Supplier<T> supplier) {
+  public static <T> @NonNull ConditionalExecutor of(@NonNull Predicate<T> predicate,
+    @NonNull Supplier<T> supplier) {
     return new ConditionalExecutor(predicate.test(supplier.get()));
   }
 
   @Contract(value = "_ -> new", pure = true)
-  public static @NotNull ConditionalExecutor of(@NotNull BooleanSupplier booleanSupplier) {
+  public static @NonNull ConditionalExecutor of(@NonNull BooleanSupplier booleanSupplier) {
     return new ConditionalExecutor(booleanSupplier.getAsBoolean());
   }
 
@@ -58,13 +58,13 @@ public class ConditionalExecutor {
     return this;
   }
 
-  public ConditionalExecutor condition(@NotNull BooleanSupplier booleanSupplier) {
+  public ConditionalExecutor condition(@NonNull BooleanSupplier booleanSupplier) {
     this.condition = booleanSupplier.getAsBoolean();
     return this;
   }
 
-  public <T> ConditionalExecutor condition(@NotNull Predicate<T> predicate,
-    @NotNull Supplier<T> supplier) {
+  public <T> ConditionalExecutor condition(@NonNull Predicate<T> predicate,
+    @NonNull Supplier<T> supplier) {
     this.condition = predicate.test(supplier.get());
     return this;
   }

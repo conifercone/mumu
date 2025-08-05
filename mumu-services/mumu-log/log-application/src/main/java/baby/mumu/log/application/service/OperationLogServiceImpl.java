@@ -38,7 +38,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -88,8 +88,8 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void submit(@NotNull OperationLogSubmitGrpcCmd request,
-    @NotNull StreamObserver<Empty> responseObserver) {
+  public void submit(@NonNull OperationLogSubmitGrpcCmd request,
+    @NonNull StreamObserver<Empty> responseObserver) {
     operationLogConvertor.toOperationLogSubmitCmd(request)
       .ifPresentOrElse((operationLogSubmitCmd) -> {
         operationLogSubmitCmdExe.execute(operationLogSubmitCmd);

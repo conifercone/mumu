@@ -30,7 +30,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import lombok.Data;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
 
 /**
@@ -78,45 +78,45 @@ public class ResponseWrapper<T> implements Serializable {
   private String traceId = TraceIdFilter.getTraceId();
 
 
-  private ResponseWrapper(@NotNull BaseResponse resultCode, boolean success) {
+  private ResponseWrapper(@NonNull BaseResponse resultCode, boolean success) {
     this.code = resultCode.getCode();
     this.message = resultCode.getMessage();
     this.success = success;
   }
 
-  private ResponseWrapper(@NotNull String code, @NotNull String message, boolean success) {
+  private ResponseWrapper(@NonNull String code, @NonNull String message, boolean success) {
     this.code = code;
     this.message = message;
     this.success = success;
   }
 
   @Contract(" -> new")
-  public static @NotNull <T> ResponseWrapper<T> success() {
+  public static @NonNull <T> ResponseWrapper<T> success() {
     return new ResponseWrapper<>(ResponseCode.SUCCESS, true);
   }
 
-  public static <T> @NotNull ResponseWrapper<T> success(T t) {
+  public static <T> @NonNull ResponseWrapper<T> success(T t) {
     ResponseWrapper<T> responseWrapper = new ResponseWrapper<>(ResponseCode.SUCCESS, true);
     responseWrapper.setData(t);
     return responseWrapper;
   }
 
   @Contract("_ -> new")
-  public static @NotNull <T> ResponseWrapper<T> failure(BaseResponse resultCode) {
+  public static @NonNull <T> ResponseWrapper<T> failure(BaseResponse resultCode) {
     return new ResponseWrapper<>(resultCode, false);
   }
 
-  public static @NotNull <T> ResponseWrapper<T> failure(String code, String message) {
+  public static @NonNull <T> ResponseWrapper<T> failure(String code, String message) {
     return new ResponseWrapper<>(code, message, false);
   }
 
-  public static <T> @NotNull ResponseWrapper<T> failure(BaseResponse resultCode, T t) {
+  public static <T> @NonNull ResponseWrapper<T> failure(BaseResponse resultCode, T t) {
     ResponseWrapper<T> responseWrapper = new ResponseWrapper<>(resultCode, false);
     responseWrapper.setData(t);
     return responseWrapper;
   }
 
-  public static void exceptionResponse(@NotNull HttpServletResponse response,
+  public static void exceptionResponse(@NonNull HttpServletResponse response,
     BaseResponse resultCode)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
@@ -126,7 +126,7 @@ public class ResponseWrapper<T> implements Serializable {
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 
-  private static void applicationJsonResponse(@NotNull HttpServletResponse response,
+  private static void applicationJsonResponse(@NonNull HttpServletResponse response,
     String jsonResult)
     throws IOException {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -134,7 +134,7 @@ public class ResponseWrapper<T> implements Serializable {
     response.getWriter().print(jsonResult);
   }
 
-  public static void exceptionResponse(@NotNull HttpServletResponse response,
+  public static void exceptionResponse(@NonNull HttpServletResponse response,
     String code, String message)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);

@@ -19,7 +19,7 @@ package baby.mumu.extension.gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import org.javamoney.moneta.Money;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
 
 /**
@@ -31,7 +31,7 @@ import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
 public class MuMuGsonBuilderCustomizer implements GsonBuilderCustomizer {
 
   @Override
-  public void customize(@NotNull GsonBuilder gsonBuilder) {
+  public void customize(@NonNull GsonBuilder gsonBuilder) {
     gsonBuilder.registerTypeAdapter(Money.class, new MoneySerializer())
       .registerTypeAdapter(Money.class, new MoneyDeserializer());
     gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING);

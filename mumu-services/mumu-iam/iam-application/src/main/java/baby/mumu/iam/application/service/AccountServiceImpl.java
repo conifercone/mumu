@@ -75,7 +75,7 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerIntercepto
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -316,7 +316,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   @Transactional(rollbackFor = Exception.class)
   public void queryCurrentLoginAccount(Empty request,
-    @NotNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
+    @NonNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
     AccountCurrentLoginDTO accountCurrentLoginDTO = accountCurrentLoginQueryCmdExe.execute();
     responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcDTO(accountCurrentLoginDTO)
       .orElse(AccountCurrentLoginGrpcDTO.getDefaultInstance()));

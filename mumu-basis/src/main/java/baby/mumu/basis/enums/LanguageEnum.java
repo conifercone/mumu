@@ -16,7 +16,7 @@
 
 package baby.mumu.basis.enums;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 语言偏好枚举
@@ -228,7 +228,7 @@ public enum LanguageEnum {
     return name;
   }
 
-  public static @NotNull LanguageEnum fromCode(String code) {
+  public static @NonNull LanguageEnum fromCode(String code) {
     for (LanguageEnum lang : LanguageEnum.values()) {
       if (lang.code.equalsIgnoreCase(code)) {
         return lang;

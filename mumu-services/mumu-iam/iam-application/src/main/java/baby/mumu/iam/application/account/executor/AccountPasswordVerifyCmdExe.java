@@ -19,7 +19,7 @@ package baby.mumu.iam.application.account.executor;
 import baby.mumu.iam.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -41,7 +41,7 @@ public class AccountPasswordVerifyCmdExe {
     this.accountGateway = accountGateway;
   }
 
-  public boolean execute(@NotNull AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+  public boolean execute(@NonNull AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
     Assert.notNull(accountPasswordVerifyCmd, "AccountPasswordVerifyCmd cannot be null");
     return accountGateway.verifyPassword(accountPasswordVerifyCmd.getPassword());
   }

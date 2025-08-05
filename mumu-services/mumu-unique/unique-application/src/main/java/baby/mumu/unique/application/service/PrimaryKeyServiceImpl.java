@@ -29,7 +29,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +60,7 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void snowflake(Empty request, @NotNull StreamObserver<SnowflakeResult> responseObserver) {
+  public void snowflake(Empty request, @NonNull StreamObserver<SnowflakeResult> responseObserver) {
     SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
       .setId(primaryKeySnowflakeGenerateExe.execute())
       .build();

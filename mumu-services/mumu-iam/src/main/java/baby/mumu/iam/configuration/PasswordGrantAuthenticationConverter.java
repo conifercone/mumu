@@ -22,8 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -43,7 +43,7 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
 
   @Nullable
   @Override
-  public Authentication convert(@NotNull HttpServletRequest request) {
+  public Authentication convert(@NonNull HttpServletRequest request) {
     // grant_type (REQUIRED)
     String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
     if (!OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(grantType)) {
@@ -92,8 +92,8 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
    * @param request 请求
    * @return 请求参数
    */
-  private static @NotNull MultiValueMap<String, String> getParameters(
-    @NotNull HttpServletRequest request) {
+  private static @NonNull MultiValueMap<String, String> getParameters(
+    @NonNull HttpServletRequest request) {
     Map<String, String[]> parameterMap = request.getParameterMap();
     MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>(parameterMap.size());
     parameterMap.forEach((key, values) -> {

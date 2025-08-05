@@ -23,7 +23,7 @@ import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -50,7 +50,7 @@ public class OperationLogFindAllCmdExe {
   }
 
   public Page<OperationLogFindAllDTO> execute(
-    @NotNull OperationLogFindAllCmd operationLogFindAllCmd) {
+    @NonNull OperationLogFindAllCmd operationLogFindAllCmd) {
     Assert.notNull(operationLogFindAllCmd, "operationLogFindAllCmd cannot be null");
     OperationLog operationLog = operationLogConvertor.toEntity(operationLogFindAllCmd)
       .orElseGet(OperationLog::new);

@@ -20,7 +20,7 @@ import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 顶级异常
@@ -41,21 +41,21 @@ public class MuMuException extends RuntimeException {
 
   private final transient Throwable throwable;
 
-  public MuMuException(@NotNull ResponseCode responseCode) {
+  public MuMuException(@NonNull ResponseCode responseCode) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = null;
     this.throwable = null;
   }
 
-  public MuMuException(@NotNull ResponseCode responseCode, Throwable throwable) {
+  public MuMuException(@NonNull ResponseCode responseCode, Throwable throwable) {
     super(throwable);
     this.responseCode = responseCode;
     this.data = null;
     this.throwable = throwable;
   }
 
-  public MuMuException(@NotNull ResponseCode responseCode, Object data) {
+  public MuMuException(@NonNull ResponseCode responseCode, Object data) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = data;

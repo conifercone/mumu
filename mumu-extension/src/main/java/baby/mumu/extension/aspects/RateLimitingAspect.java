@@ -55,7 +55,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 
@@ -74,7 +74,7 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   private final LettuceBasedProxyManager<String> proxyManager;
 
   public RateLimitingAspect(ApplicationContext applicationContext,
-    @NotNull ExtensionProperties extensionProperties) {
+    @NonNull ExtensionProperties extensionProperties) {
     this.applicationContext = applicationContext;
     this.redisClient = RedisClient.create(extensionProperties.getRl().getRedis().getUri());
     this.connection = redisClient.connect(new RateLimiterStringByteArrayCodec());
@@ -110,8 +110,8 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     return joinPoint.proceed(args);
   }
 
-  private void rateLimiting(@NotNull RateLimitingKey rateLimitingKey,
-    @NotNull List<RateLimiter> list) {
+  private void rateLimiting(@NonNull RateLimitingKey rateLimitingKey,
+    @NonNull List<RateLimiter> list) {
     Bucket bucket = getBucket(rateLimitingKey, list);
     ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
     if (!probe.isConsumed()) {
@@ -121,8 +121,8 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     }
   }
 
-  private Bucket getBucket(@NotNull RateLimitingKey rateLimitingKey,
-    @NotNull List<RateLimiter> list) {
+  private Bucket getBucket(@NonNull RateLimitingKey rateLimitingKey,
+    @NonNull List<RateLimiter> list) {
     RateLimitingKeyProvider rateLimitingKeyProvider = applicationContext.getBean(
       rateLimitingKey.getKeyProvider());
     String uniqKey = rateLimitingKey.getPrefix() + ":" + rateLimitingKeyProvider.generateUniqKey();
@@ -163,7 +163,7 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
   }
 
   @Contract("_ -> new")
-  private @NotNull BasicInformation getBasicInformation(@NotNull RateLimiter rateLimiter) {
+  private @NonNull BasicInformation getBasicInformation(@NonNull RateLimiter rateLimiter) {
     if (rateLimiter.customGeneration()) {
       RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(
         rateLimiter.customGenerationProvider());

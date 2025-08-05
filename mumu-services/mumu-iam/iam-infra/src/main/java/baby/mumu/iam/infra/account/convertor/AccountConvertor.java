@@ -74,7 +74,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -157,7 +157,7 @@ public class AccountConvertor {
     });
   }
 
-  private @NotNull ArrayList<Role> getRoles(List<Long> roleIds) {
+  private @NonNull ArrayList<Role> getRoles(List<Long> roleIds) {
     // 查询缓存中存在的数据
     List<RoleCacheablePO> roleCacheablePOS = roleCacheRepository.findAllById(
       roleIds);
@@ -203,7 +203,7 @@ public class AccountConvertor {
     });
   }
 
-  private void initializeRoles(@NotNull Account accountNotNull, ArrayList<Role> roles) {
+  private void initializeRoles(@NonNull Account accountNotNull, ArrayList<Role> roles) {
     accountNotNull.setRoles(roles);
     List<Long> ancestorIds = roles.stream().filter(Role::isHasDescendant)
       .map(Role::getId)
@@ -216,7 +216,7 @@ public class AccountConvertor {
     }
   }
 
-  private @NotNull ArrayList<Role> getRolesByCodes(List<String> codes) {
+  private @NonNull ArrayList<Role> getRolesByCodes(List<String> codes) {
     // 查询缓存中存在的数据
     List<RoleCacheablePO> roleCacheablePOS = roleCacheRepository.findByCodeIn(
       codes);
@@ -258,8 +258,8 @@ public class AccountConvertor {
         AccountMapper.INSTANCE.toEntity(accountDataObject)));
   }
 
-  @NotNull
-  private Optional<Account> getBasicInfoAccount(@NotNull AccountPO accountDataObject,
+  @NonNull
+  private Optional<Account> getBasicInfoAccount(@NonNull AccountPO accountDataObject,
     Account account) {
     return Optional.ofNullable(account).map(accountNotNull -> {
       List<AccountAddressDocumentPO> accountAddressDocumentPOList = accountAddressDocumentRepository.findByAccountId(
@@ -296,7 +296,7 @@ public class AccountConvertor {
       });
   }
 
-  private @NotNull List<Long> getRoleIds(Long account) {
+  private @NonNull List<Long> getRoleIds(Long account) {
     return accountRoleCacheRepository.findById(account)
       .map(AccountRoleCacheablePO::getRoleIds).orElseGet(() -> {
         List<Long> roleIds = accountRoleRepository.findByAccountId(account)

@@ -16,7 +16,7 @@
 
 package baby.mumu.log.infra.system.gatewayimpl.kafka;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -39,8 +39,8 @@ public class SystemLogKafkaRepository extends KafkaTemplate<Object, Object> {
   public SystemLogKafkaRepository(
     @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
     @Autowired ProducerListener<Object, Object> kafkaProducerListener,
-    @Autowired @NotNull ObjectProvider<RecordMessageConverter> messageConverter,
-    @Autowired @NotNull KafkaProperties properties) {
+    @Autowired @NonNull ObjectProvider<RecordMessageConverter> messageConverter,
+    @Autowired @NonNull KafkaProperties properties) {
     super(kafkaProducerFactory);
     PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
     messageConverter.ifUnique(this::setMessageConverter);

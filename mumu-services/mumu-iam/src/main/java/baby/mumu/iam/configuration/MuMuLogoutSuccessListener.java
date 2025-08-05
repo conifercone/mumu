@@ -17,7 +17,7 @@
 package baby.mumu.iam.configuration;
 
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
@@ -44,7 +44,7 @@ public class MuMuLogoutSuccessListener {
   }
 
   @EventListener
-  public void onLogoutSuccess(@NotNull LogoutSuccessEvent event) {
+  public void onLogoutSuccess(@NonNull LogoutSuccessEvent event) {
     Authentication authentication = event.getAuthentication();
     if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
       Optional.ofNullable(oAuth2AuthorizationService.findByToken(

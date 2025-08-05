@@ -29,7 +29,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +59,8 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void validity(@NotNull TokenValidityGrpcCmd request,
-    @NotNull StreamObserver<TokenValidityGrpcDTO> responseObserver) {
+  public void validity(@NonNull TokenValidityGrpcCmd request,
+    @NonNull StreamObserver<TokenValidityGrpcDTO> responseObserver) {
     TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
     tokenValidityCmd.setToken(request.getToken());
     responseObserver.onNext(

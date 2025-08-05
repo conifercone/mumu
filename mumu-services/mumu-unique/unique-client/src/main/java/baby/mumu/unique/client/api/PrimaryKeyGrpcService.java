@@ -25,7 +25,7 @@ import io.grpc.ManagedChannel;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
@@ -70,7 +70,7 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
       .orElseGet(YitIdHelper::nextId);
   }
 
-  private @NotNull Long snowflakeFromGrpc() {
+  private @NonNull Long snowflakeFromGrpc() {
     PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
       channel);
     return primaryKeyServiceBlockingStub.snowflake(

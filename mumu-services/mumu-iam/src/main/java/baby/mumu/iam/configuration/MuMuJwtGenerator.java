@@ -39,8 +39,8 @@ import java.util.UUID;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -97,7 +97,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
 
   @Nullable
   @Override
-  public Jwt generate(@NotNull OAuth2TokenContext context) {
+  public Jwt generate(@NonNull OAuth2TokenContext context) {
     if (MuMuJwtGenerator.calibration(context)) {
       return null;
     }
@@ -141,7 +141,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     return jwt;
   }
 
-  private static boolean calibration(@NotNull OAuth2TokenContext context) {
+  private static boolean calibration(@NonNull OAuth2TokenContext context) {
     if (context.getTokenType() == null ||
       (!OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) &&
         !OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue()))) {
@@ -153,7 +153,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   }
 
   private static JwtEncodingContext.Builder getJwtContextBuilder(
-    @NotNull OAuth2TokenContext context,
+    @NonNull OAuth2TokenContext context,
     JwsHeader.Builder jwsHeaderBuilder, Builder claimsBuilder) {
     // @formatter:off
       JwtEncodingContext.Builder jwtContextBuilder = JwtEncodingContext.with(jwsHeaderBuilder, claimsBuilder)
@@ -179,7 +179,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     return jwtContextBuilder;
   }
 
-  private static @NotNull JwtClaimsSet.Builder getClaimsBuilder(@NotNull OAuth2TokenContext context,
+  private static JwtClaimsSet.@NonNull Builder getClaimsBuilder(@NonNull OAuth2TokenContext context,
     String issuer, RegisteredClient registeredClient, Instant issuedAt, Instant expiresAt) {
     // @formatter:off
     Builder claimsBuilder = JwtClaimsSet.builder();
@@ -226,7 +226,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
     return claimsBuilder;
   }
 
-  private void cachedToken(@NotNull OAuth2TokenContext context, @NotNull Jwt jwt) {
+  private void cachedToken(@NonNull OAuth2TokenContext context, @NonNull Jwt jwt) {
     String tokenValue = jwt.getTokenValue();
     Instant start = Instant.now();
     Instant jwtExpiresAt = jwt.getExpiresAt();

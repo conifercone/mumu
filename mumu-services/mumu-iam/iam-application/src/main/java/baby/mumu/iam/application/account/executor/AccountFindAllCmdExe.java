@@ -24,7 +24,7 @@ import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -50,7 +50,7 @@ public class AccountFindAllCmdExe {
     this.accountConvertor = accountConvertor;
   }
 
-  public Page<AccountFindAllDTO> execute(@NotNull AccountFindAllCmd accountFindAllCmd) {
+  public Page<AccountFindAllDTO> execute(@NonNull AccountFindAllCmd accountFindAllCmd) {
     Account account = accountConvertor.toEntity(accountFindAllCmd)
       .orElseGet(Account::new);
     Page<Account> accounts = accountGateway.findAll(account,

@@ -33,7 +33,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +132,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
    * @param request      请求信息
    * @throws IOException io异常
    */
-  private void exceptionResponse(HttpServletResponse response, @NotNull ResponseCode responseCode,
+  private void exceptionResponse(HttpServletResponse response, @NonNull ResponseCode responseCode,
     HttpServletRequest request)
     throws IOException {
     operationFailLog(responseCode.getCode(),

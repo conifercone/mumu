@@ -66,7 +66,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -130,7 +130,7 @@ public class RoleConvertor {
     });
   }
 
-  private @NotNull List<Long> getPermissionIds(@NotNull Role role) {
+  private @NonNull List<Long> getPermissionIds(@NonNull Role role) {
     return rolePermissionCacheRepository.findById(role.getId())
       .map(RolePermissionCacheablePO::getPermissionIds).orElseGet(() -> {
         List<Long> permissionIds = rolePermissionRepository.findByRoleId(role.getId()).stream()
@@ -162,7 +162,7 @@ public class RoleConvertor {
     });
   }
 
-  private @NotNull ArrayList<Permission> getAuthorities(List<Long> permissionIds) {
+  private @NonNull ArrayList<Permission> getAuthorities(List<Long> permissionIds) {
     // 查询缓存中存在的数据
     List<PermissionCacheablePO> permissionCacheablePOS = permissionCacheRepository.findAllById(
       permissionIds);

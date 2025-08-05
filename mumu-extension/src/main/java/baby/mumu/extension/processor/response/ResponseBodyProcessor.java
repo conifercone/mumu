@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -76,8 +76,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(MuMuException.class)
-  public ResponseWrapper<?> handleMuMuException(@NotNull MuMuException mumuException,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleMuMuException(@NonNull MuMuException mumuException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(
@@ -101,8 +101,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(RateLimiterException.class)
   public ResponseWrapper<?> handleRateLimitingException(
-    @NotNull RateLimiterException rateLimiterException,
-    @NotNull HttpServletResponse response) {
+    @NonNull RateLimiterException rateLimiterException,
+    @NonNull HttpServletResponse response) {
     ResponseCode responseCode = rateLimiterException.getResponseCode();
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -118,8 +118,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(ValidationException.class)
-  public ResponseWrapper<?> handleException(@NotNull ValidationException validationException,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleException(@NonNull ValidationException validationException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -136,8 +136,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull HttpMessageNotReadableException httpMessageNotReadableException,
-    @NotNull HttpServletResponse response) {
+    @NonNull HttpMessageNotReadableException httpMessageNotReadableException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.PARAMS_IS_INVALID.getStatus());
@@ -153,8 +153,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull MethodArgumentNotValidException methodArgumentNotValidException,
-    @NotNull HttpServletResponse response) {
+    @NonNull MethodArgumentNotValidException methodArgumentNotValidException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -172,8 +172,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull IllegalArgumentException illegalArgumentException,
-    @NotNull HttpServletResponse response) {
+    @NonNull IllegalArgumentException illegalArgumentException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -194,8 +194,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull MissingServletRequestParameterException missingServletRequestParameterException,
-    @NotNull HttpServletResponse response) {
+    @NonNull MissingServletRequestParameterException missingServletRequestParameterException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS.getStatus());
@@ -211,8 +211,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseWrapper<?> handleException(@NotNull Exception exception,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleException(@NonNull Exception exception,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.INTERNAL_SERVER_ERROR.getStatus());
@@ -226,16 +226,16 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @Override
-  public boolean supports(@NotNull MethodParameter returnType,
-    @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
+  public boolean supports(@NonNull MethodParameter returnType,
+    @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
     return true;
   }
 
   @Override
-  public Object beforeBodyWrite(Object body, @NotNull MethodParameter returnType,
-    @NotNull MediaType selectedContentType,
-    @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
-    @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
+  public Object beforeBodyWrite(Object body, @NonNull MethodParameter returnType,
+    @NonNull MediaType selectedContentType,
+    @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
+    @NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response) {
     if (ResponseBodyProcessor.VOID.equals(getReturnName(returnType))) {
       return ResponseWrapper.success();
     }
@@ -256,7 +256,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     };
   }
 
-  private @NotNull String getReturnName(MethodParameter returnType) {
+  private @NonNull String getReturnName(MethodParameter returnType) {
     if (returnType == null || returnType.getMethod() == null) {
       return "";
     }

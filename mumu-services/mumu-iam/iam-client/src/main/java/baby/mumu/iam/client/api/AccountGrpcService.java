@@ -31,7 +31,7 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientIntercepto
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -89,7 +89,7 @@ public class AccountGrpcService extends IAMGrpcService implements DisposableBean
       .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 
-  private @NotNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc(
+  private @NonNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc(
     CallCredentials authCallCredentials) {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
       channel);

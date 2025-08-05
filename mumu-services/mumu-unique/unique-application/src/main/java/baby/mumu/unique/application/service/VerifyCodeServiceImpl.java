@@ -34,7 +34,7 @@ import io.grpc.stub.StreamObserver;
 import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,8 +80,8 @@ public class VerifyCodeServiceImpl extends VerifyCodeServiceImplBase implements 
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void generate(@NotNull VerifyCodeGeneratedGrpcCmd request,
-    @NotNull StreamObserver<Int64Value> responseObserver) {
+  public void generate(@NonNull VerifyCodeGeneratedGrpcCmd request,
+    @NonNull StreamObserver<Int64Value> responseObserver) {
     VerifyCodeGeneratedCmd verifyCodeGeneratedCmd = new VerifyCodeGeneratedCmd();
     verifyCodeGeneratedCmd.setTtl(request.getTtl());
     verifyCodeGeneratedCmd.setLength(request.getLength());

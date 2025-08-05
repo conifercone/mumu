@@ -33,7 +33,7 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientIntercepto
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -119,7 +119,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
       .findAll(permissionFindAllGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAllFromGrpc(
+  private @NonNull ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAllFromGrpc(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
     CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
@@ -137,7 +137,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
       .findById(id);
   }
 
-  private @NotNull ListenableFuture<PermissionFindByIdGrpcDTO> syncFindByIdFromGrpc(
+  private @NonNull ListenableFuture<PermissionFindByIdGrpcDTO> syncFindByIdFromGrpc(
     Int64Value id,
     CallCredentials callCredentials) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(

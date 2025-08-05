@@ -33,7 +33,7 @@ import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientIntercepto
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -117,7 +117,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
       .findAll(roleFindAllGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAllFromGrpc(
+  private @NonNull ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAllFromGrpc(
     RoleFindAllGrpcCmd roleFindAllGrpcCmd,
     CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
@@ -134,7 +134,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
       .findById(roleId);
   }
 
-  private @NotNull ListenableFuture<RoleFindByIdGrpcDTO> syncFindByIdFromGrpc(
+  private @NonNull ListenableFuture<RoleFindByIdGrpcDTO> syncFindByIdFromGrpc(
     Int64Value roleId,
     CallCredentials callCredentials) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
