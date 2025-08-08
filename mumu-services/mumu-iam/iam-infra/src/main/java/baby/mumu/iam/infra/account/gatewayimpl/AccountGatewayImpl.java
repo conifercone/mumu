@@ -17,6 +17,7 @@
 package baby.mumu.iam.infra.account.gatewayimpl;
 
 import baby.mumu.basis.annotations.DangerousOperation;
+import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
 import baby.mumu.basis.exception.MuMuException;
@@ -40,12 +41,16 @@ import baby.mumu.iam.infra.account.gatewayimpl.document.AccountAddressDocumentRe
 import baby.mumu.iam.infra.account.gatewayimpl.document.AccountAvatarDocumentRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.document.AccountSystemSettingsDocumentRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAddressDocumentPO;
+import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
 import baby.mumu.iam.infra.relations.cache.AccountRoleCacheRepository;
 import baby.mumu.iam.infra.relations.database.AccountRoleRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
+import baby.mumu.storage.client.api.FileGrpcService;
+import com.google.protobuf.Int64Value;
+import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,6 +58,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
@@ -100,6 +106,7 @@ public class AccountGatewayImpl implements AccountGateway {
   private final ApplicationEventPublisher applicationEventPublisher;
   private final AccountRoleCacheRepository accountRoleCacheRepository;
   private final AccountAvatarDocumentRepository accountAvatarDocumentRepository;
+  private final FileGrpcService fileGrpcService;
 
   @Autowired
   public AccountGatewayImpl(AccountRepository accountRepository,
@@ -115,7 +122,8 @@ public class AccountGatewayImpl implements AccountGateway {
     OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
     ApplicationEventPublisher applicationEventPublisher,
     AccountRoleCacheRepository accountRoleCacheRepository,
-    AccountAvatarDocumentRepository accountAvatarDocumentRepository) {
+    AccountAvatarDocumentRepository accountAvatarDocumentRepository,
+    FileGrpcService fileGrpcService) {
     this.accountRepository = accountRepository;
     this.passwordTokenCacheRepository = passwordTokenCacheRepository;
     this.passwordEncoder = passwordEncoder;
@@ -132,6 +140,7 @@ public class AccountGatewayImpl implements AccountGateway {
     this.applicationEventPublisher = applicationEventPublisher;
     this.accountRoleCacheRepository = accountRoleCacheRepository;
     this.accountAvatarDocumentRepository = accountAvatarDocumentRepository;
+    this.fileGrpcService = fileGrpcService;
   }
 
   /**
@@ -360,7 +369,20 @@ public class AccountGatewayImpl implements AccountGateway {
     accountRepository.deleteById(accountId);
     accountAddressDocumentRepository.deleteByAccountId(accountId);
     accountSystemSettingsDocumentRepository.deleteByAccountId(accountId);
-    accountAvatarDocumentRepository.deleteByAccountId(accountId);
+    Optional<AccountAvatarDocumentPO> accountAvatarDocumentPOOptional = accountAvatarDocumentRepository.findByAccountId(
+      accountId);
+    if (accountAvatarDocumentPOOptional.isPresent()) {
+      AccountAvatarDocumentPO accountAvatarDocumentPO = accountAvatarDocumentPOOptional.get();
+      if (AccountAvatarSourceEnum.UPLOAD.equals(accountAvatarDocumentPO.getSource())) {
+        CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
+          () -> SecurityContextUtils.getTokenValue().orElseThrow(
+            () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
+        fileGrpcService.syncDeleteByMetadataId(Int64Value.of(
+            Long.parseLong(accountAvatarDocumentPO.getFileId())),
+          callCredentials);
+      }
+      accountAvatarDocumentRepository.deleteByAccountId(accountId);
+    }
     accountRoleRepository.deleteByAccountId(accountId);
     // 删除缓存
     passwordTokenCacheRepository.deleteById(accountId);

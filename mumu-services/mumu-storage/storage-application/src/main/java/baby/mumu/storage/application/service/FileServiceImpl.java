@@ -16,14 +16,22 @@
 
 package baby.mumu.storage.application.service;
 
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileDownloadByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileFindMetaByMetaIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileUploadCmdExe;
 import baby.mumu.storage.client.api.FileService;
+import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceImplBase;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
+import io.grpc.stub.StreamObserver;
+import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
+import net.devh.boot.grpc.server.service.GrpcService;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +44,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 @Observed(name = "FileServiceImpl")
-public class FileServiceImpl implements FileService {
+@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+public class FileServiceImpl extends FileServiceImplBase implements FileService {
 
   private final FileUploadCmdExe fileUploadCmdExe;
   private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
@@ -87,5 +96,13 @@ public class FileServiceImpl implements FileService {
   @Override
   public FileFindMetaByMetaIdDTO findMetaByMetaId(Long metadataId) {
     return fileFindMetaByMetaIdCmdExe.execute(metadataId);
+  }
+
+  @Override
+  public void deleteByMetadataId(@NonNull Int64Value request,
+    @NonNull StreamObserver<Empty> responseObserver) {
+    fileDeleteByMetadataIdCmdExe.execute(request.getValue());
+    responseObserver.onNext(Empty.getDefaultInstance());
+    responseObserver.onCompleted();
   }
 }
