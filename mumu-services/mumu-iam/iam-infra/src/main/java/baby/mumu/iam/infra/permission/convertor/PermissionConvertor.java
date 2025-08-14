@@ -47,9 +47,12 @@ import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchived
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathRepository;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
@@ -92,6 +95,13 @@ public class PermissionConvertor {
       PermissionMapper.INSTANCE::toEntity).flatMap(this::hasDescendant);
   }
 
+  @API(status = Status.STABLE, since = "2.14.0")
+  public List<Permission> toEntities(List<PermissionPO> permissionPOList) {
+    List<Permission> permissions = Optional.ofNullable(permissionPOList).map(
+      PermissionMapper.INSTANCE::toEntities).orElse(new ArrayList<>());
+    return this.hasDescendant(permissions);
+  }
+
   @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionPO permissionPO) {
@@ -105,6 +115,23 @@ public class PermissionConvertor {
         permissionPathRepository.existsDescendantPermissions(permission.getId()));
       return permissionNotNull;
     });
+  }
+
+  private List<Permission> hasDescendant(List<Permission> permissions) {
+    List<Long> permissionIds = Optional.ofNullable(permissions).orElse(new ArrayList<>()).stream()
+      .map(Permission::getId).toList();
+    if (permissionIds.isEmpty()) {
+      return permissions;
+    }
+    Set<Long> ancestorIdsWithDescendants = new HashSet<>(
+      permissionPathRepository.findAncestorIdsWithDescendants(
+        permissionIds));
+    permissions.forEach(p -> {
+      if (ancestorIdsWithDescendants.contains(p.getId())) {
+        p.setHasDescendant(true);
+      }
+    });
+    return permissions;
   }
 
   @Contract("_ -> new")

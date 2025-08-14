@@ -44,6 +44,7 @@ import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
+import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -65,6 +66,9 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   Permission toEntity(PermissionPO permissionPO);
+
+  @API(status = Status.STABLE, since = "2.14.0")
+  List<Permission> toEntities(List<PermissionPO> permissionPOList);
 
   @API(status = Status.STABLE, since = "1.0.1")
   Permission toEntity(PermissionAddCmd permissionAddCmd);

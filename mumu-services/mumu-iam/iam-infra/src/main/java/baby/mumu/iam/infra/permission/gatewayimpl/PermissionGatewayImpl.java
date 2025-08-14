@@ -149,10 +149,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionPO> repositoryAll = permissionRepository.findAllPage(
       permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new),
       pageRequest);
-    List<Permission> authorities = repositoryAll.getContent().stream()
-      .map(permissionConvertor::toEntity)
-      .filter(Optional::isPresent).map(Optional::get)
-      .toList();
+    List<Permission> authorities = permissionConvertor.toEntities(repositoryAll.getContent());
     return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
   }
 
