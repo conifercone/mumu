@@ -234,15 +234,9 @@ public class PermissionConvertor {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<PermissionFindAllDTO> toPermissionFindAllDTO(Permission permission) {
-    return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionFindAllDTO)
-      .map(permissionFindAllCo -> {
-        Optional.ofNullable(simpleTextTranslation).flatMap(
-            simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-              permissionFindAllCo.getName()))
-          .ifPresent(permissionFindAllCo::setName);
-        return permissionFindAllCo;
-      });
+  public List<PermissionFindAllDTO> toPermissionFindAllDTOS(List<Permission> permissions) {
+    return Optional.ofNullable(permissions).map(PermissionMapper.INSTANCE::toPermissionFindAllDTOS)
+      .orElse(new ArrayList<>());
   }
 
   @API(status = Status.STABLE, since = "2.2.0")

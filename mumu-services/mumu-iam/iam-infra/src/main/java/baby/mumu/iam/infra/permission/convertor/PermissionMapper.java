@@ -106,6 +106,9 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   PermissionFindAllDTO toPermissionFindAllDTO(Permission permission);
 
+  @API(status = Status.STABLE, since = "2.14.0")
+  List<PermissionFindAllDTO> toPermissionFindAllDTOS(List<Permission> permissions);
+
   @API(status = Status.STABLE, since = "2.2.0")
   PermissionFindAllSliceDTO toPermissionFindAllSliceDTO(Permission permission);
 
