@@ -185,6 +185,13 @@ public class PermissionConvertor {
     return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toEntity);
   }
 
+  @API(status = Status.STABLE, since = "2.0.0")
+  public List<Permission> toEntitiesFromArchivedPO(
+    List<PermissionArchivedPO> permissionArchivedPOList) {
+    return Optional.ofNullable(permissionArchivedPOList)
+      .map(PermissionMapper.INSTANCE::toEntitiesFromArchivedPO).orElse(new ArrayList<>());
+  }
+
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Permission> toEntity(PermissionCacheablePO permissionCacheablePO) {
     return Optional.ofNullable(permissionCacheablePO).map(PermissionMapper.INSTANCE::toEntity);

@@ -167,8 +167,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionPO> repositoryAll = permissionRepository.findAllPage(
       permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new),
       pageRequest);
-    List<Permission> authorities = permissionConvertor.toEntities(repositoryAll.getContent());
-    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+    List<Permission> permissions = permissionConvertor.toEntities(repositoryAll.getContent());
+    return new PageImpl<>(permissions, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
@@ -177,9 +177,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<PermissionPO> permissionPOSlice = permissionRepository.findAllSlice(
       permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new), pageRequest);
-    return new SliceImpl<>(permissionPOSlice.getContent().stream()
-      .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream())
-      .toList(), pageRequest, permissionPOSlice.hasNext());
+    List<Permission> permissions = permissionConvertor.toEntities(permissionPOSlice.getContent());
+    return new SliceImpl<>(permissions, pageRequest, permissionPOSlice.hasNext());
   }
 
   @Override
@@ -189,9 +188,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Slice<PermissionArchivedPO> permissionArchivedPOS = permissionArchivedRepository.findAllSlice(
       permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
       pageRequest);
-    return new SliceImpl<>(permissionArchivedPOS.getContent().stream()
-      .flatMap(permissionArchivedPO -> permissionConvertor.toEntity(permissionArchivedPO).stream())
-      .toList(), pageRequest, permissionArchivedPOS.hasNext());
+    List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+      permissionArchivedPOS.getContent());
+    return new SliceImpl<>(entitiesFromArchivedPO, pageRequest, permissionArchivedPOS.hasNext());
   }
 
   @Override
@@ -201,11 +200,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionArchivedPO> repositoryAll = permissionArchivedRepository.findAllPage(
       permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
       pageRequest);
-    List<Permission> authorities = repositoryAll.getContent().stream()
-      .map(permissionConvertor::toEntity)
-      .filter(Optional::isPresent).map(Optional::get)
-      .toList();
-    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+    List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+      repositoryAll.getContent());
+    return new PageImpl<>(entitiesFromArchivedPO, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
