@@ -24,8 +24,6 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import java.nio.charset.StandardCharsets;
@@ -61,7 +59,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice(annotations = RestController.class)
 public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String VOID = "void";
   private static final Logger log = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
@@ -228,7 +225,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   @Override
   public boolean supports(@NonNull MethodParameter returnType,
     @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
-    return true;
+    // 只对本项目生效
+    Class<?> controllerClass = returnType.getContainingClass();
+    return controllerClass.getPackageName().startsWith("baby.mumu");
   }
 
   @Override
@@ -241,13 +240,6 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     }
     return switch (body) {
       case ResponseWrapper<?> responseWrapper -> responseWrapper;
-      case String string -> {
-        try {
-          yield objectMapper.writeValueAsString(ResponseWrapper.success(string));
-        } catch (JsonProcessingException e) {
-          throw new MuMuException(ResponseCode.DATA_CONVERSION_FAILED);
-        }
-      }
       case DataTransferObject dataTransferObject -> ResponseWrapper.success(dataTransferObject);
       case Page<?> page -> ResponseWrapper.success(page);
       case Slice<?> slice -> ResponseWrapper.success(slice);
