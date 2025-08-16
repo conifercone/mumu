@@ -137,6 +137,14 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public Optional<Permission> updateById(Permission permission) {
     PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
       .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+    if (permission.getId() == null) {
+      return Optional.empty();
+    }
+    // 判断权限是否存在
+    if (permissionRepository.findById(permission.getId()).isEmpty()) {
+      throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+    }
+
     PermissionPO merged = permissionRepository.merge(permissionPO);
     permissionCacheRepository.deleteById(permissionPO.getId());
     return permissionConvertor.toEntity(merged);
