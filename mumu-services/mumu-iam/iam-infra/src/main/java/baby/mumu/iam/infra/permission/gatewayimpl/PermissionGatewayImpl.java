@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
@@ -340,10 +341,11 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "2.4.0")
   @DangerousOperation("根据Code删除Code为%0的权限数据")
   public void deleteByCode(String code) {
-    Optional.ofNullable(code)
-      .flatMap(permissionRepository::findByCode)
-      .map(PermissionPO::getId)
-      .ifPresent(this::deleteById);
+    if (StringUtils.isNotBlank(code)) {
+      PermissionPO permissionPO = permissionRepository.findByCode(code)
+        .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+      this.deleteById(permissionPO.getId());
+    }
   }
 
   @Override
