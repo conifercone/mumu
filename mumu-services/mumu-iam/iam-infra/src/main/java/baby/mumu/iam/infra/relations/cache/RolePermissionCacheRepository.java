@@ -27,4 +27,5 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
 public interface RolePermissionCacheRepository extends
   RedisDocumentRepository<RolePermissionCacheablePO, Long> {
 
+  void deleteByPermissionIdsContaining(Long permissionId);
 }

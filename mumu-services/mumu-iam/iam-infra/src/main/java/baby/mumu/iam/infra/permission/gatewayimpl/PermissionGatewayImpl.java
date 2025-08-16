@@ -31,6 +31,7 @@ import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionArchivedRep
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.iam.infra.relations.cache.RolePermissionCacheRepository;
 import baby.mumu.iam.infra.relations.database.PermissionPathPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
 import baby.mumu.iam.infra.relations.database.PermissionPathRepository;
@@ -75,6 +76,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   private final ExtensionProperties extensionProperties;
   private final PermissionCacheRepository permissionCacheRepository;
   private final PermissionPathRepository permissionPathRepository;
+  private final RolePermissionCacheRepository rolePermissionCacheRepository;
 
   @Autowired
   public PermissionGatewayImpl(PermissionRepository permissionRepository,
@@ -82,7 +84,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     PermissionConvertor permissionConvertor,
     PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties, PermissionCacheRepository permissionCacheRepository,
-    PermissionPathRepository permissionPathRepository) {
+    PermissionPathRepository permissionPathRepository,
+    RolePermissionCacheRepository rolePermissionCacheRepository) {
     this.permissionRepository = permissionRepository;
     this.roleGateway = roleGateway;
     this.permissionConvertor = permissionConvertor;
@@ -91,6 +94,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     this.extensionProperties = extensionProperties;
     this.permissionCacheRepository = permissionCacheRepository;
     this.permissionPathRepository = permissionPathRepository;
+    this.rolePermissionCacheRepository = rolePermissionCacheRepository;
   }
 
   @Override
@@ -119,16 +123,21 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("根据ID删除ID为%0的权限数据")
   public void deleteById(Long id) {
-    List<Role> roles = roleGateway.findAllContainPermission(id);
-    if (CollectionUtils.isNotEmpty(roles)) {
-      throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-        roles.stream().map(Role::getCode).toList());
-    }
     Optional.ofNullable(id).ifPresent(permissionId -> {
-      permissionRepository.deleteById(permissionId);
-      permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
-      permissionArchivedRepository.deleteById(permissionId);
-      permissionCacheRepository.deleteById(permissionId);
+      if (permissionRepository.existsById(permissionId)) {
+        List<Role> roles = roleGateway.findAllContainPermission(permissionId);
+        if (CollectionUtils.isNotEmpty(roles)) {
+          throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+            roles.stream().map(Role::getCode).toList());
+        }
+        permissionRepository.deleteById(permissionId);
+        permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
+        permissionArchivedRepository.deleteById(permissionId);
+        permissionCacheRepository.deleteById(permissionId);
+        rolePermissionCacheRepository.deleteByPermissionIdsContaining(permissionId);
+      } else {
+        throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+      }
     });
   }
 
