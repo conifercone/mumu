@@ -103,7 +103,8 @@ public class FileConvertor {
           .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
         fileMetadata.setStorageZone(storageZone);
         fileMetadata.setSize(multipartFile.getSize());
-        fileMetadata.setContentType(tika.detect(new ByteArrayInputStream(fileBytes)));
+        fileMetadata.setContentType(
+          tika.detect(new ByteArrayInputStream(fileBytes), multipartFile.getOriginalFilename()));
         fileMetadata.setOriginalFilename(multipartFile.getOriginalFilename());
         fileMetadata.setStoredFilename(multipartFile.getOriginalFilename());
         fileMetadata.setStoragePath(fileMetadata.getId() + "/" + fileMetadata.getStoredFilename());
