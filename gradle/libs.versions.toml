@@ -54,225 +54,225 @@ lombokPluginVersion = '8.14.2'
 kotlinPluginVersion = '2.2.10'
 
 [libraries]
-# https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+# https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
-# https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+# https://central.sonatype.com/artifact/org.junit.platform/junit-platform-launcher
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-test
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
-# https://mvnrepository.com/artifact/org.apiguardian/apiguardian-api
+# https://central.sonatype.com/artifact/org.apiguardian/apiguardian-api
 apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
-# https://mvnrepository.com/artifact/org.jspecify/jspecify
+# https://central.sonatype.com/artifact/org.jspecify/jspecify
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecifyVersion" }
-# https://mvnrepository.com/artifact/org.jetbrains/annotations
+# https://central.sonatype.com/artifact/org.jetbrains/annotations
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-dependencies
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-web
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
-# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-core
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core" }
-# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-databind
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
-# https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-annotations
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
-# https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
 spring-boot-starter-oauth2-authorization-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
 spring-boot-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
-# https://mvnrepository.com/artifact/org.postgresql/postgresql
+# https://central.sonatype.com/artifact/org.postgresql/postgresql
 postgresql = { module = "org.postgresql:postgresql" }
-# https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
+# https://central.sonatype.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
 jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", version.ref = "jasyptVersion" }
-# https://mvnrepository.com/artifact/com.google.guava/guava
+# https://central.sonatype.com/artifact/com.google.guava/guava
 guava = { module = "com.google.guava:guava" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
-# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
+# https://central.sonatype.com/artifact/org.springframework.cloud/spring-cloud-dependencies
 spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloudVersion" }
-# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-discovery
+# https://central.sonatype.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-discovery
 spring-cloud-starter-consul-discovery = { module = "org.springframework.cloud:spring-cloud-starter-consul-discovery" }
-# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-config
+# https://central.sonatype.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-config
 spring-cloud-starter-consul-config = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
-# https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+# https://central.sonatype.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 swagger3Ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "swagger3Version" }
-# https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
+# https://central.sonatype.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta
 swagger-annotations-jakarta = { module = "io.swagger.core.v3:swagger-annotations-jakarta", version.ref = "swagger3AnnotationsVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
 spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 spring-boot-starter-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-validation
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
-# https://mvnrepository.com/artifact/p6spy/p6spy
+# https://central.sonatype.com/artifact/p6spy/p6spy
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
 spring-boot-starter-data-elasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
-# https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+# https://central.sonatype.com/artifact/org.springframework.kafka/spring-kafka
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
-# https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+# https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java
 protobuf-java = { module = "com.google.protobuf:protobuf-java" }
-# https://mvnrepository.com/artifact/com.google.protobuf/protoc
+# https://central.sonatype.com/artifact/com.google.protobuf/protoc
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobufBomVersion" }
-# https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java
+# https://central.sonatype.com/artifact/io.grpc/protoc-gen-grpc-java
 protoc-gen-grpc-java = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpcBomVersion" }
-# https://mvnrepository.com/artifact/io.grpc/grpc-stub
+# https://central.sonatype.com/artifact/io.grpc/grpc-stub
 grpc-stub = { module = "io.grpc:grpc-stub" }
-# https://mvnrepository.com/artifact/io.grpc/grpc-protobuf
+# https://central.sonatype.com/artifact/io.grpc/grpc-protobuf
 grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
-# https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+# https://central.sonatype.com/artifact/javax.annotation/javax.annotation-api
 javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
-# https://mvnrepository.com/artifact/net.devh/grpc-server-spring-boot-starter
+# https://central.sonatype.com/artifact/net.devh/grpc-server-spring-boot-starter
 grpc-server-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
-# https://mvnrepository.com/artifact/net.devh/grpc-client-spring-boot-starter
+# https://central.sonatype.com/artifact/net.devh/grpc-client-spring-boot-starter
 grpc-client-spring-boot-starter = { module = "net.devh:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
-# https://mvnrepository.com/artifact/com.redis.om/redis-om-spring
+# https://central.sonatype.com/artifact/com.redis.om/redis-om-spring
 redis-om-spring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
-# https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+# https://central.sonatype.com/artifact/org.apache.commons/commons-lang3
 commons-lang3 = { module = "org.apache.commons:commons-lang3" }
-# https://mvnrepository.com/artifact/org.apache.commons/commons-text
+# https://central.sonatype.com/artifact/org.apache.commons/commons-text
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsTextVersion" }
-# https://mvnrepository.com/artifact/commons-io/commons-io
+# https://central.sonatype.com/artifact/commons-io/commons-io
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
-# https://mvnrepository.com/artifact/com.github.guang19/leaf-spring-boot-starter
+# https://central.sonatype.com/artifact/com.github.guang19/leaf-spring-boot-starter
 leaf = { module = "com.github.guang19:leaf-spring-boot-starter", version.ref = "leafVersion" }
-# https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
+# https://central.sonatype.com/artifact/org.apache.zookeeper/zookeeper
 zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeperVersion" }
-# https://mvnrepository.com/artifact/com.github.yitter/yitter-idgenerator
+# https://central.sonatype.com/artifact/com.github.yitter/yitter-idgenerator
 yitter-idgenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
-# https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
+# https://central.sonatype.com/artifact/io.micrometer/micrometer-tracing
 micrometer-tracing = { module = "io.micrometer:micrometer-tracing" }
-# https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+# https://central.sonatype.com/artifact/io.micrometer/micrometer-registry-prometheus
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
-# https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing-bridge-otel
+# https://central.sonatype.com/artifact/io.micrometer/micrometer-tracing-bridge-otel
 micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
-# https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-exporter-zipkin
+# https://central.sonatype.com/artifact/io.opentelemetry/opentelemetry-exporter-zipkin
 opentelemetry-exporter-zipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-aop
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
-# https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
+# https://central.sonatype.com/artifact/jakarta.validation/jakarta.validation-api
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
-# https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
+# https://central.sonatype.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
 hypersistence-utils-hibernate63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-core
 spring-security-core = { module = "org.springframework.security:spring-security-core" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-crypto
 spring-security-crypto = { module = "org.springframework.security:spring-security-crypto" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-core
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-oauth2-core
 spring-security-oauth2-core = { module = "org.springframework.security:spring-security-oauth2-core" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-oauth2-jose
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
-# https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons
+# https://central.sonatype.com/artifact/org.springframework.data/spring-data-commons
 spring-data-commons = { module = "org.springframework.data:spring-data-commons" }
-# https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
+# https://central.sonatype.com/artifact/org.springframework.data/spring-data-elasticsearch
 spring-data-elasticsearch = { module = "org.springframework.data:spring-data-elasticsearch" }
-# https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
+# https://central.sonatype.com/artifact/org.springframework.data/spring-data-mongodb
 spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" }
-# https://mvnrepository.com/artifact/org.springframework/spring-web
+# https://central.sonatype.com/artifact/org.springframework/spring-web
 spring-web = { module = "org.springframework:spring-web" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-test
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
-# https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+# https://central.sonatype.com/artifact/org.flywaydb/flyway-core
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
-# https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql
+# https://central.sonatype.com/artifact/org.flywaydb/flyway-database-postgresql
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
-# https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+# https://central.sonatype.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
-# https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
-# https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+# https://central.sonatype.com/artifact/org.jetbrains.kotlin/kotlin-reflect
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
-# https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
+# https://central.sonatype.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
 hibernate-jpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
-# https://mvnrepository.com/artifact/com.lmax/disruptor
+# https://central.sonatype.com/artifact/com.lmax/disruptor
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
-# https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+# https://central.sonatype.com/artifact/com.github.ben-manes.caffeine/caffeine
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
-# https://mvnrepository.com/artifact/io.grpc/grpc-bom
+# https://central.sonatype.com/artifact/io.grpc/grpc-bom
 grpc-bom = { module = "io.grpc:grpc-bom", version.ref = "grpcBomVersion" }
-# https://mvnrepository.com/artifact/com.google.protobuf/protobuf-bom
+# https://central.sonatype.com/artifact/com.google.protobuf/protobuf-bom
 protobuf-bom = { module = "com.google.protobuf:protobuf-bom", version.ref = "protobufBomVersion" }
-# https://mvnrepository.com/artifact/com.google.guava/guava-bom
+# https://central.sonatype.com/artifact/com.google.guava/guava-bom
 guava-bom = { module = "com.google.guava:guava-bom", version.ref = "guavaBomVersion" }
-# https://mvnrepository.com/artifact/org.springframework/spring-tx
+# https://central.sonatype.com/artifact/org.springframework/spring-tx
 spring-tx = { module = "org.springframework:spring-tx" }
-# https://mvnrepository.com/artifact/io.minio/minio
+# https://central.sonatype.com/artifact/io.minio/minio
 minio = { module = "io.minio:minio", version.ref = "minioVersion" }
-# https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+# https://central.sonatype.com/artifact/org.mapstruct/mapstruct
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
-# https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
+# https://central.sonatype.com/artifact/org.mapstruct/mapstruct-processor
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
-# https://mvnrepository.com/artifact/org.jobrunr/jobrunr-spring-boot-3-starter
+# https://central.sonatype.com/artifact/org.jobrunr/jobrunr-spring-boot-3-starter
 jobrunr-spring-boot3-starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
-# https://mvnrepository.com/artifact/com.aliyun/alimt20181012
+# https://central.sonatype.com/artifact/com.aliyun/alimt20181012
 aliyun-mt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
-# https://mvnrepository.com/artifact/com.deepl.api/deepl-java
+# https://central.sonatype.com/artifact/com.deepl.api/deepl-java
 deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
-# https://mvnrepository.com/artifact/de.vandermeer/asciitable
+# https://central.sonatype.com/artifact/de.vandermeer/asciitable
 asciitable = { module = "de.vandermeer:asciitable", version.ref = "asciitableVersion" }
-# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-undertow
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-undertow
 spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow" }
-# https://mvnrepository.com/artifact/com.google.zxing/core
+# https://central.sonatype.com/artifact/com.google.zxing/core
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxingVersion" }
-# https://mvnrepository.com/artifact/com.google.zxing/javase
+# https://central.sonatype.com/artifact/com.google.zxing/javase
 zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxingVersion" }
-# https://mvnrepository.com/artifact/com.palantir.javapoet/javapoet
+# https://central.sonatype.com/artifact/com.palantir.javapoet/javapoet
 javapoet = { module = "com.palantir.javapoet:javapoet", version.ref = "javapoetVersion" }
-# https://mvnrepository.com/artifact/com.google.auto.service/auto-service
+# https://central.sonatype.com/artifact/com.google.auto.service/auto-service
 auto-service = { module = "com.google.auto.service:auto-service", version.ref = "autoServiceVersion" }
-# https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
+# https://central.sonatype.com/artifact/jakarta.persistence/jakarta.persistence-api
 jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api" }
-# https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
+# https://central.sonatype.com/artifact/net.sourceforge.tess4j/tess4j
 tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4jVersion" }
-# https://mvnrepository.com/artifact/org.springframework/spring-test
+# https://central.sonatype.com/artifact/org.springframework/spring-test
 spring-test = { module = "org.springframework:spring-test" }
-# https://mvnrepository.com/artifact/org.bytedeco/javacv-platform
+# https://central.sonatype.com/artifact/org.bytedeco/javacv-platform
 javacv = { module = "org.bytedeco:javacv-platform", version.ref = "javacvVersion" }
-# https://mvnrepository.com/artifact/com.aliyun/ocr_api20210707
+# https://central.sonatype.com/artifact/com.aliyun/ocr_api20210707
 aliyun-ocr = { module = "com.aliyun:ocr_api20210707", version.ref = "aliyunOcrVersion" }
-# https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-lettuce
+# https://central.sonatype.com/artifact/com.bucket4j/bucket4j_jdk17-lettuce
 bucket4j-lettuce = { module = "com.bucket4j:bucket4j_jdk17-lettuce", version.ref = "bucket4jVersion" }
-# https://mvnrepository.com/artifact/io.lettuce/lettuce-core
+# https://central.sonatype.com/artifact/io.lettuce/lettuce-core
 lettuce-core = { module = "io.lettuce:lettuce-core" }
-# https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+# https://central.sonatype.com/artifact/org.apache.commons/commons-collections4
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4Version" }
-# https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-commons
+# https://central.sonatype.com/artifact/org.springframework.cloud/spring-cloud-commons
 spring-cloud-commons = { module = "org.springframework.cloud:spring-cloud-commons" }
-# https://mvnrepository.com/artifact/io.grpc/grpc-api
+# https://central.sonatype.com/artifact/io.grpc/grpc-api
 grpc-api = { module = "io.grpc:grpc-api" }
-# https://mvnrepository.com/artifact/me.tongfei/progressbar
+# https://central.sonatype.com/artifact/me.tongfei/progressbar
 progressbar = { module = "me.tongfei:progressbar", version.ref = "progressbarVersion" }
-# https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
+# https://central.sonatype.com/artifact/org.springframework.data/spring-data-redis
 spring-data-redis = { module = "org.springframework.data:spring-data-redis" }
-# https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-retry
+# https://central.sonatype.com/artifact/io.github.resilience4j/resilience4j-retry
 resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry", version.ref = "resilience4jVersion" }
-# https://mvnrepository.com/artifact/org.springframework.security/spring-security-rsa
+# https://central.sonatype.com/artifact/org.springframework.security/spring-security-rsa
 spring-security-rsa = { module = "org.springframework.security:spring-security-rsa", version.ref = "springSecurityRsaVersion" }
-# https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+# https://central.sonatype.com/artifact/org.hibernate.orm/hibernate-core
 hibernate-core = { module = "org.hibernate.orm:hibernate-core" }
-# https://mvnrepository.com/artifact/com.opencsv/opencsv
+# https://central.sonatype.com/artifact/com.opencsv/opencsv
 opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsvVersion" }
-# https://mvnrepository.com/artifact/org.javamoney/moneta
+# https://central.sonatype.com/artifact/org.javamoney/moneta
 moneta = { module = "org.javamoney:moneta", version.ref = "monetaVersion" }
-# https://mvnrepository.com/artifact/org.zalando/jackson-datatype-money
+# https://central.sonatype.com/artifact/org.zalando/jackson-datatype-money
 jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version.ref = "jacksonDatatypeMoneyVersion" }
-# https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber
+# https://central.sonatype.com/artifact/com.googlecode.libphonenumber/libphonenumber
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
-# https://mvnrepository.com/artifact/commons-validator/commons-validator
+# https://central.sonatype.com/artifact/commons-validator/commons-validator
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidatorVersion" }
-# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+# https://central.sonatype.com/artifact/org.openjdk.jmh/jmh-core
 jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
-# https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+# https://central.sonatype.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
 jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
-# https://mvnrepository.com/artifact/org.apache.tika/tika-core
+# https://central.sonatype.com/artifact/org.apache.tika/tika-core
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" }
 
 [bundles]
