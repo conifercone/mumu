@@ -110,5 +110,9 @@ link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 
 [#contributors]
 == Contributors
-
-image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="{mumu-github-homepage-link}/graphs/contributors"]
+// tag::contributors[]
+++++
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -start -->
+++++
+// end::contributors[]
