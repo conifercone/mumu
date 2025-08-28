@@ -112,6 +112,7 @@ link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 == Contributors
 // tag::contributors[]
 ++++
+<!--suppress ALL -->
 <!-- readme: collaborators,contributors -start -->
 <table>
 	<tbody>
