@@ -113,6 +113,26 @@ link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 // tag::contributors[]
 ++++
 <!-- readme: collaborators,contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/conifercone">
+                    <img src="https://avatars.githubusercontent.com/u/30498960?v=4" width="100;" alt="conifercone"/>
+                    <br />
+                    <sub><b>Kaiyu Shan</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/ImgBotApp">
+                    <img src="https://avatars.githubusercontent.com/u/31427850?v=4" width="100;" alt="ImgBotApp"/>
+                    <br />
+                    <sub><b>Imgbot</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: collaborators,contributors -end -->
 ++++
 // end::contributors[]
