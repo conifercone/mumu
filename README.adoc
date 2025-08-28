@@ -24,6 +24,7 @@ image::logo.svg[mumu]
 - link:docs/README.ja.adoc[日本語]
 - link:docs/README.ko.adoc[한국어]
 
+// tag::shields[]
 image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="{mumu-github-homepage-link}"]
 image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="{mumu-github-homepage-link}"]
 image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="{mumu-github-homepage-link}"]
@@ -41,6 +42,7 @@ image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop
 image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link="{slack-invite}"]
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
+// end::shields[]
 
 == TOC
 
