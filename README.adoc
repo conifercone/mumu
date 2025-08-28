@@ -16,7 +16,9 @@
 
 = mumu
 
+// tag::logo[]
 image::logo.svg[mumu]
+// end::logo[]
 
 - link:docs/README.zh_CN.adoc[简体中文]
 - link:docs/README.zh_TW.adoc[繁體中文]

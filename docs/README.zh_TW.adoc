@@ -16,13 +16,9 @@
 
 = mumu
 
-image::logo.svg[mumu]
+include::../README.adoc[tags=logo]
 
-- link:README.zh_CN.adoc[简体中文]
-- link:README.zh_TW.adoc[繁體中文]
-- link:../README.adoc[English]
-- link:README.ja.adoc[日本語]
-- link:README.ko.adoc[한국어]
+include::README.zh_CN.adoc[tags=links]
 
 include::../README.adoc[tags=shields]
 
@@ -80,7 +76,7 @@ link:https://github.com/conifercone/mumu/network/dependencies[**相依圖**]
 [#license]
 == 授權
 
-link:../LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
+include::README.zh_CN.adoc[tags=license]
 
 [#contributors]
 == 貢獻者
