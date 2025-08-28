@@ -113,6 +113,6 @@ link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
 // tag::contributors[]
 ++++
 <!-- readme: collaborators,contributors -start -->
-<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
 ++++
 // end::contributors[]

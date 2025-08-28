@@ -17,5 +17,7 @@ jobs:
         uses: akhilmhdh/contributors-readme-action@v2.3.11
         with:
           readme_path: README.adoc
+          committer_username: Kaiyu Shan
+          committer_email: kaiyu.shan@outlook.com
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
