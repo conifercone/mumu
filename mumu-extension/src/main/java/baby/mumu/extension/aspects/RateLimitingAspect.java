@@ -116,8 +116,8 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
     if (!probe.isConsumed()) {
       long waitForRefillNanos = probe.getNanosToWaitForRefill();
-      long waitForRefillMillis = Duration.ofNanos(waitForRefillNanos).toSeconds();
-      throw new RateLimiterException(waitForRefillMillis);
+      long waitForRefillSeconds = Duration.ofNanos(waitForRefillNanos).toSeconds();
+      throw new RateLimiterException(waitForRefillSeconds);
     }
   }
 
