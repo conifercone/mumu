@@ -4,7 +4,7 @@ springCloudVersion = "2025.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
-jetbrainsAnnotationsVersion = '26.0.2'
+jetbrainsAnnotationsVersion = '26.0.2-1'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.8.11'
 swagger3AnnotationsVersion = '2.2.36'
