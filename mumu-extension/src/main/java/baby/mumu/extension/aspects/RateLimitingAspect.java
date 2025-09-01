@@ -68,6 +68,7 @@ import org.springframework.context.ApplicationContext;
 @Aspect
 public class RateLimitingAspect extends AbstractAspect implements DisposableBean {
 
+  private static final String UNIQ_KEY_LIGATURE = ":";
   private final ApplicationContext applicationContext;
   private final RedisClient redisClient;
   private final StatefulRedisConnection<String, byte[]> connection;
@@ -125,7 +126,8 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     @NonNull List<RateLimiter> list) {
     RateLimitingKeyProvider rateLimitingKeyProvider = applicationContext.getBean(
       rateLimitingKey.getKeyProvider());
-    String uniqKey = rateLimitingKey.getPrefix() + ":" + rateLimitingKeyProvider.generateUniqKey();
+    String uniqKey = rateLimitingKey.getPrefix() + RateLimitingAspect.UNIQ_KEY_LIGATURE
+      + rateLimitingKeyProvider.generateUniqKey();
     ConfigurationBuilder configurationBuilder = BucketConfiguration.builder();
 
     list.forEach(x -> {
