@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: .
 :icons: font
+include::common-attributes.adoc[]
 
 = Commit Message Template
 

@@ -1,7 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
-:email: kaiyu.shan@outlook.com
+include::../common-attributes.adoc[]
 
 = 贡献者誓言行为规范
 

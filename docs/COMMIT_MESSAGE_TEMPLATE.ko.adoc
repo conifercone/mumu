@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+include::../common-attributes.adoc[]
 
 = 커밋 메시지 템플릿
 

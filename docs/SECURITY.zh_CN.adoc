@@ -1,8 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
-:mumu-github-homepage-link: https://github.com/conifercone/mumu
-:mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
+include::../common-attributes.adoc[]
 
 = 安全政策
 

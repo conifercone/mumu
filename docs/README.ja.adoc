@@ -1,18 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
-:slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
-:java-version: 23
-:java-badge: https://img.shields.io/badge/JDK-{java-version}+-green.svg
-:java-link: https://adoptium.net/temurin/releases/?version={java-version}
-:mumu-github-homepage-link: https://github.com/conifercone/mumu
-:mumu-github-releases-latest-link: {mumu-github-homepage-link}/releases/latest
-:mumu-github-issues-link: {mumu-github-homepage-link}/issues
-:mumu-github-pr-link: {mumu-github-homepage-link}/pulls
-:mumu-github-discussions-link: {mumu-github-homepage-link}/discussions
-:codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
-:email: kaiyu.shan@outlook.com
-:author: Kaiyu Shan
+include::../common-attributes.adoc[]
 
 = mumu
 
@@ -71,7 +60,7 @@ mumu
 [#dependency-statement]
 == 依存関係
 
-link:https://github.com/conifercone/mumu/network/dependencies[**依存関係グラフ**]
+link:{dependencies-link}[**依存関係グラフ**]
 
 [#license]
 == ライセンス

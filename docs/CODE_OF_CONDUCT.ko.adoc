@@ -1,7 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
-:email: kaiyu.shan@outlook.com
+include::../common-attributes.adoc[]
 
 = 기여자 서약 행동 강령
 
