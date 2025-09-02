@@ -99,7 +99,7 @@ link:{dependencies-link}[**Dependency graph**]
 [#license]
 == License
 
-link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
+link:LICENSE[{license-name}] © link:mailto:{email}[{author}]
 
 [#contributors]
 == Contributors

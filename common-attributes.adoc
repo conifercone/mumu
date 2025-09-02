@@ -12,3 +12,4 @@
 :author: Kaiyu Shan
 :dependencies-link: {mumu-github-homepage-link}/network/dependencies
 :mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
+:license-name: Apache License 2.0

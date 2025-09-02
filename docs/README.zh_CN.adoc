@@ -72,7 +72,7 @@ link:{dependencies-link}[**依赖关系图**]
 == 许可
 
 // tag::license[]
-link:../LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
+link:../LICENSE[{license-name}] © link:mailto:{email}[{author}]
 // end::license[]
 
 [#contributors]
