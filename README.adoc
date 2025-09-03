@@ -2,7 +2,7 @@
 :imagesdir: .
 :icons: font
 :lang: en
-include::common-attributes.adoc[]
+include::./common-attributes.adoc[]
 
 = mumu
 
