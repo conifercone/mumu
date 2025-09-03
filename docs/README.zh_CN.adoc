@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+:lang: zh
 include::../common-attributes.adoc[]
 
 = mumu
@@ -49,19 +50,7 @@ ____
 [#module-introduction]
 == 模块介绍
 
-[source,text]
-----
-mumu
-├── mumu-services
-│   ├── mumu-iam
-│   ├── mumu-log
-│   ├── mumu-storage
-│   └── mumu-unique
-├── mumu-basis
-├── mumu-benchmark
-├── mumu-extension
-└── mumu-processor
-----
+include::../modules-table.adoc[]
 
 [#dependency-statement]
 == 依赖声明

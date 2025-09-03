@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: .
 :icons: font
+:lang: en
 include::common-attributes.adoc[]
 
 = mumu
@@ -77,19 +78,7 @@ Let’s make managing a joyride!
 [#module-introduction]
 == Module Introduction
 
-[source,text]
-----
-mumu
-├── mumu-services
-│   ├── mumu-iam
-│   ├── mumu-log
-│   ├── mumu-storage
-│   └── mumu-unique
-├── mumu-basis
-├── mumu-benchmark
-├── mumu-extension
-└── mumu-processor
-----
+include::modules-table.adoc[]
 
 [#dependency-statement]
 == Dependency Statement

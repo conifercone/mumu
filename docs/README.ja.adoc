@@ -1,6 +1,7 @@
 :doctype: article
 :imagesdir: ..
 :icons: font
+:lang: ja
 include::../common-attributes.adoc[]
 
 = mumu
@@ -43,19 +44,7 @@ ____
 [#module-introduction]
 == モジュール紹介
 
-[source,text]
-----
-mumu
-├── mumu-services
-│   ├── mumu-iam
-│   ├── mumu-log
-│   ├── mumu-storage
-│   └── mumu-unique
-├── mumu-basis
-├── mumu-benchmark
-├── mumu-extension
-└── mumu-processor
-----
+include::../modules-table.adoc[]
 
 [#dependency-statement]
 == 依存関係

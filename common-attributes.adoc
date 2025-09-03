@@ -13,3 +13,77 @@
 :dependencies-link: {mumu-github-homepage-link}/network/dependencies
 :mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
 :license-name: Apache License 2.0
+// ---------------- EN ----------------
+:desc-mumu-iam-en: Identity and Access Management (users, roles, permissions)
+:desc-mumu-log-en: Centralized logging and query service
+:desc-mumu-storage-en: File storage service
+:desc-mumu-unique-en: Distributed unique ID generator
+:desc-mumu-basis-en: Common utilities and shared components
+:desc-mumu-benchmark-en: Performance testing and benchmarking
+:desc-mumu-extension-en: Extension and integration modules
+:desc-mumu-processor-en: Background processing and task scheduling
+
+// --------------- 简体中文 ---------------
+:desc-mumu-iam-zh: 身份与访问管理（用户、角色、权限）
+:desc-mumu-log-zh: 日志中心，统一收集与查询日志
+:desc-mumu-storage-zh: 文件存储服务
+:desc-mumu-unique-zh: 分布式唯一 ID 生成
+:desc-mumu-basis-zh: 基础工具与公共组件
+:desc-mumu-benchmark-zh: 性能测试与基准验证
+:desc-mumu-extension-zh: 扩展功能模块
+:desc-mumu-processor-zh: 后台处理与任务调度
+
+// --------------- 繁體中文 ---------------
+:desc-mumu-iam-zh-tw: 身分與存取管理（使用者、角色、權限）
+:desc-mumu-log-zh-tw: 日誌中心，統一收集與查詢日誌
+:desc-mumu-storage-zh-tw: 檔案儲存服務
+:desc-mumu-unique-zh-tw: 分散式唯一 ID 生成
+:desc-mumu-basis-zh-tw: 基礎工具與公共元件
+:desc-mumu-benchmark-zh-tw: 效能測試與基準驗證
+:desc-mumu-extension-zh-tw: 擴展功能模組
+:desc-mumu-processor-zh-tw: 後台處理與任務排程
+
+// ---------------- JA ----------------
+:desc-mumu-iam-ja: アイデンティティとアクセス管理（ユーザー、ロール、権限）
+:desc-mumu-log-ja: ログセンター、統合収集と検索
+:desc-mumu-storage-ja: ファイルストレージサービス
+:desc-mumu-unique-ja: 分散型ユニークID生成
+:desc-mumu-basis-ja: 共通ユーティリティおよび共有コンポーネント
+:desc-mumu-benchmark-ja: パフォーマンステストとベンチマーク
+:desc-mumu-extension-ja: 拡張機能モジュール
+:desc-mumu-processor-ja: バックグラウンド処理とタスクスケジューリング
+
+// ---------------- KO ----------------
+:desc-mumu-iam-ko: ID 및 접근 관리(사용자, 역할, 권한)
+:desc-mumu-log-ko: 로그 센터, 통합 수집 및 조회
+:desc-mumu-storage-ko: 파일 스토리지 서비스
+:desc-mumu-unique-ko: 분산형 고유 ID 생성
+:desc-mumu-basis-ko: 공통 유틸리티 및 공유 컴포넌트
+:desc-mumu-benchmark-ko: 성능 테스트 및 벤치마킹
+:desc-mumu-extension-ko: 확장 기능 모듈
+:desc-mumu-processor-ko: 백그라운드 처리 및 작업 스케줄링
+
+// EN
+:table-header-module-en: Module
+:table-header-submodule-en: Submodule
+:table-header-description-en: Description
+
+// 简体中文
+:table-header-module-zh: 模块
+:table-header-submodule-zh: 子模块
+:table-header-description-zh: 描述
+
+// 繁體中文
+:table-header-module-zh-tw: 模組
+:table-header-submodule-zh-tw: 子模組
+:table-header-description-zh-tw: 描述
+
+// 日本語
+:table-header-module-ja: モジュール
+:table-header-submodule-ja: サブモジュール
+:table-header-description-ja: 説明
+
+// 한국어
+:table-header-module-ko: 모듈
+:table-header-submodule-ko: 서브모듈
+:table-header-description-ko: 설명
