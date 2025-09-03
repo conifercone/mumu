@@ -2,9 +2,10 @@
 :imagesdir: .
 :icons: font
 :lang: en
-include::./common-attributes.adoc[]
 
 = mumu
+
+include::common-attributes.adoc[]
 
 // tag::logo[]
 image::logo.svg[mumu]
