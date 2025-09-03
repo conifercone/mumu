@@ -1,12 +1,9 @@
 :doctype: article
 :imagesdir: .
 :icons: font
-include::common-attributes.adoc[]
+:email: kaiyu.shan@outlook.com
 
 = Contributing to mumu
-
-- link:docs/CONTRIBUTING.zh_CN.adoc[简体中文]
-- link:CONTRIBUTING.adoc[English]
 
 👍🎉 First off, thanks for taking the time to contribute!
 🎉👍

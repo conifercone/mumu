@@ -1,12 +1,10 @@
 :doctype: article
 :imagesdir: .
 :icons: font
-include::common-attributes.adoc[]
+:mumu-github-homepage-link: https://github.com/conifercone/mumu
+:mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
 
 = Security Policy
-
-- link:docs/SECURITY.zh_CN.adoc[简体中文]
-- link:SECURITY.adoc[English]
 
 == Supported Versions
 

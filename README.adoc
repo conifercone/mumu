@@ -1,23 +1,35 @@
 :doctype: article
 :imagesdir: .
 :icons: font
-:lang: en
+:slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
+:java-version: 23
+:java-badge: https://img.shields.io/badge/JDK-{java-version}+-green.svg
+:java-link: https://adoptium.net/temurin/releases/?version={java-version}
+:mumu-github-homepage-link: https://github.com/conifercone/mumu
+:mumu-github-releases-latest-link: {mumu-github-homepage-link}/releases/latest
+:mumu-github-issues-link: {mumu-github-homepage-link}/issues
+:mumu-github-pr-link: {mumu-github-homepage-link}/pulls
+:mumu-github-discussions-link: {mumu-github-homepage-link}/discussions
+:codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
+:email: kaiyu.shan@outlook.com
+:author: Kaiyu Shan
+:dependencies-link: {mumu-github-homepage-link}/network/dependencies
+:mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
+:license-name: Apache License 2.0
+:desc-mumu-iam: Identity and Access Management (users, roles, permissions)
+:desc-mumu-log: Centralized logging and query service
+:desc-mumu-storage: File storage service
+:desc-mumu-unique: Distributed unique ID generator
+:desc-mumu-basis: Common utilities and shared components
+:desc-mumu-benchmark: Performance testing and benchmarking
+:desc-mumu-extension: Extension and integration modules
+:desc-mumu-processor: Background processing and task scheduling
+
 
 = mumu
 
-include::common-attributes.adoc[]
-
-// tag::logo[]
 image::logo.svg[mumu]
-// end::logo[]
 
-- link:docs/README.zh_CN.adoc[简体中文]
-- link:docs/README.zh_TW.adoc[繁體中文]
-- link:README.adoc[English]
-- link:docs/README.ja.adoc[日本語]
-- link:docs/README.ko.adoc[한국어]
-
-// tag::shields[]
 image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="{mumu-github-homepage-link}"]
 image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="{mumu-github-homepage-link}"]
 image:https://img.shields.io/github/languages/top/conifercone/mumu[GitHub top language,link="{mumu-github-homepage-link}"]
@@ -35,7 +47,6 @@ image:https://www.codefactor.io/repository/github/conifercone/mumu/badge/develop
 image:https://img.shields.io/badge/Slack-Join%20Our%20Community-green[Slack,link="{slack-invite}"]
 image:https://img.shields.io/github/commit-activity/m/conifercone/mumu[GitHub commit activity]
 image:https://img.shields.io/github/contributors/conifercone/mumu[GitHub contributors]
-// end::shields[]
 
 == TOC
 
@@ -79,7 +90,20 @@ Let’s make managing a joyride!
 [#module-introduction]
 == Module Introduction
 
-include::modules-table.adoc[]
+[cols="1,2,3",options="header"]
+|===
+| Module | Submodule | Description
+
+.4+| mumu-services | mumu-iam     | {desc-mumu-iam}
+| mumu-log     | {desc-mumu-log}
+| mumu-storage | {desc-mumu-storage}
+| mumu-unique  | {desc-mumu-unique}
+
+| mumu-basis     | - | {desc-mumu-basis}
+| mumu-benchmark | - | {desc-mumu-benchmark}
+| mumu-extension | - | {desc-mumu-extension}
+| mumu-processor | - | {desc-mumu-processor}
+|===
 
 [#dependency-statement]
 == Dependency Statement
@@ -93,7 +117,7 @@ link:LICENSE[{license-name}] © link:mailto:{email}[{author}]
 
 [#contributors]
 == Contributors
-// tag::contributors[]
+
 ++++
 <!--suppress ALL -->
 <!-- readme: collaborators,contributors -start -->
@@ -119,4 +143,3 @@ link:LICENSE[{license-name}] © link:mailto:{email}[{author}]
 </table>
 <!-- readme: collaborators,contributors -end -->
 ++++
-// end::contributors[]

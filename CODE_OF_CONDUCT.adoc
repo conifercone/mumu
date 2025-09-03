@@ -1,15 +1,9 @@
 :doctype: article
 :imagesdir: .
 :icons: font
-include::common-attributes.adoc[]
+:email: kaiyu.shan@outlook.com
 
 = Contributor Covenant Code of Conduct
-
-- link:docs/CODE_OF_CONDUCT.zh_CN.adoc[简体中文]
-- link:docs/CODE_OF_CONDUCT.zh_TW.adoc[繁體中文]
-- link:CODE_OF_CONDUCT.adoc[English]
-- link:docs/CODE_OF_CONDUCT.ja.adoc[日本語]
-- link:docs/CODE_OF_CONDUCT.ko.adoc[한국어]
 
 == TOC
 

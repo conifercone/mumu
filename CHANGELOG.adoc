@@ -1,12 +1,8 @@
 :doctype: article
 :imagesdir: .
 :icons: font
-include::common-attributes.adoc[]
 
 = Changelog
-
-- link:docs/CHANGELOG.zh_CN.adoc[简体中文]
-- link:CHANGELOG.adoc[English]
 
 All notable changes to this project will be documented in this file.
 
