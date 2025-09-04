@@ -54,7 +54,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
@@ -164,7 +163,6 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     return proxyManager.getProxy(uniqKey, configurationBuilder::build);
   }
 
-  @Contract("_ -> new")
   private @NonNull BasicInformation getBasicInformation(@NonNull RateLimiter rateLimiter) {
     if (rateLimiter.customGeneration()) {
       RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(

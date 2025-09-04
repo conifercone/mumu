@@ -73,7 +73,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -123,7 +122,6 @@ public class AccountConvertor {
     this.accountAvatarDocumentRepository = accountAvatarDocumentRepository;
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Account> toEntity(AccountPO accountPO) {
     return Optional.ofNullable(accountPO).flatMap(accountDataObject -> {
@@ -250,7 +248,6 @@ public class AccountConvertor {
       CollectionUtils.union(cachedCollectionOfRole, uncachedCollectionOfRole));
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toBasicInfoEntity(AccountPO accountPO) {
     return Optional.ofNullable(accountPO)
@@ -285,7 +282,6 @@ public class AccountConvertor {
     });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<Account> toEntity(AccountCacheablePO accountCacheablePO) {
     return Optional.ofNullable(accountCacheablePO).map(AccountMapper.INSTANCE::toEntity)
@@ -309,13 +305,11 @@ public class AccountConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<AccountPO> toAccountPO(Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<AccountCacheablePO> toAccountCacheablePO(Account account) {
     return Optional.ofNullable(account).map(AccountMapper.INSTANCE::toAccountCacheablePO);

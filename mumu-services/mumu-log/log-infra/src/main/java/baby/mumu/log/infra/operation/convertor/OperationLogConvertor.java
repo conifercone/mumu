@@ -32,7 +32,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,20 +54,17 @@ public class OperationLogConvertor {
     this.tracer = tracer;
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLogKafkaPO> toOperationLogKafkaPO(OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
       .map(OperationLogMapper.INSTANCE::toOperationLogKafkaPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLogEsPO> toOperationLogEsPO(OperationLog operationLog) {
     return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toOperationLogEsPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
     return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
@@ -84,20 +80,17 @@ public class OperationLogConvertor {
 
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(OperationLogSaveCmd operationLogSaveCmd) {
     return Optional.ofNullable(operationLogSaveCmd).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(OperationLogEsPO operationLogEsPO) {
     return Optional.ofNullable(operationLogEsPO).map(OperationLogMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLog> toEntity(
     OperationLogFindAllCmd operationLogFindAllCmd) {
@@ -111,14 +104,12 @@ public class OperationLogConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<OperationLogFindAllDTO> toOperationLogFindAllDTO(OperationLog operationLog) {
     return Optional.ofNullable(operationLog)
       .map(OperationLogMapper.INSTANCE::toOperationLogFindAllDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<OperationLogSubmitCmd> toOperationLogSubmitCmd(
     OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
@@ -133,7 +124,6 @@ public class OperationLogConvertor {
       .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<OperationLogQryDTO> toOperationLogQryDTO(
     OperationLog operationLog) {

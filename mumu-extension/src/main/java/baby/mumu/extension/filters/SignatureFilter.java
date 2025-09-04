@@ -38,7 +38,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,14 +150,12 @@ public class SignatureFilter extends OncePerRequestFilter {
       body = jsonString.toString().replaceAll("\\s+", "");
     }
 
-    @Contract(" -> new")
     @Override
     public @NonNull BufferedReader getReader() {
       return new BufferedReader(new InputStreamReader(
         new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8))));
     }
 
-    @Contract(" -> new")
     @Override
     public @NonNull ServletInputStream getInputStream() {
       return new ServletInputStreamWrapper(

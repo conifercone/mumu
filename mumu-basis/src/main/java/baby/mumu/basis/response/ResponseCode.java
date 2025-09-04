@@ -20,7 +20,6 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import java.util.Locale;
 import lombok.Getter;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.context.MessageSource;
@@ -135,7 +134,6 @@ public enum ResponseCode implements BaseResponse {
     this.status = status;
   }
 
-  @Contract(pure = true)
   @Override
   public @NonNull String getCode() {
     return this.code;

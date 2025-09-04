@@ -57,7 +57,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -88,7 +87,6 @@ public class PermissionConvertor {
     this.permissionPathRepository = permissionPathRepository;
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Permission> toEntity(PermissionPO permissionPO) {
     return Optional.ofNullable(permissionPO).map(
@@ -102,7 +100,6 @@ public class PermissionConvertor {
     return this.hasDescendant(permissions);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<Permission> toEntityDoNotJudgeHasDescendant(PermissionPO permissionPO) {
     return Optional.ofNullable(permissionPO).map(
@@ -134,7 +131,6 @@ public class PermissionConvertor {
     return permissions;
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<PermissionPO> toPermissionPO(Permission permission) {
     return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionPO);
@@ -287,25 +283,21 @@ public class PermissionConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<PermissionArchivedPO> toPermissionArchivedPO(PermissionPO permissionPO) {
     return Optional.ofNullable(permissionPO).map(PermissionMapper.INSTANCE::toPermissionArchivedPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<PermissionArchivedPO> toPermissionArchivedPO(Permission permission) {
     return Optional.ofNullable(permission).map(PermissionMapper.INSTANCE::toPermissionArchivedPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<PermissionPO> toPermissionPO(PermissionArchivedPO permissionArchivedPO) {
     return Optional.ofNullable(permissionArchivedPO).map(PermissionMapper.INSTANCE::toPermissionPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<PermissionFindAllCmd> toPermissionFindAllCmd(
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd) {
@@ -321,7 +313,6 @@ public class PermissionConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<PermissionGrpcDTO> toPermissionGrpcDTO(
     PermissionFindAllDTO permissionFindAllDTO) {
@@ -329,7 +320,6 @@ public class PermissionConvertor {
       .map(PermissionMapper.INSTANCE::toPermissionGrpcDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
   public Optional<PermissionFindByIdGrpcDTO> toPermissionFindByIdGrpcDTO(
     PermissionFindByIdDTO permissionFindByIdDTO) {
@@ -337,7 +327,6 @@ public class PermissionConvertor {
       .map(PermissionMapper.INSTANCE::toPermissionFindByIdGrpcDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
   public Optional<PermissionFindRootDTO> toPermissionFindRootDTO(
     Permission permission) {
@@ -345,7 +334,6 @@ public class PermissionConvertor {
       .map(PermissionMapper.INSTANCE::toPermissionFindRootDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.3.0")
   public Optional<PermissionFindDirectDTO> toPermissionFindDirectDTO(
     Permission permission) {
@@ -353,7 +341,6 @@ public class PermissionConvertor {
       .map(PermissionMapper.INSTANCE::toPermissionFindDirectDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<PermissionDownloadAllDTO> toPermissionDownloadAllDTO(
     Permission permission) {
@@ -361,7 +348,6 @@ public class PermissionConvertor {
       .map(PermissionMapper.INSTANCE::toPermissionDownloadAllDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.6.0")
   public Optional<PermissionIncludePathDownloadAllDTO> toPermissionIncludePathDownloadAllDTO(
     Permission permission) {
@@ -380,7 +366,6 @@ public class PermissionConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
   public Optional<PermissionUpdatedDataDTO> toPermissionUpdatedDataDTO(
     Permission permission) {

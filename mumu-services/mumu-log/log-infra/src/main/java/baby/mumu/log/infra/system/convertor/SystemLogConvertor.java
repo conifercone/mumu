@@ -31,7 +31,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,21 +53,18 @@ public class SystemLogConvertor {
     this.tracer = tracer;
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogKafkaPO> toSystemLogKafkaPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
       .map(SystemLogMapper.INSTANCE::toSystemLogKafkaPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogEsPO> toSystemLogEsPO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
       .map(SystemLogMapper.INSTANCE::toSystemLogEsPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(SystemLogSubmitCmd systemLogSubmitCmd) {
     return Optional.ofNullable(systemLogSubmitCmd).map(res -> {
@@ -82,21 +78,18 @@ public class SystemLogConvertor {
     });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(SystemLogSaveCmd systemLogSaveCmd) {
     return Optional.ofNullable(systemLogSaveCmd)
       .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(SystemLogEsPO systemLogEsPO) {
     return Optional.ofNullable(systemLogEsPO)
       .map(SystemLogMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLog> toEntity(
     SystemLogFindAllCmd systemLogFindAllCmd) {
@@ -110,14 +103,12 @@ public class SystemLogConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<SystemLogFindAllDTO> toSystemLogFindAllDTO(SystemLog systemLog) {
     return Optional.ofNullable(systemLog)
       .map(SystemLogMapper.INSTANCE::toSystemLogFindAllDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<SystemLogSubmitCmd> toSystemLogSubmitCmd(
     SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
@@ -125,7 +116,6 @@ public class SystemLogConvertor {
       .map(SystemLogMapper.INSTANCE::toSystemLogSubmitCmd);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<SystemLogSaveCmd> toSystemLogSaveCmd(
     SystemLogKafkaPO systemLogKafkaPO) {

@@ -29,7 +29,6 @@ import baby.mumu.unique.domain.country.State;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,35 +40,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountryConvertor {
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryStateCityGetAllDTO> toCountryStateCityGetAllDTO(
     Country country) {
     return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryStateCityGetAllDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStatesByCountryIdDTO> toCountryGetStatesByCountryIdDTO(
     State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStatesByCountryIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCitiesByStateIdDTO> toCountryGetCitiesByStateIdDTO(
     City city) {
     return Optional.ofNullable(city).map(CountryMapper.INSTANCE::toCountryGetCitiesByStateIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateByIdDTO> toCountryGetStateByIdDTO(
     State state) {
     return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStateByIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetStateCitiesByIdDTO> toCountryGetStateCitiesByIdDTO(
     State state) {
@@ -77,7 +71,6 @@ public class CountryConvertor {
       .map(CountryMapper.INSTANCE::toCountryGetStateCitiesByIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetCityByIdDTO> toCountryGetCityByIdDTO(
     City city) {
@@ -85,7 +78,6 @@ public class CountryConvertor {
       .map(CountryMapper.INSTANCE::toCountryGetCityByIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.0.0")
   public Optional<CountryGetAllDTO> toCountryGetAllDTO(
     Country country) {

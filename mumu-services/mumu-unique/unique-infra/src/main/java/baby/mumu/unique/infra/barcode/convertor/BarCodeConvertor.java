@@ -21,7 +21,6 @@ import baby.mumu.unique.domain.barcode.BarCode;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +32,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class BarCodeConvertor {
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<BarCode> toEntity(
     BarCodeGenerateCmd barCodeGenerateCmd) {

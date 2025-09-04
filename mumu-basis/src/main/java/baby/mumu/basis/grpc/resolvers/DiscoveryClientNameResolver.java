@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NonNull;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
@@ -80,8 +78,7 @@ public class DiscoveryClientNameResolver extends NameResolver {
     // No operation needed for this implementation.
   }
 
-  @Contract(" -> new")
-  private @NonNull @Unmodifiable List<EquivalentAddressGroup> fetchAddresses() {
+  private @NonNull List<EquivalentAddressGroup> fetchAddresses() {
     return List.of(new EquivalentAddressGroup(Optional.ofNullable(
         discoveryClient.getInstances(serviceName)).map(
         serviceInstances -> serviceInstances.stream().map(

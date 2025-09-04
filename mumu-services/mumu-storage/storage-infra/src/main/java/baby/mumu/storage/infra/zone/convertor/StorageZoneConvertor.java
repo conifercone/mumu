@@ -22,7 +22,6 @@ import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class StorageZoneConvertor {
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
   public Optional<StorageZone> toEntity(
     StorageZonePO storageZonePO) {
@@ -42,7 +40,6 @@ public class StorageZoneConvertor {
       .map(StorageZoneMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
   public Optional<StorageZonePO> toStorageZonePO(
     StorageZone storageZone) {
@@ -50,7 +47,6 @@ public class StorageZoneConvertor {
       .map(StorageZoneMapper.INSTANCE::toStorageZonePO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
   public Optional<StorageZone> toEntity(
     StorageZoneAddCmd storageZoneAddCmd) {

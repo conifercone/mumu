@@ -24,7 +24,6 @@ import baby.mumu.unique.infra.verification.gatewayimpl.cache.po.VerifyCodeCachea
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,27 +36,23 @@ import org.springframework.stereotype.Component;
 public class VerifyCodeConvertor {
 
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<VerifyCodeCacheablePO> toVerifyCodeCacheablePO(VerifyCode verifyCode) {
     return Optional.ofNullable(verifyCode).map(VerifyCodeMapper.INSTANCE::toVerifyCodeCacheablePO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<VerifyCode> toEntity(
     VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
     return Optional.ofNullable(verifyCodeGeneratedCmd).map(VerifyCodeMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.1")
   public Optional<VerifyCode> toEntity(
     VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
     return Optional.ofNullable(verifyCodeVerifyCmd).map(VerifyCodeMapper.INSTANCE::toEntity);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<VerifyCodeVerifyCmd> toVerifyCodeVerifyCmd(
     VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {

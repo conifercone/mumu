@@ -4,7 +4,6 @@ springCloudVersion = "2025.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
-jetbrainsAnnotationsVersion = '26.0.2-1'
 jasyptVersion = '3.0.5'
 swagger3Version = '2.8.11'
 swagger3AnnotationsVersion = '2.2.36'
@@ -66,8 +65,6 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardianVersion" }
 # https://central.sonatype.com/artifact/org.jspecify/jspecify
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecifyVersion" }
-# https://central.sonatype.com/artifact/org.jetbrains/annotations
-jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotationsVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-dependencies
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-web

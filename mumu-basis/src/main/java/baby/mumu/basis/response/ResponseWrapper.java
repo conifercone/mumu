@@ -29,7 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import lombok.Data;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
 
@@ -90,7 +89,6 @@ public class ResponseWrapper<T> implements Serializable {
     this.success = success;
   }
 
-  @Contract(" -> new")
   public static @NonNull <T> ResponseWrapper<T> success() {
     return new ResponseWrapper<>(ResponseCode.SUCCESS, true);
   }
@@ -101,7 +99,6 @@ public class ResponseWrapper<T> implements Serializable {
     return responseWrapper;
   }
 
-  @Contract("_ -> new")
   public static @NonNull <T> ResponseWrapper<T> failure(BaseResponse resultCode) {
     return new ResponseWrapper<>(resultCode, false);
   }

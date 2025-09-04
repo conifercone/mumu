@@ -26,7 +26,6 @@ import org.bytedeco.opencv.opencv_core.Rect;
 import org.bytedeco.opencv.opencv_core.RectVector;
 import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 
@@ -71,7 +70,6 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     });
   }
 
-  @Contract("_ -> new")
   private static @NonNull Result getResult(@NonNull FaceDetection faceDetectionNonNull) {
     String imagePath = faceDetectionNonNull.getImageAbsolutePath();
     Mat image = opencv_imgcodecs.imread(imagePath);

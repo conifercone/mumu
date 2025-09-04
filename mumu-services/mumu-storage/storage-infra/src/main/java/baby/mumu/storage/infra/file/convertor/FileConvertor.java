@@ -33,7 +33,6 @@ import java.util.Optional;
 import org.apache.tika.Tika;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +59,6 @@ public class FileConvertor {
   }
 
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadataPO> toFileMetadataPO(FileMetadata fileMetadata) {
     return Optional.ofNullable(fileMetadata)
@@ -73,7 +71,6 @@ public class FileConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.12.0")
   public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
     return Optional.ofNullable(fileMetadataPO)
@@ -116,7 +113,6 @@ public class FileConvertor {
     });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.13.0")
   public Optional<FileFindMetaByMetaIdDTO> toFileFindMetaByMetaIdDTO(
     FileMetadata fileMetadata) {

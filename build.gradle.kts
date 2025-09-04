@@ -255,7 +255,6 @@ subprojects {
         implementation(rootProject.libs.bundles.jackson)
         testImplementation(rootProject.libs.bundles.jackson)
         implementation(rootProject.libs.jspecify)
-        implementation(rootProject.libs.jetbrains.annotations)
         implementation(rootProject.libs.apiguardian.api)
         implementation(rootProject.libs.guava)
         implementation(rootProject.libs.commons.lang3)

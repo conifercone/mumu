@@ -65,7 +65,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -349,31 +348,26 @@ public class RoleConvertor {
   }
 
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<RoleArchivedPO> toRoleArchivedPO(RolePO rolePO) {
     return Optional.ofNullable(rolePO).map(RoleMapper.INSTANCE::toRoleArchivedPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleCacheablePO> toRoleCacheablePO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleCacheablePO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleArchivedPO> toRoleArchivedPO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedPO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "1.0.4")
   public Optional<RolePO> toRolePO(RoleArchivedPO roleArchivedPO) {
     return Optional.ofNullable(roleArchivedPO).map(RoleMapper.INSTANCE::toRolePO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.1.0")
   public List<RolePermissionPO> toRolePermissionPOS(Role role) {
     return Optional.ofNullable(role).flatMap(roleNonNull -> Optional.ofNullable(
@@ -387,7 +381,6 @@ public class RoleConvertor {
     }).toList()).orElse(new ArrayList<>());
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleFindAllCmd> toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
     return Optional.ofNullable(roleFindAllGrpcCmd).map(RoleMapper.INSTANCE::toRoleFindAllCmd)
@@ -402,7 +395,6 @@ public class RoleConvertor {
       });
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.2.0")
   public Optional<RoleGrpcDTO> toRoleGrpcDTO(RoleFindAllDTO roleFindAllDTO) {
     return Optional.ofNullable(roleFindAllDTO).map(RoleMapper.INSTANCE::toRoleGrpcDTO)
@@ -415,31 +407,26 @@ public class RoleConvertor {
       );
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindByIdDTO> toRoleFindByIdDTO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.5.0")
   public Optional<RoleFindByCodeDTO> toRoleFindByCodeDTO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByCodeDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindRootDTO> toRoleFindRootDTO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindRootDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindDirectDTO> toRoleFindDirectDTO(Role role) {
     return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectDTO);
   }
 
-  @Contract("_ -> new")
   @API(status = Status.STABLE, since = "2.4.0")
   public Optional<RoleFindByIdGrpcDTO> toRoleFindByIdGrpcDTO(RoleFindByIdDTO roleFindByIdDTO) {
     return Optional.ofNullable(roleFindByIdDTO).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcDTO);

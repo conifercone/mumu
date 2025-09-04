@@ -20,7 +20,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -37,18 +36,15 @@ public class ConditionalExecutor {
     this.condition = condition;
   }
 
-  @Contract(value = "_ -> new", pure = true)
   public static @NonNull ConditionalExecutor of(boolean condition) {
     return new ConditionalExecutor(condition);
   }
 
-  @Contract("_, _ -> new")
   public static <T> @NonNull ConditionalExecutor of(@NonNull Predicate<T> predicate,
     @NonNull Supplier<T> supplier) {
     return new ConditionalExecutor(predicate.test(supplier.get()));
   }
 
-  @Contract(value = "_ -> new", pure = true)
   public static @NonNull ConditionalExecutor of(@NonNull BooleanSupplier booleanSupplier) {
     return new ConditionalExecutor(booleanSupplier.getAsBoolean());
   }
