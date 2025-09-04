@@ -37,6 +37,7 @@ import org.springframework.security.core.AuthenticationException;
  * @since 1.0.0
  */
 @GrpcAdvice
+@SuppressWarnings("ClassCanBeRecord")
 public class GrpcExceptionAdvice {
 
   private final SystemLogGrpcService systemLogGrpcService;
@@ -57,7 +58,7 @@ public class GrpcExceptionAdvice {
       GrpcExceptionAdvice.log.error(mumuException.getMessage(), mumuException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(mumuException.getMessage())
-        .setCategory("mumuException")
+        .setCategory("MUMU")
         .setFail(ExceptionUtils.getStackTrace(mumuException))
         .build());
       internal = internal.withDescription(mumuException.getMessage()).withCause(mumuException);
@@ -73,7 +74,7 @@ public class GrpcExceptionAdvice {
       GrpcExceptionAdvice.log.error(rateLimiterException.getMessage(), rateLimiterException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(rateLimiterException.getMessage())
-        .setCategory("rateLimiterException")
+        .setCategory("RL")
         .setFail(ExceptionUtils.getStackTrace(rateLimiterException))
         .build());
       resourceExhausted = resourceExhausted.withDescription(rateLimiterException.getMessage())
@@ -91,7 +92,7 @@ public class GrpcExceptionAdvice {
         authenticationException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(ResponseCode.UNAUTHORIZED.getMessage())
-        .setCategory("exception")
+        .setCategory("EXCEPTION")
         .setFail(ResponseCode.UNAUTHORIZED.getMessage())
         .build());
       unauthenticated = unauthenticated.withDescription(authenticationException.getMessage())

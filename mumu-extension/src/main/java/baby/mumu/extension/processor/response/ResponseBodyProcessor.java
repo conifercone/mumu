@@ -87,7 +87,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(mumuException.getMessage())
-      .setCategory("mumuException")
+      .setCategory("MUMU")
       .setFail(ExceptionUtils.getStackTrace(mumuException))
       .build());
     if (mumuException.getData() != null) {
@@ -107,7 +107,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     ResponseBodyProcessor.log.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(rateLimiterException.getMessage())
-      .setCategory("rateLimiterException")
+      .setCategory("RL")
       .setFail(ExceptionUtils.getStackTrace(rateLimiterException))
       .build());
     return ResponseWrapper.failure(rateLimiterException.getResponseCode(),
@@ -123,7 +123,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     ResponseBodyProcessor.log.error(validationException.getMessage(), validationException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(validationException.getMessage())
-      .setCategory("validationException")
+      .setCategory("VALIDATION")
       .setFail(ExceptionUtils.getStackTrace(validationException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -142,7 +142,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(httpMessageNotReadableException.getMessage())
-      .setCategory("httpMessageNotReadableException")
+      .setCategory("HTTP_MESSAGE_NOT_READABLE")
       .setFail(ExceptionUtils.getStackTrace(httpMessageNotReadableException))
       .build());
     return ResponseWrapper.failure(ResponseCode.PARAMS_IS_INVALID);
@@ -159,7 +159,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       methodArgumentNotValidException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(methodArgumentNotValidException.getMessage())
-      .setCategory("methodArgumentNotValidException")
+      .setCategory("METHOD_ARGUMENT_NOT_VALID")
       .setFail(ExceptionUtils.getStackTrace(methodArgumentNotValidException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -178,7 +178,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       illegalArgumentException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(illegalArgumentException.getMessage())
-      .setCategory("illegalArgumentException")
+      .setCategory("ILLEGAL_ARGUMENT")
       .setFail(ExceptionUtils.getStackTrace(illegalArgumentException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -200,7 +200,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       missingServletRequestParameterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(missingServletRequestParameterException.getMessage())
-      .setCategory("missingServletRequestParameterException")
+      .setCategory("MISSING_SERVLET_REQUEST_PARAMETER")
       .setFail(ExceptionUtils.getStackTrace(missingServletRequestParameterException))
       .build());
     return ResponseWrapper.failure(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS,
@@ -216,7 +216,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     ResponseBodyProcessor.log.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(exception.getMessage())
-      .setCategory("exception")
+      .setCategory("EXCEPTION")
       .setFail(ExceptionUtils.getStackTrace(exception))
       .build());
     return ResponseWrapper.failure(ResponseCode.INTERNAL_SERVER_ERROR);
