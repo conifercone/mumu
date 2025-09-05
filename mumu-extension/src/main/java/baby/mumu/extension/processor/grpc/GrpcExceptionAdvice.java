@@ -92,12 +92,30 @@ public class GrpcExceptionAdvice {
         authenticationException);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(ResponseCode.UNAUTHORIZED.getMessage())
-        .setCategory("EXCEPTION")
+        .setCategory("AUTHENTICATION")
         .setFail(ResponseCode.UNAUTHORIZED.getMessage())
         .build());
       unauthenticated = unauthenticated.withDescription(authenticationException.getMessage())
         .withCause(authenticationException);
     }
     return unauthenticated;
+  }
+
+  @SuppressWarnings("unused")
+  @GrpcExceptionHandler
+  public Status handle(Exception exception) {
+    Status unknown = Status.UNKNOWN;
+    if (exception != null) {
+      GrpcExceptionAdvice.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
+        exception);
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setContent(ResponseCode.INTERNAL_SERVER_ERROR.getMessage())
+        .setCategory("AUTHENTICATION")
+        .setFail(ResponseCode.INTERNAL_SERVER_ERROR.getMessage())
+        .build());
+      unknown = unknown.withDescription(exception.getMessage())
+        .withCause(exception);
+    }
+    return unknown;
   }
 }
