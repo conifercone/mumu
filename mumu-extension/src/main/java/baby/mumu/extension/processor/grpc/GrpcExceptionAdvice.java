@@ -110,7 +110,7 @@ public class GrpcExceptionAdvice {
         exception);
       systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
         .setContent(ResponseCode.INTERNAL_SERVER_ERROR.getMessage())
-        .setCategory("AUTHENTICATION")
+        .setCategory("EXCEPTION")
         .setFail(ResponseCode.INTERNAL_SERVER_ERROR.getMessage())
         .build());
       internal = internal.withDescription(exception.getMessage())
