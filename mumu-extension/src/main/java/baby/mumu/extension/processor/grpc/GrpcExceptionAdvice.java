@@ -104,7 +104,7 @@ public class GrpcExceptionAdvice {
   @SuppressWarnings("unused")
   @GrpcExceptionHandler
   public Status handle(Exception exception) {
-    Status unknown = Status.UNKNOWN;
+    Status internal = Status.INTERNAL;
     if (exception != null) {
       GrpcExceptionAdvice.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
         exception);
@@ -113,9 +113,9 @@ public class GrpcExceptionAdvice {
         .setCategory("AUTHENTICATION")
         .setFail(ResponseCode.INTERNAL_SERVER_ERROR.getMessage())
         .build());
-      unknown = unknown.withDescription(exception.getMessage())
+      internal = internal.withDescription(exception.getMessage())
         .withCause(exception);
     }
-    return unknown;
+    return internal;
   }
 }
