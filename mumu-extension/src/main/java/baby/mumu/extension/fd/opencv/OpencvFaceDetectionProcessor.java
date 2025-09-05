@@ -35,6 +35,7 @@ import org.jspecify.annotations.NonNull;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
 
   private final CascadeClassifier faceDetector;
@@ -43,6 +44,9 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     this.faceDetector = faceDetector;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Long numberOfFaces(FaceDetection faceDetection) {
     return Optional.ofNullable(faceDetection).map(faceDetectionNonNull -> {
@@ -52,6 +56,9 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     }).orElse(0L);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void drawBorder(FaceDetection faceDetection) {
     Optional.ofNullable(faceDetection).ifPresent(faceDetectionNonNull -> {
