@@ -29,6 +29,7 @@ import jakarta.validation.ValidationException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -250,7 +251,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   private @NonNull String getReturnName(MethodParameter returnType) {
     if (returnType == null || returnType.getMethod() == null) {
-      return "";
+      return StringUtils.EMPTY;
     }
     return returnType.getMethod().getReturnType().getName();
   }
