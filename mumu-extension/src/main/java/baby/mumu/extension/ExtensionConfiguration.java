@@ -25,7 +25,7 @@ import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
 import baby.mumu.extension.nosql.DocumentConfiguration;
 import baby.mumu.extension.ocr.OcrConfiguration;
-import baby.mumu.extension.processor.grpc.GrpcExceptionAdvice;
+import baby.mumu.extension.processor.grpc.GrpcExceptionHandlersConfiguration;
 import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
@@ -44,7 +44,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  * @since 1.0.0
  */
 @Configuration
-@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
+@Import({GrpcExceptionHandlersConfiguration.class, ResponseBodyProcessor.class,
   MuMuCorsConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
