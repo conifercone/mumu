@@ -1,6 +1,7 @@
 [versions]
 springbootVersion = "3.5.5"
 springCloudVersion = "2025.0.0"
+springGrpcVersion = "0.10.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
@@ -271,6 +272,8 @@ jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
 jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
 # https://central.sonatype.com/artifact/org.apache.tika/tika-core
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" }
+# https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-dependencies
+spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-dependencies", version.ref = "springGrpcVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
