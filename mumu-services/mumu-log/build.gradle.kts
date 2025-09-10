@@ -12,7 +12,7 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.spring.boot.starter.data.elasticsearch)
     implementation(libs.spring.kafka)
-    implementation(libs.grpc.server.spring.boot.starter)
+    implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.bundles.micrometer)
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)

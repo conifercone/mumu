@@ -4,7 +4,7 @@ dependencies {
     api(project(":mumu-basis"))
     implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(libs.spring.boot.starter.web)
-    implementation(libs.grpc.server.spring.boot.starter)
+    implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.spring.data.commons)
     implementation(libs.spring.security.core)
     implementation(libs.p6spy)

@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.protobuf.java)
-    testImplementation(libs.grpc.client.spring.boot.starter)
+    testImplementation(libs.spring.grpc.client.spring.boot.starter)
     implementation(libs.redis.om.spring)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
