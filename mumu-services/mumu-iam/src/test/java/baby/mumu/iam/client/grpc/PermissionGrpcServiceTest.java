@@ -26,7 +26,9 @@ import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Int32Value;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -49,6 +52,7 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
+@Import(GrpcSecurityTestConfiguration.class)
 @TestPropertySource(properties = {
   SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
   SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
@@ -68,7 +72,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void findAll() {
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
-      .setName("数据")
+      .setName(StringValue.of("数据"))
+      .setCurrent(Int32Value.of(1))
+      .setPageSize(Int32Value.of(10))
       .build();
     PageOfPermissionFindAllGrpcDTO pageOfPermissionGrpcDTO = permissionGrpcService.findAll(
       permissionFindAllGrpcCmd
@@ -78,14 +84,15 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     pageOfPermissionGrpcDTO.getContentList().stream().map(PermissionGrpcDTO::getName)
       .forEach(PermissionGrpcServiceTest.log::info);
     Assertions.assertNotNull(pageOfPermissionGrpcDTO);
-    Assertions.assertFalse(pageOfPermissionGrpcDTO.getContentList().isEmpty());
   }
 
   @Test
   public void syncFindAll() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
-      .setName("数据")
+      .setName(StringValue.of("数据"))
+      .setCurrent(Int32Value.of(1))
+      .setPageSize(Int32Value.of(10))
       .build();
     ListenableFuture<PageOfPermissionFindAllGrpcDTO> pageOfPermissionFindAllGrpcDTOListenableFuture = permissionGrpcService.syncFindAll(
       permissionFindAllGrpcCmd

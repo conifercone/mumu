@@ -44,8 +44,10 @@ import baby.mumu.iam.infra.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RolePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -131,13 +133,16 @@ public interface RoleMapper extends GrpcMapper, DataTransferObjectMapper {
   RoleFindAllCmd toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   RoleGrpcDTO toRoleGrpcDTO(RoleFindAllDTO roleFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   RolePermissionGrpcDTO toRolePermissionGrpcDTO(
     RolePermissionDTO rolePermissionDTO);
 
   @API(status = Status.STABLE, since = "2.4.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   RoleFindByIdGrpcDTO toRoleFindByIdGrpcDTO(
     RoleFindByIdDTO roleFindByIdDTO);
 

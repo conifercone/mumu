@@ -12,12 +12,12 @@ service RoleService {
 }
 
 message RoleFindAllGrpcCmd {
-  int64 id = 1;
-  string code = 2;
-  string name = 3;
-  string description = 4;
-  int32 current = 5;
-  int32 page_size = 6;
+  google.protobuf.Int64Value id = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
+  google.protobuf.StringValue description = 4;
+  google.protobuf.Int32Value  current = 5;
+  google.protobuf.Int32Value  page_size = 6;
 }
 
 message RoleFindByIdGrpcDTO {

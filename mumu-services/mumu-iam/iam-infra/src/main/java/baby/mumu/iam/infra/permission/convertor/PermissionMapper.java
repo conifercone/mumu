@@ -47,8 +47,10 @@ import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -137,9 +139,11 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   PermissionGrpcDTO toPermissionGrpcDTO(PermissionFindAllDTO permissionFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.3.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   PermissionFindByIdGrpcDTO toPermissionFindByIdGrpcDTO(
     PermissionFindByIdDTO permissionFindByIdDTO);
 
