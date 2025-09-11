@@ -19,6 +19,8 @@ package baby.mumu.iam.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.iam.MuMuIAMApplicationMetamodel;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleUpdateCmd;
@@ -49,7 +51,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
   "mumu.extension.global.digital-signature.enabled=false",
-  "mumu.extension.idempotent.request-id.enabled=false"
+  "mumu.extension.idempotent.request-id.enabled=false",
+  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
+    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
 })
 public class RoleControllerTest {
 

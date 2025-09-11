@@ -16,7 +16,9 @@
 
 package baby.mumu.iam.client.grpc;
 
+import baby.mumu.basis.constants.SpringBootConstants;
 import baby.mumu.iam.AuthenticationRequired;
+import baby.mumu.iam.MuMuIAMApplicationMetamodel;
 import baby.mumu.iam.client.api.RoleGrpcService;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * RoleGrpcService单元测试
@@ -45,6 +48,12 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
+@TestPropertySource(properties = {
+  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
+    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
+})
 public class RoleGrpcServiceTest extends AuthenticationRequired {
 
   private final RoleGrpcService roleGrpcService;

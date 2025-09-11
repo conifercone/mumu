@@ -16,7 +16,9 @@
 
 package baby.mumu.iam.client.grpc;
 
+import baby.mumu.basis.constants.SpringBootConstants;
 import baby.mumu.iam.AuthenticationRequired;
+import baby.mumu.iam.MuMuIAMApplicationMetamodel;
 import baby.mumu.iam.client.api.AccountGrpcService;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -31,7 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * AccountGrpcService单元测试
@@ -42,6 +46,13 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
+@TestPropertySource(properties = {
+  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
+    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
+})
 public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
