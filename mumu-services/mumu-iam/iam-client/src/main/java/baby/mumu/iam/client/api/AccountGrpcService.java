@@ -25,16 +25,14 @@ import baby.mumu.iam.client.api.grpc.AccountServiceGrpc.AccountServiceBlockingSt
 import baby.mumu.iam.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
-import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 账号对外提供grpc调用实例
@@ -47,9 +45,8 @@ public class AccountGrpcService extends IAMGrpcService implements DisposableBean
   private ManagedChannel channel;
 
   public AccountGrpcService(
-    DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    DiscoveryClient discoveryClient, GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -58,42 +55,38 @@ public class AccountGrpcService extends IAMGrpcService implements DisposableBean
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public AccountCurrentLoginGrpcDTO queryCurrentLoginAccount(
-    CallCredentials authCallCredentials) {
+  public AccountCurrentLoginGrpcDTO queryCurrentLoginAccount() {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return queryCurrentLoginAccountFromGrpc(authCallCredentials);
+        return queryCurrentLoginAccountFromGrpc();
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
-  public ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccount(
-    CallCredentials authCallCredentials) {
+  public ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccount() {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncQueryCurrentLoginAccountFromGrpc(authCallCredentials);
+        return syncQueryCurrentLoginAccountFromGrpc();
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc(
-    CallCredentials authCallCredentials) {
+  private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc() {
     AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
       channel);
-    return accountServiceBlockingStub.withCallCredentials(authCallCredentials)
+    return accountServiceBlockingStub
       .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 
-  private @NonNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc(
-    CallCredentials authCallCredentials) {
+  private @NonNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc() {
     AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
       channel);
-    return accountServiceFutureStub.withCallCredentials(authCallCredentials)
+    return accountServiceFutureStub
       .queryCurrentLoginAccount(Empty.getDefaultInstance());
   }
 

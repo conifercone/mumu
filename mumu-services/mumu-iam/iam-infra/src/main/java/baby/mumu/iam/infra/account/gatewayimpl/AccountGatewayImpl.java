@@ -50,7 +50,6 @@ import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.storage.client.api.FileGrpcService;
 import com.google.protobuf.Int64Value;
-import io.grpc.CallCredentials;
 import io.micrometer.observation.annotation.Observed;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -58,7 +57,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
@@ -374,12 +372,8 @@ public class AccountGatewayImpl implements AccountGateway {
     if (accountAvatarDocumentPOOptional.isPresent()) {
       AccountAvatarDocumentPO accountAvatarDocumentPO = accountAvatarDocumentPOOptional.get();
       if (AccountAvatarSourceEnum.UPLOAD.equals(accountAvatarDocumentPO.getSource())) {
-        CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-          () -> SecurityContextUtils.getTokenValue().orElseThrow(
-            () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
         fileGrpcService.syncDeleteByMetadataId(Int64Value.of(
-            Long.parseLong(accountAvatarDocumentPO.getFileId())),
-          callCredentials);
+          Long.parseLong(accountAvatarDocumentPO.getFileId())));
       }
       accountAvatarDocumentRepository.deleteByAccountId(accountId);
     }

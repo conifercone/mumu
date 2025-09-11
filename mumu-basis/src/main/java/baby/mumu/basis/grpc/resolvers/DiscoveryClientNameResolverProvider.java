@@ -39,7 +39,8 @@ public class DiscoveryClientNameResolverProvider extends NameResolverProvider {
 
   @Override
   public NameResolver newNameResolver(@NonNull URI targetUri, Args args) {
-    return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient);
+    return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient,
+      targetUri.getPort());
   }
 
   @Override

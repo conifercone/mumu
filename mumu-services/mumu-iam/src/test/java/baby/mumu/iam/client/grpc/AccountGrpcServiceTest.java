@@ -16,18 +16,14 @@
 
 package baby.mumu.iam.client.grpc;
 
-import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.AuthenticationRequired;
 import baby.mumu.iam.client.api.AccountGrpcService;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -36,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * AccountGrpcService单元测试
@@ -50,22 +45,16 @@ import org.springframework.test.web.servlet.MockMvc;
 public class AccountGrpcServiceTest extends AuthenticationRequired {
 
   private final AccountGrpcService accountGrpcService;
-  private final MockMvc mockMvc;
   private static final Logger log = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
 
   @Autowired
-  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService, MockMvc mockMvc) {
+  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService) {
     this.accountGrpcService = accountGrpcService;
-    this.mockMvc = mockMvc;
   }
 
   @Test
   public void queryCurrentLoginAccount() {
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc, "admin", "Admin@5211314").orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
-    AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount(
-      callCredentials);
+    AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount();
     Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
     AccountGrpcServiceTest.log.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
   }
@@ -73,11 +62,8 @@ public class AccountGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncQueryCurrentLoginAccount() {
     CountDownLatch countDownLatch = new CountDownLatch(1);
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc, "admin", "Admin@5211314").orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<AccountCurrentLoginGrpcDTO> accountCurrentLoginGrpcDTOListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
-      callCredentials);
+    );
     accountCurrentLoginGrpcDTOListenableFuture.addListener(() -> {
       try {
         AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountCurrentLoginGrpcDTOListenableFuture.get();

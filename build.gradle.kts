@@ -245,6 +245,7 @@ subprojects {
         implementation(platform(rootProject.libs.spring.boot.dependencies))
         annotationProcessor(platform(rootProject.libs.spring.boot.dependencies))
         implementation(platform(rootProject.libs.spring.cloud.dependencies))
+        implementation(platform(rootProject.libs.spring.grpc.dependencies))
         implementation(platform(rootProject.libs.grpc.bom))
         implementation(platform(rootProject.libs.protobuf.bom))
         implementation(platform(rootProject.libs.guava.bom))

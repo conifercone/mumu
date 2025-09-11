@@ -25,16 +25,14 @@ import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
-import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 文件对外提供grpc调用实例
@@ -48,8 +46,8 @@ public class FileGrpcService extends StorageGrpcService implements DisposableBea
 
   public FileGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -60,13 +58,12 @@ public class FileGrpcService extends StorageGrpcService implements DisposableBea
 
   @SuppressWarnings("unused")
   @API(status = Status.STABLE, since = "2.14.0")
-  public void deleteByMetadataId(Int64Value metadataId,
-    CallCredentials callCredentials) {
+  public void deleteByMetadataId(Int64Value metadataId) {
     Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .ifPresentOrElse(ch -> {
         channel = ch;
-        deleteByMetadataIdFromGrpc(metadataId, callCredentials);
+        deleteByMetadataIdFromGrpc(metadataId);
       }, () -> {
         throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
       });
@@ -75,34 +72,29 @@ public class FileGrpcService extends StorageGrpcService implements DisposableBea
   @SuppressWarnings("UnusedReturnValue")
   @API(status = Status.STABLE, since = "2.14.0")
   public ListenableFuture<Empty> syncDeleteByMetadataId(
-    Int64Value roleId,
-    CallCredentials callCredentials) {
+    Int64Value roleId) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncDeleteByMetadataIdFromGrpc(roleId, callCredentials);
+        return syncDeleteByMetadataIdFromGrpc(roleId);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
 
   private void deleteByMetadataIdFromGrpc(
-    Int64Value metadataId,
-    CallCredentials callCredentials) {
+    Int64Value metadataId) {
     FileServiceBlockingStub fileServiceBlockingStub = FileServiceGrpc.newBlockingStub(channel);
     // noinspection ResultOfMethodCallIgnored
-    fileServiceBlockingStub.withCallCredentials(callCredentials)
-      .deleteByMetadataId(metadataId);
+    fileServiceBlockingStub.deleteByMetadataId(metadataId);
   }
 
   private @NonNull ListenableFuture<Empty> syncDeleteByMetadataIdFromGrpc(
-    Int64Value metadataId,
-    CallCredentials callCredentials) {
+    Int64Value metadataId) {
     FileServiceFutureStub fileServiceFutureStub = FileServiceGrpc.newFutureStub(
       channel);
-    return fileServiceFutureStub.withCallCredentials(callCredentials)
-      .deleteByMetadataId(metadataId);
+    return fileServiceFutureStub.deleteByMetadataId(metadataId);
   }
 
 }

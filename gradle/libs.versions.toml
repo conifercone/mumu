@@ -1,6 +1,7 @@
 [versions]
 springbootVersion = "3.5.5"
 springCloudVersion = "2025.0.0"
+springGrpcVersion = "0.10.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
@@ -9,7 +10,6 @@ swagger3Version = '2.8.13'
 swagger3AnnotationsVersion = '2.2.36'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
-grpcSpringBootStarterApiVersion = '3.1.0.RELEASE'
 redisOmSpringVersion = "1.0.1"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.4"
@@ -127,10 +127,10 @@ grpc-stub = { module = "io.grpc:grpc-stub" }
 grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
 # https://central.sonatype.com/artifact/javax.annotation/javax.annotation-api
 javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
-# https://central.sonatype.com/artifact/net.devh/grpc-server-spring-boot-starter
-grpc-server-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
-# https://central.sonatype.com/artifact/net.devh/grpc-client-spring-boot-starter
-grpc-client-spring-boot-starter = { module = "net.devh:grpc-client-spring-boot-starter", version.ref = "grpcSpringBootStarterApiVersion" }
+# https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-server-spring-boot-starter
+spring-grpc-server-spring-boot-starter = { module = "org.springframework.grpc:spring-grpc-server-spring-boot-starter" }
+# https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-client-spring-boot-starter
+spring-grpc-client-spring-boot-starter = { module = "org.springframework.grpc:spring-grpc-client-spring-boot-starter" }
 # https://central.sonatype.com/artifact/com.redis.om/redis-om-spring
 redis-om-spring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://central.sonatype.com/artifact/org.apache.commons/commons-lang3
@@ -271,6 +271,8 @@ jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmhVersion" }
 jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmhVersion" }
 # https://central.sonatype.com/artifact/org.apache.tika/tika-core
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" }
+# https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-dependencies
+spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-dependencies", version.ref = "springGrpcVersion" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
