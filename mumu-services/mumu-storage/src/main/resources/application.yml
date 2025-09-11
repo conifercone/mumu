@@ -18,25 +18,6 @@ server:
   port: ${port:7805}
   shutdown: graceful
 spring:
-  grpc:
-    client:
-      channels:
-        storage:
-          address: dns:///storage.service.consul:9090
-          default-load-balancing-policy: round_robin
-          negotiation-type: PLAINTEXT
-        iam:
-          address: dns:///iam.service.consul:9090
-          default-load-balancing-policy: round_robin
-          negotiation-type: PLAINTEXT
-        log:
-          address: dns:///log.service.consul:9090
-          default-load-balancing-policy: round_robin
-          negotiation-type: PLAINTEXT
-        unique:
-          address: dns:///unique.service.consul:9090
-          default-load-balancing-policy: round_robin
-          negotiation-type: PLAINTEXT
   config:
     import: 'optional:consul:'
   cloud:
