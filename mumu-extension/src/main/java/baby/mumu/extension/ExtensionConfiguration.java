@@ -22,6 +22,7 @@ import baby.mumu.extension.cors.MuMuCorsConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.grpc.interceptors.SafeBearerTokenInterceptor;
 import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
@@ -37,8 +38,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.grpc.client.GlobalClientInterceptor;
-import org.springframework.grpc.client.interceptor.security.BearerTokenAuthenticationInterceptor;
+import org.springframework.grpc.server.GlobalServerInterceptor;
 import org.springframework.http.server.observation.ServerRequestObservationContext;
 
 /**
@@ -71,15 +73,16 @@ public class ExtensionConfiguration {
   }
 
   @Bean
-  @GlobalClientInterceptor
+  @GlobalServerInterceptor
+  @Order(Integer.MIN_VALUE)
   ClientIpInterceptor clientIpInterceptor() {
     return new ClientIpInterceptor();
   }
 
   @Bean
   @GlobalClientInterceptor
-  BearerTokenAuthenticationInterceptor bearerTokenInterceptor() {
-    return new BearerTokenAuthenticationInterceptor(
+  SafeBearerTokenInterceptor bearerTokenInterceptor() {
+    return new SafeBearerTokenInterceptor(
       () -> SecurityContextUtils.getTokenValue().orElse(null)
     );
   }
