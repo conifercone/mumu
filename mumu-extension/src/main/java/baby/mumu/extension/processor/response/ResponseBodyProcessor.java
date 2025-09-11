@@ -24,15 +24,14 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -61,7 +60,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice(annotations = RestController.class)
 public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String VOID = "void";
   private static final Logger log = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
@@ -76,8 +74,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(MuMuException.class)
-  public ResponseWrapper<?> handleMuMuException(@NotNull MuMuException mumuException,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleMuMuException(@NonNull MuMuException mumuException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(
@@ -90,7 +88,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(mumuException.getMessage())
-      .setCategory("mumuException")
+      .setCategory("MUMU")
       .setFail(ExceptionUtils.getStackTrace(mumuException))
       .build());
     if (mumuException.getData() != null) {
@@ -101,8 +99,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(RateLimiterException.class)
   public ResponseWrapper<?> handleRateLimitingException(
-    @NotNull RateLimiterException rateLimiterException,
-    @NotNull HttpServletResponse response) {
+    @NonNull RateLimiterException rateLimiterException,
+    @NonNull HttpServletResponse response) {
     ResponseCode responseCode = rateLimiterException.getResponseCode();
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -110,7 +108,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     ResponseBodyProcessor.log.error(rateLimiterException.getMessage(), rateLimiterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(rateLimiterException.getMessage())
-      .setCategory("rateLimiterException")
+      .setCategory("RL")
       .setFail(ExceptionUtils.getStackTrace(rateLimiterException))
       .build());
     return ResponseWrapper.failure(rateLimiterException.getResponseCode(),
@@ -118,15 +116,15 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(ValidationException.class)
-  public ResponseWrapper<?> handleException(@NotNull ValidationException validationException,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleException(@NonNull ValidationException validationException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     ResponseBodyProcessor.log.error(validationException.getMessage(), validationException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(validationException.getMessage())
-      .setCategory("validationException")
+      .setCategory("VALIDATION")
       .setFail(ExceptionUtils.getStackTrace(validationException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -136,8 +134,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull HttpMessageNotReadableException httpMessageNotReadableException,
-    @NotNull HttpServletResponse response) {
+    @NonNull HttpMessageNotReadableException httpMessageNotReadableException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.PARAMS_IS_INVALID.getStatus());
@@ -145,7 +143,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       httpMessageNotReadableException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(httpMessageNotReadableException.getMessage())
-      .setCategory("httpMessageNotReadableException")
+      .setCategory("HTTP_MESSAGE_NOT_READABLE")
       .setFail(ExceptionUtils.getStackTrace(httpMessageNotReadableException))
       .build());
     return ResponseWrapper.failure(ResponseCode.PARAMS_IS_INVALID);
@@ -153,8 +151,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull MethodArgumentNotValidException methodArgumentNotValidException,
-    @NotNull HttpServletResponse response) {
+    @NonNull MethodArgumentNotValidException methodArgumentNotValidException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -162,7 +160,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       methodArgumentNotValidException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(methodArgumentNotValidException.getMessage())
-      .setCategory("methodArgumentNotValidException")
+      .setCategory("METHOD_ARGUMENT_NOT_VALID")
       .setFail(ExceptionUtils.getStackTrace(methodArgumentNotValidException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -172,8 +170,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull IllegalArgumentException illegalArgumentException,
-    @NotNull HttpServletResponse response) {
+    @NonNull IllegalArgumentException illegalArgumentException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -181,7 +179,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       illegalArgumentException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(illegalArgumentException.getMessage())
-      .setCategory("illegalArgumentException")
+      .setCategory("ILLEGAL_ARGUMENT")
       .setFail(ExceptionUtils.getStackTrace(illegalArgumentException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
@@ -194,8 +192,8 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
 
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public ResponseWrapper<?> handleException(
-    @NotNull MissingServletRequestParameterException missingServletRequestParameterException,
-    @NotNull HttpServletResponse response) {
+    @NonNull MissingServletRequestParameterException missingServletRequestParameterException,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS.getStatus());
@@ -203,7 +201,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       missingServletRequestParameterException);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(missingServletRequestParameterException.getMessage())
-      .setCategory("missingServletRequestParameterException")
+      .setCategory("MISSING_SERVLET_REQUEST_PARAMETER")
       .setFail(ExceptionUtils.getStackTrace(missingServletRequestParameterException))
       .build());
     return ResponseWrapper.failure(ResponseCode.REQUEST_MISSING_NECESSARY_PARAMETERS,
@@ -211,43 +209,38 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseWrapper<?> handleException(@NotNull Exception exception,
-    @NotNull HttpServletResponse response) {
+  public ResponseWrapper<?> handleException(@NonNull Exception exception,
+    @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(ResponseCode.INTERNAL_SERVER_ERROR.getStatus());
     ResponseBodyProcessor.log.error(exception.getMessage(), exception);
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
       .setContent(exception.getMessage())
-      .setCategory("exception")
+      .setCategory("EXCEPTION")
       .setFail(ExceptionUtils.getStackTrace(exception))
       .build());
     return ResponseWrapper.failure(ResponseCode.INTERNAL_SERVER_ERROR);
   }
 
   @Override
-  public boolean supports(@NotNull MethodParameter returnType,
-    @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
-    return true;
+  public boolean supports(@NonNull MethodParameter returnType,
+    @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
+    // 只对本项目生效
+    Class<?> controllerClass = returnType.getContainingClass();
+    return controllerClass.getPackageName().startsWith("baby.mumu");
   }
 
   @Override
-  public Object beforeBodyWrite(Object body, @NotNull MethodParameter returnType,
-    @NotNull MediaType selectedContentType,
-    @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
-    @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
+  public Object beforeBodyWrite(Object body, @NonNull MethodParameter returnType,
+    @NonNull MediaType selectedContentType,
+    @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
+    @NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response) {
     if (ResponseBodyProcessor.VOID.equals(getReturnName(returnType))) {
       return ResponseWrapper.success();
     }
     return switch (body) {
       case ResponseWrapper<?> responseWrapper -> responseWrapper;
-      case String string -> {
-        try {
-          yield objectMapper.writeValueAsString(ResponseWrapper.success(string));
-        } catch (JsonProcessingException e) {
-          throw new MuMuException(ResponseCode.DATA_CONVERSION_FAILED);
-        }
-      }
       case DataTransferObject dataTransferObject -> ResponseWrapper.success(dataTransferObject);
       case Page<?> page -> ResponseWrapper.success(page);
       case Slice<?> slice -> ResponseWrapper.success(slice);
@@ -256,9 +249,9 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     };
   }
 
-  private @NotNull String getReturnName(MethodParameter returnType) {
+  private @NonNull String getReturnName(MethodParameter returnType) {
     if (returnType == null || returnType.getMethod() == null) {
-      return "";
+      return StringUtils.EMPTY;
     }
     return returnType.getMethod().getReturnType().getName();
   }

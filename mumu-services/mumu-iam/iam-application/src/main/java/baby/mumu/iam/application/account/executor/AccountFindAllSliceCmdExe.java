@@ -24,7 +24,7 @@ import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -51,7 +51,7 @@ public class AccountFindAllSliceCmdExe {
   }
 
   public Slice<AccountFindAllSliceDTO> execute(
-    @NotNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
+    @NonNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
     Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
     Slice<Account> accounts = accountGateway.findAllSlice(account,
       accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());

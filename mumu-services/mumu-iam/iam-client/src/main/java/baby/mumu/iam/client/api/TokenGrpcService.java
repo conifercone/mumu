@@ -24,14 +24,13 @@ import baby.mumu.iam.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcDTO;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * token对外提供grpc调用实例
@@ -45,8 +44,8 @@ public class TokenGrpcService extends IAMGrpcService implements DisposableBean {
 
   public TokenGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -57,7 +56,7 @@ public class TokenGrpcService extends IAMGrpcService implements DisposableBean {
   @API(status = Status.STABLE, since = "1.0.0")
   public TokenValidityGrpcDTO validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return validityFromGrpc(tokenValidityGrpcCmd);

@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
@@ -124,7 +124,7 @@ public class Tess4jOcrTest {
     System.out.println(string);
   }
 
-  private @NotNull File getFileFromResource(String fileName)
+  private @NonNull File getFileFromResource(String fileName)
     throws IOException {
     Resource resource = resourceLoader.getResource("classpath:" + fileName);
     File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));

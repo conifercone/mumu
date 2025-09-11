@@ -29,7 +29,7 @@ import io.grpc.ServerInterceptor;
 import java.net.InetSocketAddress;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 客户端IP拦截器
@@ -43,7 +43,7 @@ public class ClientIpInterceptor implements ServerInterceptor {
   private static final Key<String> CLIENT_IP_KEY = Context.key("client-ip");
 
   @Override
-  public <Q, P> Listener<Q> interceptCall(@NotNull ServerCall<Q, P> call,
+  public <Q, P> Listener<Q> interceptCall(@NonNull ServerCall<Q, P> call,
     Metadata headers,
     ServerCallHandler<Q, P> next) {
     Attributes attributes = call.getAttributes();

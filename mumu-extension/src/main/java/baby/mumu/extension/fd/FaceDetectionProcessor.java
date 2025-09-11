@@ -24,7 +24,18 @@ package baby.mumu.extension.fd;
  */
 public interface FaceDetectionProcessor {
 
+  /**
+   * 检测图片中人脸个数
+   *
+   * @param faceDetection 人脸检测
+   * @return 人脸个数
+   */
   Long numberOfFaces(FaceDetection faceDetection);
 
+  /**
+   * 图片中人脸绘制边框
+   *
+   * @param faceDetection 人脸检测
+   */
   void drawBorder(FaceDetection faceDetection);
 }

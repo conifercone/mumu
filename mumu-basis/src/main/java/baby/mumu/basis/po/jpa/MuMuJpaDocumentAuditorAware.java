@@ -18,7 +18,7 @@ package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.AuditorAware;
 
 /**
@@ -30,7 +30,7 @@ import org.springframework.data.domain.AuditorAware;
 public class MuMuJpaDocumentAuditorAware implements AuditorAware<Long> {
 
   @Override
-  public @NotNull Optional<Long> getCurrentAuditor() {
+  public @NonNull Optional<Long> getCurrentAuditor() {
     return SecurityContextUtils.getLoginAccountId();
   }
 }

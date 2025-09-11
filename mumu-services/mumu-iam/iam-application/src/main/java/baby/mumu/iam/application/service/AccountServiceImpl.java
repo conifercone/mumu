@@ -17,7 +17,6 @@
 package baby.mumu.iam.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.account.executor.AccountAddAddressCmdExe;
 import baby.mumu.iam.application.account.executor.AccountAddSystemSettingsCmdExe;
@@ -71,14 +70,13 @@ import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,7 +87,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "AccountServiceImpl")
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 
@@ -316,7 +314,7 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   @Transactional(rollbackFor = Exception.class)
   public void queryCurrentLoginAccount(Empty request,
-    @NotNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
+    @NonNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
     AccountCurrentLoginDTO accountCurrentLoginDTO = accountCurrentLoginQueryCmdExe.execute();
     responseObserver.onNext(accountConvertor.toAccountCurrentLoginGrpcDTO(accountCurrentLoginDTO)
       .orElse(AccountCurrentLoginGrpcDTO.getDefaultInstance()));

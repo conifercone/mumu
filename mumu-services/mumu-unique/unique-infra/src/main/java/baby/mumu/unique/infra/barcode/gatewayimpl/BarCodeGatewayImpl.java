@@ -40,8 +40,8 @@ import java.util.HashMap;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -76,7 +76,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
     }).orElse(new byte[0]);
   }
 
-  private @Nullable BufferedImage insertWords(BufferedImage image, @NotNull BarCode barCode) {
+  private @Nullable BufferedImage insertWords(BufferedImage image, @NonNull BarCode barCode) {
     if (StringUtils.isNotBlank(barCode.getFootContent())) {
       BufferedImage outImage = new BufferedImage(barCode.getWidth(), barCode.getHeight() + 20,
         BufferedImage.TYPE_INT_RGB);
@@ -111,7 +111,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
    *
    * @param g2d Graphics2D提供对几何形状、坐标转换、颜色管理和文本布局更为复杂的控制
    */
-  private void setGraphics2D(@NotNull Graphics2D g2d) {
+  private void setGraphics2D(@NonNull Graphics2D g2d) {
     // 消除画图锯齿
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     // 消除文字锯齿
@@ -122,7 +122,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
     g2d.setStroke(s);
   }
 
-  private void setColorWhite(@NotNull Graphics2D g2d, @NotNull BarCode barCode) {
+  private void setColorWhite(@NonNull Graphics2D g2d, @NonNull BarCode barCode) {
     g2d.setColor(Color.WHITE);
     // 填充整个屏幕
     g2d.fillRect(0, 0, barCode.getWidth(), barCode.getHeight() + 20);

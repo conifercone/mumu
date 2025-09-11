@@ -16,7 +16,7 @@
 
 package baby.mumu.jmh;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.openjdk.jmh.results.format.ResultFormatType;
 
 /**
@@ -29,8 +29,8 @@ public class MuMuBenchmarkUtils {
 
   public static final String RESULT_FILE_PATH_TEMPLATE = "./benchmark-history/%s.%s";
 
-  public static @NotNull String getResultFilePath(@NotNull Class<?> clazz,
-    @NotNull ResultFormatType format) {
+  public static @NonNull String getResultFilePath(@NonNull Class<?> clazz,
+    @NonNull ResultFormatType format) {
     return String.format(MuMuBenchmarkUtils.RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
       format.toString().toLowerCase());
   }

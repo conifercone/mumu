@@ -24,7 +24,7 @@ import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.core.GrantedAuthority;
@@ -63,7 +63,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
    * @return The {@link GrantedAuthority authorities} read from the token scopes
    */
   @Override
-  public Collection<GrantedAuthority> convert(@NotNull Jwt jwt) {
+  public Collection<GrantedAuthority> convert(@NonNull Jwt jwt) {
     Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
     for (String authority : getAuthorities(jwt)) {
       if (authority.startsWith(CommonConstants.ROLE_PREFIX)) {

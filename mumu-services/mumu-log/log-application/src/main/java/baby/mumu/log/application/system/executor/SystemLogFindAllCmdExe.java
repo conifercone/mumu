@@ -23,7 +23,7 @@ import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -50,7 +50,7 @@ public class SystemLogFindAllCmdExe {
   }
 
   public Page<SystemLogFindAllDTO> execute(
-    @NotNull SystemLogFindAllCmd systemLogFindAllCmd) {
+    @NonNull SystemLogFindAllCmd systemLogFindAllCmd) {
     Assert.notNull(systemLogFindAllCmd, "SystemLogFindAllCmd cannot be null");
     SystemLog systemLog = systemLogConvertor.toEntity(systemLogFindAllCmd)
       .orElseGet(SystemLog::new);

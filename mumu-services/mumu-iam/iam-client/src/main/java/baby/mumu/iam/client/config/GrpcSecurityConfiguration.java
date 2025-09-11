@@ -18,34 +18,18 @@ package baby.mumu.iam.client.config;
 
 import baby.mumu.basis.constants.CommonConstants;
 import io.grpc.MethodDescriptor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import net.devh.boot.grpc.server.security.authentication.BearerAuthenticationReader;
-import net.devh.boot.grpc.server.security.authentication.CompositeGrpcAuthenticationReader;
-import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
-import net.devh.boot.grpc.server.security.check.AccessPredicate;
-import net.devh.boot.grpc.server.security.check.AccessPredicateVoter;
-import net.devh.boot.grpc.server.security.check.GrpcSecurityMetadataSource;
-import net.devh.boot.grpc.server.security.check.ManualGrpcSecurityMetadataSource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.UnanimousBased;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.grpc.server.GlobalServerInterceptor;
+import org.springframework.grpc.server.security.AuthenticationProcessInterceptor;
+import org.springframework.grpc.server.security.GrpcSecurity;
 import org.springframework.util.Assert;
 
 /**
@@ -57,97 +41,125 @@ import org.springframework.util.Assert;
 @Configuration
 public class GrpcSecurityConfiguration {
 
-  private final JwtAuthenticationProvider jwtAuthenticationProvider;
-  private final ResourcePoliciesProperties resourcePoliciesProperties;
-  private final static String GRPC_GET_METHOD_TEMPLATE = "get%sMethod";
+  private static final String GET_METHOD_TEMPLATE = "get%sMethod";
+  private final ResourcePoliciesProperties props;
+
+  private static final String AUTHORITY_PREFIX =
+    CommonConstants.AUTHORITY_PREFIX;
+  private static final String ROLE_PREFIX = CommonConstants.ROLE_PREFIX;
 
   @Autowired
-  public GrpcSecurityConfiguration(JwtDecoder jwtDecoder,
-    JwtAuthenticationConverter jwtAuthenticationConverter,
-    ResourcePoliciesProperties resourcePoliciesProperties) {
-    JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(jwtDecoder);
-    authenticationProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
-    this.jwtAuthenticationProvider = authenticationProvider;
-    this.resourcePoliciesProperties = resourcePoliciesProperties;
+  public GrpcSecurityConfiguration(ResourcePoliciesProperties props) {
+    this.props = props;
   }
 
   @Bean
-  AuthenticationManager authenticationManager() {
-    final List<AuthenticationProvider> providers = new ArrayList<>();
-    providers.add(jwtAuthenticationProvider);
-    return new ProviderManager(providers);
-  }
+  @GlobalServerInterceptor
+  AuthenticationProcessInterceptor authenticationProcessInterceptor(GrpcSecurity grpc)
+    throws Exception {
+    // 1) 启用 OAuth2 资源服务器（会自动挂上 Bearer 提取器）
+    grpc.oauth2ResourceServer(cfg -> cfg.jwt(_ -> {
+    }));
 
-  @Bean
-  GrpcAuthenticationReader authenticationReader() {
-    final List<GrpcAuthenticationReader> readers = new ArrayList<>();
-    readers.add(new BearerAuthenticationReader(
-      BearerTokenAuthenticationToken::new));
-    return new CompositeGrpcAuthenticationReader(readers);
-  }
+    // 2) 基于方法路径的授权映射
+    grpc.authorizeRequests(r -> {
+      // 放开 gRPC 内置服务；需要更严可以改成 authenticated()
+      r.methods("grpc.*/*").permitAll();
 
-  @Bean
-  GrpcSecurityMetadataSource grpcSecurityMetadataSource() {
-    final ManualGrpcSecurityMetadataSource source = new ManualGrpcSecurityMetadataSource();
-    if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getGrpc())) {
-      resourcePoliciesProperties.getGrpc()
-        .forEach(grpc -> {
-          if (CollectionUtils.isNotEmpty(grpc.getGrpcPolicies())) {
-            grpc.getGrpcPolicies().forEach(grpcPolicy -> {
-              try {
-                Class<?> clazz = Class.forName(grpc.getServiceFullPath());
-                Method method = clazz.getDeclaredMethod(String.format(
-                  GrpcSecurityConfiguration.GRPC_GET_METHOD_TEMPLATE,
-                  StringUtils.capitalize(grpcPolicy.getMethod())));
-                MethodDescriptor<?, ?> methods =
-                  (MethodDescriptor<?, ?>) method.invoke(null);
-                if (StringUtils.isNotBlank(grpcPolicy.getRole())) {
-                  source.set(methods, AccessPredicate.hasRole(grpcPolicy.getRole()));
-                } else if (CollectionUtils.isNotEmpty(grpcPolicy.getAnyRole())) {
-                  source.set(methods, AccessPredicate.hasAnyRole(grpcPolicy.getAnyRole()));
-                } else if (StringUtils.isNotBlank(
-                  grpcPolicy.getAuthority())) {
-                  Assert.isTrue(
-                    !grpcPolicy.getAuthority().startsWith(CommonConstants.AUTHORITY_PREFIX),
-                    "Permission configuration cannot be empty and cannot start with SCOPE_");
-                  source.set(methods, AccessPredicate.hasAuthority(new SimpleGrantedAuthority(
-                    CommonConstants.AUTHORITY_PREFIX.concat(grpcPolicy.getAuthority()))));
-                } else if (CollectionUtils.isNotEmpty(grpcPolicy.getAnyAuthority())) {
-                  List<String> anyAuthority = grpcPolicy.getAnyAuthority();
-                  anyAuthority.stream().filter(
-                    authority -> StringUtils.isBlank(authority) || authority.startsWith(
-                      CommonConstants.AUTHORITY_PREFIX)).findAny().ifPresent(_ -> {
-                    throw new IllegalArgumentException(
-                      "Permission configuration cannot be empty and cannot start with SCOPE_");
-                  });
-                  source.set(methods, AccessPredicate.hasAnyAuthority(
-                    anyAuthority.stream().distinct().map(authority -> new SimpleGrantedAuthority(
-                        CommonConstants.AUTHORITY_PREFIX.concat(authority)))
-                      .collect(Collectors.toSet())));
-                } else if (grpcPolicy.isPermitAll()) {
-                  source.set(methods, AccessPredicate.permitAll());
-                } else if (grpcPolicy.isDenyAll()) {
-                  source.set(methods, AccessPredicate.denyAll());
-                } else if (grpcPolicy.isAuthenticated()) {
-                  source.set(methods, AccessPredicate.authenticated());
-                }
-              } catch (ClassNotFoundException | InvocationTargetException |
-                       IllegalAccessException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-              }
-            });
+      if (CollectionUtils.isNotEmpty(props.getGrpc())) {
+        for (var svc : props.getGrpc()) {
+          if (CollectionUtils.isEmpty(svc.getGrpcPolicies())) {
+            continue;
           }
-        });
-    }
-    source.setDefault(AccessPredicate.denyAll());
-    return source;
+
+          for (var p : svc.getGrpcPolicies()) {
+            String full;
+            try {
+              full = GrpcSecurityConfiguration.resolveFullMethodName(svc.getServiceFullPath(),
+                p.getMethod());
+            } catch (Exception e) {
+              throw new RuntimeException(e);
+            }
+            var m = r.methods(full);
+
+            if (StringUtils.isNotBlank(p.getRole())) {
+              // 没有 hasRole，自己转成 ROLE_ 权限去匹配
+              m.hasAuthority(roleToAuthority(p.getRole()));
+            } else if (CollectionUtils.isNotEmpty(p.getAnyRole())) {
+              m.hasAnyAuthority(
+                p.getAnyRole().stream()
+                  .filter(StringUtils::isNotBlank)
+                  .map(this::roleToAuthority)
+                  .distinct()
+                  .toArray(String[]::new)
+              );
+            } else if (StringUtils.isNotBlank(p.getAuthority())) {
+              Assert.isTrue(
+                !p.getAuthority().startsWith(GrpcSecurityConfiguration.AUTHORITY_PREFIX),
+                "Permission cannot start with " + GrpcSecurityConfiguration.AUTHORITY_PREFIX);
+              m.hasAuthority(GrpcSecurityConfiguration.AUTHORITY_PREFIX + p.getAuthority());
+            } else if (CollectionUtils.isNotEmpty(p.getAnyAuthority())) {
+              GrpcSecurityConfiguration.validateAuthorities(p.getAnyAuthority());
+              Set<String> granted = p.getAnyAuthority().stream()
+                .distinct()
+                .map(a -> GrpcSecurityConfiguration.AUTHORITY_PREFIX + a)
+                .collect(Collectors.toSet());
+              m.hasAnyAuthority(granted.toArray(String[]::new));
+            } else if (p.isPermitAll()) {
+              m.permitAll();
+            } else if (p.isDenyAll()) {
+              m.denyAll();
+            } else if (p.isAuthenticated()) {
+              m.authenticated();
+            } else {
+              m.denyAll(); // 未声明一律拒绝
+            }
+          }
+        }
+      }
+
+      // 兜底
+      r.allRequests().denyAll();
+    });
+
+    return grpc.build();
   }
 
-  @Bean
-  @SuppressWarnings("deprecation")
-  AccessDecisionManager accessDecisionManager() {
-    final List<AccessDecisionVoter<?>> voters = new ArrayList<>();
-    voters.add(new AccessPredicateVoter());
-    return new UnanimousBased(voters);
+  private String roleToAuthority(String role) {
+    String r = StringUtils.trim(role);
+    if (StringUtils.isBlank(r)) {
+      throw new IllegalArgumentException("role must not be blank");
+    }
+    return r.startsWith(GrpcSecurityConfiguration.ROLE_PREFIX) ? r :
+      GrpcSecurityConfiguration.ROLE_PREFIX + r;
   }
+
+  private static void validateAuthorities(List<String> anyAuthority) {
+    anyAuthority.stream()
+      .filter(a -> StringUtils.isBlank(a) || a.startsWith(
+        GrpcSecurityConfiguration.AUTHORITY_PREFIX))
+      .findAny()
+      .ifPresent(_ -> {
+        throw new IllegalArgumentException(
+          "Permission cannot be empty and cannot start with "
+            + GrpcSecurityConfiguration.AUTHORITY_PREFIX);
+      });
+  }
+
+  private static String resolveFullMethodName(String serviceFullPath, String methodName)
+    throws Exception {
+    Class<?> clazz = Class.forName(serviceFullPath);
+    Method m = clazz.getDeclaredMethod(String.format(GrpcSecurityConfiguration.GET_METHOD_TEMPLATE,
+      GrpcSecurityConfiguration.capitalize(methodName)));
+    MethodDescriptor<?, ?> md = (MethodDescriptor<?, ?>) m.invoke(null);
+    return md.getFullMethodName(); // e.g. "com.foo.UserService/GetUser"
+  }
+
+  private static String capitalize(String s) {
+    if (StringUtils.isBlank(s)) {
+      return s;
+    }
+    return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+  }
+
 }

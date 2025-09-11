@@ -27,16 +27,14 @@ import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceBlockingStub;
 import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Int64Value;
-import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 角色对外提供grpc调用实例
@@ -50,8 +48,8 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
 
   public RoleGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -60,86 +58,78 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public PageOfRoleFindAllGrpcDTO findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+  public PageOfRoleFindAllGrpcDTO findAll(RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return findAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+        return findAllFromGrpc(roleFindAllGrpcCmd);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAll(
-    RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+    RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncFindAllFromGrpc(roleFindAllGrpcCmd, callCredentials);
+        return syncFindAllFromGrpc(roleFindAllGrpcCmd);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
-  public RoleFindByIdGrpcDTO findById(Int64Value roleId,
-    CallCredentials callCredentials) {
+  public RoleFindByIdGrpcDTO findById(Int64Value roleId) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return findByIdFromGrpc(roleId, callCredentials);
+        return findByIdFromGrpc(roleId);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
   public ListenableFuture<RoleFindByIdGrpcDTO> syncFindById(
-    Int64Value roleId,
-    CallCredentials callCredentials) {
+    Int64Value roleId) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncFindByIdFromGrpc(roleId, callCredentials);
+        return syncFindByIdFromGrpc(roleId);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private PageOfRoleFindAllGrpcDTO findAllFromGrpc(
-    RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+    RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
-    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+    return roleServiceBlockingStub
       .findAll(roleFindAllGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAllFromGrpc(
-    RoleFindAllGrpcCmd roleFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+  private @NonNull ListenableFuture<PageOfRoleFindAllGrpcDTO> syncFindAllFromGrpc(
+    RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
       channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials)
+    return roleServiceFutureStub
       .findAll(roleFindAllGrpcCmd);
   }
 
   private RoleFindByIdGrpcDTO findByIdFromGrpc(
-    Int64Value roleId,
-    CallCredentials callCredentials) {
+    Int64Value roleId) {
     RoleServiceBlockingStub roleServiceBlockingStub = RoleServiceGrpc.newBlockingStub(channel);
-    return roleServiceBlockingStub.withCallCredentials(callCredentials)
+    return roleServiceBlockingStub
       .findById(roleId);
   }
 
-  private @NotNull ListenableFuture<RoleFindByIdGrpcDTO> syncFindByIdFromGrpc(
-    Int64Value roleId,
-    CallCredentials callCredentials) {
+  private @NonNull ListenableFuture<RoleFindByIdGrpcDTO> syncFindByIdFromGrpc(
+    Int64Value roleId) {
     RoleServiceFutureStub roleServiceFutureStub = RoleServiceGrpc.newFutureStub(
       channel);
-    return roleServiceFutureStub.withCallCredentials(callCredentials)
+    return roleServiceFutureStub
       .findById(roleId);
   }
 

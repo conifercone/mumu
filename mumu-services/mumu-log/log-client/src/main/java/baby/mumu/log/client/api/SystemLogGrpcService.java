@@ -20,11 +20,10 @@ import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc;
 import baby.mumu.log.client.api.grpc.SystemLogServiceGrpc.SystemLogServiceFutureStub;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 系统日志对外提供grpc调用实例
@@ -38,8 +37,8 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   public SystemLogGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
 
@@ -50,7 +49,7 @@ public class SystemLogGrpcService extends LogGrpcService implements DisposableBe
 
   public void syncSubmit(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
     Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .ifPresent(ch -> {
         channel = ch;
         syncSubmitFromGrpc(systemLogSubmitGrpcCmd);

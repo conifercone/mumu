@@ -19,6 +19,8 @@ package baby.mumu.iam.adapter.web;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import baby.mumu.basis.constants.SpringBootConstants;
+import baby.mumu.iam.MuMuIAMApplicationMetamodel;
 import baby.mumu.iam.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.iam.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
@@ -50,7 +52,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
   "mumu.extension.global.digital-signature.enabled=false",
-  "mumu.extension.idempotent.request-id.enabled=false"
+  "mumu.extension.idempotent.request-id.enabled=false",
+  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
+    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
 })
 public class AccountControllerTest {
 
@@ -129,13 +135,10 @@ public class AccountControllerTest {
   public void verifyPassword() throws Exception {
     AccountPasswordVerifyCmd accountPasswordVerifyCmd = new AccountPasswordVerifyCmd();
     accountPasswordVerifyCmd.setPassword("Admin@5211314");
-    mockMvc.perform(MockMvcRequestBuilders
-        .get("/account/verifyPassword").with(csrf())
-        .content(objectMapper.writeValueAsBytes(accountPasswordVerifyCmd))
+    mockMvc.perform(MockMvcRequestBuilders.get("/account/verifyPassword")
+        .param("password", "Admin@5211314")
         .header("X-Forwarded-For", "123.123.123.123")
-        .accept(MediaType.APPLICATION_JSON)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-      )
+        .accept(MediaType.APPLICATION_JSON))
       .andExpect(MockMvcResultMatchers.status().isOk())
       .andDo(print());
   }

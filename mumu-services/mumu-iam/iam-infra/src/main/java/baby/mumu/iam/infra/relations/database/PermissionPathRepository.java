@@ -94,6 +94,21 @@ public interface PermissionPathRepository extends
 
 
   /**
+   * 查询哪些权限存在后代权限
+   *
+   * @param ancestorIds 祖先ID集合
+   * @return 存在后代权限的ID集合
+   */
+  @Query("""
+    SELECT DISTINCT p.ancestor.id
+    FROM PermissionPathPO p
+    WHERE p.ancestor.id IN :ancestorIds
+      AND p.id.depth = 1
+    """)
+  List<Long> findAncestorIdsWithDescendants(@Param("ancestorIds") List<Long> ancestorIds);
+
+
+  /**
    * 删除所有不可达节点
    */
   @Modifying

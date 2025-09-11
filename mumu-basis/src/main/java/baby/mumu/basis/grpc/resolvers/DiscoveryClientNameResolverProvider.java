@@ -20,7 +20,7 @@ import io.grpc.NameResolver;
 import io.grpc.NameResolver.Args;
 import io.grpc.NameResolverProvider;
 import java.net.URI;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
@@ -38,8 +38,9 @@ public class DiscoveryClientNameResolverProvider extends NameResolverProvider {
   }
 
   @Override
-  public NameResolver newNameResolver(@NotNull URI targetUri, Args args) {
-    return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient);
+  public NameResolver newNameResolver(@NonNull URI targetUri, Args args) {
+    return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient,
+      targetUri.getPort());
   }
 
   @Override

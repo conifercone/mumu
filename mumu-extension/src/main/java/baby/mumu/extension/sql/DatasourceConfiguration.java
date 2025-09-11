@@ -26,7 +26,7 @@ import baby.mumu.extension.sql.filter.datasource.P6spyDataSourceFilter;
 import com.p6spy.engine.spy.P6DataSource;
 import java.util.List;
 import javax.sql.DataSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -66,7 +66,7 @@ public class DatasourceConfiguration {
     ExtensionProperties extensionProperties) {
     return new BeanPostProcessor() {
       @Override
-      public Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String beanName)
+      public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName)
         throws BeansException {
         if (bean instanceof DataSource originalDataSource) {
           // 包装原始数据源

@@ -38,8 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -69,9 +68,9 @@ public class SignatureFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(@NotNull HttpServletRequest request,
-    @NotNull HttpServletResponse response,
-    @NotNull FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(@NonNull HttpServletRequest request,
+    @NonNull HttpServletResponse response,
+    @NonNull FilterChain filterChain) throws ServletException, IOException {
     CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(
       request);
     String requestURI = request.getRequestURI();
@@ -122,7 +121,7 @@ public class SignatureFilter extends OncePerRequestFilter {
    * 检查请求路径和方法是否在白名单中
    */
   public boolean isAllowed(String requestUrl, String requestMethod,
-    @NotNull List<RequestMethod> allowlist) {
+    @NonNull List<RequestMethod> allowlist) {
     for (RequestMethod allowedMethod : allowlist) {
       if (allowedMethod.getMethod().equalsIgnoreCase(requestMethod)
         && pathMatcher.match(allowedMethod.getUrl(), requestUrl)) {
@@ -151,16 +150,14 @@ public class SignatureFilter extends OncePerRequestFilter {
       body = jsonString.toString().replaceAll("\\s+", "");
     }
 
-    @Contract(" -> new")
     @Override
-    public @NotNull BufferedReader getReader() {
+    public @NonNull BufferedReader getReader() {
       return new BufferedReader(new InputStreamReader(
         new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8))));
     }
 
-    @Contract(" -> new")
     @Override
-    public @NotNull ServletInputStream getInputStream() {
+    public @NonNull ServletInputStream getInputStream() {
       return new ServletInputStreamWrapper(
         new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)));
     }

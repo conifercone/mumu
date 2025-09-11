@@ -17,7 +17,6 @@
 package baby.mumu.unique.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.unique.application.verification.executor.VerifyCodeGeneratedCmdExe;
 import baby.mumu.unique.application.verification.executor.VerifyCodeVerifyCmdExe;
@@ -31,11 +30,10 @@ import baby.mumu.unique.infra.verification.convertor.VerifyCodeConvertor;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
-import net.devh.boot.grpc.server.service.GrpcService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -45,7 +43,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.1
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "VerifyCodeServiceImpl")
 public class VerifyCodeServiceImpl extends VerifyCodeServiceImplBase implements VerifyCodeService {
 
@@ -80,8 +78,8 @@ public class VerifyCodeServiceImpl extends VerifyCodeServiceImplBase implements 
 
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void generate(@NotNull VerifyCodeGeneratedGrpcCmd request,
-    @NotNull StreamObserver<Int64Value> responseObserver) {
+  public void generate(@NonNull VerifyCodeGeneratedGrpcCmd request,
+    @NonNull StreamObserver<Int64Value> responseObserver) {
     VerifyCodeGeneratedCmd verifyCodeGeneratedCmd = new VerifyCodeGeneratedCmd();
     verifyCodeGeneratedCmd.setTtl(request.getTtl());
     verifyCodeGeneratedCmd.setLength(request.getLength());

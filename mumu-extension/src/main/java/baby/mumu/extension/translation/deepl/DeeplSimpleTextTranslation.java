@@ -23,7 +23,7 @@ import com.deepl.api.DeepLException;
 import com.deepl.api.Translator;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * deepl简单文本翻译
@@ -41,7 +41,7 @@ public class DeeplSimpleTextTranslation implements SimpleTextTranslation {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NotNull String targetLanguage) throws MuMuException {
+  public String translate(String text, @NonNull String targetLanguage) throws MuMuException {
     try {
       return deeplTranslator.translateText(text, null, targetLanguage).getText();
     } catch (DeepLException | InterruptedException e) {

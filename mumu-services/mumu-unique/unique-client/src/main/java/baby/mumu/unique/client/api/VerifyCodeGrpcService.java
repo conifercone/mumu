@@ -28,13 +28,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 验证码生成对外提供grpc调用实例
@@ -49,8 +48,8 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
 
   public VerifyCodeGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -61,7 +60,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
   public Int64Value generate(
     VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return generateFromGrpc(verifyCodeGeneratedGrpcCmd);
@@ -72,7 +71,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
   public ListenableFuture<Int64Value> syncGenerate(
     VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return syncGenerateFromGrpc(verifyCodeGeneratedGrpcCmd);
@@ -83,7 +82,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
   public BoolValue verify(
     VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return verifyFromGrpc(verifyCodeVerifyGrpcCmd);
@@ -95,7 +94,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
   public ListenableFuture<BoolValue> syncVerify(
     VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return syncVerifyFromGrpc(verifyCodeVerifyGrpcCmd);
@@ -110,7 +109,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
     return verifyCodeServiceBlockingStub.generate(verifyCodeGeneratedGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
+  private @NonNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
     VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
     VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
       channel);
@@ -125,7 +124,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
     return verifyCodeServiceBlockingStub.verify(verifyCodeVerifyGrpcCmd);
   }
 
-  private @NotNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
+  private @NonNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
     VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
     VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
       channel);

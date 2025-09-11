@@ -16,16 +16,19 @@
 
 package baby.mumu.extension;
 
+import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.aspects.AspectConfiguration;
 import baby.mumu.extension.cors.MuMuCorsConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
+import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
+import baby.mumu.extension.grpc.interceptors.SafeBearerTokenInterceptor;
 import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
 import baby.mumu.extension.nosql.DocumentConfiguration;
 import baby.mumu.extension.ocr.OcrConfiguration;
-import baby.mumu.extension.processor.grpc.GrpcExceptionAdvice;
+import baby.mumu.extension.processor.grpc.GrpcExceptionHandlersConfiguration;
 import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
@@ -35,6 +38,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
+import org.springframework.grpc.client.GlobalClientInterceptor;
+import org.springframework.grpc.server.GlobalServerInterceptor;
 import org.springframework.http.server.observation.ServerRequestObservationContext;
 
 /**
@@ -44,7 +50,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  * @since 1.0.0
  */
 @Configuration
-@Import({GrpcExceptionAdvice.class, ResponseBodyProcessor.class,
+@Import({GrpcExceptionHandlersConfiguration.class, ResponseBodyProcessor.class,
   MuMuCorsConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
@@ -64,5 +70,20 @@ public class ExtensionConfiguration {
         return true;
       }
     };
+  }
+
+  @Bean
+  @GlobalServerInterceptor
+  @Order(Integer.MIN_VALUE)
+  ClientIpInterceptor clientIpInterceptor() {
+    return new ClientIpInterceptor();
+  }
+
+  @Bean
+  @GlobalClientInterceptor
+  SafeBearerTokenInterceptor bearerTokenInterceptor() {
+    return new SafeBearerTokenInterceptor(
+      () -> SecurityContextUtils.getTokenValue().orElse(null)
+    );
   }
 }

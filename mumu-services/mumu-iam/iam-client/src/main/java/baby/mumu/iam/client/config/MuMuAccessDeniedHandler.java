@@ -21,7 +21,7 @@ import baby.mumu.basis.response.ResponseWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -34,7 +34,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class MuMuAccessDeniedHandler implements AccessDeniedHandler {
 
   @Override
-  public void handle(HttpServletRequest request, @NotNull HttpServletResponse response,
+  public void handle(HttpServletRequest request, @NonNull HttpServletResponse response,
     AccessDeniedException accessDeniedException) throws IOException {
     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     ResponseWrapper.exceptionResponse(response, ResponseCode.ACCESS_DENIED);

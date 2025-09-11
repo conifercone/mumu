@@ -24,7 +24,7 @@ import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -49,7 +49,7 @@ public class RoleFindAllCmdExe {
     this.roleConvertor = roleConvertor;
   }
 
-  public Page<RoleFindAllDTO> execute(@NotNull RoleFindAllCmd roleFindAllCmd) {
+  public Page<RoleFindAllDTO> execute(@NonNull RoleFindAllCmd roleFindAllCmd) {
     Role role = roleConvertor.toEntity(roleFindAllCmd)
       .orElseGet(Role::new);
     Page<Role> roles = roleGateway.findAll(role,

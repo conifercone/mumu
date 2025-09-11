@@ -44,10 +44,13 @@ import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
+import java.util.List;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -66,6 +69,9 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   @API(status = Status.STABLE, since = "1.0.1")
   Permission toEntity(PermissionPO permissionPO);
 
+  @API(status = Status.STABLE, since = "2.14.0")
+  List<Permission> toEntities(List<PermissionPO> permissionPOList);
+
   @API(status = Status.STABLE, since = "1.0.1")
   Permission toEntity(PermissionAddCmd permissionAddCmd);
 
@@ -77,6 +83,9 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
 
   @API(status = Status.STABLE, since = "2.0.0")
   Permission toEntity(PermissionArchivedPO permissionArchivedPO);
+
+  @API(status = Status.STABLE, since = "2.14.0")
+  List<Permission> toEntitiesFromArchivedPO(List<PermissionArchivedPO> permissionArchivedPOList);
 
   @API(status = Status.STABLE, since = "2.2.0")
   Permission toEntity(PermissionCacheablePO permissionCacheablePO);
@@ -101,6 +110,9 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
 
   @API(status = Status.STABLE, since = "1.0.1")
   PermissionFindAllDTO toPermissionFindAllDTO(Permission permission);
+
+  @API(status = Status.STABLE, since = "2.14.0")
+  List<PermissionFindAllDTO> toPermissionFindAllDTOS(List<Permission> permissions);
 
   @API(status = Status.STABLE, since = "2.2.0")
   PermissionFindAllSliceDTO toPermissionFindAllSliceDTO(Permission permission);
@@ -127,9 +139,11 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
   PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   PermissionGrpcDTO toPermissionGrpcDTO(PermissionFindAllDTO permissionFindAllDTO);
 
   @API(status = Status.STABLE, since = "2.3.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   PermissionFindByIdGrpcDTO toPermissionFindByIdGrpcDTO(
     PermissionFindByIdDTO permissionFindByIdDTO);
 

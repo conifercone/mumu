@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -92,7 +92,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
       .map(this::toObject).orElse(null);
   }
 
-  private RegisteredClient toObject(@NotNull Client client) {
+  private RegisteredClient toObject(@NonNull Client client) {
     Set<String> clientAuthenticationMethods = StringUtils.commaDelimitedListToSet(
       client.getClientAuthenticationMethods());
     Set<String> authorizationGrantTypes = StringUtils.commaDelimitedListToSet(
@@ -130,7 +130,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
     return builder.build();
   }
 
-  private @NotNull Client toEntity(@NotNull RegisteredClient registeredClient) {
+  private @NonNull Client toEntity(@NonNull RegisteredClient registeredClient) {
     List<String> clientAuthenticationMethods = new ArrayList<>(
       registeredClient.getClientAuthenticationMethods().size());
     registeredClient.getClientAuthenticationMethods().forEach(clientAuthenticationMethod ->

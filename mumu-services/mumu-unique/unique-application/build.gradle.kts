@@ -5,6 +5,6 @@ dependencies {
     implementation(project(":mumu-services:mumu-unique:unique-infra"))
     implementation(project(":mumu-extension"))
     implementation(libs.grpc.stub)
-    implementation(libs.grpc.server.spring.boot.starter)
+    implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
 }

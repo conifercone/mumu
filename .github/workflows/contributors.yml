@@ -1,0 +1,29 @@
+#file: noinspection UndefinedAction,UndefinedParamsPresent
+
+on:
+  push:
+    branches:
+      - develop
+
+# 赋权
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  contrib-readme-job:
+    runs-on: ubuntu-latest
+    name: A job to automate contrib in readme
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Contribute List
+        uses: akhilmhdh/contributors-readme-action@v2.3.11
+        with:
+          image_size: 90
+          readme_path: README.adoc
+          committer_username: Kaiyu Shan
+          committer_email: kaiyu.shan@outlook.com
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

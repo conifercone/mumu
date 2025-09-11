@@ -19,7 +19,6 @@ package baby.mumu.iam.application.service;
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.exception.MuMuException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.role.executor.RoleAddCmdExe;
 import baby.mumu.iam.application.role.executor.RoleAddDescendantCmdExe;
@@ -65,14 +64,13 @@ import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,7 +81,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "RoleServiceImpl")
 public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
 

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -226,7 +226,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
    * @param userDetails 账号信息
    * @param password    密码
    */
-  private void verifyAccountInformation(@NotNull UserDetails userDetails, String password) {
+  private void verifyAccountInformation(@NonNull UserDetails userDetails, String password) {
     checkCondition(!userDetails.isEnabled(), ResponseCode.ACCOUNT_DISABLED);
     checkCondition(!userDetails.isAccountNonLocked(), ResponseCode.ACCOUNT_LOCKED);
     checkCondition(!userDetails.isAccountNonExpired(), ResponseCode.ACCOUNT_HAS_EXPIRED);
@@ -240,15 +240,15 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
       .ifTrue(() -> throwAuthenticationException(responseCode));
   }
 
-  private void throwAuthenticationException(@NotNull ResponseCode responseCode) {
+  private void throwAuthenticationException(@NonNull ResponseCode responseCode) {
     OAuth2Error error = new OAuth2Error(responseCode.getCode(), responseCode.getMessage(),
       StringUtils.EMPTY);
     throw new OAuth2AuthenticationException(error);
   }
 
-  @NotNull
+  @NonNull
   private static RegisteredClient getRegisteredClient(
-    @NotNull OAuth2ClientAuthenticationToken clientPrincipal,
+    @NonNull OAuth2ClientAuthenticationToken clientPrincipal,
     AuthorizationGrantType authorizationGrantType) {
     RegisteredClient registeredClient = clientPrincipal.getRegisteredClient();
     if (registeredClient == null || CollectionUtils.isEmpty(
@@ -267,8 +267,8 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     return PasswordGrantAuthenticationToken.class.isAssignableFrom(authentication);
   }
 
-  private static @NotNull OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient(
-    @NotNull Authentication authentication) {
+  private static @NonNull OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient(
+    @NonNull Authentication authentication) {
     OAuth2ClientAuthenticationToken clientPrincipal = null;
     if (OAuth2ClientAuthenticationToken.class.isAssignableFrom(
       authentication.getPrincipal().getClass())) {

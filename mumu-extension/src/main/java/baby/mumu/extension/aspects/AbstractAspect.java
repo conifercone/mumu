@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 切面抽象类
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractAspect {
 
-  protected <T extends Annotation> T getMethodAnnotation(@NotNull JoinPoint joinPoint,
+  protected <T extends Annotation> T getMethodAnnotation(@NonNull JoinPoint joinPoint,
     Class<T> clazz) throws NoSuchMethodException {
     T annotation = null;
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
@@ -45,7 +45,7 @@ public abstract class AbstractAspect {
     return annotation;
   }
 
-  protected Optional<Method> getCurrentMethod(@NotNull JoinPoint joinPoint) {
+  protected Optional<Method> getCurrentMethod(@NonNull JoinPoint joinPoint) {
     String methodName = joinPoint.getSignature().getName();
     Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
     try {

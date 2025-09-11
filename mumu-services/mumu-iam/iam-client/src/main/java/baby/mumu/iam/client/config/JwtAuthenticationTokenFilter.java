@@ -36,7 +36,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -72,9 +72,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(@NotNull HttpServletRequest request,
-    @NotNull HttpServletResponse response,
-    @NotNull FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(@NonNull HttpServletRequest request,
+    @NonNull HttpServletResponse response,
+    @NonNull FilterChain filterChain) throws ServletException, IOException {
     MuMuHttpServletRequestWrapper mumuHttpServletRequestWrapper = new MuMuHttpServletRequestWrapper(
       request);
     String authHeader = mumuHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);

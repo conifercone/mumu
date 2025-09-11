@@ -26,8 +26,7 @@ import org.bytedeco.opencv.opencv_core.Rect;
 import org.bytedeco.opencv.opencv_core.RectVector;
 import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 
 /**
@@ -36,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.0.0
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
 
   private final CascadeClassifier faceDetector;
@@ -44,6 +44,9 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     this.faceDetector = faceDetector;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Long numberOfFaces(FaceDetection faceDetection) {
     return Optional.ofNullable(faceDetection).map(faceDetectionNonNull -> {
@@ -53,6 +56,9 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     }).orElse(0L);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void drawBorder(FaceDetection faceDetection) {
     Optional.ofNullable(faceDetection).ifPresent(faceDetectionNonNull -> {
@@ -71,8 +77,7 @@ public class OpencvFaceDetectionProcessor implements FaceDetectionProcessor {
     });
   }
 
-  @Contract("_ -> new")
-  private static @NotNull Result getResult(@NotNull FaceDetection faceDetectionNonNull) {
+  private static @NonNull Result getResult(@NonNull FaceDetection faceDetectionNonNull) {
     String imagePath = faceDetectionNonNull.getImageAbsolutePath();
     Mat image = opencv_imgcodecs.imread(imagePath);
     Mat grayImage = new Mat();

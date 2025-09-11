@@ -17,7 +17,7 @@
 package baby.mumu.log.configuration;
 
 import baby.mumu.log.infra.config.LogProperties;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -45,7 +45,7 @@ public class MuMuElasticsearchConfiguration extends
   }
 
   @Override
-  public @NotNull ClientConfiguration clientConfiguration() {
+  public @NonNull ClientConfiguration clientConfiguration() {
     // 使用构建器来提供集群地址
     return ClientConfiguration.builder()
       // 设置连接地址

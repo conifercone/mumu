@@ -20,9 +20,8 @@ import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import java.util.Locale;
 import lombok.Getter;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -135,23 +134,22 @@ public enum ResponseCode implements BaseResponse {
     this.status = status;
   }
 
-  @Contract(pure = true)
   @Override
-  public @NotNull String getCode() {
+  public @NonNull String getCode() {
     return this.code;
   }
 
   @Override
-  public @NotNull String getMessage() {
+  public @NonNull String getMessage() {
     return makeMessage(null);
   }
 
   @Override
-  public @NotNull String getMessage(@Nullable Object[] args) {
+  public @NonNull String getMessage(@Nullable Object[] args) {
     return makeMessage(args);
   }
 
-  private @NotNull String makeMessage(@Nullable Object[] args) {
+  private @NonNull String makeMessage(@Nullable Object[] args) {
     return SpringContextUtils.getBean(MessageSource.class)
       .map(messageSource -> messageSource.getMessage(getCode(), args,
         SecurityContextUtils.getLoginAccountLanguage()

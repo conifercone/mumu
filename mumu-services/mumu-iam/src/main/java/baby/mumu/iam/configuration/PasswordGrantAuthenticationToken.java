@@ -19,7 +19,7 @@ package baby.mumu.iam.configuration;
 import baby.mumu.basis.enums.OAuth2Enum;
 import java.io.Serial;
 import java.util.Map;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationGrantAuthenticationToken;

@@ -54,8 +54,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 
@@ -68,13 +67,14 @@ import org.springframework.context.ApplicationContext;
 @Aspect
 public class RateLimitingAspect extends AbstractAspect implements DisposableBean {
 
+  private static final String UNIQ_KEY_LIGATURE = ":";
   private final ApplicationContext applicationContext;
   private final RedisClient redisClient;
   private final StatefulRedisConnection<String, byte[]> connection;
   private final LettuceBasedProxyManager<String> proxyManager;
 
   public RateLimitingAspect(ApplicationContext applicationContext,
-    @NotNull ExtensionProperties extensionProperties) {
+    @NonNull ExtensionProperties extensionProperties) {
     this.applicationContext = applicationContext;
     this.redisClient = RedisClient.create(extensionProperties.getRl().getRedis().getUri());
     this.connection = redisClient.connect(new RateLimiterStringByteArrayCodec());
@@ -110,22 +110,23 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     return joinPoint.proceed(args);
   }
 
-  private void rateLimiting(@NotNull RateLimitingKey rateLimitingKey,
-    @NotNull List<RateLimiter> list) {
+  private void rateLimiting(@NonNull RateLimitingKey rateLimitingKey,
+    @NonNull List<RateLimiter> list) {
     Bucket bucket = getBucket(rateLimitingKey, list);
     ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
     if (!probe.isConsumed()) {
       long waitForRefillNanos = probe.getNanosToWaitForRefill();
-      long waitForRefillMillis = Duration.ofNanos(waitForRefillNanos).toSeconds();
-      throw new RateLimiterException(waitForRefillMillis);
+      long waitForRefillSeconds = Duration.ofNanos(waitForRefillNanos).toSeconds();
+      throw new RateLimiterException(waitForRefillSeconds);
     }
   }
 
-  private Bucket getBucket(@NotNull RateLimitingKey rateLimitingKey,
-    @NotNull List<RateLimiter> list) {
+  private Bucket getBucket(@NonNull RateLimitingKey rateLimitingKey,
+    @NonNull List<RateLimiter> list) {
     RateLimitingKeyProvider rateLimitingKeyProvider = applicationContext.getBean(
       rateLimitingKey.getKeyProvider());
-    String uniqKey = rateLimitingKey.getPrefix() + ":" + rateLimitingKeyProvider.generateUniqKey();
+    String uniqKey = rateLimitingKey.getPrefix() + RateLimitingAspect.UNIQ_KEY_LIGATURE
+      + rateLimitingKeyProvider.generateUniqKey();
     ConfigurationBuilder configurationBuilder = BucketConfiguration.builder();
 
     list.forEach(x -> {
@@ -162,8 +163,7 @@ public class RateLimitingAspect extends AbstractAspect implements DisposableBean
     return proxyManager.getProxy(uniqKey, configurationBuilder::build);
   }
 
-  @Contract("_ -> new")
-  private @NotNull BasicInformation getBasicInformation(@NotNull RateLimiter rateLimiter) {
+  private @NonNull BasicInformation getBasicInformation(@NonNull RateLimiter rateLimiter) {
     if (rateLimiter.customGeneration()) {
       RateLimitingCustomGenerateProvider rateLimitingCustomGenerateProvider = applicationContext.getBean(
         rateLimiter.customGenerationProvider());

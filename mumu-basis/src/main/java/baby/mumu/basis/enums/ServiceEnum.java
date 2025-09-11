@@ -31,12 +31,6 @@ public enum ServiceEnum {
 
   LOG("log"),
 
-  MAIL("mail"),
-
-  MESSAGE("message"),
-
-  SMS("sms"),
-
   STORAGE("storage"),
 
   UNIQUE("unique");

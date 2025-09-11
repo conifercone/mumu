@@ -20,12 +20,11 @@ import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import baby.mumu.unique.client.api.VerifyCodeGrpcService;
 import io.grpc.NameResolverRegistry;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 唯一数据服务客户端配置
@@ -48,14 +47,14 @@ public class UniqueClientConfiguration {
 
   @Bean
   public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new PrimaryKeyGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new PrimaryKeyGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean
   public VerifyCodeGrpcService verifyCodeGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new VerifyCodeGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new VerifyCodeGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean

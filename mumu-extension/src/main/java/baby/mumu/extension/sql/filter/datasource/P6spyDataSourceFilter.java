@@ -19,7 +19,7 @@ package baby.mumu.extension.sql.filter.datasource;
 import baby.mumu.extension.ExtensionProperties;
 import com.p6spy.engine.spy.P6DataSource;
 import javax.sql.DataSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class P6spyDataSourceFilter extends AbstractDataSourceFilter {
 
   @Override
   public DataSource afterCreate(DataSource dataSource,
-    @NotNull ExtensionProperties extensionProperties) {
+    @NonNull ExtensionProperties extensionProperties) {
     P6spyDataSourceFilter.log.debug("P6spyDataSourceFilter afterCreate starting...");
     boolean enableLog =
       extensionProperties.getSql().getLog().isEnabled();

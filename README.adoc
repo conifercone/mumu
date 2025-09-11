@@ -13,16 +13,22 @@
 :codeFactor-develop-branch-link: https://www.codefactor.io/repository/github/conifercone/mumu/overview/develop
 :email: kaiyu.shan@outlook.com
 :author: Kaiyu Shan
+:dependencies-link: {mumu-github-homepage-link}/network/dependencies
+:mumu-github-new-security-report-link: {mumu-github-homepage-link}/security/advisories/new
+:license-name: Apache License 2.0
+:desc-mumu-iam: Identity and Access Management (users, roles, permissions)
+:desc-mumu-log: Centralized logging and query service
+:desc-mumu-storage: File storage service
+:desc-mumu-unique: Distributed unique ID generator
+:desc-mumu-basis: Common utilities and shared components
+:desc-mumu-benchmark: Performance testing and benchmarking
+:desc-mumu-extension: Extension and integration modules
+:desc-mumu-processor: Background processing and task scheduling
+
 
 = mumu
 
 image::logo.svg[mumu]
-
-- link:docs/README.zh_CN.adoc[简体中文]
-- link:docs/README.zh_TW.adoc[繁體中文]
-- link:README.adoc[English]
-- link:docs/README.ja.adoc[日本語]
-- link:docs/README.ko.adoc[한국어]
 
 image:https://img.shields.io/github/created-at/conifercone/mumu[GitHub Created At,link="{mumu-github-homepage-link}"]
 image:https://img.shields.io/github/repo-size/conifercone/mumu[GitHub repo size,link="{mumu-github-homepage-link}"]
@@ -84,31 +90,56 @@ Let’s make managing a joyride!
 [#module-introduction]
 == Module Introduction
 
-[source,text]
-----
-mumu
-├── mumu-services
-│   ├── mumu-iam
-│   ├── mumu-log
-│   ├── mumu-storage
-│   └── mumu-unique
-├── mumu-basis
-├── mumu-benchmark
-├── mumu-extension
-└── mumu-processor
-----
+[cols="1,2,3",options="header"]
+|===
+| Module | Submodule | Description
+
+.4+| mumu-services | mumu-iam     | {desc-mumu-iam}
+| mumu-log     | {desc-mumu-log}
+| mumu-storage | {desc-mumu-storage}
+| mumu-unique  | {desc-mumu-unique}
+
+| mumu-basis     | - | {desc-mumu-basis}
+| mumu-benchmark | - | {desc-mumu-benchmark}
+| mumu-extension | - | {desc-mumu-extension}
+| mumu-processor | - | {desc-mumu-processor}
+|===
 
 [#dependency-statement]
 == Dependency Statement
 
-link:https://github.com/conifercone/mumu/network/dependencies[**Dependency graph**]
+link:{dependencies-link}[**Dependency graph**]
 
 [#license]
 == License
 
-link:LICENSE[Apache License 2.0] © link:mailto:{email}[{author}]
+link:LICENSE[{license-name}] © link:mailto:{email}[{author}]
 
 [#contributors]
 == Contributors
 
-image:https://contrib.rocks/image?repo=conifercone/mumu[Contributors,link="{mumu-github-homepage-link}/graphs/contributors"]
+++++
+<!--suppress ALL -->
+<!-- readme: collaborators,contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/conifercone">
+                    <img src="https://avatars.githubusercontent.com/u/30498960?v=4" width="90;" alt="conifercone"/>
+                    <br />
+                    <sub><b>Kaiyu Shan</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/ImgBotApp">
+                    <img src="https://avatars.githubusercontent.com/u/31427850?v=4" width="90;" alt="ImgBotApp"/>
+                    <br />
+                    <sub><b>Imgbot</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
+<!-- readme: collaborators,contributors -end -->
+++++

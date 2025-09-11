@@ -23,7 +23,6 @@ import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -56,9 +55,8 @@ public class PermissionFindAllCmdExe {
       .orElseGet(Permission::new);
     Page<Permission> permissions = permissionGateway.findAll(permission,
       permissionFindAllCmd.getCurrent(), permissionFindAllCmd.getPageSize());
-    List<PermissionFindAllDTO> permissionFindAllDTOList = permissions.getContent().stream()
-      .map(permissionConvertor::toPermissionFindAllDTO)
-      .filter(Optional::isPresent).map(Optional::get).toList();
+    List<PermissionFindAllDTO> permissionFindAllDTOList = permissionConvertor.toPermissionFindAllDTOS(
+      permissions.getContent());
     return new PageImpl<>(permissionFindAllDTOList, permissions.getPageable(),
       permissions.getTotalElements());
   }

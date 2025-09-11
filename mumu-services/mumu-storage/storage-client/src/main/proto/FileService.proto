@@ -1,0 +1,11 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "baby.mumu.storage.client.api.grpc";
+option java_outer_classname = "FileServiceProto";
+
+service FileService {
+  rpc deleteByMetadataId (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+}

@@ -22,14 +22,13 @@ import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
 import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 主键生成对外提供grpc调用实例
@@ -45,8 +44,8 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
 
   public PrimaryKeyGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -62,7 +61,7 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
 
   public Long snowflake() {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
         return snowflakeFromGrpc();
@@ -70,7 +69,7 @@ public class PrimaryKeyGrpcService extends UniqueGrpcService implements Disposab
       .orElseGet(YitIdHelper::nextId);
   }
 
-  private @NotNull Long snowflakeFromGrpc() {
+  private @NonNull Long snowflakeFromGrpc() {
     PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
       channel);
     return primaryKeyServiceBlockingStub.snowflake(

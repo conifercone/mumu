@@ -57,8 +57,10 @@ import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAvatarDocument
 import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -163,22 +165,27 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
   Account toEntity(AccountFindAllSliceCmd accountFindAllSliceCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   AccountCurrentLoginGrpcDTO toAccountCurrentLoginGrpcDTO(
     AccountCurrentLoginDTO accountCurrentLoginDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   AccountAddressGrpcDTO toAccountAddressGrpcDTO(
     AccountAddressDTO accountAddressDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   AccountRoleGrpcDTO toAccountRoleGrpcDTO(
     AccountRoleDTO accountRoleDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   AccountRolePermissionGrpcDTO toAccountRolePermissionGrpcDTO(
     AccountPermissionDTO accountPermissionDTO);
 
   @API(status = Status.STABLE, since = "2.2.0")
+  @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
   AccountSystemSettingsGrpcDTO toAccountSystemSettingsGrpcDTO(
     AccountSystemSettingDTO accountSystemSettingDTO);
 

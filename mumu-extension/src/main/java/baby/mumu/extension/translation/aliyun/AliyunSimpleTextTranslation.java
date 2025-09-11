@@ -27,7 +27,7 @@ import com.aliyun.alimt20181012.models.TranslateGeneralResponse;
 import com.aliyun.teautil.models.RuntimeOptions;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * 阿里云简单文本翻译
@@ -45,7 +45,7 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NotNull String targetLanguage) throws MuMuException {
+  public String translate(String text, @NonNull String targetLanguage) throws MuMuException {
     try {
       RuntimeOptions runtime = new RuntimeOptions();
       GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()

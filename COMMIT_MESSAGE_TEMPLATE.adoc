@@ -4,12 +4,6 @@
 
 = Commit Message Template
 
-- link:docs/COMMIT_MESSAGE_TEMPLATE.zh_CN.adoc[简体中文]
-- link:docs/COMMIT_MESSAGE_TEMPLATE.zh_TW.adoc[繁體中文]
-- link:COMMIT_MESSAGE_TEMPLATE.adoc[English]
-- link:docs/COMMIT_MESSAGE_TEMPLATE.ja.adoc[日本語]
-- link:docs/COMMIT_MESSAGE_TEMPLATE.ko.adoc[한국어]
-
 [source,text]
 ----
 <type>(<scope>): <subject>

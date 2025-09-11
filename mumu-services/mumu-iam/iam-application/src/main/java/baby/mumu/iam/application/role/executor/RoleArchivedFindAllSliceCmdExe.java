@@ -24,7 +24,7 @@ import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -50,7 +50,7 @@ public class RoleArchivedFindAllSliceCmdExe {
   }
 
   public Slice<RoleArchivedFindAllSliceDTO> execute(
-    @NotNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+    @NonNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
     Role role = roleConvertor.toEntity(
         roleArchivedFindAllSliceCmd)
       .orElseGet(Role::new);

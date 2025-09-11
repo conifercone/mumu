@@ -5,9 +5,6 @@
 
 = Contributing to mumu
 
-- link:docs/CONTRIBUTING.zh_CN.adoc[简体中文]
-- link:CONTRIBUTING.adoc[English]
-
 👍🎉 First off, thanks for taking the time to contribute!
 🎉👍
 

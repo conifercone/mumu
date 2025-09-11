@@ -26,7 +26,7 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import java.util.Iterator;
 import javax.money.MonetaryAmount;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * swagger转换器
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 public class MonetaryAmountConverter implements ModelConverter {
 
   @Override
-  public Schema<?> resolve(@NotNull AnnotatedType type, ModelConverterContext context,
+  public Schema<?> resolve(@NonNull AnnotatedType type, ModelConverterContext context,
     Iterator<ModelConverter> chain) {
     if (type.isSchemaProperty()) {
       JavaType _type = Json.mapper().constructType(type.getType());

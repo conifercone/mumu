@@ -31,6 +31,7 @@ import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionArchivedRep
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.iam.infra.relations.cache.RolePermissionCacheRepository;
 import baby.mumu.iam.infra.relations.database.PermissionPathPO;
 import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
 import baby.mumu.iam.infra.relations.database.PermissionPathRepository;
@@ -42,6 +43,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jobrunr.jobs.annotations.Job;
@@ -74,6 +76,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   private final ExtensionProperties extensionProperties;
   private final PermissionCacheRepository permissionCacheRepository;
   private final PermissionPathRepository permissionPathRepository;
+  private final RolePermissionCacheRepository rolePermissionCacheRepository;
 
   @Autowired
   public PermissionGatewayImpl(PermissionRepository permissionRepository,
@@ -81,7 +84,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     PermissionConvertor permissionConvertor,
     PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
     ExtensionProperties extensionProperties, PermissionCacheRepository permissionCacheRepository,
-    PermissionPathRepository permissionPathRepository) {
+    PermissionPathRepository permissionPathRepository,
+    RolePermissionCacheRepository rolePermissionCacheRepository) {
     this.permissionRepository = permissionRepository;
     this.roleGateway = roleGateway;
     this.permissionConvertor = permissionConvertor;
@@ -90,6 +94,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     this.extensionProperties = extensionProperties;
     this.permissionCacheRepository = permissionCacheRepository;
     this.permissionPathRepository = permissionPathRepository;
+    this.rolePermissionCacheRepository = rolePermissionCacheRepository;
   }
 
   @Override
@@ -118,16 +123,21 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   @DangerousOperation("根据ID删除ID为%0的权限数据")
   public void deleteById(Long id) {
-    List<Role> roles = roleGateway.findAllContainPermission(id);
-    if (CollectionUtils.isNotEmpty(roles)) {
-      throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
-        roles.stream().map(Role::getCode).toList());
-    }
     Optional.ofNullable(id).ifPresent(permissionId -> {
-      permissionRepository.deleteById(permissionId);
-      permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
-      permissionArchivedRepository.deleteById(permissionId);
-      permissionCacheRepository.deleteById(permissionId);
+      if (permissionRepository.existsById(permissionId)) {
+        List<Role> roles = roleGateway.findAllContainPermission(permissionId);
+        if (CollectionUtils.isNotEmpty(roles)) {
+          throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+            roles.stream().map(Role::getCode).toList());
+        }
+        permissionRepository.deleteById(permissionId);
+        permissionPathRepository.deleteAllPathsByPermissionId(permissionId);
+        permissionArchivedRepository.deleteById(permissionId);
+        permissionCacheRepository.deleteById(permissionId);
+        rolePermissionCacheRepository.deleteByPermissionIdsContaining(permissionId);
+      } else {
+        throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+      }
     });
   }
 
@@ -137,6 +147,14 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public Optional<Permission> updateById(Permission permission) {
     PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
       .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+    if (permission.getId() == null) {
+      return Optional.empty();
+    }
+    // 判断权限是否存在
+    if (permissionRepository.findById(permission.getId()).isEmpty()) {
+      throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+    }
+
     PermissionPO merged = permissionRepository.merge(permissionPO);
     permissionCacheRepository.deleteById(permissionPO.getId());
     return permissionConvertor.toEntity(merged);
@@ -149,11 +167,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionPO> repositoryAll = permissionRepository.findAllPage(
       permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new),
       pageRequest);
-    List<Permission> authorities = repositoryAll.getContent().stream()
-      .map(permissionConvertor::toEntity)
-      .filter(Optional::isPresent).map(Optional::get)
-      .toList();
-    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+    List<Permission> permissions = permissionConvertor.toEntities(repositoryAll.getContent());
+    return new PageImpl<>(permissions, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
@@ -162,9 +177,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
     Slice<PermissionPO> permissionPOSlice = permissionRepository.findAllSlice(
       permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new), pageRequest);
-    return new SliceImpl<>(permissionPOSlice.getContent().stream()
-      .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream())
-      .toList(), pageRequest, permissionPOSlice.hasNext());
+    List<Permission> permissions = permissionConvertor.toEntities(permissionPOSlice.getContent());
+    return new SliceImpl<>(permissions, pageRequest, permissionPOSlice.hasNext());
   }
 
   @Override
@@ -174,9 +188,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Slice<PermissionArchivedPO> permissionArchivedPOS = permissionArchivedRepository.findAllSlice(
       permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
       pageRequest);
-    return new SliceImpl<>(permissionArchivedPOS.getContent().stream()
-      .flatMap(permissionArchivedPO -> permissionConvertor.toEntity(permissionArchivedPO).stream())
-      .toList(), pageRequest, permissionArchivedPOS.hasNext());
+    List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+      permissionArchivedPOS.getContent());
+    return new SliceImpl<>(entitiesFromArchivedPO, pageRequest, permissionArchivedPOS.hasNext());
   }
 
   @Override
@@ -186,11 +200,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     Page<PermissionArchivedPO> repositoryAll = permissionArchivedRepository.findAllPage(
       permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
       pageRequest);
-    List<Permission> authorities = repositoryAll.getContent().stream()
-      .map(permissionConvertor::toEntity)
-      .filter(Optional::isPresent).map(Optional::get)
-      .toList();
-    return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
+    List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+      repositoryAll.getContent());
+    return new PageImpl<>(entitiesFromArchivedPO, pageRequest, repositoryAll.getTotalElements());
   }
 
   @Override
@@ -335,10 +347,11 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "2.4.0")
   @DangerousOperation("根据Code删除Code为%0的权限数据")
   public void deleteByCode(String code) {
-    Optional.ofNullable(code)
-      .flatMap(permissionRepository::findByCode)
-      .map(PermissionPO::getId)
-      .ifPresent(this::deleteById);
+    if (StringUtils.isNotBlank(code)) {
+      PermissionPO permissionPO = permissionRepository.findByCode(code)
+        .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+      this.deleteById(permissionPO.getId());
+    }
   }
 
   @Override

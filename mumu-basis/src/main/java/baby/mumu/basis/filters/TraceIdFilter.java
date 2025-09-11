@@ -26,7 +26,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.NamedInheritableThreadLocal;
 
 /**
@@ -48,7 +48,7 @@ public class TraceIdFilter implements Filter {
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, @NotNull FilterChain chain)
+  public void doFilter(ServletRequest request, ServletResponse response, @NonNull FilterChain chain)
     throws IOException, ServletException {
     try {
       traceId().ifPresent(TraceIdFilter.traceIdThreadLocal::set);

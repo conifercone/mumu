@@ -18,7 +18,7 @@ package baby.mumu.iam.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Client;
 import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Registration;
@@ -80,7 +80,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return registeredClients;
   }
 
-  private RegisteredClient getRegisteredClient(String registrationId, @NotNull Client client) {
+  private RegisteredClient getRegisteredClient(String registrationId, @NonNull Client client) {
     Registration registration = client.getRegistration();
     PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
     RegisteredClient.Builder builder = RegisteredClient.withId(registrationId);
@@ -105,8 +105,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return builder.build();
   }
 
-  private @NotNull ClientSettings getClientSettings(@NotNull Client client,
-    @NotNull PropertyMapper map) {
+  private @NonNull ClientSettings getClientSettings(@NonNull Client client,
+    @NonNull PropertyMapper map) {
     ClientSettings.Builder builder = ClientSettings.builder();
     map.from(client::isRequireProofKey).to(builder::requireProofKey);
     map.from(client::isRequireAuthorizationConsent).to(builder::requireAuthorizationConsent);
@@ -117,8 +117,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return builder.build();
   }
 
-  private @NotNull TokenSettings getTokenSettings(@NotNull Client client,
-    @NotNull PropertyMapper map) {
+  private @NonNull TokenSettings getTokenSettings(@NonNull Client client,
+    @NonNull PropertyMapper map) {
     OAuth2AuthorizationServerProperties.Token token = client.getToken();
     TokenSettings.Builder builder = TokenSettings.builder();
     map.from(token::getAuthorizationCodeTimeToLive).to(builder::authorizationCodeTimeToLive);
@@ -133,7 +133,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return builder.build();
   }
 
-  private JwsAlgorithm jwsAlgorithm(@NotNull String signingAlgorithm) {
+  private JwsAlgorithm jwsAlgorithm(@NonNull String signingAlgorithm) {
     String name = signingAlgorithm.toUpperCase();
     JwsAlgorithm jwsAlgorithm = SignatureAlgorithm.from(name);
     if (jwsAlgorithm == null) {
@@ -142,7 +142,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return jwsAlgorithm;
   }
 
-  private SignatureAlgorithm signatureAlgorithm(@NotNull String signatureAlgorithm) {
+  private SignatureAlgorithm signatureAlgorithm(@NonNull String signatureAlgorithm) {
     return SignatureAlgorithm.from(signatureAlgorithm.toUpperCase());
   }
 
