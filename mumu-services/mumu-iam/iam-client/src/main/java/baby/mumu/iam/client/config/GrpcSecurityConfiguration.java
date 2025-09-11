@@ -55,7 +55,8 @@ public class GrpcSecurityConfiguration {
 
   @Bean
   @GlobalServerInterceptor
-  AuthenticationProcessInterceptor grpcSecurity(GrpcSecurity grpc) throws Exception {
+  AuthenticationProcessInterceptor authenticationProcessInterceptor(GrpcSecurity grpc)
+    throws Exception {
     // 1) 启用 OAuth2 资源服务器（会自动挂上 Bearer 提取器）
     grpc.oauth2ResourceServer(cfg -> cfg.jwt(_ -> {
     }));
