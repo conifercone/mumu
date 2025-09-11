@@ -16,6 +16,53 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.14.0] - 2025-09-11
+
+=== ⭐ Added
+
+- Add unified exception handling
+- Add interface annotations
+- Add contributors workflow
+- Detect if the avatar file needs to be deleted when deleting an account.
+- Integrate jspecify
+
+=== 🐞 Fixed
+
+- Fix wrong semantics
+
+=== 🕸️ Changed
+
+- grpc dependency replacement with spring-grpc
+- Replacing constant characters
+- Modify the corresponding exception category in the system log
+- Replace the domain name of the link address of the dependency description
+- Optimize the logic of obtaining the true type of file
+- Optimize the conditions for global response interceptors to take effect
+- Optimize permission query performance
+- `org.apache.zookeeper:zookeeper` Upgrade to 3.9.4.
+- `com.googlecode.libphonenumber:libphonenumber` Updated to 9.0.13.
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` upgrade to 2.8.13
+- `kotlin` upgraded to 2.2.10
+- `com.deepl.api:deepl-java` upgraded to 1.10.3
+- `com.bucket4j:bucket4j_jdk17-lettuce` Upgraded to 8.15.0.
+- `flyway` upgraded to 11.12.0
+- `protobuf` upgraded to 4.32.0
+- `grpc` upgraded to 1.75.0
+- `io.freefair.lombok` upgraded to 8.14.2
+- `io.swagger.core.v3:swagger-annotations-jakarta` upgrade to 2.2.36
+- `spring boot` upgrade to 3.5.5
+- `com.aliyun:alimt20181012` upgrade to 1.5.1
+- `com.redis.om:redis-om-spring` upgraded to 1.0.1.
+- `org.apache.tika:tika-core` upgrade to 3.2.2
+- `commons-io:commons-io` Upgraded to 2.20.0.
+- `com.opencsv:opencsv` upgrade to 5.12.0
+- `org.jobrunr:jobrunr-spring-boot-3-starter` upgraded to 8.0.2
+
+=== ⚠️ Removed
+
+- Remove jetbrains annotation
+- Remove useless documents
+
 == [2.13.0] - 2025-08-04
 
 === ⭐ Added
