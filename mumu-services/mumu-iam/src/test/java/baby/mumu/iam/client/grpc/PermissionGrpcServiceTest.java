@@ -16,8 +16,6 @@
 
 package baby.mumu.iam.client.grpc;
 
-import baby.mumu.basis.exception.MuMuException;
-import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.AuthenticationRequired;
 import baby.mumu.iam.client.api.PermissionGrpcService;
 import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
@@ -27,11 +25,9 @@ import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
-import io.grpc.CallCredentials;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import net.devh.boot.grpc.client.security.CallCredentialsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -40,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * PermissionGrpcService单元测试
@@ -54,13 +49,11 @@ import org.springframework.test.web.servlet.MockMvc;
 public class PermissionGrpcServiceTest extends AuthenticationRequired {
 
   private final PermissionGrpcService permissionGrpcService;
-  private final MockMvc mockMvc;
   private static final Logger log = LoggerFactory.getLogger(PermissionGrpcServiceTest.class);
 
   @Autowired
-  public PermissionGrpcServiceTest(PermissionGrpcService permissionGrpcService, MockMvc mockMvc) {
+  public PermissionGrpcServiceTest(PermissionGrpcService permissionGrpcService) {
     this.permissionGrpcService = permissionGrpcService;
-    this.mockMvc = mockMvc;
   }
 
   @Test
@@ -68,12 +61,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
       .setName("数据")
       .build();
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc).orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     PageOfPermissionFindAllGrpcDTO pageOfPermissionGrpcDTO = permissionGrpcService.findAll(
-      permissionFindAllGrpcCmd,
-      callCredentials);
+      permissionFindAllGrpcCmd
+    );
     PermissionGrpcServiceTest.log.info("PageOfPermissionFindAllGrpcDTO: {}",
       pageOfPermissionGrpcDTO);
     pageOfPermissionGrpcDTO.getContentList().stream().map(PermissionGrpcDTO::getName)
@@ -88,12 +78,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
     PermissionFindAllGrpcCmd permissionFindAllGrpcCmd = PermissionFindAllGrpcCmd.newBuilder()
       .setName("数据")
       .build();
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc).orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<PageOfPermissionFindAllGrpcDTO> pageOfPermissionFindAllGrpcDTOListenableFuture = permissionGrpcService.syncFindAll(
-      permissionFindAllGrpcCmd,
-      callCredentials);
+      permissionFindAllGrpcCmd
+    );
     pageOfPermissionFindAllGrpcDTOListenableFuture.addListener(() -> {
       try {
         PageOfPermissionFindAllGrpcDTO pageOfPermissionFindAllGrpcDTO = pageOfPermissionFindAllGrpcDTOListenableFuture.get();
@@ -112,12 +99,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
 
   @Test
   public void findById() {
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc).orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionGrpcService.findById(
-      Int64Value.of(1),
-      callCredentials);
+      Int64Value.of(1)
+    );
     PermissionGrpcServiceTest.log.info("PermissionFindByIdGrpcDTO: {}", permissionFindByIdGrpcDTO);
     Assertions.assertNotNull(permissionFindByIdGrpcDTO);
   }
@@ -125,12 +109,9 @@ public class PermissionGrpcServiceTest extends AuthenticationRequired {
   @Test
   public void syncFindById() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch(1);
-    CallCredentials callCredentials = CallCredentialsHelper.bearerAuth(
-      () -> getToken(mockMvc).orElseThrow(
-        () -> new MuMuException(ResponseCode.INTERNAL_SERVER_ERROR)));
     ListenableFuture<PermissionFindByIdGrpcDTO> permissionFindByIdGrpcDTOListenableFuture = permissionGrpcService.syncFindById(
-      Int64Value.of(1),
-      callCredentials);
+      Int64Value.of(1)
+    );
     permissionFindByIdGrpcDTOListenableFuture.addListener(() -> {
       try {
         PermissionFindByIdGrpcDTO permissionFindByIdGrpcDTO = permissionFindByIdGrpcDTOListenableFuture.get();

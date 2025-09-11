@@ -17,7 +17,6 @@
 package baby.mumu.unique.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.unique.application.pk.executor.PrimaryKeySnowflakeGenerateExe;
 import baby.mumu.unique.client.api.PrimaryKeyService;
@@ -26,7 +25,6 @@ import baby.mumu.unique.client.api.grpc.SnowflakeResult;
 import baby.mumu.unique.client.dto.PrimaryKeySnowflakeDTO;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "PrimaryKeyServiceImpl")
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 

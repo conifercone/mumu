@@ -27,16 +27,14 @@ import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceBloc
 import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceFutureStub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Int64Value;
-import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
 import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 权限对外提供grpc调用实例
@@ -51,8 +49,8 @@ public class PermissionGrpcService extends IAMGrpcService implements
 
   public PermissionGrpcService(
     DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    super(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    super(discoveryClient, grpcChannelFactory);
   }
 
   @Override
@@ -61,88 +59,80 @@ public class PermissionGrpcService extends IAMGrpcService implements
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
-  public PageOfPermissionFindAllGrpcDTO findAll(PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+  public PageOfPermissionFindAllGrpcDTO findAll(PermissionFindAllGrpcCmd permissionFindAllGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return findAllFromGrpc(permissionFindAllGrpcCmd, callCredentials);
+        return findAllFromGrpc(permissionFindAllGrpcCmd);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
   public ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAll(
-    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncFindAllFromGrpc(permissionFindAllGrpcCmd, callCredentials);
+        return syncFindAllFromGrpc(permissionFindAllGrpcCmd);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
-  public PermissionFindByIdGrpcDTO findById(Int64Value id,
-    CallCredentials callCredentials) {
+  public PermissionFindByIdGrpcDTO findById(Int64Value id) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return findByIdFromGrpc(id, callCredentials);
+        return findByIdFromGrpc(id);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
   public ListenableFuture<PermissionFindByIdGrpcDTO> syncFindById(
-    Int64Value id,
-    CallCredentials callCredentials) {
+    Int64Value id) {
     return Optional.ofNullable(channel)
-      .or(this::getManagedChannelUsePlaintext)
+      .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncFindByIdFromGrpc(id, callCredentials);
+        return syncFindByIdFromGrpc(id);
       })
       .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private PageOfPermissionFindAllGrpcDTO findAllFromGrpc(
-    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
       channel);
-    return permissionServiceBlockingStub.withCallCredentials(callCredentials)
+    return permissionServiceBlockingStub
       .findAll(permissionFindAllGrpcCmd);
   }
 
   private @NonNull ListenableFuture<PageOfPermissionFindAllGrpcDTO> syncFindAllFromGrpc(
-    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd,
-    CallCredentials callCredentials) {
+    PermissionFindAllGrpcCmd permissionFindAllGrpcCmd) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
       channel);
-    return permissionServiceFutureStub.withCallCredentials(callCredentials)
+    return permissionServiceFutureStub
       .findAll(permissionFindAllGrpcCmd);
   }
 
   private PermissionFindByIdGrpcDTO findByIdFromGrpc(
-    Int64Value id,
-    CallCredentials callCredentials) {
+    Int64Value id) {
     PermissionServiceBlockingStub permissionServiceBlockingStub = PermissionServiceGrpc.newBlockingStub(
       channel);
-    return permissionServiceBlockingStub.withCallCredentials(callCredentials)
+    return permissionServiceBlockingStub
       .findById(id);
   }
 
   private @NonNull ListenableFuture<PermissionFindByIdGrpcDTO> syncFindByIdFromGrpc(
-    Int64Value id,
-    CallCredentials callCredentials) {
+    Int64Value id) {
     PermissionServiceFutureStub permissionServiceFutureStub = PermissionServiceGrpc.newFutureStub(
       channel);
-    return permissionServiceFutureStub.withCallCredentials(callCredentials)
+    return permissionServiceFutureStub
       .findById(id);
   }
 }

@@ -17,7 +17,6 @@
 package baby.mumu.iam.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.token.executor.TokenValidityCmdExe;
 import baby.mumu.iam.client.api.TokenService;
@@ -26,7 +25,6 @@ import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcDTO;
 import baby.mumu.iam.client.cmds.TokenValidityCmd;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "TokenServiceImpl")
 public class TokenServiceImpl extends TokenServiceImplBase implements TokenService {
 

@@ -22,12 +22,11 @@ import baby.mumu.iam.client.api.PermissionGrpcService;
 import baby.mumu.iam.client.api.RoleGrpcService;
 import baby.mumu.iam.client.api.TokenGrpcService;
 import io.grpc.NameResolverRegistry;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * api配置类
@@ -50,26 +49,26 @@ public class AuthenticationClientConfiguration {
 
   @Bean
   public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new TokenGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new TokenGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean
   public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new AccountGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new AccountGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean
   public PermissionGrpcService permissionGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new PermissionGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new PermissionGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean
   public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new RoleGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new RoleGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean

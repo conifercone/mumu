@@ -16,7 +16,6 @@
 
 package baby.mumu.storage.application.service;
 
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.storage.application.file.executor.FileDeleteByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileDownloadByMetadataIdCmdExe;
 import baby.mumu.storage.application.file.executor.FileFindMetaByMetaIdCmdExe;
@@ -27,7 +26,6 @@ import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
@@ -44,7 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 @Observed(name = "FileServiceImpl")
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 public class FileServiceImpl extends FileServiceImplBase implements FileService {
 
   private final FileUploadCmdExe fileUploadCmdExe;

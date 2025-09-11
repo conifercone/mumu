@@ -17,7 +17,6 @@
 package baby.mumu.log.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.application.operation.executor.OperationLogFindAllCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogQryCmdExe;
@@ -35,7 +34,6 @@ import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
   OperationLogService {

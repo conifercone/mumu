@@ -17,7 +17,6 @@
 package baby.mumu.iam.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.account.executor.AccountAddAddressCmdExe;
 import baby.mumu.iam.application.account.executor.AccountAddSystemSettingsCmdExe;
@@ -71,7 +70,6 @@ import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import io.micrometer.observation.annotation.Observed;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
@@ -89,7 +87,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 @Observed(name = "AccountServiceImpl")
 public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
 

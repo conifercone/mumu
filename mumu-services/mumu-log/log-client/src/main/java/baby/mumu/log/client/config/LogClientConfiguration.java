@@ -20,12 +20,11 @@ import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import baby.mumu.log.client.api.OperationLogGrpcService;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import io.grpc.NameResolverRegistry;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 日志客户端配置类
@@ -48,14 +47,14 @@ public class LogClientConfiguration {
 
   @Bean
   public OperationLogGrpcService operationLogGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new OperationLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new OperationLogGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean
   public SystemLogGrpcService systemLogGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new SystemLogGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new SystemLogGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean

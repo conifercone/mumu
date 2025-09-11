@@ -17,7 +17,6 @@
 package baby.mumu.log.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.application.system.executor.SystemLogFindAllCmdExe;
 import baby.mumu.log.application.system.executor.SystemLogSaveCmdExe;
@@ -32,7 +31,6 @@ import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcServerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.grpc.server.service.GrpcService;
@@ -45,7 +43,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GrpcService(interceptors = {ObservationGrpcServerInterceptor.class, ClientIpInterceptor.class})
+@GrpcService
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
   private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;

@@ -19,12 +19,11 @@ package baby.mumu.storage.client.config;
 import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
 import baby.mumu.storage.client.api.FileGrpcService;
 import io.grpc.NameResolverRegistry;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 存储服务客户端配置
@@ -47,8 +46,9 @@ public class StorageClientConfiguration {
 
   @Bean
   public FileGrpcService fileGrpcService(DiscoveryClient discoveryClient,
-    ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
-    return new FileGrpcService(discoveryClient, grpcClientInterceptorObjectProvider);
+    GrpcChannelFactory grpcChannelFactory) {
+    return new FileGrpcService(discoveryClient,
+      grpcChannelFactory);
   }
 
   @Bean

@@ -18,12 +18,11 @@ package baby.mumu.log.client.api;
 
 import baby.mumu.basis.enums.ServiceEnum;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.micrometer.core.instrument.binder.grpc.ObservationGrpcClientInterceptor;
+import java.time.Duration;
 import java.util.Optional;
-import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.grpc.client.ChannelBuilderOptions;
+import org.springframework.grpc.client.GrpcChannelFactory;
 
 /**
  * 日志grpc服务
@@ -35,26 +34,24 @@ class LogGrpcService {
 
   public static final String GRPC_LOG = ServiceEnum.LOG.getName();
   private final DiscoveryClient discoveryClient;
+  private final GrpcChannelFactory grpcChannelFactory;
 
-  private final ObservationGrpcClientInterceptor observationGrpcClientInterceptor;
-
-  public LogGrpcService(DiscoveryClient discoveryClient,
-    @NonNull ObjectProvider<ObservationGrpcClientInterceptor> grpcClientInterceptorObjectProvider) {
+  public LogGrpcService(DiscoveryClient discoveryClient, GrpcChannelFactory grpcChannelFactory) {
     this.discoveryClient = discoveryClient;
-    this.observationGrpcClientInterceptor = grpcClientInterceptorObjectProvider.getIfAvailable();
+    this.grpcChannelFactory = grpcChannelFactory;
   }
 
-  protected Optional<ManagedChannel> getManagedChannelUsePlaintext() {
-    // noinspection DuplicatedCode
-    return Optional.of(serviceAvailable()).filter(Boolean::booleanValue).map(
-      _ -> {
-        ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(
-            "discovery-client://" + LogGrpcService.GRPC_LOG)
-          .defaultLoadBalancingPolicy("round_robin")
-          .usePlaintext();
-        Optional.ofNullable(observationGrpcClientInterceptor).ifPresent(builder::intercept);
-        return builder.build();
-      });
+  protected Optional<ManagedChannel> getManagedChannel() {
+    if (!serviceAvailable()) {
+      return Optional.empty();
+    }
+    ChannelBuilderOptions opts = ChannelBuilderOptions.defaults()
+      .withInterceptorsMerge(true)
+      .withShutdownGracePeriod(Duration.ofSeconds(10));
+
+    // 这里传入的是“通道名”，会去读取 spring.grpc.client.channels.storage.* 的配置
+    ManagedChannel ch = grpcChannelFactory.createChannel(LogGrpcService.GRPC_LOG, opts);
+    return Optional.of(ch);
   }
 
   protected boolean serviceAvailable() {
