@@ -38,9 +38,9 @@ public class MuMuLogApplication {
       MuMuLogApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      MuMuLogApplicationMetamodel.projectName);
+      MuMuLogApplicationMetamodel.PROJECT_NAME);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      MuMuLogApplicationMetamodel.formattedProjectVersion);
+      MuMuLogApplicationMetamodel.FORMATTED_PROJECT_VERSION);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

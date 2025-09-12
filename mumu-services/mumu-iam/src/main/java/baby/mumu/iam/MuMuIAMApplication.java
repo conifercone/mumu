@@ -57,9 +57,9 @@ public class MuMuIAMApplication {
       MuMuIAMApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      MuMuIAMApplicationMetamodel.projectName);
+      MuMuIAMApplicationMetamodel.PROJECT_NAME);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      MuMuIAMApplicationMetamodel.formattedProjectVersion);
+      MuMuIAMApplicationMetamodel.FORMATTED_PROJECT_VERSION);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

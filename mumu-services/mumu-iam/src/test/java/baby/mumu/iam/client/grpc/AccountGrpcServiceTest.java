@@ -50,9 +50,9 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
-  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.PROJECT_NAME,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
-    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
+    + MuMuIAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
 })
 public class AccountGrpcServiceTest extends AuthenticationRequired {
 

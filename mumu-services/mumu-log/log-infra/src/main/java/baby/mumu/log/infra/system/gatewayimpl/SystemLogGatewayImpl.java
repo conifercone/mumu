@@ -97,10 +97,10 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     Optional.ofNullable(systemLog).ifPresent(sysLog -> {
       Optional.ofNullable(sysLog.getId())
         .ifPresent(id -> criteria.and(
-          new Criteria(SystemLogEsPOMetamodel.id).matches(id)));
+          new Criteria(SystemLogEsPOMetamodel.ID).matches(id)));
       Optional.ofNullable(sysLog.getContent())
         .ifPresent(content -> {
-          String propertyName = SystemLogEsPOMetamodel.content;
+          String propertyName = SystemLogEsPOMetamodel.CONTENT;
           criteria.and(
             new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
               .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -108,11 +108,11 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         });
       Optional.ofNullable(sysLog.getCategory())
         .ifPresent(category -> criteria.and(
-          new Criteria(SystemLogEsPOMetamodel.category).matches(
+          new Criteria(SystemLogEsPOMetamodel.CATEGORY).matches(
             category)));
       Optional.ofNullable(sysLog.getSuccess())
         .ifPresent(success -> {
-          String propertyName = SystemLogEsPOMetamodel.success;
+          String propertyName = SystemLogEsPOMetamodel.SUCCESS;
           criteria.and(
             new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
               .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -120,7 +120,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         });
       Optional.ofNullable(sysLog.getFail())
         .ifPresent(fail -> {
-          String propertyName = SystemLogEsPOMetamodel.fail;
+          String propertyName = SystemLogEsPOMetamodel.FAIL;
           criteria.and(
             new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
               .matches(fail));
@@ -128,24 +128,24 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
       Optional.ofNullable(sysLog.getRecordTime())
         .ifPresent(
           recordTime -> criteria.and(new Criteria(
-            SystemLogEsPOMetamodel.recordTime).matches(
+            SystemLogEsPOMetamodel.RECORD_TIME).matches(
             TimeUtils.convertAccountZoneToUTC(recordTime))));
       Optional.ofNullable(sysLog.getRecordStartTime())
         .ifPresent(
           recordStartTime -> criteria.and(
             new Criteria(
-              SystemLogEsPOMetamodel.recordTime).greaterThan(
+              SystemLogEsPOMetamodel.RECORD_TIME).greaterThan(
               TimeUtils.convertAccountZoneToUTC(recordStartTime))));
       Optional.ofNullable(sysLog.getRecordEndTime())
         .ifPresent(
           recordEndTime -> criteria.and(
             new Criteria(
-              SystemLogEsPOMetamodel.recordTime).lessThan(
+              SystemLogEsPOMetamodel.RECORD_TIME).lessThan(
               TimeUtils.convertAccountZoneToUTC(recordEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
       .addSort(
-        Sort.by(SystemLogEsPOMetamodel.recordTime).descending());
+        Sort.by(SystemLogEsPOMetamodel.RECORD_TIME).descending());
     SearchHits<SystemLogEsPO> searchHits = elasticsearchTemplate.search(query,
       SystemLogEsPO.class);
     List<SystemLog> systemLogs = searchHits.getSearchHits().stream()

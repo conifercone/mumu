@@ -120,10 +120,10 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     Optional.ofNullable(operationLog).ifPresent(optLog -> {
       Optional.ofNullable(optLog.getId())
         .ifPresent(id -> criteria.and(
-          new Criteria(OperationLogEsPOMetamodel.id).matches(id)));
+          new Criteria(OperationLogEsPOMetamodel.ID).matches(id)));
       Optional.ofNullable(optLog.getContent())
         .ifPresent(content -> {
-          String propertyName = OperationLogEsPOMetamodel.content;
+          String propertyName = OperationLogEsPOMetamodel.CONTENT;
           criteria.and(
             new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
               .matches(content).or(propertyName.concat(ES_QUERY_SP))
@@ -131,7 +131,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         });
       Optional.ofNullable(optLog.getOperator())
         .ifPresent(operator -> {
-          String propertyName = OperationLogEsPOMetamodel.operator;
+          String propertyName = OperationLogEsPOMetamodel.OPERATOR;
           criteria.and(
             new Criteria(propertyName).matches(operator).or(propertyName.concat(ES_QUERY_EN))
               .matches(operator).or(propertyName.concat(ES_QUERY_SP))
@@ -139,14 +139,14 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         });
       Optional.ofNullable(optLog.getBizNo())
         .ifPresent(bizNo -> criteria.and(
-          new Criteria(OperationLogEsPOMetamodel.bizNo).matches(bizNo)));
+          new Criteria(OperationLogEsPOMetamodel.BIZ_NO).matches(bizNo)));
       Optional.ofNullable(optLog.getCategory())
         .ifPresent(category -> criteria.and(
-          new Criteria(OperationLogEsPOMetamodel.category).matches(
+          new Criteria(OperationLogEsPOMetamodel.CATEGORY).matches(
             category)));
       Optional.ofNullable(optLog.getDetail())
         .ifPresent(detail -> {
-          String propertyName = OperationLogEsPOMetamodel.detail;
+          String propertyName = OperationLogEsPOMetamodel.DETAIL;
           criteria.and(
             new Criteria(propertyName).matches(detail).or(propertyName.concat(ES_QUERY_EN))
               .matches(detail).or(propertyName.concat(ES_QUERY_SP))
@@ -154,7 +154,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         });
       Optional.ofNullable(optLog.getSuccess())
         .ifPresent(success -> {
-          String propertyName = OperationLogEsPOMetamodel.success;
+          String propertyName = OperationLogEsPOMetamodel.SUCCESS;
           criteria.and(
             new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
               .matches(success).or(propertyName.concat(ES_QUERY_SP))
@@ -162,7 +162,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
         });
       Optional.ofNullable(optLog.getFail())
         .ifPresent(fail -> {
-          String propertyName = OperationLogEsPOMetamodel.fail;
+          String propertyName = OperationLogEsPOMetamodel.FAIL;
           criteria.and(
             new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_EN))
               .matches(fail).or(propertyName.concat(ES_QUERY_SP))
@@ -172,24 +172,24 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
       Optional.ofNullable(optLog.getOperatingTime())
         .ifPresent(
           operatingTime -> criteria.and(new Criteria(
-            OperationLogEsPOMetamodel.operatingTime).matches(
+            OperationLogEsPOMetamodel.OPERATING_TIME).matches(
             TimeUtils.convertAccountZoneToUTC(operatingTime))));
       Optional.ofNullable(optLog.getOperatingStartTime())
         .ifPresent(
           operatingStartTime -> criteria.and(
             new Criteria(
-              OperationLogEsPOMetamodel.operatingTime).greaterThan(
+              OperationLogEsPOMetamodel.OPERATING_TIME).greaterThan(
               TimeUtils.convertAccountZoneToUTC(operatingStartTime))));
       Optional.ofNullable(optLog.getOperatingEndTime())
         .ifPresent(
           operatingEndTime -> criteria.and(
             new Criteria(
-              OperationLogEsPOMetamodel.operatingTime).lessThan(
+              OperationLogEsPOMetamodel.OPERATING_TIME).lessThan(
               TimeUtils.convertAccountZoneToUTC(operatingEndTime))));
     });
     Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
       .addSort(
-        Sort.by(OperationLogEsPOMetamodel.operatingTime).descending());
+        Sort.by(OperationLogEsPOMetamodel.OPERATING_TIME).descending());
     SearchHits<OperationLogEsPO> searchHits = elasticsearchTemplate.search(query,
       OperationLogEsPO.class);
     List<OperationLog> operationLogs = searchHits.getSearchHits().stream()

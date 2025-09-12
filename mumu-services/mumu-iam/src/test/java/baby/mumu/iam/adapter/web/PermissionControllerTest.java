@@ -51,9 +51,9 @@ import org.springframework.transaction.annotation.Transactional;
 @TestPropertySource(properties = {
   "mumu.extension.global.digital-signature.enabled=false",
   "mumu.extension.idempotent.request-id.enabled=false",
-  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
+  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.PROJECT_NAME,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
-    + MuMuIAMApplicationMetamodel.formattedProjectVersion,
+    + MuMuIAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
 })
 public class PermissionControllerTest {
 

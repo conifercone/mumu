@@ -34,7 +34,7 @@ public class ProjectInformationPrint {
 
   @PostConstruct
   public void run() {
-    log.info(":: {} :: {}", ProjectInformationPrintMetamodel.projectName,
-      ProjectInformationPrintMetamodel.projectVersion);
+    log.info(":: {} :: {}", ProjectInformationPrintMetamodel.PROJECT_NAME,
+      ProjectInformationPrintMetamodel.PROJECT_VERSION);
   }
 }

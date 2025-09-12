@@ -50,7 +50,7 @@ public @interface Metamodel {
    *
    * @since 2.2.0
    */
-  String projectVersionFiledName() default "projectVersion";
+  String projectVersionFiledName() default "PROJECT_VERSION";
 
   /**
    * 是否生成格式化后的项目版本号
@@ -64,7 +64,7 @@ public @interface Metamodel {
    *
    * @since 2.3.0
    */
-  String formattedProjectVersionFiledName() default "formattedProjectVersion";
+  String formattedProjectVersionFiledName() default "FORMATTED_PROJECT_VERSION";
 
   /**
    * 是否生成项目名
@@ -78,5 +78,5 @@ public @interface Metamodel {
    *
    * @since 2.2.0
    */
-  String projectNameFiledName() default "projectName";
+  String projectNameFiledName() default "PROJECT_NAME";
 }

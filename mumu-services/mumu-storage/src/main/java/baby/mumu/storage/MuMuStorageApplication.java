@@ -51,9 +51,9 @@ public class MuMuStorageApplication {
       MuMuStorageApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      MuMuStorageApplicationMetamodel.projectName);
+      MuMuStorageApplicationMetamodel.PROJECT_NAME);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      MuMuStorageApplicationMetamodel.formattedProjectVersion);
+      MuMuStorageApplicationMetamodel.FORMATTED_PROJECT_VERSION);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

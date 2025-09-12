@@ -86,7 +86,7 @@ public class MetamodelGenerator extends AbstractProcessor {
   private String authorName;
   private String authorEmail;
   private static final String GENERATE_DESCRIPTION_CLASS_SUFFIX = "Metamodel";
-  private static final String SINGULAR_FIELD_SUFFIX = "Singular";
+  private static final String SINGULAR_FIELD_SUFFIX = "_SINGULAR";
   private String gradleVersion;
   private String javaVersion;
   private String osName;
@@ -212,7 +212,8 @@ public class MetamodelGenerator extends AbstractProcessor {
     });
     if (CollectionUtils.isNotEmpty(fields)) {
       fields.forEach(field -> {
-        FieldSpec fieldSpec = FieldSpec.builder(String.class, field.getSimpleName().toString())
+        FieldSpec fieldSpec = FieldSpec.builder(String.class,
+            camelToUpperUnderscore(field.getSimpleName().toString()))
           .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
           .initializer("$S", field.getSimpleName().toString())
           .addJavadoc(String.format(
@@ -226,7 +227,8 @@ public class MetamodelGenerator extends AbstractProcessor {
                   SingularAttribute.class.getSimpleName()),
                 TypeName.get(ObjectUtils.getEntityType(field).asType()),
                 fieldClassName),
-              field.getSimpleName().toString().concat(MetamodelGenerator.SINGULAR_FIELD_SUFFIX))
+              camelToUpperUnderscore(field.getSimpleName().toString())
+                .concat(MetamodelGenerator.SINGULAR_FIELD_SUFFIX))
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
             .addJavadoc(String.format(
               "@see %s#%s",
@@ -249,6 +251,21 @@ public class MetamodelGenerator extends AbstractProcessor {
         .build();
       builder.addField(fieldSpec);
     }
+  }
+
+  private String camelToUpperUnderscore(String input) {
+    if (input == null || input.isEmpty()) {
+      return input;
+    }
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < input.length(); i++) {
+      char c = input.charAt(i);
+      if (Character.isUpperCase(c) && i > 0) {
+        result.append('_');
+      }
+      result.append(Character.toUpperCase(c));
+    }
+    return result.toString();
   }
 
   private void generateBasicProjectInformation(String packageName, String entityName,
