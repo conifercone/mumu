@@ -18,7 +18,6 @@ package baby.mumu.log;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
-import baby.mumu.basis.enums.ServiceEnum;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
@@ -40,8 +39,6 @@ public class MuMuLogApplication {
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuLogApplicationMetamodel.projectName);
-    defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
-      ServiceEnum.LOG.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuLogApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

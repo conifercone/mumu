@@ -53,7 +53,6 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureMockMvc
 @Import(GrpcSecurityTestConfiguration.class)
 @TestPropertySource(properties = {
-  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
   SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
     + MuMuIAMApplicationMetamodel.formattedProjectVersion,

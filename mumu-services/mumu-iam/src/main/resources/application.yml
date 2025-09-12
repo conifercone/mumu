@@ -18,6 +18,8 @@ server:
   port: ${port:7800}
   shutdown: graceful
 spring:
+  application:
+    name: iam
   config:
     import: 'optional:consul:'
   cloud:

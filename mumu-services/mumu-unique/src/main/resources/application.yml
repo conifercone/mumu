@@ -18,6 +18,8 @@ server:
   port: ${port:7806}
   shutdown: graceful
 spring:
+  application:
+    name: unique
   config:
     import: 'optional:consul:'
   cloud:

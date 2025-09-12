@@ -18,7 +18,6 @@ package baby.mumu.unique;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
-import baby.mumu.basis.enums.ServiceEnum;
 import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
@@ -45,8 +44,6 @@ public class MuMuUniqueApplication {
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
       MuMuUniqueApplicationMetamodel.projectName);
-    defaultProperties.put(SpringBootConstants.SPRING_APPLICATION_NAME,
-      ServiceEnum.UNIQUE.getName());
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
       MuMuUniqueApplicationMetamodel.formattedProjectVersion);
     springApplication.setDefaultProperties(defaultProperties);

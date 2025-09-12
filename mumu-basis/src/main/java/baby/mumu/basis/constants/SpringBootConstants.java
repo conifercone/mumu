@@ -25,7 +25,6 @@ package baby.mumu.basis.constants;
 public final class SpringBootConstants {
 
   public static final String APPLICATION_TITLE = "application.title";
-  public static final String SPRING_APPLICATION_NAME = "spring.application.name";
   public static final String APPLICATION_FORMATTED_VERSION = "application.formatted-version";
 
   private SpringBootConstants() {

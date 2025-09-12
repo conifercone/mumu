@@ -51,7 +51,6 @@ import org.springframework.transaction.annotation.Transactional;
 @TestPropertySource(properties = {
   "mumu.extension.global.digital-signature.enabled=false",
   "mumu.extension.idempotent.request-id.enabled=false",
-  SpringBootConstants.SPRING_APPLICATION_NAME + "=" + "iam",
   SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.projectName,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
     + MuMuIAMApplicationMetamodel.formattedProjectVersion,
