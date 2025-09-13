@@ -253,6 +253,12 @@ public class MetamodelGenerator extends AbstractProcessor {
     }
   }
 
+  /**
+   * 属性名转换为大写下划线格式
+   *
+   * @param input 输入字符
+   * @return 转换后字符
+   */
   private String camelToUpperUnderscore(String input) {
     if (input == null || input.isEmpty()) {
       return input;
