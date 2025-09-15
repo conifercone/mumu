@@ -46,7 +46,7 @@ tikaVersion = '3.2.2'
 # bom version
 grpcBomVersion = '1.75.0'
 guavaBomVersion = '33.4.8-jre'
-protobufBomVersion = '4.32.0'
+protobufBomVersion = '4.32.1'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.14.2'
