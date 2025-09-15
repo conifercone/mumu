@@ -307,6 +307,11 @@ public class MetamodelGenerator extends AbstractProcessor {
     }
   }
 
+  /**
+   * 获取git user邮箱地址
+   *
+   * @return git user邮箱地址
+   */
   private Optional<String> getGitEmail() {
     if (gitNotAvailable()) {
       return Optional.empty();
@@ -327,6 +332,11 @@ public class MetamodelGenerator extends AbstractProcessor {
     }
   }
 
+  /**
+   * 获取git user 用户名
+   *
+   * @return git user 用户名
+   */
   private Optional<String> getGitUserName() {
     if (gitNotAvailable()) {
       return Optional.empty();
