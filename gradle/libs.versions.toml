@@ -50,7 +50,7 @@ protobufBomVersion = '4.32.0'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '8.14.2'
-kotlinPluginVersion = '2.2.10'
+kotlinPluginVersion = '2.2.20'
 
 [libraries]
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
