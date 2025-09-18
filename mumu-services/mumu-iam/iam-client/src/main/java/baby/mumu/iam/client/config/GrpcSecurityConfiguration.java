@@ -63,7 +63,7 @@ public class GrpcSecurityConfiguration {
 
     // 2) 基于方法路径的授权映射
     grpc.authorizeRequests(r -> {
-      // 放开 gRPC 内置服务；需要更严可以改成 authenticated()
+      // 放开 gRPC 内置服务
       r.methods("grpc.*/*").permitAll();
 
       if (CollectionUtils.isNotEmpty(props.getGrpc())) {
@@ -83,7 +83,6 @@ public class GrpcSecurityConfiguration {
             var m = r.methods(full);
 
             if (StringUtils.isNotBlank(p.getRole())) {
-              // 没有 hasRole，自己转成 ROLE_ 权限去匹配
               m.hasAuthority(roleToAuthority(p.getRole()));
             } else if (CollectionUtils.isNotEmpty(p.getAnyRole())) {
               m.hasAnyAuthority(
