@@ -42,7 +42,7 @@ jacksonDatatypeMoneyVersion = '1.3.0'
 libphonenumberVersion = '9.0.14'
 commonsValidatorVersion = '1.10.0'
 jmhVersion = '1.37'
-tikaVersion = '3.2.2'
+tikaVersion = '3.2.3'
 # bom version
 grpcBomVersion = '1.75.0'
 guavaBomVersion = '33.4.8-jre'
