@@ -33,7 +33,6 @@ import jakarta.persistence.metamodel.SingularAttribute;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Writer;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -59,7 +58,6 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
@@ -181,10 +179,7 @@ public class MetamodelGenerator extends AbstractProcessor {
     JavaFile javaFile = JavaFile
       .builder(packageName, builder.build())
       .build();
-    JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(qualifiedGenEntityName);
-    Writer writer = builderFile.openWriter();
-    javaFile.writeTo(writer);
-    writer.close();
+    javaFile.writeTo(processingEnv.getFiler());
   }
 
   private void generateFields(@NonNull Element annotatedElement, String packageName,
