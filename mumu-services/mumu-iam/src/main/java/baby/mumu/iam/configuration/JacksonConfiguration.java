@@ -18,6 +18,7 @@ package baby.mumu.iam.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -37,14 +38,19 @@ public class JacksonConfiguration {
 
   @Bean
   public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.registerModule(new MoneyModule().withQuotedDecimalNumbers());
-    SimpleModule simpleModule = new SimpleModule();
-    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-    objectMapper.registerModule(simpleModule);
-    objectMapper.addMixIn(Point.class, PointMixin.class);
-    return objectMapper;
+
+    return JsonMapper.builder()
+      // 关闭“把日期写成时间戳”的行为
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      // 时间模块 + Money 模块
+      .addModule(new JavaTimeModule())
+      .addModule(new MoneyModule().withQuotedDecimalNumbers())
+      // Long → String 序列化（含包装类型和原始类型）
+      .addModule(new SimpleModule()
+        .addSerializer(Long.class, ToStringSerializer.instance)
+        .addSerializer(Long.TYPE, ToStringSerializer.instance))
+      // MixIn
+      .addMixIn(Point.class, PointMixin.class)
+      .build();
   }
 }

@@ -41,6 +41,7 @@ import baby.mumu.iam.infra.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.database.Oauth2AuthenticationRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -266,18 +267,24 @@ public class AuthorizationConfiguration {
       jdbcTemplate, registeredClientRepository);
     JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper(
       registeredClientRepository);
+    SimpleModule longToString = new SimpleModule()
+      .addSerializer(Long.class, ToStringSerializer.instance)
+      .addSerializer(Long.TYPE, ToStringSerializer.instance);
     ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModules(new CoreJackson2Module());
-    objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
-    objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
-    objectMapper.registerModule(new MoneyModule());
-    SimpleModule simpleModule = new SimpleModule();
-    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-    objectMapper.registerModule(simpleModule);
-    objectMapper.addMixIn(Long.class, LongMixin.class);
-    objectMapper.addMixIn(BigDecimal.class, BigDecimalMixin.class);
-    objectMapper.addMixIn(Point.class, PointMixin.class);
+    ObjectMapper objectMapper = JsonMapper.builder()
+      // Spring Security 基础与扩展模块
+      .addModule(new CoreJackson2Module())
+      .addModules(SecurityJackson2Modules.getModules(classLoader))
+      // 授权服务器 & Money
+      .addModule(new OAuth2AuthorizationServerJackson2Module())
+      .addModule(new MoneyModule())
+      // Long → String
+      .addModule(longToString)
+      // MixIn 映射
+      .addMixIn(Long.class, LongMixin.class)
+      .addMixIn(BigDecimal.class, BigDecimalMixin.class)
+      .addMixIn(Point.class, PointMixin.class)
+      .build();
     rowMapper.setObjectMapper(objectMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
     OAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new OAuth2AuthorizationParametersMapper();

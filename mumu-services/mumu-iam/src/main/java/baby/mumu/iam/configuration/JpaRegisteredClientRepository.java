@@ -22,6 +22,7 @@ import baby.mumu.iam.infra.client.gatewayimpl.database.ClientRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,13 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
   private final ClientRepository clientRepository;
   private final ClientConvertor clientConvertor;
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final List<Module> securityModules =
+    SecurityJackson2Modules.getModules(JpaRegisteredClientRepository.class.getClassLoader());
+  private final ObjectMapper objectMapper = JsonMapper.builder()
+    .addModules(securityModules) // 批量注册 securityModules
+    .addModule(new OAuth2AuthorizationServerJackson2Module()) // OAuth2 模块
+    .addModule(new JavaTimeModule()) // Java 8 时间模块
+    .build();
 
   public JpaRegisteredClientRepository(ClientRepository clientRepository,
     ClientConvertor clientConvertor) {
@@ -57,12 +64,6 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
     Assert.notNull(clientConvertor, "clientConvertor cannot be null");
     this.clientConvertor = clientConvertor;
     this.clientRepository = clientRepository;
-
-    ClassLoader classLoader = JpaRegisteredClientRepository.class.getClassLoader();
-    List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
-    this.objectMapper.registerModules(securityModules);
-    this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
-    this.objectMapper.registerModule(new JavaTimeModule());
   }
 
   @Override

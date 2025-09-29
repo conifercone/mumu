@@ -20,6 +20,7 @@ import baby.mumu.basis.enums.OAuth2Enum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class AuthenticationRequired {
   }
 
   public Optional<String> getToken(@NonNull MockMvc mockMvc, String username, String password) {
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = JsonMapper.builder().build();
     MvcResult mvcResult;
     try {
       byte[] encodedBytes = Base64.encodeBase64(

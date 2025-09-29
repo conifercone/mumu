@@ -20,6 +20,7 @@ import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -76,6 +77,10 @@ public class ResponseWrapper<T> implements Serializable {
    */
   private String traceId = TraceIdFilter.getTraceId();
 
+  private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+    .addModule(new JavaTimeModule())
+    .build();
+
 
   private ResponseWrapper(@NonNull BaseResponse resultCode, boolean success) {
     this.code = resultCode.getCode();
@@ -117,9 +122,7 @@ public class ResponseWrapper<T> implements Serializable {
     BaseResponse resultCode)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    String jsonResult = objectMapper.writeValueAsString(responseResult);
+    String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 
@@ -135,9 +138,7 @@ public class ResponseWrapper<T> implements Serializable {
     String code, String message)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    String jsonResult = objectMapper.writeValueAsString(responseResult);
+    String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 }

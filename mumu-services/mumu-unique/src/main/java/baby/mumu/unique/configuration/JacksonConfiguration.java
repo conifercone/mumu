@@ -19,6 +19,7 @@ package baby.mumu.unique.configuration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -37,14 +38,19 @@ public class JacksonConfiguration {
 
   @Bean
   public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    objectMapper.registerModule(new MoneyModule().withQuotedDecimalNumbers());
-    SimpleModule simpleModule = new SimpleModule();
-    simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-    objectMapper.registerModule(simpleModule);
-    return objectMapper;
+    return JsonMapper.builder()
+      // 写日期时不要用时间戳
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      // 反序列化时忽略未知字段
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+      // Java 8 时间模块
+      .addModule(new JavaTimeModule())
+      // Money 模块，数字字符串形式
+      .addModule(new MoneyModule().withQuotedDecimalNumbers())
+      // Long → String 序列化，避免 JS 丢精度
+      .addModule(new SimpleModule()
+        .addSerializer(Long.class, ToStringSerializer.instance)
+        .addSerializer(Long.TYPE, ToStringSerializer.instance))
+      .build();
   }
 }
