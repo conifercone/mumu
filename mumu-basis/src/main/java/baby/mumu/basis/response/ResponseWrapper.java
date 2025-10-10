@@ -20,6 +20,7 @@ import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
@@ -73,12 +74,13 @@ public class ResponseWrapper<T> implements Serializable {
   private T data;
 
   /**
-   * traceId
+   * 全局链路追踪ID
    */
   private String traceId = TraceIdFilter.getTraceId();
 
   private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
     .addModule(new JavaTimeModule())
+    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     .build();
 
 
