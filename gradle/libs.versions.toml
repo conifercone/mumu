@@ -44,7 +44,7 @@ commonsValidatorVersion = '1.10.0'
 jmhVersion = '1.37'
 tikaVersion = '3.2.3'
 # bom version
-grpcBomVersion = '1.75.0'
+grpcBomVersion = '1.76.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.32.1'
 # plugin version
