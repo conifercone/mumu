@@ -14,38 +14,52 @@
  * limitations under the License.
  */
 
-package baby.mumu.unique;
+package baby.mumu.iam;
+
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
 import baby.mumu.basis.annotations.Metamodel;
+import baby.mumu.basis.constants.BeanNameConstants;
 import baby.mumu.basis.constants.SpringBootConstants;
-import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 分布式主键生成服务
+ * 鉴权服务
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @SpringBootApplication
-@Import(LeafAutoConfiguration.class)
-@EnableRedisDocumentRepositories(basePackages = "baby.mumu.unique.infra.**.cache.**")
+@EnableConfigurationProperties
+@EnableJpaAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
+@EnableMongoAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE)
+@EnableRedisDocumentRepositories(basePackages = "baby.mumu.iam.infra.**.cache.**")
+@EnableMongoRepositories(basePackages = "baby.mumu.iam.infra.**.document.**")
+@EnableMethodSecurity
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
+@EnableTransactionManagement
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
-public class MuMuUniqueApplication {
+public class IAMApplication {
 
   public static void main(String[] args) {
     SpringApplication springApplication = new SpringApplication(
-      MuMuUniqueApplication.class);
+      IAMApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();
     defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      MuMuUniqueApplicationMetamodel.PROJECT_NAME);
+      IAMApplicationMetamodel.PROJECT_NAME);
     defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      MuMuUniqueApplicationMetamodel.FORMATTED_PROJECT_VERSION);
+      IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION);
     springApplication.setDefaultProperties(defaultProperties);
     springApplication.run(args);
   }

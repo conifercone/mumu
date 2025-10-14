@@ -1,12 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MuMuIAMApplication-dev"
+  <configuration default="false" name="UniqueApplication-dev"
     type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev"/>
-    <module name="mumu.mumu-services.mumu-iam.main"/>
+    <module name="mumu.mumu-services.mumu-unique.main"/>
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE"/>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.iam.MuMuIAMApplication"/>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="baby.mumu.unique.UniqueApplication"/>
     <option name="VM_PARAMETERS"
-      value="-Dcom.sun.management.jmxremote.port=31101 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
+      value="-Dcom.sun.management.jmxremote.port=31301 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"/>
     <method v="2">
       <option name="Make" enabled="true"/>
     </method>
