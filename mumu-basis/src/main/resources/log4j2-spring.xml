@@ -16,7 +16,7 @@
     limitations under the License.
 
 -->
-<Configuration status="INFO" name="mumu">
+<Configuration status="INFO" name="basis">
   <Properties>
     <!-- @formatter:off -->
     <Property name="LOG_PATH">${spring:mumu.log.path}/logs/${spring:spring.application.name:-mumu}</Property>
