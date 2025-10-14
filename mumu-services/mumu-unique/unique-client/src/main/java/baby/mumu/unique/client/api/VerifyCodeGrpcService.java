@@ -18,7 +18,7 @@ package baby.mumu.unique.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.unique.client.api.grpc.VerifyCodeGeneratedGrpcCmd;
 import baby.mumu.unique.client.api.grpc.VerifyCodeServiceGrpc;
 import baby.mumu.unique.client.api.grpc.VerifyCodeServiceGrpc.VerifyCodeServiceBlockingStub;
@@ -65,7 +65,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
         channel = ch;
         return generateFromGrpc(verifyCodeGeneratedGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public ListenableFuture<Int64Value> syncGenerate(
@@ -76,7 +76,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
         channel = ch;
         return syncGenerateFromGrpc(verifyCodeGeneratedGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public BoolValue verify(
@@ -87,7 +87,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
         channel = ch;
         return verifyFromGrpc(verifyCodeVerifyGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @SuppressWarnings("unused")
@@ -99,7 +99,7 @@ public class VerifyCodeGrpcService extends UniqueGrpcService implements Disposab
         channel = ch;
         return syncVerifyFromGrpc(verifyCodeVerifyGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private Int64Value generateFromGrpc(

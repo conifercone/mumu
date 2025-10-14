@@ -18,7 +18,7 @@ package baby.mumu.storage.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.storage.client.api.grpc.FileServiceGrpc;
 import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceBlockingStub;
 import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceFutureStub;
@@ -65,7 +65,7 @@ public class FileGrpcService extends StorageGrpcService implements DisposableBea
         channel = ch;
         deleteByMetadataIdFromGrpc(metadataId);
       }, () -> {
-        throw new MuMuException(GRPC_SERVICE_NOT_FOUND);
+        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
       });
   }
 
@@ -79,7 +79,7 @@ public class FileGrpcService extends StorageGrpcService implements DisposableBea
         channel = ch;
         return syncDeleteByMetadataIdFromGrpc(roleId);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
 

@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.role.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.domain.role.Role;
@@ -47,7 +47,7 @@ public class RoleAddCmdExe {
 
   public Long execute(RoleAddCmd roleAddCmd) {
     Role role = roleConvertor.toEntity(roleAddCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     return roleGateway.add(role);
   }
 }

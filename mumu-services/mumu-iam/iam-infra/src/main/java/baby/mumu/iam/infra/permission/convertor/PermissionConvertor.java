@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.infra.permission.convertor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
@@ -146,7 +146,7 @@ public class PermissionConvertor {
   public Optional<Permission> toEntity(PermissionUpdateCmd permissionUpdateCmd) {
     return Optional.ofNullable(permissionUpdateCmd).map(permissionUpdateCmdNotNull -> {
       if (permissionUpdateCmdNotNull.getId() == null) {
-        throw new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+        throw new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
       }
       return permissionRepository.findById(
           permissionUpdateCmdNotNull.getId()).flatMap(this::toEntity)
@@ -158,7 +158,7 @@ public class PermissionConvertor {
             && (permissionRepository.existsByCode(
             codeAfterUpdate) || permissionArchivedRepository.existsByCode(
             codeAfterUpdate))) {
-            throw new MuMuException(ResponseCode.PERMISSION_CODE_ALREADY_EXISTS);
+            throw new ApplicationException(ResponseCode.PERMISSION_CODE_ALREADY_EXISTS);
           }
           return permission;
         }).orElse(null);

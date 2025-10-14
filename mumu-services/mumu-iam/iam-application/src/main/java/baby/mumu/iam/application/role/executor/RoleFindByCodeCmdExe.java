@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.role.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
@@ -47,7 +47,7 @@ public class RoleFindByCodeCmdExe {
 
   public RoleFindByCodeDTO execute(String code) {
     return Optional.ofNullable(code).flatMap(roleGateway::findByCode)
-      .flatMap(roleConvertor::toRoleFindByCodeDTO).orElseThrow(() -> new MuMuException(
+      .flatMap(roleConvertor::toRoleFindByCodeDTO).orElseThrow(() -> new ApplicationException(
         ResponseCode.ROLE_DOES_NOT_EXIST));
   }
 }

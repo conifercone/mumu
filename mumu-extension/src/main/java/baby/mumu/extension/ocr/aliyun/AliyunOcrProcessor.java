@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.ocr.aliyun;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ocr.Ocr;
 import baby.mumu.extension.ocr.OcrProcessor;
@@ -54,7 +54,7 @@ public class AliyunOcrProcessor implements OcrProcessor {
             recognizeBasicRequest, new RuntimeOptions());
           return recognizeBasicResponse.getBody().getData();
         } catch (Exception e) {
-          throw new MuMuException(ResponseCode.OCR_RECOGNITION_FAILED);
+          throw new ApplicationException(ResponseCode.OCR_RECOGNITION_FAILED);
         }
       }).orElse(StringUtils.EMPTY);
   }

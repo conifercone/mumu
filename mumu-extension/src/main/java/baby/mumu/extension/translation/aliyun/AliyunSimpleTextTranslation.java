@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.translation.aliyun;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import com.aliyun.alimt20181012.Client;
@@ -45,7 +45,7 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NonNull String targetLanguage) throws MuMuException {
+  public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
     try {
       RuntimeOptions runtime = new RuntimeOptions();
       GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
@@ -67,7 +67,7 @@ public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
         translateGeneralRequest, runtime);
       return translateGeneralResponse.getBody().getData().getTranslated();
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.TRANSLATION_FAILED);
+      throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
     }
   }
 }

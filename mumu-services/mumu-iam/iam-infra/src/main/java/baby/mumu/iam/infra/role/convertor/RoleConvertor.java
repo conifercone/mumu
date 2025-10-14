@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.infra.role.convertor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
@@ -228,7 +228,7 @@ public class RoleConvertor {
   public Optional<Role> toEntity(RoleUpdateCmd roleUpdateCmd) {
     return Optional.ofNullable(roleUpdateCmd).flatMap(roleUpdateCmdNotNull -> {
       Optional.ofNullable(roleUpdateCmdNotNull.getId())
-        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<RolePO> roleDoOptional = roleRepository.findById(roleUpdateCmdNotNull.getId());
       return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
         String codeBeforeUpdated = roleDomain.getCode();
@@ -237,7 +237,7 @@ public class RoleConvertor {
         if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
           && (roleRepository.existsByCode(codeAfterUpdated)
           || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
-          throw new MuMuException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
+          throw new ApplicationException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
         }
         Optional.ofNullable(roleUpdateCmdNotNull.getPermissionIds())
           .ifPresent(authorities -> setAuthorities(roleDomain, authorities));

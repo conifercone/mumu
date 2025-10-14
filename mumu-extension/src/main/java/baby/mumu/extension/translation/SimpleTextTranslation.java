@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.translation;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ import org.apiguardian.api.API.Status;
 public interface SimpleTextTranslation {
 
   @API(status = Status.STABLE, since = "1.0.3")
-  String translate(String text, String targetLanguage) throws MuMuException;
+  String translate(String text, String targetLanguage) throws ApplicationException;
 
   @API(status = Status.STABLE, since = "1.0.3")
   default Optional<String> translateToAccountLanguageIfPossible(String text) {

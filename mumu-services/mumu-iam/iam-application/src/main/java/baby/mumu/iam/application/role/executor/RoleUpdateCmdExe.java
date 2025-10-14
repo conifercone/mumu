@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.role.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.RoleUpdateCmd;
 import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
@@ -48,8 +48,8 @@ public class RoleUpdateCmdExe {
 
   public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
     Role role = roleConvertor.toEntity(roleUpdateCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
   }
 }

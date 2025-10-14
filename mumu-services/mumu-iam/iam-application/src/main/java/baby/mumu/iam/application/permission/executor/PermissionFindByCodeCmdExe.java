@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.permission.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
@@ -50,6 +50,6 @@ public class PermissionFindByCodeCmdExe {
     return Optional.ofNullable(code)
       .flatMap(permissionGateway::findByCode).flatMap(
         permissionConvertor::toPermissionFindByCodeDTO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
   }
 }

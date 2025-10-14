@@ -17,7 +17,7 @@
 package baby.mumu.extension.processor.response;
 
 import baby.mumu.basis.dto.DataTransferObject;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -73,28 +73,31 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
-  @ExceptionHandler(MuMuException.class)
-  public ResponseWrapper<?> handleMuMuException(@NonNull MuMuException mumuException,
+  @ExceptionHandler(ApplicationException.class)
+  public ResponseWrapper<?> handleApplicationException(
+    @NonNull ApplicationException applicationException,
     @NonNull HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     response.setStatus(
-      mumuException.getResponseCode() != null ? mumuException.getResponseCode().getStatus()
+      applicationException.getResponseCode() != null ? applicationException.getResponseCode()
+        .getStatus()
         : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    ResponseBodyProcessor.log.error(mumuException.getMessage(), mumuException);
-    if (mumuException.getThrowable() != null) {
-      ResponseBodyProcessor.log.error(mumuException.getThrowable().getMessage(),
-        mumuException.getThrowable());
+    ResponseBodyProcessor.log.error(applicationException.getMessage(), applicationException);
+    if (applicationException.getThrowable() != null) {
+      ResponseBodyProcessor.log.error(applicationException.getThrowable().getMessage(),
+        applicationException.getThrowable());
     }
     systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-      .setContent(mumuException.getMessage())
+      .setContent(applicationException.getMessage())
       .setCategory("MUMU")
-      .setFail(ExceptionUtils.getStackTrace(mumuException))
+      .setFail(ExceptionUtils.getStackTrace(applicationException))
       .build());
-    if (mumuException.getData() != null) {
-      return ResponseWrapper.failure(mumuException.getResponseCode(), mumuException.getData());
+    if (applicationException.getData() != null) {
+      return ResponseWrapper.failure(applicationException.getResponseCode(),
+        applicationException.getData());
     }
-    return ResponseWrapper.failure(mumuException.getResponseCode());
+    return ResponseWrapper.failure(applicationException.getResponseCode());
   }
 
   @ExceptionHandler(RateLimiterException.class)

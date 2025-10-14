@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.permission.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.PermissionUpdateCmd;
 import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
@@ -49,11 +49,11 @@ public class PermissionUpdateCmdExe {
 
   public PermissionUpdatedDataDTO execute(PermissionUpdateCmd permissionUpdateCmd) {
     Permission permission = permissionConvertor.toEntity(permissionUpdateCmd)
-      .orElseThrow(() -> new MuMuException(
+      .orElseThrow(() -> new ApplicationException(
         ResponseCode.INVALID_PERMISSION_FORMAT));
     return permissionGateway.updateById(permission)
       .flatMap(permissionConvertor::toPermissionUpdatedDataDTO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
 
   }
 }

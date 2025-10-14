@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.permission.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.domain.permission.Permission;
@@ -48,7 +48,7 @@ public class PermissionAddCmdExe {
 
   public Long execute(PermissionAddCmd permissionAddCmd) {
     Permission permission = permissionConvertor.toEntity(permissionAddCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
     return permissionGateway.add(permission);
   }
 }

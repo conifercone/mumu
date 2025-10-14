@@ -18,7 +18,7 @@ package baby.mumu.iam.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import baby.mumu.iam.client.api.grpc.AccountServiceGrpc;
 import baby.mumu.iam.client.api.grpc.AccountServiceGrpc.AccountServiceBlockingStub;
@@ -62,7 +62,7 @@ public class AccountGrpcService extends IAMGrpcService implements DisposableBean
         channel = ch;
         return queryCurrentLoginAccountFromGrpc();
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.2.0")
@@ -73,7 +73,7 @@ public class AccountGrpcService extends IAMGrpcService implements DisposableBean
         channel = ch;
         return syncQueryCurrentLoginAccountFromGrpc();
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc() {

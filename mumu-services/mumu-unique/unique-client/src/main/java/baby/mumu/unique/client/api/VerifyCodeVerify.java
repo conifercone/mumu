@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.client.api;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.api.grpc.VerifyCodeVerifyGrpcCmd;
 import java.util.Optional;
@@ -37,18 +37,20 @@ public class VerifyCodeVerify {
 
   public void verify(Long id, String verifyCode) {
     Long verifyCodeId = Optional.ofNullable(id)
-      .orElseThrow(() -> new MuMuException(ResponseCode.VERIFICATION_CODE_ID_CANNOT_BE_EMPTY));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.VERIFICATION_CODE_ID_CANNOT_BE_EMPTY));
     String code = Optional.ofNullable(verifyCode)
-      .orElseThrow(() -> new MuMuException(ResponseCode.VERIFICATION_CODE_CANNOT_BE_EMPTY));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.VERIFICATION_CODE_CANNOT_BE_EMPTY));
     try {
       if (!verifyCodeGrpcService.verify(
           VerifyCodeVerifyGrpcCmd.newBuilder().setId(verifyCodeId).setSource(
             code).build())
         .getValue()) {
-        throw new MuMuException(ResponseCode.VERIFICATION_CODE_INCORRECT);
+        throw new ApplicationException(ResponseCode.VERIFICATION_CODE_INCORRECT);
       }
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.VERIFICATION_CODE_VERIFICATION_EXCEPTION);
+      throw new ApplicationException(ResponseCode.VERIFICATION_CODE_VERIFICATION_EXCEPTION);
     }
   }
 }

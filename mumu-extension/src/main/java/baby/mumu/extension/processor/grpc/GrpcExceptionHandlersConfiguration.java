@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.processor.grpc;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.exception.RateLimiterException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.log.client.api.SystemLogGrpcService;
@@ -61,7 +61,7 @@ public class GrpcExceptionHandlersConfiguration {
         return Status.UNAUTHENTICATED.withDescription(e.getMessage()).withCause(e).asException();
       }
 
-      if (exception instanceof MuMuException e) {
+      if (exception instanceof ApplicationException e) {
         GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
         submit(systemLogGrpcService, "MUMU", e.getMessage(), ExceptionUtils.getStackTrace(e));
         return Status.INTERNAL.withDescription(e.getMessage()).withCause(e).asException();

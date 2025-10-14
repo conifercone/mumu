@@ -25,7 +25,7 @@ import java.io.Serial;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class DataConversionException extends MuMuException {
+public class DataConversionException extends ApplicationException {
 
   @Serial
   private static final long serialVersionUID = -1039551120326053286L;

@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.application.zone.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import baby.mumu.storage.domain.zone.StorageZone;
@@ -47,7 +47,7 @@ public class StorageZoneAddCmdExe {
 
   public Long execute(StorageZoneAddCmd storageZoneAddCmd) {
     StorageZone storageZone = storageZoneConvertor.toEntity(storageZoneAddCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
     return storageZoneGateway.add(storageZone);
   }
 }

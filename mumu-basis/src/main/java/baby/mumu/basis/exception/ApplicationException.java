@@ -26,11 +26,11 @@ import org.jspecify.annotations.NonNull;
  * 顶级异常
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.0
+ * @since 2.15.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MuMuException extends RuntimeException {
+public class ApplicationException extends RuntimeException {
 
   @Serial
   private static final long serialVersionUID = 5646742276995362775L;
@@ -41,21 +41,21 @@ public class MuMuException extends RuntimeException {
 
   private final transient Throwable throwable;
 
-  public MuMuException(@NonNull ResponseCode responseCode) {
+  public ApplicationException(@NonNull ResponseCode responseCode) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = null;
     this.throwable = null;
   }
 
-  public MuMuException(@NonNull ResponseCode responseCode, Throwable throwable) {
+  public ApplicationException(@NonNull ResponseCode responseCode, Throwable throwable) {
     super(throwable);
     this.responseCode = responseCode;
     this.data = null;
     this.throwable = throwable;
   }
 
-  public MuMuException(@NonNull ResponseCode responseCode, Object data) {
+  public ApplicationException(@NonNull ResponseCode responseCode, Object data) {
     super(responseCode.getMessage());
     this.responseCode = responseCode;
     this.data = data;

@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.account.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd;
 import baby.mumu.iam.domain.account.Account;
@@ -51,7 +51,7 @@ public class AccountRegisterCmdExe extends VerifyCodeVerify {
 
   public Long execute(AccountRegisterCmd accountRegisterCmd) {
     Account account = accountConvertor.toEntity(accountRegisterCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
     verify(accountRegisterCmd.getVerifyCodeId(), accountRegisterCmd.getVerifyCode());
     return accountGateway.register(account);
   }

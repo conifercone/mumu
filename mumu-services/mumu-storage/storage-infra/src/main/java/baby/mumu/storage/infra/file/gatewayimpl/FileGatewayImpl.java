@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.infra.file.gatewayimpl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
@@ -69,13 +69,13 @@ public class FileGatewayImpl implements FileGateway {
     }
 
     FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
     try {
       // 上传文件
       fileStorageRepository.upload(file);
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FILE_UPLOAD_FAILED);
+      throw new ApplicationException(ResponseCode.FILE_UPLOAD_FAILED);
     }
 
     try {
@@ -86,9 +86,9 @@ public class FileGatewayImpl implements FileGateway {
       try {
         fileStorageRepository.delete(file);
       } catch (Exception ex) {
-        throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+        throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
       }
-      throw new MuMuException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
+      throw new ApplicationException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
     }
     return fileMetadataPO.getId();
   }
@@ -104,9 +104,9 @@ public class FileGatewayImpl implements FileGateway {
       return;
     }
     FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
     FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
     try {
       // 删除文件
@@ -114,14 +114,14 @@ public class FileGatewayImpl implements FileGateway {
       file.setMetadata(fileMetadata);
       fileStorageRepository.delete(file);
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+      throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
     }
 
     try {
       // 删除文件元数据
       fileMetadataRepository.deleteById(fileMetadataId);
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FILE_DELETION_FAILED);
+      throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
     }
   }
 
@@ -132,18 +132,18 @@ public class FileGatewayImpl implements FileGateway {
   @Transactional(rollbackFor = Exception.class)
   public File downloadByMetadataId(Long fileMetadataId) {
     if (fileMetadataId == null) {
-      throw new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST);
+      throw new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST);
     }
     FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
     FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
     File file = new File();
     file.setMetadata(fileMetadata);
     try {
       file.setContent(fileStorageRepository.download(file));
     } catch (Exception e) {
-      throw new MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED);
+      throw new ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED);
     }
     return file;
   }

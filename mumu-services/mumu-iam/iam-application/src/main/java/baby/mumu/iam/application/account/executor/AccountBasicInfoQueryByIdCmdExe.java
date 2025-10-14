@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.account.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.AccountBasicInfoDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
@@ -50,6 +50,6 @@ public class AccountBasicInfoQueryByIdCmdExe {
     return Optional.ofNullable(id)
       .flatMap(accountGateway::getAccountBasicInfoById)
       .flatMap(accountConvertor::toAccountBasicInfoDTO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
   }
 }

@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.translation.deepl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.translation.SimpleTextTranslation;
 import com.deepl.api.DeepLException;
@@ -41,11 +41,11 @@ public class DeeplSimpleTextTranslation implements SimpleTextTranslation {
 
   @Override
   @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NonNull String targetLanguage) throws MuMuException {
+  public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
     try {
       return deeplTranslator.translateText(text, null, targetLanguage).getText();
     } catch (DeepLException | InterruptedException e) {
-      throw new MuMuException(ResponseCode.TRANSLATION_FAILED);
+      throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
     }
   }
 }

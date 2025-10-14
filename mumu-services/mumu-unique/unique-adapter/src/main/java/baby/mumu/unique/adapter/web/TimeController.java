@@ -17,7 +17,7 @@
 package baby.mumu.unique.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -63,7 +63,7 @@ public class TimeController {
   @API(status = Status.STABLE, since = "2.7.0")
   public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {
     if (!TimeUtils.isValidTimeZone(zoneId)) {
-      throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+      throw new ApplicationException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
     } else {
       return ResponseWrapper.success(OffsetDateTime.now(ZoneId.of(zoneId)));
     }

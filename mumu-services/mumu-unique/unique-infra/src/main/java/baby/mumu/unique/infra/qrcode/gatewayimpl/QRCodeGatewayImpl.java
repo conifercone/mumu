@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.infra.qrcode.gatewayimpl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.qrcode.QRCode;
 import baby.mumu.unique.domain.qrcode.gateway.QRCodeGateway;
@@ -58,7 +58,7 @@ public class QRCodeGatewayImpl implements QRCodeGateway {
           os);
         return os.toByteArray();
       } catch (IOException | WriterException e) {
-        throw new MuMuException(ResponseCode.QR_CODE_GENERATION_FAILED);
+        throw new ApplicationException(ResponseCode.QR_CODE_GENERATION_FAILED);
       }
     }).orElse(new byte[0]);
   }

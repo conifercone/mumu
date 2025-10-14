@@ -18,7 +18,7 @@ package baby.mumu.iam.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.TokenServiceGrpc;
 import baby.mumu.iam.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
@@ -61,7 +61,7 @@ public class TokenGrpcService extends IAMGrpcService implements DisposableBean {
         channel = ch;
         return validityFromGrpc(tokenValidityGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private @Nullable TokenValidityGrpcDTO validityFromGrpc(

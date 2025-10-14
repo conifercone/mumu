@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.infra.verification.gatewayimpl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.pk.gateway.PrimaryKeyGateway;
 import baby.mumu.unique.domain.verification.VerifyCode;
@@ -57,14 +57,14 @@ public class VerifyCodeGatewayImpl implements
       .flatMap(verifyCodeNotNull -> {
         verifyCodeNotNull.setId(primaryKeyGateway.snowflake());
         Optional.ofNullable(verifyCodeNotNull.getLength()).filter(length -> length > 0)
-          .orElseThrow(() -> new MuMuException(
+          .orElseThrow(() -> new ApplicationException(
             ResponseCode.VERIFICATION_CODE_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
         verifyCodeNotNull.setTarget(
           RandomStringUtils.secure().nextAlphanumeric(verifyCodeNotNull.getLength()));
-        Optional.ofNullable(verifyCodeNotNull.getTtl()).orElseThrow(() -> new MuMuException(
+        Optional.ofNullable(verifyCodeNotNull.getTtl()).orElseThrow(() -> new ApplicationException(
           ResponseCode.VERIFICATION_CODE_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
         return verifyCodeConvertor.toVerifyCodeCacheablePO(verifyCodeNotNull);
-      }).orElseThrow(() -> new MuMuException(ResponseCode.DATA_CONVERSION_FAILED));
+      }).orElseThrow(() -> new ApplicationException(ResponseCode.DATA_CONVERSION_FAILED));
     verifyCodeCacheRepository.save(verifyCodeCacheablePO);
     return verifyCodeCacheablePO.getId();
   }

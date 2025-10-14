@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.infra.zone.gatewayimpl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.domain.zone.gateway.StorageZoneGateway;
@@ -50,7 +50,7 @@ public class StorageZoneGatewayImpl implements StorageZoneGateway {
   @Transactional(rollbackFor = Exception.class)
   public Long add(StorageZone storageZone) {
     StorageZonePO storageZonePO = storageZoneConvertor.toStorageZonePO(storageZone)
-      .orElseThrow(() -> new MuMuException(
+      .orElseThrow(() -> new ApplicationException(
         ResponseCode.STORAGE_ZONE_INVALID));
     StorageZonePO persisted = storageZoneRepository.persist(storageZonePO);
     return persisted.getId();

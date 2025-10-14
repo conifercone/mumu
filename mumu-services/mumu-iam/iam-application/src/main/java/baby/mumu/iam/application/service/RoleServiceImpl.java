@@ -17,7 +17,7 @@
 package baby.mumu.iam.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.role.executor.RoleAddCmdExe;
@@ -212,7 +212,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         responseObserver.onNext(roleFindByIdGrpcDTO);
         responseObserver.onCompleted();
       }, () -> {
-        throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST);
+        throw new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST);
       });
   }
 

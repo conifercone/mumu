@@ -20,7 +20,7 @@ import baby.mumu.basis.annotations.DangerousOperation;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.event.OfflineSuccessEvent;
 import baby.mumu.basis.exception.AccountAlreadyExistsException;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.response.ResponseCode;
@@ -151,7 +151,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Long register(Account account) {
     AccountPO accountPO = accountConvertor.toAccountPO(account)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
     if (accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
       account.getUsername(), account.getEmail())
       || accountArchivedRepository.existsByIdOrUsernameOrEmail(account.getId(),
@@ -166,7 +166,7 @@ public class AccountGatewayImpl implements AccountGateway {
     // 验证时区是否为有效时区类型
     if (StringUtils.isNotBlank(accountPO.getTimezone()) && !TimeUtils.isValidTimeZone(
       accountPO.getTimezone())) {
-      throw new MuMuException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+      throw new ApplicationException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
     }
     accountPO.setPassword(passwordEncoder.encode(accountPO.getPassword()));
     AccountPO persisted = accountRepository.persist(accountPO);
@@ -245,9 +245,9 @@ public class AccountGatewayImpl implements AccountGateway {
     }
     Long loginAccountId = SecurityContextUtils.getLoginAccountId()
       .filter(id -> Objects.equals(id, account.getId()))
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
     AccountPO accountPO = accountConvertor.toAccountPO(account)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
     AccountPO merged = accountRepository.merge(accountPO);
     accountCacheRepository.deleteById(loginAccountId);
     accountRoleCacheRepository.deleteById(loginAccountId);
@@ -284,7 +284,7 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(Long accountId) {
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     accountPO.setEnabled(false);
     accountRepository.merge(accountPO);
     passwordTokenCacheRepository.deleteById(accountId);
@@ -336,10 +336,10 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(Long accountId) {
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     String initialPassword = extensionProperties.getAuthentication().getInitialPassword();
     if (StringUtils.isBlank(initialPassword)) {
-      throw new MuMuException(ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY);
+      throw new ApplicationException(ResponseCode.THE_INITIAL_PASSWORD_CANNOT_BE_EMPTY);
     }
     accountPO.setPassword(passwordEncoder.encode(initialPassword));
     accountRepository.merge(accountPO);
@@ -356,12 +356,12 @@ public class AccountGatewayImpl implements AccountGateway {
   @DangerousOperation("删除当前账号")
   public void deleteCurrentAccount() {
     Long accountId = SecurityContextUtils.getLoginAccountId()
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     // 若账号还有余额，不允许删除
     if (accountPO.getBalance().isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
-      throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+      throw new ApplicationException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
     }
     // 删除数据库中的信息
     accountRepository.deleteById(accountId);
@@ -406,9 +406,9 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public boolean verifyPassword(String password) {
     Long accountId = SecurityContextUtils.getLoginAccountId()
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     return passwordEncoder.matches(password, accountPO.getPassword());
   }
 
@@ -420,11 +420,11 @@ public class AccountGatewayImpl implements AccountGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public void changePassword(String originalPassword, String newPassword) {
     Long accountId = SecurityContextUtils.getLoginAccountId()
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNAUTHORIZED));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     if (!passwordEncoder.matches(originalPassword, accountPO.getPassword())) {
-      throw new MuMuException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
+      throw new ApplicationException(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT);
     }
     accountPO.setPassword(passwordEncoder.encode(newPassword));
     accountRepository.merge(accountPO);
@@ -443,12 +443,13 @@ public class AccountGatewayImpl implements AccountGateway {
       return;
     }
     AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     AccountArchivedPO archivedPO = accountConvertor.toAccountArchivedPO(accountPO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
     // 禁止归档有余额的账户
     if (archivedPO.getBalance().isGreaterThan(Money.of(0, archivedPO.getBalance().getCurrency()))) {
-      throw new MuMuException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+      throw new ApplicationException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
     }
     archivedPO.setArchived(true);
     accountArchivedRepository.persist(archivedPO);
@@ -487,9 +488,10 @@ public class AccountGatewayImpl implements AccountGateway {
       return;
     }
     AccountArchivedPO archivedPO = accountArchivedRepository.findById(accountId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_ARCHIVE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_ARCHIVE_NOT_FOUND));
     AccountPO accountPO = accountConvertor.toAccountPO(archivedPO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
     accountPO.setArchived(false);
     accountArchivedRepository.deleteById(accountId);
     accountRepository.persist(accountPO);

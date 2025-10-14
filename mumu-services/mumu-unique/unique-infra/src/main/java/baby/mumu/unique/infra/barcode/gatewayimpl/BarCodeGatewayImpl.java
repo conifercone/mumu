@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.infra.barcode.gatewayimpl;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.domain.barcode.BarCode;
 import baby.mumu.unique.domain.barcode.gateway.BarCodeGateway;
@@ -71,7 +71,7 @@ public class BarCodeGatewayImpl implements BarCodeGateway {
         ImageIO.write(finalImage, barCode.getImageFormat().getExtension(), os);
         return os.toByteArray();
       } catch (IOException e) {
-        throw new MuMuException(ResponseCode.BARCODE_GENERATION_FAILED);
+        throw new ApplicationException(ResponseCode.BARCODE_GENERATION_FAILED);
       }
     }).orElse(new byte[0]);
   }

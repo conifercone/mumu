@@ -17,7 +17,7 @@
 package baby.mumu.iam.infra.permission.gatewayimpl;
 
 import baby.mumu.basis.annotations.DangerousOperation;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
@@ -102,12 +102,12 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Long add(Permission permission) {
     PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
     if (permissionRepository.existsByIdOrCode(permissionPO.getId(),
       permissionPO.getCode()) || permissionArchivedRepository.existsByIdOrCode(
       permissionPO.getId(),
       permissionPO.getCode())) {
-      throw new MuMuException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
+      throw new ApplicationException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
     }
     PermissionPO persisted = permissionRepository.persist(permissionPO);
     permissionPathRepository.persist(
@@ -127,7 +127,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
       if (permissionRepository.existsById(permissionId)) {
         List<Role> roles = roleGateway.findAllContainPermission(permissionId);
         if (CollectionUtils.isNotEmpty(roles)) {
-          throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+          throw new ApplicationException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_REMOVED,
             roles.stream().map(Role::getCode).toList());
         }
         permissionRepository.deleteById(permissionId);
@@ -136,7 +136,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
         permissionCacheRepository.deleteById(permissionId);
         rolePermissionCacheRepository.deleteByPermissionIdsContaining(permissionId);
       } else {
-        throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+        throw new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
       }
     });
   }
@@ -146,13 +146,13 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Permission> updateById(Permission permission) {
     PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_PERMISSION_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
     if (permission.getId() == null) {
       return Optional.empty();
     }
     // 判断权限是否存在
     if (permissionRepository.findById(permission.getId()).isEmpty()) {
-      throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+      throw new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
     }
 
     PermissionPO merged = permissionRepository.merge(permissionPO);
@@ -225,7 +225,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public void archiveById(Long id) {
     List<Role> authorities = roleGateway.findAllContainPermission(id);
     if (CollectionUtils.isNotEmpty(authorities)) {
-      throw new MuMuException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+      throw new ApplicationException(ResponseCode.PERMISSION_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
         authorities.stream().map(Role::getCode).toList());
     }
     // noinspection DuplicatedCode
@@ -285,11 +285,11 @@ public class PermissionGatewayImpl implements PermissionGateway {
         .collect(
           Collectors.toSet());
       if (ancestorIds.contains(descendantId)) {
-        throw new MuMuException(ResponseCode.PERMISSION_CYCLE);
+        throw new ApplicationException(ResponseCode.PERMISSION_CYCLE);
       }
       if (permissionPathRepository.existsById(
         new PermissionPathPOId(ancestorId, descendantId, 1L))) {
-        throw new MuMuException(ResponseCode.PERMISSION_PATH_ALREADY_EXISTS);
+        throw new ApplicationException(ResponseCode.PERMISSION_PATH_ALREADY_EXISTS);
       }
       List<PermissionPathPO> permissionPathPOS = ancestorAuthorities.stream()
         .map(ancestorPermission -> new PermissionPathPO(
@@ -334,7 +334,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   @Transactional(rollbackFor = Exception.class)
   public void deletePath(Long ancestorId, Long descendantId) {
     if (permissionPathRepository.existsDescendantPermissions(descendantId)) {
-      throw new MuMuException(ResponseCode.DESCENDANT_PERMISSION_HAS_DESCENDANT_PERMISSION);
+      throw new ApplicationException(ResponseCode.DESCENDANT_PERMISSION_HAS_DESCENDANT_PERMISSION);
     }
     permissionPathRepository.deleteById(new PermissionPathPOId(ancestorId, descendantId, 1L));
     permissionPathRepository.deleteUnreachableData();
@@ -349,7 +349,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
   public void deleteByCode(String code) {
     if (StringUtils.isNotBlank(code)) {
       PermissionPO permissionPO = permissionRepository.findByCode(code)
-        .orElseThrow(() -> new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+        .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
       this.deleteById(permissionPO.getId());
     }
   }

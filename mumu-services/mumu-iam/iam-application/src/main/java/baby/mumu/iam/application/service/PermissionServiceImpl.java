@@ -17,7 +17,7 @@
 package baby.mumu.iam.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.permission.executor.PermissionAddCmdExe;
@@ -211,7 +211,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
   public void findById(Int64Value request,
     StreamObserver<PermissionFindByIdGrpcDTO> responseObserver) {
     Runnable runnable = () -> {
-      throw new MuMuException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
+      throw new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
     };
     Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
       (id) -> permissionConvertor.toPermissionFindByIdGrpcDTO(

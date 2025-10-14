@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.provider;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -35,6 +35,7 @@ public class RateLimitingGrpcIpKeyProviderImpl implements RateLimitingKeyProvide
   public String generateUniqKey() {
     return Optional.ofNullable(ClientIpInterceptor.getClientIp())
       .filter(StringUtils::isNotBlank)
-      .orElseThrow(() -> new MuMuException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
   }
 }

@@ -16,7 +16,7 @@
 
 package baby.mumu.basis.kotlin.tools
 
-import baby.mumu.basis.exception.MuMuException
+import baby.mumu.basis.exception.ApplicationException
 import baby.mumu.basis.response.ResponseCode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -54,6 +54,7 @@ object FileDownloadUtils {
      * @param fileContent 文件内容字节数组
      * @param contentType 文件类型 (如 "application/pdf", "text/csv")
      */
+    @Suppress("unused")
     @JvmStatic
     @API(status = API.Status.STABLE, since = "2.4.0")
     fun download(
@@ -77,7 +78,7 @@ object FileDownloadUtils {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
+            throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -114,7 +115,7 @@ object FileDownloadUtils {
                 os.flush()
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
+            throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -152,6 +153,7 @@ object FileDownloadUtils {
                 data.forEach { record ->
                     if (index == 0) {
                         beanToCsv.write(record)
+                        @Suppress("AssignedValueIsNeverRead")
                         index = 1
                     } else {
                         scope.fork { beanToCsv.write(record) } // 每条记录在虚拟线程中处理
@@ -161,7 +163,7 @@ object FileDownloadUtils {
                 scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
+            throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED, e)
         }
     }
 
@@ -207,7 +209,7 @@ object FileDownloadUtils {
                 try {
                     objectWriter.writeValue(generator, obj)
                 } catch (_: IOException) {
-                    throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+                    throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED)
                 }
             }
             // 写入 JSON 数组结束符
@@ -215,7 +217,7 @@ object FileDownloadUtils {
             // 关闭生成器
             generator.close()
         } catch (_: java.lang.Exception) {
-            throw MuMuException(ResponseCode.FILE_DOWNLOAD_FAILED)
+            throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED)
         }
     }
 

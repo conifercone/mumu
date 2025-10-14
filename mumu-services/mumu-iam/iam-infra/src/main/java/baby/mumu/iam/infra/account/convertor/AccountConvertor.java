@@ -17,7 +17,7 @@
 package baby.mumu.iam.infra.account.convertor;
 
 import baby.mumu.basis.enums.DigitalPreferenceEnum;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.PhoneUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
@@ -323,7 +323,7 @@ public class AccountConvertor {
         accountRegisterCmdNotNull.getPhoneCountryCode()) && !PhoneUtils.isValidPhoneNumber(
         accountRegisterCmdNotNull.getPhone(),
         accountRegisterCmdNotNull.getPhoneCountryCode())) {
-        throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
+        throw new ApplicationException(ResponseCode.INVALID_PHONE_NUMBER);
       }
       Account account = AccountMapper.INSTANCE.toEntity(accountRegisterCmdNotNull);
       // 根据角色code设置账号角色相关信息
@@ -345,7 +345,7 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd) {
     return Optional.ofNullable(accountUpdateByIdCmd).flatMap(accountUpdateByIdCmdNotNull -> {
       Optional.ofNullable(accountUpdateByIdCmdNotNull.getId())
-        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       return accountRepository.findById(accountUpdateByIdCmdNotNull.getId())
         .flatMap(this::toEntity).flatMap(account -> {
           String emailBeforeUpdated = account.getEmail();
@@ -359,21 +359,21 @@ public class AccountConvertor {
           if (StringUtils.isNoneBlank(account.getPhone(), account.getPhoneCountryCode())
             && !PhoneUtils.isValidPhoneNumber(account.getPhone(),
             account.getPhoneCountryCode())) {
-            throw new MuMuException(ResponseCode.INVALID_PHONE_NUMBER);
+            throw new ApplicationException(ResponseCode.INVALID_PHONE_NUMBER);
           }
           // 校验修改后的账号邮箱唯一性
           if (StringUtils.isNotBlank(emailAfterUpdated) && !emailAfterUpdated.equals(
             emailBeforeUpdated
           ) && (accountRepository.existsByEmail(emailAfterUpdated)
             || accountArchivedRepository.existsByEmail(emailAfterUpdated))) {
-            throw new MuMuException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
+            throw new ApplicationException(ResponseCode.ACCOUNT_EMAIL_ALREADY_EXISTS);
           }
           // 校验修改后的账号名唯一性
           if (StringUtils.isNotBlank(usernameAfterUpdated) && !usernameAfterUpdated.equals(
             usernameBeforeUpdated
           ) && (accountRepository.existsByUsername(usernameAfterUpdated)
             || accountArchivedRepository.existsByUsername(usernameAfterUpdated))) {
-            throw new MuMuException(ResponseCode.ACCOUNT_NAME_ALREADY_EXISTS);
+            throw new ApplicationException(ResponseCode.ACCOUNT_NAME_ALREADY_EXISTS);
           }
           return Optional.of(account);
         });
@@ -384,11 +384,11 @@ public class AccountConvertor {
   public Optional<Account> toEntity(AccountUpdateRoleCmd accountUpdateRoleCmd) {
     return Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountUpdateRoleCmdNotNull -> {
       Optional.ofNullable(accountUpdateRoleCmdNotNull.getId())
-        .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+        .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
       Optional<AccountPO> accountPOOptional = accountRepository.findById(
         accountUpdateRoleCmdNotNull.getId());
       AccountPO accountPO = accountPOOptional.orElseThrow(
-        () -> new MuMuException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+        () -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
       return toEntity(accountPO).map(account -> {
         Optional.ofNullable(accountUpdateRoleCmdNotNull.getRoleCodes())
           .ifPresent(roleCodes -> setRolesWithCodes(account, roleCodes));
@@ -469,7 +469,7 @@ public class AccountConvertor {
     return Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmd)
       .flatMap(accountModifySystemSettingsBySettingsIdCmdNotNull -> {
         Optional.ofNullable(accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
-          .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+          .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
         return accountSystemSettingsDocumentRepository.findById(
             accountModifySystemSettingsBySettingsIdCmdNotNull.getId())
           .flatMap(this::toAccountSystemSettings).flatMap(accountSystemSettings -> {
@@ -602,7 +602,7 @@ public class AccountConvertor {
     return Optional.ofNullable(accountModifyAddressByAddressIdCmd)
       .flatMap(modifyAddressByAddressIdCmd -> {
         Optional.ofNullable(modifyAddressByAddressIdCmd.getId())
-          .orElseThrow(() -> new MuMuException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
+          .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
         return accountAddressDocumentRepository.findById(
             modifyAddressByAddressIdCmd.getId())
           .flatMap(this::toAccountAddress).flatMap(accountAddress -> {

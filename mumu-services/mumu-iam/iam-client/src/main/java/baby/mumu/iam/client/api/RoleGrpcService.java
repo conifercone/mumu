@@ -18,7 +18,7 @@ package baby.mumu.iam.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
 import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
@@ -65,7 +65,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
         channel = ch;
         return findAllFromGrpc(roleFindAllGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -77,7 +77,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
         channel = ch;
         return syncFindAllFromGrpc(roleFindAllGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
@@ -88,7 +88,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
         channel = ch;
         return findByIdFromGrpc(roleId);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.4.0")
@@ -100,7 +100,7 @@ public class RoleGrpcService extends IAMGrpcService implements DisposableBean {
         channel = ch;
         return syncFindByIdFromGrpc(roleId);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private PageOfRoleFindAllGrpcDTO findAllFromGrpc(

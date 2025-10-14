@@ -27,7 +27,7 @@ import lombok.Getter;
  * @since 2.1.0
  */
 @Getter
-public class RateLimiterException extends MuMuException {
+public class RateLimiterException extends ApplicationException {
 
   @Serial
   private static final long serialVersionUID = 6238973755219029059L;

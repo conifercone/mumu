@@ -16,7 +16,7 @@
 
 package baby.mumu.unique.application.verification.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.unique.client.cmds.VerifyCodeGeneratedCmd;
 import baby.mumu.unique.infra.verification.convertor.VerifyCodeConvertor;
@@ -48,7 +48,7 @@ public class VerifyCodeGeneratedCmdExe {
     Assert.notNull(verifyCodeGeneratedCmd, "VerifyCodeGeneratedCmd cannot be null");
     return verifyCodeConvertor.toEntity(verifyCodeGeneratedCmd)
       .map(verifyCodeGateway::generate)
-      .orElseThrow(() -> new MuMuException(
+      .orElseThrow(() -> new ApplicationException(
         ResponseCode.VERIFICATION_CODE_GENERATION_FAILED));
   }
 }

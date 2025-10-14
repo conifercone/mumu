@@ -17,7 +17,7 @@
 package baby.mumu.iam.infra.role.gatewayimpl;
 
 import baby.mumu.basis.annotations.DangerousOperation;
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
@@ -103,10 +103,10 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Long add(Role role) {
     RolePO rolePO = roleConvertor.toRolePO(role)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     if (roleRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())
       || roleArchivedRepository.existsByIdOrCode(rolePO.getId(), rolePO.getCode())) {
-      throw new MuMuException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
+      throw new ApplicationException(ResponseCode.ROLE_CODE_OR_ID_ALREADY_EXISTS);
     }
     RolePO persisted = roleRepository.persist(rolePO);
     // 回填ID
@@ -139,7 +139,7 @@ public class RoleGatewayImpl implements RoleGateway {
     Optional.ofNullable(id).ifPresent(roleId -> {
       List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(roleId);
       if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
-        throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
+        throw new ApplicationException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_REMOVED,
           allAccountByRoleId.stream().map(Account::getUsername).toList());
       }
       rolePermissionRepository.deleteByRoleId(roleId);
@@ -165,7 +165,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @API(status = Status.STABLE, since = "1.0.0")
   public Optional<Role> updateById(Role role) {
     RolePO rolePO = roleConvertor.toRolePO(role)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ROLE_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     RolePO merged = roleRepository.merge(rolePO);
     // 删除权限关系数据重新添加
     rolePermissionRepository.deleteByRoleId(merged.getId());
@@ -254,7 +254,7 @@ public class RoleGatewayImpl implements RoleGateway {
   public void archiveById(Long id) {
     List<Account> allAccountByRoleId = accountGateway.findAllAccountByRoleId(id);
     if (CollectionUtils.isNotEmpty(allAccountByRoleId)) {
-      throw new MuMuException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
+      throw new ApplicationException(ResponseCode.ROLE_IS_IN_USE_AND_CANNOT_BE_ARCHIVE,
         allAccountByRoleId.stream().map(Account::getUsername).toList());
     }
     Optional.ofNullable(id).flatMap(roleRepository::findById)
@@ -304,12 +304,13 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   public void addDescendant(Long ancestorId, Long descendantId) {
     if (!roleRepository.existsById(ancestorId)) {
-      throw new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST, ancestorId);
+      throw new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST, ancestorId);
     }
     // 后代角色
     RolePO descendantRolePO = roleRepository.findById(
         descendantId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.ROLE_DOES_NOT_EXIST, descendantId));
+      .orElseThrow(
+        () -> new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST, descendantId));
     // 为节点添加从所有祖先到自身的路径
     List<RolePathPO> ancestorRoles = rolePathRepository.findByDescendantId(
       ancestorId);
@@ -319,11 +320,11 @@ public class RoleGatewayImpl implements RoleGateway {
       .collect(
         Collectors.toSet());
     if (ancestorIds.contains(descendantId)) {
-      throw new MuMuException(ResponseCode.ROLE_CYCLE);
+      throw new ApplicationException(ResponseCode.ROLE_CYCLE);
     }
     if (rolePathRepository.existsById(
       new RolePathPOId(ancestorId, descendantId, 1L))) {
-      throw new MuMuException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
+      throw new ApplicationException(ResponseCode.ROLE_PATH_ALREADY_EXISTS);
     }
     List<RolePathPO> rolePathPOS = ancestorRoles.stream()
       .map(rolePathPO -> new RolePathPO(
@@ -367,7 +368,7 @@ public class RoleGatewayImpl implements RoleGateway {
   @Transactional(rollbackFor = Exception.class)
   public void deletePath(Long ancestorId, Long descendantId) {
     if (rolePathRepository.existsDescendantRoles(descendantId)) {
-      throw new MuMuException(ResponseCode.DESCENDANT_ROLE_HAS_DESCENDANT_ROLE);
+      throw new ApplicationException(ResponseCode.DESCENDANT_ROLE_HAS_DESCENDANT_ROLE);
     }
     rolePathRepository.deleteById(new RolePathPOId(ancestorId, descendantId, 1L));
     rolePathRepository.deleteUnreachableData();

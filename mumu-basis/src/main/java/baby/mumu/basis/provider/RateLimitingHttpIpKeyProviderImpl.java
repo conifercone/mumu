@@ -16,7 +16,7 @@
 
 package baby.mumu.basis.provider;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.IpUtils;
 import baby.mumu.basis.response.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class RateLimitingHttpIpKeyProviderImpl implements RateLimitingKeyProvide
   public String generateUniqKey() {
     String ipAddr = IpUtils.getIpAddr(httpServletRequest);
     if (StringUtils.isBlank(ipAddr)) {
-      throw new MuMuException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP);
+      throw new ApplicationException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP);
     }
     return ipAddr;
   }

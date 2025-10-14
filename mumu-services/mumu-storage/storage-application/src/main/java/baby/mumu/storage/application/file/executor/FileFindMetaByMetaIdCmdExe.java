@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.application.file.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.FileMetadata;
@@ -48,8 +48,8 @@ public class FileFindMetaByMetaIdCmdExe {
 
   public FileFindMetaByMetaIdDTO execute(Long metadataId) {
     FileMetadata fileMetadata = fileGateway.findMetaByMetaId(metadataId)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_DOES_NOT_EXIST));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
     return fileConvertor.toFileFindMetaByMetaIdDTO(fileMetadata)
-      .orElseThrow(() -> new MuMuException(ResponseCode.FILE_METADATA_INVALID));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
   }
 }

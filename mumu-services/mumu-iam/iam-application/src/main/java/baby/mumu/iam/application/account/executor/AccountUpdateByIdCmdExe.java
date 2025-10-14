@@ -16,7 +16,7 @@
 
 package baby.mumu.iam.application.account.executor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
@@ -48,9 +48,9 @@ public class AccountUpdateByIdCmdExe {
 
   public AccountUpdatedDataDTO execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
     Account account = accountConvertor.toEntity(accountUpdateByIdCmd)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
     return accountGateway.updateById(account)
       .flatMap(accountConvertor::toAccountUpdatedDataDTO)
-      .orElseThrow(() -> new MuMuException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
   }
 }

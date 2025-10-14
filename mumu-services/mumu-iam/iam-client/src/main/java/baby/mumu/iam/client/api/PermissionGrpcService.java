@@ -18,7 +18,7 @@ package baby.mumu.iam.client.api;
 
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
 import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
@@ -66,7 +66,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
         channel = ch;
         return findAllFromGrpc(permissionFindAllGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -78,7 +78,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
         channel = ch;
         return syncFindAllFromGrpc(permissionFindAllGrpcCmd);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
@@ -89,7 +89,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
         channel = ch;
         return findByIdFromGrpc(id);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @API(status = Status.STABLE, since = "2.3.0")
@@ -101,7 +101,7 @@ public class PermissionGrpcService extends IAMGrpcService implements
         channel = ch;
         return syncFindByIdFromGrpc(id);
       })
-      .orElseThrow(() -> new MuMuException(GRPC_SERVICE_NOT_FOUND));
+      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private PageOfPermissionFindAllGrpcDTO findAllFromGrpc(

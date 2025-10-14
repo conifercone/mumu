@@ -25,7 +25,7 @@ import java.io.Serial;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class AccountAlreadyExistsException extends MuMuException {
+public class AccountAlreadyExistsException extends ApplicationException {
 
   @Serial
   private static final long serialVersionUID = 7383143329621946676L;

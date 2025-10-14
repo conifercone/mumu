@@ -16,7 +16,7 @@
 
 package baby.mumu.storage.infra.file.convertor;
 
-import baby.mumu.basis.exception.MuMuException;
+import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.File;
@@ -65,7 +65,8 @@ public class FileConvertor {
       .map(FileMapper.INSTANCE::toFileMetadataPO).map(fileMetadataPO -> {
         Long storageZoneId = Optional.ofNullable(fileMetadata.getStorageZone())
           .map(StorageZone::getId)
-          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+          .orElseThrow(
+            () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
         fileMetadataPO.setStorageZoneId(storageZoneId);
         return fileMetadataPO;
       });
@@ -77,9 +78,10 @@ public class FileConvertor {
       .map(FileMapper.INSTANCE::toEntity).map(fileMetadata -> {
         StorageZonePO storageZonePO = storageZoneRepository.findById(
             fileMetadataPO.getStorageZoneId())
-          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+          .orElseThrow(
+            () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
         StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
-          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+          .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
         fileMetadata.setStorageZone(storageZone);
         return fileMetadata;
       });
@@ -95,9 +97,10 @@ public class FileConvertor {
         FileMetadata fileMetadata = new FileMetadata();
         fileMetadata.setId(primaryKeyGrpcService.snowflake());
         StorageZonePO storageZonePO = storageZoneRepository.findById(storageZoneId)
-          .orElseThrow(() -> new MuMuException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
+          .orElseThrow(
+            () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
         StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
-          .orElseThrow(() -> new MuMuException(ResponseCode.STORAGE_ZONE_INVALID));
+          .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
         fileMetadata.setStorageZone(storageZone);
         fileMetadata.setSize(multipartFile.getSize());
         fileMetadata.setContentType(
@@ -107,7 +110,7 @@ public class FileConvertor {
         fileMetadata.setStoragePath(fileMetadata.getId() + "/" + fileMetadata.getStoredFilename());
         file.setMetadata(fileMetadata);
       } catch (IOException e) {
-        throw new MuMuException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
+        throw new ApplicationException(ResponseCode.INPUT_STREAM_CONVERSION_FAILED);
       }
       return file;
     });
