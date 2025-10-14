@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 public class GsonConfiguration {
 
   @Bean
-  public GsonBuilderCustomizer mumuGsonBuilderCustomizer() {
-    return new MuMuGsonBuilderCustomizer();
+  public GsonBuilderCustomizer applicationGsonBuilderCustomizer() {
+    return new ApplicationGsonBuilderCustomizer();
   }
 }

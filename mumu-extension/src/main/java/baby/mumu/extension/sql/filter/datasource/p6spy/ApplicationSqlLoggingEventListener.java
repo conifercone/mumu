@@ -26,15 +26,15 @@ import java.sql.SQLException;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class MuMuSqlLoggingEventListener extends LoggingEventListener {
+public class ApplicationSqlLoggingEventListener extends LoggingEventListener {
 
-  private static MuMuSqlLoggingEventListener instance;
+  private static ApplicationSqlLoggingEventListener instance;
 
-  public static MuMuSqlLoggingEventListener getInstance() {
-    if (null == MuMuSqlLoggingEventListener.instance) {
-      MuMuSqlLoggingEventListener.instance = new MuMuSqlLoggingEventListener();
+  public static ApplicationSqlLoggingEventListener getInstance() {
+    if (null == ApplicationSqlLoggingEventListener.instance) {
+      ApplicationSqlLoggingEventListener.instance = new ApplicationSqlLoggingEventListener();
     }
-    return MuMuSqlLoggingEventListener.instance;
+    return ApplicationSqlLoggingEventListener.instance;
   }
 
   @Override

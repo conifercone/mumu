@@ -14,26 +14,35 @@
  * limitations under the License.
  */
 
-package baby.mumu.extension.listener;
+package baby.mumu.iam.client.config;
 
-import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import java.util.Locale;
 
 /**
- * 项目启动成功监听器
+ * HttpServletRequest包装类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.2.0
+ * @since 1.0.2
  */
-public class MuMuApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-  private final Logger log = LoggerFactory.getLogger(MuMuApplicationStartupListener.class);
+  private Locale customLocale;
+
+  public ApplicationHttpServletRequestWrapper(HttpServletRequest request) {
+    super(request);
+  }
+
+  public void setLocale(Locale locale) {
+    this.customLocale = locale;
+  }
 
   @Override
-  public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
-    log.info("🎉 Startup completed!");
+  public Locale getLocale() {
+    if (customLocale != null) {
+      return customLocale;
+    }
+    return super.getLocale();
   }
 }

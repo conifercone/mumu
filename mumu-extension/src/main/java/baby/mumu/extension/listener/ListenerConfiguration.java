@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 public class ListenerConfiguration {
 
   @Bean
-  public MuMuApplicationStartupListener mumuApplicationStartupListener() {
-    return new MuMuApplicationStartupListener();
+  public ApplicationStartupListener applicationStartupListener() {
+    return new ApplicationStartupListener();
   }
 }

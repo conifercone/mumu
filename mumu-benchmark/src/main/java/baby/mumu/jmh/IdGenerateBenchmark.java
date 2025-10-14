@@ -16,7 +16,7 @@
 
 package baby.mumu.jmh;
 
-import static baby.mumu.jmh.MuMuBenchmarkUtils.getResultFilePath;
+import static baby.mumu.jmh.ApplicationBenchmarkUtils.getResultFilePath;
 
 import com.github.yitter.idgen.YitIdHelper;
 import java.util.UUID;

@@ -133,10 +133,10 @@ public class AuthorizationConfiguration {
   /**
    * 授权服务安全过滤链配置
    *
-   * @param http                             请求
-   * @param authorizationService             认证服务
-   * @param tokenGenerator                   token生成器
-   * @param mumuAuthenticationFailureHandler 自定义认证失败处理器
+   * @param http                            请求
+   * @param authorizationService            认证服务
+   * @param tokenGenerator                  token生成器
+   * @param iamAuthenticationFailureHandler 自定义认证失败处理器
    * @return 授权服务安全过滤链实例
    * @throws Exception 异常信息
    */
@@ -145,7 +145,7 @@ public class AuthorizationConfiguration {
   public SecurityFilterChain authorizationServerSecurityFilterChain(@NonNull HttpSecurity http,
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
-    MuMuAuthenticationFailureHandler mumuAuthenticationFailureHandler,
+    IamAuthenticationFailureHandler iamAuthenticationFailureHandler,
     UserDetailsService userDetailsService,
     PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings)
     throws Exception {
@@ -159,11 +159,11 @@ public class AuthorizationConfiguration {
           .authorizationServerSettings(authorizationServerSettings)
           .clientAuthentication(
             oAuth2ClientAuthenticationConfigurer -> oAuth2ClientAuthenticationConfigurer.errorResponseHandler(
-              mumuAuthenticationFailureHandler))
+              iamAuthenticationFailureHandler))
           // 设置自定义密码模式
           .tokenEndpoint(tokenEndpoint ->
             tokenEndpoint
-              .errorResponseHandler(mumuAuthenticationFailureHandler)
+              .errorResponseHandler(iamAuthenticationFailureHandler)
               .accessTokenRequestConverter(
                 new PasswordGrantAuthenticationConverter())
               .authenticationProvider(
@@ -201,14 +201,14 @@ public class AuthorizationConfiguration {
     OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
     ClientTokenCacheRepository clientTokenCacheRepository,
     AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
-    MuMuJwtGenerator jwtGenerator = new MuMuJwtGenerator(new NimbusJwtEncoder(jwkSource));
+    IamJwtGenerator jwtGenerator = new IamJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
     jwtGenerator.setPasswordTokenCacheRepository(passwordTokenCacheRepository);
     jwtGenerator.setOidcIdTokenCacheRepository(oidcIdTokenCacheRepository);
     jwtGenerator.setClientTokenCacheRepository(clientTokenCacheRepository);
     jwtGenerator.setAuthorizeCodeTokenCacheRepository(authorizeCodeTokenCacheRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
-    MuMuOAuth2RefreshTokenGenerator refreshTokenGenerator = new MuMuOAuth2RefreshTokenGenerator();
+    IamOAuth2RefreshTokenGenerator refreshTokenGenerator = new IamOAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(
       jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
   }

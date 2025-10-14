@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
-public class MuMuJwtGrantedAuthoritiesConverter implements
+public class IamJwtGrantedAuthoritiesConverter implements
   Converter<Jwt, Collection<GrantedAuthority>> {
 
   private final Log log = LogFactory.getLog(getClass());
@@ -50,9 +50,9 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
   private static final Collection<String> WELL_KNOWN_AUTHORITIES_CLAIM_NAMES = Arrays.asList(
     "scope", "scp");
 
-  private String authorityPrefix = MuMuJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITY_PREFIX;
+  private String authorityPrefix = IamJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITY_PREFIX;
 
-  private String authoritiesClaimDelimiter = MuMuJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITIES_CLAIM_DELIMITER;
+  private String authoritiesClaimDelimiter = IamJwtGrantedAuthoritiesConverter.DEFAULT_AUTHORITIES_CLAIM_DELIMITER;
 
   private String authoritiesClaimName;
 
@@ -77,7 +77,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
 
   /**
    * Sets the prefix to use for {@link GrantedAuthority authorities} mapped by this converter.
-   * Defaults to {@link MuMuJwtGrantedAuthoritiesConverter#DEFAULT_AUTHORITY_PREFIX}.
+   * Defaults to {@link IamJwtGrantedAuthoritiesConverter#DEFAULT_AUTHORITY_PREFIX}.
    *
    * @param authorityPrefix The authority prefix
    * @since 5.2
@@ -91,7 +91,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
   /**
    * Sets the regex to use for splitting the value of the authorities claim into
    * {@link GrantedAuthority authorities}. Defaults to
-   * {@link MuMuJwtGrantedAuthoritiesConverter#DEFAULT_AUTHORITIES_CLAIM_DELIMITER}.
+   * {@link IamJwtGrantedAuthoritiesConverter#DEFAULT_AUTHORITIES_CLAIM_DELIMITER}.
    *
    * @param authoritiesClaimDelimiter The regex used to split the authorities
    * @since 6.1
@@ -105,7 +105,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
   /**
    * Sets the name of token claim to use for mapping {@link GrantedAuthority authorities} by this
    * converter. Defaults to
-   * {@link MuMuJwtGrantedAuthoritiesConverter#WELL_KNOWN_AUTHORITIES_CLAIM_NAMES}.
+   * {@link IamJwtGrantedAuthoritiesConverter#WELL_KNOWN_AUTHORITIES_CLAIM_NAMES}.
    *
    * @param authoritiesClaimName The token claim name to map authorities
    * @since 5.2
@@ -119,7 +119,7 @@ public class MuMuJwtGrantedAuthoritiesConverter implements
     if (this.authoritiesClaimName != null) {
       return this.authoritiesClaimName;
     }
-    for (String claimName : MuMuJwtGrantedAuthoritiesConverter.WELL_KNOWN_AUTHORITIES_CLAIM_NAMES) {
+    for (String claimName : IamJwtGrantedAuthoritiesConverter.WELL_KNOWN_AUTHORITIES_CLAIM_NAMES) {
       if (jwt.hasClaim(claimName)) {
         return claimName;
       }

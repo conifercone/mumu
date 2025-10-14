@@ -17,7 +17,7 @@
 package baby.mumu.extension.sql;
 
 import baby.mumu.basis.constants.BeanNameConstants;
-import baby.mumu.basis.po.jpa.MuMuJpaAuditorAware;
+import baby.mumu.basis.po.jpa.ApplicationJpaAuditorAware;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.sql.filter.datasource.DataSourceFilter;
 import baby.mumu.extension.sql.filter.datasource.DatasourceFilterChain;
@@ -94,8 +94,8 @@ public class DatasourceConfiguration {
    *
    * @return JpaAuditorAware
    */
-  @Bean(name = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
-  public MuMuJpaAuditorAware mumuJpaAuditorAware() {
-    return new MuMuJpaAuditorAware();
+  @Bean(name = BeanNameConstants.APPLICATION_JPA_AUDITOR_AWARE)
+  public ApplicationJpaAuditorAware applicationJpaAuditorAware() {
+    return new ApplicationJpaAuditorAware();
   }
 }

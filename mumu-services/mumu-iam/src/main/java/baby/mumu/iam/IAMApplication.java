@@ -42,8 +42,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableConfigurationProperties
-@EnableJpaAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
-@EnableMongoAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE)
+@EnableJpaAuditing(auditorAwareRef = BeanNameConstants.APPLICATION_JPA_AUDITOR_AWARE)
+@EnableMongoAuditing(auditorAwareRef = BeanNameConstants.APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE)
 @EnableRedisDocumentRepositories(basePackages = "baby.mumu.iam.infra.**.cache.**")
 @EnableMongoRepositories(basePackages = "baby.mumu.iam.infra.**.document.**")
 @EnableMethodSecurity

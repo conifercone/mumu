@@ -51,17 +51,17 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class IamAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
   private static final Logger log = LoggerFactory.getLogger(
-    MuMuAuthenticationFailureHandler.class);
+    IamAuthenticationFailureHandler.class);
 
   private final OperationLogGrpcService operationLogGrpcService;
 
   private final SystemLogGrpcService systemLogGrpcService;
 
   @Autowired
-  public MuMuAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
+  public IamAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
     SystemLogGrpcService systemLogGrpcService) {
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
@@ -78,7 +78,7 @@ public class MuMuAuthenticationFailureHandler implements AuthenticationFailureHa
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      MuMuAuthenticationFailureHandler.log.error(oAuth2AuthenticationException.getMessage());
+      IamAuthenticationFailureHandler.log.error(oAuth2AuthenticationException.getMessage());
 
       if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
         response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());

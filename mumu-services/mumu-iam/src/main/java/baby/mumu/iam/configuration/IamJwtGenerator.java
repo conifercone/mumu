@@ -73,7 +73,7 @@ import org.springframework.util.Assert;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
+public class IamJwtGenerator implements OAuth2TokenGenerator<Jwt> {
 
   private final JwtEncoder jwtEncoder;
   private OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
@@ -90,7 +90,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
    *
    * @param jwtEncoder the jwt encoder
    */
-  public MuMuJwtGenerator(JwtEncoder jwtEncoder) {
+  public IamJwtGenerator(JwtEncoder jwtEncoder) {
     Assert.notNull(jwtEncoder, "jwtEncoder cannot be null");
     this.jwtEncoder = jwtEncoder;
   }
@@ -98,7 +98,7 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
   @Nullable
   @Override
   public Jwt generate(@NonNull OAuth2TokenContext context) {
-    if (MuMuJwtGenerator.calibration(context)) {
+    if (IamJwtGenerator.calibration(context)) {
       return null;
     }
 
@@ -120,13 +120,13 @@ public class MuMuJwtGenerator implements OAuth2TokenGenerator<Jwt> {
       expiresAt = issuedAt.plus(registeredClient.getTokenSettings().getAccessTokenTimeToLive());
     }
 
-    Builder claimsBuilder = MuMuJwtGenerator.getClaimsBuilder(context,
+    Builder claimsBuilder = IamJwtGenerator.getClaimsBuilder(context,
       issuer, registeredClient, issuedAt, expiresAt);
 
     JwsHeader.Builder jwsHeaderBuilder = JwsHeader.with(jwsAlgorithm);
 
     if (this.jwtCustomizer != null) {
-      JwtEncodingContext.Builder jwtContextBuilder = MuMuJwtGenerator.getJwtContextBuilder(
+      JwtEncodingContext.Builder jwtContextBuilder = IamJwtGenerator.getJwtContextBuilder(
         context, jwsHeaderBuilder, claimsBuilder);
 
       JwtEncodingContext jwtContext = jwtContextBuilder.build();

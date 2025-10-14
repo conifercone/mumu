@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package baby.mumu.iam.client.config;
+package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
-import java.util.Locale;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6Factory;
+import com.p6spy.engine.spy.P6LoadableOptions;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 /**
- * HttpServletRequest包装类
+ * P6Factory
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.2
+ * @since 1.0.0
  */
-public class MuMuHttpServletRequestWrapper extends HttpServletRequestWrapper {
+public class ApplicationSqlLogFactory implements P6Factory {
 
-  private Locale customLocale;
-
-  public MuMuHttpServletRequestWrapper(HttpServletRequest request) {
-    super(request);
-  }
-
-  public void setLocale(Locale locale) {
-    this.customLocale = locale;
+  @Override
+  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
+    return new P6LogOptions(optionsRepository);
   }
 
   @Override
-  public Locale getLocale() {
-    if (customLocale != null) {
-      return customLocale;
-    }
-    return super.getLocale();
+  public JdbcEventListener getJdbcEventListener() {
+    return ApplicationSqlLoggingEventListener.getInstance();
   }
 }
+

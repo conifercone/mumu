@@ -34,13 +34,13 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 @Configuration
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(LogProperties.class)
-public class MuMuElasticsearchConfiguration extends
+public class LogElasticsearchConfiguration extends
   ElasticsearchConfiguration {
 
   private final LogProperties logProperties;
 
   @Autowired
-  public MuMuElasticsearchConfiguration(LogProperties logProperties) {
+  public LogElasticsearchConfiguration(LogProperties logProperties) {
     this.logProperties = logProperties;
   }
 

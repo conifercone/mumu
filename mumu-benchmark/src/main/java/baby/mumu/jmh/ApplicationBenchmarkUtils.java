@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package baby.mumu.extension.sql.filter.datasource.p6spy;
+package baby.mumu.jmh;
 
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.P6Factory;
-import com.p6spy.engine.spy.P6LoadableOptions;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import org.jspecify.annotations.NonNull;
+import org.openjdk.jmh.results.format.ResultFormatType;
 
 /**
- * P6Factory
+ * 基准测试
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.0
+ * @since 2.10.0
  */
-public class MuMuSqlLogFactory implements P6Factory {
+public class ApplicationBenchmarkUtils {
 
-  @Override
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
-    return new P6LogOptions(optionsRepository);
-  }
+  public static final String RESULT_FILE_PATH_TEMPLATE = "./benchmark-history/%s.%s";
 
-  @Override
-  public JdbcEventListener getJdbcEventListener() {
-    return MuMuSqlLoggingEventListener.getInstance();
+  public static @NonNull String getResultFilePath(@NonNull Class<?> clazz,
+    @NonNull ResultFormatType format) {
+    return String.format(ApplicationBenchmarkUtils.RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
+      format.toString().toLowerCase());
   }
 }
-

@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package baby.mumu.basis.po.jpa;
+package baby.mumu.extension.gson;
 
-import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
-import java.util.Optional;
+import com.google.gson.GsonBuilder;
+import com.google.gson.LongSerializationPolicy;
+import org.javamoney.moneta.Money;
 import org.jspecify.annotations.NonNull;
-import org.springframework.data.domain.AuditorAware;
+import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
 
 /**
- * 创建人&修改人自动填充
+ * gson 构建器定制器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.2.0
+ * @since 2.4.0
  */
-public class MuMuJpaDocumentAuditorAware implements AuditorAware<Long> {
+public class ApplicationGsonBuilderCustomizer implements GsonBuilderCustomizer {
 
   @Override
-  public @NonNull Optional<Long> getCurrentAuditor() {
-    return SecurityContextUtils.getLoginAccountId();
+  public void customize(@NonNull GsonBuilder gsonBuilder) {
+    gsonBuilder.registerTypeAdapter(Money.class, new MoneySerializer())
+      .registerTypeAdapter(Money.class, new MoneyDeserializer());
+    gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING);
   }
 }

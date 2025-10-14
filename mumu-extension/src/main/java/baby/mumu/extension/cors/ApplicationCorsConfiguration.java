@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @since 1.0.0
  */
 @Configuration
-public class MuMuCorsConfiguration implements WebMvcConfigurer {
+public class ApplicationCorsConfiguration implements WebMvcConfigurer {
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {

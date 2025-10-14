@@ -125,13 +125,13 @@ public class IamResourceServerConfig {
       new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
       UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling(exceptionHandling -> exceptionHandling
-      .accessDeniedHandler(mumuAccessDeniedHandler()));
+      .accessDeniedHandler(iamAccessDeniedHandler()));
     return http.formLogin(withDefaults()).cors(Customizer.withDefaults()).build();
   }
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
-    MuMuJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new MuMuJwtGrantedAuthoritiesConverter();
+    IamJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new IamJwtGrantedAuthoritiesConverter();
     grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.getClaimName());
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
@@ -139,8 +139,8 @@ public class IamResourceServerConfig {
   }
 
   @Bean
-  public MuMuAccessDeniedHandler mumuAccessDeniedHandler() {
-    return new MuMuAccessDeniedHandler();
+  public IamAccessDeniedHandler iamAccessDeniedHandler() {
+    return new IamAccessDeniedHandler();
   }
 
 }

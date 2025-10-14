@@ -18,7 +18,7 @@ package baby.mumu.extension;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.aspects.AspectConfiguration;
-import baby.mumu.extension.cors.MuMuCorsConfiguration;
+import baby.mumu.extension.cors.ApplicationCorsConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -51,7 +51,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  */
 @Configuration
 @Import({GrpcExceptionHandlersConfiguration.class, ResponseBodyProcessor.class,
-  MuMuCorsConfiguration.class,
+  ApplicationCorsConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,

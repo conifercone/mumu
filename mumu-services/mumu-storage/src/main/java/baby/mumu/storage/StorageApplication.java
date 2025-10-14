@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @SpringBootApplication
 @EnableConfigurationProperties
-@EnableJpaAuditing(auditorAwareRef = BeanNameConstants.MUMU_JPA_AUDITOR_AWARE)
+@EnableJpaAuditing(auditorAwareRef = BeanNameConstants.APPLICATION_JPA_AUDITOR_AWARE)
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableTransactionManagement
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)

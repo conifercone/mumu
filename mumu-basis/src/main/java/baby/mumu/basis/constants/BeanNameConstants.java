@@ -27,7 +27,7 @@ public final class BeanNameConstants {
   private BeanNameConstants() {
   }
 
-  public static final String MUMU_JPA_AUDITOR_AWARE = "mumuJpaAuditorAware";
+  public static final String APPLICATION_JPA_AUDITOR_AWARE = "applicationJpaAuditorAware";
 
-  public static final String MUMU_JPA_DOCUMENT_AUDITOR_AWARE = "mumuJpaDocumentAuditorAware";
+  public static final String APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE = "applicationJpaDocumentAuditorAware";
 }

@@ -36,7 +36,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.2
  */
-public class MuMuOAuth2RefreshTokenGenerator implements
+public class IamOAuth2RefreshTokenGenerator implements
   OAuth2TokenGenerator<OAuth2RefreshToken> {
 
   private final StringKeyGenerator refreshTokenGenerator = new Base64StringKeyGenerator(
@@ -49,7 +49,7 @@ public class MuMuOAuth2RefreshTokenGenerator implements
     if (!OAuth2TokenType.REFRESH_TOKEN.equals(context.getTokenType())) {
       return null;
     }
-    if (MuMuOAuth2RefreshTokenGenerator.isPublicClientForAuthorizationCodeGrant(context)) {
+    if (IamOAuth2RefreshTokenGenerator.isPublicClientForAuthorizationCodeGrant(context)) {
       // Do not issue refresh token to public client
       return null;
     }

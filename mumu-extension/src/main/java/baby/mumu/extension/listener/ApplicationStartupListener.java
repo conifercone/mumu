@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package baby.mumu.jmh;
+package baby.mumu.extension.listener;
 
 import org.jspecify.annotations.NonNull;
-import org.openjdk.jmh.results.format.ResultFormatType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 
 /**
- * 基准测试
+ * 项目启动成功监听器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.10.0
+ * @since 2.2.0
  */
-public class MuMuBenchmarkUtils {
+public class ApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
-  public static final String RESULT_FILE_PATH_TEMPLATE = "./benchmark-history/%s.%s";
+  private final Logger log = LoggerFactory.getLogger(ApplicationStartupListener.class);
 
-  public static @NonNull String getResultFilePath(@NonNull Class<?> clazz,
-    @NonNull ResultFormatType format) {
-    return String.format(MuMuBenchmarkUtils.RESULT_FILE_PATH_TEMPLATE, clazz.getSimpleName(),
-      format.toString().toLowerCase());
+  @Override
+  public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
+    log.info("🎉 Startup completed!");
   }
 }

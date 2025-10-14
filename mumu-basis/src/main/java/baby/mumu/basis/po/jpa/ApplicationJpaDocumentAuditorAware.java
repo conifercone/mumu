@@ -25,9 +25,9 @@ import org.springframework.data.domain.AuditorAware;
  * 创建人&修改人自动填充
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.0
+ * @since 2.2.0
  */
-public class MuMuJpaAuditorAware implements AuditorAware<Long> {
+public class ApplicationJpaDocumentAuditorAware implements AuditorAware<Long> {
 
   @Override
   public @NonNull Optional<Long> getCurrentAuditor() {

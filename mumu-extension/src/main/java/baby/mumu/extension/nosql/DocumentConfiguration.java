@@ -16,9 +16,9 @@
 
 package baby.mumu.extension.nosql;
 
-import static baby.mumu.basis.constants.BeanNameConstants.MUMU_JPA_DOCUMENT_AUDITOR_AWARE;
+import static baby.mumu.basis.constants.BeanNameConstants.APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE;
 
-import baby.mumu.basis.po.jpa.MuMuJpaDocumentAuditorAware;
+import baby.mumu.basis.po.jpa.ApplicationJpaDocumentAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DocumentConfiguration {
 
-  @Bean(name = MUMU_JPA_DOCUMENT_AUDITOR_AWARE)
-  public MuMuJpaDocumentAuditorAware mumuJpaDocumentAuditorAware() {
-    return new MuMuJpaDocumentAuditorAware();
+  @Bean(name = APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE)
+  public ApplicationJpaDocumentAuditorAware applicationJpaDocumentAuditorAware() {
+    return new ApplicationJpaDocumentAuditorAware();
   }
 }
