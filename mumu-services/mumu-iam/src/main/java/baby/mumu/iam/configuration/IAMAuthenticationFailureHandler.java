@@ -51,17 +51,17 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-public class IamAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class IAMAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
   private static final Logger log = LoggerFactory.getLogger(
-    IamAuthenticationFailureHandler.class);
+    IAMAuthenticationFailureHandler.class);
 
   private final OperationLogGrpcService operationLogGrpcService;
 
   private final SystemLogGrpcService systemLogGrpcService;
 
   @Autowired
-  public IamAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
+  public IAMAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
     SystemLogGrpcService systemLogGrpcService) {
     this.operationLogGrpcService = operationLogGrpcService;
     this.systemLogGrpcService = systemLogGrpcService;
@@ -78,7 +78,7 @@ public class IamAuthenticationFailureHandler implements AuthenticationFailureHan
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      IamAuthenticationFailureHandler.log.error(oAuth2AuthenticationException.getMessage());
+      IAMAuthenticationFailureHandler.log.error(oAuth2AuthenticationException.getMessage());
 
       if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
         response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());

@@ -31,7 +31,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
-public class IamAccessDeniedHandler implements AccessDeniedHandler {
+public class IAMAccessDeniedHandler implements AccessDeniedHandler {
 
   @Override
   public void handle(HttpServletRequest request, @NonNull HttpServletResponse response,

@@ -145,7 +145,7 @@ public class AuthorizationConfiguration {
   public SecurityFilterChain authorizationServerSecurityFilterChain(@NonNull HttpSecurity http,
     OAuth2AuthorizationService authorizationService,
     OAuth2TokenGenerator<?> tokenGenerator,
-    IamAuthenticationFailureHandler iamAuthenticationFailureHandler,
+    IAMAuthenticationFailureHandler iamAuthenticationFailureHandler,
     UserDetailsService userDetailsService,
     PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings)
     throws Exception {
@@ -201,14 +201,14 @@ public class AuthorizationConfiguration {
     OidcIdTokenCacheRepository oidcIdTokenCacheRepository,
     ClientTokenCacheRepository clientTokenCacheRepository,
     AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
-    IamJwtGenerator jwtGenerator = new IamJwtGenerator(new NimbusJwtEncoder(jwkSource));
+    IAMJwtGenerator jwtGenerator = new IAMJwtGenerator(new NimbusJwtEncoder(jwkSource));
     jwtGenerator.setJwtCustomizer(oAuth2TokenCustomizer);
     jwtGenerator.setPasswordTokenCacheRepository(passwordTokenCacheRepository);
     jwtGenerator.setOidcIdTokenCacheRepository(oidcIdTokenCacheRepository);
     jwtGenerator.setClientTokenCacheRepository(clientTokenCacheRepository);
     jwtGenerator.setAuthorizeCodeTokenCacheRepository(authorizeCodeTokenCacheRepository);
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
-    IamOAuth2RefreshTokenGenerator refreshTokenGenerator = new IamOAuth2RefreshTokenGenerator();
+    IAMOAuth2RefreshTokenGenerator refreshTokenGenerator = new IAMOAuth2RefreshTokenGenerator();
     return new DelegatingOAuth2TokenGenerator(
       jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
   }

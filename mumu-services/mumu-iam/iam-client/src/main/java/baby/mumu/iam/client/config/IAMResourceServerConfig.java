@@ -54,12 +54,12 @@ import org.springframework.util.Assert;
 @Configuration
 @EnableConfigurationProperties(ResourcePoliciesProperties.class)
 @EnableWebSecurity
-public class IamResourceServerConfig {
+public class IAMResourceServerConfig {
 
   private final ResourcePoliciesProperties resourcePoliciesProperties;
 
   @Autowired
-  public IamResourceServerConfig(ResourcePoliciesProperties resourcePoliciesProperties) {
+  public IAMResourceServerConfig(ResourcePoliciesProperties resourcePoliciesProperties) {
     this.resourcePoliciesProperties = resourcePoliciesProperties;
   }
 
@@ -131,7 +131,7 @@ public class IamResourceServerConfig {
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
-    IamJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new IamJwtGrantedAuthoritiesConverter();
+    IAMJwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new IAMJwtGrantedAuthoritiesConverter();
     grantedAuthoritiesConverter.setAuthoritiesClaimName(TokenClaimsEnum.AUTHORITIES.getClaimName());
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
@@ -139,8 +139,8 @@ public class IamResourceServerConfig {
   }
 
   @Bean
-  public IamAccessDeniedHandler iamAccessDeniedHandler() {
-    return new IamAccessDeniedHandler();
+  public IAMAccessDeniedHandler iamAccessDeniedHandler() {
+    return new IAMAccessDeniedHandler();
   }
 
 }
