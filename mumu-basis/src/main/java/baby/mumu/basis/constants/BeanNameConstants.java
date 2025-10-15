@@ -27,7 +27,13 @@ public final class BeanNameConstants {
   private BeanNameConstants() {
   }
 
+  /**
+   * 应用程序 JPA 审计Bean名称
+   */
   public static final String APPLICATION_JPA_AUDITOR_AWARE = "applicationJpaAuditorAware";
 
+  /**
+   * 应用程序 JPA 文档审计Bean名称
+   */
   public static final String APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE = "applicationJpaDocumentAuditorAware";
 }
