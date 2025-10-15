@@ -35,7 +35,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 鉴权服务
+ * 统一身份与访问管理（IAM）微服务，提供身份认证、单点登录、细粒度授权与审计能力
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
