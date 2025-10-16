@@ -34,46 +34,8 @@ object IpUtils {
      */
     @JvmStatic
     fun getIpAddr(request: HttpServletRequest): String? {
-        var ip: String? = request.remoteAddr
-
-        val localIp = setOf(
-            "127.0.0.1",  // 本地回环地址 (IPv4)
-            "::1",        // 本地回环地址 (IPv6)
-            "localhost",  // 本地主机名
-            "unknown"     // 未知地址
-        )
-
-        // 如果 IP 是本地地址或 "unknown"，则置空
-        if (ip in localIp) {
-            ip = null
-        }
-
-        // 按可信度排序的请求头列表
-        val headers = listOf(
-            "X-Real-IP",
-            "X-Forwarded-For",
-            "Proxy-Client-IP",
-            "WL-Proxy-Client-IP",
-            "HTTP_CLIENT_IP",
-            "HTTP_X_FORWARDED_FOR"
-        )
-
-        for (header in headers) {
-            val headerValue = request.getHeader(header)
-            if (!headerValue.isNullOrEmpty() && !"unknown".equals(headerValue, ignoreCase = true)) {
-                ip = if (header == "X-Forwarded-For") {
-                    // 处理多个 IP，获取第一个有效的 IP
-                    headerValue.split(",").map { it.trim() }
-                        .firstOrNull { !"unknown".equals(it, ignoreCase = true) }
-                } else {
-                    headerValue
-                }
-                if (ip != null) break // 找到有效 IP 就终止循环
-            }
-        }
-
-        return ip
+        val ip = request.remoteAddr ?: return ""
+        return if (ip.startsWith("[") && ip.endsWith("]")) ip.substring(1, ip.length - 1) else ip
     }
-
 
 }
