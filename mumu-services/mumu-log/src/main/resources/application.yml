@@ -47,3 +47,4 @@ spring:
           use-actuator-health: false
         tags:
           - "mumu"
+          - "log"
