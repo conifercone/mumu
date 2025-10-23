@@ -16,6 +16,7 @@
 
 package baby.mumu.log.infra.system.convertor;
 
+import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.cmds.SystemLogSaveCmd;
@@ -24,7 +25,6 @@ import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

@@ -19,7 +19,7 @@ package baby.mumu.iam.infra.account.gatewayimpl.database.po;
 import baby.mumu.basis.enums.GenderEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
+import baby.mumu.genix.client.config.SnowflakeIdGenerator;
 import io.hypersistence.utils.hibernate.type.money.MonetaryAmountType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;

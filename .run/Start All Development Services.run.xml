@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Start All Development Services"
     type="CompoundRunConfigurationType">
+    <toRun name="GenixApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="IAMApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="LogApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <toRun name="StorageApplication-dev" type="SpringBootApplicationConfigurationType"/>
-    <toRun name="UniqueApplication-dev" type="SpringBootApplicationConfigurationType"/>
     <method v="2"/>
   </configuration>
 </component>

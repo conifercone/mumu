@@ -41,17 +41,17 @@ findProject(":mumu-services:mumu-log:log-domain")?.name = "log-domain"
 include("mumu-services:mumu-log:log-infra")
 findProject(":mumu-services:mumu-log:log-infra")?.name = "log-infra"
 include("mumu-basis")
-include("mumu-services:mumu-unique")
-include("mumu-services:mumu-unique:unique-adapter")
-findProject(":mumu-services:mumu-unique:unique-adapter")?.name = "unique-adapter"
-include("mumu-services:mumu-unique:unique-client")
-findProject(":mumu-services:mumu-unique:unique-client")?.name = "unique-client"
-include("mumu-services:mumu-unique:unique-application")
-findProject(":mumu-services:mumu-unique:unique-application")?.name = "unique-application"
-include("mumu-services:mumu-unique:unique-domain")
-findProject(":mumu-services:mumu-unique:unique-domain")?.name = "unique-domain"
-include("mumu-services:mumu-unique:unique-infra")
-findProject(":mumu-services:mumu-unique:unique-infra")?.name = "unique-infra"
+include("mumu-services:mumu-genix")
+include("mumu-services:mumu-genix:genix-adapter")
+findProject(":mumu-services:mumu-genix:genix-adapter")?.name = "genix-adapter"
+include("mumu-services:mumu-genix:genix-client")
+findProject(":mumu-services:mumu-genix:genix-client")?.name = "genix-client"
+include("mumu-services:mumu-genix:genix-application")
+findProject(":mumu-services:mumu-genix:genix-application")?.name = "genix-application"
+include("mumu-services:mumu-genix:genix-domain")
+findProject(":mumu-services:mumu-genix:genix-domain")?.name = "genix-domain"
+include("mumu-services:mumu-genix:genix-infra")
+findProject(":mumu-services:mumu-genix:genix-infra")?.name = "genix-infra"
 include("mumu-services:mumu-storage")
 include("mumu-services:mumu-storage:storage-adapter")
 findProject(":mumu-services:mumu-storage:storage-adapter")?.name = "storage-adapter"

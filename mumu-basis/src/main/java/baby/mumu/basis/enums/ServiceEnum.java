@@ -33,7 +33,7 @@ public enum ServiceEnum {
 
   STORAGE("storage"),
 
-  UNIQUE("unique");
+  GENIX("genix");
 
   private final String name;
 

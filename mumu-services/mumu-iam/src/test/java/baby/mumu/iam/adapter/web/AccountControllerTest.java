@@ -20,7 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import baby.mumu.basis.constants.SpringBootConstants;
-import baby.mumu.iam.MuMuIAMApplicationMetamodel;
+import baby.mumu.iam.IAMApplicationMetamodel;
 import baby.mumu.iam.client.cmds.AccountChangePasswordCmd;
 import baby.mumu.iam.client.cmds.AccountPasswordVerifyCmd;
 import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
@@ -53,9 +53,9 @@ import org.springframework.transaction.annotation.Transactional;
 @TestPropertySource(properties = {
   "mumu.extension.global.digital-signature.enabled=false",
   "mumu.extension.idempotent.request-id.enabled=false",
-  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.PROJECT_NAME,
+  SpringBootConstants.APPLICATION_TITLE + "=" + IAMApplicationMetamodel.PROJECT_NAME,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
-    + MuMuIAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
+    + IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
 })
 public class AccountControllerTest {
 

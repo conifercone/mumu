@@ -21,6 +21,7 @@ import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
 
 import baby.mumu.basis.exception.DataConversionException;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
+import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infra.config.LogProperties;
@@ -29,7 +30,6 @@ import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.OperationLogEsRep
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPOMetamodel;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;

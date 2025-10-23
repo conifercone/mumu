@@ -19,7 +19,7 @@
 :desc-mumu-iam: Identity and Access Management (users, roles, permissions)
 :desc-mumu-log: Centralized logging and query service
 :desc-mumu-storage: File storage service
-:desc-mumu-unique: Distributed unique ID generator
+:desc-mumu-genix: Generation + Mix
 :desc-mumu-basis: Common utilities and shared components
 :desc-mumu-benchmark: Performance testing and benchmarking
 :desc-mumu-extension: Extension and integration modules
@@ -97,7 +97,7 @@ Let’s make managing a joyride!
 .4+| mumu-services | mumu-iam     | {desc-mumu-iam}
 | mumu-log     | {desc-mumu-log}
 | mumu-storage | {desc-mumu-storage}
-| mumu-unique  | {desc-mumu-unique}
+| mumu-genix  | {desc-mumu-genix}
 
 | mumu-basis     | - | {desc-mumu-basis}
 | mumu-benchmark | - | {desc-mumu-benchmark}

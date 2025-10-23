@@ -1,7 +1,7 @@
 dependencies {
     implementation(project(":mumu-services:mumu-log:log-domain"))
     implementation(project(":mumu-services:mumu-log:log-client"))
-    implementation(project(":mumu-services:mumu-unique:unique-client"))
+    implementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(project(":mumu-extension"))
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.kafka)

@@ -2,7 +2,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-domain"))
     implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-services:mumu-log:log-client"))
-    implementation(project(":mumu-services:mumu-unique:unique-client"))
+    implementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(project(":mumu-services:mumu-storage:storage-client"))
     implementation(project(":mumu-extension"))
     annotationProcessor(project(":mumu-processor"))

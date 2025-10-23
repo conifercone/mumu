@@ -18,7 +18,7 @@ package baby.mumu.storage.infra.zone.gatewayimpl.database.po;
 
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
+import baby.mumu.genix.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

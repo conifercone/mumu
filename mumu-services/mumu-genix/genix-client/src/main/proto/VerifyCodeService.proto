@@ -1,0 +1,22 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "baby.mumu.genix.client.api.grpc";
+option java_outer_classname = "VerifyCodeServiceProto";
+
+service VerifyCodeService {
+  rpc generate (VerifyCodeGeneratedGrpcCmd) returns (google.protobuf.Int64Value);
+  rpc verify (VerifyCodeVerifyGrpcCmd) returns (google.protobuf.BoolValue);
+}
+
+message VerifyCodeGeneratedGrpcCmd {
+  int64 ttl = 1;
+  int32 length = 2;
+}
+
+message VerifyCodeVerifyGrpcCmd {
+  int64 id = 1;
+  string source = 2;
+}

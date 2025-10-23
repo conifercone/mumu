@@ -22,7 +22,7 @@ dependencies {
     testImplementation(libs.jasypt)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.spring.grpc.client.spring.boot.starter)
-    testImplementation(project(":mumu-services:mumu-unique:unique-client"))
+    testImplementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(libs.flyway.core)
     implementation(libs.flyway.database.postgresql)
     implementation(libs.hypersistence.utils.hibernate63)

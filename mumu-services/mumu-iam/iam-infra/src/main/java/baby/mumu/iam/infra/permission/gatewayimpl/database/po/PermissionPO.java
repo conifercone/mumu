@@ -17,7 +17,7 @@
 package baby.mumu.iam.infra.permission.gatewayimpl.database.po;
 
 import baby.mumu.basis.po.jpa.JpaBasisArchivablePersistentObject;
-import baby.mumu.unique.client.config.SnowflakeIdGenerator;
+import baby.mumu.genix.client.config.SnowflakeIdGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

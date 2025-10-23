@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2024-2025, the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package baby.mumu.genix.client.config;
+
+import baby.mumu.basis.kotlin.tools.SpringContextUtils;
+import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
+import java.io.Serial;
+import java.util.Properties;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.id.IdentifierGenerator;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.Type;
+import org.jspecify.annotations.NonNull;
+
+/**
+ * 雪花算法ID生成器
+ *
+ * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
+ * @since 2.4.0
+ */
+public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
+
+  @Serial
+  private static final long serialVersionUID = -8395528141162825280L;
+
+  private Class<?> idType;
+
+  @Override
+  public Object generate(@NonNull SharedSessionContractImplementor session, Object object) {
+    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtils.getBean(
+        PrimaryKeyGrpcService.class)
+      .orElseThrow(() -> new IllegalArgumentException("PrimaryKeyGrpcService bean not found"));
+    if (String.class.isAssignableFrom(idType)) {
+      return String.valueOf(primaryKeyGrpcService.snowflake());
+    }
+    if (Long.class.isAssignableFrom(idType)) {
+      return primaryKeyGrpcService.snowflake();
+    }
+    throw new HibernateException(
+      "Unanticipated return type [" + idType.getName() + "] for Snowflake conversion");
+  }
+
+  @Override
+  public void configure(@NonNull Type type, Properties parameters,
+    ServiceRegistry serviceRegistry) {
+    idType = type.getReturnedClass();
+  }
+}

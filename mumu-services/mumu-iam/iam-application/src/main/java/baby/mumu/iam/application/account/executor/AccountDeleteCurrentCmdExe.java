@@ -16,10 +16,10 @@
 
 package baby.mumu.iam.application.account.executor;
 
+import baby.mumu.genix.client.api.VerifyCodeGrpcService;
+import baby.mumu.genix.client.api.VerifyCodeVerify;
 import baby.mumu.iam.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.unique.client.api.VerifyCodeGrpcService;
-import baby.mumu.unique.client.api.VerifyCodeVerify;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;

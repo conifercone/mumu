@@ -18,6 +18,7 @@ package baby.mumu.storage.infra.file.convertor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
@@ -26,7 +27,6 @@ import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
-import baby.mumu.unique.client.api.PrimaryKeyGrpcService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;

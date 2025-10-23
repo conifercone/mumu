@@ -18,7 +18,7 @@ package baby.mumu.iam.client.grpc;
 
 import baby.mumu.basis.constants.SpringBootConstants;
 import baby.mumu.iam.AuthenticationRequired;
-import baby.mumu.iam.MuMuIAMApplicationMetamodel;
+import baby.mumu.iam.IAMApplicationMetamodel;
 import baby.mumu.iam.client.api.AccountGrpcService;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -50,9 +50,9 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
-  SpringBootConstants.APPLICATION_TITLE + "=" + MuMuIAMApplicationMetamodel.PROJECT_NAME,
+  SpringBootConstants.APPLICATION_TITLE + "=" + IAMApplicationMetamodel.PROJECT_NAME,
   SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
-    + MuMuIAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
+    + IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
 })
 public class AccountGrpcServiceTest extends AuthenticationRequired {
 
