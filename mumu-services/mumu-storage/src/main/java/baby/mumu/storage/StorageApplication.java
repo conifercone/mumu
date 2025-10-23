@@ -32,7 +32,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 存储服务
+ * 存储服务，提供文件及对象的存储、访问与管理能力
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1

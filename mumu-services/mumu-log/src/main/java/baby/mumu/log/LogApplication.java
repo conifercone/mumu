@@ -24,7 +24,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 日志服务
+ * 日志服务，收集、存储、查询和分析系统运行日志数据，让系统的“行为数据”变得可观测、可追踪、可理解
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
