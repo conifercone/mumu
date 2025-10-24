@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.domain.verification;
+package baby.mumu.genix.domain.captcha;
 
 import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerifyCode extends BasisDomainModel {
+public class CaptchaCode extends BasisDomainModel {
 
   @Serial
   private static final long serialVersionUID = 5903194159824109581L;

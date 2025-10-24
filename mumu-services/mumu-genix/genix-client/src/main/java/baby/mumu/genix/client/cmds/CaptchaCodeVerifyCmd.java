@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.verification.gatewayimpl.cache;
+package baby.mumu.genix.client.cmds;
 
-import baby.mumu.genix.infra.verification.gatewayimpl.cache.po.VerifyCodeCacheablePO;
-import com.redis.om.spring.repository.RedisDocumentRepository;
+import lombok.Data;
 
 /**
- * 简单验证码操作类
+ * 简单验证码验证指令
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface VerifyCodeCacheRepository extends
-  RedisDocumentRepository<VerifyCodeCacheablePO, Long> {
+@Data
+public class CaptchaCodeVerifyCmd {
 
+  /**
+   * 验证码id
+   */
+  private Long id;
+
+  /**
+   * 验证码内容
+   */
+  private String source;
 }

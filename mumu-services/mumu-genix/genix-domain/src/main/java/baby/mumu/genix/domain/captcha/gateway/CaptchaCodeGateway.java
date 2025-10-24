@@ -14,26 +14,33 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.client.cmds;
+package baby.mumu.genix.domain.captcha.gateway;
 
-import lombok.Data;
+import baby.mumu.genix.domain.captcha.CaptchaCode;
 
 /**
- * 简单验证码验证指令
+ * 验证码领域网关
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Data
-public class VerifyCodeVerifyCmd {
+public interface CaptchaCodeGateway {
 
   /**
-   * 验证码id
+   * 生成指定长度的简单验证码
+   *
+   * @param captchaCode 简单验证码
+   * @return 验证码ID
    */
-  private Long id;
+  Long generate(CaptchaCode captchaCode);
+
 
   /**
-   * 验证码内容
+   * 验证简单验证码
+   *
+   * @param captchaCode 简单验证码
+   * @return 验证结果
    */
-  private String source;
+  boolean verify(CaptchaCode captchaCode);
+
 }

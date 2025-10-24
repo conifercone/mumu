@@ -16,8 +16,8 @@
 
 package baby.mumu.iam.application.account.executor;
 
-import baby.mumu.genix.client.api.VerifyCodeGrpcService;
-import baby.mumu.genix.client.api.VerifyCodeVerify;
+import baby.mumu.genix.client.api.CaptchaCodeGrpcService;
+import baby.mumu.genix.client.api.CaptchaCodeVerify;
 import baby.mumu.iam.client.cmds.AccountDeleteCurrentCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import io.micrometer.observation.annotation.Observed;
@@ -33,19 +33,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Observed(name = "AccountDeleteCurrentCmdExe")
-public class AccountDeleteCurrentCmdExe extends VerifyCodeVerify {
+public class AccountDeleteCurrentCmdExe extends CaptchaCodeVerify {
 
   private final AccountGateway accountGateway;
 
   @Autowired
   public AccountDeleteCurrentCmdExe(AccountGateway accountGateway,
-    VerifyCodeGrpcService verifyCodeGrpcService) {
-    super(verifyCodeGrpcService);
+    CaptchaCodeGrpcService captchaCodeGrpcService) {
+    super(captchaCodeGrpcService);
     this.accountGateway = accountGateway;
   }
 
   public void execute(@NonNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
-    verify(accountDeleteCurrentCmd.getVerifyCodeId(), accountDeleteCurrentCmd.getVerifyCode());
+    verify(accountDeleteCurrentCmd.getCaptchaCodeId(), accountDeleteCurrentCmd.getCaptchaCode());
     accountGateway.deleteCurrentAccount();
   }
 }

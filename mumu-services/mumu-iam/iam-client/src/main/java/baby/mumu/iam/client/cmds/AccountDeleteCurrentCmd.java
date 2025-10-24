@@ -30,8 +30,8 @@ import lombok.Data;
 public class AccountDeleteCurrentCmd {
 
   @NotNull
-  private Long verifyCodeId;
+  private Long captchaCodeId;
 
   @NotBlank
-  private String verifyCode;
+  private String captchaCode;
 }

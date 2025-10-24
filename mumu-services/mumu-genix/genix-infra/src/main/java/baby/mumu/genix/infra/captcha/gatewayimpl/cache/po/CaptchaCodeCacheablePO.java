@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.verification.gatewayimpl.cache.po;
+package baby.mumu.genix.infra.captcha.gatewayimpl.cache.po;
 
 import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.po.jpa.JpaCacheableBasisDefaultPersistentObject;
@@ -35,8 +35,8 @@ import org.springframework.data.redis.core.TimeToLive;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document(value = "mumu:genix:verify-code")
-public class VerifyCodeCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
+@Document(value = "mumu:genix:captcha-code")
+public class CaptchaCodeCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
 
   @Serial
   private static final long serialVersionUID = -4676000530909358286L;

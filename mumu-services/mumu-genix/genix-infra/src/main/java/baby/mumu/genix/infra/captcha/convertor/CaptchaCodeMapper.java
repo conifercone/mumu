@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.verification.convertor;
+package baby.mumu.genix.infra.captcha.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.genix.client.api.grpc.VerifyCodeVerifyGrpcCmd;
-import baby.mumu.genix.client.cmds.VerifyCodeGeneratedCmd;
-import baby.mumu.genix.client.cmds.VerifyCodeVerifyCmd;
-import baby.mumu.genix.domain.verification.VerifyCode;
-import baby.mumu.genix.infra.verification.gatewayimpl.cache.po.VerifyCodeCacheablePO;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
+import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
+import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.domain.captcha.CaptchaCode;
+import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -30,27 +30,27 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * VerifyCode mapstruct转换器
+ * CaptchaCode mapstruct转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface VerifyCodeMapper extends GrpcMapper {
+public interface CaptchaCodeMapper extends GrpcMapper {
 
-  VerifyCodeMapper INSTANCE = Mappers.getMapper(VerifyCodeMapper.class);
-
-  @API(status = Status.STABLE, since = "1.0.1")
-  VerifyCodeCacheablePO toVerifyCodeCacheablePO(VerifyCode verifyCode);
+  CaptchaCodeMapper INSTANCE = Mappers.getMapper(CaptchaCodeMapper.class);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  VerifyCode toEntity(VerifyCodeGeneratedCmd verifyCodeGeneratedCmd);
+  CaptchaCodeCacheablePO toCaptchaCodeCacheablePO(CaptchaCode captchaCode);
 
   @API(status = Status.STABLE, since = "1.0.1")
-  VerifyCode toEntity(VerifyCodeVerifyCmd verifyCodeVerifyCmd);
+  CaptchaCode toEntity(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd);
+
+  @API(status = Status.STABLE, since = "1.0.1")
+  CaptchaCode toEntity(CaptchaCodeVerifyCmd captchaCodeVerifyCmd);
 
   @API(status = Status.STABLE, since = "2.2.0")
-  VerifyCodeVerifyCmd toVerifyCodeVerifyCmd(
-    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd);
+  CaptchaCodeVerifyCmd toCaptchaCodeVerifyCmd(
+    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd);
 
 }

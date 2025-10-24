@@ -16,8 +16,8 @@
 
 package baby.mumu.genix.client.grpc;
 
-import baby.mumu.genix.client.api.VerifyCodeGrpcService;
-import baby.mumu.genix.client.api.grpc.VerifyCodeGeneratedGrpcCmd;
+import baby.mumu.genix.client.api.CaptchaCodeGrpcService;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.Int64Value;
@@ -43,24 +43,24 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-public class VerifyCodeGrpcServiceTest {
+public class CaptchaCodeGrpcServiceTest {
 
-  private final VerifyCodeGrpcService verifyCodeGrpcService;
-  private static final Logger log = LoggerFactory.getLogger(VerifyCodeGrpcServiceTest.class);
+  private final CaptchaCodeGrpcService captchaCodeGrpcService;
+  private static final Logger log = LoggerFactory.getLogger(CaptchaCodeGrpcServiceTest.class);
 
   @Autowired
-  public VerifyCodeGrpcServiceTest(VerifyCodeGrpcService verifyCodeGrpcService) {
-    this.verifyCodeGrpcService = verifyCodeGrpcService;
+  public CaptchaCodeGrpcServiceTest(CaptchaCodeGrpcService captchaCodeGrpcService) {
+    this.captchaCodeGrpcService = captchaCodeGrpcService;
   }
 
   @Test
   public void generate() {
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd = VerifyCodeGeneratedGrpcCmd.newBuilder()
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd = CaptchaCodeGeneratedGrpcCmd.newBuilder()
       .setLength(4)
       .setTtl(500).build();
-    Int64Value generate = verifyCodeGrpcService.generate(
-      verifyCodeGeneratedGrpcCmd);
-    VerifyCodeGrpcServiceTest.log.info("ID : {}",
+    Int64Value generate = captchaCodeGrpcService.generate(
+      captchaCodeGeneratedGrpcCmd);
+    CaptchaCodeGrpcServiceTest.log.info("ID : {}",
       generate.getValue());
     Assertions.assertNotNull(generate);
   }
@@ -68,15 +68,15 @@ public class VerifyCodeGrpcServiceTest {
   @Test
   public void syncGenerate() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd = VerifyCodeGeneratedGrpcCmd.newBuilder()
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd = CaptchaCodeGeneratedGrpcCmd.newBuilder()
       .setLength(4)
       .setTtl(500).build();
-    ListenableFuture<Int64Value> valueListenableFuture = verifyCodeGrpcService.syncGenerate(
-      verifyCodeGeneratedGrpcCmd);
+    ListenableFuture<Int64Value> valueListenableFuture = captchaCodeGrpcService.syncGenerate(
+      captchaCodeGeneratedGrpcCmd);
     valueListenableFuture.addListener(() -> {
       try {
         Int64Value int64Value = valueListenableFuture.get();
-        VerifyCodeGrpcServiceTest.log.info("Sync ID : {}",
+        CaptchaCodeGrpcServiceTest.log.info("Sync ID : {}",
           Objects.requireNonNull(int64Value).getValue());
         Assertions.assertNotNull(int64Value);
         countDownLatch.countDown();

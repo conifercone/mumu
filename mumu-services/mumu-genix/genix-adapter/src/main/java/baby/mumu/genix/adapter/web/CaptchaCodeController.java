@@ -18,9 +18,9 @@ package baby.mumu.genix.adapter.web;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.basis.response.ResponseWrapper;
-import baby.mumu.genix.client.api.VerifyCodeService;
-import baby.mumu.genix.client.cmds.VerifyCodeGeneratedCmd;
-import baby.mumu.genix.client.cmds.VerifyCodeVerifyCmd;
+import baby.mumu.genix.client.api.CaptchaCodeService;
+import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
+import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -43,15 +43,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Validated
-@RequestMapping("/verifyCode")
+@RequestMapping("/captchaCode")
 @Tag(name = "验证码管理")
-public class VerifyCodeController {
+public class CaptchaCodeController {
 
-  private final VerifyCodeService verifyCodeService;
+  private final CaptchaCodeService captchaCodeService;
 
   @Autowired
-  public VerifyCodeController(VerifyCodeService verifyCodeService) {
-    this.verifyCodeService = verifyCodeService;
+  public CaptchaCodeController(CaptchaCodeService captchaCodeService) {
+    this.captchaCodeService = captchaCodeService;
   }
 
   @Operation(summary = "获取简单验证码")
@@ -60,8 +60,8 @@ public class VerifyCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public ResponseWrapper<Long> generate(
-    @ModelAttribute @Validated VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
-    return ResponseWrapper.success(verifyCodeService.generate(verifyCodeGeneratedCmd));
+    @ModelAttribute @Validated CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+    return ResponseWrapper.success(captchaCodeService.generate(captchaCodeGeneratedCmd));
   }
 
   @Operation(summary = "验证简单验证码")
@@ -70,7 +70,7 @@ public class VerifyCodeController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
   public ResponseWrapper<Boolean> verify(
-    @RequestBody VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
-    return ResponseWrapper.success(verifyCodeService.verify(verifyCodeVerifyCmd));
+    @RequestBody CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
+    return ResponseWrapper.success(captchaCodeService.verify(captchaCodeVerifyCmd));
   }
 }

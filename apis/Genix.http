@@ -30,7 +30,7 @@ Accept: */*
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-GET {{genix-service-url}}/verifyCode/generate?ttl=400&length=4
+GET {{genix-service-url}}/captchaCode/generate?ttl=400&length=4
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}
@@ -53,7 +53,7 @@ Accept: */*
   request.variables.set("timestamp", headers.timestamp)
   request.variables.set("requestId", headers.requestId)
 %}
-POST {{genix-service-url}}/verifyCode/verify
+POST {{genix-service-url}}/captchaCode/verify
 Content-Type: application/json
 X-Request-ID: {{requestId}}
 X-Signature: {{signature}}

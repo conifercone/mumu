@@ -18,8 +18,8 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.genix.client.api.VerifyCodeGrpcService;
-import baby.mumu.genix.client.api.VerifyCodeVerify;
+import baby.mumu.genix.client.api.CaptchaCodeGrpcService;
+import baby.mumu.genix.client.api.CaptchaCodeVerify;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
@@ -36,15 +36,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Observed(name = "AccountRegisterCmdExe")
-public class AccountRegisterCmdExe extends VerifyCodeVerify {
+public class AccountRegisterCmdExe extends CaptchaCodeVerify {
 
   private final AccountGateway accountGateway;
   private final AccountConvertor accountConvertor;
 
   @Autowired
   public AccountRegisterCmdExe(AccountGateway accountGateway,
-    VerifyCodeGrpcService verifyCodeGrpcService, AccountConvertor accountConvertor) {
-    super(verifyCodeGrpcService);
+    CaptchaCodeGrpcService captchaCodeGrpcService, AccountConvertor accountConvertor) {
+    super(captchaCodeGrpcService);
     this.accountGateway = accountGateway;
     this.accountConvertor = accountConvertor;
   }
@@ -52,7 +52,7 @@ public class AccountRegisterCmdExe extends VerifyCodeVerify {
   public Long execute(AccountRegisterCmd accountRegisterCmd) {
     Account account = accountConvertor.toEntity(accountRegisterCmd)
       .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-    verify(accountRegisterCmd.getVerifyCodeId(), accountRegisterCmd.getVerifyCode());
+    verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode());
     return accountGateway.register(account);
   }
 }

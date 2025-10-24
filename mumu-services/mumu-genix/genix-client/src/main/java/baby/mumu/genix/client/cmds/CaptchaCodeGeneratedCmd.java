@@ -26,7 +26,7 @@ import lombok.Data;
  * @since 1.0.1
  */
 @Data
-public class VerifyCodeGeneratedCmd {
+public class CaptchaCodeGeneratedCmd {
 
   /**
    * 有效期

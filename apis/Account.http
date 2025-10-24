@@ -48,8 +48,8 @@ Accept: */*
       "country": "中国"
     }
   ],
-  "verifyCodeId": 127267766272,
-  "verifyCode": "U4BC"
+  "captchaCodeId": 127267766272,
+  "captchaCode": "U4BC"
 }
 
 > {%
@@ -400,8 +400,8 @@ Accept: */*
 Authorization: Bearer {{$auth.token("admin")}}
 
 {
-  "verifyCodeId": 2977796456448,
-  "verifyCode": "ZGYW"
+  "captchaCodeId": 2977796456448,
+  "captchaCode": "ZGYW"
 }
 
 > {%

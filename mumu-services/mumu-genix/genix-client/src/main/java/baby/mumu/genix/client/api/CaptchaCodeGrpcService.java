@@ -19,11 +19,11 @@ package baby.mumu.genix.client.api;
 import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.basis.exception.ApplicationException;
-import baby.mumu.genix.client.api.grpc.VerifyCodeGeneratedGrpcCmd;
-import baby.mumu.genix.client.api.grpc.VerifyCodeServiceGrpc;
-import baby.mumu.genix.client.api.grpc.VerifyCodeServiceGrpc.VerifyCodeServiceBlockingStub;
-import baby.mumu.genix.client.api.grpc.VerifyCodeServiceGrpc.VerifyCodeServiceFutureStub;
-import baby.mumu.genix.client.api.grpc.VerifyCodeVerifyGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceBlockingStub;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceFutureStub;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
@@ -41,12 +41,12 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Observed(name = "VerifyCodeGrpcService")
-public class VerifyCodeGrpcService extends GenixGrpcService implements DisposableBean {
+@Observed(name = "CaptchaCodeGrpcService")
+public class CaptchaCodeGrpcService extends GenixGrpcService implements DisposableBean {
 
   private ManagedChannel channel;
 
-  public VerifyCodeGrpcService(
+  public CaptchaCodeGrpcService(
     DiscoveryClient discoveryClient,
     GrpcChannelFactory grpcChannelFactory) {
     super(discoveryClient, grpcChannelFactory);
@@ -58,77 +58,77 @@ public class VerifyCodeGrpcService extends GenixGrpcService implements Disposabl
   }
 
   public Int64Value generate(
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return generateFromGrpc(verifyCodeGeneratedGrpcCmd);
+        return generateFromGrpc(captchaCodeGeneratedGrpcCmd);
       })
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public ListenableFuture<Int64Value> syncGenerate(
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncGenerateFromGrpc(verifyCodeGeneratedGrpcCmd);
+        return syncGenerateFromGrpc(captchaCodeGeneratedGrpcCmd);
       })
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   public BoolValue verify(
-    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
+    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return verifyFromGrpc(verifyCodeVerifyGrpcCmd);
+        return verifyFromGrpc(captchaCodeVerifyGrpcCmd);
       })
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   @SuppressWarnings("unused")
   public ListenableFuture<BoolValue> syncVerify(
-    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
+    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
       .map(ch -> {
         channel = ch;
-        return syncVerifyFromGrpc(verifyCodeVerifyGrpcCmd);
+        return syncVerifyFromGrpc(captchaCodeVerifyGrpcCmd);
       })
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
   private Int64Value generateFromGrpc(
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
-    VerifyCodeServiceBlockingStub verifyCodeServiceBlockingStub = VerifyCodeServiceGrpc.newBlockingStub(
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
       channel);
-    return verifyCodeServiceBlockingStub.generate(verifyCodeGeneratedGrpcCmd);
+    return captchaCodeServiceBlockingStub.generate(captchaCodeGeneratedGrpcCmd);
   }
 
   private @NonNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
-    VerifyCodeGeneratedGrpcCmd verifyCodeGeneratedGrpcCmd) {
-    VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
+    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
       channel);
-    return verifyCodeServiceFutureStub.generate(
-      verifyCodeGeneratedGrpcCmd);
+    return captchaCodeServiceFutureStub.generate(
+      captchaCodeGeneratedGrpcCmd);
   }
 
   private BoolValue verifyFromGrpc(
-    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
-    VerifyCodeServiceBlockingStub verifyCodeServiceBlockingStub = VerifyCodeServiceGrpc.newBlockingStub(
+    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
       channel);
-    return verifyCodeServiceBlockingStub.verify(verifyCodeVerifyGrpcCmd);
+    return captchaCodeServiceBlockingStub.verify(captchaCodeVerifyGrpcCmd);
   }
 
   private @NonNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
-    VerifyCodeVerifyGrpcCmd verifyCodeVerifyGrpcCmd) {
-    VerifyCodeServiceFutureStub verifyCodeServiceFutureStub = VerifyCodeServiceGrpc.newFutureStub(
+    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
       channel);
-    return verifyCodeServiceFutureStub.verify(
-      verifyCodeVerifyGrpcCmd);
+    return captchaCodeServiceFutureStub.verify(
+      captchaCodeVerifyGrpcCmd);
   }
 }

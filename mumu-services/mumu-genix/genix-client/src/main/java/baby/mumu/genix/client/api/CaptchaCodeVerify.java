@@ -18,7 +18,7 @@ package baby.mumu.genix.client.api;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.genix.client.api.grpc.VerifyCodeVerifyGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import java.util.Optional;
 
 /**
@@ -27,30 +27,30 @@ import java.util.Optional;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.10.0
  */
-public class VerifyCodeVerify {
+public class CaptchaCodeVerify {
 
-  private final VerifyCodeGrpcService verifyCodeGrpcService;
+  private final CaptchaCodeGrpcService captchaCodeGrpcService;
 
-  public VerifyCodeVerify(VerifyCodeGrpcService verifyCodeGrpcService) {
-    this.verifyCodeGrpcService = verifyCodeGrpcService;
+  public CaptchaCodeVerify(CaptchaCodeGrpcService captchaCodeGrpcService) {
+    this.captchaCodeGrpcService = captchaCodeGrpcService;
   }
 
-  public void verify(Long id, String verifyCode) {
-    Long verifyCodeId = Optional.ofNullable(id)
+  public void verify(Long id, String captchaCode) {
+    Long captchaCodeId = Optional.ofNullable(id)
       .orElseThrow(
-        () -> new ApplicationException(ResponseCode.VERIFICATION_CODE_ID_CANNOT_BE_EMPTY));
-    String code = Optional.ofNullable(verifyCode)
+        () -> new ApplicationException(ResponseCode.CAPTCHA_CODE_ID_CANNOT_BE_EMPTY));
+    String code = Optional.ofNullable(captchaCode)
       .orElseThrow(
-        () -> new ApplicationException(ResponseCode.VERIFICATION_CODE_CANNOT_BE_EMPTY));
+        () -> new ApplicationException(ResponseCode.CAPTCHA_CODE_CANNOT_BE_EMPTY));
     try {
-      if (!verifyCodeGrpcService.verify(
-          VerifyCodeVerifyGrpcCmd.newBuilder().setId(verifyCodeId).setSource(
+      if (!captchaCodeGrpcService.verify(
+          CaptchaCodeVerifyGrpcCmd.newBuilder().setId(captchaCodeId).setSource(
             code).build())
         .getValue()) {
-        throw new ApplicationException(ResponseCode.VERIFICATION_CODE_INCORRECT);
+        throw new ApplicationException(ResponseCode.CAPTCHA_CODE_INCORRECT);
       }
     } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.VERIFICATION_CODE_VERIFICATION_EXCEPTION);
+      throw new ApplicationException(ResponseCode.CAPTCHA_CODE_VERIFICATION_EXCEPTION);
     }
   }
 }

@@ -14,33 +14,18 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.domain.verification.gateway;
+package baby.mumu.genix.infra.captcha.gatewayimpl.cache;
 
-import baby.mumu.genix.domain.verification.VerifyCode;
+import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
+import com.redis.om.spring.repository.RedisDocumentRepository;
 
 /**
- * 验证码领域网关
+ * 简单验证码操作类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-public interface VerifyCodeGateway {
-
-  /**
-   * 生成指定长度的简单验证码
-   *
-   * @param verifyCode 简单验证码
-   * @return 验证码ID
-   */
-  Long generate(VerifyCode verifyCode);
-
-
-  /**
-   * 验证简单验证码
-   *
-   * @param verifyCode 简单验证码
-   * @return 验证结果
-   */
-  boolean verify(VerifyCode verifyCode);
+public interface CaptchaCodeCacheRepository extends
+  RedisDocumentRepository<CaptchaCodeCacheablePO, Long> {
 
 }

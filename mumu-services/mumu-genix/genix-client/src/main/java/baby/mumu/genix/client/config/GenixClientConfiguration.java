@@ -17,8 +17,8 @@
 package baby.mumu.genix.client.config;
 
 import baby.mumu.basis.grpc.resolvers.DiscoveryClientNameResolverProvider;
+import baby.mumu.genix.client.api.CaptchaCodeGrpcService;
 import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
-import baby.mumu.genix.client.api.VerifyCodeGrpcService;
 import io.grpc.NameResolverRegistry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -52,9 +52,9 @@ public class GenixClientConfiguration {
   }
 
   @Bean
-  public VerifyCodeGrpcService verifyCodeGrpcService(DiscoveryClient discoveryClient,
+  public CaptchaCodeGrpcService captchaCodeGrpcService(DiscoveryClient discoveryClient,
     GrpcChannelFactory grpcChannelFactory) {
-    return new VerifyCodeGrpcService(discoveryClient, grpcChannelFactory);
+    return new CaptchaCodeGrpcService(discoveryClient, grpcChannelFactory);
   }
 
   @Bean

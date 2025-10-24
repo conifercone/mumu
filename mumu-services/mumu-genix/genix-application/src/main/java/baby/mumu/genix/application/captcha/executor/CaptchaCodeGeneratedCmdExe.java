@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.application.verification.executor;
+package baby.mumu.genix.application.captcha.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.genix.client.cmds.VerifyCodeGeneratedCmd;
-import baby.mumu.genix.domain.verification.gateway.VerifyCodeGateway;
-import baby.mumu.genix.infra.verification.convertor.VerifyCodeConvertor;
+import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
+import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
+import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -32,24 +32,24 @@ import org.springframework.util.Assert;
  * @since 1.0.1
  */
 @Component
-public class VerifyCodeGeneratedCmdExe {
+public class CaptchaCodeGeneratedCmdExe {
 
-  private final VerifyCodeGateway verifyCodeGateway;
-  private final VerifyCodeConvertor verifyCodeConvertor;
+  private final CaptchaCodeGateway captchaCodeGateway;
+  private final CaptchaCodeConvertor captchaCodeConvertor;
 
   @Autowired
-  public VerifyCodeGeneratedCmdExe(
-    VerifyCodeGateway verifyCodeGateway,
-    VerifyCodeConvertor verifyCodeConvertor) {
-    this.verifyCodeGateway = verifyCodeGateway;
-    this.verifyCodeConvertor = verifyCodeConvertor;
+  public CaptchaCodeGeneratedCmdExe(
+    CaptchaCodeGateway captchaCodeGateway,
+    CaptchaCodeConvertor captchaCodeConvertor) {
+    this.captchaCodeGateway = captchaCodeGateway;
+    this.captchaCodeConvertor = captchaCodeConvertor;
   }
 
-  public Long execute(VerifyCodeGeneratedCmd verifyCodeGeneratedCmd) {
-    Assert.notNull(verifyCodeGeneratedCmd, "VerifyCodeGeneratedCmd cannot be null");
-    return verifyCodeConvertor.toEntity(verifyCodeGeneratedCmd)
-      .map(verifyCodeGateway::generate)
+  public Long execute(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+    Assert.notNull(captchaCodeGeneratedCmd, "CaptchaCodeGeneratedCmd cannot be null");
+    return captchaCodeConvertor.toEntity(captchaCodeGeneratedCmd)
+      .map(captchaCodeGateway::generate)
       .orElseThrow(() -> new ApplicationException(
-        ResponseCode.VERIFICATION_CODE_GENERATION_FAILED));
+        ResponseCode.CAPTCHA_CODE_GENERATION_FAILED));
   }
 }

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.application.verification.executor;
+package baby.mumu.genix.application.captcha.executor;
 
-import baby.mumu.genix.client.cmds.VerifyCodeVerifyCmd;
-import baby.mumu.genix.domain.verification.gateway.VerifyCodeGateway;
-import baby.mumu.genix.infra.verification.convertor.VerifyCodeConvertor;
+import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
+import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,22 +30,22 @@ import org.springframework.stereotype.Component;
  * @since 1.0.1
  */
 @Component
-public class VerifyCodeVerifyCmdExe {
+public class CaptchaCodeVerifyCmdExe {
 
-  private final VerifyCodeGateway verifyCodeGateway;
-  private final VerifyCodeConvertor verifyCodeConvertor;
+  private final CaptchaCodeGateway captchaCodeGateway;
+  private final CaptchaCodeConvertor captchaCodeConvertor;
 
   @Autowired
-  public VerifyCodeVerifyCmdExe(
-    VerifyCodeGateway verifyCodeGateway,
-    VerifyCodeConvertor verifyCodeConvertor) {
-    this.verifyCodeGateway = verifyCodeGateway;
-    this.verifyCodeConvertor = verifyCodeConvertor;
+  public CaptchaCodeVerifyCmdExe(
+    CaptchaCodeGateway captchaCodeGateway,
+    CaptchaCodeConvertor captchaCodeConvertor) {
+    this.captchaCodeGateway = captchaCodeGateway;
+    this.captchaCodeConvertor = captchaCodeConvertor;
   }
 
-  public boolean execute(VerifyCodeVerifyCmd verifyCodeVerifyCmd) {
-    return Optional.ofNullable(verifyCodeVerifyCmd).flatMap(verifyCodeConvertor::toEntity)
-      .map(verifyCodeGateway::verify)
+  public boolean execute(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
+    return Optional.ofNullable(captchaCodeVerifyCmd).flatMap(captchaCodeConvertor::toEntity)
+      .map(captchaCodeGateway::verify)
       .orElse(false);
   }
 }
