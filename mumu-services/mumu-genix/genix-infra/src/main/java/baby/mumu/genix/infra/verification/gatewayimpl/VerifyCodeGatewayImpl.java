@@ -52,6 +52,9 @@ public class VerifyCodeGatewayImpl implements
     this.verifyCodeConvertor = verifyCodeConvertor;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Long generate(VerifyCode verifyCode) {
     VerifyCodeCacheablePO verifyCodeCacheablePO = Optional.ofNullable(verifyCode)
@@ -70,6 +73,9 @@ public class VerifyCodeGatewayImpl implements
     return verifyCodeCacheablePO.getId();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean verify(VerifyCode verifyCode) {
     return Optional.ofNullable(verifyCode).flatMap(
