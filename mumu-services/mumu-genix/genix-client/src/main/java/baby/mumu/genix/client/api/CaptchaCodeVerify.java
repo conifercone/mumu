@@ -77,7 +77,7 @@ public class CaptchaCodeVerify {
 
     // 业务逻辑成功后删除验证码
     try {
-      captchaCodeGrpcService.delete(Int64Value.of(captchaCodeId));
+      captchaCodeGrpcService.syncDelete(Int64Value.of(captchaCodeId));
     } catch (Exception e) {
       // 删除失败不影响业务成功，可记录日志
       CaptchaCodeVerify.log.warn("Failed to delete captcha code: {}", captchaCodeId, e);
