@@ -9,6 +9,7 @@ option java_outer_classname = "CaptchaCodeServiceProto";
 service CaptchaCodeService {
   rpc generate (CaptchaCodeGeneratedGrpcCmd) returns (CaptchaCodeGeneratedGrpcDTO);
   rpc verify (CaptchaCodeVerifyGrpcCmd) returns (google.protobuf.BoolValue);
+  rpc delete (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }
 
 message CaptchaCodeGeneratedGrpcCmd {

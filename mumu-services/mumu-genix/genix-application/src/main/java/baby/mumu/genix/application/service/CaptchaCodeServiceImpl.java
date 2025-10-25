@@ -18,6 +18,7 @@ package baby.mumu.genix.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
+import baby.mumu.genix.application.captcha.executor.CaptchaCodeDeleteCmdExe;
 import baby.mumu.genix.application.captcha.executor.CaptchaCodeGeneratedCmdExe;
 import baby.mumu.genix.application.captcha.executor.CaptchaCodeVerifyCmdExe;
 import baby.mumu.genix.client.api.CaptchaCodeService;
@@ -30,8 +31,11 @@ import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import com.google.protobuf.BoolValue;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
@@ -52,13 +56,16 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
   private final CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe;
   private final CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe;
   private final CaptchaCodeConvertor captchaCodeConvertor;
+  private final CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe;
 
   @Autowired
   public CaptchaCodeServiceImpl(CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe,
-    CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeConvertor captchaCodeConvertor) {
+    CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeConvertor captchaCodeConvertor,
+    CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe) {
     this.captchaCodeGeneratedCmdExe = captchaCodeGeneratedCmdExe;
     this.captchaCodeVerifyCmdExe = captchaCodeVerifyCmdExe;
     this.captchaCodeConvertor = captchaCodeConvertor;
+    this.captchaCodeDeleteCmdExe = captchaCodeDeleteCmdExe;
   }
 
   /**
@@ -76,6 +83,14 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
   @Override
   public boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
     return captchaCodeVerifyCmdExe.execute(captchaCodeVerifyCmd);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void delete(Long captchaCodeId) {
+    Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeDeleteCmdExe::execute);
   }
 
   @Override
@@ -106,5 +121,14 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
         responseObserver.onNext(BoolValue.getDefaultInstance());
         responseObserver.onCompleted();
       });
+  }
+
+  @Override
+  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+  public void delete(Int64Value request, StreamObserver<Empty> responseObserver) {
+    Optional.ofNullable(request).map(Int64Value::getValue).ifPresent(
+      captchaCodeDeleteCmdExe::execute);
+    responseObserver.onNext(Empty.getDefaultInstance());
+    responseObserver.onCompleted();
   }
 }

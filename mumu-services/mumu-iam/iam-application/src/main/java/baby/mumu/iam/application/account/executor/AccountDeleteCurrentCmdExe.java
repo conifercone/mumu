@@ -45,7 +45,7 @@ public class AccountDeleteCurrentCmdExe extends CaptchaCodeVerify {
   }
 
   public void execute(@NonNull AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
-    verify(accountDeleteCurrentCmd.getCaptchaCodeId(), accountDeleteCurrentCmd.getCaptchaCode());
-    accountGateway.deleteCurrentAccount();
+    verify(accountDeleteCurrentCmd.getCaptchaCodeId(), accountDeleteCurrentCmd.getCaptchaCode(),
+      accountGateway::deleteCurrentAccount);
   }
 }

@@ -52,7 +52,7 @@ public class AccountRegisterCmdExe extends CaptchaCodeVerify {
   public Long execute(AccountRegisterCmd accountRegisterCmd) {
     Account account = accountConvertor.toEntity(accountRegisterCmd)
       .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-    verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode());
-    return accountGateway.register(account);
+    return verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode(),
+      () -> accountGateway.register(account));
   }
 }

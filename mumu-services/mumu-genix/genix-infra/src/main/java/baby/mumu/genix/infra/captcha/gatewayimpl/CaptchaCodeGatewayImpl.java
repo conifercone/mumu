@@ -85,4 +85,12 @@ public class CaptchaCodeGatewayImpl implements
           .equalsIgnoreCase(captchaCode.getSource()))
       .orElse(false);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void delete(Long captchaCodeId) {
+    Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeCacheRepository::deleteById);
+  }
 }

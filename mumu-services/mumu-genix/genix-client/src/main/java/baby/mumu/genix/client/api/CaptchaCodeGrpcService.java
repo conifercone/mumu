@@ -27,6 +27,7 @@ import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeService
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.BoolValue;
+import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -102,6 +103,29 @@ public class CaptchaCodeGrpcService extends GenixGrpcService implements Disposab
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
+  public void delete(Int64Value captchaCodeId) {
+    Optional.ofNullable(channel)
+      .or(this::getManagedChannel)
+      .ifPresentOrElse(ch -> {
+        channel = ch;
+        deleteFromGrpc(captchaCodeId);
+      }, () -> {
+        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
+      });
+  }
+
+  @SuppressWarnings("unused")
+  public void syncDelete(Int64Value captchaCodeId) {
+    Optional.ofNullable(channel)
+      .or(this::getManagedChannel)
+      .ifPresentOrElse(ch -> {
+        channel = ch;
+        syncDeleteFromGrpc(captchaCodeId);
+      }, () -> {
+        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
+      });
+  }
+
   private CaptchaCodeGeneratedGrpcDTO generateFromGrpc(
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
@@ -130,5 +154,19 @@ public class CaptchaCodeGrpcService extends GenixGrpcService implements Disposab
       channel);
     return captchaCodeServiceFutureStub.verify(
       captchaCodeVerifyGrpcCmd);
+  }
+
+  private void deleteFromGrpc(Int64Value captchaCodeId) {
+    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
+      channel);
+    // noinspection ResultOfMethodCallIgnored
+    captchaCodeServiceBlockingStub.delete(captchaCodeId);
+  }
+
+  private void syncDeleteFromGrpc(Int64Value captchaCodeId) {
+    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
+      channel);
+    // noinspection ResultOfMethodCallIgnored
+    captchaCodeServiceFutureStub.delete(captchaCodeId);
   }
 }

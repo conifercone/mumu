@@ -44,4 +44,11 @@ public interface CaptchaCodeService {
    * @return 校验结果
    */
   boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd);
+
+  /**
+   * 根据ID删除验证码
+   *
+   * @param captchaCodeId 验证码ID
+   */
+  void delete(Long captchaCodeId);
 }

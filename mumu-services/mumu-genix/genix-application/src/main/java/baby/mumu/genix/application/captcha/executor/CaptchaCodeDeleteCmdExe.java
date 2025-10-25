@@ -14,40 +14,31 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.domain.captcha.gateway;
+package baby.mumu.genix.application.captcha.executor;
 
-import baby.mumu.genix.domain.captcha.CaptchaCode;
+import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * 验证码领域网关
+ * 简单验证码删除指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.15.0
  */
-public interface CaptchaCodeGateway {
+@Component
+public class CaptchaCodeDeleteCmdExe {
 
-  /**
-   * 生成指定长度的简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证码
-   */
-  CaptchaCode generate(CaptchaCode captchaCode);
+  private final CaptchaCodeGateway captchaCodeGateway;
 
+  @Autowired
+  public CaptchaCodeDeleteCmdExe(
+    CaptchaCodeGateway captchaCodeGateway) {
+    this.captchaCodeGateway = captchaCodeGateway;
+  }
 
-  /**
-   * 验证简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证结果
-   */
-  boolean verify(CaptchaCode captchaCode);
-
-  /**
-   * 根据ID删除验证码
-   *
-   * @param captchaCodeId 验证码ID
-   */
-  void delete(Long captchaCodeId);
-
+  public void execute(Long captchaCodeId) {
+    Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeGateway::delete);
+  }
 }
