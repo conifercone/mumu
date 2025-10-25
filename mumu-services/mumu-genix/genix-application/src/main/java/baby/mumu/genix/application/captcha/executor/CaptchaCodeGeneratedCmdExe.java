@@ -19,6 +19,7 @@ package baby.mumu.genix.application.captcha.executor;
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
 import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,11 @@ public class CaptchaCodeGeneratedCmdExe {
     this.captchaCodeConvertor = captchaCodeConvertor;
   }
 
-  public Long execute(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+  public CaptchaCodeGeneratedDTO execute(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
     Assert.notNull(captchaCodeGeneratedCmd, "CaptchaCodeGeneratedCmd cannot be null");
     return captchaCodeConvertor.toEntity(captchaCodeGeneratedCmd)
       .map(captchaCodeGateway::generate)
+      .flatMap(captchaCodeConvertor::toCaptchaCodeGeneratedDTO)
       .orElseThrow(() -> new ApplicationException(
         ResponseCode.CAPTCHA_CODE_GENERATION_FAILED));
   }

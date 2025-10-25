@@ -20,13 +20,13 @@ import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceBlockingStub;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceFutureStub;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.BoolValue;
-import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
 import java.util.Optional;
@@ -57,7 +57,7 @@ public class CaptchaCodeGrpcService extends GenixGrpcService implements Disposab
     Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
   }
 
-  public Int64Value generate(
+  public CaptchaCodeGeneratedGrpcDTO generate(
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
@@ -68,7 +68,7 @@ public class CaptchaCodeGrpcService extends GenixGrpcService implements Disposab
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  public ListenableFuture<Int64Value> syncGenerate(
+  public ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerate(
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     return Optional.ofNullable(channel)
       .or(this::getManagedChannel)
@@ -102,14 +102,14 @@ public class CaptchaCodeGrpcService extends GenixGrpcService implements Disposab
       .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
   }
 
-  private Int64Value generateFromGrpc(
+  private CaptchaCodeGeneratedGrpcDTO generateFromGrpc(
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
       channel);
     return captchaCodeServiceBlockingStub.generate(captchaCodeGeneratedGrpcCmd);
   }
 
-  private @NonNull ListenableFuture<Int64Value> syncGenerateFromGrpc(
+  private @NonNull ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerateFromGrpc(
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
     CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
       channel);

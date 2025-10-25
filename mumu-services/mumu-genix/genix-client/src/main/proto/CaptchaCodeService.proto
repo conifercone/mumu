@@ -7,13 +7,20 @@ option java_package = "baby.mumu.genix.client.api.grpc";
 option java_outer_classname = "CaptchaCodeServiceProto";
 
 service CaptchaCodeService {
-  rpc generate (CaptchaCodeGeneratedGrpcCmd) returns (google.protobuf.Int64Value);
+  rpc generate (CaptchaCodeGeneratedGrpcCmd) returns (CaptchaCodeGeneratedGrpcDTO);
   rpc verify (CaptchaCodeVerifyGrpcCmd) returns (google.protobuf.BoolValue);
 }
 
 message CaptchaCodeGeneratedGrpcCmd {
   int64 ttl = 1;
   int32 length = 2;
+}
+
+message CaptchaCodeGeneratedGrpcDTO {
+  int64 id = 1;
+  string target = 2;
+  int64 ttl = 3;
+  int32 length = 4;
 }
 
 message CaptchaCodeVerifyGrpcCmd {

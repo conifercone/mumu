@@ -22,13 +22,14 @@ import baby.mumu.genix.application.captcha.executor.CaptchaCodeGeneratedCmdExe;
 import baby.mumu.genix.application.captcha.executor.CaptchaCodeVerifyCmdExe;
 import baby.mumu.genix.client.api.CaptchaCodeService;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceImplBase;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import com.google.protobuf.BoolValue;
-import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
@@ -64,7 +65,7 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
    * {@inheritDoc}
    */
   @Override
-  public Long generate(
+  public CaptchaCodeGeneratedDTO generate(
     CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
     return captchaCodeGeneratedCmdExe.execute(captchaCodeGeneratedCmd);
   }
@@ -80,13 +81,15 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
   @Override
   @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
   public void generate(@NonNull CaptchaCodeGeneratedGrpcCmd request,
-    @NonNull StreamObserver<Int64Value> responseObserver) {
+    @NonNull StreamObserver<CaptchaCodeGeneratedGrpcDTO> responseObserver) {
     CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd = new CaptchaCodeGeneratedCmd();
     captchaCodeGeneratedCmd.setTtl(request.getTtl());
     captchaCodeGeneratedCmd.setLength(request.getLength());
-    Long execute = captchaCodeGeneratedCmdExe.execute(
+    CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO = captchaCodeGeneratedCmdExe.execute(
       captchaCodeGeneratedCmd);
-    responseObserver.onNext(Int64Value.of(execute));
+    responseObserver.onNext(
+      captchaCodeConvertor.toCaptchaCodeGeneratedGrpcDTO(captchaCodeGeneratedDTO)
+        .orElse(CaptchaCodeGeneratedGrpcDTO.getDefaultInstance()));
     responseObserver.onCompleted();
   }
 

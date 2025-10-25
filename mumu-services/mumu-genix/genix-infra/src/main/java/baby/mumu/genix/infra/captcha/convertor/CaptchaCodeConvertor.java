@@ -16,9 +16,11 @@
 
 package baby.mumu.genix.infra.captcha.convertor;
 
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.CaptchaCode;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import java.util.Optional;
@@ -59,5 +61,19 @@ public class CaptchaCodeConvertor {
     CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
     return Optional.ofNullable(captchaCodeVerifyGrpcCmd)
       .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeVerifyCmd);
+  }
+
+  @API(status = Status.STABLE, since = "2.15.0")
+  public Optional<CaptchaCodeGeneratedDTO> toCaptchaCodeGeneratedDTO(
+    CaptchaCode captchaCode) {
+    return Optional.ofNullable(captchaCode)
+      .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeGeneratedDTO);
+  }
+
+  @API(status = Status.STABLE, since = "2.15.0")
+  public Optional<CaptchaCodeGeneratedGrpcDTO> toCaptchaCodeGeneratedGrpcDTO(
+    CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO) {
+    return Optional.ofNullable(captchaCodeGeneratedDTO)
+      .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeGeneratedGrpcDTO);
   }
 }

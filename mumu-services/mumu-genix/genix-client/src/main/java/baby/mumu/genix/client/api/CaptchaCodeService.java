@@ -18,6 +18,7 @@ package baby.mumu.genix.client.api;
 
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 
 /**
  * 验证码service
@@ -31,9 +32,9 @@ public interface CaptchaCodeService {
    * 验证码生成
    *
    * @param captchaCodeGeneratedCmd 验证码生成指令
-   * @return 验证码ID
+   * @return 验证码
    */
-  Long generate(
+  CaptchaCodeGeneratedDTO generate(
     CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd);
 
   /**

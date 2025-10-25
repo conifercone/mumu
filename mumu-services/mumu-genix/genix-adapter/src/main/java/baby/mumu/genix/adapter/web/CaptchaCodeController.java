@@ -21,6 +21,7 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.genix.client.api.CaptchaCodeService;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
@@ -59,9 +60,9 @@ public class CaptchaCodeController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.1")
-  public ResponseWrapper<Long> generate(
+  public CaptchaCodeGeneratedDTO generate(
     @ModelAttribute @Validated CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
-    return ResponseWrapper.success(captchaCodeService.generate(captchaCodeGeneratedCmd));
+    return captchaCodeService.generate(captchaCodeGeneratedCmd);
   }
 
   @Operation(summary = "验证简单验证码")

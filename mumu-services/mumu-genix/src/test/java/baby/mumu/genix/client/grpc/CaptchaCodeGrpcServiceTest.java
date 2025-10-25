@@ -18,9 +18,9 @@ package baby.mumu.genix.client.grpc;
 
 import baby.mumu.genix.client.api.CaptchaCodeGrpcService;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.protobuf.Int64Value;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -58,10 +58,10 @@ public class CaptchaCodeGrpcServiceTest {
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd = CaptchaCodeGeneratedGrpcCmd.newBuilder()
       .setLength(4)
       .setTtl(500).build();
-    Int64Value generate = captchaCodeGrpcService.generate(
+    CaptchaCodeGeneratedGrpcDTO generate = captchaCodeGrpcService.generate(
       captchaCodeGeneratedGrpcCmd);
     CaptchaCodeGrpcServiceTest.log.info("ID : {}",
-      generate.getValue());
+      generate.getId());
     Assertions.assertNotNull(generate);
   }
 
@@ -71,14 +71,14 @@ public class CaptchaCodeGrpcServiceTest {
     CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd = CaptchaCodeGeneratedGrpcCmd.newBuilder()
       .setLength(4)
       .setTtl(500).build();
-    ListenableFuture<Int64Value> valueListenableFuture = captchaCodeGrpcService.syncGenerate(
+    ListenableFuture<CaptchaCodeGeneratedGrpcDTO> valueListenableFuture = captchaCodeGrpcService.syncGenerate(
       captchaCodeGeneratedGrpcCmd);
     valueListenableFuture.addListener(() -> {
       try {
-        Int64Value int64Value = valueListenableFuture.get();
+        CaptchaCodeGeneratedGrpcDTO captchaCodeGeneratedGrpcDTO = valueListenableFuture.get();
         CaptchaCodeGrpcServiceTest.log.info("Sync ID : {}",
-          Objects.requireNonNull(int64Value).getValue());
-        Assertions.assertNotNull(int64Value);
+          Objects.requireNonNull(captchaCodeGeneratedGrpcDTO).getId());
+        Assertions.assertNotNull(captchaCodeGeneratedGrpcDTO);
         countDownLatch.countDown();
       } catch (InterruptedException | ExecutionException e) {
         throw new RuntimeException(e);

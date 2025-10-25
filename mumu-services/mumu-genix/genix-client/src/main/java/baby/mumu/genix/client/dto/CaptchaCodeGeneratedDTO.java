@@ -14,33 +14,43 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.domain.captcha.gateway;
+package baby.mumu.genix.client.dto;
 
-import baby.mumu.genix.domain.captcha.CaptchaCode;
+import baby.mumu.basis.dto.BaseDataTransferObject;
+import java.io.Serial;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 验证码领域网关
+ * 验证码生成数据传输对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.1
+ * @since 2.15.0
  */
-public interface CaptchaCodeGateway {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class CaptchaCodeGeneratedDTO extends BaseDataTransferObject {
+
+  @Serial
+  private static final long serialVersionUID = 8360137456255142667L;
 
   /**
-   * 生成指定长度的简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证码
+   * 验证码id
    */
-  CaptchaCode generate(CaptchaCode captchaCode);
-
+  private Long id;
 
   /**
-   * 验证简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证结果
+   * 验证码目标值
    */
-  boolean verify(CaptchaCode captchaCode);
+  private String target;
 
+  /**
+   * 有效期
+   */
+  private Long ttl;
+
+  /**
+   * 验证码长度
+   */
+  private Integer length;
 }

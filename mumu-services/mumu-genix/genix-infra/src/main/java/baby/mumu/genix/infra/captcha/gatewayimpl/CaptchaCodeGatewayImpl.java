@@ -56,7 +56,7 @@ public class CaptchaCodeGatewayImpl implements
    * {@inheritDoc}
    */
   @Override
-  public Long generate(CaptchaCode captchaCode) {
+  public CaptchaCode generate(CaptchaCode captchaCode) {
     CaptchaCodeCacheablePO captchaCodeCacheablePO = Optional.ofNullable(captchaCode)
       .flatMap(captchaCodeNotNull -> {
         captchaCodeNotNull.setId(primaryKeyGateway.snowflake());
@@ -70,7 +70,7 @@ public class CaptchaCodeGatewayImpl implements
         return captchaCodeConvertor.toCaptchaCodeCacheablePO(captchaCodeNotNull);
       }).orElseThrow(() -> new ApplicationException(ResponseCode.DATA_CONVERSION_FAILED));
     captchaCodeCacheRepository.save(captchaCodeCacheablePO);
-    return captchaCodeCacheablePO.getId();
+    return captchaCode;
   }
 
   /**

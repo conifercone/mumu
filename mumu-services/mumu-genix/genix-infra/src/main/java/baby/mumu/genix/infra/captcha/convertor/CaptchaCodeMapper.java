@@ -17,9 +17,11 @@
 package baby.mumu.genix.infra.captcha.convertor;
 
 import baby.mumu.basis.mappers.GrpcMapper;
+import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
+import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.CaptchaCode;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import org.apiguardian.api.API;
@@ -52,5 +54,13 @@ public interface CaptchaCodeMapper extends GrpcMapper {
   @API(status = Status.STABLE, since = "2.2.0")
   CaptchaCodeVerifyCmd toCaptchaCodeVerifyCmd(
     CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd);
+
+  @API(status = Status.STABLE, since = "2.15.0")
+  CaptchaCodeGeneratedDTO toCaptchaCodeGeneratedDTO(
+    CaptchaCode captchaCode);
+
+  @API(status = Status.STABLE, since = "2.15.0")
+  CaptchaCodeGeneratedGrpcDTO toCaptchaCodeGeneratedGrpcDTO(
+    CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO);
 
 }
