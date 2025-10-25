@@ -29,9 +29,15 @@ import lombok.Data;
 @Data
 public class AccountDeleteCurrentCmd {
 
+  /**
+   * 验证码ID
+   */
   @NotNull
   private Long captchaCodeId;
 
+  /**
+   * 验证码值
+   */
   @NotBlank
   private String captchaCode;
 }
