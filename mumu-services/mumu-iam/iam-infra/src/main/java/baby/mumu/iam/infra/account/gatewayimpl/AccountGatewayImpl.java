@@ -447,7 +447,7 @@ public class AccountGatewayImpl implements AccountGateway {
     AccountArchivedPO archivedPO = accountConvertor.toAccountArchivedPO(accountPO)
       .orElseThrow(
         () -> new ApplicationException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
-    // 禁止归档有余额的账户
+    // 禁止归档有余额的账号
     if (archivedPO.getBalance().isGreaterThan(Money.of(0, archivedPO.getBalance().getCurrency()))) {
       throw new ApplicationException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
     }
