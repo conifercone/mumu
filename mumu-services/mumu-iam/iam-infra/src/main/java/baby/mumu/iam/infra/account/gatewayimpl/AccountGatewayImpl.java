@@ -437,7 +437,7 @@ public class AccountGatewayImpl implements AccountGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("根据ID归档账号ID为%0的账号")
+  @DangerousOperation("归档ID为%0的账号")
   public void archiveById(Long accountId) {
     if (accountId == null) {
       return;
@@ -465,7 +465,7 @@ public class AccountGatewayImpl implements AccountGateway {
   }
 
   @Job(name = "删除ID为：%0 的账号归档数据")
-  @DangerousOperation("根据ID删除ID为%0的账号归档数据定时任务")
+  @DangerousOperation("删除ID为%0的账号归档数据定时任务")
   @Transactional(rollbackFor = Exception.class)
   public void deleteArchivedDataJob(Long id) {
     if (id == null) {
