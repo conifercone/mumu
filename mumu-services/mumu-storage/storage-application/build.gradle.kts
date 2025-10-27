@@ -9,4 +9,5 @@ dependencies {
     implementation(libs.spring.security.core)
     implementation(libs.spring.web)
     implementation(libs.spring.tx)
+    implementation(libs.jakarta.servlet.api)
 }

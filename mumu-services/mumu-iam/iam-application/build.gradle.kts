@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":mumu-extension"))
     implementation(libs.spring.security.core)
     implementation(libs.grpc.stub)
+    implementation(libs.jakarta.servlet.api)
     implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.data.commons)

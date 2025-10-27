@@ -215,8 +215,6 @@ aliyun-mt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" 
 deepl = { module = "com.deepl.api:deepl-java", version.ref = "deeplVersion" }
 # https://central.sonatype.com/artifact/de.vandermeer/asciitable
 asciitable = { module = "de.vandermeer:asciitable", version.ref = "asciitableVersion" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-undertow
-spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow" }
 # https://central.sonatype.com/artifact/com.google.zxing/core
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxingVersion" }
 # https://central.sonatype.com/artifact/com.google.zxing/javase
