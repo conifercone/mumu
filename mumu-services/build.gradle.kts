@@ -25,6 +25,7 @@ subprojects {
                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                 )
             }
+            finalizedBy("signBootJar")
         }
 
         signing {

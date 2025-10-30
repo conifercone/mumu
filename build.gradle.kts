@@ -129,6 +129,12 @@ subprojects {
         outputs.cacheIf { true }
     }
 
+    tasks.register<Jar>("sourceJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets.main.get().allSource)
+    }
+
+
     signing {
         val mumuSigningKeyId = "MUMU_SIGNING_KEY_ID"
         val mumuSigningKeyFilePath = "MUMU_SIGNING_KEY_FILE_PATH"
@@ -155,19 +161,16 @@ subprojects {
             if (keyContent.isNullOrBlank()) file(keyFile).readText() else keyContent,
             password
         )
-        sign(tasks["jar"])
+        sign(tasks.getByName("jar"), tasks.getByName("sourceJar"))
     }
 
-    tasks.register<Jar>("sourceJar") {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
+
+    tasks.withType<Jar> {
+        finalizedBy("signJar", "signSourceJar")
     }
 
-    signing {
-        sign(tasks.getByName("sourceJar"))
-    }
 
-    tasks.named("assemble") {
+    tasks.named("jar") {
         dependsOn(tasks.named("sourceJar"))
     }
 
