@@ -58,7 +58,7 @@ public class FileController {
     this.fileService = fileService;
   }
 
-  @Operation(summary = "文件上传")
+  @Operation(summary = "上传文件")
   @PostMapping("/upload/{storageZoneId}")
   @ResponseBody
   @RateLimiter
@@ -69,7 +69,7 @@ public class FileController {
     return ResponseWrapper.success(fileService.upload(storageZoneId, file));
   }
 
-  @Operation(summary = "文件根据元数据ID删除")
+  @Operation(summary = "根据元数据ID删除文件")
   @DeleteMapping("/deleteByMetadataId/{metadataId}")
   @ResponseBody
   @RateLimiter
@@ -79,7 +79,7 @@ public class FileController {
     fileService.deleteByMetadataId(metadataId);
   }
 
-  @Operation(summary = "文件根据元数据ID下载")
+  @Operation(summary = "根据元数据ID下载文件")
   @GetMapping("/downloadByMetadataId/{metadataId}")
   @ResponseBody
   @RateLimiter
@@ -90,7 +90,7 @@ public class FileController {
     fileService.downloadByMetadataId(metadataId, httpServletResponse);
   }
 
-  @Operation(summary = "文件根据元数据ID获取文件元数据信息")
+  @Operation(summary = "根据元数据ID获取文件元数据信息")
   @GetMapping("/findMetaByMetaId/{metadataId}")
   @ResponseBody
   @RateLimiter
