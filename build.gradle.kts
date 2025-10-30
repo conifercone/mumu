@@ -167,8 +167,8 @@ subprojects {
         sign(tasks.getByName("sourceJar"))
     }
 
-    artifacts {
-        add("archives", tasks.named("sourceJar"))
+    tasks.named("assemble") {
+        dependsOn(tasks.named("sourceJar"))
     }
 
     tasks.withType<JavaCompile> {
