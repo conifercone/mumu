@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文件上传指令执行器
+ * 上传文件指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0

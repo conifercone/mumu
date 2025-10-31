@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 文件根据元数据ID下载文件指令执行器
+ * 根据元数据ID下载文件指令执行器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
