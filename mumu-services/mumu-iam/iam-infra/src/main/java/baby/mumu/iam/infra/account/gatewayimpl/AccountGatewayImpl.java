@@ -365,8 +365,12 @@ public class AccountGatewayImpl implements AccountGateway {
     }
     // 删除数据库中的信息
     accountRepository.deleteById(accountId);
+    // 删除账号地址信息
     accountAddressDocumentRepository.deleteByAccountId(accountId);
+    // 删除账号系统设置信息
     accountSystemSettingsDocumentRepository.deleteByAccountId(accountId);
+
+    // 如果账号存在上传头像则删除上传头像文件
     Optional<AccountAvatarDocumentPO> accountAvatarDocumentPOOptional = accountAvatarDocumentRepository.findByAccountId(
       accountId);
     if (accountAvatarDocumentPOOptional.isPresent()) {
@@ -377,6 +381,8 @@ public class AccountGatewayImpl implements AccountGateway {
       }
       accountAvatarDocumentRepository.deleteByAccountId(accountId);
     }
+
+    // 删除账号角色信息
     accountRoleRepository.deleteByAccountId(accountId);
     // 删除缓存
     passwordTokenCacheRepository.deleteById(accountId);
