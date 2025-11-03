@@ -118,7 +118,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
           new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
               authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
             .orElse(new HashSet<>()));
-        // 重新设置回用户对象
+        // 重新设置回账号对象
         authenticationToken.setDetails(
           new WebAuthenticationDetailsSource().buildDetails(applicationHttpServletRequestWrapper));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

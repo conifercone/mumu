@@ -24,8 +24,8 @@ package baby.mumu.basis.enums;
  */
 public enum AccountAvatarSourceEnum {
 
-  // 用户上传头像文件
+  // 账号上传头像文件
   UPLOAD,
-  // 用户指定头像地址
+  // 账号指定头像地址
   URL
 }
