@@ -195,7 +195,7 @@ public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObj
     private String fileId;
 
     /**
-     * 用户上传的URL地址
+     * 账号上传的URL地址
      */
     private String url;
 

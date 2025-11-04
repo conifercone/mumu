@@ -79,7 +79,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 用户领域网关实现
+ * 账号领域网关实现
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -646,7 +646,7 @@ public class AccountGatewayImpl implements AccountGateway {
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  @DangerousOperation("强制ID为%0的用户下线")
+  @DangerousOperation("强制ID为%0的账号下线")
   public void offline(Long accountId) {
     Optional.ofNullable(accountId).ifPresent(accountIdNotNull -> {
       passwordTokenCacheRepository.findById(accountIdNotNull)

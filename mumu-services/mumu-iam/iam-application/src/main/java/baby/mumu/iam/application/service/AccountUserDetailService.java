@@ -31,7 +31,7 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.util.Assert;
 
 /**
- * spring security authentication server 用户信息service
+ * spring security authentication server 账号信息service
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0

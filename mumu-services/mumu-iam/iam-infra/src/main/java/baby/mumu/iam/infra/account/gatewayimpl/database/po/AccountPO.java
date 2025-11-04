@@ -43,7 +43,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.javamoney.moneta.Money;
 
 /**
- * 用户基本信息数据对象
+ * 账号基本信息数据对象
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0

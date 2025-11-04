@@ -382,11 +382,11 @@ public class AuthorizationConfiguration {
     PermissionConvertor permissionConvertor,
     Oauth2AuthenticationRepository oauth2AuthenticationRepository) {
     return context -> {
-      // 检查登录用户信息是不是UserDetails，排除掉没有用户参与的流程
+      // 检查登录账号信息是不是UserDetails，排除掉没有账号参与的流程
       if (context.getPrincipal().getPrincipal() instanceof Account account) {
         // 获取申请的scopes
         Set<String> scopes = context.getAuthorizedScopes();
-        // 获取用户的权限
+        // 获取账号的权限
         Collection<? extends GrantedAuthority> authorities = account.getAuthorities();
         // 提取权限并转为字符串
         Set<String> authoritySet = Optional.ofNullable(authorities).orElse(Collections.emptyList())

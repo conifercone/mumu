@@ -55,11 +55,11 @@ public interface AccountRepository extends BaseJpaRepository<AccountPO, Long>,
   Optional<AccountPO> findByEmail(String email);
 
   /**
-   * 根据id或者username或者email判断用户是否存在
+   * 根据id或者username或者email判断账号是否存在
    *
-   * @param id       用户id
+   * @param id       账号id
    * @param username 用户名
-   * @param email    用户邮箱地址
+   * @param email    账号邮箱地址
    * @return 是否存在
    */
   boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,

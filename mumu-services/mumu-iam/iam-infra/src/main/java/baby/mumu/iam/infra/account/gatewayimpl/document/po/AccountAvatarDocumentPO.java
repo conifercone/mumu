@@ -76,7 +76,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
   private String fileId;
 
   /**
-   * 用户上传的URL地址
+   * 账号上传的URL地址
    */
   @Indexed(background = true)
   private String url;
