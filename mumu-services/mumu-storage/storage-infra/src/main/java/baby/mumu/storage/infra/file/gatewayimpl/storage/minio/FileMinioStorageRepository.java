@@ -75,6 +75,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
       PutObjectArgs.builder()
         .bucket(storageZoneCode)
         .object(file.getMetadata().getStoragePath())
+        // 自动计算分表大小
         .stream(file.getContent(), fileSize, -1)
         .contentType(file.getMetadata().getContentType())
         .build()
