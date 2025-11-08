@@ -139,16 +139,19 @@ public class AccountRegisterCmd {
     /**
      * 头像来源
      */
+    @Schema(description = "头像来源", requiredMode = RequiredMode.NOT_REQUIRED)
     private AccountAvatarSourceEnum source;
 
     /**
      * 上传头像时的文件ID，填写URL或第三方时可为空
      */
+    @Schema(description = "上传头像时的文件ID，填写URL或第三方时可为空", requiredMode = RequiredMode.NOT_REQUIRED)
     private String fileId;
 
     /**
      * 用户上传的URL地址
      */
+    @Schema(description = "用户上传的URL地址", requiredMode = RequiredMode.NOT_REQUIRED)
     private String url;
   }
 
