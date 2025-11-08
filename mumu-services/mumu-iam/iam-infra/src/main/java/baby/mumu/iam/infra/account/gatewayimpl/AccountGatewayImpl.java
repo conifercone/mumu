@@ -357,14 +357,28 @@ public class AccountGatewayImpl implements AccountGateway {
   public void deleteCurrentAccount() {
     Long accountId = SecurityContextUtils.getLoginAccountId()
       .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
-    AccountPO accountPO = accountRepository.findById(accountId)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
-    // 若账号还有余额，不允许删除
-    if (accountPO.getBalance().isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
-      throw new ApplicationException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+    this.deleteAccount(accountId, false);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  @API(status = Status.STABLE, since = "2.15.0")
+  public void deleteAccount(Long accountId, boolean archived) {
+    if (!archived) {
+      AccountPO accountPO = accountRepository.findById(accountId)
+        .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
+      // 若账号还有余额，不允许删除
+      if (accountPO.getBalance().isGreaterThan(Money.of(0, accountPO.getBalance().getCurrency()))) {
+        throw new ApplicationException(ResponseCode.THE_ACCOUNT_HAS_AN_UNUSED_BALANCE);
+      }
     }
     // 删除数据库中的信息
-    accountRepository.deleteById(accountId);
+    if (archived) {
+      accountArchivedRepository.deleteById(accountId);
+    } else {
+      accountRepository.deleteById(accountId);
+    }
+
     // 删除账号地址信息
     accountAddressDocumentRepository.deleteByAccountId(accountId);
     // 删除账号系统设置信息
@@ -467,21 +481,17 @@ public class AccountGatewayImpl implements AccountGateway {
     GlobalProperties global = extensionProperties.getGlobal();
     Instant triggerTime = Instant.now()
       .plus(global.getArchiveDeletionPeriod(), global.getArchiveDeletionPeriodUnit());
-    jobScheduler.schedule(triggerTime, () -> deleteArchivedDataJob(accountId));
+    jobScheduler.schedule(triggerTime, () -> deleteArchivedAccountJob(accountId));
   }
 
   @Job(name = "删除ID为：%0 的账号归档数据")
   @DangerousOperation("删除ID为%0的账号归档数据定时任务")
   @Transactional(rollbackFor = Exception.class)
-  public void deleteArchivedDataJob(Long id) {
+  public void deleteArchivedAccountJob(Long id) {
     if (id == null) {
       return;
     }
-    accountArchivedRepository.deleteById(id);
-    accountAddressDocumentRepository.deleteByAccountId(id);
-    accountRoleRepository.deleteByAccountId(id);
-    accountCacheRepository.deleteById(id);
-    accountRoleCacheRepository.deleteById(id);
+    deleteAccount(id, true);
   }
 
   /**

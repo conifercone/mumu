@@ -105,6 +105,14 @@ public interface AccountGateway {
   void deleteCurrentAccount();
 
   /**
+   * 删除指定账号
+   *
+   * @param accountId 账号ID
+   * @param archived  账号已归档
+   */
+  void deleteAccount(Long accountId, boolean archived);
+
+  /**
    * 查询所有正在使用指定角色的账号
    *
    * @param roleId 角色id
