@@ -16,8 +16,8 @@
 
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import com.google.common.base.Strings;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * SQL打印策略
@@ -42,19 +42,17 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
   @Override
   public String formatMessage(int connectionId, String now, long elapsed, String category,
     String prepared, String sql, String url) {
+    if (StringUtils.isBlank(sql)) {
+      return "";
+    }
+
     String templateStart = "====>";
     String templateEnd = "\n";
-    // 耗时格式化模板
-    String timeConsumingFormatTemplate = templateStart + "time-consuming:[%s]ms" + templateEnd;
-    // sql格式化模板
-    String sqlFormatTemplate = templateStart + "sql:[%s]" + templateEnd;
-    // 数据源信息格式化模板
-    String datasourceFormatTemplate = templateStart + "datasource:[%s]" + templateEnd;
-    // 当前时间
-    String nowFormatTemplate = templateStart + "now:[%s]" + templateEnd;
-    return !Strings.isNullOrEmpty(sql) ? templateEnd + String.format(timeConsumingFormatTemplate,
-      elapsed) + String.format(nowFormatTemplate,
-      now) + String.format(sqlFormatTemplate, sql.replaceAll("\\s+", " ")) + String.format(
-      datasourceFormatTemplate, url) : "";
+
+    return templateEnd
+      + templateStart + "time-consuming:[" + elapsed + "]ms" + templateEnd
+      + templateStart + "now:[" + now + "]" + templateEnd
+      + templateStart + "sql:[" + sql.replaceAll("\\s+", " ") + "]" + templateEnd
+      + templateStart + "datasource:[" + url + "]" + templateEnd;
   }
 }
