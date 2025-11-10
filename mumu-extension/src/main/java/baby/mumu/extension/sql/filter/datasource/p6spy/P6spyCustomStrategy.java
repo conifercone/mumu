@@ -30,6 +30,8 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
 
   // 静态预编译正则
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+  public static final String LINE_FEED = StringUtils.LF;
+  public static final String TEMPLATE_START = "====>";
 
   /**
    * 格式化SQL输出
@@ -56,14 +58,13 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
     final String normalizedSql = P6spyCustomStrategy.WHITESPACE.matcher(sql)
       .replaceAll(StringUtils.SPACE);
 
-    String lineFeed = StringUtils.LF;
-    String templateStart = "====>";
-
-    return lineFeed
-      + templateStart + "time-consuming:[" + elapsed + "]ms"
-      + lineFeed
-      + templateStart + "now:[" + now + "]" + lineFeed
-      + templateStart + "sql:[" + normalizedSql + "]" + lineFeed
-      + templateStart + "datasource:[" + url + "]" + lineFeed;
+    return P6spyCustomStrategy.LINE_FEED
+      + P6spyCustomStrategy.TEMPLATE_START + "time-consuming:[" + elapsed + "]ms"
+      + P6spyCustomStrategy.LINE_FEED
+      + P6spyCustomStrategy.TEMPLATE_START + "now:[" + now + "]" + P6spyCustomStrategy.LINE_FEED
+      + P6spyCustomStrategy.TEMPLATE_START + "sql:[" + normalizedSql + "]"
+      + P6spyCustomStrategy.LINE_FEED
+      + P6spyCustomStrategy.TEMPLATE_START + "datasource:[" + url + "]"
+      + P6spyCustomStrategy.LINE_FEED;
   }
 }
