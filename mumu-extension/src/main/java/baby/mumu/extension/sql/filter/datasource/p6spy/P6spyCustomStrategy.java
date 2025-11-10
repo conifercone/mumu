@@ -17,6 +17,7 @@
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,6 +27,9 @@ import org.apache.commons.lang3.StringUtils;
  * @since 1.0.0
  */
 public class P6spyCustomStrategy implements MessageFormattingStrategy {
+
+  // 静态预编译正则
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
   /**
    * 格式化SQL输出
@@ -43,16 +47,23 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
   public String formatMessage(int connectionId, String now, long elapsed, String category,
     String prepared, String sql, String url) {
     if (StringUtils.isBlank(sql)) {
-      return "";
+      return StringUtils.EMPTY;
     }
 
-    String templateStart = "====>";
-    String templateEnd = "\n";
+    // 预编译的空白字符正则
+    // \s+ 表示任意连续空白字符（空格、换行、制表符等）
+    // 提前编译避免每次 replaceAll 重新构建 Pattern
+    final String normalizedSql = P6spyCustomStrategy.WHITESPACE.matcher(sql)
+      .replaceAll(StringUtils.SPACE);
 
-    return templateEnd
-      + templateStart + "time-consuming:[" + elapsed + "]ms" + templateEnd
-      + templateStart + "now:[" + now + "]" + templateEnd
-      + templateStart + "sql:[" + sql.replaceAll("\\s+", " ") + "]" + templateEnd
-      + templateStart + "datasource:[" + url + "]" + templateEnd;
+    String lineFeed = StringUtils.LF;
+    String templateStart = "====>";
+
+    return lineFeed
+      + templateStart + "time-consuming:[" + elapsed + "]ms"
+      + lineFeed
+      + templateStart + "now:[" + now + "]" + lineFeed
+      + templateStart + "sql:[" + normalizedSql + "]" + lineFeed
+      + templateStart + "datasource:[" + url + "]" + lineFeed;
   }
 }
