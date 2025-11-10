@@ -76,7 +76,7 @@ public class ResponseWrapper<T> implements Serializable {
   /**
    * 全局链路追踪ID
    */
-  private String traceId = TraceIdFilter.getTraceId();
+  private String traceId = TraceIdFilter.traceId().orElse(null);
 
   private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
     .addModule(new JavaTimeModule())

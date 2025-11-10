@@ -17,13 +17,11 @@
 package baby.mumu.iam.client.config;
 
 import baby.mumu.basis.enums.TokenClaimsEnum;
-import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.TokenGrpcService;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
-import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -88,14 +86,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       // 判断redis中是否存在token
       if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
         .getValidity()) {
-        try {
-          traceId();
-          JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
-          response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
-          ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
-        } finally {
-          TraceIdFilter.removeTraceId();
-        }
+        JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
+        response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
+        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
       }
       // 判断token是否合法
@@ -103,13 +96,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
       try {
         jwt = jwtDecoder.decode(authToken);
       } catch (JwtException e) {
-        traceId();
         JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
         response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
         ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
         return;
-      } finally {
-        TraceIdFilter.removeTraceId();
       }
       List<String> authorities = jwt.getClaimAsStringList(
         TokenClaimsEnum.AUTHORITIES.getClaimName());
@@ -129,10 +119,5 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     }
     // 放行
     filterChain.doFilter(applicationHttpServletRequestWrapper, response);
-  }
-
-  private void traceId() {
-    Optional.ofNullable(tracer).map(Tracer::currentSpan).map(Span::context)
-      .ifPresent(traceContext -> TraceIdFilter.setTraceId(traceContext.traceId()));
   }
 }

@@ -27,7 +27,6 @@ import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import org.jspecify.annotations.NonNull;
-import org.springframework.core.NamedInheritableThreadLocal;
 
 /**
  * TraceId id 过滤器
@@ -37,44 +36,22 @@ import org.springframework.core.NamedInheritableThreadLocal;
  */
 public class TraceIdFilter implements Filter {
 
-  // InheritableThreadLocal 变量用于存储 TraceId
-  private static final NamedInheritableThreadLocal<String> traceIdThreadLocal = new NamedInheritableThreadLocal<>(
-    "TraceId");
-
-  private final Tracer tracer;
+  private static Tracer tracer;
 
   public TraceIdFilter(Tracer tracer) {
-    this.tracer = tracer;
+    TraceIdFilter.tracer = tracer;
   }
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, @NonNull FilterChain chain)
     throws IOException, ServletException {
-    try {
-      traceId().ifPresent(TraceIdFilter.traceIdThreadLocal::set);
-      // 继续处理请求
-      chain.doFilter(request, response);
-    } finally {
-      // 清理 ThreadLocal，避免内存泄漏
-      TraceIdFilter.traceIdThreadLocal.remove();
-    }
+    // 继续处理请求
+    chain.doFilter(request, response);
   }
 
-  private Optional<String> traceId() {
-    return Optional.ofNullable(tracer).map(Tracer::currentSpan).map(Span::context).map(
-      TraceContext::traceId);
-  }
-
-  // 静态方法用于获取当前线程的 TraceId
-  public static String getTraceId() {
-    return TraceIdFilter.traceIdThreadLocal.get();
-  }
-
-  public static void setTraceId(String traceId) {
-    TraceIdFilter.traceIdThreadLocal.set(traceId);
-  }
-
-  public static void removeTraceId() {
-    TraceIdFilter.traceIdThreadLocal.remove();
+  public static Optional<String> traceId() {
+    return Optional.ofNullable(TraceIdFilter.tracer).map(Tracer::currentSpan).map(Span::context)
+      .map(
+        TraceContext::traceId);
   }
 }
