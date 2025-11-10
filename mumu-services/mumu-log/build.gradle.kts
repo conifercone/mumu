@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.spring.boot.starter.data.elasticsearch)
     implementation(libs.spring.kafka)
     implementation(libs.spring.grpc.server.spring.boot.starter)
-    implementation(libs.bundles.micrometer)
+    implementation(libs.bundles.web)
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.jasypt)

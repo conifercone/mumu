@@ -5,7 +5,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(project(":mumu-services:mumu-genix:genix-application"))
     implementation(project(":mumu-extension"))
-    implementation(libs.bundles.micrometer)
+    implementation(libs.bundles.web)
     implementation(libs.swagger3Ui)
     implementation(libs.leaf)
     implementation(libs.zookeeper)

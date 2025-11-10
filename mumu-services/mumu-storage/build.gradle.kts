@@ -11,7 +11,7 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.spring.cloud.starter.consul.config)
-    implementation(libs.bundles.micrometer)
+    implementation(libs.bundles.web)
     implementation(libs.spring.grpc.server.spring.boot.starter)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.jasypt)

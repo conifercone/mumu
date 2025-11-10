@@ -274,7 +274,7 @@ spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-depe
 
 [bundles]
 jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
-micrometer = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
+web = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }
