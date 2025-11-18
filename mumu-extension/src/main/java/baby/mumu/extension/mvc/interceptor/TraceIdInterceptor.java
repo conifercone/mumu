@@ -33,7 +33,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 public class TraceIdInterceptor implements HandlerInterceptor {
 
+  private static final String TRACE_ID_ATTRIBUTE_NAME = "TRACE_ID";
   private final ObjectProvider<Tracer> tracerProvider;
+  private static final String TRACE_ID_HEADER_NAME = "X-Trace-Id";
 
   public TraceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
     this.tracerProvider = tracerProvider;
@@ -52,7 +54,7 @@ public class TraceIdInterceptor implements HandlerInterceptor {
     }
 
     if (traceId == null || traceId.isBlank()) {
-      String fromHeader = request.getHeader(MDCConstants.TRACE_ID);
+      String fromHeader = request.getHeader(TraceIdInterceptor.TRACE_ID_HEADER_NAME);
       if (fromHeader != null && !fromHeader.isBlank()) {
         traceId = fromHeader;
       }
@@ -60,7 +62,7 @@ public class TraceIdInterceptor implements HandlerInterceptor {
 
     if (traceId != null) {
       MDC.put(MDCConstants.TRACE_ID, traceId);
-      request.setAttribute("TRACE_ID", traceId);
+      request.setAttribute(TraceIdInterceptor.TRACE_ID_ATTRIBUTE_NAME, traceId);
     }
     return true;
   }
