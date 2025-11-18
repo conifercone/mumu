@@ -18,7 +18,6 @@ package baby.mumu.extension;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.aspects.AspectConfiguration;
-import baby.mumu.extension.cors.ApplicationCorsConfiguration;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
@@ -26,6 +25,8 @@ import baby.mumu.extension.grpc.interceptors.SafeBearerTokenInterceptor;
 import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
+import baby.mumu.extension.mvc.ApplicationMvcConfiguration;
+import baby.mumu.extension.mvc.interceptor.TraceIdInterceptor;
 import baby.mumu.extension.nosql.DocumentConfiguration;
 import baby.mumu.extension.ocr.OcrConfiguration;
 import baby.mumu.extension.processor.grpc.GrpcExceptionHandlersConfiguration;
@@ -33,6 +34,8 @@ import baby.mumu.extension.processor.response.ResponseBodyProcessor;
 import baby.mumu.extension.sql.DatasourceConfiguration;
 import baby.mumu.extension.translation.TranslationConfiguration;
 import io.micrometer.observation.ObservationPredicate;
+import io.micrometer.tracing.Tracer;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -51,13 +54,18 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  */
 @Configuration
 @Import({GrpcExceptionHandlersConfiguration.class, ResponseBodyProcessor.class,
-  ApplicationCorsConfiguration.class,
+  ApplicationMvcConfiguration.class,
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
   FilterConfiguration.class, IdempotentConfiguration.class, GsonConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
+
+  @Bean
+  public TraceIdInterceptor traceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
+    return new TraceIdInterceptor(tracerProvider);
+  }
 
   @Bean
   @ConditionalOnClass(ObservationPredicate.class)

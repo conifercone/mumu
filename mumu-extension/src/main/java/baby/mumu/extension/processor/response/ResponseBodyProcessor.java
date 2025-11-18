@@ -19,22 +19,20 @@ package baby.mumu.extension.processor.response;
 import baby.mumu.basis.dto.DataTransferObject;
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.exception.RateLimiterException;
+import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
-import baby.mumu.extension.translation.SimpleTextTranslation;
 import baby.mumu.log.client.api.SystemLogGrpcService;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -64,13 +62,10 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
   private static final Logger log = LoggerFactory.getLogger(ResponseBodyProcessor.class);
 
   private final SystemLogGrpcService systemLogGrpcService;
-  private final SimpleTextTranslation simpleTextTranslation;
 
   @Autowired
-  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService,
-    ObjectProvider<SimpleTextTranslation> simpleTextTranslations) {
+  public ResponseBodyProcessor(SystemLogGrpcService systemLogGrpcService) {
     this.systemLogGrpcService = systemLogGrpcService;
-    this.simpleTextTranslation = simpleTextTranslations.getIfAvailable();
   }
 
   @ExceptionHandler(ApplicationException.class)
@@ -186,10 +181,7 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
       .setFail(ExceptionUtils.getStackTrace(illegalArgumentException))
       .build());
     return ResponseWrapper.failure(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
-      Optional.ofNullable(simpleTextTranslation).flatMap(
-          textTranslation -> textTranslation.translateToAccountLanguageIfPossible(
-            illegalArgumentException.getMessage()))
-        .orElse(illegalArgumentException.getMessage())
+      illegalArgumentException.getMessage()
     );
   }
 
@@ -239,15 +231,38 @@ public class ResponseBodyProcessor implements ResponseBodyAdvice<Object> {
     @NonNull MediaType selectedContentType,
     @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
     @NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response) {
+    String traceId = TraceIdUtils.getTraceId();
     if (ResponseBodyProcessor.VOID.equals(getReturnName(returnType))) {
-      return ResponseWrapper.success();
+      ResponseWrapper<Object> responseWrapper = ResponseWrapper.success();
+      responseWrapper.setTraceId(traceId);
+      return responseWrapper;
     }
     return switch (body) {
-      case ResponseWrapper<?> responseWrapper -> responseWrapper;
-      case DataTransferObject dataTransferObject -> ResponseWrapper.success(dataTransferObject);
-      case Page<?> page -> ResponseWrapper.success(page);
-      case Slice<?> slice -> ResponseWrapper.success(slice);
-      case null -> ResponseWrapper.success();
+      case ResponseWrapper<?> responseWrapper -> {
+        responseWrapper.setTraceId(traceId);
+        yield responseWrapper;
+      }
+      case DataTransferObject dataTransferObject -> {
+        ResponseWrapper<DataTransferObject> responseWrapper = ResponseWrapper.success(
+          dataTransferObject);
+        responseWrapper.setTraceId(traceId);
+        yield responseWrapper;
+      }
+      case Page<?> page -> {
+        ResponseWrapper<? extends Page<?>> responseWrapper = ResponseWrapper.success(page);
+        responseWrapper.setTraceId(traceId);
+        yield responseWrapper;
+      }
+      case Slice<?> slice -> {
+        ResponseWrapper<? extends Slice<?>> responseWrapper = ResponseWrapper.success(slice);
+        responseWrapper.setTraceId(traceId);
+        yield responseWrapper;
+      }
+      case null -> {
+        ResponseWrapper<Object> responseWrapper = ResponseWrapper.success();
+        responseWrapper.setTraceId(traceId);
+        yield responseWrapper;
+      }
       default -> body;
     };
   }

@@ -16,13 +16,11 @@
 
 package baby.mumu.extension.sql.filter.datasource.p6spy;
 
-import baby.mumu.basis.kotlin.tools.SpringContextUtils;
+import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import com.google.common.base.Strings;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-import io.micrometer.tracing.Tracer;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,17 +55,7 @@ public class P6spyCustomLogger extends FormattedLogger {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(lf).append("====>");
       stringBuilder.append("trace-id:[");
-      String traceId;
-      try {
-        traceId = Optional.ofNullable(SpringContextUtils.getApplicationContext())
-          .flatMap(applicationContext -> Optional.ofNullable(
-            applicationContext.getBeanProvider(Tracer.class).getIfAvailable())).flatMap(
-            tracer -> Optional.ofNullable(tracer.currentSpan())
-              .map(span -> span.context().traceId())
-          ).orElse("");
-      } catch (Exception e) {
-        traceId = "";
-      }
+      String traceId = TraceIdUtils.getTraceId();
       stringBuilder.append(traceId);
       stringBuilder.append("]");
       String msg = strategy.formatMessage(connectionId, now, elapsed,

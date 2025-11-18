@@ -16,6 +16,7 @@
 
 package baby.mumu.log.infra.operation.convertor;
 
+import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.cmds.OperationLogFindAllCmd;
@@ -26,10 +27,10 @@ import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
-import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +47,10 @@ public class OperationLogConvertor {
 
 
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
-  private final Tracer tracer;
 
   @Autowired
-  public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService, Tracer tracer) {
+  public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
     this.primaryKeyGrpcService = primaryKeyGrpcService;
-    this.tracer = tracer;
   }
 
   @API(status = Status.STABLE, since = "1.0.0")
@@ -69,10 +68,9 @@ public class OperationLogConvertor {
   public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
     return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
       OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
-      operationLog.setId(
-        Optional.ofNullable(tracer.currentSpan())
-          .map(span -> span.context().traceId()).orElseGet(() ->
-            String.valueOf(primaryKeyGrpcService.snowflake()))
+      String traceId = TraceIdUtils.getTraceId();
+      operationLog.setId(StringUtils.isNotBlank(traceId) ? traceId
+        : String.valueOf(primaryKeyGrpcService.snowflake())
       );
       operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
       return operationLog;

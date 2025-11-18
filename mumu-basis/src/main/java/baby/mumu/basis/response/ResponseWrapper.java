@@ -16,8 +16,8 @@
 
 package baby.mumu.basis.response;
 
-import baby.mumu.basis.filters.TraceIdFilter;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
+import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -76,7 +76,7 @@ public class ResponseWrapper<T> implements Serializable {
   /**
    * 全局链路追踪ID
    */
-  private String traceId = TraceIdFilter.traceId().orElse(null);
+  private String traceId;
 
   private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
     .addModule(new JavaTimeModule())
@@ -124,6 +124,7 @@ public class ResponseWrapper<T> implements Serializable {
     BaseResponse resultCode)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
+    responseResult.setTraceId(TraceIdUtils.getTraceId());
     String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
@@ -140,6 +141,7 @@ public class ResponseWrapper<T> implements Serializable {
     String code, String message)
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);
+    responseResult.setTraceId(TraceIdUtils.getTraceId());
     String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }

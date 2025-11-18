@@ -20,4 +20,4 @@
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
-package baby.mumu.extension.cors;
+package baby.mumu.extension.mvc;

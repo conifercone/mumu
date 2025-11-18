@@ -22,12 +22,10 @@ import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.basis.enums.TokenClaimsEnum;
 import baby.mumu.iam.client.api.TokenGrpcService;
 import baby.mumu.iam.client.config.ResourcePoliciesProperties.HttpPolicy;
-import io.micrometer.tracing.Tracer;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -66,7 +64,7 @@ public class IAMResourceServerConfig {
   @Bean
   public SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
     JwtDecoder jwtDecoder,
-    TokenGrpcService tokenGrpcService, ObjectProvider<Tracer> tracers) throws Exception {
+    TokenGrpcService tokenGrpcService) throws Exception {
     // noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getHttp())) {
@@ -122,7 +120,7 @@ public class IAMResourceServerConfig {
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
         .ignoringRequestMatchers(csrfIgnoreUrls.toArray(new String[0])));
     http.addFilterBefore(
-      new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService, tracers.getIfAvailable()),
+      new JwtAuthenticationTokenFilter(jwtDecoder, tokenGrpcService),
       UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling(exceptionHandling -> exceptionHandling
       .accessDeniedHandler(iamAccessDeniedHandler()));

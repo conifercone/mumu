@@ -22,7 +22,6 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.iam.client.api.TokenGrpcService;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
-import io.micrometer.tracing.Tracer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,13 +59,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   TokenGrpcService tokenGrpcService;
   private static final Logger log = LoggerFactory.getLogger(
     JwtAuthenticationTokenFilter.class);
-  Tracer tracer;
 
-  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService,
-    Tracer tracer) {
+  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
     this.jwtDecoder = jwtDecoder;
     this.tokenGrpcService = tokenGrpcService;
-    this.tracer = tracer;
   }
 
   @Override

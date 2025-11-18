@@ -14,24 +14,40 @@
  * limitations under the License.
  */
 
-package baby.mumu.extension.cors;
+package baby.mumu.extension.mvc;
 
 
+import baby.mumu.extension.mvc.interceptor.TraceIdInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 跨域配置类
+ * MVC配置类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Configuration
-public class ApplicationCorsConfiguration implements WebMvcConfigurer {
+public class ApplicationMvcConfiguration implements WebMvcConfigurer {
+
+  private final TraceIdInterceptor traceIdInterceptor;
+
+  @Autowired
+  public ApplicationMvcConfiguration(TraceIdInterceptor traceIdInterceptor) {
+    this.traceIdInterceptor = traceIdInterceptor;
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(traceIdInterceptor).order(Ordered.LOWEST_PRECEDENCE);
+  }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
