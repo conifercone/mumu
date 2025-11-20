@@ -1,0 +1,21 @@
+meta {
+  name: 分页查询账号
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{iam-service-url}}/account/findAll?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

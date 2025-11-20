@@ -1,0 +1,30 @@
+meta {
+  name: 账号添加地址
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{iam-service-url}}/account/addAddress
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "country": "中国",
+    "state": "山东省",
+    "city": "济南市",
+    "street": "历城区",
+    "postalCode": "250000",
+    "location": {
+      "x": 117.18689,
+      "y": 36.65065
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
