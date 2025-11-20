@@ -1,0 +1,16 @@
+meta {
+  name: 获取当前登录用户信息
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{iam-service-url}}/account/currentLoginAccount
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

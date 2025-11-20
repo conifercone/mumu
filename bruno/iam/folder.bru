@@ -1,0 +1,65 @@
+meta {
+  name: iam
+  seq: 6
+}
+
+auth {
+  mode: inherit
+}
+
+script:pre-request {
+  const crypto = require("crypto");
+  const { v4: uuidv4 } = require('uuid');
+  
+  // 1. 生成 requestId
+  function generateRequestId() {
+    return uuidv4();
+  }
+  
+  // 2. 生成时间戳（跟后端约定：毫秒 / 秒 / ISO 自己选，这里示例毫秒）
+  const requestIdString = generateRequestId();
+  const timestampString = Date.now().toString();
+  
+  // 在 Bruno 中，req.getUrl() 是完整 URL，已经替换变量后的
+  var fullUrl = req.getUrl();
+  // 去掉 {{xxx}} 整段
+  fullUrl = fullUrl.replace(/\{\{.*?\}\}/g, "");
+  // 确保不会出现类似 "//account/..." 的情况
+  fullUrl = fullUrl.replace(/\/{2,}/g, "/");
+  let requestPath = fullUrl;
+  
+  // 4. 获取请求 body
+  let requestBody = req.getBody(); // Bruno 会返回字符串或对象，按需要处理
+  
+  let compactJsonString = "";
+  if (requestBody) {
+    // 如果是对象，先 stringify；如果是字符串，按 JSON 再 parse 一次以压缩
+    if (typeof requestBody === "object") {
+      compactJsonString = JSON.stringify(requestBody);
+    } else if (typeof requestBody === "string" && requestBody.trim().length > 0) {
+      try {
+        compactJsonString = JSON.stringify(JSON.parse(requestBody));
+      } catch (e) {
+        // 如果不是合法 JSON，就直接原样使用
+        compactJsonString = requestBody;
+      }
+    }
+  }
+  
+  // 5. 拼接 dataToSign
+  const dataToSign =
+    timestampString + requestIdString + requestPath + compactJsonString;
+  
+  // 6. 计算 HMAC-SHA256
+  const secret = bru.getEnvVar("secret");
+  const signatureString = crypto
+    .createHmac("sha256", secret)
+    .update(dataToSign, "utf8")
+    .digest("hex");
+  
+  // 7. 设置 header（或变量）
+  req.setHeader("X-Timestamp", timestampString);
+  req.setHeader("X-Request-ID", requestIdString);
+  req.setHeader("X-Signature", signatureString);
+  
+}
