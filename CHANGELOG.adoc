@@ -16,6 +16,48 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.15.0] - 2025-11-20
+
+=== 🕸️ Changed
+
+- Optimize global link tracking ID acquisition logic
+- `Gradle` upgraded to 9.2.1
+- `org.jobrunr:jobrunr-spring-boot-3-starter` upgraded to 8.2.0
+- `com.googlecode.libphonenumber:libphonenumber` upgraded to 9.0.18
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` upgraded to 2.8.14
+- `commons-io:commons-io` upgraded to 2.21.0
+- `io.hypersistence:hypersistence-utils-hibernate-63` upgraded to 3.12.0
+- `flyway` upgraded to 11.16.0
+- `io.freefair.lombok` upgraded to 9.1.0
+- `com.deepl.api:deepl-java` upgraded to 1.11.0
+- `io.swagger.core.v3:swagger-annotations-jakarta` upgraded to 2.2.40
+- `org.springframework.grpc:spring-grpc-dependencies` upgraded to 0.12.0
+- `Spring Boot` upgraded to 3.5.7
+- `kotlin` upgraded to 2.2.21
+- `protobuf` upgraded to 4.33.0
+- `io.minio:minio` upgraded to 8.6.0
+- `com.google.guava:guava-bom` upgraded to 33.5.0-jre
+- `org.apache.tika:tika-core` upgraded to 3.2.3
+- `com.redis.om:redis-om-spring` upgraded to 1.0.4
+- Improve sql log printing performance
+- Optimize account deletion logic
+- Optimize multi-language prompt information
+- Optimize build script
+- After the business logic is successful, the verification code is deleted and changed to asynchronous deletion.
+- Modify the return value type of the verification code generation method
+- Verification code related renaming
+- `unique` service renamed to `genix`
+- Optimize the general method of obtaining IP
+- Refactor class name
+- Disable Jackson's WRITE_DATES_AS_TIMESTAMPS attribute
+- Modify the creation method of Jackson Mapper
+- Optimize file writing method
+- Modify the field name generation rules in the annotation processor
+
+=== ⚠️ Removed
+
+- Remove undertow and use tomcat instead
+
 == [2.14.0] - 2025-09-11
 
 === ⭐ Added
