@@ -1,0 +1,15 @@
+meta {
+  name: 根据省或州ID获取城市
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{genix-service-url}}/country/getCitiesByStateId/2252
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,16 @@
+meta {
+  name: 获取可用时区列表
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{genix-service-url}}/time/timezone/available
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

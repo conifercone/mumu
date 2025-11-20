@@ -1,0 +1,15 @@
+meta {
+  name: 根据城市id获取城市指令
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{genix-service-url}}/country/getCityById/19286
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

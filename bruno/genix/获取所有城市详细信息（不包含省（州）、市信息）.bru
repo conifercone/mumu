@@ -1,0 +1,15 @@
+meta {
+  name: 获取所有城市详细信息（不包含省（州）、市信息）
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{genix-service-url}}/country/getCountries
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

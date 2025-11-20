@@ -1,0 +1,23 @@
+meta {
+  name: 校验简单验证码正确性
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{genix-service-url}}/captchaCode/verify
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": 47328526336,
+    "source": "19av"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

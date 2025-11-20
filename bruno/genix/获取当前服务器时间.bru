@@ -1,0 +1,20 @@
+meta {
+  name: 获取当前服务器时间
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{genix-service-url}}/time/serverTime?zoneId=UTC
+  body: none
+  auth: inherit
+}
+
+params:query {
+  zoneId: UTC
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

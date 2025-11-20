@@ -1,0 +1,15 @@
+meta {
+  name: 获取所有城市详细信息（包含省（州）、市信息）
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{genix-service-url}}/country/getCountryStateCity
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

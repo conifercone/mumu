@@ -1,0 +1,19 @@
+meta {
+  name: 生成二维码（返回Base64格式的图片数据链接）
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{genix-service-url}}/qrCode/dataUrl?content=测试
+  body: none
+  auth: inherit
+}
+
+params:query {
+  content: 测试
+}
+
+settings {
+  encodeUrl: true
+}

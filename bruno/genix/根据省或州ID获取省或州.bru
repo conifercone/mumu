@@ -1,0 +1,15 @@
+meta {
+  name: 根据省或州ID获取省或州
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{genix-service-url}}/country/getStateById/2252
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
