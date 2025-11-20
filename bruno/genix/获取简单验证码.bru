@@ -1,0 +1,21 @@
+meta {
+  name: 获取简单验证码
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{genix-service-url}}/captchaCode/generate?ttl=400&length=4
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ttl: 400
+  length: 4
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

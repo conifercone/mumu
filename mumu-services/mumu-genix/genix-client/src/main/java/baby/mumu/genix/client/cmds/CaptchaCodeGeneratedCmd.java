@@ -16,7 +16,8 @@
 
 package baby.mumu.genix.client.cmds;
 
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 /**
@@ -31,12 +32,14 @@ public class CaptchaCodeGeneratedCmd {
   /**
    * 有效期
    */
-  @Size(max = 3600)
+  @Min(1)
+  @Max(3600)
   private Long ttl;
 
   /**
    * 验证码长度
    */
-  @Size(min = 1, max = 10)
+  @Min(1)
+  @Max(10)
   private Integer length;
 }
