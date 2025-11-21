@@ -1,0 +1,15 @@
+meta {
+  name: 根据id查询权限
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{iam-service-url}}/permission/findById/1
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

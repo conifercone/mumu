@@ -1,0 +1,15 @@
+meta {
+  name: 根据code删除角色
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{iam-service-url}}/role/deleteByCode/admin
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

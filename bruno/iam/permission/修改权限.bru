@@ -1,0 +1,23 @@
+meta {
+  name: 修改权限
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{iam-service-url}}/permission/updateById
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "1",
+    "name": "test_updated"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

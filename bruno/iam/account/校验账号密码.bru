@@ -1,0 +1,20 @@
+meta {
+  name: 校验账号密码
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{iam-service-url}}/account/verifyPassword?password=admin
+  body: none
+  auth: inherit
+}
+
+params:query {
+  password: admin
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

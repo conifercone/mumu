@@ -1,0 +1,20 @@
+meta {
+  name: 查询已归档权限 (不查询总数)
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{iam-service-url}}/permission/findArchivedAllSlice?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+}

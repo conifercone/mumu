@@ -1,0 +1,23 @@
+meta {
+  name: 当前账号添加系统设置
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{iam-service-url}}/account/addSystemSettings
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "profile": "default",
+    "name": "默认系统设置"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

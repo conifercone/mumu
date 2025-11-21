@@ -1,0 +1,15 @@
+meta {
+  name: 下载所有权限数据（包含权限关系数据）
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{iam-service-url}}/permission/downloadAllIncludePath
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

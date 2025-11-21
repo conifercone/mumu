@@ -1,0 +1,21 @@
+meta {
+  name: 获取直系后代权限
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{iam-service-url}}/permission/findDirect?current=1&pageSize=10&ancestorId=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+  ancestorId: 1
+}
+
+settings {
+  encodeUrl: true
+}

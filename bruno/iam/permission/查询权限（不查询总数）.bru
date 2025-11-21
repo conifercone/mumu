@@ -1,0 +1,21 @@
+meta {
+  name: 查询权限（不查询总数）
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{iam-service-url}}/permission/findAllSlice?current=1&pageSize=10&name=数据
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+  name: 数据
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,16 @@
+meta {
+  name: 禁用账号
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{iam-service-url}}/account/disable/1
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

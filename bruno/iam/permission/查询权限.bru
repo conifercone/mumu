@@ -1,0 +1,21 @@
+meta {
+  name: 查询权限
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{iam-service-url}}/permission/findAll?current=1&pageSize=10&name=数据
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+  name: 数据
+}
+
+settings {
+  encodeUrl: true
+}

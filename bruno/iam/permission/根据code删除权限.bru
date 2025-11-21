@@ -1,0 +1,15 @@
+meta {
+  name: 根据code删除权限
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{iam-service-url}}/permission/deleteByCode/admin
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

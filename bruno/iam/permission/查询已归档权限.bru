@@ -1,0 +1,20 @@
+meta {
+  name: 查询已归档权限
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{iam-service-url}}/permission/findArchivedAll?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+}

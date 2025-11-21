@@ -1,0 +1,16 @@
+meta {
+  name: 删除指定账号地址
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{iam-service-url}}/account/address/677b4c5dd14df91de0e7d721
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

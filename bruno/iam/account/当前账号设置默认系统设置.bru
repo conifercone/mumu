@@ -1,0 +1,16 @@
+meta {
+  name: 当前账号设置默认系统设置
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{iam-service-url}}/account/setDefaultSystemSettings/677c866780f0b5754fd51eac
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

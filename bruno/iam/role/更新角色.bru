@@ -1,0 +1,26 @@
+meta {
+  name: 更新角色
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{iam-service-url}}/role/updateById
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "",
+    "name": "updated",
+    "permissionIds": [
+      1
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

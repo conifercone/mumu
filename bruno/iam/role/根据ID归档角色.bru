@@ -1,0 +1,16 @@
+meta {
+  name: 根据ID归档角色
+  type: http
+  seq: 9
+}
+
+put {
+  url: {{iam-service-url}}/role/archiveById/1
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

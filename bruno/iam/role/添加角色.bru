@@ -1,0 +1,27 @@
+meta {
+  name: 添加角色
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{iam-service-url}}/role/add
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "test2",
+    "name": "测试",
+    "permissionIds": [
+      1,
+      2
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

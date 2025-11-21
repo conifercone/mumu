@@ -1,0 +1,22 @@
+meta {
+  name: 添加权限
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{iam-service-url}}/permission/add
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "test2"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

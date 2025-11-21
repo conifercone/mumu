@@ -1,0 +1,23 @@
+meta {
+  name: 添加后代权限
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{iam-service-url}}/permission/addDescendant
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "descendantId": 4,
+    "ancestorId": 2
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

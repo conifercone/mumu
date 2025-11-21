@@ -1,0 +1,21 @@
+meta {
+  name: 获取直系后代角色
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{iam-service-url}}/role/findDirect?current=1&pageSize=10&ancestorId=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+  ancestorId: 1
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,20 @@
+meta {
+  name: 获取所有根角色
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{iam-service-url}}/role/findRoot?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+}

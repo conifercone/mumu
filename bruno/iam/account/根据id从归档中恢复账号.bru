@@ -1,0 +1,16 @@
+meta {
+  name: 根据id从归档中恢复账号
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{iam-service-url}}/account/recoverFromArchiveById/3
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

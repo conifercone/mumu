@@ -1,0 +1,22 @@
+meta {
+  name: 查询角色
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{iam-service-url}}/role/findAll?current=1&pageSize=10&code=admin
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+  code: admin
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

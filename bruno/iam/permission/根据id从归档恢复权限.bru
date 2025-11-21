@@ -1,0 +1,15 @@
+meta {
+  name: 根据id从归档恢复权限
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{iam-service-url}}/permission/recoverFromArchiveById/1
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

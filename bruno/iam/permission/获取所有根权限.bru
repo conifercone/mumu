@@ -1,0 +1,20 @@
+meta {
+  name: 获取所有根权限
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{iam-service-url}}/permission/findRoot?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+}

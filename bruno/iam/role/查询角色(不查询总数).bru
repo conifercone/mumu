@@ -1,0 +1,20 @@
+meta {
+  name: 查询角色(不查询总数)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{iam-service-url}}/role/findAllSlice?current=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  current: 1
+  pageSize: 10
+}
+
+settings {
+  encodeUrl: true
+}

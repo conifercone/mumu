@@ -1,0 +1,23 @@
+meta {
+  name: 添加后代角色
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{iam-service-url}}/role/addDescendant
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "descendantId": 4,
+    "ancestorId": 2
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

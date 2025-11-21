@@ -1,0 +1,16 @@
+meta {
+  name: 根据id归档权限
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{iam-service-url}}/permission/archiveById/1
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

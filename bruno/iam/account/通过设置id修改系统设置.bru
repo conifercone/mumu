@@ -1,0 +1,23 @@
+meta {
+  name: 通过设置id修改系统设置
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{iam-service-url}}/account/modifySystemSettingsBySettingsId
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "677c866780f0b5754fd51eac",
+    "name": "默认系统设置"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
