@@ -1,7 +1,10 @@
 vars {
-  secret: mumu
-  iam-service-url: http://localhost:9080/api/mumu/iam
-  storage-service-url: http://localhost:9080/api/mumu/storage
-  log-service-url: http://localhost:9080/api/mumu/log
-  genix-service-url: http://localhost:9080/api/mumu/genix
+  apisix-base-url: http://localhost:9080/api/mumu
+  storage-service-url: {{apisix-base-url}}/storage
+  log-service-url: {{apisix-base-url}}/log
+  genix-service-url: {{apisix-base-url}}/genix
+  iam-service-url: {{apisix-base-url}}/iam
 }
+vars:secret [
+  secret
+]
