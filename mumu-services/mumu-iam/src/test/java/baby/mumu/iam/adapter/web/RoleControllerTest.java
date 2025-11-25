@@ -24,12 +24,11 @@ import baby.mumu.iam.IAMApplicationMetamodel;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.client.cmds.RoleFindAllCmd;
 import baby.mumu.iam.client.cmds.RoleUpdateCmd;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -38,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 角色相关web接口单元测试

@@ -16,12 +16,11 @@
 
 package baby.mumu.log.configuration;
 
-import org.springframework.boot.actuate.autoconfigure.data.elasticsearch.ElasticsearchReactiveHealthContributorAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.elasticsearch.ElasticsearchRestHealthContributorAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
+import org.springframework.boot.elasticsearch.autoconfigure.ElasticsearchClientAutoConfiguration;
+import org.springframework.boot.elasticsearch.autoconfigure.ElasticsearchRestClientAutoConfiguration;
+import org.springframework.boot.elasticsearch.autoconfigure.health.ElasticsearchRestHealthContributorAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -34,7 +33,6 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "false")
 @EnableAutoConfiguration(exclude = {
   ElasticsearchRestClientAutoConfiguration.class,
-  ElasticsearchReactiveHealthContributorAutoConfiguration.class,
   ElasticsearchClientAutoConfiguration.class,
   ElasticsearchRestHealthContributorAutoConfiguration.class
 })

@@ -269,7 +269,7 @@ subprojects {
         implementation(rootProject.libs.progressbar)
         implementation(rootProject.libs.swagger.annotations.jakarta)
         implementation(rootProject.libs.moneta)
-        implementation(rootProject.libs.jackson.datatype.money)
+        implementation(rootProject.libs.jackson.datatype.moneta)
         testImplementation(rootProject.libs.junit.jupiter)
         testRuntimeOnly(rootProject.libs.junit.platform.launcher)
         annotationProcessor(rootProject.libs.spring.boot.configuration.processor)

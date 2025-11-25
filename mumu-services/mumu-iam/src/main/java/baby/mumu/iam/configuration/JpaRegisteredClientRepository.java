@@ -19,26 +19,25 @@ package baby.mumu.iam.configuration;
 import baby.mumu.iam.domain.client.Client;
 import baby.mumu.iam.infra.client.convertor.ClientConvertor;
 import baby.mumu.iam.infra.client.gatewayimpl.database.ClientRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.jspecify.annotations.NonNull;
-import org.springframework.security.jackson2.SecurityJackson2Modules;
+import org.springframework.security.jackson.SecurityJacksonModules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
+import org.springframework.security.oauth2.server.authorization.jackson.OAuth2AuthorizationServerJacksonModule;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * jpa注册客户端存储库
@@ -50,12 +49,11 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
   private final ClientRepository clientRepository;
   private final ClientConvertor clientConvertor;
-  private final List<Module> securityModules =
-    SecurityJackson2Modules.getModules(JpaRegisteredClientRepository.class.getClassLoader());
+  private final List<JacksonModule> securityModules =
+    SecurityJacksonModules.getModules(JpaRegisteredClientRepository.class.getClassLoader());
   private final ObjectMapper objectMapper = JsonMapper.builder()
     .addModules(securityModules) // 批量注册 securityModules
-    .addModule(new OAuth2AuthorizationServerJackson2Module()) // OAuth2 模块
-    .addModule(new JavaTimeModule()) // Java 8 时间模块
+    .addModule(new OAuth2AuthorizationServerJacksonModule()) // OAuth2 模块
     .build();
 
   public JpaRegisteredClientRepository(ClientRepository clientRepository,

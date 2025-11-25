@@ -18,8 +18,6 @@ package baby.mumu.basis.kotlin.tools
 
 import baby.mumu.basis.exception.ApplicationException
 import baby.mumu.basis.response.ResponseCode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.opencsv.CSVWriter
 import com.opencsv.bean.StatefulBeanToCsvBuilder
 import jakarta.servlet.http.HttpServletResponse
@@ -28,7 +26,9 @@ import org.apiguardian.api.API
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.util.Assert
-import org.zalando.jackson.datatype.money.MoneyModule
+import tools.jackson.core.JsonEncoding
+import tools.jackson.datatype.javax.money.JavaxMoneyModule
+import tools.jackson.module.kotlin.jsonMapper
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStreamWriter
@@ -181,18 +181,16 @@ object FileDownloadUtils {
                 processedFileName += ".json"
             }
             // 创建 ObjectMapper 实例
-            val objectMapper = ObjectMapper()
-            // 注册模块（例如时间模块和Money模块）
-            objectMapper.registerModule(JavaTimeModule())
-            objectMapper.registerModule(MoneyModule())
+            val objectMapper = jsonMapper {
+                addModule(JavaxMoneyModule())
+            }
 
             // 创建 ObjectWriter 实例
             val objectWriter = objectMapper.writerWithDefaultPrettyPrinter()
 
             // 获取 JSON 生成器
-            val generator = objectMapper.factory
-                .createGenerator(response.outputStream)
-            generator.useDefaultPrettyPrinter()
+            val generator = objectMapper
+                .createGenerator(response.outputStream, JsonEncoding.UTF8)
 
             // 设置响应头
             response.contentType = MediaType.APPLICATION_JSON_VALUE

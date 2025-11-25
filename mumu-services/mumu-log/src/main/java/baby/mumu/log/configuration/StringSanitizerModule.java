@@ -16,14 +16,13 @@
 
 package baby.mumu.log.configuration;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.base.Strings;
-import java.io.IOException;
 import java.io.Serial;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdScalarDeserializer;
+import tools.jackson.databind.module.SimpleModule;
 
 /**
  * jackson空字符串转NULL模块
@@ -39,12 +38,9 @@ public class StringSanitizerModule extends SimpleModule {
 
   public StringSanitizerModule() {
     addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
-      @Serial
-      private static final long serialVersionUID = -3447488199252754578L;
 
       @Override
-      public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
-        throws IOException {
+      public String deserialize(JsonParser jsonParser, DeserializationContext ctx) {
         return Strings.emptyToNull(jsonParser.getValueAsString().trim());
       }
     });

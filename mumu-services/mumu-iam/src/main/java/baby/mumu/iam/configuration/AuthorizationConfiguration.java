@@ -40,11 +40,6 @@ import baby.mumu.iam.infra.token.gatewayimpl.cache.OidcIdTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.database.Oauth2AuthenticationRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -69,8 +64,8 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.security.oauth2.server.authorization.autoconfigure.servlet.OAuth2AuthorizationServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -81,12 +76,14 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.jackson2.CoreJackson2Module;
-import org.springframework.security.jackson2.SecurityJackson2Modules;
+import org.springframework.security.jackson.CoreJacksonModule;
+import org.springframework.security.jackson.SecurityJacksonModules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -96,16 +93,14 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService.OAuth2AuthorizationParametersMapper;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService.JsonMapperOAuth2AuthorizationParametersMapper;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
+import org.springframework.security.oauth2.server.authorization.jackson.OAuth2AuthorizationServerJacksonModule;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
@@ -117,7 +112,10 @@ import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.datatype.moneta.MonetaMoneyModule;
 
 /**
  * 授权配置
@@ -138,7 +136,6 @@ public class AuthorizationConfiguration {
    * @param tokenGenerator                  token生成器
    * @param iamAuthenticationFailureHandler 自定义认证失败处理器
    * @return 授权服务安全过滤链实例
-   * @throws Exception 异常信息
    */
   @Bean
   @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -147,10 +144,9 @@ public class AuthorizationConfiguration {
     OAuth2TokenGenerator<?> tokenGenerator,
     IAMAuthenticationFailureHandler iamAuthenticationFailureHandler,
     UserDetailsService userDetailsService,
-    PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings)
-    throws Exception {
+    PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings) {
     OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-      OAuth2AuthorizationServerConfigurer.authorizationServer();
+      http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
 
     http
       .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
@@ -265,30 +261,29 @@ public class AuthorizationConfiguration {
     RegisteredClientRepository registeredClientRepository) {
     JdbcOAuth2AuthorizationService jdbcOAuth2AuthorizationService = new JdbcOAuth2AuthorizationService(
       jdbcTemplate, registeredClientRepository);
-    JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.OAuth2AuthorizationRowMapper(
-      registeredClientRepository);
+
     SimpleModule longToString = new SimpleModule()
       .addSerializer(Long.class, ToStringSerializer.instance)
       .addSerializer(Long.TYPE, ToStringSerializer.instance);
     ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
-    ObjectMapper objectMapper = JsonMapper.builder()
+    JsonMapper jsonMapper = JsonMapper.builder()
       // Spring Security 基础与扩展模块
-      .addModule(new CoreJackson2Module())
-      .addModules(SecurityJackson2Modules.getModules(classLoader))
+      .addModule(new CoreJacksonModule())
+      .addModules(SecurityJacksonModules.getModules(classLoader))
       // 授权服务器 & Money
-      .addModule(new OAuth2AuthorizationServerJackson2Module())
-      .addModule(new MoneyModule())
+      .addModule(new OAuth2AuthorizationServerJacksonModule())
+      .addModule(new MonetaMoneyModule())
       // Long → String
       .addModule(longToString)
       // MixIn 映射
       .addMixIn(Long.class, LongMixin.class)
       .addMixIn(BigDecimal.class, BigDecimalMixin.class)
-      .addMixIn(Point.class, PointMixin.class)
-      .build();
-    rowMapper.setObjectMapper(objectMapper);
+      .addMixIn(Point.class, PointMixin.class).build();
+    JdbcOAuth2AuthorizationService.JsonMapperOAuth2AuthorizationRowMapper rowMapper = new JdbcOAuth2AuthorizationService.JsonMapperOAuth2AuthorizationRowMapper(
+      registeredClientRepository, jsonMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationRowMapper(rowMapper);
-    OAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new OAuth2AuthorizationParametersMapper();
-    oAuth2AuthorizationParametersMapper.setObjectMapper(objectMapper);
+    JsonMapperOAuth2AuthorizationParametersMapper oAuth2AuthorizationParametersMapper = new JsonMapperOAuth2AuthorizationParametersMapper(
+      jsonMapper);
     jdbcOAuth2AuthorizationService.setAuthorizationParametersMapper(
       oAuth2AuthorizationParametersMapper);
     return jdbcOAuth2AuthorizationService;
@@ -389,7 +384,7 @@ public class AuthorizationConfiguration {
         // 获取账号的权限
         Collection<? extends GrantedAuthority> authorities = account.getAuthorities();
         // 提取权限并转为字符串
-        Set<String> authoritySet = Optional.ofNullable(authorities).orElse(Collections.emptyList())
+        Set<String> authoritySet = Optional.of(authorities).orElse(Collections.emptyList())
           .stream()
           // 获取权限字符串
           .map(GrantedAuthority::getAuthority)
@@ -421,8 +416,9 @@ public class AuthorizationConfiguration {
         claims.claim(TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName(),
           context.getAuthorizationGrantType().getValue());
         Set<String> authoritySet = Optional.ofNullable(
-            ((OAuth2ClientAuthenticationToken) context.getAuthorizationGrant()
-              .getPrincipal()).getRegisteredClient()
+            ((OAuth2ClientAuthenticationToken) Objects.requireNonNull(
+              context.getAuthorizationGrant()
+                .getPrincipal())).getRegisteredClient()
           )
           .map(RegisteredClient::getScopes)
           .map(scopes -> AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
@@ -487,11 +483,6 @@ public class AuthorizationConfiguration {
     authorityCodesFromRoles.addAll(scopes);
     authorityCodesFromRoles.addAll(allPermissionCodes);
     return authorityCodesFromRoles;
-  }
-
-  @Bean
-  public com.fasterxml.jackson.databind.Module dateTimeModule() {
-    return new JavaTimeModule();
   }
 
   private KeyPair loadKeyPair(String keyPath, @NonNull String keyPassword, String keyPair) {

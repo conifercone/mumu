@@ -14,9 +14,11 @@ dependencies {
     implementation(libs.spring.cloud.starter.consul.config)
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.protobuf.java)
     testImplementation(libs.spring.grpc.client.spring.boot.starter)
     implementation(libs.redis.om.spring)
+    implementation(libs.spring.boot.data.redis)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
 }

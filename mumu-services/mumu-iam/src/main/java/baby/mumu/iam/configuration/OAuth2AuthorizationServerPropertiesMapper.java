@@ -19,10 +19,9 @@ package baby.mumu.iam.configuration;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Client;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerProperties.Registration;
 import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.boot.security.oauth2.server.authorization.autoconfigure.servlet.OAuth2AuthorizationServerProperties;
+import org.springframework.boot.security.oauth2.server.authorization.autoconfigure.servlet.OAuth2AuthorizationServerProperties.Registration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -54,11 +53,12 @@ public class OAuth2AuthorizationServerPropertiesMapper {
   }
 
   public AuthorizationServerSettings asAuthorizationServerSettings() {
-    PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+    PropertyMapper map = PropertyMapper.get();
     OAuth2AuthorizationServerProperties.Endpoint endpoint = this.properties.getEndpoint();
     OAuth2AuthorizationServerProperties.OidcEndpoint oidc = endpoint.getOidc();
     AuthorizationServerSettings.Builder builder = AuthorizationServerSettings.builder();
     map.from(this.properties::getIssuer).to(builder::issuer);
+    map.from(this.properties::isMultipleIssuersAllowed).to(builder::multipleIssuersAllowed);
     map.from(endpoint::getAuthorizationUri).to(builder::authorizationEndpoint);
     map.from(endpoint::getDeviceAuthorizationUri).to(builder::deviceAuthorizationEndpoint);
     map.from(endpoint::getDeviceVerificationUri).to(builder::deviceVerificationEndpoint);
@@ -66,6 +66,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     map.from(endpoint::getJwkSetUri).to(builder::jwkSetEndpoint);
     map.from(endpoint::getTokenRevocationUri).to(builder::tokenRevocationEndpoint);
     map.from(endpoint::getTokenIntrospectionUri).to(builder::tokenIntrospectionEndpoint);
+    map.from(endpoint::getPushedAuthorizationRequestUri)
+      .to(builder::pushedAuthorizationRequestEndpoint);
     map.from(oidc::getLogoutUri).to(builder::oidcLogoutEndpoint);
     map.from(oidc::getClientRegistrationUri).to(builder::oidcClientRegistrationEndpoint);
     map.from(oidc::getUserInfoUri).to(builder::oidcUserInfoEndpoint);
@@ -80,9 +82,10 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return registeredClients;
   }
 
-  private RegisteredClient getRegisteredClient(String registrationId, @NonNull Client client) {
+  private RegisteredClient getRegisteredClient(String registrationId,
+    OAuth2AuthorizationServerProperties.Client client) {
     Registration registration = client.getRegistration();
-    PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+    PropertyMapper map = PropertyMapper.get();
     RegisteredClient.Builder builder = RegisteredClient.withId(registrationId);
     map.from(registration::getClientId).to(builder::clientId);
     map.from(passwordEncoder.encode(registration.getClientSecret())).to(builder::clientSecret);
@@ -105,7 +108,8 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return builder.build();
   }
 
-  private @NonNull ClientSettings getClientSettings(@NonNull Client client,
+  private @NonNull ClientSettings getClientSettings(
+    OAuth2AuthorizationServerProperties.Client client,
     @NonNull PropertyMapper map) {
     ClientSettings.Builder builder = ClientSettings.builder();
     map.from(client::isRequireProofKey).to(builder::requireProofKey);
@@ -117,7 +121,7 @@ public class OAuth2AuthorizationServerPropertiesMapper {
     return builder.build();
   }
 
-  private @NonNull TokenSettings getTokenSettings(@NonNull Client client,
+  private @NonNull TokenSettings getTokenSettings(OAuth2AuthorizationServerProperties.Client client,
     @NonNull PropertyMapper map) {
     OAuth2AuthorizationServerProperties.Token token = client.getToken();
     TokenSettings.Builder builder = TokenSettings.builder();

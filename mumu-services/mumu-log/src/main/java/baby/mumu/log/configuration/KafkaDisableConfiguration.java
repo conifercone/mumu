@@ -18,7 +18,7 @@ package baby.mumu.log.configuration;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
+import org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
