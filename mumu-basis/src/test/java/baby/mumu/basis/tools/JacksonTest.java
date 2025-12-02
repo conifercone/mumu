@@ -16,13 +16,12 @@
 
 package baby.mumu.basis.tools;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.intellij.lang.annotations.Language;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.moneta.MonetaMoneyModule;
 
 /**
  * jackson test
@@ -33,9 +32,9 @@ import org.zalando.jackson.datatype.money.MoneyModule;
 public class JacksonTest {
 
   @Test
-  public void test() throws JsonProcessingException {
+  public void test() {
     ObjectMapper objectMapper = JsonMapper.builder()
-      .addModule(new MoneyModule().withQuotedDecimalNumbers())
+      .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
       .build();
 
     @Language("JSON")

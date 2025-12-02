@@ -18,6 +18,6 @@ dependencies {
     implementation(libs.redis.om.spring)
     implementation(libs.spring.boot.starter.data.mongodb)
     annotationProcessor(libs.redis.om.spring)
-    annotationProcessor(libs.hibernate.jpamodelgen)
+    annotationProcessor(libs.hibernate.processor)
     implementation(libs.jobrunr.spring.boot3.starter)
 }

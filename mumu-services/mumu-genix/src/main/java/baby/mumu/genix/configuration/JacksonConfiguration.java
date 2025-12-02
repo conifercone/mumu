@@ -16,16 +16,15 @@
 
 package baby.mumu.genix.configuration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.datatype.moneta.MonetaMoneyModule;
 
 /**
  * jackson配置
@@ -39,14 +38,10 @@ public class JacksonConfiguration {
   @Bean
   public ObjectMapper objectMapper() {
     return JsonMapper.builder()
-      // 写日期时不要用时间戳
-      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       // 反序列化时忽略未知字段
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-      // Java 8 时间模块
-      .addModule(new JavaTimeModule())
       // Money 模块，数字字符串形式
-      .addModule(new MoneyModule().withQuotedDecimalNumbers())
+      .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
       // Long → String 序列化，避免 JS 丢精度
       .addModule(new SimpleModule()
         .addSerializer(Long.class, ToStringSerializer.instance)

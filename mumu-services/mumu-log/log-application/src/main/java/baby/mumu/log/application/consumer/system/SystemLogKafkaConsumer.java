@@ -20,13 +20,12 @@ import baby.mumu.log.client.api.SystemLogService;
 import baby.mumu.log.infra.config.LogProperties;
 import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 系统日志消费者
@@ -52,7 +51,7 @@ public class SystemLogKafkaConsumer {
   }
 
   @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
-  public void handle(String systemLog) throws JsonProcessingException {
+  public void handle(String systemLog) {
     SystemLogKafkaPO systemLogKafkaPO = objectMapper.readValue(systemLog,
       SystemLogKafkaPO.class);
     systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);

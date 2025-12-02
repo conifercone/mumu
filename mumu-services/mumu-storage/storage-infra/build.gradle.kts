@@ -13,6 +13,6 @@ dependencies {
     implementation(libs.hypersistence.utils.hibernate63)
     implementation(libs.postgresql)
     implementation(libs.jakarta.validation.api)
-    annotationProcessor(libs.hibernate.jpamodelgen)
+    annotationProcessor(libs.hibernate.processor)
     implementation(libs.tika.core)
 }

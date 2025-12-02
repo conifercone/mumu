@@ -60,42 +60,42 @@ public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentO
    * 账号ID
    */
   @NotNull
-  @Indexed(background = true)
+  @Indexed
   private Long accountId;
 
   /**
    * 街道地址，包含门牌号和街道信息
    */
   @Size(max = 255)
-  @Indexed(background = true)
+  @Indexed
   private String street;
 
   /**
    * 城市信息
    */
   @Size(max = 100)
-  @Indexed(background = true)
+  @Indexed
   private String city;
 
   /**
    * 州或省的信息
    */
   @Size(max = 100)
-  @Indexed(background = true)
+  @Indexed
   private String state;
 
   /**
    * 邮政编码
    */
   @Size(max = 20)
-  @Indexed(background = true)
+  @Indexed
   private String postalCode;
 
   /**
    * 国家信息
    */
   @Size(max = 100)
-  @Indexed(background = true)
+  @Indexed
   private String country;
 
   /**
@@ -107,7 +107,7 @@ public class AccountAddressDocumentPO extends JpaDocumentBasisDefaultPersistentO
   /**
    * 是否为默认地址
    */
-  @Indexed(background = true)
+  @Indexed
   private boolean defaultAddress;
 
   @Version

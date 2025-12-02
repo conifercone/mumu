@@ -19,10 +19,6 @@ package baby.mumu.basis.response;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
@@ -33,6 +29,8 @@ import java.time.ZoneOffset;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 响应信息
@@ -79,8 +77,6 @@ public class ResponseWrapper<T> implements Serializable {
   private String traceId;
 
   private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
-    .addModule(new JavaTimeModule())
-    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     .build();
 
 

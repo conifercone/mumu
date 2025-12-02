@@ -19,7 +19,6 @@ package baby.mumu.log.infra.operation.gatewayimpl;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
 
-import baby.mumu.basis.exception.DataConversionException;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.log.domain.operation.OperationLog;
@@ -30,8 +29,6 @@ import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.OperationLogEsRep
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPOMetamodel;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.OperationLogKafkaRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -48,6 +45,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 操作日志领域网关实现
@@ -80,15 +78,10 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   @Override
   public void submit(OperationLog operationLog) {
-    operationLogConvertor.toOperationLogKafkaPO(operationLog).ifPresent(res -> {
-      try {
-        operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
-          objectMapper.writeValueAsString(
-            res));
-      } catch (JsonProcessingException e) {
-        throw new DataConversionException();
-      }
-    });
+    operationLogConvertor.toOperationLogKafkaPO(operationLog).ifPresent(
+      res -> operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
+        objectMapper.writeValueAsString(
+          res)));
   }
 
   @Override

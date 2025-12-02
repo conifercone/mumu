@@ -19,7 +19,6 @@ package baby.mumu.log.infra.system.gatewayimpl;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
 
-import baby.mumu.basis.exception.DataConversionException;
 import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
@@ -29,8 +28,6 @@ import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.SystemLogEsRepositor
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPOMetamodel;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.SystemLogKafkaRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +42,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 系统日志领域网关实现
@@ -74,14 +72,9 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   @Override
   public void submit(SystemLog systemLog) {
-    systemLogConvertor.toSystemLogKafkaPO(systemLog).ifPresent(res -> {
-      try {
-        systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
-          objectMapper.writeValueAsString(res));
-      } catch (JsonProcessingException e) {
-        throw new DataConversionException();
-      }
-    });
+    systemLogConvertor.toSystemLogKafkaPO(systemLog)
+      .ifPresent(res -> systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
+        objectMapper.writeValueAsString(res)));
   }
 
   @Override

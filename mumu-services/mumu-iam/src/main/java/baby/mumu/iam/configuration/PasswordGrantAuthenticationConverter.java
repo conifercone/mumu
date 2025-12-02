@@ -41,6 +41,9 @@ import org.springframework.util.MultiValueMap;
  */
 public class PasswordGrantAuthenticationConverter implements AuthenticationConverter {
 
+  public static final String USERNAME = "username";
+  public static final String PASSWORD = "password";
+
   @Nullable
   @Override
   public Authentication convert(@NonNull HttpServletRequest request) {
@@ -54,17 +57,17 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
     MultiValueMap<String, String> parameters = PasswordGrantAuthenticationConverter.getParameters(
       request);
     // username (REQUIRED)
-    String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
+    String username = parameters.getFirst(PasswordGrantAuthenticationConverter.USERNAME);
     if (StringUtils.isBlank(username) ||
-      parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
+      parameters.get(PasswordGrantAuthenticationConverter.USERNAME).size() != 1) {
       ResponseCode accountNameCannotBeEmpty = ResponseCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
         new OAuth2Error(accountNameCannotBeEmpty.getCode(),
           accountNameCannotBeEmpty.getMessage(), StringUtils.EMPTY));
     }
-    String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
+    String password = parameters.getFirst(PasswordGrantAuthenticationConverter.PASSWORD);
     if (StringUtils.isBlank(password) ||
-      parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
+      parameters.get(PasswordGrantAuthenticationConverter.PASSWORD).size() != 1) {
       ResponseCode accountPasswordCannotBeEmpty = ResponseCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
       throw new OAuth2AuthenticationException(
         new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
