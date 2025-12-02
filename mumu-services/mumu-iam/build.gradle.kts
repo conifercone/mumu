@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.hypersistence.utils.hibernate63)
     implementation(libs.redis.om.spring)
     implementation(libs.spring.boot.data.redis)
-    implementation(libs.jobrunr.spring.boot3.starter)
+    implementation(libs.jobrunr)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)

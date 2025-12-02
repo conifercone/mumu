@@ -15,13 +15,12 @@ leafVersion = "1.0.2"
 zookeeperVersion = "3.9.4"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.13.0"
-flywayVersion = "11.18.0"
 disruptorVersion = '4.0.0'
 minioVersion = '8.6.0'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.21.0'
 commonsTextVersion = '1.14.0'
-jobrunrSpringBoot3StarterVersion = '8.3.0'
+jobrunrVersion = '8.3.0'
 alimtVersion = '1.5.1'
 deeplVersion = '1.12.0'
 asciitableVersion = '0.3.2'
@@ -198,8 +197,8 @@ minio = { module = "io.minio:minio", version.ref = "minioVersion" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstructVersion" }
 # https://central.sonatype.com/artifact/org.mapstruct/mapstruct-processor
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstructVersion" }
-# https://central.sonatype.com/artifact/org.jobrunr/jobrunr-spring-boot-3-starter
-jobrunr-spring-boot3-starter = { module = "org.jobrunr:jobrunr-spring-boot-3-starter", version.ref = "jobrunrSpringBoot3StarterVersion" }
+# https://central.sonatype.com/artifact/org.jobrunr/jobrunr-spring-boot-4-starter
+jobrunr = { module = "org.jobrunr:jobrunr-spring-boot-4-starter", version.ref = "jobrunrVersion" }
 # https://central.sonatype.com/artifact/com.aliyun/alimt20181012
 aliyun-mt = { module = "com.aliyun:alimt20181012", version.ref = "alimtVersion" }
 # https://central.sonatype.com/artifact/com.deepl.api/deepl-java

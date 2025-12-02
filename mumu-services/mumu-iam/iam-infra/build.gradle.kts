@@ -19,5 +19,5 @@ dependencies {
     implementation(libs.spring.boot.starter.data.mongodb)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(libs.hibernate.processor)
-    implementation(libs.jobrunr.spring.boot3.starter)
+    implementation(libs.jobrunr)
 }
