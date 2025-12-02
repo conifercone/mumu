@@ -26,7 +26,7 @@ dependencies {
     testImplementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.flyway.database.postgresql)
-    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.hypersistence)
     implementation(libs.redis.om.spring)
     implementation(libs.spring.boot.data.redis)
     implementation(libs.jobrunr)

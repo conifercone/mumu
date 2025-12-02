@@ -22,7 +22,6 @@ import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.grpc.interceptors.SafeBearerTokenInterceptor;
-import baby.mumu.extension.gson.GsonConfiguration;
 import baby.mumu.extension.idempotent.IdempotentConfiguration;
 import baby.mumu.extension.listener.ListenerConfiguration;
 import baby.mumu.extension.mvc.ApplicationMvcConfiguration;
@@ -58,7 +57,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
   DatasourceConfiguration.class,
   TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
   FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
-  FilterConfiguration.class, IdempotentConfiguration.class, GsonConfiguration.class})
+  FilterConfiguration.class, IdempotentConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 
@@ -73,6 +72,7 @@ public class ExtensionConfiguration {
     return (name, context) -> {
       if ("http.server.requests".equals(name)
         && context instanceof ServerRequestObservationContext serverContext) {
+        assert serverContext.getCarrier() != null;
         return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
       } else {
         return true;

@@ -112,7 +112,10 @@ import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import tools.jackson.databind.jsontype.PolymorphicTypeValidator;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.ToStringSerializer;
 import tools.jackson.datatype.moneta.MonetaMoneyModule;
@@ -145,8 +148,7 @@ public class AuthorizationConfiguration {
     IAMAuthenticationFailureHandler iamAuthenticationFailureHandler,
     UserDetailsService userDetailsService,
     PasswordEncoder passwordEncoder, AuthorizationServerSettings authorizationServerSettings) {
-    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-      http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
+    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
 
     http
       .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
@@ -266,6 +268,10 @@ public class AuthorizationConfiguration {
       .addSerializer(Long.class, ToStringSerializer.instance)
       .addSerializer(Long.TYPE, ToStringSerializer.instance);
     ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
+    // 关键：允许特定包的多态反序列化
+    PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+      .allowIfSubType("baby.mumu.iam.")
+      .build();
     JsonMapper jsonMapper = JsonMapper.builder()
       // Spring Security 基础与扩展模块
       .addModule(new CoreJacksonModule())
@@ -273,6 +279,7 @@ public class AuthorizationConfiguration {
       // 授权服务器 & Money
       .addModule(new OAuth2AuthorizationServerJacksonModule())
       .addModule(new MonetaMoneyModule())
+      .activateDefaultTyping(ptv, DefaultTyping.NON_FINAL)
       // Long → String
       .addModule(longToString)
       // MixIn 映射

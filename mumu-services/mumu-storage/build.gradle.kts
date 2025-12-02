@@ -21,7 +21,7 @@ dependencies {
     testImplementation(libs.spring.web)
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.flyway.database.postgresql)
-    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.hypersistence)
     implementation(libs.jasypt)
     implementation(libs.swagger3Ui)
     implementation(libs.minio)

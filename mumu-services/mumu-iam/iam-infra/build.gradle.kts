@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.spring.security.core)
     implementation(libs.spring.security.crypto)
     implementation(libs.jakarta.validation.api)
-    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.hypersistence)
     implementation(libs.postgresql)
     implementation(libs.redis.om.spring)
     implementation(libs.spring.boot.starter.data.mongodb)

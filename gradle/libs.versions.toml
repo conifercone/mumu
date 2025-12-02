@@ -14,7 +14,7 @@ redisOmSpringVersion = "2.0.0"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.4"
 yitterIdGeneratorVersion = "1.0.6"
-hypersistenceUtilsVersion = "3.13.0"
+hypersistenceUtilsVersion = "3.13.1"
 disruptorVersion = '4.0.0'
 minioVersion = '8.6.0'
 mapstructVersion = '1.6.3'
@@ -145,8 +145,8 @@ micrometer-tracing = { module = "io.micrometer:micrometer-tracing" }
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 # https://central.sonatype.com/artifact/jakarta.validation/jakarta.validation-api
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
-# https://central.sonatype.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
-hypersistence-utils-hibernate63 = { module = "io.hypersistence:hypersistence-utils-hibernate-63", version.ref = "hypersistenceUtilsVersion" }
+# https://central.sonatype.com/artifact/io.hypersistence/hypersistence-utils-hibernate-71
+hypersistence = { module = "io.hypersistence:hypersistence-utils-hibernate-71", version.ref = "hypersistenceUtilsVersion" }
 # https://central.sonatype.com/artifact/org.springframework.security/spring-security-core
 spring-security-core = { module = "org.springframework.security:spring-security-core" }
 # https://central.sonatype.com/artifact/org.springframework.security/spring-security-crypto

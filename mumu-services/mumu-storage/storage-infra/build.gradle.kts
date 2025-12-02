@@ -10,7 +10,7 @@ dependencies {
     implementation(libs.grpc.protobuf)
     implementation(libs.minio)
     implementation(libs.spring.web)
-    implementation(libs.hypersistence.utils.hibernate63)
+    implementation(libs.hypersistence)
     implementation(libs.postgresql)
     implementation(libs.jakarta.validation.api)
     annotationProcessor(libs.hibernate.processor)

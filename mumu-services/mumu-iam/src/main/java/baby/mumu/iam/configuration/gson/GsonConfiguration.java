@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package baby.mumu.extension.gson;
+package baby.mumu.iam.configuration.gson;
 
-import org.springframework.boot.gson.autoconfigure.GsonBuilderCustomizer;
+import com.redis.om.spring.serialization.gson.GsonBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
