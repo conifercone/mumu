@@ -65,14 +65,14 @@ public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPers
    * 账号ID
    */
   @NotNull
-  @Indexed(background = true)
+  @Indexed
   private Long accountId;
 
   /**
    * 系统设置标识
    */
   @NotBlank
-  @Indexed(background = true)
+  @Indexed
   private String profile;
 
   /**
@@ -94,7 +94,7 @@ public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPers
   /**
    * 是否是默认系统设置
    */
-  @Indexed(background = true)
+  @Indexed
   private boolean defaultSystemSettings;
 
   @Version

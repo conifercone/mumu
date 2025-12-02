@@ -16,15 +16,13 @@
 
 package baby.mumu.storage.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.datatype.moneta.MonetaMoneyModule;
 
 /**
  * jackson配置
@@ -38,12 +36,8 @@ public class JacksonConfiguration {
   @Bean
   public ObjectMapper objectMapper() {
     return JsonMapper.builder()
-      // 关闭时间戳形式的日期输出
-      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-      // 时间模块
-      .addModule(new JavaTimeModule())
       // Money 模块，数字字符串形式
-      .addModule(new MoneyModule().withQuotedDecimalNumbers())
+      .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
       // Long → String 序列化，避免 JS 丢精度
       .addModule(new SimpleModule()
         .addSerializer(Long.class, ToStringSerializer.instance)

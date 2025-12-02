@@ -64,7 +64,7 @@ public class IAMResourceServerConfig {
   @Bean
   public SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http,
     JwtDecoder jwtDecoder,
-    TokenGrpcService tokenGrpcService) throws Exception {
+    TokenGrpcService tokenGrpcService) {
     // noinspection DuplicatedCode
     ArrayList<String> csrfIgnoreUrls = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(resourcePoliciesProperties.getHttp())) {

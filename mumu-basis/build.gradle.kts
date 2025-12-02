@@ -8,7 +8,7 @@ dependencies {
     api(libs.jakarta.persistence.api)
     compileOnly(libs.spring.boot.starter.data.jpa)
     compileOnly(libs.spring.boot.starter.data.mongodb)
-    annotationProcessor(libs.hibernate.jpamodelgen)
+    annotationProcessor(libs.hibernate.processor)
     implementation(libs.spring.cloud.commons)
     implementation(libs.grpc.api)
     implementation(libs.grpc.protobuf)

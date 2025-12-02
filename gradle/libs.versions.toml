@@ -1,32 +1,32 @@
 [versions]
 springbootVersion = "4.0.0"
-springCloudVersion = "2025.0.0"
-springGrpcVersion = "0.12.0"
+springCloudVersion = "2025.1.0"
+springGrpcVersion = "1.0.0-RC1"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
 jasyptVersion = '3.0.5'
 swagger3Version = '3.0.0'
-swagger3AnnotationsVersion = '2.2.40'
+swagger3AnnotationsVersion = '2.2.41'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
-redisOmSpringVersion = "1.1.0"
+redisOmSpringVersion = "2.0.0"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.4"
 yitterIdGeneratorVersion = "1.0.6"
 hypersistenceUtilsVersion = "3.13.0"
-flywayVersion = "11.17.1"
+flywayVersion = "11.18.0"
 disruptorVersion = '4.0.0'
 minioVersion = '8.6.0'
 mapstructVersion = '1.6.3'
 commonsIoVersion = '2.21.0'
 commonsTextVersion = '1.14.0'
-jobrunrSpringBoot3StarterVersion = '8.2.4'
+jobrunrSpringBoot3StarterVersion = '8.3.0'
 alimtVersion = '1.5.1'
 deeplVersion = '1.12.0'
 asciitableVersion = '0.3.2'
 zxingVersion = '3.5.4'
-javapoetVersion = '0.8.0'
+javapoetVersion = '0.9.0'
 autoServiceVersion = '1.1.1'
 tess4jVersion = '5.16.0'
 javacvVersion = '1.5.12'
@@ -38,7 +38,6 @@ resilience4jVersion = '2.3.0'
 springSecurityRsaVersion = '1.1.5'
 opencsvVersion = '5.12.0'
 monetaVersion = '1.4.5'
-jacksonDatatypeMoneyVersion = '1.3.0'
 libphonenumberVersion = '9.0.19'
 commonsValidatorVersion = '1.10.1'
 jmhVersion = '1.37'
@@ -67,20 +66,14 @@ apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "a
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecifyVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-dependencies
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springbootVersion" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-web
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
-# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-core
-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core" }
-# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-databind
-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
-# https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-annotations
-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
-# https://central.sonatype.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-authorization-server
-spring-boot-starter-oauth2-authorization-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-authorization-server" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server
-spring-boot-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-webmvc
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-jackson
+spring-boot-starter-jackson = { module = "org.springframework.boot:spring-boot-starter-jackson" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-security-oauth2-authorization-server
+spring-boot-starter-security-oauth2-authorization-server = { module = "org.springframework.boot:spring-boot-starter-security-oauth2-authorization-server" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-security-oauth2-resource-server
+spring-boot-starter-security-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-security-oauth2-resource-server" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 # https://central.sonatype.com/artifact/org.postgresql/postgresql
@@ -109,12 +102,14 @@ spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-b
 spring-boot-starter-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-validation
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-webmvc-test
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
 # https://central.sonatype.com/artifact/p6spy/p6spy
 p6spy = { module = "p6spy:p6spy", version.ref = "p6spyVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch
 spring-boot-starter-data-elasticsearch = { module = "org.springframework.boot:spring-boot-starter-data-elasticsearch" }
-# https://central.sonatype.com/artifact/org.springframework.kafka/spring-kafka
-spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-kafka
+spring-boot-starter-kafka = { module = "org.springframework.boot:spring-boot-starter-kafka" }
 # https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java
 protobuf-java = { module = "com.google.protobuf:protobuf-java" }
 # https://central.sonatype.com/artifact/com.google.protobuf/protoc
@@ -147,14 +142,8 @@ zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeepe
 yitter-idgenerator = { module = "com.github.yitter:yitter-idgenerator", version.ref = "yitterIdGeneratorVersion" }
 # https://central.sonatype.com/artifact/io.micrometer/micrometer-tracing
 micrometer-tracing = { module = "io.micrometer:micrometer-tracing" }
-# https://central.sonatype.com/artifact/io.micrometer/micrometer-registry-prometheus
-micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
-# https://central.sonatype.com/artifact/io.micrometer/micrometer-tracing-bridge-otel
-micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
-# https://central.sonatype.com/artifact/io.opentelemetry/opentelemetry-exporter-zipkin
-opentelemetry-exporter-zipkin = { module = "io.opentelemetry:opentelemetry-exporter-zipkin" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-aop
-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-aspectj
+spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 # https://central.sonatype.com/artifact/jakarta.validation/jakarta.validation-api
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
 # https://central.sonatype.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
@@ -177,18 +166,20 @@ spring-data-mongodb = { module = "org.springframework.data:spring-data-mongodb" 
 spring-web = { module = "org.springframework:spring-web" }
 # https://central.sonatype.com/artifact/org.springframework.security/spring-security-test
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
-# https://central.sonatype.com/artifact/org.flywaydb/flyway-core
-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-flyway
+spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-gson
+spring-boot-starter-gson = { module = "org.springframework.boot:spring-boot-starter-gson" }
 # https://central.sonatype.com/artifact/org.flywaydb/flyway-database-postgresql
-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 # https://central.sonatype.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
-# https://central.sonatype.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
-jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+# https://central.sonatype.com/artifact/tools.jackson.module/jackson-module-kotlin
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" }
 # https://central.sonatype.com/artifact/org.jetbrains.kotlin/kotlin-reflect
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
-# https://central.sonatype.com/artifact/org.hibernate.orm/hibernate-jpamodelgen
-hibernate-jpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen" }
+# https://central.sonatype.com/artifact/org.hibernate.orm/hibernate-processor
+hibernate-processor = { module = "org.hibernate.orm:hibernate-processor" }
 # https://central.sonatype.com/artifact/com.lmax/disruptor
 disruptor = { module = "com.lmax:disruptor", version.ref = "disruptorVersion" }
 # https://central.sonatype.com/artifact/com.github.ben-manes.caffeine/caffeine
@@ -257,8 +248,8 @@ hibernate-core = { module = "org.hibernate.orm:hibernate-core" }
 opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsvVersion" }
 # https://central.sonatype.com/artifact/org.javamoney/moneta
 moneta = { module = "org.javamoney:moneta", version.ref = "monetaVersion" }
-# https://central.sonatype.com/artifact/org.zalando/jackson-datatype-money
-jackson-datatype-money = { module = "org.zalando:jackson-datatype-money", version.ref = "jacksonDatatypeMoneyVersion" }
+# https://central.sonatype.com/artifact/tools.jackson.datatype/jackson-datatype-moneta
+jackson-datatype-moneta = { module = "tools.jackson.datatype:jackson-datatype-moneta" }
 # https://central.sonatype.com/artifact/com.googlecode.libphonenumber/libphonenumber
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberVersion" }
 # https://central.sonatype.com/artifact/commons-validator/commons-validator
@@ -271,10 +262,14 @@ jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess"
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" }
 # https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-dependencies
 spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-dependencies", version.ref = "springGrpcVersion" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-opentelemetry
+spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-data-redis
+spring-boot-data-redis = { module = "org.springframework.boot:spring-boot-data-redis" }
 
 [bundles]
-jackson = ["jackson-core", "jackson-databind", "jackson-annotations", "jackson-datatype-jsr310"]
-web = ["micrometer-tracing", "micrometer-registry-prometheus", "micrometer-tracing-bridge-otel", "opentelemetry-exporter-zipkin", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-web"]
+jackson = ["spring-boot-starter-jackson"]
+web = ["spring-boot-starter-opentelemetry", "spring-boot-starter-aspectj", "spring-boot-starter-actuator", "spring-boot-starter-webmvc"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springbootVersion" }

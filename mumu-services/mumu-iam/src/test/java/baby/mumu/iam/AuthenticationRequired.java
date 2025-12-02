@@ -17,10 +17,6 @@
 package baby.mumu.iam;
 
 import baby.mumu.basis.enums.OAuth2Enum;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -33,6 +29,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 自动获取token
@@ -76,8 +75,8 @@ public class AuthenticationRequired {
         String contentAsString = response.getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(contentAsString);
         JsonNode accessToken = jsonNode.get("access_token");
-        return Optional.ofNullable(accessToken.textValue());
-      } catch (UnsupportedEncodingException | JsonProcessingException e) {
+        return Optional.ofNullable(accessToken.asString());
+      } catch (UnsupportedEncodingException e) {
         return Optional.empty();
       }
     }

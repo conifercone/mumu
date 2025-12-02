@@ -22,6 +22,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -100,9 +101,11 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     // 授权类型
     AuthorizationGrantType authorizationGrantType = passwordGrantAuthenticationToken.getGrantType();
     // 用户名
-    String username = (String) additionalParameters.get(OAuth2ParameterNames.USERNAME);
+    String username = (String) additionalParameters.get(
+      PasswordGrantAuthenticationConverter.USERNAME);
     // 密码
-    String password = (String) additionalParameters.get(OAuth2ParameterNames.PASSWORD);
+    String password = (String) additionalParameters.get(
+      PasswordGrantAuthenticationConverter.PASSWORD);
     // 请求参数权限范围
     String requestScopesStr = (String) additionalParameters.get(OAuth2ParameterNames.SCOPE);
     // 请求参数权限范围专场集合
@@ -271,7 +274,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     @NonNull Authentication authentication) {
     OAuth2ClientAuthenticationToken clientPrincipal = null;
     if (OAuth2ClientAuthenticationToken.class.isAssignableFrom(
-      authentication.getPrincipal().getClass())) {
+      Objects.requireNonNull(authentication.getPrincipal()).getClass())) {
       clientPrincipal = (OAuth2ClientAuthenticationToken) authentication.getPrincipal();
     }
     if (clientPrincipal != null && clientPrincipal.isAuthenticated()) {

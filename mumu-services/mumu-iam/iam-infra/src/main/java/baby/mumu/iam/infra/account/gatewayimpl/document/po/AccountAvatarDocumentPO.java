@@ -57,7 +57,7 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
    * 账号ID
    */
   @NotNull
-  @Indexed(background = true)
+  @Indexed
   private Long accountId;
 
   /**
@@ -66,19 +66,19 @@ public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentOb
    * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
    * {@link AccountAvatarDocumentPO#fileId}</p>
    */
-  @Indexed(background = true)
+  @Indexed
   private AccountAvatarSourceEnum source;
 
   /**
    * 上传头像时的文件ID，填写URL或第三方时可为空
    */
-  @Indexed(background = true)
+  @Indexed
   private String fileId;
 
   /**
    * 账号上传的URL地址
    */
-  @Indexed(background = true)
+  @Indexed
   private String url;
 
   @Version

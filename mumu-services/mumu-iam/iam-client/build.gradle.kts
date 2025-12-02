@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.spring.grpc.client.spring.boot.starter)
     implementation(libs.resilience4j.retry)
-    api(libs.spring.boot.starter.oauth2.resource.server)
+    api(libs.spring.boot.starter.security.oauth2.resource.server)
     api(libs.protobuf.java)
     implementation(libs.micrometer.tracing)
     implementation(libs.opencsv)

@@ -22,8 +22,6 @@ import baby.mumu.genix.domain.country.City;
 import baby.mumu.genix.domain.country.Country;
 import baby.mumu.genix.domain.country.State;
 import baby.mumu.genix.domain.country.gateway.CountryGateway;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,6 +32,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 国家领域网关实现

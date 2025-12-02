@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import org.javamoney.moneta.Money;
 import org.jspecify.annotations.NonNull;
-import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
+import org.springframework.boot.gson.autoconfigure.GsonBuilderCustomizer;
 
 /**
  * gson 构建器定制器

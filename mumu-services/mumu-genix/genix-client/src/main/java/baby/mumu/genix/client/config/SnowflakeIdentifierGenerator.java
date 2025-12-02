@@ -22,9 +22,8 @@ import java.io.Serial;
 import java.util.Properties;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.generator.GeneratorCreationContext;
 import org.hibernate.id.IdentifierGenerator;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.type.Type;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -56,8 +55,8 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
   }
 
   @Override
-  public void configure(@NonNull Type type, Properties parameters,
-    ServiceRegistry serviceRegistry) {
-    idType = type.getReturnedClass();
+  public void configure(@NonNull GeneratorCreationContext creationContext,
+    Properties parameters) {
+    this.idType = creationContext.getType().getReturnedClass();
   }
 }

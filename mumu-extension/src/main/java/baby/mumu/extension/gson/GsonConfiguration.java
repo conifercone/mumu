@@ -16,7 +16,7 @@
 
 package baby.mumu.extension.gson;
 
-import org.springframework.boot.autoconfigure.gson.GsonBuilderCustomizer;
+import org.springframework.boot.gson.autoconfigure.GsonBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

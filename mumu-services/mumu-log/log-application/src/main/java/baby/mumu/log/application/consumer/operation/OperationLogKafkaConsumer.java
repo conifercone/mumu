@@ -20,13 +20,12 @@ import baby.mumu.log.client.api.OperationLogService;
 import baby.mumu.log.infra.config.LogProperties;
 import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * 操作日志消费者
@@ -53,7 +52,7 @@ public class OperationLogKafkaConsumer {
   }
 
   @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
-  public void handle(String operationLog) throws JsonProcessingException {
+  public void handle(String operationLog) {
     OperationLogKafkaPO operationLogKafkaPO = objectMapper.readValue(operationLog,
       OperationLogKafkaPO.class);
     operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
