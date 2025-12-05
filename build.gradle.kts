@@ -52,7 +52,6 @@ val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssXX
 val formattedTime: String = now.format(formatter)
 
 
-val javaMajorVersion = findProperty("java.major.version")!!.toString().toInt()
 val checkstyleToolVersion = findProperty("checkstyle.tool.version")!!.toString()
 val pmdToolVersion = findProperty("pmd.tool.version")!!.toString()
 
@@ -99,12 +98,6 @@ subprojects {
     apply(plugin = rootProject.libs.plugins.kotlinJvm.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginSpring.get().pluginId)
     apply(plugin = rootProject.libs.plugins.kotlinPluginJpa.get().pluginId)
-
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(javaMajorVersion))
-        }
-    }
 
     checkstyle {
         toolVersion = checkstyleToolVersion
