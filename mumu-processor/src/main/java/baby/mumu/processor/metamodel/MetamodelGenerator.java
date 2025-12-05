@@ -68,11 +68,11 @@ import org.jspecify.annotations.NonNull;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
-@SuppressWarnings("unused")
+@java.lang.SuppressWarnings("unused")
 @SupportedAnnotationTypes(
   value = {"baby.mumu.basis.annotations.Metamodel"}
 )
-@SupportedSourceVersion(SourceVersion.RELEASE_23)
+@SupportedSourceVersion(SourceVersion.RELEASE_25)
 @AutoService(Processor.class)
 @SupportedOptions({"gradle.version", "os.name", "java.version", "project.version", "project.name"})
 public class MetamodelGenerator extends AbstractProcessor {
@@ -197,7 +197,7 @@ public class MetamodelGenerator extends AbstractProcessor {
       .flatMap(typeElement -> ObjectUtils.getFields(typeElement).stream())
       .collect(
         Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
-          (existing, replacement) -> existing)).values()
+          (existing, _) -> existing)).values()
       .stream()
       .toList();
     superClassFields.forEach(superClassField -> {

@@ -147,20 +147,29 @@ object FileDownloadUtils {
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withOrderedResults(true)
                     .build()
-                // 使用虚拟线程处理数据
-                val scope = StructuredTaskScope.ShutdownOnFailure()
-                var index = 0
-                data.forEach { record ->
-                    if (index == 0) {
-                        beanToCsv.write(record)
-                        @Suppress("AssignedValueIsNeverRead")
-                        index = 1
-                    } else {
-                        scope.fork { beanToCsv.write(record) } // 每条记录在虚拟线程中处理
+
+                // JDK 25：使用新的 StructuredTaskScope API
+                StructuredTaskScope.open<Void>().use { scope ->
+                    var index = 0
+                    data.forEach { record ->
+                        if (index == 0) {
+                            // 第一条在当前线程写，避免 scope 还没完全建立时就 fork
+                            beanToCsv.write(record)
+                            @Suppress("AssignedValueIsNeverRead")
+                            index = 1
+                        } else {
+                            // 之后的记录丢到虚拟线程里
+                            scope.fork<Void>(Runnable {
+                                beanToCsv.write(record)
+                            })
+                        }
                     }
+
+                    // 等待所有子任务结束：
+                    // - 全部成功：join() 正常返回
+                    // - 任意一个失败：join() 抛 StructuredTaskScope.FailedException
+                    scope.join()
                 }
-                scope.join() // 等待所有虚拟线程完成
-                scope.throwIfFailed() // 检查是否有异常抛出
             }
         } catch (e: Exception) {
             throw ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED, e)

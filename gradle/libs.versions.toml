@@ -1,7 +1,7 @@
 [versions]
 springbootVersion = "4.0.0"
 springCloudVersion = "2025.1.0"
-springGrpcVersion = "1.0.0-RC1"
+springGrpcVersion = "1.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
@@ -48,7 +48,7 @@ protobufBomVersion = '4.33.1'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '9.1.0'
-kotlinPluginVersion = '2.2.21'
+kotlinPluginVersion = '2.3.0-RC2'
 
 [libraries]
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter

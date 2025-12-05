@@ -2,7 +2,7 @@
 :imagesdir: .
 :icons: font
 :slack-invite: https://join.slack.com/t/mumu-community/shared_invite/zt-2ov97fcpj-bFJZmpXSp5YZWSU9zD7S5g
-:java-version: 23
+:java-version: 25
 :java-badge: https://img.shields.io/badge/JDK-{java-version}+-green.svg
 :java-link: https://adoptium.net/temurin/releases/?version={java-version}
 :mumu-github-homepage-link: https://github.com/conifercone/mumu
