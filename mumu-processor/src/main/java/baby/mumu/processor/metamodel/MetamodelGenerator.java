@@ -68,7 +68,7 @@ import org.jspecify.annotations.NonNull;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
-@java.lang.SuppressWarnings("unused")
+@SuppressWarnings("unused")
 @SupportedAnnotationTypes(
   value = {"baby.mumu.basis.annotations.Metamodel"}
 )
