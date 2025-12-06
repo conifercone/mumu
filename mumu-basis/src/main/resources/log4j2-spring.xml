@@ -21,7 +21,7 @@
     <!-- @formatter:off -->
     <Property name="LOG_PATH">${spring:mumu.log.path}/logs/${spring:spring.application.name:-mumu}</Property>
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-mumu}</Property>
-    <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%wEx</Property>
+    <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%xEx{full}</Property>
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-mumu},%X{traceId},%X{spanId}]</Property>
     <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
     <!-- @formatter:on -->
@@ -30,10 +30,10 @@
   <Appenders>
     <!-- @formatter:off -->
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
     </Console>
     <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
-      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         <SizeBasedTriggeringPolicy size="250MB" />
