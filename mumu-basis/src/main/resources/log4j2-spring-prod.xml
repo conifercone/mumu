@@ -19,10 +19,15 @@
 <Configuration status="WARN" name="prod">
   <Properties>
     <!-- @formatter:off -->
+    <!-- 日志目录：${mumu.log.path}/logs/${spring.application.name} -->
     <Property name="LOG_PATH">${spring:mumu.log.path}/logs/${spring:spring.application.name:-mumu}</Property>
+    <!-- 日志文件名前缀：应用名 -->
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-mumu}</Property>
+    <!-- 异常输出（dev 使用完整栈信息） -->
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%xEx{full}</Property>
+    <!-- 日志级别 + appName + traceId/spanId -->
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-mumu},%X{traceId},%X{spanId}]</Property>
+    <!-- 日期格式 -->
     <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
     <!-- @formatter:on -->
   </Properties>
@@ -33,6 +38,7 @@
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
       <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
     </Console>
+    <!-- INFO日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
     <RollingFile name="RollingInfoFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-info.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-info-%d{yyyy-MM-dd}-%i.log.gz">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
       <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -49,6 +55,7 @@
         </Delete>
       </DefaultRolloverStrategy>
     </RollingFile>
+    <!-- ERROR日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
     <RollingFile name="RollingErrorFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-error.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
       <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -75,6 +82,8 @@
       <AppenderRef ref="RollingInfoFile"/>
       <AppenderRef ref="RollingErrorFile"/>
     </AsyncRoot>
+
+    <!-- 降低 Kafka 客户端日志噪音 -->
     <logger name="org.apache.kafka" level="warn" additivity="false"/>
   </Loggers>
 </Configuration>
