@@ -41,7 +41,7 @@
       </Policies>
       <DefaultRolloverStrategy max="30">
         <Delete basePath="${LOG_PATH}/" maxDepth="1">
-          <IfFileName glob="*.log"/>
+          <IfFileName glob="*.log*"/>
           <IfLastModified age="7d"/>
         </Delete>
       </DefaultRolloverStrategy>
