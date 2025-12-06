@@ -270,7 +270,7 @@ public class AuthorizationConfiguration {
     ClassLoader classLoader = JdbcOAuth2AuthorizationService.class.getClassLoader();
     // 关键：允许特定包的多态反序列化
     PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-      .allowIfSubType("baby.mumu.iam.")
+      .allowIfSubType("baby.mumu.")
       .build();
     JsonMapper jsonMapper = JsonMapper.builder()
       // Spring Security 基础与扩展模块
