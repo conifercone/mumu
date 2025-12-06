@@ -31,3 +31,9 @@ trim_trailing_whitespace = true
 indent_size = 2
 tab_width = 2
 trim_trailing_whitespace = true
+
+[*.properties]
+# 以 2 个空格缩进
+indent_size = 2
+tab_width = 2
+trim_trailing_whitespace = true
