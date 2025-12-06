@@ -47,34 +47,36 @@ public class GrpcExceptionHandlersConfiguration {
     SystemLogGrpcService systemLogGrpcService) {
     return exception -> {
 
-      if (exception instanceof RateLimiterException e) {
-        GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
-        submit(systemLogGrpcService, "RL", e.getMessage(), ExceptionUtils.getStackTrace(e));
-        return Status.RESOURCE_EXHAUSTED.withDescription(e.getMessage()).withCause(e).asException();
+      switch (exception) {
+        case RateLimiterException e -> {
+          GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
+          submit(systemLogGrpcService, "RL", e.getMessage(), ExceptionUtils.getStackTrace(e));
+          return Status.RESOURCE_EXHAUSTED.withDescription(e.getMessage()).withCause(e)
+            .asException();
+        }
+        case AuthenticationException e -> {
+          GrpcExceptionHandlersConfiguration.log.error(ResponseCode.UNAUTHORIZED.getMessage(), e);
+          submit(systemLogGrpcService, "AUTHENTICATION",
+            ResponseCode.UNAUTHORIZED.getMessage(),
+            ResponseCode.UNAUTHORIZED.getMessage());
+          return Status.UNAUTHENTICATED.withDescription(e.getMessage()).withCause(e).asException();
+        }
+        case ApplicationException e -> {
+          GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
+          submit(systemLogGrpcService, "MUMU", e.getMessage(), ExceptionUtils.getStackTrace(e));
+          return Status.INTERNAL.withDescription(e.getMessage()).withCause(e).asException();
+        }
+        default -> {
+          // 兜底
+          GrpcExceptionHandlersConfiguration.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
+            exception);
+          submit(systemLogGrpcService, "EXCEPTION",
+            ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
+            ResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+          return Status.INTERNAL.withDescription(exception.getMessage()).withCause(exception)
+            .asException();
+        }
       }
-
-      if (exception instanceof AuthenticationException e) {
-        GrpcExceptionHandlersConfiguration.log.error(ResponseCode.UNAUTHORIZED.getMessage(), e);
-        submit(systemLogGrpcService, "AUTHENTICATION",
-          ResponseCode.UNAUTHORIZED.getMessage(),
-          ResponseCode.UNAUTHORIZED.getMessage());
-        return Status.UNAUTHENTICATED.withDescription(e.getMessage()).withCause(e).asException();
-      }
-
-      if (exception instanceof ApplicationException e) {
-        GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
-        submit(systemLogGrpcService, "MUMU", e.getMessage(), ExceptionUtils.getStackTrace(e));
-        return Status.INTERNAL.withDescription(e.getMessage()).withCause(e).asException();
-      }
-
-      // 兜底
-      GrpcExceptionHandlersConfiguration.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
-        exception);
-      submit(systemLogGrpcService, "EXCEPTION",
-        ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
-        ResponseCode.INTERNAL_SERVER_ERROR.getMessage());
-      return Status.INTERNAL.withDescription(exception.getMessage()).withCause(exception)
-        .asException();
     };
   }
 
