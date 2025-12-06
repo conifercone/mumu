@@ -23,26 +23,45 @@
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-mumu}</Property>
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%wEx</Property>
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-mumu},%X{traceId},%X{spanId}]</Property>
+    <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
     <!-- @formatter:on -->
   </Properties>
 
   <Appenders>
     <!-- @formatter:off -->
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
     </Console>
-    <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
-      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <RollingFile name="RollingInfoFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-info.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-info-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
       <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
         <SizeBasedTriggeringPolicy size="250MB" />
       </Policies>
-      <DefaultRolloverStrategy max="30">
-        <Delete basePath="${LOG_PATH}/" maxDepth="1">
-          <IfFileName glob="*.log*"/>
-          <IfLastModified age="7d"/>
+      <DefaultRolloverStrategy max="100">
+        <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+          <!-- 只匹配归档文件 -->
+          <IfFileName glob="${LOGFILE_NAME}-info-*.log.gz"/>
+          <!-- 只删除 30 天前的 -->
+          <IfLastModified age="30d"/>
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+    <RollingFile name="RollingErrorFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-error.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+      <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="100MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="100">
+        <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+          <!-- 只匹配 error 归档 -->
+          <IfFileName glob="${LOGFILE_NAME}-error-*.log.gz"/>
+          <!-- 只删除 60 天前的 -->
+          <IfLastModified age="60d"/>
         </Delete>
       </DefaultRolloverStrategy>
     </RollingFile>
@@ -53,7 +72,8 @@
     <!--Root level logger to control overall logging-->
     <AsyncRoot level="INFO" includeLocation="true">
       <AppenderRef ref="Console"/>
-      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="RollingInfoFile"/>
+      <AppenderRef ref="RollingErrorFile"/>
     </AsyncRoot>
     <logger name="org.apache.kafka" level="warn" additivity="false"/>
   </Loggers>
