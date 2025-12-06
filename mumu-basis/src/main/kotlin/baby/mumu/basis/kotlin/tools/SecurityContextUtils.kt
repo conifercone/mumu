@@ -36,143 +36,143 @@ import java.util.*
 @API(status = API.Status.INTERNAL, since = "1.0.0")
 object SecurityContextUtils {
 
+  /**
+   * 账号ID属性名
+   */
+  private const val ID = "id"
+
+  /**
+   * 账号时区属性名
+   */
+  private const val TIMEZONE = "timezone"
+
+  /**
+   * 账号语言个人偏好属性名
+   */
+  private const val LANGUAGE = "language"
+
+  @get:API(status = API.Status.INTERNAL, since = "1.0.0")
+  @JvmStatic
+  val loginAccountId: Optional<Long>
     /**
-     * 账号ID属性名
+     * 获取当前登录账号ID
+     *
+     * @return 登录账号ID
      */
-    private const val ID = "id"
+    get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+      .map { authentication: Authentication ->
+        if (authentication.isAuthenticated) {
+          val principal = authentication.principal
+          if (principal is UserDetails) {
+            val beanMap = BeanMap.create(principal)
+            if (beanMap.containsKey(ID)) {
+              return@map beanMap[ID].toString().toLong()
+            }
+          } else if (principal is ClaimAccessor) {
+            val claims: Map<String, Any> = principal.claims
+            if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.claimName)) {
+              return@map claims[TokenClaimsEnum.ACCOUNT_ID.claimName].toString()
+                .toLong()
+            }
+          }
+        }
+        null
+      }
 
+  @get:API(status = API.Status.INTERNAL, since = "2.2.0")
+  @JvmStatic
+  val loginAccountName: Optional<String>
     /**
-     * 账号时区属性名
+     * 获取当前登录账号名
+     *
+     * @return 登录账号名
      */
-    private const val TIMEZONE = "timezone"
+    get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+      .map { authentication: Authentication ->
+        if (authentication.isAuthenticated) {
+          val principal = authentication.principal
+          if (principal is UserDetails) {
+            return@map principal.username
+          } else if (principal is ClaimAccessor) {
+            val claims: Map<String, Any> = principal.claims
+            if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.claimName)) {
+              return@map claims[TokenClaimsEnum.ACCOUNT_NAME.claimName].toString()
+            }
+          }
+        }
+        null
+      }
 
+  @get:API(status = API.Status.INTERNAL, since = "1.0.0")
+  @JvmStatic
+  val loginAccountTimezone: Optional<String>
     /**
-     * 账号语言个人偏好属性名
+     * 获取当前登录账号ID
+     *
+     * @return 登录账号ID
      */
-    private const val LANGUAGE = "language"
-
-    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
-    @JvmStatic
-    val loginAccountId: Optional<Long>
-        /**
-         * 获取当前登录账号ID
-         *
-         * @return 登录账号ID
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is UserDetails) {
-                        val beanMap = BeanMap.create(principal)
-                        if (beanMap.containsKey(ID)) {
-                            return@map beanMap[ID].toString().toLong()
-                        }
-                    } else if (principal is ClaimAccessor) {
-                        val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_ID.claimName)) {
-                            return@map claims[TokenClaimsEnum.ACCOUNT_ID.claimName].toString()
-                                .toLong()
-                        }
-                    }
-                }
-                null
+    get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+      .map { authentication: Authentication ->
+        if (authentication.isAuthenticated) {
+          val principal = authentication.principal
+          if (principal is UserDetails) {
+            val beanMap = BeanMap.create(principal)
+            if (beanMap.containsKey(TIMEZONE)) {
+              return@map beanMap[TIMEZONE].toString()
             }
-
-    @get:API(status = API.Status.INTERNAL, since = "2.2.0")
-    @JvmStatic
-    val loginAccountName: Optional<String>
-        /**
-         * 获取当前登录账号名
-         *
-         * @return 登录账号名
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is UserDetails) {
-                        return@map principal.username
-                    } else if (principal is ClaimAccessor) {
-                        val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.claimName)) {
-                            return@map claims[TokenClaimsEnum.ACCOUNT_NAME.claimName].toString()
-                        }
-                    }
-                }
-                null
+          } else if (principal is ClaimAccessor) {
+            val claims: Map<String, Any> = principal.claims
+            if (claims.containsKey(TokenClaimsEnum.TIMEZONE.claimName)) {
+              return@map claims[TokenClaimsEnum.TIMEZONE.claimName].toString()
             }
+          }
+        }
+        null
+      }
 
-    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
-    @JvmStatic
-    val loginAccountTimezone: Optional<String>
-        /**
-         * 获取当前登录账号ID
-         *
-         * @return 登录账号ID
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is UserDetails) {
-                        val beanMap = BeanMap.create(principal)
-                        if (beanMap.containsKey(TIMEZONE)) {
-                            return@map beanMap[TIMEZONE].toString()
-                        }
-                    } else if (principal is ClaimAccessor) {
-                        val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.TIMEZONE.claimName)) {
-                            return@map claims[TokenClaimsEnum.TIMEZONE.claimName].toString()
-                        }
-                    }
-                }
-                null
+  @get:API(status = API.Status.INTERNAL, since = "1.0.0")
+  @JvmStatic
+  val loginAccountLanguage: Optional<LanguageEnum>
+    /**
+     * 获取当前登录账号语言偏好
+     *
+     * @return 登录账号语言偏好
+     */
+    get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+      .map { authentication: Authentication ->
+        if (authentication.isAuthenticated) {
+          val principal = authentication.principal
+          if (principal is UserDetails) {
+            val beanMap = BeanMap.create(principal)
+            if (beanMap.containsKey(LANGUAGE)) {
+              return@map beanMap[LANGUAGE] as LanguageEnum?
             }
+          } else if (principal is ClaimAccessor) {
+            val claims: Map<String, Any> = principal.claims
+            if (claims.containsKey(TokenClaimsEnum.LANGUAGE.claimName)) {
+              return@map LanguageEnum.fromCode(claims[TokenClaimsEnum.LANGUAGE.claimName].toString())
+            }
+          }
+        }
+        null
+      }
 
-    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
-    @JvmStatic
-    val loginAccountLanguage: Optional<LanguageEnum>
-        /**
-         * 获取当前登录账号语言偏好
-         *
-         * @return 登录账号语言偏好
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is UserDetails) {
-                        val beanMap = BeanMap.create(principal)
-                        if (beanMap.containsKey(LANGUAGE)) {
-                            return@map beanMap[LANGUAGE] as LanguageEnum?
-                        }
-                    } else if (principal is ClaimAccessor) {
-                        val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.LANGUAGE.claimName)) {
-                            return@map LanguageEnum.fromCode(claims[TokenClaimsEnum.LANGUAGE.claimName].toString())
-                        }
-                    }
-                }
-                null
-            }
-
-    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
-    @JvmStatic
-    val tokenValue: Optional<String>
-        /**
-         * 获取当前token
-         *
-         * @return token
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is Jwt) {
-                        return@map principal.tokenValue
-                    }
-                }
-                null
-            }
+  @get:API(status = API.Status.INTERNAL, since = "1.0.0")
+  @JvmStatic
+  val tokenValue: Optional<String>
+    /**
+     * 获取当前token
+     *
+     * @return token
+     */
+    get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
+      .map { authentication: Authentication ->
+        if (authentication.isAuthenticated) {
+          val principal = authentication.principal
+          if (principal is Jwt) {
+            return@map principal.tokenValue
+          }
+        }
+        null
+      }
 }

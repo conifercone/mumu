@@ -27,17 +27,17 @@ import org.apiguardian.api.API
  */
 object EmailUtils {
 
-    /**
-     * 校验邮箱地址格式的方法
-     * @param email 邮箱地址
-     * @return 是否为合法格式的邮箱地址
-     */
-    @API(status = API.Status.STABLE, since = "2.7.0")
-    @JvmStatic
-    fun isValidEmailFormat(email: String?): Boolean {
-        if (email.isNullOrEmpty()) {
-            return false
-        }
-        return EmailValidator.getInstance().isValid(email)
+  /**
+   * 校验邮箱地址格式的方法
+   * @param email 邮箱地址
+   * @return 是否为合法格式的邮箱地址
+   */
+  @API(status = API.Status.STABLE, since = "2.7.0")
+  @JvmStatic
+  fun isValidEmailFormat(email: String?): Boolean {
+    if (email.isNullOrEmpty()) {
+      return false
     }
+    return EmailValidator.getInstance().isValid(email)
+  }
 }

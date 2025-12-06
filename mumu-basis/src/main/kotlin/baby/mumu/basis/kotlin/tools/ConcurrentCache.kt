@@ -29,68 +29,68 @@ import java.util.function.Function
  * @since 1.0.0
  */
 class ConcurrentCache<K, V>(private val size: Int) {
-    private val eden: MutableMap<K, V> = ConcurrentHashMap(size)
+  private val eden: MutableMap<K, V> = ConcurrentHashMap(size)
 
-    private val longTerm: MutableMap<K, V> = WeakHashMap(size)
+  private val longTerm: MutableMap<K, V> = WeakHashMap(size)
 
-    /**
-     * 从缓存中检索与给定键关联的值
-     *
-     * @param k 要检索的值的键
-     * @return 与给定键关联的值，如果缓存中不存在该键，则为null
-     */
-    operator fun get(k: K): V? {
-        var v = eden[k]
-        if (v == null) {
-            var tempValue: V?
-            synchronized(longTerm) {
-                tempValue = longTerm[k]
-            }
-            v = tempValue
-            if (v != null) {
-                eden[k] = v
-            }
-        }
-        return v
-    }
-
-    /**
-     * 将给定的键值对存储到缓存中
-     *
-     * @param k 要存储的键
-     * @param v 要存储的值
-     */
-    fun put(k: K, v: V) {
-        if (eden.size >= size) {
-            synchronized(longTerm) {
-                longTerm.putAll(this.eden)
-            }
-            eden.clear()
-        }
+  /**
+   * 从缓存中检索与给定键关联的值
+   *
+   * @param k 要检索的值的键
+   * @return 与给定键关联的值，如果缓存中不存在该键，则为null
+   */
+  operator fun get(k: K): V? {
+    var v = eden[k]
+    if (v == null) {
+      var tempValue: V?
+      synchronized(longTerm) {
+        tempValue = longTerm[k]
+      }
+      v = tempValue
+      if (v != null) {
         eden[k] = v
+      }
     }
+    return v
+  }
 
-    /**
-     * 如果缓存中不存在给定键的值，则根据给定的键使用指定的映射函数计算并存储一个值
-     *
-     * @param key             要进行计算的键
-     * @param mappingFunction 对缓存中不存在的键进行计算的映射函数
-     * @return 缓存中与给定键关联的值；如果计算结果为 null，则返回 null
-     */
-    fun computeIfAbsent(
-        key: K,
-        mappingFunction: Function<in K, out V>
-    ): V? {
-        Objects.requireNonNull(mappingFunction)
-        val v: V? = this[key]
-        if (v == null) {
-            val newValue: V? = mappingFunction.apply(key)
-            if (newValue != null) {
-                put(key, newValue)
-                return newValue
-            }
-        }
-        return v
+  /**
+   * 将给定的键值对存储到缓存中
+   *
+   * @param k 要存储的键
+   * @param v 要存储的值
+   */
+  fun put(k: K, v: V) {
+    if (eden.size >= size) {
+      synchronized(longTerm) {
+        longTerm.putAll(this.eden)
+      }
+      eden.clear()
     }
+    eden[k] = v
+  }
+
+  /**
+   * 如果缓存中不存在给定键的值，则根据给定的键使用指定的映射函数计算并存储一个值
+   *
+   * @param key             要进行计算的键
+   * @param mappingFunction 对缓存中不存在的键进行计算的映射函数
+   * @return 缓存中与给定键关联的值；如果计算结果为 null，则返回 null
+   */
+  fun computeIfAbsent(
+    key: K,
+    mappingFunction: Function<in K, out V>
+  ): V? {
+    Objects.requireNonNull(mappingFunction)
+    val v: V? = this[key]
+    if (v == null) {
+      val newValue: V? = mappingFunction.apply(key)
+      if (newValue != null) {
+        put(key, newValue)
+        return newValue
+      }
+    }
+    return v
+  }
 
 }

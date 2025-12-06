@@ -28,24 +28,24 @@ import org.slf4j.MDC
  */
 object TraceIdUtils {
 
-    @JvmStatic
-    fun getTraceId(): String {
-        // 先取 MDC
-        val mdcId = MDC.get(MDCConstants.TRACE_ID)
-        if (!mdcId.isNullOrEmpty()) {
-            return mdcId
-        }
-
-        // 再尝试取 Tracer
-        return try {
-            val tracer = SpringContextUtils.getApplicationContext()
-                ?.getBeanProvider(Tracer::class.java)
-                ?.getIfAvailable()
-
-            val span = tracer?.currentSpan()
-            span?.context()?.traceId() ?: ""
-        } catch (_: Exception) {
-            ""
-        }
+  @JvmStatic
+  fun getTraceId(): String {
+    // 先取 MDC
+    val mdcId = MDC.get(MDCConstants.TRACE_ID)
+    if (!mdcId.isNullOrEmpty()) {
+      return mdcId
     }
+
+    // 再尝试取 Tracer
+    return try {
+      val tracer = SpringContextUtils.getApplicationContext()
+        ?.getBeanProvider(Tracer::class.java)
+        ?.getIfAvailable()
+
+      val span = tracer?.currentSpan()
+      span?.context()?.traceId() ?: ""
+    } catch (_: Exception) {
+      ""
+    }
+  }
 }
