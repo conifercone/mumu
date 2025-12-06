@@ -1,17 +1,20 @@
 root = true
 # 对于所有的文件: 始终在文件末尾插入一个新行、设置文件字符集为utf-8
 [*]
+# 换行符使用 LF
 end_of_line = lf
+# 文件编码为 UTF-8
 charset = utf-8
 # 文件末尾强制添加换行
 insert_final_newline = true
+# 使用空格缩进
+indent_style = space
 
 # Java 文件设置
 [*.java]
 # 以 2 个空格缩进
 indent_size = 2
 tab_width = 2
-indent_style = space
 # 自动移除行尾多余空格
 trim_trailing_whitespace = true
 
@@ -20,6 +23,5 @@ trim_trailing_whitespace = true
 # 以 2 个空格缩进
 indent_size = 2
 tab_width = 2
-indent_style = space
 # 自动移除行尾多余空格
 trim_trailing_whitespace = true
