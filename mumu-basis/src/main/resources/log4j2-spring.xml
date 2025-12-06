@@ -32,15 +32,19 @@
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
     </Console>
-    <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/${LOGFILE_NAME}-%d{yyyy-MM-dd}.log">
+    <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+      <!-- 滚动策略：每天轮转 + 单文件超过 250MB 轮转 -->
       <Policies>
         <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-        <SizeBasedTriggeringPolicy size="250MB" />
+        <SizeBasedTriggeringPolicy size="250MB"/>
       </Policies>
+
+      <!-- 归档清理策略：仅清理 archive 目录下 7 天前的 *.log.gz 归档文件 -->
       <DefaultRolloverStrategy max="30">
-        <Delete basePath="${LOG_PATH}/" maxDepth="1">
-          <IfFileName glob="*.log"/>
+        <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+          <!-- 只删除当前应用归档日志，不影响其他日志 -->
+          <IfFileName glob="${LOGFILE_NAME}-*.log.gz"/>
           <IfLastModified age="7d"/>
         </Delete>
       </DefaultRolloverStrategy>
