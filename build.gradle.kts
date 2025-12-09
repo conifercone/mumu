@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.nio.charset.StandardCharsets
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -19,7 +20,7 @@ plugins {
 
 description = "The Delightfully Clean & Ready-to-Go Management System!"
 
-val rootDirectory = project.rootDir
+val rootDirectory: File? = project.rootDir
 
 // 安装git hook
 tasks.register<Copy>("installGitHooks") {
@@ -211,7 +212,7 @@ subprojects {
 
     tasks.named(
         "compileKotlin",
-        org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java
+        KotlinCompilationTask::class.java
     ) {
         compilerOptions {
             freeCompilerArgs.add("-Xjsr305=strict")
