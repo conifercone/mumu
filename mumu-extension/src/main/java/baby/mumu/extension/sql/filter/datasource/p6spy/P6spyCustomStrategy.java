@@ -41,8 +41,8 @@ public class P6spyCustomStrategy implements MessageFormattingStrategy {
    * @param elapsed      the time in milliseconds that the operation took to complete
    * @param category     the category of the operation
    * @param prepared     the SQL statement with all bind variables replaced with actual values
-   * @param sql          the sql statement executed
-   * @param url          the database url where the sql statement executed
+   * @param sql          the SQL statement executed
+   * @param url          the database url where the SQL statement executed
    * @return 格式化后的SQL输出
    */
   @Override
