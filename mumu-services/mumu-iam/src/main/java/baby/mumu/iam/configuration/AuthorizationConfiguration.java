@@ -25,8 +25,10 @@ import baby.mumu.extension.authentication.AuthenticationProperties;
 import baby.mumu.extension.authentication.AuthenticationProperties.Rsa;
 import baby.mumu.iam.application.service.AccountUserDetailService;
 import baby.mumu.iam.domain.account.Account;
+import baby.mumu.iam.domain.account.AccountAddress;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.domain.permission.Permission;
+import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.client.convertor.ClientConvertor;
 import baby.mumu.iam.infra.client.gatewayimpl.database.ClientRepository;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
@@ -270,7 +272,11 @@ public class AuthorizationConfiguration {
     BasicPolymorphicTypeValidator.Builder ptvBuilder =
       BasicPolymorphicTypeValidator.builder()
         // 允许你的领域对象包
-        .allowIfSubType("baby.mumu.");
+        .allowIfSubType(Point.class)
+        .allowIfSubType(Permission.class)
+        .allowIfSubType(AccountAddress.class)
+        .allowIfSubType(Role.class)
+        .allowIfSubType(Account.class);
     JsonMapper jsonMapper = JsonMapper.builder()
       // Spring Security 基础与扩展模块
       .addModule(new CoreJacksonModule())
