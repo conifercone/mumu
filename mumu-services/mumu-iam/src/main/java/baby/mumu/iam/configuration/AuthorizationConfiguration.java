@@ -274,6 +274,7 @@ public class AuthorizationConfiguration {
         // 允许你的领域对象包
         .allowIfSubType(Point.class)
         .allowIfSubType(Permission.class)
+        .allowIfSubType(BigDecimal.class)
         .allowIfSubType(AccountAddress.class)
         .allowIfSubType(Role.class)
         .allowIfSubType(Account.class);
