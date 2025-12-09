@@ -10,7 +10,7 @@ swagger3Version = '3.0.0'
 swagger3AnnotationsVersion = '2.2.41'
 p6spyVersion = '3.9.1'
 annotationApiVersion = '1.3.2'
-redisOmSpringVersion = "2.0.0"
+redisOmSpringVersion = "2.0.1"
 leafVersion = "1.0.2"
 zookeeperVersion = "3.9.4"
 yitterIdGeneratorVersion = "1.0.6"
@@ -263,8 +263,6 @@ tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" 
 spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-dependencies", version.ref = "springGrpcVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-opentelemetry
 spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
-# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-data-redis
-spring-boot-data-redis = { module = "org.springframework.boot:spring-boot-data-redis" }
 
 [bundles]
 jackson = ["spring-boot-starter-jackson"]

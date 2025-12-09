@@ -18,7 +18,6 @@ dependencies {
     testImplementation(libs.protobuf.java)
     testImplementation(libs.spring.grpc.client.spring.boot.starter)
     implementation(libs.redis.om.spring)
-    implementation(libs.spring.boot.data.redis)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
 }

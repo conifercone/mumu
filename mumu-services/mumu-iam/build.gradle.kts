@@ -28,7 +28,6 @@ dependencies {
     implementation(libs.flyway.database.postgresql)
     implementation(libs.hypersistence)
     implementation(libs.redis.om.spring)
-    implementation(libs.spring.boot.data.redis)
     implementation(libs.jobrunr)
     annotationProcessor(libs.redis.om.spring)
     annotationProcessor(project(":mumu-processor"))
