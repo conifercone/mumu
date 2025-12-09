@@ -19,6 +19,7 @@ package baby.mumu.basis.kotlin.tools
 import baby.mumu.basis.constants.MDCConstants
 import io.micrometer.tracing.Tracer
 import org.slf4j.MDC
+import org.springframework.beans.factory.getBeanProvider
 
 /**
  * 全局链路ID工具类
@@ -39,7 +40,7 @@ object TraceIdUtils {
     // 再尝试取 Tracer
     return try {
       val tracer = SpringContextUtils.getApplicationContext()
-        ?.getBeanProvider(Tracer::class.java)
+        ?.getBeanProvider<Tracer>()
         ?.getIfAvailable()
 
       val span = tracer?.currentSpan()
