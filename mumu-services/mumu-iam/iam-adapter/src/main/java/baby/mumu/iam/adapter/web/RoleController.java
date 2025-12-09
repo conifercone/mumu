@@ -89,7 +89,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public void deleteById(@PathVariable(value = "id") Long id) {
+  public void deleteById(@PathVariable Long id) {
     roleService.deleteById(id);
   }
 
@@ -98,7 +98,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void deleteByCode(@PathVariable(value = "code") String code) {
+  public void deleteByCode(@PathVariable String code) {
     roleService.deleteByCode(code);
   }
 
@@ -155,7 +155,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void archiveById(@PathVariable(value = "id") Long id) {
+  public void archiveById(@PathVariable Long id) {
     roleService.archiveById(id);
   }
 
@@ -164,7 +164,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
-  public void recoverFromArchiveById(@PathVariable(value = "id") Long id) {
+  public void recoverFromArchiveById(@PathVariable Long id) {
     roleService.recoverFromArchiveById(id);
   }
 
@@ -202,8 +202,8 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public void deletePath(@PathVariable(value = "ancestorId") Long ancestorId,
-    @PathVariable(value = "descendantId") Long descendantId) {
+  public void deletePath(@PathVariable Long ancestorId,
+    @PathVariable Long descendantId) {
     roleService.deletePath(ancestorId, descendantId);
   }
 
@@ -212,7 +212,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.4.0")
-  public RoleFindByIdDTO findById(@PathVariable(value = "id") Long id) {
+  public RoleFindByIdDTO findById(@PathVariable Long id) {
     return roleService.findById(id);
   }
 
@@ -221,7 +221,7 @@ public class RoleController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.5.0")
-  public RoleFindByCodeDTO findByCode(@PathVariable(value = "code") String code) {
+  public RoleFindByCodeDTO findByCode(@PathVariable String code) {
     return roleService.findByCode(code);
   }
 }

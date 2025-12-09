@@ -116,7 +116,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void disable(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long id) {
     accountService.disable(id);
   }
 
@@ -153,7 +153,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
   public void resetPassword(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long id) {
     accountService.resetPassword(id);
   }
 
@@ -163,7 +163,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void resetSystemSettingsBySettingsId(
-    @Parameter(description = "系统设置ID", required = true) @PathVariable(value = "systemSettingsId") String systemSettingsId) {
+    @PathVariable @Parameter(description = "系统设置ID", required = true) String systemSettingsId) {
     accountService.resetSystemSettingsBySettingsId(systemSettingsId);
   }
 
@@ -233,7 +233,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void archiveById(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long accountId) {
     accountService.archiveById(accountId);
   }
 
@@ -243,7 +243,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.4")
   public void recoverFromArchiveById(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long accountId) {
     accountService.recoverFromArchiveById(accountId);
   }
 
@@ -263,7 +263,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public AccountBasicInfoDTO getAccountBasicInfoById(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "id") Long id) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long id) {
     return accountService.getAccountBasicInfoById(id);
   }
 
@@ -273,7 +273,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.2.0")
   public void offline(
-    @Parameter(description = "账号ID", required = true) @PathVariable(value = "accountId") Long accountId) {
+    @PathVariable @Parameter(description = "账号ID", required = true) Long accountId) {
     accountService.offline(accountId);
   }
 
@@ -303,7 +303,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public ResponseWrapper<List<AccountNearbyDTO>> nearby(
-    @PathVariable(value = "radiusInMeters") @Min(1) double radiusInMeters) {
+    @PathVariable @Min(1) double radiusInMeters) {
     return ResponseWrapper.success(accountService.nearby(radiusInMeters));
   }
 
@@ -313,7 +313,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void setDefaultAddress(
-    @PathVariable(value = "addressId") @NotBlank String addressId) {
+    @PathVariable @NotBlank String addressId) {
     accountService.setDefaultAddress(addressId);
   }
 
@@ -323,7 +323,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void deleteAddress(
-    @PathVariable(value = "addressId") @NotBlank String addressId) {
+    @PathVariable @NotBlank String addressId) {
     accountService.deleteAddress(addressId);
   }
 
@@ -333,7 +333,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void setDefaultSystemSettings(
-    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    @PathVariable @NotBlank String systemSettingsId) {
     accountService.setDefaultSystemSettings(systemSettingsId);
   }
 
@@ -343,7 +343,7 @@ public class AccountController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.6.0")
   public void deleteSystemSettings(
-    @PathVariable(value = "systemSettingsId") @NotBlank String systemSettingsId) {
+    @PathVariable @NotBlank String systemSettingsId) {
     accountService.deleteSystemSettings(systemSettingsId);
   }
 }

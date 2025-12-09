@@ -82,8 +82,7 @@ public class CountryController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<List<CountryGetStatesByCountryIdDTO>> getStatesByCountryId(
-    @PathVariable(value = "id")
-    Long id) {
+    @PathVariable Long id) {
     return ResponseWrapper.success(
       countryService.getStatesByCountryId(id));
   }
@@ -94,8 +93,7 @@ public class CountryController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<List<CountryGetCitiesByStateIdDTO>> getCitiesByStateId(
-    @PathVariable(value = "id")
-    Long id) {
+    @PathVariable Long id) {
     return ResponseWrapper.success(countryService.getCitiesByStateId(id));
   }
 
@@ -104,8 +102,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<CountryGetStateByIdDTO> getStateById(@PathVariable(value = "id")
-  Long id) {
+  public ResponseWrapper<CountryGetStateByIdDTO> getStateById(
+    @PathVariable Long id) {
     return ResponseWrapper.success(countryService.getStateById(id));
   }
 
@@ -115,8 +113,7 @@ public class CountryController {
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
   public ResponseWrapper<CountryGetStateCitiesByIdDTO> getStateCitiesById(
-    @PathVariable(value = "id")
-    Long id) {
+    @PathVariable Long id) {
     return ResponseWrapper.success(countryService.getStateCitiesById(id));
   }
 
@@ -125,8 +122,8 @@ public class CountryController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "2.0.0")
-  public ResponseWrapper<CountryGetCityByIdDTO> getCityById(@PathVariable(value = "id")
-  Long id) {
+  public ResponseWrapper<CountryGetCityByIdDTO> getCityById(
+    @PathVariable Long id) {
     return ResponseWrapper.success(countryService.getCityById(id));
   }
 }

@@ -71,7 +71,7 @@ public class OperationLogController {
   @ResponseBody
   @RateLimiter
   @API(status = Status.STABLE, since = "1.0.0")
-  public OperationLogQryDTO findOperationLogById(@PathVariable(value = "id") String id) {
+  public OperationLogQryDTO findOperationLogById(@PathVariable String id) {
     return operationLogService.findOperationLogById(id);
   }
 
