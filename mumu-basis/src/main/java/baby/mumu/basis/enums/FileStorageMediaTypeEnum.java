@@ -23,5 +23,6 @@ package baby.mumu.basis.enums;
  * @since 2.11.0
  */
 public enum FileStorageMediaTypeEnum {
-  MINIO
+  MINIO,
+  S3
 }

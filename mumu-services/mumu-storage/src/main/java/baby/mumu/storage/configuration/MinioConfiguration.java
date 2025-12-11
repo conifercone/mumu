@@ -16,6 +16,7 @@
 
 package baby.mumu.storage.configuration;
 
+import baby.mumu.storage.client.config.StorageProperties;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

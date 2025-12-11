@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.configuration;
+package baby.mumu.storage.client.config;
 
 import baby.mumu.basis.enums.FileStorageMediaTypeEnum;
 import lombok.Data;
@@ -36,6 +36,12 @@ public class StorageProperties {
    */
   @NestedConfigurationProperty
   private Minio minio = new Minio();
+
+  /**
+   * S3配置属性
+   */
+  @NestedConfigurationProperty
+  private S3 s3 = new S3();
 
   /**
    * 文件存储介质类型
@@ -60,5 +66,34 @@ public class StorageProperties {
      * 认证密钥
      */
     private String secretKey;
+  }
+
+  @Data
+  public static class S3 {
+
+    /**
+     * 地址
+     */
+    private String endpoint;
+
+    /**
+     * 区域
+     */
+    private String region;
+
+    /**
+     * 访问密钥 ID
+     */
+    private String accessKeyId;
+
+    /**
+     * 认证密钥
+     */
+    private String secretAccessKey;
+
+    /**
+     * 启用路径样式访问
+     */
+    private boolean pathStyleAccessEnabled;
   }
 }

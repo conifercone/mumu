@@ -57,6 +57,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
 
   @Override
   public void upload(@NonNull File file) throws Exception {
+    // noinspection DuplicatedCode
     FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
       .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
     StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
