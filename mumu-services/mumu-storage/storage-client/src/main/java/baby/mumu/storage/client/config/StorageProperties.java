@@ -47,7 +47,7 @@ public class StorageProperties {
    * 文件存储介质类型
    */
   @NestedConfigurationProperty
-  private FileStorageMediaTypeEnum storageMediaType = FileStorageMediaTypeEnum.MINIO;
+  private FileStorageMediaTypeEnum storageMediaType = FileStorageMediaTypeEnum.S3;
 
   @Data
   public static class Minio {

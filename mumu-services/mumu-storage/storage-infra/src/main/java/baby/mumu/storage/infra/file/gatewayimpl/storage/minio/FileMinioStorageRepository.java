@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
  * @since 2.12.0
  */
 @Component
-@ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO")
 public class FileMinioStorageRepository implements FileStorageRepository {
 
   private final MinioClient minioClient;

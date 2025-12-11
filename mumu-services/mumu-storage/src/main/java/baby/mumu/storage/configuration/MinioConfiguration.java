@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(StorageProperties.class)
-@ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO")
 public class MinioConfiguration {
 
   private final StorageProperties storageProperties;
