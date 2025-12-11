@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.jakarta.validation.api)
     annotationProcessor(libs.hibernate.processor)
     implementation(libs.tika.core)
+    implementation(libs.s3)
 }

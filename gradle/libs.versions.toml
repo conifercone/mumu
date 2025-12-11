@@ -266,6 +266,8 @@ spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-depe
 spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
 # https://central.sonatype.com/artifact/software.amazon.awssdk/bom
 awssdk-bom = { module = "software.amazon.awssdk:bom", version.ref = "awssdkBomVersion" }
+# https://central.sonatype.com/artifact/software.amazon.awssdk/s3
+s3 = { module = "software.amazon.awssdk:s3" }
 
 [bundles]
 jackson = ["spring-boot-starter-jackson"]
