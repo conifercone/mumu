@@ -45,6 +45,7 @@ tikaVersion = '3.2.3'
 grpcBomVersion = '1.77.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.33.2'
+awssdkBomVersion = '2.40.6'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '9.1.0'
@@ -263,6 +264,8 @@ tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaVersion" 
 spring-grpc-dependencies = { module = "org.springframework.grpc:spring-grpc-dependencies", version.ref = "springGrpcVersion" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-opentelemetry
 spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
+# https://central.sonatype.com/artifact/software.amazon.awssdk/bom
+awssdk-bom = { module = "software.amazon.awssdk:bom", version.ref = "awssdkBomVersion" }
 
 [bundles]
 jackson = ["spring-boot-starter-jackson"]

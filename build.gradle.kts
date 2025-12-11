@@ -245,6 +245,7 @@ subprojects {
         implementation(platform(rootProject.libs.grpc.bom))
         implementation(platform(rootProject.libs.protobuf.bom))
         implementation(platform(rootProject.libs.guava.bom))
+        implementation(platform(rootProject.libs.awssdk.bom))
         implementation(rootProject.libs.spring.boot.starter)
         implementation(rootProject.libs.spring.boot.starter.log4j2)
         implementation(rootProject.libs.spring.boot.starter.validation)
