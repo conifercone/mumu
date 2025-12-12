@@ -16,4 +16,5 @@ dependencies {
     annotationProcessor(libs.hibernate.processor)
     implementation(libs.tika.core)
     implementation(libs.s3)
+    implementation(libs.s3.transfer.manager)
 }

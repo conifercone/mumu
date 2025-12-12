@@ -30,6 +30,8 @@ import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 
@@ -79,4 +81,22 @@ public class S3Configuration {
     return s3ClientBuilder.build();
   }
 
+  @Bean
+  public S3AsyncClient s3AsyncClient() {
+    S3 s3 = storageProperties.getS3();
+    S3AsyncClientBuilder builder = S3AsyncClient.builder()
+      .multipartEnabled(true)
+      .region(Region.of(s3.getRegion()))
+      .credentialsProvider(
+        StaticCredentialsProvider.create(
+          AwsBasicCredentials.create(s3.getAccessKeyId(), s3.getSecretAccessKey())
+        )
+      );
+
+    if (StringUtils.isNotBlank(s3.getEndpoint())) {
+      builder = builder.endpointOverride(URI.create(s3.getEndpoint()));
+    }
+
+    return builder.build();
+  }
 }
