@@ -25,35 +25,36 @@ import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.AbortMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.BucketCannedACL;
+import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
+import software.amazon.awssdk.services.s3.model.CompletedMultipartUpload;
+import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.CreateBucketConfiguration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest.Builder;
+import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
+import software.amazon.awssdk.services.s3.model.CreateMultipartUploadResponse;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
-import software.amazon.awssdk.transfer.s3.S3TransferManager;
-import software.amazon.awssdk.transfer.s3.model.FileUpload;
-import software.amazon.awssdk.transfer.s3.model.UploadFileRequest;
+import software.amazon.awssdk.services.s3.model.UploadPartRequest;
+import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
 /**
  * 文件S3存储
@@ -66,22 +67,18 @@ import software.amazon.awssdk.transfer.s3.model.UploadFileRequest;
 public class FileS3StorageRepository implements FileStorageRepository {
 
   private final S3Client s3Client;
-  private final S3AsyncClient s3AsyncClient;
   private final StorageProperties storageProperties;
-  private static final Logger log = LoggerFactory.getLogger(
-    FileS3StorageRepository.class);
 
 
   @Autowired
-  public FileS3StorageRepository(S3Client s3Client, S3AsyncClient s3AsyncClient,
+  public FileS3StorageRepository(S3Client s3Client,
     StorageProperties storageProperties) {
     this.s3Client = s3Client;
-    this.s3AsyncClient = s3AsyncClient;
     this.storageProperties = storageProperties;
   }
 
   @Override
-  public void upload(@NonNull File file) throws IOException {
+  public void upload(@NonNull File file) {
     // noinspection DuplicatedCode
     FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
       .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
@@ -106,41 +103,9 @@ public class FileS3StorageRepository implements FileStorageRepository {
 
       s3Client.putObject(request, RequestBody.fromInputStream(file.getContent(), fileSize));
     } else {
-      try (S3TransferManager transferManager = S3TransferManager.builder()
-        .s3Client(s3AsyncClient)
-        .build()) {
-
-        Path temp = Files.createTempFile("upload-", ".tmp");
-        Files.copy(file.getContent(), temp, StandardCopyOption.REPLACE_EXISTING);
-
-        UploadFileRequest request = UploadFileRequest.builder()
-          .putObjectRequest(
-            p -> p.bucket(storageZoneCode).contentType(fileMetadata.getContentType())
-              .key(String.valueOf(fileMetadata.getId())))
-          .source(temp)
-          .build();
-        FileUpload upload = transferManager.uploadFile(request);
-
-        try {
-          // 等待上传完成（若失败会抛异常）
-          upload.completionFuture().join();
-
-          // 上传成功 → 删除临时文件
-          Files.deleteIfExists(temp);
-
-        } catch (Exception e) {
-          // 上传失败 → 尝试删除临时文件
-          try {
-            Files.deleteIfExists(temp);
-          } catch (IOException ex) {
-            // 记录日志即可，不应覆盖原始异常
-            FileS3StorageRepository.log.error("Failed to delete temp file: {}", ex.getMessage());
-          }
-
-          // 再次抛出上传异常
-          throw new RuntimeException("S3 upload failed", e);
-        }
-      }
+      uploadStreamAsMultipart(storageZoneCode, String.valueOf(fileMetadata.getId()),
+        file.getContent(),
+        fileMetadata.getContentType());
     }
   }
 
@@ -182,6 +147,97 @@ public class FileS3StorageRepository implements FileStorageRepository {
       .key(String.valueOf(metadata.getId()))
       .build();
     return s3Client.getObjectAsBytes(getObjectRequest).asInputStream();
+  }
+
+  /**
+   * 使用 InputStream 进行分片上传到 S3
+   */
+  public void uploadStreamAsMultipart(String bucket,
+    String key,
+    InputStream inputStream,
+    String contentType) {
+
+    // 每个分片大小（至少 5 MB，最后一片可以小于 5MB）
+    final int partSize = 5 * 1024 * 1024; // 5MB
+
+    // 1. 初始化 multipart upload
+    CreateMultipartUploadRequest createMultipartUploadRequest =
+      CreateMultipartUploadRequest.builder()
+        .bucket(bucket)
+        .key(key)
+        .contentType(contentType)
+        .build();
+
+    CreateMultipartUploadResponse createResponse =
+      s3Client.createMultipartUpload(createMultipartUploadRequest);
+
+    String uploadId = createResponse.uploadId();
+
+    List<CompletedPart> completedParts = new ArrayList<>();
+    byte[] buffer = new byte[partSize];
+    int partNumber = 1;
+
+    try {
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+
+        byte[] bytesToUpload;
+        if (bytesRead == buffer.length) {
+          bytesToUpload = buffer;
+        } else {
+          // 最后一块可能没读满 buffer
+          bytesToUpload = Arrays.copyOf(buffer, bytesRead);
+        }
+
+        UploadPartRequest uploadPartRequest = UploadPartRequest.builder()
+          .bucket(bucket)
+          .key(key)
+          .uploadId(uploadId)
+          .partNumber(partNumber)
+          .contentLength((long) bytesRead)
+          .build();
+
+        UploadPartResponse uploadPartResponse = s3Client.uploadPart(
+          uploadPartRequest,
+          RequestBody.fromBytes(bytesToUpload)
+        );
+
+        completedParts.add(
+          CompletedPart.builder()
+            .partNumber(partNumber)
+            .eTag(uploadPartResponse.eTag())
+            .build()
+        );
+
+        partNumber++;
+      }
+
+      // 2. 所有分片上传完，合并分片
+      CompletedMultipartUpload completedMultipartUpload = CompletedMultipartUpload.builder()
+        .parts(completedParts)
+        .build();
+
+      CompleteMultipartUploadRequest completeMultipartUploadRequest =
+        CompleteMultipartUploadRequest.builder()
+          .bucket(bucket)
+          .key(key)
+          .uploadId(uploadId)
+          .multipartUpload(completedMultipartUpload)
+          .build();
+
+      s3Client.completeMultipartUpload(completeMultipartUploadRequest);
+
+    } catch (Exception e) {
+      // 3. 出异常中止 upload
+      AbortMultipartUploadRequest abortMultipartUploadRequest =
+        AbortMultipartUploadRequest.builder()
+          .bucket(bucket)
+          .key(key)
+          .uploadId(uploadId)
+          .build();
+      s3Client.abortMultipartUpload(abortMultipartUploadRequest);
+      throw new RuntimeException("Multipart upload failed", e);
+    }
   }
 
   /**
