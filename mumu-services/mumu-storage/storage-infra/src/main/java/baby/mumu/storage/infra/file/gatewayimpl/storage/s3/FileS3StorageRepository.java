@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.BucketCannedACL;
@@ -48,6 +49,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.model.FileUpload;
@@ -85,7 +87,7 @@ public class FileS3StorageRepository implements FileStorageRepository {
       .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
     StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
       .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_CANNOT_BE_EMPTY));
-    Optional.ofNullable(fileMetadata.getSize())
+    Long fileSize = Optional.ofNullable(fileMetadata.getSize())
       .filter(size -> size > 0)
       .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
     if (StringUtils.isBlank(fileMetadata.getStoredFilename())) {
@@ -94,38 +96,50 @@ public class FileS3StorageRepository implements FileStorageRepository {
     // 确保 Bucket 存在
     String storageZoneCode = storageZone.getCode();
     createBucketIfNeeded(storageZoneCode, storageZone.getPolicy());
-    try (S3TransferManager transferManager = S3TransferManager.builder()
-      .s3Client(s3AsyncClient)
-      .build()) {
-
-      Path temp = Files.createTempFile("upload-", ".tmp");
-      Files.copy(file.getContent(), temp, StandardCopyOption.REPLACE_EXISTING);
-
-      UploadFileRequest request = UploadFileRequest.builder()
-        .putObjectRequest(p -> p.bucket(storageZoneCode).contentType(fileMetadata.getContentType())
-          .key(String.valueOf(fileMetadata.getId())))
-        .source(temp)
+    if (fileSize > 0 && fileSize <= 50L * 1024 * 1024) {
+      // 上传
+      PutObjectRequest request = PutObjectRequest.builder()
+        .bucket(storageZoneCode)
+        .key(String.valueOf(fileMetadata.getId()))
+        .contentType(fileMetadata.getContentType())
         .build();
-      FileUpload upload = transferManager.uploadFile(request);
 
-      try {
-        // 等待上传完成（若失败会抛异常）
-        upload.completionFuture().join();
+      s3Client.putObject(request, RequestBody.fromInputStream(file.getContent(), fileSize));
+    } else {
+      try (S3TransferManager transferManager = S3TransferManager.builder()
+        .s3Client(s3AsyncClient)
+        .build()) {
 
-        // 上传成功 → 删除临时文件
-        Files.deleteIfExists(temp);
+        Path temp = Files.createTempFile("upload-", ".tmp");
+        Files.copy(file.getContent(), temp, StandardCopyOption.REPLACE_EXISTING);
 
-      } catch (Exception e) {
-        // 上传失败 → 尝试删除临时文件
+        UploadFileRequest request = UploadFileRequest.builder()
+          .putObjectRequest(
+            p -> p.bucket(storageZoneCode).contentType(fileMetadata.getContentType())
+              .key(String.valueOf(fileMetadata.getId())))
+          .source(temp)
+          .build();
+        FileUpload upload = transferManager.uploadFile(request);
+
         try {
-          Files.deleteIfExists(temp);
-        } catch (IOException ex) {
-          // 记录日志即可，不应覆盖原始异常
-          FileS3StorageRepository.log.error("Failed to delete temp file: {}", ex.getMessage());
-        }
+          // 等待上传完成（若失败会抛异常）
+          upload.completionFuture().join();
 
-        // 再次抛出上传异常
-        throw new RuntimeException("S3 upload failed", e);
+          // 上传成功 → 删除临时文件
+          Files.deleteIfExists(temp);
+
+        } catch (Exception e) {
+          // 上传失败 → 尝试删除临时文件
+          try {
+            Files.deleteIfExists(temp);
+          } catch (IOException ex) {
+            // 记录日志即可，不应覆盖原始异常
+            FileS3StorageRepository.log.error("Failed to delete temp file: {}", ex.getMessage());
+          }
+
+          // 再次抛出上传异常
+          throw new RuntimeException("S3 upload failed", e);
+        }
       }
     }
   }
