@@ -277,6 +277,7 @@ public class AuthorizationConfiguration {
         .allowIfSubType(BigDecimal.class)
         .allowIfSubType(AccountAddress.class)
         .allowIfSubType(Role.class)
+        .allowIfSubType(Long.class)
         .allowIfSubType(Account.class);
     JsonMapper jsonMapper = JsonMapper.builder()
       // Spring Security 基础与扩展模块

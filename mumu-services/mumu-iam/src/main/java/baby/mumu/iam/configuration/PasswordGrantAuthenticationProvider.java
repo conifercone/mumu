@@ -126,7 +126,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
 
     // 由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.authenticated(
-      userDetails, clientPrincipal, userDetails.getAuthorities());
+      userDetails, password, userDetails.getAuthorities());
 
     // Initialize the DefaultOAuth2TokenContext
     DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
