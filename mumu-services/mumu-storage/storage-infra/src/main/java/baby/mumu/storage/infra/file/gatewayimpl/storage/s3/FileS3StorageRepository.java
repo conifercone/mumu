@@ -92,7 +92,7 @@ public class FileS3StorageRepository implements FileStorageRepository {
     }
     // 确保 Bucket 存在
     String storageZoneCode = storageZone.getCode();
-    createBucketIfNeeded(storageZoneCode, storageZone.getPolicy());
+    createStorageZone(file);
     if (fileSize > 0 && fileSize <= 50L * 1024 * 1024) {
       // 上传
       PutObjectRequest request = PutObjectRequest.builder()
@@ -109,20 +109,21 @@ public class FileS3StorageRepository implements FileStorageRepository {
     }
   }
 
-  private void createBucketIfNeeded(String storageZoneCode,
-    StorageZonePolicyEnum storageZonePolicy) {
+  @Override
+  public void createStorageZone(File file) {
     S3 s3 = storageProperties.getS3();
-    if (!bucketExists(storageZoneCode)) {
+    StorageZone storageZone = file.getMetadata().getStorageZone();
+    if (!storageZoneExists(file)) {
       Builder builder = CreateBucketRequest.builder()
         .createBucketConfiguration(
           CreateBucketConfiguration.builder()
             .locationConstraint(s3.getRegion())
             .build()
         )
-        .bucket(storageZoneCode);
-      if (StorageZonePolicyEnum.PUBLIC.equals(storageZonePolicy)) {
+        .bucket(storageZone.getCode());
+      if (StorageZonePolicyEnum.PUBLIC.equals(storageZone.getPolicy())) {
         builder.acl(BucketCannedACL.PUBLIC_READ_WRITE);
-      } else if (StorageZonePolicyEnum.PRIVATE.equals(storageZonePolicy)) {
+      } else if (StorageZonePolicyEnum.PRIVATE.equals(storageZone.getPolicy())) {
         builder.acl(BucketCannedACL.PRIVATE);
       }
       s3Client.createBucket(builder.build());
@@ -243,9 +244,11 @@ public class FileS3StorageRepository implements FileStorageRepository {
   /**
    * 判断 Bucket 是否存在
    */
-  public boolean bucketExists(String storageZoneCode) {
+  @Override
+  public boolean storageZoneExists(File file) {
     try {
-      s3Client.headBucket(HeadBucketRequest.builder().bucket(storageZoneCode).build());
+      s3Client.headBucket(
+        HeadBucketRequest.builder().bucket(file.getMetadata().getStorageZone().getCode()).build());
       return true;
     } catch (NoSuchBucketException e) {
       return false;

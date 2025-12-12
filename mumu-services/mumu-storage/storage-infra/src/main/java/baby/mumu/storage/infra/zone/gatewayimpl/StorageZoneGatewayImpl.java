@@ -18,8 +18,11 @@ package baby.mumu.storage.infra.zone.gatewayimpl;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.storage.domain.file.File;
+import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.domain.zone.gateway.StorageZoneGateway;
+import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
@@ -39,11 +42,13 @@ public class StorageZoneGatewayImpl implements StorageZoneGateway {
 
   private final StorageZoneConvertor storageZoneConvertor;
   private final StorageZoneRepository storageZoneRepository;
+  private final FileStorageRepository fileStorageRepository;
 
   public StorageZoneGatewayImpl(StorageZoneConvertor storageZoneConvertor,
-    StorageZoneRepository storageZoneRepository) {
+    StorageZoneRepository storageZoneRepository, FileStorageRepository fileStorageRepository) {
     this.storageZoneConvertor = storageZoneConvertor;
     this.storageZoneRepository = storageZoneRepository;
+    this.fileStorageRepository = fileStorageRepository;
   }
 
   @Override
@@ -53,6 +58,15 @@ public class StorageZoneGatewayImpl implements StorageZoneGateway {
       .orElseThrow(() -> new ApplicationException(
         ResponseCode.STORAGE_ZONE_INVALID));
     StorageZonePO persisted = storageZoneRepository.persist(storageZonePO);
+    try {
+      File file = new File();
+      FileMetadata fileMetadata = new FileMetadata();
+      fileMetadata.setStorageZone(storageZone);
+      file.setMetadata(fileMetadata);
+      fileStorageRepository.createStorageZone(file);
+    } catch (Exception e) {
+      throw new ApplicationException(ResponseCode.STORAGE_ZONE_CREATION_FAILED);
+    }
     return persisted.getId();
   }
 }

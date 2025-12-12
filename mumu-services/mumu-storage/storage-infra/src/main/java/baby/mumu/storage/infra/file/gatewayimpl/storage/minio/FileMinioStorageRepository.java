@@ -70,7 +70,7 @@ public class FileMinioStorageRepository implements FileStorageRepository {
     }
     // 确保 Bucket 存在
     String storageZoneCode = storageZone.getCode();
-    createBucketIfNeeded(storageZoneCode, storageZone.getPolicy());
+    createStorageZone(file);
     // 上传
     minioClient.putObject(
       PutObjectArgs.builder()
@@ -83,60 +83,69 @@ public class FileMinioStorageRepository implements FileStorageRepository {
     );
   }
 
-  private void createBucketIfNeeded(String storageZoneCode, StorageZonePolicyEnum storageZonePolicy)
-    throws Exception {
-    if (!minioClient.bucketExists(
-      BucketExistsArgs.builder().bucket(storageZoneCode).build())) {
-      minioClient.makeBucket(
-        MakeBucketArgs.builder().bucket(storageZoneCode).build());
-      if (StorageZonePolicyEnum.PUBLIC.equals(storageZonePolicy)) {
-        /*
-         * s3:GetBucketLocation: 获取桶的位置
-         * s3:ListBucket: 列出桶内文件（GET /bucket?prefix=xxx）
-         * s3:ListBucketMultipartUploads: 列出分片上传记录（如用多段上传）
-         * s3:PutObject: 上传对象
-         * s3:GetObject: 下载对象
-         * s3:DeleteObject: 删除对象
-         * s3:AbortMultipartUpload: 终止未完成的分片上传
-         * s3:ListMultipartUploadParts: 列出已上传的分片
-         */
-        String policy = """
-          {
-            "Version": "2012-10-17",
-            "Statement": [
-              {
-                "Effect": "Allow",
-                "Principal": { "AWS": "*" },
-                "Action": [
-                  "s3:GetBucketLocation",
-                  "s3:ListBucket",
-                  "s3:ListBucketMultipartUploads"
-                ],
-                "Resource": ["arn:aws:s3:::%s"]
-              },
-              {
-                "Effect": "Allow",
-                "Principal": { "AWS": "*" },
-                "Action": [
-                  "s3:AbortMultipartUpload",
-                  "s3:DeleteObject",
-                  "s3:GetObject",
-                  "s3:ListMultipartUploadParts",
-                  "s3:PutObject"
-                ],
-                "Resource": ["arn:aws:s3:::%s/*"]
-              }
-            ]
-          }
-          """.formatted(storageZoneCode, storageZoneCode);
+  @Override
+  public boolean storageZoneExists(File file) throws Exception {
+    StorageZone storageZone = file.getMetadata().getStorageZone();
+    return minioClient.bucketExists(
+      BucketExistsArgs.builder().bucket(storageZone.getCode()).build());
+  }
 
-        minioClient.setBucketPolicy(
-          SetBucketPolicyArgs.builder()
-            .bucket(storageZoneCode)
-            .config(policy)
-            .build()
-        );
-      }
+  @Override
+  public void createStorageZone(File file)
+    throws Exception {
+    if (storageZoneExists(file)) {
+      return;
+    }
+    StorageZone storageZone = file.getMetadata().getStorageZone();
+    minioClient.makeBucket(
+      MakeBucketArgs.builder().bucket(storageZone.getCode()).build());
+    if (StorageZonePolicyEnum.PUBLIC.equals(storageZone.getPolicy())) {
+      /*
+       * s3:GetBucketLocation: 获取桶的位置
+       * s3:ListBucket: 列出桶内文件（GET /bucket?prefix=xxx）
+       * s3:ListBucketMultipartUploads: 列出分片上传记录（如用多段上传）
+       * s3:PutObject: 上传对象
+       * s3:GetObject: 下载对象
+       * s3:DeleteObject: 删除对象
+       * s3:AbortMultipartUpload: 终止未完成的分片上传
+       * s3:ListMultipartUploadParts: 列出已上传的分片
+       */
+      String policy = """
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": { "AWS": "*" },
+              "Action": [
+                "s3:GetBucketLocation",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads"
+              ],
+              "Resource": ["arn:aws:s3:::%s"]
+            },
+            {
+              "Effect": "Allow",
+              "Principal": { "AWS": "*" },
+              "Action": [
+                "s3:AbortMultipartUpload",
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:ListMultipartUploadParts",
+                "s3:PutObject"
+              ],
+              "Resource": ["arn:aws:s3:::%s/*"]
+            }
+          ]
+        }
+        """.formatted(storageZone.getCode(), storageZone.getCode());
+
+      minioClient.setBucketPolicy(
+        SetBucketPolicyArgs.builder()
+          .bucket(storageZone.getCode())
+          .config(policy)
+          .build()
+      );
     }
   }
 

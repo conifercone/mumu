@@ -47,4 +47,20 @@ public interface FileStorageRepository {
    * @param file 目标文件
    */
   InputStream download(File file) throws Exception;
+
+
+  /**
+   * 创建目标文件对应的存储区
+   *
+   * @param file 目标文件
+   */
+  void createStorageZone(File file) throws Exception;
+
+
+  /**
+   * 判断目标文件对应的存储区是否存在
+   *
+   * @param file 目标文件
+   */
+  boolean storageZoneExists(File file) throws Exception;
 }
