@@ -18,7 +18,6 @@ package baby.mumu.log.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.ToStringSerializer;
@@ -34,7 +33,7 @@ import tools.jackson.datatype.moneta.MonetaMoneyModule;
 public class JacksonConfiguration {
 
   @Bean
-  public ObjectMapper objectMapper(StringSanitizerModule stringSanitizerModule) {
+  public JsonMapper.Builder jsonMapperBuilder(StringSanitizerModule stringSanitizerModule) {
     return JsonMapper.builder()
       // 注册自定义模块
       .addModule(stringSanitizerModule)
@@ -43,7 +42,6 @@ public class JacksonConfiguration {
       // Long -> String 序列化（避免 JS 精度丢失）
       .addModule(new SimpleModule()
         .addSerializer(Long.class, ToStringSerializer.instance)
-        .addSerializer(Long.TYPE, ToStringSerializer.instance))
-      .build();
+        .addSerializer(Long.TYPE, ToStringSerializer.instance));
   }
 }

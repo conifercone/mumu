@@ -19,7 +19,6 @@ package baby.mumu.iam.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.geo.Point;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.ToStringSerializer;
@@ -35,8 +34,7 @@ import tools.jackson.datatype.moneta.MonetaMoneyModule;
 public class JacksonConfiguration {
 
   @Bean
-  public ObjectMapper objectMapper() {
-
+  public JsonMapper.Builder jsonMapperBuilder() {
     return JsonMapper.builder()
       .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
       // Long → String 序列化（含包装类型和原始类型）
@@ -44,7 +42,6 @@ public class JacksonConfiguration {
         .addSerializer(Long.class, ToStringSerializer.instance)
         .addSerializer(Long.TYPE, ToStringSerializer.instance))
       // MixIn
-      .addMixIn(Point.class, PointMixin.class)
-      .build();
+      .addMixIn(Point.class, PointMixin.class);
   }
 }
