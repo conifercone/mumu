@@ -19,7 +19,6 @@ package baby.mumu.basis.tools;
 import org.intellij.lang.annotations.Language;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.datatype.moneta.MonetaMoneyModule;
 
@@ -33,7 +32,7 @@ public class JacksonTest {
 
   @Test
   public void test() {
-    ObjectMapper objectMapper = JsonMapper.builder()
+    JsonMapper jsonMapper = JsonMapper.builder()
       .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
       .build();
 
@@ -44,8 +43,8 @@ public class JacksonTest {
          "currency": "USD"
       }
       """;
-    Money money = objectMapper.readValue(json, Money.class);
-    String written = objectMapper.writeValueAsString(money);
+    Money money = jsonMapper.readValue(json, Money.class);
+    String written = jsonMapper.writeValueAsString(money);
     System.out.println(written);
     System.out.println(money);
   }

@@ -33,7 +33,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 国家领域网关实现
@@ -44,7 +44,7 @@ import tools.jackson.databind.ObjectMapper;
 @Component
 public class CountryGatewayImpl implements CountryGateway {
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private List<Country> countriesStatesCities;
   private List<Country> countries;
   /**
@@ -69,8 +69,8 @@ public class CountryGatewayImpl implements CountryGateway {
   private Map<Long, City> cityIdMappingCity;
 
   @Autowired
-  public CountryGatewayImpl(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public CountryGatewayImpl(JsonMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
   }
 
   @Override
@@ -116,7 +116,7 @@ public class CountryGatewayImpl implements CountryGateway {
   public void loadCountries() {
     try {
       InputStream inputStream = getClass().getResourceAsStream("/countries-states-cities.json");
-      this.countriesStatesCities = objectMapper.readValue(inputStream, new TypeReference<>() {
+      this.countriesStatesCities = jsonMapper.readValue(inputStream, new TypeReference<>() {
       });
       this.countries = this.countriesStatesCities.stream().map(SerializationUtils::clone)
         .peek(country -> country.setStates(null))

@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 系统日志消费者
@@ -38,21 +38,21 @@ import tools.jackson.databind.ObjectMapper;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class SystemLogKafkaConsumer {
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private final SystemLogService systemLogService;
   private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
-  public SystemLogKafkaConsumer(ObjectMapper objectMapper, SystemLogService systemLogService,
+  public SystemLogKafkaConsumer(JsonMapper jsonMapper, SystemLogService systemLogService,
     SystemLogConvertor systemLogConvertor) {
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
     this.systemLogService = systemLogService;
     this.systemLogConvertor = systemLogConvertor;
   }
 
   @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
   public void handle(String systemLog) {
-    SystemLogKafkaPO systemLogKafkaPO = objectMapper.readValue(systemLog,
+    SystemLogKafkaPO systemLogKafkaPO = jsonMapper.readValue(systemLog,
       SystemLogKafkaPO.class);
     systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);
   }

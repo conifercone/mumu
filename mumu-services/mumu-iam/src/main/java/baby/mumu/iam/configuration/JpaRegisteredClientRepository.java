@@ -36,7 +36,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JacksonModule;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -51,7 +50,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
   private final ClientConvertor clientConvertor;
   private final List<JacksonModule> securityModules =
     SecurityJacksonModules.getModules(JpaRegisteredClientRepository.class.getClassLoader());
-  private final ObjectMapper objectMapper = JsonMapper.builder()
+  private final JsonMapper jsonMapper = JsonMapper.builder()
     .addModules(securityModules) // 批量注册 securityModules
     .addModule(new OAuth2AuthorizationServerJacksonModule()) // OAuth2 模块
     .build();
@@ -164,7 +163,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
   private Map<String, Object> parseMap(String data) {
     try {
-      return this.objectMapper.readValue(data, new TypeReference<>() {
+      return this.jsonMapper.readValue(data, new TypeReference<>() {
       });
     } catch (Exception ex) {
       throw new IllegalArgumentException(ex.getMessage(), ex);
@@ -173,7 +172,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
   private String writeMap(Map<String, Object> data) {
     try {
-      return this.objectMapper.writeValueAsString(data);
+      return this.jsonMapper.writeValueAsString(data);
     } catch (Exception ex) {
       throw new IllegalArgumentException(ex.getMessage(), ex);
     }

@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 账号相关web接口单元测试
@@ -58,12 +58,12 @@ import tools.jackson.databind.ObjectMapper;
 public class PermissionControllerTest {
 
   private final MockMvc mockMvc;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
   @Autowired
-  public PermissionControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+  public PermissionControllerTest(MockMvc mockMvc, JsonMapper jsonMapper) {
     this.mockMvc = mockMvc;
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
   }
 
   @Test
@@ -74,7 +74,7 @@ public class PermissionControllerTest {
     permissionAddCmd.setName("test_name");
     mockMvc.perform(MockMvcRequestBuilders
         .post("/permission/add").with(csrf())
-        .content(objectMapper.writeValueAsBytes(permissionAddCmd))
+        .content(jsonMapper.writeValueAsBytes(permissionAddCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -104,7 +104,7 @@ public class PermissionControllerTest {
     permissionUpdateCmd.setCode("test_updated");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/permission/updateById").with(csrf())
-        .content(objectMapper.writeValueAsBytes(permissionUpdateCmd))
+        .content(jsonMapper.writeValueAsBytes(permissionUpdateCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +121,7 @@ public class PermissionControllerTest {
     permissionFindAllCmd.setId(1L);
     mockMvc.perform(MockMvcRequestBuilders
         .get("/permission/findAll")
-        .content(objectMapper.writeValueAsBytes(permissionFindAllCmd))
+        .content(jsonMapper.writeValueAsBytes(permissionFindAllCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)

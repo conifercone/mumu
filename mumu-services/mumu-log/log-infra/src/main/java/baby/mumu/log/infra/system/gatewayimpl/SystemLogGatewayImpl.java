@@ -42,7 +42,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 系统日志领域网关实现
@@ -55,17 +55,17 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
 
   private final SystemLogKafkaRepository systemLogKafkaRepository;
   private final SystemLogEsRepository systemLogEsRepository;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private final ElasticsearchTemplate elasticsearchTemplate;
   private final SystemLogConvertor systemLogConvertor;
 
   @Autowired
   public SystemLogGatewayImpl(SystemLogKafkaRepository systemLogKafkaRepository,
-    SystemLogEsRepository systemLogEsRepository, ObjectMapper objectMapper,
+    SystemLogEsRepository systemLogEsRepository, JsonMapper jsonMapper,
     ElasticsearchTemplate elasticsearchTemplate, SystemLogConvertor systemLogConvertor) {
     this.systemLogKafkaRepository = systemLogKafkaRepository;
     this.systemLogEsRepository = systemLogEsRepository;
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
     this.elasticsearchTemplate = elasticsearchTemplate;
     this.systemLogConvertor = systemLogConvertor;
   }
@@ -74,7 +74,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
   public void submit(SystemLog systemLog) {
     systemLogConvertor.toSystemLogKafkaPO(systemLog)
       .ifPresent(res -> systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
-        objectMapper.writeValueAsString(res)));
+        jsonMapper.writeValueAsString(res)));
   }
 
   @Override

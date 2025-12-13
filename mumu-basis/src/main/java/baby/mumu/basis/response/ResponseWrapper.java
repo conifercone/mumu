@@ -29,7 +29,6 @@ import java.time.ZoneOffset;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.MediaType;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -76,7 +75,7 @@ public class ResponseWrapper<T> implements Serializable {
    */
   private String traceId;
 
-  private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+  private static final JsonMapper JSON_MAPPER = JsonMapper.builder()
     .build();
 
 
@@ -121,7 +120,7 @@ public class ResponseWrapper<T> implements Serializable {
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(resultCode);
     responseResult.setTraceId(TraceIdUtils.getTraceId());
-    String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
+    String jsonResult = ResponseWrapper.JSON_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 
@@ -138,7 +137,7 @@ public class ResponseWrapper<T> implements Serializable {
     throws IOException {
     ResponseWrapper<?> responseResult = ResponseWrapper.failure(code, message);
     responseResult.setTraceId(TraceIdUtils.getTraceId());
-    String jsonResult = ResponseWrapper.OBJECT_MAPPER.writeValueAsString(responseResult);
+    String jsonResult = ResponseWrapper.JSON_MAPPER.writeValueAsString(responseResult);
     ResponseWrapper.applicationJsonResponse(response, jsonResult);
   }
 }

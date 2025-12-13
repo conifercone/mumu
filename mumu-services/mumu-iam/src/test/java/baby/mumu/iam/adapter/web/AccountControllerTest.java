@@ -38,7 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 账号相关web接口单元测试
@@ -60,13 +60,13 @@ import tools.jackson.databind.ObjectMapper;
 public class AccountControllerTest {
 
   private final MockMvc mockMvc;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
   @Autowired
   public AccountControllerTest(MockMvc mockMvc,
-    ObjectMapper objectMapper) {
+    JsonMapper jsonMapper) {
     this.mockMvc = mockMvc;
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
   }
 
   @Test
@@ -77,7 +77,7 @@ public class AccountControllerTest {
     accountUpdateByIdCmd.setUsername("test_updated");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/updateById").with(csrf())
-        .content(objectMapper.writeValueAsBytes(accountUpdateByIdCmd))
+        .content(jsonMapper.writeValueAsBytes(accountUpdateByIdCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -94,7 +94,7 @@ public class AccountControllerTest {
     accountUpdateRoleCmd.setRoleCodes(Collections.singletonList("test"));
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/updateRoleById").with(csrf())
-        .content(objectMapper.writeValueAsBytes(accountUpdateRoleCmd))
+        .content(jsonMapper.writeValueAsBytes(accountUpdateRoleCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -150,7 +150,7 @@ public class AccountControllerTest {
     accountChangePasswordCmd.setOriginalPassword("Admin@5211314");
     mockMvc.perform(MockMvcRequestBuilders
         .put("/account/changePassword").with(csrf())
-        .content(objectMapper.writeValueAsBytes(accountChangePasswordCmd))
+        .content(jsonMapper.writeValueAsBytes(accountChangePasswordCmd))
         .header("X-Forwarded-For", "123.123.123.123")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON_VALUE)

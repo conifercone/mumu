@@ -155,7 +155,6 @@ object FileDownloadUtils {
             if (index == 0) {
               // 第一条在当前线程写，避免 scope 还没完全建立时就 fork
               beanToCsv.write(record)
-              @Suppress("AssignedValueIsNeverRead")
               index = 1
             } else {
               // 之后的记录丢到虚拟线程里
@@ -190,15 +189,15 @@ object FileDownloadUtils {
         processedFileName += ".json"
       }
       // 创建 ObjectMapper 实例
-      val objectMapper = jsonMapper {
+      val jsonMapper = jsonMapper {
         addModule(JavaxMoneyModule())
       }
 
       // 创建 ObjectWriter 实例
-      val objectWriter = objectMapper.writerWithDefaultPrettyPrinter()
+      val objectWriter = jsonMapper.writerWithDefaultPrettyPrinter()
 
       // 获取 JSON 生成器
-      val generator = objectMapper
+      val generator = jsonMapper
         .createGenerator(response.outputStream, JsonEncoding.UTF8)
 
       // 设置响应头

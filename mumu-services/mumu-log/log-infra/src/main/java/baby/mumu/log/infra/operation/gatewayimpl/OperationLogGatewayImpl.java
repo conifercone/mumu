@@ -45,7 +45,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 操作日志领域网关实现
@@ -58,19 +58,19 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
 
   private final OperationLogKafkaRepository operationLogKafkaRepository;
   private final OperationLogEsRepository operationLogEsRepository;
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
   private final PrimaryKeyGrpcService primaryKeyGrpcService;
   private final ElasticsearchTemplate elasticsearchTemplate;
   private final OperationLogConvertor operationLogConvertor;
 
   @Autowired
   public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
-    OperationLogEsRepository operationLogEsRepository, ObjectMapper objectMapper,
+    OperationLogEsRepository operationLogEsRepository, JsonMapper jsonMapper,
     PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate,
     OperationLogConvertor operationLogConvertor) {
     this.operationLogKafkaRepository = operationLogKafkaRepository;
     this.operationLogEsRepository = operationLogEsRepository;
-    this.objectMapper = objectMapper;
+    this.jsonMapper = jsonMapper;
     this.primaryKeyGrpcService = primaryKeyGrpcService;
     this.elasticsearchTemplate = elasticsearchTemplate;
     this.operationLogConvertor = operationLogConvertor;
@@ -80,7 +80,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
   public void submit(OperationLog operationLog) {
     operationLogConvertor.toOperationLogKafkaPO(operationLog).ifPresent(
       res -> operationLogKafkaRepository.send(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME,
-        objectMapper.writeValueAsString(
+        jsonMapper.writeValueAsString(
           res)));
   }
 

@@ -30,7 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -46,7 +45,7 @@ public class AuthenticationRequired {
   }
 
   public Optional<String> getToken(@NonNull MockMvc mockMvc, String username, String password) {
-    ObjectMapper objectMapper = JsonMapper.builder().build();
+    JsonMapper jsonMapper = JsonMapper.builder().build();
     MvcResult mvcResult;
     try {
       byte[] encodedBytes = Base64.encodeBase64(
@@ -73,7 +72,7 @@ public class AuthenticationRequired {
     if (response.getStatus() == HttpStatus.SC_OK) {
       try {
         String contentAsString = response.getContentAsString();
-        JsonNode jsonNode = objectMapper.readTree(contentAsString);
+        JsonNode jsonNode = jsonMapper.readTree(contentAsString);
         JsonNode accessToken = jsonNode.get("access_token");
         return Optional.ofNullable(accessToken.asString());
       } catch (UnsupportedEncodingException e) {
