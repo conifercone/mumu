@@ -102,19 +102,19 @@ public class IAMAuthenticationFailureHandler implements AuthenticationFailureHan
         exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST, request);
       } else if (UNSUPPORTED_GRANT_TYPE
         .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
         exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
       } else if (INVALID_CLIENT
         .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
       } else if (INVALID_GRANT
         .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
         exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
       } else if (INVALID_SCOPE
         .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
         exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
       } else {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
