@@ -121,6 +121,18 @@ public class IAMAuthenticationFailureHandler implements AuthenticationFailureHan
         operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
         ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
       }
+    } else {
+      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+        .setContent(ResponseCode.UNAUTHORIZED.getCode())
+        .setCategory("exception")
+        .setFail(ExceptionUtils.getStackTrace(exception))
+        .build());
+      IAMAuthenticationFailureHandler.log.error(exception.getMessage());
+      response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      operationFailLog(ResponseCode.UNAUTHORIZED.getCode(), exception.getMessage(),
+        IpUtils.getIpAddr(request));
+      ResponseWrapper.exceptionResponse(response, ResponseCode.UNAUTHORIZED.getCode(),
+        exception.getMessage());
     }
   }
 
