@@ -33,7 +33,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class LogApplication {
 
-  public static void main(String[] args) {
+  static void main(String[] args) {
     SpringApplication springApplication = new SpringApplication(
       LogApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();

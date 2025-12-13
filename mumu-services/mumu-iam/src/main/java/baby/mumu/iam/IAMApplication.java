@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class IAMApplication {
 
-  public static void main(String[] args) {
+  static void main(String[] args) {
     SpringApplication springApplication = new SpringApplication(
       IAMApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();

@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Import;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class GenixApplication {
 
-  public static void main(String[] args) {
+  static void main(String[] args) {
     SpringApplication springApplication = new SpringApplication(
       GenixApplication.class);
     Map<String, Object> defaultProperties = new HashMap<>();

@@ -270,6 +270,8 @@ awssdk-bom = { module = "software.amazon.awssdk:bom", version.ref = "awssdkBomVe
 s3 = { module = "software.amazon.awssdk:s3" }
 # https://central.sonatype.com/artifact/software.amazon.awssdk/s3-transfer-manager
 s3-transfer-manager = { module = "software.amazon.awssdk:s3-transfer-manager" }
+# https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
 
 [bundles]
 jackson = ["spring-boot-starter-jackson"]
