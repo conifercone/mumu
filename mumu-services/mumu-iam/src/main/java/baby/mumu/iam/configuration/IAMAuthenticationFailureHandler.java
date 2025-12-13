@@ -78,7 +78,7 @@ public class IAMAuthenticationFailureHandler implements AuthenticationFailureHan
         .setCategory("exception")
         .setFail(ExceptionUtils.getStackTrace(exception))
         .build());
-      IAMAuthenticationFailureHandler.log.error(oAuth2AuthenticationException.getMessage());
+      IAMAuthenticationFailureHandler.log.error(errorCode);
 
       if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
         response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());
