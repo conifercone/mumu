@@ -44,7 +44,7 @@ cosidVersion = '3.0.1'
 grpcBomVersion = '1.77.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.33.2'
-awssdkBomVersion = '2.40.6'
+awssdkBomVersion = '2.40.8'
 # plugin version
 protobufPluginVersion = '0.9.5'
 lombokPluginVersion = '9.1.0'
