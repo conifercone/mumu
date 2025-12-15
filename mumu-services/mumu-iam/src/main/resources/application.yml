@@ -19,6 +19,9 @@ server:
   shutdown: graceful
   forward-headers-strategy: framework
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: iam
   config:
