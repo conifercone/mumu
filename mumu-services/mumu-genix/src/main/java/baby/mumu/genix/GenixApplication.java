@@ -18,13 +18,11 @@ package baby.mumu.genix;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
-import com.github.guang19.leaf.spring.autoconfig.LeafAutoConfiguration;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 
 /**
  * Generation + Mix 多功能生成器生成服务
@@ -33,7 +31,6 @@ import org.springframework.context.annotation.Import;
  * @since 1.0.0
  */
 @SpringBootApplication
-@Import(LeafAutoConfiguration.class)
 @EnableRedisDocumentRepositories(basePackages = "baby.mumu.genix.infra.**.cache.**")
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class GenixApplication {

@@ -17,8 +17,10 @@
 package baby.mumu.genix.infra.pk.gatewayimpl;
 
 import baby.mumu.genix.domain.pk.gateway.PrimaryKeyGateway;
-import com.github.guang19.leaf.core.IdGenerator;
+import me.ahoo.cosid.snowflake.SnowflakeId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,15 +32,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryKeyGatewayImpl implements PrimaryKeyGateway {
 
-  private final IdGenerator snowflakeIdGenerator;
+  private final SnowflakeId snowflakeId;
 
   @Autowired
-  public PrimaryKeyGatewayImpl(IdGenerator snowflakeIdGenerator) {
-    this.snowflakeIdGenerator = snowflakeIdGenerator;
+  public PrimaryKeyGatewayImpl(
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") @Qualifier("__share__SnowflakeId") @Lazy SnowflakeId snowflakeId) {
+    this.snowflakeId = snowflakeId;
   }
 
   @Override
   public long snowflake() {
-    return snowflakeIdGenerator.nextId().getId();
+    return snowflakeId.generate();
   }
 }
