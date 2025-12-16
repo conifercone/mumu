@@ -15,4 +15,6 @@
   <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons"/>
   <!-- 禁用System.out.println -->
   <rule ref="category/java/bestpractices.xml/SystemPrintln"/>
+  <!-- 禁用双括号初始化 -->
+  <rule ref="category/java/bestpractices.xml/DoubleBraceInitialization"/>
 </ruleset>
