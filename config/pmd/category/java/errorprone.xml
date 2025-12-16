@@ -9,4 +9,14 @@
   <rule ref="category/java/errorprone.xml/EqualsNull"/>
   <!-- 检查空的 catch 代码块，避免吞掉异常 -->
   <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+  <!-- 检查重复字符串 -->
+  <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
+    <properties>
+      <property name="maxDuplicateLiterals" value="4"/>
+      <property name="minimumLength" value="3"/>
+      <property name="skipAnnotations" value="true"/>
+      <property name="exceptionList" value=""/>
+    </properties>
+  </rule>
+
 </ruleset>

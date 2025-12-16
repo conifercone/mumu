@@ -75,6 +75,7 @@ import org.springframework.util.Assert;
  */
 public class IAMJwtGenerator implements OAuth2TokenGenerator<Jwt> {
 
+  private static final String SID = "sid";
   private final JwtEncoder jwtEncoder;
   private OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
   private PasswordTokenCacheRepository passwordTokenCacheRepository;
@@ -209,13 +210,13 @@ public class IAMJwtGenerator implements OAuth2TokenGenerator<Jwt> {
         }
         SessionInformation sessionInformation = context.get(SessionInformation.class);
         if (sessionInformation != null) {
-          claimsBuilder.claim("sid", sessionInformation.getSessionId());
+          claimsBuilder.claim(IAMJwtGenerator.SID, sessionInformation.getSessionId());
           claimsBuilder.claim(IdTokenClaimNames.AUTH_TIME, sessionInformation.getLastRequest());
         }
       } else if (AuthorizationGrantType.REFRESH_TOKEN.equals(context.getAuthorizationGrantType())) {
         OidcIdToken currentIdToken = Objects.requireNonNull(Objects.requireNonNull(context.getAuthorization()).getToken(OidcIdToken.class)).getToken();
-        if (currentIdToken.hasClaim("sid")) {
-          claimsBuilder.claim("sid", currentIdToken.getClaim("sid"));
+        if (currentIdToken.hasClaim(IAMJwtGenerator.SID)) {
+          claimsBuilder.claim(IAMJwtGenerator.SID, currentIdToken.getClaim(IAMJwtGenerator.SID));
         }
         if (currentIdToken.hasClaim(IdTokenClaimNames.AUTH_TIME)) {
           claimsBuilder.claim(IdTokenClaimNames.AUTH_TIME, currentIdToken.<Date>getClaim(IdTokenClaimNames.AUTH_TIME));
