@@ -46,7 +46,7 @@ public class ResponseWrapper<T> implements Serializable {
   /**
    * 是否成功
    */
-  private boolean success;
+  private boolean successful;
 
   /**
    * 响应代码
@@ -79,16 +79,16 @@ public class ResponseWrapper<T> implements Serializable {
     .build();
 
 
-  private ResponseWrapper(@NonNull BaseResponse resultCode, boolean success) {
+  private ResponseWrapper(@NonNull BaseResponse resultCode, boolean successful) {
     this.code = resultCode.getCode();
     this.message = resultCode.getMessage();
-    this.success = success;
+    this.successful = successful;
   }
 
-  private ResponseWrapper(@NonNull String code, @NonNull String message, boolean success) {
+  private ResponseWrapper(@NonNull String code, @NonNull String message, boolean successful) {
     this.code = code;
     this.message = message;
-    this.success = success;
+    this.successful = successful;
   }
 
   public static @NonNull <T> ResponseWrapper<T> success() {

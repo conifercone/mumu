@@ -18,5 +18,7 @@
       <property name="exceptionList" value=""/>
     </properties>
   </rule>
+  <!-- 避免字段名与方法名匹配 -->
+  <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingMethodName"/>
 
 </ruleset>

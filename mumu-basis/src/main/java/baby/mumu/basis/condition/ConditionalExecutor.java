@@ -30,10 +30,10 @@ import org.jspecify.annotations.NonNull;
  */
 public class ConditionalExecutor {
 
-  private boolean condition;
+  private boolean allowed;
 
-  private ConditionalExecutor(boolean condition) {
-    this.condition = condition;
+  private ConditionalExecutor(boolean allowed) {
+    this.allowed = allowed;
   }
 
   public static @NonNull ConditionalExecutor of(boolean condition) {
@@ -50,18 +50,18 @@ public class ConditionalExecutor {
   }
 
   public ConditionalExecutor condition(boolean condition) {
-    this.condition = condition;
+    this.allowed = condition;
     return this;
   }
 
   public ConditionalExecutor condition(@NonNull BooleanSupplier booleanSupplier) {
-    this.condition = booleanSupplier.getAsBoolean();
+    this.allowed = booleanSupplier.getAsBoolean();
     return this;
   }
 
   public <T> ConditionalExecutor condition(@NonNull Predicate<T> predicate,
     @NonNull Supplier<T> supplier) {
-    this.condition = predicate.test(supplier.get());
+    this.allowed = predicate.test(supplier.get());
     return this;
   }
 
@@ -72,7 +72,7 @@ public class ConditionalExecutor {
    * @param supplier 供应者，用于生成参数
    */
   public <T> ConditionalExecutor ifTrue(Consumer<T> action, Supplier<T> supplier) {
-    if (condition) {
+    if (allowed) {
       action.accept(supplier.get());
     }
     return this;
@@ -84,7 +84,7 @@ public class ConditionalExecutor {
    * @param action 要执行的代码块
    */
   public ConditionalExecutor ifTrue(Runnable action) {
-    if (condition) {
+    if (allowed) {
       action.run();
     }
     return this;
@@ -96,7 +96,7 @@ public class ConditionalExecutor {
    * @param action 要执行的代码块
    */
   public ConditionalExecutor ifFalse(Runnable action) {
-    if (!condition) {
+    if (!allowed) {
       action.run();
     }
     return this;
@@ -111,7 +111,7 @@ public class ConditionalExecutor {
    * @return 执行结果
    */
   public <T> T orElseGet(Supplier<T> action, Supplier<T> defaultValue) {
-    return condition ? action.get() : defaultValue.get();
+    return allowed ? action.get() : defaultValue.get();
   }
 
   /**
@@ -123,7 +123,7 @@ public class ConditionalExecutor {
    * @return 执行结果
    */
   public <T> T orElse(T successValue, T defaultValue) {
-    return condition ? successValue : defaultValue;
+    return allowed ? successValue : defaultValue;
   }
 
   /**
@@ -133,7 +133,7 @@ public class ConditionalExecutor {
    * @param failAction    条件不成立要执行的代码块
    */
   public ConditionalExecutor ifTrueElse(Runnable successAction, Runnable failAction) {
-    if (condition) {
+    if (allowed) {
       successAction.run();
     } else {
       failAction.run();
