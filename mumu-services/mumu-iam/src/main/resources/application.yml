@@ -38,6 +38,8 @@ spring:
         data-key: ${spring.application.name}
         prefixes: mumu
         acl-token: ${CONSUL_TOKEN}
+        watch:
+          delay: 10000
       discovery:
         register: true
         instance-id: ${spring.application.name}
@@ -51,5 +53,6 @@ spring:
         tags:
           - "mumu"
           - "iam"
+        catalog-services-watch-delay: 10000
     refresh:
       never-refreshable: com.p6spy.engine.spy.P6DataSource

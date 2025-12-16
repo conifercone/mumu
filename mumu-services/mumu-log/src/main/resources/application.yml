@@ -35,6 +35,8 @@ spring:
         data-key: ${spring.application.name}
         prefixes: mumu
         acl-token: ${CONSUL_TOKEN}
+        watch:
+          delay: 10000
       discovery:
         register: true
         instance-id: ${spring.application.name}
@@ -48,3 +50,4 @@ spring:
         tags:
           - "mumu"
           - "log"
+        catalog-services-watch-delay: 10000
