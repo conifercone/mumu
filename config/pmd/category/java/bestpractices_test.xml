@@ -1,18 +1,12 @@
 <?xml version="1.0"?>
-<ruleset name="mumu main best practices"
+<ruleset name="mumu test best practices"
   xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
   <description>Rules that encourage best practices for Java programming.</description>
   <exclude-pattern>.*/build/.*</exclude-pattern>
-  <!-- 检查未使用的局部变量 -->
-  <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
-  <!-- 缺少@Override -->
-  <rule ref="category/java/bestpractices.xml/MissingOverride"/>
   <!-- Java 允许在一行中使用多个相同类型的变量声明。但是，这会导致代码非常混乱。此规则查找同一行上的多个声明 -->
   <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine"/>
   <!--  文字优先比较，在所有字符串比较中将常量字符串放在首位防止空指针-->
   <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons"/>
-  <!-- 禁用System.out.println -->
-  <rule ref="category/java/bestpractices.xml/SystemPrintln"/>
 </ruleset>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="mumu main error prone"
+<ruleset name="mumu test error prone"
   xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
@@ -9,15 +9,6 @@
   <rule ref="category/java/errorprone.xml/EqualsNull"/>
   <!-- 检查空的 catch 代码块，避免吞掉异常 -->
   <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
-  <!-- 检查重复字符串 -->
-  <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
-    <properties>
-      <property name="maxDuplicateLiterals" value="4"/>
-      <property name="minimumLength" value="3"/>
-      <property name="skipAnnotations" value="true"/>
-      <property name="exceptionList" value=""/>
-    </properties>
-  </rule>
   <!-- 避免字段名与方法名匹配 -->
   <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingMethodName"/>
 </ruleset>

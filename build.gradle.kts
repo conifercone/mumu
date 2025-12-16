@@ -108,15 +108,26 @@ subprojects {
     pmd {
         isConsoleOutput = true
         toolVersion = pmdToolVersion
+        ruleSets = emptyList<String>()
+    }
+
+    tasks.withType<Pmd> {
+        incrementalAnalysis = true
+        outputs.cacheIf { true }
+    }
+
+    tasks.named("pmdMain", Pmd::class) {
         ruleSetFiles = files(
             pmdConfigDir.resolve("errorprone.xml"),
             pmdConfigDir.resolve("bestpractices.xml")
         )
     }
 
-    tasks.withType<Pmd> {
-        incrementalAnalysis = true
-        outputs.cacheIf { true }
+    tasks.named("pmdTest", Pmd::class) {
+        ruleSetFiles = files(
+            pmdConfigDir.resolve("errorprone_test.xml"),
+            pmdConfigDir.resolve("bestpractices_test.xml")
+        )
     }
 
     tasks.withType<Checkstyle> {
