@@ -6,7 +6,7 @@
   <description>Rules that identify code that is likely to cause errors.</description>
   <exclude-pattern>.*/build/.*</exclude-pattern>
   <!-- 避免捕获 NullPointerException -->
-  <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"/>
+  <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException"/>
   <!-- 避免在 equals 方法中比较 null -->
   <rule ref="category/java/errorprone.xml/EqualsNull"/>
   <!-- 检查空的 catch 代码块，避免吞掉异常 -->
