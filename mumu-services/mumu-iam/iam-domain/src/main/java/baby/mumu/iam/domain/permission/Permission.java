@@ -49,7 +49,7 @@ public class Permission extends BasisDomainModel implements GrantedAuthority {
   private static final long serialVersionUID = -5474154746791467326L;
 
   /**
-   * 权限id
+   * 权限 ID
    */
   private Long id;
 

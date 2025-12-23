@@ -57,7 +57,7 @@ public class AccountSystemSettings extends BasisDomainModel {
   private String name;
 
   /**
-   * 账号ID
+   * 账号 ID
    */
   private Long accountId;
 

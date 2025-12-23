@@ -51,7 +51,7 @@ public class Role extends BasisDomainModel {
   private static final long serialVersionUID = 4390244868463637644L;
 
   /**
-   * 角色id
+   * 角色 ID
    */
   private Long id;
 

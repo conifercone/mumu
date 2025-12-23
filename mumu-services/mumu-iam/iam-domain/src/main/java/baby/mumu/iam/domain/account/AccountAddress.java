@@ -46,7 +46,7 @@ public class AccountAddress extends BasisDomainModel {
   private String id;
 
   /**
-   * 账号ID
+   * 账号 ID
    */
   private Long accountId;
 

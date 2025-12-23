@@ -62,7 +62,7 @@ public class Account extends BasisDomainModel implements UserDetails {
   private static final long serialVersionUID = 7134070079639713190L;
 
   /**
-   * 账号id
+   * 账号 ID
    */
   private Long id;
 
