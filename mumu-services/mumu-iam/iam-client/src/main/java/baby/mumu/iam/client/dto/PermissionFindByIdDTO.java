@@ -20,7 +20,6 @@ import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 根据id查询权限数据传输对象
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class PermissionFindByIdDTO extends BaseDataTransferObject {
 
   @Serial

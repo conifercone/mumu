@@ -20,7 +20,6 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -30,7 +29,6 @@ import lombok.NoArgsConstructor;
  * @since 2.13.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class CaptchaCode extends BasisDomainModel {

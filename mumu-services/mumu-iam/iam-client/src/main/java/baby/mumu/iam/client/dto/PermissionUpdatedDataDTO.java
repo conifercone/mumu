@@ -19,7 +19,6 @@ package baby.mumu.iam.client.dto;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 权限更新后数据数据传输对象
@@ -28,7 +27,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.13.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class PermissionUpdatedDataDTO extends BaseDataTransferObject {
 
   @Serial

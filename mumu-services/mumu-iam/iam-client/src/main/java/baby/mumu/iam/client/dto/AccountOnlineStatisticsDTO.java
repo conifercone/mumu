@@ -19,7 +19,6 @@ package baby.mumu.iam.client.dto;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 账号在线统计数据传输对象
@@ -28,7 +27,6 @@ import lombok.EqualsAndHashCode;
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class AccountOnlineStatisticsDTO extends BaseDataTransferObject {
 
   @Serial

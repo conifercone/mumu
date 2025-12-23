@@ -20,7 +20,6 @@ import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 根据文件元数据ID获取文件元数据信息数据传输对象
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.13.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class FileFindMetaByMetaIdDTO extends BaseDataTransferObject {
 
   @Serial

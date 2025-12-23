@@ -21,9 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.geo.Point;
 
@@ -34,9 +32,7 @@ import org.springframework.data.geo.Point;
  * @since 2.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountAddress extends BasisDomainModel {

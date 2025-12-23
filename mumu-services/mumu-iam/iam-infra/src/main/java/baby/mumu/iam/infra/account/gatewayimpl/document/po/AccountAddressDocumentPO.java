@@ -23,7 +23,6 @@ import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
@@ -40,7 +39,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @since 2.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("mumu-account-addresses")

@@ -19,7 +19,6 @@ package baby.mumu.genix.client.dto;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 验证码生成数据传输对象
@@ -28,7 +27,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.15.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class CaptchaCodeGeneratedDTO extends BaseDataTransferObject {
 
   @Serial

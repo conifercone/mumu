@@ -22,7 +22,6 @@ import baby.mumu.basis.enums.LanguageEnum;
 import java.io.Serial;
 import java.time.LocalDate;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 账号修改后数据传输对象
@@ -31,7 +30,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.13.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class AccountUpdatedDataDTO extends BaseDataTransferObject {
 
   @Serial

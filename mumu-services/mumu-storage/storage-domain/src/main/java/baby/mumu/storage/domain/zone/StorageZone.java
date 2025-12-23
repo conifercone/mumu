@@ -20,7 +20,6 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 存储区域
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.13.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class StorageZone extends BasisDomainModel {
 
   @Serial

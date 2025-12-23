@@ -22,7 +22,6 @@ import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -33,7 +32,6 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:iam:permission")
 public class PermissionCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 

@@ -21,7 +21,6 @@ import baby.mumu.basis.enums.ImageFormatEnum;
 import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -31,7 +30,6 @@ import lombok.NoArgsConstructor;
  * @since 1.0.4
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class BarCode extends BasisDomainModel {

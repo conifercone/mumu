@@ -19,7 +19,6 @@ package baby.mumu.basis.exception;
 import baby.mumu.basis.response.ResponseCode;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -29,7 +28,6 @@ import org.jspecify.annotations.NonNull;
  * @since 2.15.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class ApplicationException extends RuntimeException {
 
   @Serial

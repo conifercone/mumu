@@ -20,7 +20,6 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.InputStream;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 文件领域模型
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.12.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class File extends BasisDomainModel {
 
   @Serial

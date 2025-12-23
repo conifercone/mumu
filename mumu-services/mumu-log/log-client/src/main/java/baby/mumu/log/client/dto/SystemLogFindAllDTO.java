@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -31,7 +30,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class SystemLogFindAllDTO extends BaseDataTransferObject {
 
   @Serial

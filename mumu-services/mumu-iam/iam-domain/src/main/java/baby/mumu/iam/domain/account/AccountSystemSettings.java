@@ -23,9 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serial;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -35,9 +33,7 @@ import lombok.experimental.SuperBuilder;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountSystemSettings extends BasisDomainModel {

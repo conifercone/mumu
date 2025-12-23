@@ -23,7 +23,6 @@ import com.redis.om.spring.annotations.Indexed;
 import com.redis.om.spring.annotations.TextIndexed;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -34,7 +33,6 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 1.0.1
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:genix:captcha-code")
 public class CaptchaCodeCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
 

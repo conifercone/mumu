@@ -30,7 +30,6 @@ import java.io.Serial;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.javamoney.moneta.Money;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Point;
@@ -43,7 +42,6 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:iam:account")
 public class AccountCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 

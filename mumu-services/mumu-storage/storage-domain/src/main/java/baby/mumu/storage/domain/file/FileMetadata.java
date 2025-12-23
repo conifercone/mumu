@@ -20,7 +20,6 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.storage.domain.zone.StorageZone;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 文件元数据
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.12.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class FileMetadata extends BasisDomainModel {
 
   @Serial

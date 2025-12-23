@@ -21,7 +21,6 @@ import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 附近的账号数据传输对象
@@ -30,7 +29,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.6.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class AccountNearbyDTO extends BaseDataTransferObject {
 
   @Serial

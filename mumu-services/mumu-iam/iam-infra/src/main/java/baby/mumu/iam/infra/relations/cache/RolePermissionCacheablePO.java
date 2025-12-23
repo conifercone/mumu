@@ -24,7 +24,6 @@ import java.io.Serial;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
@@ -36,7 +35,6 @@ import org.springframework.data.redis.core.TimeToLive;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Document(value = "mumu:iam:role-permission")
 @AllArgsConstructor
 @NoArgsConstructor

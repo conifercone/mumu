@@ -20,7 +20,6 @@ import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 权限查询已归档数据传输对象（不查询总数）
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class PermissionArchivedFindAllSliceDTO extends BaseDataTransferObject {
 
   @Serial

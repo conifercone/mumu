@@ -20,7 +20,6 @@ import baby.mumu.basis.dto.BaseDataTransferObject;
 import java.io.Serial;
 import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 已归档角色查询数据传输对象
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.2.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class RoleArchivedFindAllDTO extends BaseDataTransferObject {
 
   @Serial

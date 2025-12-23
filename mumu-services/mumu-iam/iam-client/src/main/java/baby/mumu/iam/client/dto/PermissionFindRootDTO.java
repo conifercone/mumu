@@ -20,7 +20,6 @@ import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 获取所有根权限数据传输对象
@@ -29,7 +28,6 @@ import lombok.EqualsAndHashCode;
  * @since 2.3.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class PermissionFindRootDTO extends BaseDataTransferObject {
 
   @Serial

@@ -20,9 +20,7 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import java.io.Serial;
 import java.time.Instant;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -31,8 +29,6 @@ import lombok.experimental.SuperBuilder;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.5.0
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
 @SuperBuilder(toBuilder = true)
