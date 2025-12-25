@@ -9,7 +9,6 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.cosid.spring.redis)
     implementation(libs.cosid.spring.boot.starter)
-    implementation(libs.jasypt)
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.spring.cloud.starter.consul.config)
     implementation(libs.caffeine)

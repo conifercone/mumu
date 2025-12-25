@@ -50,7 +50,7 @@ public class LogElasticsearchConfiguration extends
     return ClientConfiguration.builder()
       // 设置连接地址
       .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
-      // 启用ssl并配置CA指纹
+      // 启用 ssl 并配置 CA 指纹
       .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
       // 设置用户名密码
       .withBasicAuth(logProperties.getElasticsearch().getUsername(),

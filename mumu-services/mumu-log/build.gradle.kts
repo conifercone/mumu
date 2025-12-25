@@ -6,7 +6,6 @@ dependencies {
     implementation(project(":mumu-services:mumu-log:log-application"))
     implementation(project(":mumu-extension"))
     implementation(project(":mumu-services:mumu-log:log-adapter"))
-    implementation(libs.jasypt)
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.spring.cloud.starter.consul.config)
     implementation(libs.swagger3Ui)
@@ -17,6 +16,5 @@ dependencies {
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webmvc.test)
-    testImplementation(libs.jasypt)
     annotationProcessor(project(":mumu-processor"))
 }

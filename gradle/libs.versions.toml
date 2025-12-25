@@ -5,7 +5,6 @@ springGrpcVersion = "1.0.0"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
-jasyptVersion = '4.0.3'
 swagger3Version = '3.0.0'
 swagger3AnnotationsVersion = '2.2.41'
 p6spyVersion = '3.9.1'
@@ -77,8 +76,6 @@ spring-boot-starter-security-oauth2-resource-server = { module = "org.springfram
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 # https://central.sonatype.com/artifact/org.postgresql/postgresql
 postgresql = { module = "org.postgresql:postgresql" }
-# https://central.sonatype.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter
-jasypt = { module = "com.github.ulisesbocchio:jasypt-spring-boot-starter", version.ref = "jasyptVersion" }
 # https://central.sonatype.com/artifact/com.google.guava/guava
 guava = { module = "com.google.guava:guava" }
 # https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-configuration-processor
