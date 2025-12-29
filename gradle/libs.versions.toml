@@ -40,7 +40,7 @@ jmhVersion = '1.37'
 tikaVersion = '3.2.3'
 cosidVersion = '3.0.1'
 # bom version
-grpcBomVersion = '1.77.0'
+grpcBomVersion = '1.78.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.33.2'
 awssdkBomVersion = '2.40.13'
